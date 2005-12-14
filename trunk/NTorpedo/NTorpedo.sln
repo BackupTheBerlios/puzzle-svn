@@ -1,0 +1,47 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Auction", "Auction\NTorpedo.Auction.csproj", "{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Client", "Client\NTorpedo.Client.csproj", "{C188EEA5-983E-4E6B-B864-23B04E3C0995}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo", "http://localhost/NTorpedo/NTorpedo.csproj", "{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		NPDebug = NPDebug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Debug.ActiveCfg = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Debug.Build.0 = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.NPDebug.ActiveCfg = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.NPDebug.Build.0 = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Release.ActiveCfg = Release|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Release.Build.0 = Release|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Debug.ActiveCfg = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Debug.Build.0 = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.NPDebug.ActiveCfg = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.NPDebug.Build.0 = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Release.ActiveCfg = Release|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Release.Build.0 = Release|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Debug.ActiveCfg = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Debug.Build.0 = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.NPDebug.ActiveCfg = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.NPDebug.Build.0 = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Release.ActiveCfg = Release|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		TorpedoKey.snk = TorpedoKey.snk
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

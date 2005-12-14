@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPersistWebService", "http://localhost/NPersistWebService/NPersistWebService.csproj", "{1E6DA505-06EA-46CE-AB6C-C6CD4049953A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{1E6DA505-06EA-46CE-AB6C-C6CD4049953A}.Debug.ActiveCfg = Debug|.NET
+		{1E6DA505-06EA-46CE-AB6C-C6CD4049953A}.Debug.Build.0 = Debug|.NET
+		{1E6DA505-06EA-46CE-AB6C-C6CD4049953A}.Release.ActiveCfg = Release|.NET
+		{1E6DA505-06EA-46CE-AB6C-C6CD4049953A}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

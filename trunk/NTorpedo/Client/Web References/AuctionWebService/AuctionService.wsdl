@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="PlaceBid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="bidId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="maxAmount" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlaceBidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PlaceBidResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Place2Bids">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="bidId1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="bidId2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="amount1" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="amount2" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="maxAmount1" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="maxAmount2" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Place2BidsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Place2BidsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAuction">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAuctionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListAuctionResult" type="tns:AuctionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AuctionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LowPrice" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bids" type="tns:ArrayOfBidInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemGraphicFilename" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuctionID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sql" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfBidInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BidInfo" nillable="true" type="tns:BidInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BidInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="BidAmount" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="Buyer" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ListAuctionTwiceWithTransaction">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAuctionTwiceWithTransactionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListAuctionTwiceWithTransactionResult" type="tns:AuctionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAuctionTwiceWithoutTransaction">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAuctionTwiceWithoutTransactionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListAuctionTwiceWithoutTransactionResult" type="tns:AuctionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listPartialAuction">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listPartialAuctionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listPartialAuctionResult" type="tns:AuctionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindAllAuctions">
+        <s:complexType />
+      </s:element>
+      <s:element name="FindAllAuctionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindAllAuctionsResult" type="tns:CollectionWithSQL" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CollectionWithSQL">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TheCollection" type="tns:ArrayOfAnyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="TheSql" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="FindHighBids">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auctionId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindHighBidsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindHighBidsResult" type="tns:CollectionWithSQL" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PlaceBidSoapIn">
+    <wsdl:part name="parameters" element="tns:PlaceBid" />
+  </wsdl:message>
+  <wsdl:message name="PlaceBidSoapOut">
+    <wsdl:part name="parameters" element="tns:PlaceBidResponse" />
+  </wsdl:message>
+  <wsdl:message name="Place2BidsSoapIn">
+    <wsdl:part name="parameters" element="tns:Place2Bids" />
+  </wsdl:message>
+  <wsdl:message name="Place2BidsSoapOut">
+    <wsdl:part name="parameters" element="tns:Place2BidsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionSoapIn">
+    <wsdl:part name="parameters" element="tns:ListAuction" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionSoapOut">
+    <wsdl:part name="parameters" element="tns:ListAuctionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionTwiceWithTransactionSoapIn">
+    <wsdl:part name="parameters" element="tns:ListAuctionTwiceWithTransaction" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionTwiceWithTransactionSoapOut">
+    <wsdl:part name="parameters" element="tns:ListAuctionTwiceWithTransactionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionTwiceWithoutTransactionSoapIn">
+    <wsdl:part name="parameters" element="tns:ListAuctionTwiceWithoutTransaction" />
+  </wsdl:message>
+  <wsdl:message name="ListAuctionTwiceWithoutTransactionSoapOut">
+    <wsdl:part name="parameters" element="tns:ListAuctionTwiceWithoutTransactionResponse" />
+  </wsdl:message>
+  <wsdl:message name="listPartialAuctionSoapIn">
+    <wsdl:part name="parameters" element="tns:listPartialAuction" />
+  </wsdl:message>
+  <wsdl:message name="listPartialAuctionSoapOut">
+    <wsdl:part name="parameters" element="tns:listPartialAuctionResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindAllAuctionsSoapIn">
+    <wsdl:part name="parameters" element="tns:FindAllAuctions" />
+  </wsdl:message>
+  <wsdl:message name="FindAllAuctionsSoapOut">
+    <wsdl:part name="parameters" element="tns:FindAllAuctionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindHighBidsSoapIn">
+    <wsdl:part name="parameters" element="tns:FindHighBids" />
+  </wsdl:message>
+  <wsdl:message name="FindHighBidsSoapOut">
+    <wsdl:part name="parameters" element="tns:FindHighBidsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AuctionServiceSoap">
+    <wsdl:operation name="PlaceBid">
+      <wsdl:input message="tns:PlaceBidSoapIn" />
+      <wsdl:output message="tns:PlaceBidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Place2Bids">
+      <wsdl:input message="tns:Place2BidsSoapIn" />
+      <wsdl:output message="tns:Place2BidsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListAuction">
+      <wsdl:input message="tns:ListAuctionSoapIn" />
+      <wsdl:output message="tns:ListAuctionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListAuctionTwiceWithTransaction">
+      <wsdl:input message="tns:ListAuctionTwiceWithTransactionSoapIn" />
+      <wsdl:output message="tns:ListAuctionTwiceWithTransactionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListAuctionTwiceWithoutTransaction">
+      <wsdl:input message="tns:ListAuctionTwiceWithoutTransactionSoapIn" />
+      <wsdl:output message="tns:ListAuctionTwiceWithoutTransactionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listPartialAuction">
+      <wsdl:input message="tns:listPartialAuctionSoapIn" />
+      <wsdl:output message="tns:listPartialAuctionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindAllAuctions">
+      <wsdl:input message="tns:FindAllAuctionsSoapIn" />
+      <wsdl:output message="tns:FindAllAuctionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindHighBids">
+      <wsdl:input message="tns:FindHighBidsSoapIn" />
+      <wsdl:output message="tns:FindHighBidsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuctionServiceSoap" type="tns:AuctionServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="PlaceBid">
+      <soap:operation soapAction="http://tempuri.org/PlaceBid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Place2Bids">
+      <soap:operation soapAction="http://tempuri.org/Place2Bids" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAuction">
+      <soap:operation soapAction="http://tempuri.org/ListAuction" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAuctionTwiceWithTransaction">
+      <soap:operation soapAction="http://tempuri.org/ListAuctionTwiceWithTransaction" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAuctionTwiceWithoutTransaction">
+      <soap:operation soapAction="http://tempuri.org/ListAuctionTwiceWithoutTransaction" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listPartialAuction">
+      <soap:operation soapAction="http://tempuri.org/listPartialAuction" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindAllAuctions">
+      <soap:operation soapAction="http://tempuri.org/FindAllAuctions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindHighBids">
+      <soap:operation soapAction="http://tempuri.org/FindHighBids" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuctionService">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/" />
+    <wsdl:port name="AuctionServiceSoap" binding="tns:AuctionServiceSoap">
+      <soap:address location="http://localhost/NTorpedo/AuctionService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

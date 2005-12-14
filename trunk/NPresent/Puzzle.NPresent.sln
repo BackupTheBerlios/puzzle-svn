@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPresent.Framework", "Framework\Puzzle.NPresent.Framework.csproj", "{A4654E3B-43C0-4DE2-96D6-8D80A965D4A4}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPresent.Framework.WinForms", "Framework\WinForms\Puzzle.NPresent.Framework.WinForms.csproj", "{468C5E72-01E1-4AE3-8BF0-2044DE0DBCBF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A4654E3B-43C0-4DE2-96D6-8D80A965D4A4}.Debug.ActiveCfg = Debug|.NET
+		{A4654E3B-43C0-4DE2-96D6-8D80A965D4A4}.Debug.Build.0 = Debug|.NET
+		{A4654E3B-43C0-4DE2-96D6-8D80A965D4A4}.Release.ActiveCfg = Release|.NET
+		{A4654E3B-43C0-4DE2-96D6-8D80A965D4A4}.Release.Build.0 = Release|.NET
+		{468C5E72-01E1-4AE3-8BF0-2044DE0DBCBF}.Debug.ActiveCfg = Debug|.NET
+		{468C5E72-01E1-4AE3-8BF0-2044DE0DBCBF}.Debug.Build.0 = Debug|.NET
+		{468C5E72-01E1-4AE3-8BF0-2044DE0DBCBF}.Release.ActiveCfg = Release|.NET
+		{468C5E72-01E1-4AE3-8BF0-2044DE0DBCBF}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,114 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Auction", "Auction\NTorpedo.Auction.csproj", "{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Client", "Client\NTorpedo.Client.csproj", "{C188EEA5-983E-4E6B-B864-23B04E3C0995}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo", "http://localhost/NTorpedo/NTorpedo.csproj", "{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NCore.Framework", "..\NCore\Framework\Puzzle.NCore.Framework.csproj", "{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework", "..\NAspect\Framework\Puzzle.NAspect.Framework.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPath.Framework", "..\NPath\Framework\Puzzle.NPath.Framework.csproj", "{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPersist.Framework", "..\NPersist\Framework\Puzzle.NPersist.Framework.csproj", "{E6C03D2A-D150-4473-9439-D300746A1390}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPersist.Framework.TransactionalCache", "..\NPersist\Framework\TransactionalCache\Puzzle.NPersist.Framework.TransactionalCache.csproj", "{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Auction.NPersist", "Auction\NPersist\NTorpedo.Auction.NPersist.csproj", "{C970C669-41D3-456C-B82E-D27002B03953}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTorpedo.Tests", "Tests\NTorpedo.Tests.csproj", "{BD35CE60-A08F-472A-83B7-6B536EC00FE0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		NPDebug = NPDebug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Debug.ActiveCfg = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Debug.Build.0 = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.NPDebug.ActiveCfg = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.NPDebug.Build.0 = Debug|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Release.ActiveCfg = Release|.NET
+		{D2E60F05-930E-4CB8-8D41-A36C4F9E004D}.Release.Build.0 = Release|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Debug.ActiveCfg = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Debug.Build.0 = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.NPDebug.ActiveCfg = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.NPDebug.Build.0 = Debug|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Release.ActiveCfg = Release|.NET
+		{C188EEA5-983E-4E6B-B864-23B04E3C0995}.Release.Build.0 = Release|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Debug.ActiveCfg = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Debug.Build.0 = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.NPDebug.ActiveCfg = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.NPDebug.Build.0 = Debug|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Release.ActiveCfg = Release|.NET
+		{CA9FA97F-CD9E-4638-B49F-4FD84CCCF730}.Release.Build.0 = Release|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Debug.ActiveCfg = Debug|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Debug.Build.0 = Debug|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.NPDebug.ActiveCfg = Debug|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.NPDebug.Build.0 = Debug|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Release.ActiveCfg = Release|.NET
+		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Release.Build.0 = Release|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Debug.ActiveCfg = Debug|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Debug.Build.0 = Debug|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.NPDebug.ActiveCfg = Debug|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.NPDebug.Build.0 = Debug|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Release.ActiveCfg = Release|.NET
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Release.Build.0 = Release|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.Debug.ActiveCfg = Debug|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.Debug.Build.0 = Debug|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.NPDebug.ActiveCfg = Debug|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.NPDebug.Build.0 = Debug|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.Release.ActiveCfg = Release|.NET
+		{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}.Release.Build.0 = Release|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.Debug.ActiveCfg = Debug|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.Debug.Build.0 = Debug|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.NPDebug.ActiveCfg = NPDebug|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.NPDebug.Build.0 = NPDebug|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.Release.ActiveCfg = Release|.NET
+		{E6C03D2A-D150-4473-9439-D300746A1390}.Release.Build.0 = Release|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Debug.ActiveCfg = Debug|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Debug.Build.0 = Debug|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.NPDebug.ActiveCfg = Debug|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.NPDebug.Build.0 = Debug|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Release.ActiveCfg = Release|.NET
+		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Release.Build.0 = Release|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.Debug.ActiveCfg = Debug|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.Debug.Build.0 = Debug|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.NPDebug.ActiveCfg = Debug|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.NPDebug.Build.0 = Debug|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.Release.ActiveCfg = Release|.NET
+		{C970C669-41D3-456C-B82E-D27002B03953}.Release.Build.0 = Release|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.Debug.ActiveCfg = Debug|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.Debug.Build.0 = Debug|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.NPDebug.ActiveCfg = Debug|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.NPDebug.Build.0 = Debug|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.Release.ActiveCfg = Release|.NET
+		{BD35CE60-A08F-472A-83B7-6B536EC00FE0}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

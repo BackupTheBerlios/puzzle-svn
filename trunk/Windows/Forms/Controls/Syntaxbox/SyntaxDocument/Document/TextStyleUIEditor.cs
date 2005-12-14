@@ -1,0 +1,99 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Collections;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Compona.SourceCode
+{
+	public class TextStyleUIEditor: UITypeEditor
+	{
+		private IWindowsFormsEditorService edSvc = null;
+
+		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) 
+		{
+			
+			if (context != null && context.Instance != null && provider != null) 
+			{
+				edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+				
+
+				if (edSvc != null) 
+				{			
+					TextStyle style=(TextStyle)value;
+					using (TextStyleDesignerDialog tsd=new TextStyleDesignerDialog (style))
+					{
+						context.OnComponentChanging ();						
+						if (edSvc.ShowDialog (tsd)==DialogResult.OK)				
+						{
+							
+							this.ValueChanged (this,EventArgs.Empty);									
+							context.OnComponentChanged ();
+							return style;							
+						}
+						
+					}
+				}
+			}
+
+			return value ;
+		}
+		
+
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) 
+		{
+			return UITypeEditorEditStyle.Modal;			
+		}
+
+
+		private void ValueChanged(object sender, EventArgs e) 
+		{
+			if (edSvc != null) 
+			{
+				
+			}
+		}
+
+		public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
+		{
+			TextStyle ts = (TextStyle) e.Value;
+			using (SolidBrush b=new SolidBrush (ts.BackColor))
+			{
+				e.Graphics.FillRectangle (b,e.Bounds);
+			}
+
+			FontStyle fs=FontStyle.Regular;
+			if (ts.Bold)
+				fs |= FontStyle.Bold;
+			if (ts.Italic)
+				fs |= FontStyle.Italic;
+			if (ts.Underline)
+				fs |= FontStyle.Underline;
+
+			Font  f =new Font ("arial",8f,fs);
+
+
+			using (SolidBrush b=new SolidBrush (ts.ForeColor))
+			{
+				e.Graphics.DrawString ("abc",f,b,e.Bounds);
+			}
+
+			f.Dispose ();
+			
+
+
+
+
+
+		}
+
+		public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
+		{
+			return true;
+		}
+	}
+}

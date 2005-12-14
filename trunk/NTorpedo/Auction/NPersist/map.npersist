@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<domain name="NTorpedo.Auction.NPersist" assembly="NTorpedo.Auction.NPersist" root="NTorpedo.Auction.NPersist" source="NTorpedo.Auction.NPersist">
+  <class name="Auction" load-span="*, Item.*, Seller.*, Bids.*" table="AUCTION">
+    <property name="Id" id="true" columns="AUCTION_ID" type="System.String" />
+    <property name="Bids" table="BID" id-columns="AUCTION" list="true" item-type="Bid" read-only="true" slave="true" ref="ManyToOne" inverse="Auction" inherits-inverse="true" />
+    <property name="Item" columns="ITEM" ref="OneToOne" inverse="Auction" type="Item" />
+    <property name="LowPrice" columns="LOW_PRICE" type="System.Double" />
+    <property name="Seller" columns="SELLER" ref="OneToMany" inverse="Auctions" type="User" />
+    <property name="Version" columns="VERSION" on-persist="Increase" type="System.Int32" />
+  </class>
+  <class name="Bid" table="BID">
+    <property name="Id" id="true" columns="BID_ID" type="System.String" />
+    <property name="Amount" columns="AMOUNT" type="System.Double" />
+    <property name="Auction" columns="AUCTION" ref="OneToMany" inverse="Bids" type="Auction" />
+    <property name="Buyer" columns="BUYER" ref="OneToMany" inverse="Bids" type="User" />
+    <property name="MaxAmount" columns="MAX_AMOUNT" type="System.Double" />
+    <property name="Version" columns="VERSION" on-persist="Increase" type="System.Int32" />
+  </class>
+  <class name="Item" table="ITEM">
+    <property name="Id" id="true" columns="ITEM_ID" type="System.String" />
+    <property name="Auction" table="AUCTION" columns="AUCTION_ID" id-columns="ITEM" read-only="true" slave="true" ref="OneToOne" inverse="Item" inherits-inverse="true" type="Auction" />
+    <property name="Description" columns="DESCRIPTION" type="System.String" />
+    <property name="GraphicFilename" columns="GRAPHIC_FILENAME" type="System.String" />
+    <property name="ItemName" columns="ITEM_NAME" type="System.String" />
+    <property name="Version" columns="VERSION" on-persist="Increase" type="System.Int32" />
+  </class>
+  <class name="User" table="AUCTION_USER">
+    <property name="Id" id="true" columns="AUCTIONUSER_ID" type="System.String" />
+    <property name="Auctions" table="AUCTION" id-columns="SELLER" list="true" item-type="Auction" read-only="true" slave="true" ref="ManyToOne" inverse="Seller" inherits-inverse="true" />
+    <property name="Bids" table="BID" id-columns="BUYER" list="true" item-type="Bid" read-only="true" slave="true" ref="ManyToOne" inverse="Buyer" inherits-inverse="true" />
+    <property name="Version" columns="VERSION" on-persist="Increase" type="System.Int32" />
+  </class>
+  <source name="NTorpedo.Auction.NPersist" type="MSSqlServer" provider="SqlClient" schema="dbo">
+    <connection-string>SERVER=(local);UID=sa;PWD=;DATABASE=NTorpedo;</connection-string>
+    <table name="AUCTION">
+      <column name="AUCTION_ID" primary="true" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="ITEM" type="AnsiString" prec="50" length="50" scale="0" foreign="true" primary-table="ITEM" primary-column="ITEM_ID" foreign-key="FK_AUCTION_ITEM" />
+      <column name="LOW_PRICE" type="Double" prec="53" length="8" scale="0" />
+      <column name="SELLER" type="AnsiString" prec="50" length="50" scale="0" foreign="true" primary-table="AUCTION_USER" primary-column="AUCTIONUSER_ID" foreign-key="FK_AUCTION_USER" />
+      <column name="VERSION" type="Int32" prec="10" length="4" scale="0" />
+    </table>
+    <table name="AUCTION_USER">
+      <column name="AUCTIONUSER_ID" primary="true" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="VERSION" type="Int32" prec="10" length="4" scale="0" />
+    </table>
+    <table name="BID">
+      <column name="BID_ID" primary="true" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="AMOUNT" type="Double" prec="53" length="8" scale="0" />
+      <column name="AUCTION" type="AnsiString" prec="50" length="50" scale="0" foreign="true" primary-table="AUCTION" primary-column="AUCTION_ID" foreign-key="FK_BID_AUCTION" />
+      <column name="BUYER" type="AnsiString" prec="50" length="50" scale="0" foreign="true" primary-table="AUCTION_USER" primary-column="AUCTIONUSER_ID" foreign-key="FK_BID_USER" />
+      <column name="MAX_AMOUNT" type="Double" prec="53" length="8" scale="0" />
+      <column name="VERSION" type="Int32" prec="10" length="4" scale="0" />
+    </table>
+    <table name="ITEM">
+      <column name="ITEM_ID" primary="true" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="DESCRIPTION" type="AnsiString" prec="255" length="255" scale="0" />
+      <column name="GRAPHIC_FILENAME" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="ITEM_NAME" type="AnsiString" prec="50" length="50" scale="0" />
+      <column name="VERSION" type="Int32" prec="10" length="4" scale="0" />
+    </table>
+  </source>
+</domain>

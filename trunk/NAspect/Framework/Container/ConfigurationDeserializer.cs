@@ -1,0 +1,105 @@
+using System;
+using System.Collections;
+using System.Xml;
+using Puzzle.NAspect.Framework.Aop;
+
+namespace Puzzle.NAspect.Framework
+{
+	public class ConfigurationDeserializer
+	{
+		public Engine Configure(XmlElement xmlRoot)
+		{
+			Engine engine = new Engine("App.Config");
+
+			XmlElement o = xmlRoot;
+
+			if (o == null)
+				return engine;
+
+
+			foreach (XmlNode settingsNode in o)
+			{
+				if (settingsNode.Name == "aspect")
+				{
+					IList pointcuts = new ArrayList();
+					IList mixins = new ArrayList();
+
+					string aspectName = settingsNode.Attributes["name"].Value;
+
+
+					foreach (XmlNode aspectNode in settingsNode)
+					{
+						if (aspectNode.Name == "pointcut")
+						{
+							IList interceptors = new ArrayList();
+
+							foreach (XmlNode pointcutNode in aspectNode)
+							{
+								if (pointcutNode.Name == "interceptor")
+								{
+									string typeString = pointcutNode.Attributes["type"].Value;
+									Type interceptorType = Type.GetType(typeString);
+									if (interceptorType == null)
+										throw new Exception(string.Format("Interceptor type '{0}' was not found!", typeString));
+									object interceptor = Activator.CreateInstance(interceptorType);
+									interceptors.Add(interceptor);
+								}
+							}
+
+							IPointcut pointcut = null;
+							if (aspectNode.Attributes["target-signature"] != null)
+							{
+								string targetMethodSignature = aspectNode.Attributes["target-signature"].Value;
+								pointcut = new SignaturePointcut(targetMethodSignature, interceptors);
+							}
+
+							if (aspectNode.Attributes["target-attribute"] != null)
+							{
+								string attributeTypeString = aspectNode.Attributes["target-attribute"].Value;
+								Type attributeType = Type.GetType(attributeTypeString);
+								if (attributeType == null)
+									throw new Exception(string.Format("Attribute type '{0}' was not found!", attributeTypeString));
+
+								pointcut = new AttributePointcut(attributeType, interceptors);
+							}
+
+
+							pointcuts.Add(pointcut);
+						}
+
+						if (aspectNode.Name == "mixin")
+						{
+							string typeString = aspectNode.Attributes["type"].Value;
+							Type mixinType = Type.GetType(typeString);
+							if (mixinType == null)
+								throw new Exception(string.Format("Mixin type '{0}' was not found!", typeString));
+							mixins.Add(mixinType);
+						}
+					}
+
+					IAspect aspect = null;
+
+					if (settingsNode.Attributes["target-signature"] != null)
+					{
+						string targetTypeSignature = settingsNode.Attributes["target-signature"].Value;
+						aspect = new SignatureAspect(aspectName, targetTypeSignature, mixins, pointcuts);
+					}
+
+					if (settingsNode.Attributes["target-attribute"] != null)
+					{
+						string attributeTypeString = settingsNode.Attributes["target-attribute"].Value;
+						Type attributeType = Type.GetType(attributeTypeString);
+
+						aspect = new AttributeAspect(aspectName, attributeType, mixins, pointcuts);
+					}
+
+					engine.Configuration.Aspects.Add(aspect);
+				}
+
+			}
+
+
+			return engine;
+		}
+	}
+}
