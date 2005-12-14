@@ -1106,6 +1106,10 @@ Public Class frmWrapDbWizard
 
         End If
 
+        If listViewDomainModels.Items.Count > 0 Then
+            listViewDomainModels.Items(0).Selected = True
+        End If
+
     End Sub
 
     Private Sub SetupSourceTypes()
