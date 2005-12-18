@@ -16,6 +16,10 @@ namespace Puzzle.NAspect.Framework
 
 		#region Engine
 
+        /// <summary>
+        /// AOP Engine constructor
+        /// </summary>
+        /// <param name="configurationName">name of configuration/type cache to use</param>
 		public Engine(string configurationName)
 		{
 			configuration = new EngineConfiguration();
@@ -30,6 +34,9 @@ namespace Puzzle.NAspect.Framework
 
 		private EngineConfiguration configuration;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public EngineConfiguration Configuration
 		{
 			get { return this.configuration; }
