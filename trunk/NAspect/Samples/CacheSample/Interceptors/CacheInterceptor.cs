@@ -9,7 +9,7 @@ namespace CacheSample
 	{
 		private Hashtable cache = new Hashtable();
 
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			string key = call.ValueSignature;
 			if (!cache.ContainsKey(key))

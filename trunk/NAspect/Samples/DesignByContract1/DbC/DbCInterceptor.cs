@@ -7,7 +7,7 @@ namespace DesignByContract1.DbC
 {
 	public class DbCInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			ParameterInfo[] parameters =call.Method.GetParameters();
 			int i=0;

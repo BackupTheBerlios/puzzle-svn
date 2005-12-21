@@ -6,7 +6,7 @@ namespace KumoUnitTests.Interceptors
 {
 	public class RemoveExceptionInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			Type returnType = call.ReturnType;
 			object res = null;

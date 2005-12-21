@@ -5,7 +5,7 @@ namespace KumoUnitTests.Interceptors
 {
 	public class ChangeRefParamValueInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			object res = call.Proceed();
 

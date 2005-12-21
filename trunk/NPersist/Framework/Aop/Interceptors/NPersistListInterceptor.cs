@@ -24,7 +24,7 @@ namespace Puzzle.NPersist.Framework.Aop
 		{
 		}
 
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{	
 		//	Console.WriteLine(call.ValueSignature) ;
 			IInterceptableListState list = (IInterceptableListState)call.Target;

@@ -6,7 +6,7 @@ namespace ConsoleApplication1
 {
 	public class TraceWriter : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			Console.WriteLine("precall " + call.ValueSignature);
 			object res = call.Proceed();

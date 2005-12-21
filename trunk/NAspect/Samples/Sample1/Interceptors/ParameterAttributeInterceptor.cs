@@ -6,7 +6,7 @@ namespace ConsoleApplication1
 {
 	public class ParameterAttributeInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			ParameterInfo[] parameterInfos = call.Method.GetParameters();
 			int i = 0;

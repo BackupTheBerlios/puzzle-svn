@@ -6,7 +6,7 @@ namespace OneWayAsyncCalls.Interceptors
 {
 	public class OneWayInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			//
 			AsyncCallWrapper oneWay = new AsyncCallWrapper(call) ;

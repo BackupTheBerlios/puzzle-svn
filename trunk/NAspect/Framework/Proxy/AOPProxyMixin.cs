@@ -38,8 +38,8 @@ namespace Puzzle.NAspect.Framework
 			MethodInfo wrappermethod = (MethodInfo) MethodCache.wrapperMethodLookup[methodId];
 
 			IList interceptors = MethodCache.GetInterceptors(methodId);
-			MethodInvokation invokation = new MethodInvokation(target, method, wrappermethod, parameters, returnType, interceptors);
-			return invokation.Proceed();
+			MethodInvocation invocation = new MethodInvocation(target, method, wrappermethod, parameters, returnType, interceptors);
+			return invocation.Proceed();
 		}
 
 		public object GetTypeDefaultValue(Type type)

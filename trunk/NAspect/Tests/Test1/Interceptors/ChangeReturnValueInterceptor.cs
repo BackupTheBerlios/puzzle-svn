@@ -5,7 +5,7 @@ namespace KumoUnitTests.Interceptors
 {
 	public class ChangeReturnValueInterceptor : IInterceptor
 	{
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{
 			object res = call.Proceed();
 			res = 1000;

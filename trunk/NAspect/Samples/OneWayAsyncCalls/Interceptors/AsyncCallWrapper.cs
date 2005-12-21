@@ -5,8 +5,8 @@ using Puzzle.NAspect.Framework;
 namespace OneWayAsyncCalls.Interceptors
 {	public class AsyncCallWrapper
 	{
-		private MethodInvokation call;
-		public AsyncCallWrapper(MethodInvokation call)
+		private MethodInvocation call;
+		public AsyncCallWrapper(MethodInvocation call)
 		{
 			this.call = call;
 			

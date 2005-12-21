@@ -5,7 +5,7 @@ using Puzzle.NAspect.Framework.Aop;
 
 namespace Puzzle.NAspect.Framework
 {
-	public class MethodInvokation
+	public class MethodInvocation
 	{
 		public readonly IAopProxy Target;
 		public readonly MethodBase Method;
@@ -17,7 +17,7 @@ namespace Puzzle.NAspect.Framework
 
 		#region constructor
 
-		public MethodInvokation(IAopProxy target, MethodBase method, MethodInfo endMethod, IList parameters, Type returnType, IList interceptors)
+		public MethodInvocation(IAopProxy target, MethodBase method, MethodInfo endMethod, IList parameters, Type returnType, IList interceptors)
 		{
 			this.Target = target;
 			this.Method = method;

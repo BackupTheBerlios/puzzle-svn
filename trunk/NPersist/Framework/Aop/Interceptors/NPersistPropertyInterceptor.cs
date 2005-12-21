@@ -24,7 +24,7 @@ namespace Puzzle.NPersist.Framework.Aop
 		{
 		}
 
-		public object HandleCall(MethodInvokation call)
+		public object HandleCall(MethodInvocation call)
 		{		
 			try
 			{
@@ -42,7 +42,7 @@ namespace Puzzle.NPersist.Framework.Aop
 			throw new Exception ("Blame Roger for this bug! "+call.Method.Name);
 		}
 
-		private object HandleSetProperty(MethodInvokation call)
+		private object HandleSetProperty(MethodInvocation call)
 		{
 			IProxy proxy = (IProxy) call.Target;
 			bool cancel = false;
@@ -57,7 +57,7 @@ namespace Puzzle.NPersist.Framework.Aop
 			return null;
 		}
 
-		private object HandleGetProperty(MethodInvokation call)
+		private object HandleGetProperty(MethodInvocation call)
 		{
 			IProxy proxy = (IProxy) call.Target;
 			string propertyName = call.Method.Name.Substring(4);
