@@ -53,6 +53,7 @@ Comment Line = '//'
         ::= StartWithZeroDecimalIntegerLiteral
          |  StartWithNoZeroDecimalIntegerLiteral
 
+
 <FloatPointLiteral> 
         ::= FloatingPointLiteral
          |  FloatingPointLiteralExponent
@@ -73,10 +74,10 @@ Comment Line = '//'
 
 <Type>  ::= <PrimitiveType>
          |  <ReferenceType>
-	  |  <GenericType>
-  
+   
 
-<GenericType> ::= <Name> '<' <TypeList> '>'
+<GenericType> 
+        ::= <Name> '<'<TypeList>'>'
 
 <TypeList>
         ::= <Type>
@@ -104,6 +105,7 @@ Comment Line = '//'
 <ReferenceType> 
         ::= <ClassOrInterfaceType>
          |  <ArrayType>
+         |  <GenericType>
 
 <ClassOrInterfaceType> ::= <Name>
 
@@ -115,6 +117,7 @@ Comment Line = '//'
         ::= <PrimitiveType> '[' ']'
          |  <Name> '[' ']'
          |  <ArrayType> '[' ']'
+         |  <GenericType> '[' ']'
 
 <Name>
         ::= <SimpleName>
@@ -558,6 +561,7 @@ Comment Line = '//'
          |  <MethodInvocation>
          |  <ArrayAccess>
 
+
 <ClassInstanceCreationExpression> 
         ::= 'new' <ClassType> '(' <ArgumentList> ')'
          |  'new' <ClassType> '(' ')'
@@ -615,6 +619,8 @@ Comment Line = '//'
          |  <PostIncrementExpression>
          |  <PostDecrementExpression>
 
+
+
 <PostIncrementExpression>
         ::= <PostfixExpression> '++'
 
@@ -639,10 +645,7 @@ Comment Line = '//'
          |  '~' <UnaryExpression>
          |  '!' <UnaryExpression>
          |  <CastExpression>
-	  |  <IsExpression>
 
-<IsExpression>
-        ::= <IsExpression> 'is' <Type>
 
 <CastExpression>
         ::= '(' <PrimitiveType> <Dims> ')' <UnaryExpression>
@@ -665,7 +668,6 @@ Comment Line = '//'
         ::= <AdditiveExpression>
          |  <ShiftExpression> '<<' <AdditiveExpression>
          |  <ShiftExpression> '>>' <AdditiveExpression>
-         |  <ShiftExpression> '>>>' <AdditiveExpression>
 
 <RelationalExpression>
         ::= <ShiftExpression>
@@ -673,18 +675,16 @@ Comment Line = '//'
          |  <RelationalExpression> '>' <ShiftExpression>
          |  <RelationalExpression> '<=' <ShiftExpression>
          |  <RelationalExpression> '>=' <ShiftExpression>
-         |  <RelationalExpression> 'instanceof' <ReferenceType>
+         |  <RelationalExpression> 'is' <Type>
 
 <EqualityExpression>
         ::= <RelationalExpression>
          |  <EqualityExpression> '==' <RelationalExpression>
          |  <EqualityExpression> '!=' <RelationalExpression>
 
-
-
 <AndExpression>
         ::= <EqualityExpression>
-         |  <AndExpression> '&' <EqualityExpression>
+          |  <AndExpression> '&' <EqualityExpression>
 
 <ExclusiveOrExpression>
         ::= <AndExpression>
