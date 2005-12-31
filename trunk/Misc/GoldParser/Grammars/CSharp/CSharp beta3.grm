@@ -72,12 +72,13 @@ Comment Line = '//'
          |  StringLiteral
          |  NullLiteral
 
-<Type>  ::= <PrimitiveType>
-         |  <ReferenceType>
-   
+<Type>  ::= <NullableType>
+         |  <GenericType>
+         |  <ArrayType>  
+         |  <ClassOrInterfaceType>
+         |  <PrimitiveType>
+           
 
-<GenericType> 
-        ::= <Name> '<'<TypeList>'>'
 
 <TypeList>
         ::= <Type>
@@ -85,7 +86,7 @@ Comment Line = '//'
 
 
 <PrimitiveType> ::= <NumericType>
-                  | 'boolean'
+                  | 'bool'
 
 <NumericType> 
         ::= <IntegralType>
@@ -102,12 +103,11 @@ Comment Line = '//'
         ::= 'float'
          |  'double'
 
-<ReferenceType> 
-        ::= <ClassOrInterfaceType>
-         |  <ArrayType>
-         |  <GenericType>
-
 <ClassOrInterfaceType> ::= <Name>
+
+<NullableType> ::= <PrimitiveType> '?'
+                 | <Name> '?'
+
 
 <ClassType> ::= <ClassOrInterfaceType>
 
@@ -115,9 +115,13 @@ Comment Line = '//'
 
 <ArrayType>
         ::= <PrimitiveType> '[' ']'
+         |  <NullableType> '[' ']'
          |  <Name> '[' ']'
          |  <ArrayType> '[' ']'
          |  <GenericType> '[' ']'
+
+<GenericType> 
+        ::= <Name> '<'<TypeList>'>'
 
 <Name>
         ::= <SimpleName>
@@ -125,13 +129,13 @@ Comment Line = '//'
 
 <SimpleName> ::= Identifier
 
-<QualifiedName> ::= <Name> '.' Identifier
+<QualifiedName> ::= Identifier '.' <Name>
 
 <CompilationUnit> 
         ::=  <Codes>
 
 <Codes> ::=  <Code> <Codes>
-	  |	<Code>
+	  |  <Code>
 
 <Code>	::= <TypeDeclaration>
 	  | <NamespaceDeclaration>
@@ -183,13 +187,14 @@ Comment Line = '//'
 
 
 <ClassBody> 
-        ::= '{' <ClassBodyDeclarations> '}'
-         |  '{' '}'
+        ::= '{' '}'
+         |  '{' <ClassBodyDeclarations> '}'
                
 
 <ClassBodyDeclarations> 
         ::= <ClassBodyDeclaration>
-         |  <ClassBodyDeclarations> <ClassBodyDeclaration>
+	 |  <ClassBodyDeclarations> <ClassBodyDeclaration>
+           
 
 <ClassBodyDeclaration> 
         ::= <ClassMemberDeclaration>
@@ -229,10 +234,11 @@ Comment Line = '//'
          |  <Type> <MethodDeclarator>
 
 <MethodDeclarator>
-        ::= Identifier '(' <FormalParameterList> ')'
-         |  Identifier '(' ')'
-         |  Identifier '<' <TypeList> '>' '(' <FormalParameterList> ')'
-         |  Identifier '<' <TypeList> '>' '(' ')'
+        ::= <Name> '(' <FormalParameterList> ')'
+         |  <Name> '(' ')'
+         |  <Name> '<' <TypeList> '>' '(' <FormalParameterList> ')'
+         |  <Name> '<' <TypeList> '>' '(' ')'
+
 
 <FormalParameterList> 
         ::= <FormalParameter>
@@ -555,11 +561,18 @@ Comment Line = '//'
 <PrimaryNoNewArray> 
         ::= <Literal>
          |  'this'
+         |  'base'
          |  '(' <Expression> ')'
          |  <ClassInstanceCreationExpression>
          |  <FieldAccess>
+         |  <TypeOf>
          |  <MethodInvocation>
          |  <ArrayAccess>
+
+
+
+<TypeOf>
+	::= 'typeof' '(' <Type> ')'
 
 
 <ClassInstanceCreationExpression> 
@@ -599,15 +612,13 @@ Comment Line = '//'
 
 <FieldAccess> 
         ::= <Primary> '.' Identifier
-         |  'base' '.' Identifier
 
 <MethodInvocation>
         ::= <Name> '(' <ArgumentList> ')'
          |  <Name> '(' ')'
          |  <Primary> '.' Identifier '(' <ArgumentList> ')'
          |  <Primary> '.' Identifier '(' ')'
-         |  'base' '.' Identifier '(' <ArgumentList> ')'
-         |  'base' '.' Identifier '(' ')'
+
 
 <ArrayAccess> 
         ::= <Name> '[' <Expression> ']'
@@ -632,6 +643,7 @@ Comment Line = '//'
          |  <PreDecrementExpression>
          |  '+' <UnaryExpression>
          |  '-' <UnaryExpression>
+         |  <AsExpression>
          |  <UnaryExpressionNotPlusMinus>
 
 <PreIncrementExpression> 
@@ -646,12 +658,16 @@ Comment Line = '//'
          |  '!' <UnaryExpression>
          |  <CastExpression>
 
-
 <CastExpression>
         ::= '(' <PrimitiveType> <Dims> ')' <UnaryExpression>
          |  '(' <PrimitiveType> ')' <UnaryExpression>
          |  '(' <Expression> ')' <UnaryExpressionNotPlusMinus>
          |  '(' <Name> <Dims> ')' <UnaryExpressionNotPlusMinus>
+
+<AsExpression>
+	 ::= <UnaryExpressionNotPlusMinus> 'as' <Type>
+
+
 
 <MultiplicativeExpression>
         ::= <UnaryExpression>

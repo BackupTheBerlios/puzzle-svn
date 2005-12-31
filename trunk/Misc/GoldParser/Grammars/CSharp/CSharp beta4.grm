@@ -1,7 +1,7 @@
-"Name"    = 'LALR(1) Java nonunicode grammar'
+"Name"    = 'LALR(1) C# 2 nonunicode grammar'
 "Version" = '1.0 alpha 110'
-"Author"  = 'Dmitry Gazko'
-"About"   = 'Based on partial conversion of Sun Java 1.0-2.0 specification'
+"Author"  = 'Roger Johansson'
+"About"   = 'Based on Dmitry Gazko Java Grammar'
 
 {String Char} = {Printable} - ["]
 {Quote} = ['']
@@ -53,6 +53,7 @@ Comment Line = '//'
         ::= StartWithZeroDecimalIntegerLiteral
          |  StartWithNoZeroDecimalIntegerLiteral
 
+
 <FloatPointLiteral> 
         ::= FloatingPointLiteral
          |  FloatingPointLiteralExponent
@@ -71,12 +72,12 @@ Comment Line = '//'
          |  StringLiteral
          |  NullLiteral
 
-<Type>  ::= <PrimitiveType>
-         |  <ReferenceType>
-	  |  <GenericType>
-  
+        
 
-<GenericType> ::= <Name> '<' <TypeList> '>'
+<Type>  ::= <ArrayType>  
+         |  <UserType>
+         |  <PrimitiveType>           
+
 
 <TypeList>
         ::= <Type>
@@ -84,7 +85,7 @@ Comment Line = '//'
 
 
 <PrimitiveType> ::= <NumericType>
-                  | 'boolean'
+                  | 'bool'
 
 <NumericType> 
         ::= <IntegralType>
@@ -101,20 +102,23 @@ Comment Line = '//'
         ::= 'float'
          |  'double'
 
-<ReferenceType> 
-        ::= <ClassOrInterfaceType>
-         |  <ArrayType>
+<UserType> ::= <Name>
+             | <NullableType>
+             | <GenericType>
 
-<ClassOrInterfaceType> ::= <Name>
+<NullableType> ::= <PrimitiveType> '?'
+                 | <Name> '?'
 
-<ClassType> ::= <ClassOrInterfaceType>
-
-<InterfaceType> ::= <ClassOrInterfaceType>
 
 <ArrayType>
         ::= <PrimitiveType> '[' ']'
+         |  <NullableType> '[' ']'
          |  <Name> '[' ']'
          |  <ArrayType> '[' ']'
+         |  <GenericType> '[' ']'
+
+<GenericType> 
+        ::= <Name> '<'<TypeList>'>'
 
 <Name>
         ::= <SimpleName>
@@ -122,7 +126,7 @@ Comment Line = '//'
 
 <SimpleName> ::= Identifier
 
-<QualifiedName> ::= <Name> '.' Identifier
+<QualifiedName> ::= Identifier '.' <Name>
 
 <CompilationUnit> 
         ::=  <Codes>
@@ -152,11 +156,13 @@ Comment Line = '//'
 <TypeDeclaration> 
         ::= <ClassDeclaration>
          |  <InterfaceDeclaration>
+         |  <StructDeclaration>
+         |  <EnumDeclaration>
          |  ';'
 
 <Modifiers> 
-        ::= <Modifier> <Modifiers>
-         |  <Modifier>
+        ::= <Modifier>
+         |  <Modifiers> <Modifier>
 
 <Modifier> 
         ::= 'public'
@@ -180,13 +186,14 @@ Comment Line = '//'
 
 
 <ClassBody> 
-        ::= '{' <ClassBodyDeclarations> '}'
-         |  '{' '}'
+        ::= '{' '}'
+         |  '{' <ClassBodyDeclarations> '}'
                
 
 <ClassBodyDeclarations> 
         ::= <ClassBodyDeclaration>
-         |  <ClassBodyDeclarations> <ClassBodyDeclaration>
+	 |  <ClassBodyDeclarations> <ClassBodyDeclaration>
+           
 
 <ClassBodyDeclaration> 
         ::= <ClassMemberDeclaration>
@@ -194,26 +201,42 @@ Comment Line = '//'
          |  <ConstructorDeclaration>
 
 <ClassMemberDeclaration>
-        ::= <FieldDeclaration>
+        ::= <ClassFieldDeclaration>
          |  <PropertyDeclaration>
          |  <IndexerDeclaration>
          |  <MethodDeclaration>
 
-<FieldDeclaration> 
-        ::= <Modifiers> <Type> <VariableDeclarators> ';'
-         |  <Type> <VariableDeclarators> ';'
+<StructMemberDeclaration>
+        ::= <StructFieldDeclaration>
+         |  <PropertyDeclaration>
+         |  <IndexerDeclaration>
+         |  <MethodDeclaration>
 
-<VariableDeclarators>
-        ::= <VariableDeclarator>
-         |  <VariableDeclarators> ',' <VariableDeclarator>
+<ClassFieldDeclaration> 
+        ::= <Modifiers> <Type> <ClassVariableDeclarators> ';'
+         |  <Type> <ClassVariableDeclarators> ';'
 
-<VariableDeclarator> 
+<StructFieldDeclaration> 
+        ::= <Modifiers> <Type> <StructVariableDeclarators> ';'
+         |  <Type> <StructVariableDeclarators> ';'
+
+<ClassVariableDeclarators>
+        ::= <ClassVariableDeclarator>
+         |  <ClassVariableDeclarators> ',' <ClassVariableDeclarator>
+
+<StructVariableDeclarators>
+        ::= <StructVariableDeclarator>
+         |  <StructVariableDeclarators> ',' <StructVariableDeclarator>
+
+<ClassVariableDeclarator> 
         ::= <VariableDeclaratorId>
          |  <VariableDeclaratorId> '=' <VariableInitializer>
 
+<StructVariableDeclarator> 
+        ::= <VariableDeclaratorId>
+
 <VariableDeclaratorId> 
         ::= Identifier
-         |  <VariableDeclaratorId> '[' ']'
 
 <VariableInitializer> 
         ::= <Expression>
@@ -226,14 +249,15 @@ Comment Line = '//'
          |  <Type> <MethodDeclarator>
 
 <MethodDeclarator>
-        ::= Identifier '(' <FormalParameterList> ')'
-         |  Identifier '(' ')'
-         |  Identifier '<' <TypeList> '>' '(' <FormalParameterList> ')'
-         |  Identifier '<' <TypeList> '>' '(' ')'
+        ::= <Name> '(' <FormalParameterList> ')'
+         |  <Name> '(' ')'
+         |  <Name> '<' <TypeList> '>' '(' <FormalParameterList> ')'
+         |  <Name> '<' <TypeList> '>' '(' ')'
+
 
 <FormalParameterList> 
-        ::= <FormalParameter> ',' <FormalParameterList>
-         |  <FormalParameter> 
+        ::= <FormalParameter>
+         |  <FormalParameterList> ',' <FormalParameter>
 
 <FormalParameter> 
         ::= <Type> <VariableDeclaratorId>
@@ -297,8 +321,8 @@ Comment Line = '//'
 
 
 <ClassTypeList>
-        ::= <ClassType> ',' <ClassTypeList>
-         |  <ClassType>  
+        ::= <UserType>
+         |  <ClassTypeList> ',' <UserType>
 
 
 <MethodBody> 
@@ -319,8 +343,13 @@ Comment Line = '//'
          |  <SimpleName> '(' ')' ':' <ExplicitConstructorInvocation>
 
 
+<StructConstructorDeclaration>
+        ::= <Modifiers> <StructConstructorDeclarator> <ConstructorBody>
+         |  <StructConstructorDeclarator> <ConstructorBody>
 
-
+<StructConstructorDeclarator>
+        ::= <SimpleName> '(' <FormalParameterList> ')'
+         | <SimpleName> '(' <FormalParameterList> ')' ':' <ExplicitConstructorInvocation>
 
 <ConstructorBody> 
         ::= '{' <BlockStatements> '}'
@@ -333,14 +362,29 @@ Comment Line = '//'
          |  'base' '(' ')' 
                                    
 <InterfaceDeclaration> 
-        ::= <Modifiers> 'interface' Identifier <ExtendsInterfaces> <InterfaceBody>
+        ::= <Modifiers> 'interface' Identifier <Inherits> <InterfaceBody>
          |  <Modifiers> 'interface' Identifier <InterfaceBody>
-         |  'interface' Identifier <ExtendsInterfaces> <InterfaceBody>
+         |  'interface' Identifier <Inherits> <InterfaceBody>
          |  'interface' Identifier <InterfaceBody>
 
-<ExtendsInterfaces> 
-        ::= 'extends' <InterfaceType>
-         |  <ExtendsInterfaces> ',' <InterfaceType>
+<StructDeclaration> 
+        ::= <Modifiers> 'struct' Identifier <Inherits> <StructBody>
+         |  <Modifiers> 'struct' Identifier <StructBody>
+         |  'struct' Identifier <Inherits> <StructBody>
+         |  'struct' Identifier <StructBody>
+
+<StructBody> 
+        ::= '{' '}'
+         |  '{' <StructBodyDeclarations> '}'
+
+<StructBodyDeclarations> 
+        ::= <StructBodyDeclaration>
+	 |  <StructBodyDeclarations> <StructBodyDeclaration>
+
+<StructBodyDeclaration> 
+        ::= <StructMemberDeclaration>
+         |  <StaticInitializer>
+         |  <StructConstructorDeclaration>
 
 <InterfaceBody> 
         ::= '{' <InterfaceMemberDeclarations> '}'
@@ -354,7 +398,7 @@ Comment Line = '//'
         ::= <ConstantDeclaration>
          |  <AbstractMethodDeclaration>
 
-<ConstantDeclaration> ::= <FieldDeclaration>
+<ConstantDeclaration> ::= <ClassFieldDeclaration>
 
 <AbstractMethodDeclaration> ::= <MethodHeader> ';'
 
@@ -371,8 +415,8 @@ Comment Line = '//'
          |  '{' '}'
 
 <BlockStatements> 
-        ::= <BlockStatement> <BlockStatements>
-         |  <BlockStatement>
+        ::= <BlockStatement>
+         |  <BlockStatements> <BlockStatement>
 
 <BlockStatement>
         ::= <LocalVariableDeclarationStatement>
@@ -382,7 +426,7 @@ Comment Line = '//'
         ::= <LocalVariableDeclaration> ';'
 
 <LocalVariableDeclaration> 
-        ::= <Type> <VariableDeclarators>
+        ::= <Type> <ClassVariableDeclarators>
 
 <Statement>
         ::= <StatementWithoutTrailingSubstatement>
@@ -391,6 +435,11 @@ Comment Line = '//'
          |  <IfThenElseStatement>
          |  <WhileStatement>
          |  <ForStatement>
+         |  <ForEachStatement>
+	  |  <UsingStatement>
+
+<UsingStatement>
+	 ::= 'using' '(' <UserType> <VariableDeclaratorId> '=' <Expression> ')' <Statement>
 
 <StatementNoShortIf> 
         ::= <StatementWithoutTrailingSubstatement>
@@ -398,6 +447,7 @@ Comment Line = '//'
          |  <IfThenElseStatementNoShortIf>
          |  <WhileStatementNoShortIf>
          |  <ForStatementNoShortIf>
+         |  <ForEachStatementNoShortIf> 
 
 <StatementWithoutTrailingSubstatement> 
         ::= <Block>
@@ -485,6 +535,12 @@ Comment Line = '//'
          |  'for' '(' ';' ';' <ForUpdate> ')' <Statement>
          |  'for' '(' ';' ';'  ')' <Statement>
 
+<ForEachStatement> 
+	 ::= 'foreach' '(' <Type> <SimpleName> 'in' <Expression> ')' <Statement>
+
+<ForEachStatementNoShortIf> 
+	 ::= 'foreach' '(' <Type> <SimpleName> 'in' <Expression> ')' <StatementNoShortIf>
+
 <ForStatementNoShortIf> 
         ::= 'for' '(' <ForInit> ';' <Expression> ';' <ForUpdate> ')' <StatementNoShortIf>
          |  'for' '(' <ForInit> ';' <Expression> ';' ')' <StatementNoShortIf>
@@ -533,8 +589,8 @@ Comment Line = '//'
          |  'try' <Block> <Finally>
 
 <Catches>
-        ::= <CatchClause> <Catches>
-         |  <CatchClause>
+        ::= <CatchClause>
+         |  <Catches> <CatchClause>
 
 <CatchClause>
         ::= 'catch' '(' <FormalParameter> ')' <Block>
@@ -545,6 +601,11 @@ Comment Line = '//'
 <Finally> 
         ::= 'finally' <Block>
 
+!Note UserType is not included here since there is no way to distinguish between such type and a property path at parselevel
+<PrimaryOrType> ::= <PrimitiveType>
+                  | <GenericType>
+                  | <Primary>
+
 <Primary> 
         ::= <PrimaryNoNewArray>
          |  <ArrayCreationExpression>
@@ -552,20 +613,29 @@ Comment Line = '//'
 <PrimaryNoNewArray> 
         ::= <Literal>
          |  'this'
+         |  'base'
          |  '(' <Expression> ')'
          |  <ClassInstanceCreationExpression>
          |  <FieldAccess>
+         |  <TypeOf>
          |  <MethodInvocation>
          |  <ArrayAccess>
 
+
+
+
+<TypeOf>
+	::= 'typeof' '(' <Type> ')'
+
+
 <ClassInstanceCreationExpression> 
-        ::= 'new' <ClassType> '(' <ArgumentList> ')'
-         |  'new' <ClassType> '(' ')'
+        ::= 'new' <UserType> '(' <ArgumentList> ')'
+         |  'new' <UserType> '(' ')'
 
 <ArgumentList> 
         ::= <SpecialArg>
          |  <ArgumentList> ',' <SpecialArg>
-	 |  <Expression>
+	  |  <Expression>
          |  <ArgumentList> ',' <Expression>
 
 <SpecialArg> ::= <ParamsArg>
@@ -581,8 +651,8 @@ Comment Line = '//'
 <ArrayCreationExpression> 
         ::= 'new' <PrimitiveType> <DimExprs> <Dims>
          |  'new' <PrimitiveType> <DimExprs>
-         |  'new' <ClassOrInterfaceType> <DimExprs> <Dims>
-         |  'new' <ClassOrInterfaceType> <DimExprs>
+         |  'new' <UserType> <DimExprs> <Dims>
+         |  'new' <UserType> <DimExprs>
 
 <DimExprs> 
         ::= <DimExpr>
@@ -594,16 +664,15 @@ Comment Line = '//'
          | <Dims> '[' ']'
 
 <FieldAccess> 
-        ::= <Primary> '.' Identifier
-         |  'base' '.' Identifier
+        ::= <PrimaryOrType> '.' Identifier
 
 <MethodInvocation>
         ::= <Name> '(' <ArgumentList> ')'
          |  <Name> '(' ')'
-         |  <Primary> '.' Identifier '(' <ArgumentList> ')'
-         |  <Primary> '.' Identifier '(' ')'
-         |  'base' '.' Identifier '(' <ArgumentList> ')'
-         |  'base' '.' Identifier '(' ')'
+         |  <PrimaryOrType> '.' Identifier '(' <ArgumentList> ')'
+         |  <PrimaryOrType> '.' Identifier '(' ')'
+
+
 
 <ArrayAccess> 
         ::= <Name> '[' <Expression> ']'
@@ -614,6 +683,8 @@ Comment Line = '//'
          |  <Name>
          |  <PostIncrementExpression>
          |  <PostDecrementExpression>
+
+
 
 <PostIncrementExpression>
         ::= <PostfixExpression> '++'
@@ -627,6 +698,7 @@ Comment Line = '//'
          |  '+' <UnaryExpression>
          |  '-' <UnaryExpression>
          |  <UnaryExpressionNotPlusMinus>
+         |  <AsExpression>
 
 <PreIncrementExpression> 
         ::= '++' <UnaryExpression>
@@ -639,16 +711,16 @@ Comment Line = '//'
          |  '~' <UnaryExpression>
          |  '!' <UnaryExpression>
          |  <CastExpression>
-	  |  <IsExpression>
-
-<IsExpression>
-        ::= <IsExpression> 'is' <Type>
 
 <CastExpression>
         ::= '(' <PrimitiveType> <Dims> ')' <UnaryExpression>
          |  '(' <PrimitiveType> ')' <UnaryExpression>
          |  '(' <Expression> ')' <UnaryExpressionNotPlusMinus>
          |  '(' <Name> <Dims> ')' <UnaryExpressionNotPlusMinus>
+
+<AsExpression>
+	 ::= <UnaryExpressionNotPlusMinus> 'as' <Type>
+
 
 <MultiplicativeExpression>
         ::= <UnaryExpression>
@@ -665,7 +737,6 @@ Comment Line = '//'
         ::= <AdditiveExpression>
          |  <ShiftExpression> '<<' <AdditiveExpression>
          |  <ShiftExpression> '>>' <AdditiveExpression>
-         |  <ShiftExpression> '>>>' <AdditiveExpression>
 
 <RelationalExpression>
         ::= <ShiftExpression>
@@ -673,18 +744,16 @@ Comment Line = '//'
          |  <RelationalExpression> '>' <ShiftExpression>
          |  <RelationalExpression> '<=' <ShiftExpression>
          |  <RelationalExpression> '>=' <ShiftExpression>
-         |  <RelationalExpression> 'instanceof' <ReferenceType>
+         |  <RelationalExpression> 'is' <Type>
 
 <EqualityExpression>
         ::= <RelationalExpression>
          |  <EqualityExpression> '==' <RelationalExpression>
          |  <EqualityExpression> '!=' <RelationalExpression>
 
-
-
 <AndExpression>
         ::= <EqualityExpression>
-         |  <AndExpression> '&' <EqualityExpression>
+          |  <AndExpression> '&' <EqualityExpression>
 
 <ExclusiveOrExpression>
         ::= <AndExpression>
@@ -735,4 +804,19 @@ Comment Line = '//'
 <Expression> ::= <AssignmentExpression>
 
 <ConstantExpression> ::= <Expression>
+
+<EnumDeclaration> ::= <Modifiers> enum Identifier <EnumInherits> <EnumBody>
+                    | <Modifiers> enum Identifier <EnumBody>
+
+<EnumInherits> ::= ':' <IntegralType>
+
+<EnumBody> 
+        ::= '{' '}'
+         |  '{' <EnumBodyDeclarations> '}'
+
+<EnumBodyDeclarations> ::= <EnumBodyDeclaration>
+                         | <EnumBodyDeclarations> ',' <EnumBodyDeclaration>
+
+<EnumBodyDeclaration> ::=  Identifier
+                        |  Identifier '=' <IntegerLiteral>
 
