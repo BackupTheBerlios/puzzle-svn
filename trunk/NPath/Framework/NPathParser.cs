@@ -73,8 +73,9 @@ namespace Puzzle.NPath.Framework
 			if (tokenizer.GetCurrentToken().IsType("where"))
 			{
 				NPathWhereClause whereClause = new NPathWhereClause();
+                query.Where = whereClause;
 				ParseWhereClause(whereClause);
-				query.Where = whereClause;
+				
 			}
 
 			if (tokenizer.GetCurrentToken().IsType("order by")) // do not localize

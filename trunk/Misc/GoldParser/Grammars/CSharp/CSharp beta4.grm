@@ -158,6 +158,7 @@ Comment Line = '//'
          |  <InterfaceDeclaration>
          |  <StructDeclaration>
          |  <EnumDeclaration>
+         |  <DelegateDeclaration>
          |  ';'
 
 <Modifiers> 
@@ -176,10 +177,15 @@ Comment Line = '//'
          |  'volatile'
 
 <ClassDeclaration> 
-        ::= <Modifiers> 'class' Identifier <Inherits>  <ClassBody>
-         |  <Modifiers> 'class' Identifier <ClassBody>
-         |  'class' Identifier <Inherits> <ClassBody>
-         |  'class' Identifier <ClassBody>
+        ::= <AttributeGroups> <Modifiers> 'class' <GenericIdentifier> <Inherits>  <ClassBody>
+          | <AttributeGroups> <Modifiers> 'class' <GenericIdentifier> <ClassBody>
+          | <AttributeGroups> 'class' <GenericIdentifier> <Inherits> <ClassBody>
+          | <AttributeGroups> 'class' <GenericIdentifier> <ClassBody>
+          | <Modifiers> 'class' <GenericIdentifier> <Inherits>  <ClassBody>
+          | <Modifiers> 'class' <GenericIdentifier> <ClassBody>
+          | 'class' <GenericIdentifier> <Inherits> <ClassBody>
+          | 'class' <GenericIdentifier> <ClassBody>
+
 
 <Inherits> ::= ':' <ClassTypeList>
 
@@ -197,7 +203,6 @@ Comment Line = '//'
 
 <ClassBodyDeclaration> 
         ::= <ClassMemberDeclaration>
-         |  <StaticInitializer>
          |  <ConstructorDeclaration>
 
 <ClassMemberDeclaration>
@@ -242,7 +247,8 @@ Comment Line = '//'
         ::= <Expression>
          |  <ArrayInitializer>
 
-<MethodDeclaration> ::= <MethodHeader> <MethodBody>
+<MethodDeclaration> ::= <AttributeGroups> <MethodHeader> <MethodBody>
+                      | <MethodHeader> <MethodBody>
 
 <MethodHeader>
         ::= <Modifiers> <Type> <MethodDeclarator>
@@ -260,8 +266,15 @@ Comment Line = '//'
          |  <FormalParameterList> ',' <FormalParameter>
 
 <FormalParameter> 
-        ::= <Type> <VariableDeclaratorId>
+        ::= <AttributeGroups> <StandardParameter>
+	   | <AttributeGroups> <SpecialFormalParameter> 
+          | <StandardParameter>
 	   | <SpecialFormalParameter> 
+
+
+
+<StandardParameter>
+	  ::= <Type> <VariableDeclaratorId>
 
 <SpecialFormalParameter> ::= <ParamsFormalParameter>
 		 | <RefFormalParameter>
@@ -272,8 +285,8 @@ Comment Line = '//'
 <OutFormalParameter> ::= 'out' <Type> <VariableDeclaratorId>
 
 
-<PropertyDeclaration> ::= <PropertyHeader> <PropertyBody>
-
+<PropertyDeclaration> ::= <AttributeGroups> <PropertyHeader> <PropertyBody>
+                        | <PropertyHeader> <PropertyBody>
 
 <PropertyHeader>
         ::= <Modifiers> <Type> <PropertyDeclarator>
@@ -288,15 +301,19 @@ Comment Line = '//'
 	 |   '{' <PropertySetPart> '}'
 
 <PropertyGetPart>
-	 ::= 'get' <Block>
+	 ::= <AttributeGroups> 'get' <Block>
+          | <AttributeGroups> 'get' ';'
+          | 'get' <Block>
           | 'get' ';'
 
 <PropertySetPart>
-	 ::= 'set' <Block>
+	 ::= <AttributeGroups> 'set' <Block>
+          | <AttributeGroups> 'set' ';'
+          | 'set' <Block>
           | 'set' ';'
 
-<IndexerDeclaration> ::= <IndexerHeader> <IndexerBody>
-
+<IndexerDeclaration> ::= <AttributeGroups> <IndexerHeader> <IndexerBody>
+                       | <IndexerHeader> <IndexerBody>
 
 <IndexerHeader>
         ::= <Modifiers> <Type> <IndexerDeclarator>
@@ -312,11 +329,15 @@ Comment Line = '//'
 	 |   '{' <IndexerSetPart> '}'
 
 <IndexerGetPart>
-	 ::= 'get' <Block>
+	 ::= <AttributeGroups> 'get' <Block>
+          | <AttributeGroups> 'get' ';'
+          | 'get' <Block>
           | 'get' ';'
 
 <IndexerSetPart>
-	 ::= 'set' <Block>
+	 ::= <AttributeGroups> 'set' <Block>
+          | <AttributeGroups> 'set' ';'
+          | 'set' <Block>
           | 'set' ';'
 
 
@@ -329,23 +350,26 @@ Comment Line = '//'
         ::= <Block>
          |  ';'
 
-<StaticInitializer> 
-        ::= 'static' <Block>
-
 <ConstructorDeclaration>
-        ::= <Modifiers> <ConstructorDeclarator> <ConstructorBody>
-         |  <ConstructorDeclarator> <ConstructorBody>
+        ::= <AttributeGroups> <Modifiers> <ConstructorDeclarator> <ConstructorBody>
+          | <AttributeGroups> <ConstructorDeclarator> <ConstructorBody>
+          | <Modifiers> <ConstructorDeclarator> <ConstructorBody>
+          | <ConstructorDeclarator> <ConstructorBody>
+
 
 <ConstructorDeclarator>
         ::= <SimpleName> '(' <FormalParameterList> ')'
          |  <SimpleName> '(' ')'
-         | <SimpleName> '(' <FormalParameterList> ')' ':' <ExplicitConstructorInvocation>
+         |  <SimpleName> '(' <FormalParameterList> ')' ':' <ExplicitConstructorInvocation>
          |  <SimpleName> '(' ')' ':' <ExplicitConstructorInvocation>
 
 
 <StructConstructorDeclaration>
-        ::= <Modifiers> <StructConstructorDeclarator> <ConstructorBody>
-         |  <StructConstructorDeclarator> <ConstructorBody>
+        ::= <AttributeGroups> <Modifiers> <StructConstructorDeclarator> <ConstructorBody>
+          | <AttributeGroups> <StructConstructorDeclarator> <ConstructorBody>
+          | <Modifiers> <StructConstructorDeclarator> <ConstructorBody>
+          | <StructConstructorDeclarator> <ConstructorBody>
+
 
 <StructConstructorDeclarator>
         ::= <SimpleName> '(' <FormalParameterList> ')'
@@ -362,16 +386,26 @@ Comment Line = '//'
          |  'base' '(' ')' 
                                    
 <InterfaceDeclaration> 
-        ::= <Modifiers> 'interface' Identifier <Inherits> <InterfaceBody>
-         |  <Modifiers> 'interface' Identifier <InterfaceBody>
-         |  'interface' Identifier <Inherits> <InterfaceBody>
-         |  'interface' Identifier <InterfaceBody>
+        ::= <AttributeGroups> <Modifiers> 'interface' <GenericIdentifier> <Inherits> <InterfaceBody>
+         | <AttributeGroups> <Modifiers> 'interface' <GenericIdentifier> <InterfaceBody>
+         | <AttributeGroups> 'interface' <GenericIdentifier> <Inherits> <InterfaceBody>
+         | <AttributeGroups> 'interface' <GenericIdentifier> <InterfaceBody>
+         | <Modifiers> 'interface' <GenericIdentifier> <Inherits> <InterfaceBody>
+         | <Modifiers> 'interface' <GenericIdentifier> <InterfaceBody>
+         | 'interface' <GenericIdentifier> <Inherits> <InterfaceBody>
+         | 'interface' <GenericIdentifier> <InterfaceBody>
+
 
 <StructDeclaration> 
-        ::= <Modifiers> 'struct' Identifier <Inherits> <StructBody>
-         |  <Modifiers> 'struct' Identifier <StructBody>
-         |  'struct' Identifier <Inherits> <StructBody>
-         |  'struct' Identifier <StructBody>
+        ::= <AttributeGroups> <Modifiers> 'struct' <GenericIdentifier> <Inherits> <StructBody>
+         | <AttributeGroups> <Modifiers> 'struct' <GenericIdentifier> <StructBody>
+         | <AttributeGroups> 'struct' <GenericIdentifier> <Inherits> <StructBody>
+         | <AttributeGroups> 'struct' <GenericIdentifier> <StructBody>
+         | <Modifiers> 'struct' <GenericIdentifier> <Inherits> <StructBody>
+         | <Modifiers> 'struct' <GenericIdentifier> <StructBody>
+         | 'struct' <GenericIdentifier> <Inherits> <StructBody>
+         | 'struct' <GenericIdentifier> <StructBody>
+
 
 <StructBody> 
         ::= '{' '}'
@@ -383,7 +417,6 @@ Comment Line = '//'
 
 <StructBodyDeclaration> 
         ::= <StructMemberDeclaration>
-         |  <StaticInitializer>
          |  <StructConstructorDeclaration>
 
 <InterfaceBody> 
@@ -458,6 +491,7 @@ Comment Line = '//'
          |  <BreakStatement>
          |  <ContinueStatement>
          |  <ReturnStatement>
+         |  <YieldReturnStatement>
          |  <SynchronizedStatement>
          |  <ThrowStatement>
          |  <TryStatement>
@@ -571,6 +605,9 @@ Comment Line = '//'
 <ReturnStatement> 
         ::= 'return' <Expression> ';'
          |  'return' ';'
+
+<YieldReturnStatement> 
+        ::= 'yield' 'return' <Expression> ';'
 
 <ThrowStatement> 
         ::= 'throw' <Expression> ';'
@@ -719,7 +756,9 @@ Comment Line = '//'
          |  '(' <Name> <Dims> ')' <UnaryExpressionNotPlusMinus>
 
 <AsExpression>
-	 ::= <UnaryExpressionNotPlusMinus> 'as' <Type>
+	 ::= <UnaryExpressionNotPlusMinus> 'as' <GenericType>
+          | <UnaryExpressionNotPlusMinus> 'as' <ArrayType>
+          | <UnaryExpressionNotPlusMinus> 'as' <Name>
 
 
 <MultiplicativeExpression>
@@ -796,7 +835,6 @@ Comment Line = '//'
          |  '-='
          |  '<<='
          |  '>>='
-         |  '>>>='
          |  '&='
          |  '^='
          |  '|='
@@ -805,18 +843,67 @@ Comment Line = '//'
 
 <ConstantExpression> ::= <Expression>
 
-<EnumDeclaration> ::= <Modifiers> enum Identifier <EnumInherits> <EnumBody>
-                    | <Modifiers> enum Identifier <EnumBody>
+<EnumDeclaration> ::= <AttributeGroups> <Modifiers> 'enum' Identifier <EnumInherits> <EnumBody>
+                    | <AttributeGroups> <Modifiers> 'enum' Identifier <EnumBody>
+                    | <AttributeGroups> 'enum' Identifier <EnumInherits> <EnumBody>
+                    | <AttributeGroups> 'enum' Identifier <EnumBody>
+		      | <Modifiers> 'enum' Identifier <EnumInherits> <EnumBody>
+                    | <Modifiers> 'enum' Identifier <EnumBody>
+                    | 'enum' Identifier <EnumInherits> <EnumBody>
+                    | 'enum' Identifier <EnumBody>
+
+
 
 <EnumInherits> ::= ':' <IntegralType>
 
 <EnumBody> 
         ::= '{' '}'
          |  '{' <EnumBodyDeclarations> '}'
+         |  '{' <EnumBodyDeclarations> ',' '}'
+
+
 
 <EnumBodyDeclarations> ::= <EnumBodyDeclaration>
                          | <EnumBodyDeclarations> ',' <EnumBodyDeclaration>
 
-<EnumBodyDeclaration> ::=  Identifier
-                        |  Identifier '=' <IntegerLiteral>
+<EnumBodyDeclaration> ::= <AttributeGroups> Identifier
+                        | <AttributeGroups> Identifier '=' <IntegerLiteral>
+                        | Identifier
+                        | Identifier '=' <IntegerLiteral>
 
+
+
+
+<DelegateDeclaration> ::= <AttributeGroups> <Modifiers> delegate <Type> <GenericIdentifier> '(' <FormalParameterList> ')' ';'
+                        | <AttributeGroups> <Modifiers> delegate <Type> <GenericIdentifier> '(' ')' ';'
+                        | <AttributeGroups> delegate <Type> <GenericIdentifier> '(' <FormalParameterList> ')' ';'
+                        | <AttributeGroups> delegate <Type> <GenericIdentifier> '(' ')' ';'
+                        | <Modifiers> delegate <Type> <GenericIdentifier> '(' <FormalParameterList> ')' ';'
+                        | <Modifiers> delegate <Type> <GenericIdentifier> '(' ')' ';'
+                        | delegate <Type> <GenericIdentifier> '(' <FormalParameterList> ')' ';'
+                        | delegate <Type> <GenericIdentifier> '(' ')' ';'
+
+
+
+! represents a type name generic or not generic (eg class MyClass<T>)
+<GenericIdentifier> ::= Identifier
+                   | Identifier '<' <TypeList> '>'
+
+<AttributeGroups>
+		::= <AttributeGroup>
+		  | <AttributeGroups> <AttributeGroup>
+<AttributeGroup>
+		::= '[' <Attributes> ']'
+
+<Attributes>
+		::= <Attribute>
+                | <Attributes> ',' <Attribute>
+
+!TODO parameterized attributes (with property set support)
+<Attribute>
+		::= <Name>
+                | <Name> '(' ')'
+
+
+
+                

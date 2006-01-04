@@ -459,15 +459,22 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				{
 					if (idtbl == null) 
 					{
-						//if (hashObject is IPropertyMap) { hashObject = ((IPropertyMap) hashObject).ClassMap ; }
-						if (hashObject is IPropertyMap) { hashObject = tableJoin ; }
-						idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
+                        //TODO: examine this line , this causes a bug with an extra table alias in some cases
+                        //the from "classmap" already got an alias , and this line uses a new hash  key and thus creating an extra alias
+                        //if (hashObject is IPropertyMap) { hashObject = tableJoin ; }
+
+						if (hashObject is IPropertyMap) { hashObject = ((IPropertyMap) hashObject).ClassMap ; }
+                            idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
+						
+                       
+						
 					}
 					col = tbl.GetSqlColumnAlias(columnMap);
 					idcol = idtbl.GetSqlColumnAlias(columnMap.GetPrimaryKeyColumnMap());
 
 					SqlSearchCondition search = select.SqlWhereClause.GetNextSqlSearchCondition();
-					search.GetSqlComparePredicate(col, SqlCompareOperatorType.Equals, idcol);				}
+					search.GetSqlComparePredicate(col, SqlCompareOperatorType.Equals, idcol);				
+                }
 				
 			}
 		}
@@ -712,8 +719,6 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 				SqlSearchCondition search = select.SqlWhereClause.GetNextSqlSearchCondition();
 				search.GetSqlComparePredicate(parentColAlias, SqlCompareOperatorType.Equals, thisColAlias);
-					
-				Console.Write("aaa") ;
 				
 			}
 		}
@@ -825,7 +830,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 					fromTable.Alias = tbl ;
 
 					fromTables.Add(fromTable);
-					includedTableAliases.Add(tbl);					
+					includedTableAliases.Add(tbl);	
+				
 				}
 			}
 		}
