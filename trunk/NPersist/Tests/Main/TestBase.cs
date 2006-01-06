@@ -10,7 +10,7 @@ namespace Puzzle.NPersist.Tests.Main
 	public class TestBase
 	{
 
-		public static string ConnectionString = "SERVER=(local);UID=sa;PWD=;DATABASE=NPersistNUnitTests;";
+		public static string ConnectionString = "SERVER=(local);;DATABASE=NPersistNUnitTests;integrated security=true";
 
 		//The npersist xml mapping file has been compiled into the Northwind.Domain dll
 		//as an embedded resource with the following name (the namespace appears twice

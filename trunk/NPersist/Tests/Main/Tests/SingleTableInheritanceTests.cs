@@ -118,8 +118,8 @@ namespace Puzzle.NPersist.Tests.Main
 			e.EmploymentDate = DateTime.Now;
 			wf.Name = "My First Folder";
 			wf.Person = e;
-			wf.Employee = e;
-			wf.WorkType = "Boring";
+			wf.Employee = e;			
+			wf.WorkType = "Boring"; //ROGER: c'mon , be positive now
 			m_Context.Commit();
 			m_Context2 = GetContext();
 			m_Context2.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context2_ExecutingSql) ;
