@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<domain name="NUnitTests" root="Puzzle.NPersist.Tests.Main" assembly="Puzzle.NPersist.Tests.Main" source="NUnitTests" target-languages="vb">
+<domain name="NUnitTests" assembly="Puzzle.NPersist.Tests.Main" root="Puzzle.NPersist.Tests.Main" source="NUnitTests" target-languages="vb">
   <class name="Book" table="tblBook">
     <property name="Id" id="true" columns="BookId" type="Long" />
     <property name="Name" columns="Name" type="System.String" />
     <property name="Cover" columns="Cover_CoverId" ref="OneToMany" cascade-create="true" cascade-delete="true" type="Cover" />
-    <property name="BookInfo" table="tblBookInfo" columns="BookInfoId" id-columns="Book_BookId" read-only="true" ref="OneToOne" inverse="Book" inherits-inverse="true" cascade-create="true" cascade-delete="true" type="BookInfo" />
+    <property name="BookInfo" table="tblBookInfo" columns="BookInfoId" id-columns="Book_BookId" read-only="true" slave="true" ref="OneToOne" inverse="Book" inherits-inverse="true" cascade-create="true" cascade-delete="true" type="BookInfo" />
   </class>
   <class name="BookInfo" table="tblBookInfo">
     <property name="Id" id="true" columns="BookInfoId" type="Long" />
@@ -14,7 +14,7 @@
   <class name="ClsTblEmployee" table="tblClsTblPerson" type-column="ClsTblPersonType" type-value="E" inherits="ClsTblPerson" inheritance="ClassTableInheritance">
     <property name="Salary" table="tblClsTblEmployee" columns="Salary" id-columns="ClsTblPersonId, ClsTblPersonType" type="System.Decimal" />
     <property name="EmploymentDate" table="tblClsTblEmployee" columns="EmploymentDate" id-columns="ClsTblPersonId, ClsTblPersonType" type="System.DateTime" />
-    <property name="WorkFolders" table="tblClsTblWorkFolder" id-columns="Employee_ClsTblPersonId, Employee_ClsTblPersonType" list="true" item-type="ClsTblWorkFolder" read-only="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="WorkFolders" table="tblClsTblWorkFolder" id-columns="Employee_ClsTblPersonId, Employee_ClsTblPersonType" list="true" item-type="ClsTblWorkFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" />
   </class>
   <class name="ClsTblFolder" table="tblClsTblFolder" type-column="ClsTblFolderType" type-value="F" inheritance="ClassTableInheritance">
     <property name="Id" id="true" columns="ClsTblFolderId" type="Long" />
@@ -25,7 +25,7 @@
     <property name="Id" id="true" columns="ClsTblPersonId" type="Long" />
     <property name="FirstName" columns="FirstName" type="System.String" />
     <property name="LastName" columns="LastName" type="System.String" />
-    <property name="Folders" table="tblClsTblFolder" id-columns="Person_ClsTblPersonId, Person_ClsTblPersonType" list="true" item-type="ClsTblFolder" read-only="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="Folders" table="tblClsTblFolder" id-columns="Person_ClsTblPersonId, Person_ClsTblPersonType" list="true" item-type="ClsTblFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" />
   </class>
   <class name="ClsTblWorkFolder" table="tblClsTblFolder" type-column="ClsTblFolderType" type-value="W" inherits="ClsTblFolder" inheritance="ClassTableInheritance">
     <property name="Employee" table="tblClsTblWorkFolder" columns="Employee_ClsTblPersonId, Employee_ClsTblPersonType" id-columns="ClsTblFolderId, ClsTblFolderType" ref="OneToMany" type="ClsTblEmployee" />
@@ -36,7 +36,7 @@
     <property name="Salary" table="tblCncTblEmployee" columns="Salary" id-columns="CncTblPersonId, CncTblPersonType" type="System.Decimal" />
     <property name="FirstName" table="tblCncTblEmployee" columns="FirstName" id-columns="CncTblPersonId, CncTblPersonType" type="System.String" />
     <property name="LastName" table="tblCncTblEmployee" columns="LastName" id-columns="CncTblPersonId, CncTblPersonType" type="System.String" />
-    <property name="WorkFolders" table="tblCncTblWorkFolder" id-columns="Employee_CncTblPersonId, Employee_CncTblPersonType" list="true" item-type="CncTblWorkFolder" read-only="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="WorkFolders" table="tblCncTblWorkFolder" id-columns="Employee_CncTblPersonId, Employee_CncTblPersonType" list="true" item-type="CncTblWorkFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" />
   </class>
   <class name="CncTblFolder" table="tblCncTblFolder" type-column="CncTblFolderType" type-value="F" inheritance="ConcreteTableInheritance">
     <property name="Id" id="true" columns="CncTblFolderId" type="System.Int32" />
@@ -47,7 +47,7 @@
     <property name="Id" id="true" columns="CncTblPersonId" type="System.Int32" />
     <property name="FirstName" columns="FirstName" type="System.String" />
     <property name="LastName" columns="LastName" type="System.String" />
-    <property name="Folders" table="tblCncTblFolder" id-columns="Person_CncTblPersonId, Person_CncTblPersonType" list="true" item-type="CncTblFolder" read-only="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="Folders" table="tblCncTblFolder" id-columns="Person_CncTblPersonId, Person_CncTblPersonType" list="true" item-type="CncTblFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" />
   </class>
   <class name="CncTblWorkFolder" table="tblCncTblFolder" type-column="CncTblFolderType" type-value="W" inherits="CncTblFolder" inheritance="ConcreteTableInheritance">
     <property name="Name" table="tblCncTblWorkFolder" columns="Name" id-columns="CncTblFolderId, CncTblFolderType" type="System.String" />
@@ -69,12 +69,12 @@
     <property name="ID" id="true" columns="ID" type="System.Int32" />
     <property name="Descr" columns="Descr" type="System.String" />
     <property name="Parent" columns="ParentID" ref="OneToMany" inverse="Children" type="Section" />
-    <property name="Children" table="tblSections" id-columns="ParentID" list="true" item-type="Section" read-only="true" ref="ManyToOne" inverse="Parent" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="Children" table="tblSections" id-columns="ParentID" list="true" item-type="Section" read-only="true" slave="true" ref="ManyToOne" inverse="Parent" inherits-inverse="true" />
   </class>
   <class name="SngTblEmployee" table="tblSngTblPerson" type-column="SngTblPersonType" type-value="E" inherits="SngTblPerson" inheritance="SingleTableInheritance">
     <property name="Salary" columns="Salary" type="System.Decimal" />
     <property name="EmploymentDate" columns="EmploymentDate" type="System.DateTime" />
-    <property name="WorkFolders" table="tblSngTblFolder" id-columns="Employee_SngTblPersonId, Employee_SngTblPersonType" list="true" item-type="SngTblWorkFolder" read-only="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="WorkFolders" table="tblSngTblFolder" id-columns="Employee_SngTblPersonId, Employee_SngTblPersonType" list="true" item-type="SngTblWorkFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Employee" inherits-inverse="true" />
   </class>
   <class name="SngTblFolder" table="tblSngTblFolder" type-column="SngTblFolderType" type-value="F" inheritance="SingleTableInheritance">
     <property name="Id" id="true" columns="SngTblFolderId" type="System.Int32" />
@@ -85,7 +85,7 @@
     <property name="Id" id="true" columns="SngTblPersonId" type="System.Int32" />
     <property name="FirstName" columns="FirstName" type="System.String" />
     <property name="LastName" columns="LastName" type="System.String" />
-    <property name="Folders" table="tblSngTblFolder" id-columns="Person_SngTblPersonId, Person_SngTblPersonType" list="true" item-type="SngTblFolder" read-only="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" default="new System.Collections.ArrayList()" />
+    <property name="Folders" table="tblSngTblFolder" id-columns="Person_SngTblPersonId, Person_SngTblPersonType" list="true" item-type="SngTblFolder" read-only="true" slave="true" ref="ManyToOne" inverse="Person" inherits-inverse="true" />
   </class>
   <class name="SngTblWorkFolder" table="tblSngTblFolder" type-column="SngTblFolderType" type-value="W" inherits="SngTblFolder" inheritance="SingleTableInheritance">
     <property name="Employee" columns="Employee_SngTblPersonId, Employee_SngTblPersonType" ref="OneToMany" type="SngTblEmployee" />
@@ -100,7 +100,7 @@
     <property name="DateOfBirth" table="tblProfile" columns="DOB" id-columns="UserID" type="System.String" />
   </class>
   <source name="NUnitTests" type="MSSqlServer" provider="SqlClient" schema="dbo">
-    <connection-string>SERVER=(local);UID=sa;PWD=;DATABASE=NPersistNUnitTests;</connection-string>
+    <connection-string>SERVER=(local);DATABASE=NPersistNUnitTests;integrated security=true</connection-string>
     <table name="FolderID">
       <column name="Ap_Code" primary="true" type="String" prec="50" length="100" scale="0" />
       <column name="FolderDescript" type="String" prec="0" length="16" scale="0" specific-type="True" />

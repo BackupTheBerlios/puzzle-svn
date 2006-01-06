@@ -25,10 +25,14 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestFetchEmployeeBeginEditUpdateThenCancel()
 		{
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
 			using (IContext context = GetContext() )
 			{
+				
 				//we want to fetch the employee with id = 1
-				int employeeId = 1;
+				int employeeId = id;
 
 				//Ask the context to fetch the employee
 				Employee employee = (Employee) context.GetObjectById(employeeId, typeof(Employee));

@@ -22,16 +22,19 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestLazyLoadingOnReferenceProperty()
 		{
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
 			using (IContext context = GetContext() )
 			{
-				//Ask the context to fetch the employee with id = 1
-				Employee employee = (Employee) context.GetObjectById(1, typeof(Employee));
+				//Ask the context to fetch the employee with id = @id
+				Employee employee = (Employee) context.GetObjectById(id, typeof(Employee));
 
 				//Assert that the context didn't return a null value
 				Assert.IsNotNull(employee);
 
 				//Assert that the employee has the id we asked for
-				Assert.AreEqual(1, employee.Id);
+				Assert.AreEqual(id, employee.Id);
 
 				//Assert that the employee object has been fully loaded
 				Assert.AreEqual(ObjectStatus.Clean, context.GetObjectStatus(employee));
@@ -44,7 +47,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				Assert.IsNotNull(boss);
 
 				//Assert that the boss has the id we asked for
-				Assert.AreEqual(2, boss.Id);
+				Assert.AreEqual(bossid, boss.Id);
 
 				//Assert that the boss object has only been lazy loaded
 				//(it has an id but none of its other properties are
@@ -72,16 +75,19 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestLazyLoadingOnReferenceListProperty()
 		{
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
 			using (IContext context = GetContext() )
 			{
 				//Ask the context to fetch the employee with id = 2
-				Employee boss = (Employee) context.GetObjectById(2, typeof(Employee));
+				Employee boss = (Employee) context.GetObjectById(bossid, typeof(Employee));
 
 				//Assert that the context didn't return a null value
 				Assert.IsNotNull(boss);
 
 				//Assert that the employee has the id we asked for
-				Assert.AreEqual(2, boss.Id);
+				Assert.AreEqual(bossid, boss.Id);
 
 				//Assert that the employee object has been fully loaded
 				Assert.AreEqual(ObjectStatus.Clean, context.GetObjectStatus(boss));
