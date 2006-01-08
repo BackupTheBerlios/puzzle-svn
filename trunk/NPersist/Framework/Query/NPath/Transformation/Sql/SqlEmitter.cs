@@ -463,8 +463,22 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
                         //the from "classmap" already got an alias , and this line uses a new hash  key and thus creating an extra alias
                         //if (hashObject is IPropertyMap) { hashObject = tableJoin ; }
 
-						if (hashObject is IPropertyMap) { hashObject = ((IPropertyMap) hashObject).ClassMap ; }
-                            idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
+
+						//FIX: Roger, if the classmap is the root class then use the classmap as key
+						if (hashObject is IPropertyMap) 
+						{
+							IClassMap classMap = ((IPropertyMap) hashObject).ClassMap ; 
+
+							if (classMap == this.RootClassMap)
+							{
+								hashObject = classMap;
+							}
+							else
+							{
+								hashObject = tableJoin;	
+							}
+						}
+                        idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
 						
                        
 						

@@ -8,17 +8,18 @@
 // *
 // *
 
-using System;
 using System.Collections;
 using Puzzle.NPersist.Framework.Mapping;
-using Puzzle.NPersist.Framework.Sql.Dom;
 
-namespace Puzzle.NPersist.Framework.NPath.Sql {
+namespace Puzzle.NPersist.Framework.NPath.Sql
+{
 	/// <summary>
 	/// Summary description for JoinTree.
 	/// </summary>
-	public class JoinTree {
-		public JoinTree(PropertyPathTraverser propertyPathTraverser) {
+	public class JoinTree
+	{
+		public JoinTree(PropertyPathTraverser propertyPathTraverser)
+		{
 			this.propertyPathTraverser = propertyPathTraverser;
 		}
 
@@ -26,29 +27,35 @@ namespace Puzzle.NPersist.Framework.NPath.Sql {
 		private ITableMap tableMap = null;
 		private PropertyPathTraverser propertyPathTraverser = null;
 
-		public PropertyPathTraverser PropertyPathTraverser {
+		public PropertyPathTraverser PropertyPathTraverser
+		{
 			get { return this.propertyPathTraverser; }
 		}
-		
-		public ArrayList TableJoins {
+
+		public ArrayList TableJoins
+		{
 			get { return this.tableJoins; }
 			set { this.tableJoins = value; }
 		}
-			
-		public ITableMap TableMap {
+
+		public ITableMap TableMap
+		{
 			get { return this.tableMap; }
 			set { this.tableMap = value; }
 		}
 
-		public TableJoin GetTableJoinForPropertyPath(string propertyPath) {
-			ArrayList propertyMaps = propertyPathTraverser.GetPathPropertyMaps(propertyPath); 
+		public TableJoin GetTableJoinForPropertyPath(string propertyPath)
+		{
+			ArrayList propertyMaps = propertyPathTraverser.GetPathPropertyMaps(propertyPath);
 			ArrayList joins = tableJoins;
 			TableJoin theTableJoin = null;
 			foreach (IPropertyMap propertyMap in propertyMaps)
 			{
 				theTableJoin = null;
-				foreach(TableJoin tableJoin in joins) {
-					if (tableJoin.PropertyMap == propertyMap) {
+				foreach (TableJoin tableJoin in joins)
+				{
+					if (tableJoin.PropertyMap == propertyMap)
+					{
 						theTableJoin = tableJoin;
 						break;
 					}
@@ -84,9 +91,9 @@ namespace Puzzle.NPersist.Framework.NPath.Sql {
 				else
 				{
 					//make sure the table has an alias
-					tableJoin.Parent = GetTableJoinForPropertyPath(propertyPath.Substring(0, propertyPath.Length - propertyMap.Name.Length - 1) );					
+					tableJoin.Parent = GetTableJoinForPropertyPath(propertyPath.Substring(0, propertyPath.Length - propertyMap.Name.Length - 1));
 					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.GetTableMap(), tableJoin.Parent);
-				}												
+				}
 			}
 		}
 	}
