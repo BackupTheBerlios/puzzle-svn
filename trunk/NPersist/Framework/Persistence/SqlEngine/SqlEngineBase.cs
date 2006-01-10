@@ -23,6 +23,8 @@ using Puzzle.NPersist.Framework.Sql.Dom;
 using Puzzle.NPersist.Framework.Sql.Visitor;
 using Puzzle.NPersist.Framework.Utility;
 
+//
+
 namespace Puzzle.NPersist.Framework.Persistence
 {
 	public class SqlEngineBase : ISqlEngine
