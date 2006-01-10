@@ -269,7 +269,7 @@ namespace Puzzle.Drawing.GDI
 			APIPoint gp;
 			gp.x = 0;
 			gp.y = 0;
-			NativeMethods.MoveToEx(mhDC, p1.X, p1.Y, gp);
+			NativeMethods.MoveToEx(mhDC, p1.X, p1.Y,ref gp);
 			NativeMethods.LineTo(mhDC, p2.X, p2.Y);
 			IntPtr crap = NativeMethods.SelectObject(mhDC, oldpen);
 		}

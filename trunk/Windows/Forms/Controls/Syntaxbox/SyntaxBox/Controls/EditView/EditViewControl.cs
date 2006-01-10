@@ -257,7 +257,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				this.AutoList = new AutoListForm(this);
 				NativeMethods.SetWindowLong(this.AutoList.Handle,
 				                            NativeMethods.GWL_STYLE,
-				                            NativeMethods.WS_CHILD);
+				                            (int)NativeMethods.WS_CHILD);
 
 				this.AutoList.SendToBack();
 				this.AutoList.Visible = false;

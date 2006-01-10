@@ -23,48 +23,9 @@ namespace Puzzle.Windows.Forms
 	/// <summary>
 	/// Syntaxbox control that can be used as a pure text editor or as a code editor when a syntaxfile is used.
 	/// </summary>
-	[Designer(typeof (SyntaxBoxDesigner), typeof (IDesigner))]
-	public class SyntaxBoxControl : BaseControl
+    [Designer(typeof (SyntaxBoxDesigner), typeof (IDesigner))]
+    public class SyntaxBoxControl : BaseControl
 	{
-#if DEBUG
-		public void Kill()
-		{
-			this.Controls.Clear();
-			this._ActiveView = null;
-			this.UpperLeft = null;
-			this.UpperRight = null;
-			this.LowerLeft = null;
-			this.LowerRight = null;
-
-			try
-			{
-				foreach (EditViewControl  e in Views)
-				{
-					e.Kill();
-					//	e.Dispose ();
-				}
-			}
-			catch
-			{
-			}
-			Views.Clear();
-
-			splitView1.Controls.Clear();
-			try
-			{
-				splitView1.UpperLeft = null;
-				splitView1.UpperRight = null;
-				splitView1.LowerLeft = null;
-				splitView1.LowerRight = null;
-			}
-			catch
-			{
-			}
-		}
-#endif
-
-		private const short SyntaxBox_ProductID = 1;
-
 		protected internal bool DisableIntelliMouse = false;
 		protected internal bool DisableFindForm = false;
 		protected internal bool DisableAutoList = false;
@@ -91,7 +52,6 @@ namespace Puzzle.Windows.Forms
 		private bool _HighLightActiveLine = false;
 		private bool _VirtualWhitespace = false;
 		private bool _BracketMatching = true;
-		private bool _OverWrite = false;
 		private bool _ParseOnPaste = false;
 		private bool _SmoothScroll = false;
 		private bool _AllowBreakPoints = true;
@@ -312,6 +272,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		[Category("Behavior")]
 		[Browsable(false)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public TextPoint AutoListPosition
 		{
 			get { return _ActiveView.AutoListPosition; }
@@ -329,6 +290,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		[Category("Behavior")]
 		[Browsable(false)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public TextPoint InfoTipPosition
 		{
 			get { return _ActiveView.InfoTipPosition; }
@@ -371,6 +333,7 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the active view
 		/// </summary>
 		[Browsable(false)]
+       // [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ActiveView ActiveView
 		{
 			get
@@ -462,6 +425,7 @@ namespace Puzzle.Windows.Forms
 		[Category("Appearance - InfoTip"),
 			Description("An image to show in the infotip")]
 		[DefaultValue(null)]
+       // [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Image InfoTipImage
 		{
 			get { return _ActiveView.InfoTip.Image; }
@@ -533,6 +497,7 @@ namespace Puzzle.Windows.Forms
 		/// Gets the Selection object from the active view.
 		/// </summary>
 		[Browsable(false)]
+     //   [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Selection Selection
 		{
 			get
@@ -550,6 +515,7 @@ namespace Puzzle.Windows.Forms
 		/// Keyboard actions to add shortcut key combinations to certain tasks.
 		/// </summary>
 		[Browsable(false)]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden)]
 		public KeyboardActionList KeyboardActions
 		{
 			get { return _KeyboardActions; }
@@ -687,8 +653,8 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		[Category("Appearance - Borders")]
 		[Description("Gets or Sets the border styles of the split views.")]
-		[DefaultValue(BorderStyle.FixedSingle)]
-		public BorderStyle ChildBorderStyle
+        [DefaultValue(BorderStyle.FixedSingle)]
+        public BorderStyle ChildBorderStyle
 		{
 			get { return ((EditViewControl) Views[0]).BorderStyle; }
 			set
@@ -874,7 +840,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool OverWrite
 		{
-			get { return _OverWrite; }
+            get { return this._ActiveView.OverWrite; }
 		}
 
 
@@ -1404,6 +1370,7 @@ namespace Puzzle.Windows.Forms
 		[Category("Appearance"),
 			Description("Determines what Scrollbars should be visible")]
 		[DefaultValue(ScrollBars.Both)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ScrollBars ScrollBars
 		{
 			get { return _ScrollBars; }
@@ -1432,7 +1399,7 @@ namespace Puzzle.Windows.Forms
 		private bool _SplitView;
 
 		[Category("Appearance"),
-			Description("Determines if the controls should use splitviews")]
+			Description("Determines if the controls should use splitviews")]        
 		[DefaultValue(true)]
 		public bool SplitView
 		{
@@ -1791,9 +1758,35 @@ namespace Puzzle.Windows.Forms
 
 		#endregion //END Public Methods
 
-		protected virtual void OnCreate()
-		{
-		}
+        //protected virtual void OnCreate()
+        //{
+        //}
+
+        public void Save(string filename)
+        {
+            string text = this.Document.Text;
+
+            StreamWriter swr = new StreamWriter(filename);
+
+            swr.Write(text);
+
+            swr.Flush();
+
+            swr.Close();
+        }
+
+        public void Open(string filename)
+        {
+            if (this.Document == null)
+                throw new NullReferenceException("CodeEditorControl.Document");
+
+            StreamReader swr = new StreamReader(filename);
+
+            this.Document.Text = swr.ReadToEnd();
+
+            swr.Close();
+        }
+
 
 		#region Constructor
 
@@ -1803,7 +1796,7 @@ namespace Puzzle.Windows.Forms
 		public SyntaxBoxControl() : base()
 		{
 			this.Document = new SyntaxDocument();
-			this.OnCreate();
+			//this.OnCreate();
 
 			if (!DisableSplitView)
 			{
@@ -1854,7 +1847,7 @@ namespace Puzzle.Windows.Forms
 			// 
 			this.LowerRight.AllowDrop = true;
 			this.LowerRight.BorderColor = Color.White;
-			this.LowerRight.BorderStyle = BorderStyle.None;
+            this.LowerRight.BorderStyle = BorderStyle.None;
 			this.LowerRight.Location = new Point(148, 124);
 			this.LowerRight.Name = "LowerRight";
 			this.LowerRight.Size = new Size(352, 240);
@@ -1925,9 +1918,9 @@ namespace Puzzle.Windows.Forms
 			AutoListIcons = _AutoListIcons;
 			this.SplitView = true;
 			this.ScrollBars = ScrollBars.Both;
-			this.BorderStyle = BorderStyle.None;
+            this.BorderStyle = BorderStyle.None;
 			this.ChildBorderColor = SystemColors.ControlDark;
-			this.ChildBorderStyle = BorderStyle.FixedSingle;
+            this.ChildBorderStyle = BorderStyle.FixedSingle;
 			this.BackColor = SystemColors.Window;
 
 //			this.UpperLeft.Visible = true;
@@ -2325,51 +2318,34 @@ namespace Puzzle.Windows.Forms
 
 		#endregion //END DISPOSE
 
-		/// <summary>
-		/// 
-		/// </summary>
-		~SyntaxBoxControl()
-		{
-#if DEBUG
-			try
-			{
-				Console.WriteLine("finalizing syntaxbox");
-			}
-			catch
-			{
-			}
-#endif
-		}
-
 		#region Private/Protected/Internal methods
 
 		private void InitializeComponent()
 		{
-			this.components = new Container();
-			ResourceManager resources = new ResourceManager(typeof (SyntaxBoxControl));
-			this._GutterIcons = new ImageList(this.components);
-			this._AutoListIcons = new ImageList(this.components);
-			this.ParseTimer = new WeakTimer(this.components);
-			// 
-			// _GutterIcons
-			// 
-			this._GutterIcons.ColorDepth = ColorDepth.Depth32Bit;
-			this._GutterIcons.ImageSize = new Size(17, 17);
-			this._GutterIcons.ImageStream = ((ImageListStreamer) (resources.GetObject("_GutterIcons.ImageStream")));
-			this._GutterIcons.TransparentColor = Color.Transparent;
-			// 
-			// _AutoListIcons
-			// 
-			this._AutoListIcons.ColorDepth = ColorDepth.Depth8Bit;
-			this._AutoListIcons.ImageSize = new Size(16, 16);
-			this._AutoListIcons.ImageStream = ((ImageListStreamer) (resources.GetObject("_AutoListIcons.ImageStream")));
-			this._AutoListIcons.TransparentColor = Color.Transparent;
-			// 
-			// ParseTimer
-			// 
-			this.ParseTimer.Enabled = true;
-			this.ParseTimer.Interval = 1;
-			this.ParseTimer.Tick += new EventHandler(this.ParseTimer_Tick);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxBoxControl));
+            this._GutterIcons = new System.Windows.Forms.ImageList(this.components);
+            this._AutoListIcons = new System.Windows.Forms.ImageList(this.components);
+            this.ParseTimer = new Puzzle.Windows.Forms.CoreLib.WeakTimer(this.components);
+            this.SuspendLayout();
+            // 
+            // _GutterIcons
+            // 
+            this._GutterIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_GutterIcons.ImageStream")));
+            this._GutterIcons.TransparentColor = System.Drawing.Color.Transparent;
+//            this._GutterIcons.Images.SetKeyName(0, "break_point.png");
+            // 
+            // _AutoListIcons
+            // 
+            this._AutoListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_AutoListIcons.ImageStream")));
+            this._AutoListIcons.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // ParseTimer
+            // 
+            this.ParseTimer.Enabled = true;
+            this.ParseTimer.Interval = 1;
+            this.ParseTimer.Tick += new System.EventHandler(this.ParseTimer_Tick);
+            this.ResumeLayout(false);
 
 		}
 

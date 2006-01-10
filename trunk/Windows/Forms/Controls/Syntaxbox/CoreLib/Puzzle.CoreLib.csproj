@@ -231,31 +231,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Controls\PopUpContainer\PopUpContainerDesigner.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controls\PopUpContainer\PopUpContainerForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controls\PopUpContainer\PopUpContainerForm.resx"
-                    DependentUpon = "PopUpContainerForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Controls\PopUpContainer\PupUpContainerControl.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controls\PopUpContainer\PupUpContainerControl.resx"
-                    DependentUpon = "PupUpContainerControl.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Controls\RegionHandler\RegionHandler.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
