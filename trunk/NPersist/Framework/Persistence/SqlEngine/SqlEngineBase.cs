@@ -3381,11 +3381,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IClassMap classMap;
 			IColumnMap columnMap;
 			classMap = this.Context.DomainMap.MustGetClassMap(type);
-			columnMap = classMap.GetTypeColumnMap();
-			if (columnMap != null)
-			{
-				typeColumns.Add(columnMap.Name);
-			}
+//			columnMap = classMap.GetTypeColumnMap();
+//			if (columnMap != null)
+//			{
+//				typeColumns.Add(columnMap.Name);
+//			}
 			foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps())
 			{
 				columnMap = propertyMap.GetColumnMap();
@@ -3486,15 +3486,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 				//begin by seeing if a typecolumn has been supplied
 				//if so, get the type value from the datareader and make sure our classMap is of this type
-//				foreach (string strColumnName in typeColumns)
-//				{
-//					strTypeValue = (string) dr[strColumnName];
-//					if (!(strTypeValue == classMap.TypeValue))
-//					{
-//						useClassMap = classMap.GetSubClassWithTypeValue(strTypeValue);
-//						useType = type.Assembly.GetType(useClassMap.Name);
-//					}
-//				}
+				foreach (string strColumnName in typeColumns)
+				{
+					strTypeValue = (string) dr[strColumnName];
+					if (!(strTypeValue == classMap.TypeValue))
+					{
+						useClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
+						useType = this.Context.AssemblyManager.MustGetTypeFromClassMap(useClassMap);
+					}
+				}
 				identity = "";
 				//iterate through the identity properties for our type, get the columnname for each from propertyColumnMap
 				//and get the id values from the datareader, then concatenate the id values to an identity string using the id separator of the type
