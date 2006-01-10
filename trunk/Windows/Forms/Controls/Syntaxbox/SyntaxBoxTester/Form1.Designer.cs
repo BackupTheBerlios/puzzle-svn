@@ -29,34 +29,9 @@ namespace SyntaxBoxTester
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.syntaxBoxControl1 = new Puzzle.Windows.Forms.SyntaxBoxControl();
             this.syntaxDocument1 = new Puzzle.SourceCode.SyntaxDocument(this.components);
+            this.syntaxBoxControl1 = new Puzzle.Windows.Forms.SyntaxBoxControl();
             this.SuspendLayout();
-            // 
-            // syntaxBoxControl1
-            // 
-            this.syntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.SyntaxBox.ActiveView.BottomRight;
-            this.syntaxBoxControl1.AutoListPosition = null;
-            this.syntaxBoxControl1.AutoListSelectedText = "a123";
-            this.syntaxBoxControl1.AutoListVisible = false;
-            this.syntaxBoxControl1.CopyAsRTF = false;
-            this.syntaxBoxControl1.Document = this.syntaxDocument1;
-            this.syntaxBoxControl1.FontName = "Arial";
-            this.syntaxBoxControl1.InfoTipCount = 1;
-            this.syntaxBoxControl1.InfoTipPosition = null;
-            this.syntaxBoxControl1.InfoTipSelectedIndex = 1;
-            this.syntaxBoxControl1.InfoTipVisible = false;
-            this.syntaxBoxControl1.Location = new System.Drawing.Point(12, 12);
-            this.syntaxBoxControl1.LockCursorUpdate = false;
-            this.syntaxBoxControl1.Name = "syntaxBoxControl1";
-            this.syntaxBoxControl1.Size = new System.Drawing.Size(460, 333);
-            this.syntaxBoxControl1.SmoothScroll = false;
-            this.syntaxBoxControl1.SplitviewH = -4;
-            this.syntaxBoxControl1.SplitviewV = -4;
-            this.syntaxBoxControl1.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(234)))));
-            this.syntaxBoxControl1.TabIndex = 0;
-            this.syntaxBoxControl1.Text = "syntaxBoxControl1";
-            this.syntaxBoxControl1.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
             // 
             // syntaxDocument1
             // 
@@ -70,6 +45,32 @@ namespace SyntaxBoxTester
             this.syntaxDocument1.SyntaxFile = "C:\\Puzzle\\Windows\\Forms\\Controls\\Syntaxbox\\Puzzle.Syntaxbox.DefaultSyntaxFiles\\CS" +
                 "harp.syn";
             this.syntaxDocument1.UndoStep = 0;
+            // 
+            // syntaxBoxControl1
+            // 
+            this.syntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.SyntaxBox.ActiveView.BottomRight;
+            this.syntaxBoxControl1.AutoListPosition = null;
+            this.syntaxBoxControl1.AutoListSelectedText = "a123";
+            this.syntaxBoxControl1.AutoListVisible = false;
+            this.syntaxBoxControl1.CopyAsRTF = false;
+            this.syntaxBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.syntaxBoxControl1.Document = this.syntaxDocument1;
+            this.syntaxBoxControl1.FontName = "Courier new";
+            this.syntaxBoxControl1.InfoTipCount = 1;
+            this.syntaxBoxControl1.InfoTipPosition = null;
+            this.syntaxBoxControl1.InfoTipSelectedIndex = 1;
+            this.syntaxBoxControl1.InfoTipVisible = false;
+            this.syntaxBoxControl1.Location = new System.Drawing.Point(0, 0);
+            this.syntaxBoxControl1.LockCursorUpdate = false;
+            this.syntaxBoxControl1.Name = "syntaxBoxControl1";
+            this.syntaxBoxControl1.Size = new System.Drawing.Size(601, 376);
+            this.syntaxBoxControl1.SmoothScroll = false;
+            this.syntaxBoxControl1.SplitviewH = -4;
+            this.syntaxBoxControl1.SplitviewV = -4;
+            this.syntaxBoxControl1.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(234)))));
+            this.syntaxBoxControl1.TabIndex = 0;
+            this.syntaxBoxControl1.Text = "syntaxBoxControl1";
+            this.syntaxBoxControl1.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
             // 
             // Form1
             // 

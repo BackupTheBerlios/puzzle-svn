@@ -185,7 +185,8 @@ namespace Puzzle.Windows
         public const int GWL_STYLE = -16;
         public const int WS_CHILD = 0x40000000;
 
-        [DllImport("gdi32", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+
+        [DllImport("gdi32", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern int EnumFontFamiliesEx(IntPtr hDC, [MarshalAs(UnmanagedType.LPStruct)] LogFont lf, FONTENUMPROC proc, Int64 LParam, Int64 DW);
 
         [DllImport("shlwapi.dll", SetLastError = true)]
@@ -280,7 +281,7 @@ namespace Puzzle.Windows
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int GetTextMetrics(IntPtr hDC, ref GDITextMetric TextMetric);
 
-        [DllImport("gdi32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr CreateFontIndirect([MarshalAs(UnmanagedType.LPStruct)]LogFont LogFont);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
