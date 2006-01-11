@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -19,8 +20,7 @@ using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 namespace Puzzle.Windows.Forms.SyntaxBox
 {
 	[ToolboxItem(false)]
-	public class EditViewControl :
-		SplitViewChildControl
+	public class EditViewControl : SplitViewChildControl
 	{
 		#region General Declarations
 
@@ -214,7 +214,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			if (this._SyntaxBox != null && !this._SyntaxBox.DisableAutoList &&
 				this._AutoList == null)
 			{
-				System.Diagnostics.Debug.WriteLine("Creating Autolist");
+				Debug.WriteLine("Creating Autolist");
 
 				this.AutoList = new AutoListForm(this);
 				NativeMethods.SetWindowLong(this.AutoList.Handle,
@@ -239,7 +239,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			if (!this._SyntaxBox.DisableFindForm && this._FindReplaceDialog == null)
 			{
-				System.Diagnostics.Debug.WriteLine("Creating Findform");
+				Debug.WriteLine("Creating Findform");
 				FindReplaceDialog = new FindReplaceForm(this);
 			}
 		}
@@ -249,7 +249,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			if (this._SyntaxBox != null && !this._SyntaxBox.DisableInfoTip &&
 				this._InfoTip == null)
 			{
-				System.Diagnostics.Debug.WriteLine("Creating Infotip");
+				Debug.WriteLine("Creating Infotip");
 
 				this.InfoTip = new InfoTipForm(this);
 				NativeMethods.SetWindowLong(this.InfoTip.Handle,
@@ -1327,7 +1327,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				this.AllowDrop = true;
 			}
-			catch 
+			catch
 			{
 				//	Console.WriteLine ("error in editview allowdrop {0}",x.Message);
 			}
@@ -3867,9 +3867,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			foreach (TextStyle ts in styles)
 			{
 				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.ForeColor.R,
-					ts.ForeColor.G, ts.ForeColor.B);
+				                ts.ForeColor.G, ts.ForeColor.B);
 				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.BackColor.R,
-					ts.BackColor.G, ts.BackColor.B);
+				                ts.BackColor.G, ts.BackColor.B);
 			}
 
 			sb.Append(@";}");
@@ -3972,13 +3972,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			string
 				s = this.Selection.Text;
 			da.SetData(DataFormats.Text,
-				s);
+			           s);
 			Clipboard.SetDataObject(da);
 
 			CopyEventArgs ea = new CopyEventArgs();
 			ea.Text = s;
-			OnClipboardUpdated
-				(ea);
+			OnClipboardUpdated (ea);
 		}
 	}
 }
