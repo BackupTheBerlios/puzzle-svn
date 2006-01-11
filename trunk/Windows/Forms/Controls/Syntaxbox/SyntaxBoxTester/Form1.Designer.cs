@@ -54,10 +54,14 @@ namespace SyntaxBoxTester
             this.syntaxBoxControl1.AutoListSelectedText = "a123";
             this.syntaxBoxControl1.AutoListVisible = false;
             this.syntaxBoxControl1.BackColor = System.Drawing.Color.White;
-            this.syntaxBoxControl1.BorderStyle = Puzzle.Windows.Forms.BorderStyle.None;
+            this.syntaxBoxControl1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.syntaxBoxControl1.BorderStyle = Puzzle.Windows.Forms.BorderStyle.Bump;
+            this.syntaxBoxControl1.ChildBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.syntaxBoxControl1.ChildBorderStyle = Puzzle.Windows.Forms.BorderStyle.Bump;
             this.syntaxBoxControl1.CopyAsRTF = false;
             this.syntaxBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.syntaxBoxControl1.Document = this.syntaxDocument1;
+            this.syntaxBoxControl1.FontName = "Courier new";
             this.syntaxBoxControl1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.syntaxBoxControl1.InfoTipCount = 1;
             this.syntaxBoxControl1.InfoTipPosition = null;
