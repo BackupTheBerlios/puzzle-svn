@@ -12,6 +12,7 @@ using Puzzle.SourceCode;
 using Puzzle.Windows.Forms.CoreLib;
 using Puzzle.Windows.Forms.SyntaxBox;
 using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
+using System.IO;
 
 #endregion
 
@@ -465,6 +466,7 @@ namespace Puzzle.Windows.Forms
 		/// Keyboard actions to add shortcut key combinations to certain tasks.
 		/// </summary>
 		[Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public KeyboardActionList KeyboardActions
 		{
 			get { return _KeyboardActions; }
@@ -1771,6 +1773,32 @@ namespace Puzzle.Windows.Forms
 		}
 
 		#endregion //END Public Methods
+
+        public void Save(string filename)
+        {
+            string text = this.Document.Text;
+
+            StreamWriter swr = new StreamWriter(filename);
+
+            swr.Write(text);
+
+            swr.Flush();
+
+            swr.Close();
+        }
+
+        public void Open(string filename)
+        {
+            if (this.Document == null)
+                throw new NullReferenceException("CodeEditorControl.Document");
+
+            StreamReader swr = new StreamReader(filename);
+
+            this.Document.Text = swr.ReadToEnd();
+
+            swr.Close();
+        }
+
 
 		#region Constructor
 

@@ -111,6 +111,7 @@
     <Compile Include="Document\Export\HTMLExporter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Document\Export\HTMLExporter2.cs" />
     <Compile Include="Document\Formatting\FormatRange.cs">
       <SubType>Code</SubType>
     </Compile>

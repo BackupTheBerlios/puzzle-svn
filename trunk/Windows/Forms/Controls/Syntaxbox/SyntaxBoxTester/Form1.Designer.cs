@@ -1,3 +1,4 @@
+using Puzzle.Windows.Forms;
 namespace SyntaxBoxTester
 {
     partial class Form1
@@ -48,14 +49,16 @@ namespace SyntaxBoxTester
             // 
             // syntaxBoxControl1
             // 
-            this.syntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.SyntaxBox.ActiveView.BottomRight;
+            this.syntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.ActiveView.BottomRight;
             this.syntaxBoxControl1.AutoListPosition = null;
             this.syntaxBoxControl1.AutoListSelectedText = "a123";
             this.syntaxBoxControl1.AutoListVisible = false;
+            this.syntaxBoxControl1.BackColor = System.Drawing.Color.White;
+            this.syntaxBoxControl1.BorderStyle = Puzzle.Windows.Forms.BorderStyle.None;
             this.syntaxBoxControl1.CopyAsRTF = false;
             this.syntaxBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.syntaxBoxControl1.Document = this.syntaxDocument1;
-            this.syntaxBoxControl1.FontName = "Courier new";
+            this.syntaxBoxControl1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.syntaxBoxControl1.InfoTipCount = 1;
             this.syntaxBoxControl1.InfoTipPosition = null;
             this.syntaxBoxControl1.InfoTipSelectedIndex = 1;
@@ -63,6 +66,7 @@ namespace SyntaxBoxTester
             this.syntaxBoxControl1.Location = new System.Drawing.Point(0, 0);
             this.syntaxBoxControl1.LockCursorUpdate = false;
             this.syntaxBoxControl1.Name = "syntaxBoxControl1";
+            this.syntaxBoxControl1.ShowScopeIndicator = false;
             this.syntaxBoxControl1.Size = new System.Drawing.Size(601, 376);
             this.syntaxBoxControl1.SmoothScroll = false;
             this.syntaxBoxControl1.SplitviewH = -4;

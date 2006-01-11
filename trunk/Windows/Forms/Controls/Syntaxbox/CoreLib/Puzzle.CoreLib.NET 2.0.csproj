@@ -172,6 +172,9 @@
     <Compile Include="Controls\SplitView\SplitViewControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\SplitView\SplitViewParentControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ThumbControl\ThumbControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -220,6 +223,7 @@
     <Compile Include="Enums\Enums.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Globalization\IMEWindow.cs" />
     <Compile Include="Win32\Enums.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -252,6 +256,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SplitView\SplitViewControl.resx">
       <DependentUpon>SplitViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SplitView\SplitViewParentControl.resx">
+      <DependentUpon>SplitViewParentControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Weaktimer\WeakTimer.resx">
       <DependentUpon>WeakTimer.cs</DependentUpon>
