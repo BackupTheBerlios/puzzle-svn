@@ -509,6 +509,13 @@ namespace Puzzle.Windows
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=32)] public byte[] elfScript = null;
 	}
 
+	[StructLayout(LayoutKind.Sequential)]
+	public class COMPOSITIONFORM
+	{
+		public int dwStyle = 0;
+		public APIPoint ptCurrentPos = new APIPoint();
+		public APIRect rcArea = new APIRect();
+	}
 
 	[StructLayout(LayoutKind.Sequential)]
 	public class LogFont

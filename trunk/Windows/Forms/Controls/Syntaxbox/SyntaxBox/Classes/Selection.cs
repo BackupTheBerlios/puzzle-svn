@@ -47,7 +47,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			}
 			set
 			{
-				if (this.Text == value) return;
+				if (this.Text == value)
+					return;
 
 				//selection text bug fix 
 				//
@@ -68,7 +69,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				if (nCaretX != oCaretPos.X || nCaretY != oCaretPos.Y)
 
 				{
-					this.Control.Caret.Position = new TextPoint(this.Bounds.LastColumn, this.Bounds.LastRow);
+					this.Control.Caret.Position = new TextPoint(this.Bounds.LastColumn,
+					                                            this.Bounds.LastRow);
 				}
 
 				this.Control.Document.EndUndoCapture();
@@ -89,7 +91,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				{
 					return this.Bounds;
 				}
-				else if (this.Bounds.FirstRow == this.Bounds.LastRow && this.Bounds.FirstColumn < this.Bounds.LastColumn)
+				else if (this.Bounds.FirstRow == this.Bounds.LastRow &&
+					this.Bounds.FirstColumn < this.Bounds.LastColumn)
 				{
 					return this.Bounds;
 				}
@@ -111,8 +114,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get
 			{
-				return (this.LogicalBounds.FirstColumn != this.LogicalBounds.LastColumn ||
-					this.LogicalBounds.FirstRow != this.LogicalBounds.LastRow);
+				return (this.LogicalBounds.FirstColumn != this.LogicalBounds.LastColumn
+					|| this.LogicalBounds.FirstRow != this.LogicalBounds.LastRow);
 			}
 		}
 
@@ -123,8 +126,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get
 			{
-				TextPoint p1 = new TextPoint(this.Bounds.FirstColumn, this.Bounds.FirstRow);
-				TextPoint p2 = new TextPoint(this.Bounds.LastColumn, this.Bounds.LastRow);
+				TextPoint p1 = new TextPoint(this.Bounds.FirstColumn,
+				                             this.Bounds.FirstRow);
+				TextPoint p2 = new TextPoint(this.Bounds.LastColumn,
+				                             this.Bounds.LastRow);
 				int i1 = this.Control.Document.PointToIntPos(p1);
 				int i2 = this.Control.Document.PointToIntPos(p2);
 				return i2 - i1;
@@ -139,7 +144,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get
 			{
-				TextPoint p = new TextPoint(this.Bounds.LastColumn, this.Bounds.LastRow);
+				TextPoint p = new TextPoint(this.Bounds.LastColumn, this.Bounds.LastRow)
+					;
 				return this.Control.Document.PointToIntPos(p);
 			}
 			set
@@ -158,7 +164,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get
 			{
-				TextPoint p = new TextPoint(this.Bounds.FirstColumn, this.Bounds.FirstRow);
+				TextPoint p = new TextPoint(this.Bounds.FirstColumn,
+				                            this.Bounds.FirstRow);
 				return this.Control.Document.PointToIntPos(p);
 			}
 			set
@@ -176,7 +183,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get
 			{
-				TextPoint p = new TextPoint(this.LogicalBounds.FirstColumn, this.LogicalBounds.FirstRow);
+				TextPoint p = new TextPoint(this.LogicalBounds.FirstColumn,
+				                            this.LogicalBounds.FirstRow);
 				return this.Control.Document.PointToIntPos(p);
 			}
 			set
@@ -201,7 +209,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			Row xtr = null;
 			UndoBlockCollection ActionGroup = new UndoBlockCollection();
-			for (int i = this.LogicalBounds.FirstRow; i <= this.LogicalBounds.LastRow; i++)
+			for (int i = this.LogicalBounds.FirstRow; i <=
+				this.LogicalBounds.LastRow; i++)
 			{
 				xtr = Control.Document[i];
 				xtr.Text = "\t" + xtr.Text;
@@ -231,7 +240,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			Row xtr = null;
 			UndoBlockCollection ActionGroup = new UndoBlockCollection();
-			for (int i = this.LogicalBounds.FirstRow; i <= this.LogicalBounds.LastRow; i++)
+			for (int i = this.LogicalBounds.FirstRow; i <=
+				this.LogicalBounds.LastRow; i++)
 			{
 				xtr = Control.Document[i];
 				UndoBlock b = new UndoBlock();
@@ -269,7 +279,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			Row xtr = null;
 			UndoBlockCollection ActionGroup = new UndoBlockCollection();
-			for (int i = this.LogicalBounds.FirstRow; i <= this.LogicalBounds.LastRow; i++)
+			for (int i = this.LogicalBounds.FirstRow; i <=
+				this.LogicalBounds.LastRow; i++)
 			{
 				xtr = Control.Document[i];
 				xtr.Text = Pattern + xtr.Text;
@@ -299,7 +310,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			Row xtr = null;
 			UndoBlockCollection ActionGroup = new UndoBlockCollection();
-			for (int i = this.LogicalBounds.FirstRow; i <= this.LogicalBounds.LastRow; i++)
+			for (int i = this.LogicalBounds.FirstRow; i <=
+				this.LogicalBounds.LastRow; i++)
 			{
 				xtr = Control.Document[i];
 				UndoBlock b = new UndoBlock();
@@ -369,7 +381,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			Bounds.FirstColumn = 0;
 			Bounds.FirstRow = 0;
-			Bounds.LastColumn = Control.Document[Control.Document.Count - 1].Text.Length;
+			Bounds.LastColumn = Control.Document[Control.Document.Count -
+				1].Text.Length;
 			Bounds.LastRow = Control.Document.Count - 1;
 			Control.Caret.Position.X = Bounds.LastColumn;
 			Control.Caret.Position.Y = Bounds.LastRow;

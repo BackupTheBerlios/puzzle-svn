@@ -2,75 +2,26 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
+using Puzzle.Globalization;
 using Puzzle.SourceCode;
 using Puzzle.Windows.Forms.CoreLib;
 using Puzzle.Windows.Forms.SyntaxBox.Painter;
 using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
-using ScrollEventArgs = Puzzle.Windows.Forms.IntelliMouse.ScrollEventArgs;
-using ScrollEventHandler = Puzzle.Windows.Forms.IntelliMouse.ScrollEventHandler;
 
 #endregion
 
 namespace Puzzle.Windows.Forms.SyntaxBox
 {
 	[ToolboxItem(false)]
-	public sealed class EditViewControl : SplitViewChildControl
+	public class EditViewControl :
+		SplitViewChildControl
 	{
-#if DEBUG
-		public void Kill()
-		{
-			this.Controls.Clear();
-
-			if (this.IntelliMouse != null)
-			{
-				this.IntelliMouse.Dispose();
-				this.IntelliMouse = null;
-			}
-
-			this._SyntaxBox = null;
-			this._Caret = null;
-			this._Selection = null;
-
-			this.Painter = null;
-
-
-			try
-			{
-				this.InfoTip.Dispose();
-				this.InfoTip = null;
-			}
-			catch
-			{
-			}
-
-			this.AutoList.Dispose();
-			this.AutoList = null;
-
-			this.FindReplaceDialog.Dispose();
-			this.FindReplaceDialog = null;
-
-
-			this.CaretTimer.Dispose();
-			this.CaretTimer = null;
-
-
-			this.TopThumb.Dispose();
-			this.LeftThumb.Dispose();
-			this.TopThumb = null;
-			this.LeftThumb = null;
-
-			GC.Collect();
-		}
-
-
-#endif
-
 		#region General Declarations
 
 		private int MouseX = 0;
@@ -101,10 +52,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 		private string[] TextBorderStyles = new string[]
 			{
-				"****** * ******* * ******",
-				"+---+| | |+-+-+| | |+---+",
-				"+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+",
-				"+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
+				"****** * ******* * ******", "+---+| | |+-+-+| | |+---+",
+				"+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+", "+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
 			};
 
 		#endregion
@@ -115,6 +64,18 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		private PictureBox Filler;
 		private ToolTip tooltip;
 		private IContainer components;
+
+		#region PUBLIC PROPERTY IMEWINDOW
+
+		private IMEWindow _IMEWindow;
+
+		public IMEWindow IMEWindow
+		{
+			get { return _IMEWindow; }
+			set { _IMEWindow = value; }
+		}
+
+		#endregion
 
 		#region PUBLIC PROPERTY FINDREPLACEDIALOG 
 
@@ -250,14 +211,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 		private void CreateAutoList()
 		{
-			if (this._SyntaxBox != null && !this._SyntaxBox.DisableAutoList && this._AutoList == null)
+			if (this._SyntaxBox != null && !this._SyntaxBox.DisableAutoList &&
+				this._AutoList == null)
 			{
-				Debug.WriteLine("Creating Autolist");
+				System.Diagnostics.Debug.WriteLine("Creating Autolist");
 
 				this.AutoList = new AutoListForm(this);
 				NativeMethods.SetWindowLong(this.AutoList.Handle,
 				                            NativeMethods.GWL_STYLE,
-				                            (int)NativeMethods.WS_CHILD);
+				                            NativeMethods.WS_CHILD);
 
 				this.AutoList.SendToBack();
 				this.AutoList.Visible = false;
@@ -277,16 +239,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			if (!this._SyntaxBox.DisableFindForm && this._FindReplaceDialog == null)
 			{
-				Debug.WriteLine("Creating Findform");
+				System.Diagnostics.Debug.WriteLine("Creating Findform");
 				FindReplaceDialog = new FindReplaceForm(this);
 			}
 		}
 
 		private void CreateInfoTip()
 		{
-			if (this._SyntaxBox != null && !this._SyntaxBox.DisableInfoTip && this._InfoTip == null)
+			if (this._SyntaxBox != null && !this._SyntaxBox.DisableInfoTip &&
+				this._InfoTip == null)
 			{
-				Debug.WriteLine("Creating Infotip");
+				System.Diagnostics.Debug.WriteLine("Creating Infotip");
 
 				this.InfoTip = new InfoTipForm(this);
 				NativeMethods.SetWindowLong(this.InfoTip.Handle,
@@ -307,16 +270,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			_SyntaxBox = Parent;
 
-
 			Painter = new Painter_GDI(this);
 			_Selection = new Selection(this);
 			_Caret = new Caret(this);
 
 			_Caret.Change += new EventHandler(this.CaretChanged);
 			_Selection.Change += new EventHandler(this.SelectionChanged);
-
-
-			//	this.AttachDocument (_SyntaxBox.Document);
 
 
 			InitializeComponent();
@@ -332,6 +291,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
 			this.SetStyle(ControlStyles.Opaque, true);
 			this.SetStyle(ControlStyles.UserPaint, true);
+			this.UpdateStyles();
+
+			//			this.IMEWindow = new Puzzle.Globalization.IMEWindow (this.Handle,_SyntaxBox.FontName,_SyntaxBox.FontSize);
 
 		}
 
@@ -374,19 +336,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 		#endregion
 
-		~EditViewControl()
-		{
-#if DEBUG
-			try
-			{
-				Console.WriteLine("finalizing editview");
-			}
-			catch
-			{
-			}
-#endif
-		}
-
 		#region Private/Protected/public Properties
 
 		public int PixelTabSize
@@ -400,7 +349,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 		private void DoResize()
 		{
-			if (this.Visible && this.Width > 0 && this.Height > 0 && this.IsHandleCreated)
+			if (this.Visible && this.Width > 0 && this.Height > 0 &&
+				this.IsHandleCreated)
 			{
 				try
 				{
@@ -416,7 +366,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					{
 						vScroll.Top = TopThumb.Height;
 						if (hScroll.Visible)
-							vScroll.Height = this.ClientHeight - hScroll.Height - TopThumb.Height;
+							vScroll.Height = this.ClientHeight - hScroll.Height -
+								TopThumb.Height;
 						else
 							vScroll.Height = this.ClientHeight - TopThumb.Height;
 
@@ -435,7 +386,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					{
 						hScroll.Left = LeftThumb.Width;
 						if (vScroll.Visible)
-							hScroll.Width = this.ClientWidth - vScroll.Width - LeftThumb.Width;
+							hScroll.Width = this.ClientWidth - vScroll.Width -
+								LeftThumb.Width;
 						else
 							hScroll.Width = this.ClientWidth - LeftThumb.Width;
 
@@ -497,7 +449,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				if (!_OverWrite || text.Length > 1)
 				{
 					Row xtr = Caret.CurrentRow;
-					TextPoint p = Document.InsertText(text, Caret.Position.X, Caret.Position.Y);
+					TextPoint p = Document.InsertText(text, Caret.Position.X,
+					                                  Caret.Position.Y);
 					Caret.CurrentRow.Parse(true);
 					if (text.Length == 1)
 					{
@@ -535,7 +488,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					b.Position = Caret.Position;
 					ag.Add(b);
 					Document.AddToUndoList(ag);
-					Document.InsertText(NewChar, Caret.Position.X, Caret.Position.Y, false);
+					Document.InsertText(NewChar, Caret.Position.X, Caret.Position.Y,
+					                    false);
 					Caret.CurrentRow.Parse(true);
 
 					Caret.MoveRight(false);
@@ -641,7 +595,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 							Caret.CurrentRow.StartSegment.StartRow.Parse(false);
 							Caret.CurrentRow.StartSegment.StartRow.Parse(true);
 
-							string prev = "\t" + Caret.CurrentRow.StartSegment.StartRow.GetVirtualLeadingWhitespace();
+							string prev = "\t" +
+								Caret.CurrentRow.StartSegment.StartRow.GetVirtualLeadingWhitespace();
 
 							string indent = Caret.CurrentRow.PrevRow.GetLeadingWhitespace();
 							if (indent.Length < prev.Length)
@@ -706,9 +661,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 					if (xtr.FirstNonWsWord == xtr.Expansion_EndSegment.EndWord)
 					{
-						string ct = xtr.Text.Substring(0, xtr.GetLeadingWhitespace().Length);
+						string ct = xtr.Text.Substring(0, xtr.GetLeadingWhitespace().Length)
+							;
 						//int j=xtr.Expansion_StartRow.StartWordIndex;
-						string indent1 = xtr.StartSegment.StartWord.Row.GetVirtualLeadingWhitespace();
+						string indent1 =
+							xtr.StartSegment.StartWord.Row.GetVirtualLeadingWhitespace();
 						TextRange tr = new TextRange();
 						tr.FirstColumn = 0;
 						tr.LastColumn = xtr.GetLeadingWhitespace().Length;
@@ -787,7 +744,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				{
 					if (Caret.Position.Y > 0)
 					{
-						Caret.Position.Y --;
+						Caret.Position.Y--;
 						Caret.MoveEnd(false);
 						DeleteForward();
 						//Caret.CurrentRow.Parse ();
@@ -840,8 +797,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				newval = Math.Max(newval, vScroll.Minimum);
 				newval = Math.Min(newval, vScroll.Maximum);
 
-				if (newval >= vScroll.Maximum - 2)
-					newval = vScroll.Maximum - 2;
+				if (newval >= vScroll.Maximum - this.View.VisibleRowCount + 1)
+					newval = vScroll.Maximum - this.View.VisibleRowCount + 1;
 
 				vScroll.Value = newval;
 				this.Redraw();
@@ -926,7 +883,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					else
 					{
 						Assembly assembly = GetType().Assembly;
-						this.Cursor = new Cursor(assembly.GetManifestResourceStream("FlippedCursor.cur"));
+						this.Cursor = new Cursor(assembly.GetManifestResourceStream(
+							"FlippedCursor.cur"));
 					}
 				}
 				else
@@ -1078,7 +1036,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			if (this.InfoTip == null || this.AutoList == null)
 				return;
 
-			if (!this.ContainsFocus && !InfoTip.ContainsFocus && !AutoList.ContainsFocus)
+			if (!this.ContainsFocus && !InfoTip.ContainsFocus &&
+				!AutoList.ContainsFocus)
 			{
 				CaretTimer.Enabled = false;
 				this.Caret.Blink = false;
@@ -1104,9 +1063,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			int right = Caret.Position.X;
 
 			while (left >= 0 && CharType(xtr.Text.Substring(left, 1)) == Type)
-				left --;
+				left--;
 
-			while (right <= xtr.Text.Length - 1 && CharType(xtr.Text.Substring(right, 1)) == Type)
+			while (right <= xtr.Text.Length - 1 && CharType(xtr.Text.Substring(right,
+			                                                                   1)) == Type)
 				right++;
 
 			Selection.Bounds.FirstRow = Selection.Bounds.LastRow = xtr.Index;
@@ -1164,9 +1124,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			View.VisibleRowCount = 0;
 			if (hScroll.Visible)
-				View.VisibleRowCount = (this.Height - hScroll.Height)/View.RowHeight + 1;
+				View.VisibleRowCount = (this.Height - hScroll.Height)/View.RowHeight
+					+ 1;
 			else
-				View.VisibleRowCount = (this.Height - hScroll.Height)/View.RowHeight + 2;
+				View.VisibleRowCount = (this.Height - hScroll.Height)/View.RowHeight
+					+ 2;
 
 			if (this.ShowGutterMargin)
 				View.GutterMarginWidth = this.GutterMarginWidth;
@@ -1175,7 +1137,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			if (this.ShowLineNumbers)
 			{
-				int chars = (Document.Count).ToString().Length;
+				int chars = (Document.Count).ToString
+					(CultureInfo.InvariantCulture).Length;
 				string s = new String('9', chars);
 				View.LineNumberMarginWidth = 10 + this.Painter.MeasureString(s).Width;
 			}
@@ -1183,7 +1146,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				View.LineNumberMarginWidth = 0;
 
 
-			View.TotalMarginWidth = View.GutterMarginWidth + View.LineNumberMarginWidth;
+			View.TotalMarginWidth = View.GutterMarginWidth +
+				View.LineNumberMarginWidth;
 			if (Document.Folding)
 				View.TextMargin = View.TotalMarginWidth + 20;
 			else
@@ -1219,7 +1183,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			try
 			{
 				int max = 0;
-				for (int i = this.View.FirstVisibleRow; i < this.Document.VisibleRows.Count; i++)
+				for (int i = this.View.FirstVisibleRow; i <
+					this.Document.VisibleRows.Count; i++)
 				{
 					if (i >= this.View.VisibleRowCount + this.View.FirstVisibleRow)
 						break;
@@ -1253,7 +1218,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			if (Document.VisibleRows.Count > 0)
 			{
-				vScroll.Maximum = Document.VisibleRows.Count + 1; //+this.View.VisibleRowCount-2;// - View.VisibleRowCount  ;
+				vScroll.Maximum = Document.VisibleRows.Count + 1;
+				//+this.View.VisibleRowCount-2;// - View.VisibleRowCount  ;
 				vScroll.LargeChange = this.View.VisibleRowCount;
 				SetMaxHorizontalScroll();
 
@@ -1270,30 +1236,40 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		private void InitializeComponent()
 		{
 			this.components = new Container();
-			ResourceManager resources = new ResourceManager(typeof (EditViewControl));
+			ResourceManager resources = new
+				ResourceManager(typeof (EditViewControl));
 			this.Filler = new PictureBox();
-			this.CaretTimer = new WeakTimer(this.components);
+			this.CaretTimer = new WeakTimer
+				(this.components);
 			this.tooltip = new ToolTip(this.components);
 
 			this.SuspendLayout();
 
 			if (!_SyntaxBox.DisableIntelliMouse)
 			{
-				this.IntelliMouse = new IntelliMouseControl();
+				this.IntelliMouse = new
+					IntelliMouseControl();
 				// 
 				// IntelliMouse
 				// 
-				this.IntelliMouse.BackgroundImage = ((Bitmap) (resources.GetObject("IntelliMouse.BackgroundImage")));
-				this.IntelliMouse.Image = ((Bitmap) (resources.GetObject("IntelliMouse.Image")));
+				this.IntelliMouse.BackgroundImage = ((Bitmap)
+					(resources.GetObject("IntelliMouse.BackgroundImage")));
+				this.IntelliMouse.Image = ((Bitmap) (resources.GetObject(
+					"IntelliMouse.Image")));
 				this.IntelliMouse.Location = new Point(197, 157);
 				this.IntelliMouse.Name = "IntelliMouse";
 				this.IntelliMouse.Size = new Size(28, 28);
 				this.IntelliMouse.TabIndex = 4;
-				this.IntelliMouse.TransparencyKey = Color.FromArgb(((Byte) (255)), ((Byte) (0)), ((Byte) (255)));
+				this.IntelliMouse.TransparencyKey = Color.FromArgb((
+					(Byte) (255)), ((Byte) (0)), ((Byte) (255)));
 				this.IntelliMouse.Visible = false;
-				this.IntelliMouse.EndScroll += new EventHandler(this.IntelliMouse_EndScroll);
-				this.IntelliMouse.BeginScroll += new EventHandler(this.IntelliMouse_BeginScroll);
-				this.IntelliMouse.Scroll += new ScrollEventHandler(this.IntelliMouse_Scroll);
+				this.IntelliMouse.EndScroll += new EventHandler
+					(this.IntelliMouse_EndScroll);
+				this.IntelliMouse.BeginScroll += new EventHandler
+					(this.IntelliMouse_BeginScroll);
+				this.IntelliMouse.Scroll += new
+					IntelliMouse.ScrollEventHandler
+					(this.IntelliMouse_Scroll);
 
 			}
 
@@ -1302,12 +1278,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// hScroll
 			// 
 			this.hScroll.Cursor = Cursors.Default;
-			this.hScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScroll_Scroll);
+			this.hScroll.Scroll += new ScrollEventHandler
+				(this.hScroll_Scroll);
 			// 
 			// vScroll
 			// 
 			this.vScroll.Cursor = Cursors.Default;
-			this.vScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScroll_Scroll);
+			this.vScroll.Scroll += new ScrollEventHandler
+				(this.vScroll_Scroll);
 
 			// 
 			// CaretTimer
@@ -1345,12 +1323,21 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			// EditViewControl
 			// 
-			this.AllowDrop = true;
+			try
+			{
+				this.AllowDrop = true;
+			}
+			catch 
+			{
+				//	Console.WriteLine ("error in editview allowdrop {0}",x.Message);
+			}
+
 			this.Controls.AddRange(new Control[]
 				{
 					this.IntelliMouse
-				});
-			this.Size = new Size(240, 216);
+				}
+				);
+			this.Size = new Size(0, 0);
 			this.LostFocus += new EventHandler(this.EditViewControl_Leave);
 			this.GotFocus += new EventHandler(this.EditViewControl_Enter);
 			this.ResumeLayout(false);
@@ -1424,7 +1411,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				if (x >= this.Document[y].Text.Length)
 					x = this.Document[y].Text.Length - 1;
 
-				if (x == -1)
+				if (x == - 1)
 					x = 0;
 			}
 
@@ -1540,8 +1527,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		public void ShowGotoLine()
 		{
 			GotoLineForm go = new GotoLineForm(this, this.Document.Count);
-//			if (this.TopLevelControl is Form)
-//				go.Owner=(Form)this.TopLevelControl;
+			//			if (this.TopLevelControl is Form)
+			//				go.Owner=(Form)this.TopLevelControl;
 
 			go.ShowDialog(this.TopLevelControl);
 		}
@@ -1595,29 +1582,37 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			TextPoint p = Painter.CharFromPixel(x, y);
 
-			if (p.Y >= this.Selection.LogicalBounds.FirstRow && p.Y <= this.Selection.LogicalBounds.LastRow && this.Selection.IsValid)
+			if (p.Y >= this.Selection.LogicalBounds.FirstRow && p.Y <=
+				this.Selection.LogicalBounds.LastRow && this.Selection.IsValid)
 			{
-				if (p.Y > this.Selection.LogicalBounds.FirstRow && p.Y < this.Selection.LogicalBounds.LastRow && this.Selection.IsValid)
+				if (p.Y > this.Selection.LogicalBounds.FirstRow && p.Y <
+					this.Selection.LogicalBounds.LastRow && this.Selection.IsValid)
 					return true;
 				else
 				{
-					if (p.Y == this.Selection.LogicalBounds.FirstRow && this.Selection.LogicalBounds.FirstRow == this.Selection.LogicalBounds.LastRow)
+					if (p.Y == this.Selection.LogicalBounds.FirstRow &&
+						this.Selection.LogicalBounds.FirstRow ==
+							this.Selection.LogicalBounds.LastRow)
 					{
-						if (p.X >= this.Selection.LogicalBounds.FirstColumn && p.X <= this.Selection.LogicalBounds.LastColumn)
+						if (p.X >= this.Selection.LogicalBounds.FirstColumn && p.X <=
+							this.Selection.LogicalBounds.LastColumn)
 							return true;
 						else
 							return false;
 					}
-					else if (p.X >= this.Selection.LogicalBounds.FirstColumn && p.Y == this.Selection.LogicalBounds.FirstRow)
+					else if (p.X >= this.Selection.LogicalBounds.FirstColumn && p.Y ==
+						this.Selection.LogicalBounds.FirstRow)
 						return true;
-					else if (p.X <= this.Selection.LogicalBounds.LastColumn && p.Y == this.Selection.LogicalBounds.LastRow)
+					else if (p.X <= this.Selection.LogicalBounds.LastColumn && p.Y ==
+						this.Selection.LogicalBounds.LastRow)
 						return true;
 					else
 						return false;
 				}
 			}
 			else
-				return false; //no chance we are over Selection.LogicalBounds
+				return false;
+			//no chance we are over Selection.LogicalBounds
 		}
 
 		/// <summary>
@@ -1653,15 +1648,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			try
 			{
 				Row xtr2 = Caret.CurrentRow;
-				if (xtr2.VisibleIndex >= View.FirstVisibleRow + View.VisibleRowCount - 2)
+				if (xtr2.VisibleIndex >= View.FirstVisibleRow + View.VisibleRowCount -
+					2)
 				{
-					int Diff = Caret.CurrentRow.VisibleIndex - (View.FirstVisibleRow + View.VisibleRowCount - 2) + View.FirstVisibleRow;
+					int Diff = Caret.CurrentRow.VisibleIndex - (View.FirstVisibleRow +
+						View.VisibleRowCount - 2) + View.FirstVisibleRow;
 					if (Diff > Document.VisibleRows.Count - 1)
 						Diff = Document.VisibleRows.Count - 1;
 
 					Row r = Document.VisibleRows[Diff];
 					int index = r.VisibleIndex;
-					if (index != -1)
+					if (index != - 1)
 						vScroll.Value = index;
 				}
 			}
@@ -1674,7 +1671,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				Row r = Caret.CurrentRow;
 				int index = r.VisibleIndex;
-				if (index != -1)
+				if (index != - 1)
 					vScroll.Value = index;
 			}
 
@@ -1684,24 +1681,29 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			int x = 0;
 			if (Caret.CurrentRow.IsCollapsedEndPart)
 			{
-				x = Painter.MeasureRow(xtr, Caret.Position.X).Width + Caret.CurrentRow.Expansion_PixelStart;
+				x = Painter.MeasureRow(xtr, Caret.Position.X).Width +
+					Caret.CurrentRow.Expansion_PixelStart;
 				x -= Painter.MeasureRow(xtr, xtr.Expansion_StartChar).Width;
 
 				if (x >= View.ClientAreaWidth + View.ClientAreaStart)
-					hScroll.Value = Math.Min(hScroll.Maximum, ((x - View.ClientAreaWidth)/View.CharWidth) + 15);
+					hScroll.Value = Math.Min(hScroll.Maximum, ((x - View.ClientAreaWidth)
+						/View.CharWidth) + 15);
 
 				if (x < View.ClientAreaStart + 10)
-					hScroll.Value = Math.Max(hScroll.Minimum, ((x)/View.CharWidth) - 15);
+					hScroll.Value = Math.Max(hScroll.Minimum, ((x)/View.CharWidth) - 15)
+						;
 			}
 			else
 			{
 				x = Painter.MeasureRow(xtr, Caret.Position.X).Width;
 
 				if (x >= View.ClientAreaWidth + View.ClientAreaStart)
-					hScroll.Value = Math.Min(hScroll.Maximum, ((x - View.ClientAreaWidth)/View.CharWidth) + 15);
+					hScroll.Value = Math.Min(hScroll.Maximum, ((x - View.ClientAreaWidth)
+						/View.CharWidth) + 15);
 
 				if (x < View.ClientAreaStart)
-					hScroll.Value = Math.Max(hScroll.Minimum, ((x)/View.CharWidth) - 15);
+					hScroll.Value = Math.Max(hScroll.Minimum, ((x)/View.CharWidth) - 15)
+						;
 			}
 		}
 
@@ -1736,13 +1738,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// <param name="Pattern">Pattern to find</param>
 		/// <param name="MatchCase">Case sensitive</param>
 		/// <param name="WholeWords">Match whole words only</param>
-		public bool SelectNext(string Pattern, bool MatchCase, bool WholeWords, bool UseRegEx)
+		public bool SelectNext(string Pattern, bool MatchCase, bool WholeWords,
+		                       bool UseRegEx)
 		{
 			string pattern = Pattern;
 			for (int i = this.Caret.Position.Y; i < this.Document.Count; i++)
 			{
 				Row r = Document[i];
-				int Col = -1;
+				int Col = - 1;
 
 				string s = "";
 				string t = r.Text;
@@ -1762,8 +1765,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 				if (!MatchCase)
 				{
-					t = t.ToLower();
-					pattern = pattern.ToLower();
+					t = t.ToLower(CultureInfo.InvariantCulture);
+					pattern = pattern.ToLower
+						(CultureInfo.InvariantCulture);
 				}
 
 				Col = t.IndexOf(pattern);
@@ -1812,7 +1816,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// </summary>
 		public void ToggleBookmark()
 		{
-			Document[Caret.Position.Y].Bookmarked = !Document[Caret.Position.Y].Bookmarked;
+			Document[Caret.Position.Y].Bookmarked =
+				!Document[Caret.Position.Y].Bookmarked;
 			this.Redraw();
 		}
 
@@ -1895,7 +1900,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		public void Redo()
 		{
 			TextPoint p = this.Document.Redo();
-			if (p.X != -1 && p.Y != -1)
+			if (p.X != - 1 && p.Y != - 1)
 			{
 				Caret.Position = p;
 				Selection.ClearSelection();
@@ -1909,7 +1914,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		public void Undo()
 		{
 			TextPoint p = this.Document.Undo();
-			if (p.X != -1 && p.Y != -1)
+			if (p.X != - 1 && p.Y != - 1)
 			{
 				Caret.Position = p;
 				Selection.ClearSelection();
@@ -2065,8 +2070,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// The value is retrived from the owning Syntaxbox control.
 		/// </summary>
 		[Category("Content")]
-		[Description("The SyntaxDocument that is attatched to the contro")]
-		public SyntaxDocument Document
+		[Description(
+			"The SyntaxDocument that is attatched to the contro")]
+		public
+			SyntaxDocument Document
 		{
 			get { return _SyntaxBox.Document; }
 
@@ -2080,6 +2087,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get { return _SyntaxBox.TooltipDelay; }
 		}
+
+		// ROB: Required to support CollapsedBlockTooltipsEnabled
+		public bool CollapsedBlockTooltipsEnabled
+		{
+			get { return _SyntaxBox.CollapsedBlockTooltipsEnabled; }
+		}
+
+		// END-ROB ----------------------------------------------------------
 
 
 		/// <summary>
@@ -2106,7 +2121,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// Determines the style to use when painting with alt+arrow keys.
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines what type of chars to use when painting with ALT+arrow keys")]
+		[Description(
+			"Determines what type of chars to use when painting with ALT+arrow keys")]
 		public TextDrawType TextDrawStyle
 		{
 			get { return _TextDrawStyle; }
@@ -2278,8 +2294,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// Gets or Sets the background Color of the client area.
 		/// </summary>
 		[Category("Appearance")]
-		[Description("The background color of the client area")]
-		new public Color BackColor
+		[Description(
+			"The background color of the client area")]
+		new public Color
+			BackColor
 		{
 			get { return _SyntaxBox.BackColor; }
 			set { _SyntaxBox.BackColor = value; }
@@ -2349,6 +2367,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 			get { return _SyntaxBox.TabSize; }
 		}
+
+		/// <summary>
+		/// Get whether or not TabsToSpaces is turned on.
+		/// </summary>
+		public bool TabsToSpaces
+		{
+			get { return _SyntaxBox.TabsToSpaces; }
+		}
+
 
 		/// <summary>
 		/// Get if the control should render 'Tab guides'
@@ -2438,11 +2465,21 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				{
 					AutoList.TopLevel = true;
 					AutoList.BringToFront();
+
+					// ROB: Fuck knows what I did to cause having to do this..
+					// Show it off the screen, let the painter position it.
+					AutoList.Location = new Point(-16000, -16000);
+					AutoList.Show();
 					InfoTip.BringToFront();
 					if (this.TopLevelControl is Form)
 					{
 						AutoList.Owner = (Form) this.TopLevelControl;
 					}
+				}
+				else
+				{
+					// ROB: Another hack.
+					AutoList.Hide();
 				}
 
 				_AutoListVisible = value;
@@ -2468,7 +2505,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 				if (value)
 				{
-					//	InfoTipStartPos=new TextPoint (Caret.Position.X,Caret.Position.Y);
 					InfoTip.TopLevel = true;
 					AutoList.BringToFront();
 					if (this.TopLevelControl is Form)
@@ -2476,17 +2512,24 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						InfoTip.Owner = (Form) this.TopLevelControl;
 					}
 				}
-				//else
-				//	InfoTipStartPos=new TextPoint (0,0);
 
 				InfoTip.BringToFront();
 
 				_InfoTipVisible = value;
+
 				if (this.InfoTip != null && value == true)
 				{
 					this.InfoTip.Init();
 				}
-				this.Redraw();
+
+				// ROB: Cludge for infotip bug, whereby infotip does not close when made invisible..
+				if (this._InfoTip != null && !value)
+				{
+					this._InfoTip.Visible = false;
+				}
+
+				// ROB: Removed this, did it as a check, but doesn't seem to be required at all, might want to check this.
+				//this.Redraw();
 			}
 			get { return _InfoTipVisible; }
 		}
@@ -2601,7 +2644,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			try
 			{
-				if (this.VirtualWhitespace == false && Caret.CurrentRow != null && Caret.Position.X > Caret.CurrentRow.Text.Length)
+				if (this.VirtualWhitespace == false && Caret.CurrentRow != null &&
+					Caret.Position.X > Caret.CurrentRow.Text.Length)
 				{
 					Caret.Position.X = Caret.CurrentRow.Text.Length;
 					this.Redraw();
@@ -2662,14 +2706,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				//move infotip selection
 				if (e.KeyCode == Keys.Up)
 				{
-					this._SyntaxBox.InfoTipSelectedIndex ++;
+					this._SyntaxBox.InfoTipSelectedIndex++;
 					e.Handled = true;
 					return;
 				}
 
 				if (e.KeyCode == Keys.Down)
 				{
-					this._SyntaxBox.InfoTipSelectedIndex --;
+					this._SyntaxBox.InfoTipSelectedIndex--;
 
 					e.Handled = true;
 					return;
@@ -2681,7 +2725,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			if (!e.Handled && AutoListVisible)
 			{
 				//move autolist selection
-				if ((e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.PageUp || e.KeyCode == Keys.PageDown))
+				if ((e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode ==
+					Keys.PageUp || e.KeyCode == Keys.PageDown))
 				{
 					AutoList.SendKey((int) e.KeyCode);
 					e.Handled = true;
@@ -2689,7 +2734,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				}
 
 				//inject inser text from autolist
-				if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+				if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Enter || e.KeyCode ==
+					Keys.Tab)
 				{
 					string s = AutoList.SelectedText;
 					if (s != "")
@@ -2709,11 +2755,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				{
 					if (!this.ReadOnly || ka.AllowReadOnly)
 					{
-						if ((ka.Key == (Keys) (int) e.KeyCode)
-							&& ka.Alt == e.Alt
-							&& ka.Shift == e.Shift
-							&& ka.Control == e.Control)
-							ka.Action(); //if keys match , call action delegate
+						if ((ka.Key == (Keys) (int) e.KeyCode) && ka.Alt == e.Alt && ka.Shift
+							== e.Shift && ka.Control == e.Control)
+							ka.Action();
+						//if keys match , call action delegate
 					}
 				}
 
@@ -2742,7 +2787,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						break;
 					case Keys.Up:
 						if (e.Control)
-							ScrollScreen(-1);
+							ScrollScreen(- 1);
 						else
 						{
 							if (e.Alt)
@@ -2880,7 +2925,19 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						case Keys.Tab:
 							{
 								if (!Selection.IsValid)
-									InsertText("\t");
+								{
+									// ROB: Implementation of .TabsToSpaces
+									if (!this.TabsToSpaces)
+									{
+										InsertText("\t");
+									}
+									else
+									{
+										InsertText(new string(' ', this.TabSize));
+									}
+									// ROB-END
+
+								}
 
 								break;
 							}
@@ -2915,8 +2972,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					{
 						default:
 							{
-								InsertText(e.KeyChar.ToString());
-								if (this.Indent == IndentStyle.Scope || this.Indent == IndentStyle.Smart)
+								InsertText(e.KeyChar.ToString
+									(CultureInfo.InvariantCulture)
+									);
+								if (this.Indent == IndentStyle.Scope || this.Indent ==
+									IndentStyle.Smart)
 								{
 									if (Caret.CurrentRow.ShouldOutdent)
 									{
@@ -2936,7 +2996,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				{
 					if (Caret.Position.X - AutoListStartPos.X >= 0)
 					{
-						s = s.Substring(AutoListStartPos.X, Caret.Position.X - AutoListStartPos.X);
+						s = s.Substring(AutoListStartPos.X, Caret.Position.X -
+							AutoListStartPos.X);
 						AutoList.SelectItem(s);
 					}
 				}
@@ -2987,7 +3048,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				rea.Area = RowArea.GutterArea;
 			}
-			else if (e.X < this.View.LineNumberMarginWidth + this.View.GutterMarginWidth)
+			else if (e.X < this.View.LineNumberMarginWidth +
+				this.View.GutterMarginWidth)
 			{
 				rea.Area = RowArea.LineNumberArea;
 			}
@@ -3009,7 +3071,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					{
 						if (r2.Expansion_StartSegment != null)
 						{
-							if (r2.Expansion_StartSegment.StartRow != null && r2.Expansion_StartSegment.EndRow != null && r2.Expansion_StartSegment.Expanded == false)
+							if (r2.Expansion_StartSegment.StartRow != null &&
+								r2.Expansion_StartSegment.EndRow != null &&
+								r2.Expansion_StartSegment.Expanded == false)
 							{
 								if (!IsOverSelection(e.X, e.Y))
 								{
@@ -3055,7 +3119,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 							{
 								TextPoint tp = pos;
 								Word w = this.Document.GetWordFromPos(tp);
-								if (w != null && w.Pattern != null && w.Pattern.Category != null)
+								if (w != null && w.Pattern != null && w.Pattern.Category !=
+									null)
 								{
 									WordMouseEventArgs pe = new WordMouseEventArgs();
 									pe.Pattern = w.Pattern;
@@ -3159,7 +3224,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				rea.Area = RowArea.GutterArea;
 			}
-			else if (e.X < this.View.LineNumberMarginWidth + this.View.GutterMarginWidth)
+			else if (e.X < this.View.LineNumberMarginWidth +
+				this.View.GutterMarginWidth)
 			{
 				rea.Area = RowArea.LineNumberArea;
 			}
@@ -3212,35 +3278,41 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						{
 							if (e.X >= r.Expansion_PixelEnd && r.IsCollapsed)
 							{
-								if (r.Expansion_StartSegment != null)
+								// ROB: Added check for Collapsed tooltips.
+								if (this.CollapsedBlockTooltipsEnabled)
 								{
-									if (r.Expansion_StartSegment.StartRow != null && r.Expansion_StartSegment.EndRow != null && r.Expansion_StartSegment.Expanded == false)
+									if (r.Expansion_StartSegment != null)
 									{
-										string t = "";
-										int j = 0;
-										for (int i = r.Expansion_StartSegment.StartRow.Index; i <= r.Expansion_StartSegment.EndRow.Index; i++)
+										if (r.Expansion_StartSegment.StartRow != null &&
+											r.Expansion_StartSegment.EndRow != null &&
+											r.Expansion_StartSegment.Expanded == false)
 										{
-											if (j > 0)
-												t += "\n";
-											Row tmp = Document[i];
-											string tmpstr = tmp.Text.Replace("\t", "    ");
-											t += tmpstr;
-											if (j > 20)
+											string t = "";
+											int j = 0;
+											for (int i = r.Expansion_StartSegment.StartRow.Index; i <=
+												r.Expansion_StartSegment.EndRow.Index; i++)
 											{
-												t += "...";
-												break;
+												if (j > 0)
+													t += "\n";
+												Row tmp = Document[i];
+												string tmpstr = tmp.Text.Replace("\t", "    ");
+												t += tmpstr;
+												if (j > 20)
+												{
+													t += "...";
+													break;
+												}
+
+												j++;
 											}
 
-											j++;
+											//tooltip.res
+											tooltip.InitialDelay = this.TooltipDelay;
+											if (tooltip.GetToolTip(this) != t)
+												tooltip.SetToolTip(this, t);
+											tooltip.Active = true;
+											DidShow = true;
 										}
-
-
-										//tooltip.res
-										tooltip.InitialDelay = this.TooltipDelay;
-										if (tooltip.GetToolTip(this) != t)
-											tooltip.SetToolTip(this, t);
-										tooltip.Active = true;
-										DidShow = true;
 									}
 								}
 							}
@@ -3308,7 +3380,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				rea.Area = RowArea.GutterArea;
 			}
-			else if (e.X < this.View.LineNumberMarginWidth + this.View.GutterMarginWidth)
+			else if (e.X < this.View.LineNumberMarginWidth +
+				this.View.GutterMarginWidth)
 			{
 				rea.Area = RowArea.LineNumberArea;
 			}
@@ -3346,7 +3419,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			int l = SystemInformation.MouseWheelScrollLines;
-			ScrollScreen(-(e.Delta/120)*l, 2);
+			ScrollScreen(- (e.Delta/120)*l, 2);
 
 			base.OnMouseWheel(e);
 		}
@@ -3391,7 +3464,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// Overrides the default OnDragOver
 		/// </summary>
 		/// <param name="drgevent"></param>
-		protected override void OnDragOver(DragEventArgs drgevent)
+		protected override void OnDragOver(DragEventArgs
+			drgevent)
 		{
 			if (!this.ReadOnly)
 			{
@@ -3429,7 +3503,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// Overrides the default OnDragDrop
 		/// </summary>
 		/// <param name="drgevent"></param>
-		protected override void OnDragDrop(DragEventArgs drgevent)
+		protected override void OnDragDrop(DragEventArgs
+			drgevent)
 		{
 			if (!this.ReadOnly)
 			{
@@ -3445,7 +3520,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					int SelLen = s.Length;
 
 
-					if (DropStart >= SelStart && DropStart <= SelStart + Math.Abs(Selection.SelLength))
+					if (DropStart >= SelStart && DropStart <= SelStart + Math.Abs
+						(Selection.SelLength))
 						DropStart = SelStart;
 					else if (DropStart >= SelStart + SelLen)
 						DropStart -= SelLen;
@@ -3458,7 +3534,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						this.Caret.Position = Document.IntPosToPoint(DropStart);
 					}
 
-					TextPoint p = Document.InsertText(s, Caret.Position.X, Caret.Position.Y);
+					TextPoint p = Document.InsertText(s, Caret.Position.X,
+					                                  Caret.Position.Y);
 					this.Document.EndUndoCapture();
 
 					Selection.SelStart = Document.PointToIntPos(Caret.Position);
@@ -3481,7 +3558,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		///  Overrides the default OnDragEnter
 		/// </summary>
 		/// <param name="drgevent"></param>
-		protected override void OnDragEnter(DragEventArgs drgevent)
+		protected override void OnDragEnter(DragEventArgs
+			drgevent)
 		{
 		}
 
@@ -3520,7 +3598,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				rea.Area = RowArea.GutterArea;
 			}
-			else if (MouseX < this.View.LineNumberMarginWidth + this.View.GutterMarginWidth)
+			else if (MouseX < this.View.LineNumberMarginWidth +
+				this.View.GutterMarginWidth)
 			{
 				rea.Area = RowArea.LineNumberArea;
 			}
@@ -3542,7 +3621,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					{
 						if (r2.Expansion_StartSegment != null)
 						{
-							if (r2.Expansion_StartSegment.StartRow != null && r2.Expansion_StartSegment.EndRow != null && r2.Expansion_StartSegment.Expanded == false)
+							if (r2.Expansion_StartSegment.StartRow != null &&
+								r2.Expansion_StartSegment.EndRow != null &&
+								r2.Expansion_StartSegment.Expanded == false)
 							{
 								r2.Expanded = true;
 								this.Document.ResetVisibleRows();
@@ -3586,7 +3667,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				rea.Area = RowArea.GutterArea;
 			}
-			else if (MouseX < this.View.LineNumberMarginWidth + this.View.GutterMarginWidth)
+			else if (MouseX < this.View.LineNumberMarginWidth +
+				this.View.GutterMarginWidth)
 			{
 				rea.Area = RowArea.LineNumberArea;
 			}
@@ -3600,7 +3682,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			#endregion
 		}
 
-		private void vScroll_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
+		private void vScroll_Scroll(object sender,
+		                            ScrollEventArgs e)
 		{
 			SetMaxHorizontalScroll();
 			_InfoTipVisible = false;
@@ -3610,7 +3693,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 
 			int diff = e.NewValue - vScroll.Value;
-			if ((diff == -1 || diff == 1) && (e.Type == ScrollEventType.SmallDecrement || e.Type == ScrollEventType.SmallIncrement))
+			if ((diff == - 1 || diff == 1) && (e.Type ==
+				ScrollEventType.SmallDecrement || e.Type ==
+					ScrollEventType.SmallIncrement))
 			{
 				ScrollScreen(diff);
 			}
@@ -3620,7 +3705,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			}
 		}
 
-		private void hScroll_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
+		private void hScroll_Scroll(object sender,
+		                            ScrollEventArgs e)
 		{
 			_InfoTipVisible = false;
 			_AutoListVisible = false;
@@ -3708,7 +3794,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.Redraw();
 		}
 
-		private void IntelliMouse_Scroll(object sender, ScrollEventArgs e)
+		private void IntelliMouse_Scroll(object sender,
+		                                 IntelliMouse.ScrollEventArgs e)
 		{
 			if (e.DeltaY < 0 && vScroll.Value == 0)
 			{
@@ -3718,7 +3805,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			}
 
-			if (e.DeltaY > 0 && vScroll.Value >= vScroll.Maximum - this.View.VisibleRowCount + 1)
+			if (e.DeltaY > 0 && vScroll.Value >= vScroll.Maximum -
+				this.View.VisibleRowCount + 1)
 			{
 				this.View.YOffset = 0;
 				this.Redraw();
@@ -3732,7 +3820,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				_IntelliScrollPos -= scrollrows*this.View.RowHeight;
 			}
-			this.View.YOffset = -(int) _IntelliScrollPos;
+			this.View.YOffset = - (int) _IntelliScrollPos;
 			this.ScrollScreen(scrollrows);
 
 		}
@@ -3763,7 +3851,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			base.WndProc(ref m);
 		}
 
-		private void CopyAsRTF()
+		protected void CopyAsRTF()
 		{
 			TextStyle[] styles = this.Document.Parser.Language.Styles;
 			this.Document.ParseAll(true);
@@ -3778,8 +3866,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			foreach (TextStyle ts in styles)
 			{
-				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.ForeColor.R, ts.ForeColor.G, ts.ForeColor.B);
-				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.BackColor.R, ts.BackColor.G, ts.BackColor.B);
+				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.ForeColor.R,
+					ts.ForeColor.G, ts.ForeColor.B);
+				sb.AppendFormat("\\red{0}\\green{1}\\blue{2};", ts.BackColor.R,
+					ts.BackColor.G, ts.BackColor.B);
 			}
 
 			sb.Append(@";}");
@@ -3797,20 +3887,24 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 					if (i == r1 && w.Column + w.Text.Length < c1)
 						continue;
 
-					bool IsFirst = (i == r1 && w.Column <= c1 && w.Column + w.Text.Length > c1);
-					bool IsLast = (i == r2 && w.Column < c2 && w.Column + w.Text.Length > c2);
+					bool IsFirst = (i == r1 && w.Column <= c1 && w.Column + w.Text.Length
+						> c1);
+					bool IsLast = (i == r2 && w.Column < c2 && w.Column + w.Text.Length >
+						c2);
 
 
 					if (w.Type == WordType.xtWord && w.Style != null)
 					{
 						int clrindex = Array.IndexOf(styles, w.Style);
 						clrindex *= 2;
-						clrindex ++;
+						clrindex++;
 
-						sb.Append("{\\cf" + clrindex.ToString());
+						sb.Append("{\\cf" + clrindex.ToString
+							(CultureInfo.InvariantCulture));
 						if (!w.Style.Transparent)
 						{
-							sb.Append("\\highlight" + (clrindex + 1).ToString());
+							sb.Append("\\highlight" + (clrindex + 1).ToString
+								(CultureInfo.InvariantCulture));
 						}
 						sb.Append(" ");
 					}
@@ -3833,18 +3927,24 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						wordtext = wordtext.Substring(c1 - w.Column);
 
 
-					wordtext = wordtext.Replace(@"\", @"\\").Replace(@"}", @"\}").Replace(@"{", @"\{");
+					wordtext = wordtext.Replace(@"\", @" \ \ ").Replace(@"
+        }
+        ", @" \
+      }
+      ").Replace(@"
+      {
+        ", @" \
+        {
+          ");
 
 					sb.Append(wordtext);
 
 					if (w.Style != null)
 					{
-						if (w.Style.Bold)
-							sb.Append(@"\b0 ");
+						if (w.Style.Bold) sb.Append(@"\b0 ");
 						if (w.Style.Underline)
 							sb.Append(@"\ul0 ");
-						if (w.Style.Italic)
-							sb.Append(@"\i0 ");
+						if (w.Style.Italic) sb.Append(@"\i0 ");
 					}
 
 					if (w.Type == WordType.xtWord && w.Style != null)
@@ -3858,8 +3958,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 						break;
 					}
 				}
-				if (Done)
-					break;
+				if (Done) break;
 
 				sb.Append(@"\par");
 			}
@@ -3870,15 +3969,16 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 			da = new DataObject();
 			da.SetData(DataFormats.Rtf, sb.ToString());
-			string s = this.Selection.Text;
-			da.SetData(DataFormats.Text, s);
+			string
+				s = this.Selection.Text;
+			da.SetData(DataFormats.Text,
+				s);
 			Clipboard.SetDataObject(da);
 
 			CopyEventArgs ea = new CopyEventArgs();
 			ea.Text = s;
-			OnClipboardUpdated(ea);
+			OnClipboardUpdated
+				(ea);
 		}
-
-
 	}
 }

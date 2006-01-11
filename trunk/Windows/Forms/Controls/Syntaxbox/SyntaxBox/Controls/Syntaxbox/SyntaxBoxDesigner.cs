@@ -33,8 +33,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			base.OnSetComponentDefaults();
 			if (DesignerHost != null)
 			{
-				DesignerTransaction trans = DesignerHost.CreateTransaction("Adding Syntaxdocument");
-				SyntaxDocument sd = DesignerHost.CreateComponent(typeof (SyntaxDocument)) as SyntaxDocument;
+				DesignerTransaction trans = DesignerHost.CreateTransaction(
+					"Adding Syntaxdocument");
+				SyntaxDocument sd = DesignerHost.CreateComponent
+					(typeof (SyntaxDocument)) as
+					SyntaxDocument;
 
 				SyntaxBoxControl sb = this.Control as SyntaxBoxControl;
 				sb.Document = sd;

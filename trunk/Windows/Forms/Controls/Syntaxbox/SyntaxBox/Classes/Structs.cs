@@ -4,17 +4,6 @@ using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 namespace Puzzle.Windows.Forms.SyntaxBox
 {
 	/// <summary>
-	/// Represents which split view is currently active in the syntaxbox
-	/// </summary>
-	public enum ActiveView
-	{
-		TopLeft,
-		TopRight,
-		BottomLeft,
-		BottomRight,
-	}
-
-	/// <summary>
 	/// Indent styles used by the control
 	/// </summary>
 	public enum IndentStyle

@@ -83,7 +83,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		{
 		}
 
-		public KeyboardAction(Keys key, bool shift, bool control, bool alt, bool allowreadonly, ActionDelegate actionDelegate)
+		public KeyboardAction(Keys key, bool shift, bool control, bool alt, bool
+			allowreadonly, ActionDelegate actionDelegate)
 		{
 			this.Key = key;
 			this.Control = control;

@@ -261,6 +261,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controls\SplitView\SplitViewParentControl.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\SplitView\SplitViewParentControl.resx"
+                    DependentUpon = "SplitViewParentControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controls\ThumbControl\ThumbControl.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -347,6 +357,11 @@
                 />
                 <File
                     RelPath = "Enums\Enums.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Globalization\IMEWindow.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

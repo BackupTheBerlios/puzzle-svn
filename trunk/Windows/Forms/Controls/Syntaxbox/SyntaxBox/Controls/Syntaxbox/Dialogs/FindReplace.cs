@@ -72,11 +72,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			get
 			{
 				CreateParams cp = base.CreateParams;
-//				unchecked
-//				{
-//					int i= (int)0x80000000;
-//					cp.Style |=i;
-//				}
+				//				unchecked
+				//				{
+				//					int i= (int)0x80000000;
+				//					cp.Style |=i;
+				//				}
 				return cp;
 			}
 		}
@@ -154,7 +154,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (FindReplaceForm));
+			System.Resources.ResourceManager resources = new
+				System.Resources.ResourceManager(typeof (FindReplaceForm));
 			this.pnlButtons = new System.Windows.Forms.Panel();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.btnClose = new System.Windows.Forms.Button();
@@ -192,10 +193,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			this.pnlButtons.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.panel3,
-					this.pnlReplaceButtons,
-					this.panel1
-				});
+					this.panel3, this.pnlReplaceButtons, this.panel1
+				}
+				);
 			this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Right;
 			this.pnlButtons.Location = new System.Drawing.Point(400, 0);
 			this.pnlButtons.Name = "pnlButtons";
@@ -206,9 +206,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			this.panel3.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.btnClose,
-					this.btnMarkAll
-				});
+					this.btnClose, this.btnMarkAll
+				}
+				);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel3.Location = new System.Drawing.Point(0, 96);
 			this.panel3.Name = "panel3";
@@ -236,10 +236,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			// pnlReplaceButtons
 			// 
-			this.pnlReplaceButtons.Controls.AddRange(new System.Windows.Forms.Control[]
+			this.pnlReplaceButtons.Controls.AddRange(new
+				System.Windows.Forms.Control[]
 				{
 					this.btnReplaceAll
-				});
+				}
+				);
 			this.pnlReplaceButtons.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pnlReplaceButtons.Location = new System.Drawing.Point(0, 64);
 			this.pnlReplaceButtons.Name = "pnlReplaceButtons";
@@ -254,16 +256,16 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.btnReplaceAll.Size = new System.Drawing.Size(80, 24);
 			this.btnReplaceAll.TabIndex = 2;
 			this.btnReplaceAll.Text = "Replace All";
-			this.btnReplaceAll.Click += new System.EventHandler(this.btnReplaceAll_Click);
+			this.btnReplaceAll.Click += new System.EventHandler
+				(this.btnReplaceAll_Click);
 			// 
 			// panel1
 			// 
 			this.panel1.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.btnDoReplace,
-					this.btnReplace,
-					this.btnFind
-				});
+					this.btnDoReplace, this.btnReplace, this.btnFind
+				}
+				);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(96, 64);
@@ -277,11 +279,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.btnDoReplace.Size = new System.Drawing.Size(80, 24);
 			this.btnDoReplace.TabIndex = 4;
 			this.btnDoReplace.Text = "Replace";
-			this.btnDoReplace.Click += new System.EventHandler(this.btnDoReplace_Click);
+			this.btnDoReplace.Click += new System.EventHandler
+				(this.btnDoReplace_Click);
 			// 
 			// btnReplace
 			// 
-			this.btnReplace.Image = ((System.Drawing.Bitmap) (resources.GetObject("btnReplace.Image")));
+			this.btnReplace.Image = ((System.Drawing.Bitmap) (resources.GetObject(
+				"btnReplace.Image")));
 			this.btnReplace.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnReplace.Location = new System.Drawing.Point(8, 40);
 			this.btnReplace.Name = "btnReplace";
@@ -304,10 +308,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			this.pnlFind.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.cboFind,
-					this.label1,
-					this.btnRegex1
-				});
+					this.cboFind, this.label1, this.btnRegex1
+				}
+				);
 			this.pnlFind.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pnlFind.Name = "pnlFind";
 			this.pnlFind.Size = new System.Drawing.Size(400, 40);
@@ -330,7 +333,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			// btnRegex1
 			// 
-			this.btnRegex1.Image = ((System.Drawing.Bitmap) (resources.GetObject("btnRegex1.Image")));
+			this.btnRegex1.Image = ((System.Drawing.Bitmap) (resources.GetObject(
+				"btnRegex1.Image")));
 			this.btnRegex1.Location = new System.Drawing.Point(368, 8);
 			this.btnRegex1.Name = "btnRegex1";
 			this.btnRegex1.Size = new System.Drawing.Size(21, 21);
@@ -341,10 +345,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			this.pnlReplace.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.cboReplace,
-					this.label2,
-					this.button1
-				});
+					this.cboReplace, this.label2, this.button1
+				}
+				);
 			this.pnlReplace.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pnlReplace.Location = new System.Drawing.Point(0, 40);
 			this.pnlReplace.Name = "pnlReplace";
@@ -369,7 +372,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			// button1
 			// 
-			this.button1.Image = ((System.Drawing.Bitmap) (resources.GetObject("button1.Image")));
+			this.button1.Image = ((System.Drawing.Bitmap) (resources.GetObject(
+				"button1.Image")));
 			this.button1.Location = new System.Drawing.Point(368, 8);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(21, 21);
@@ -381,7 +385,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.pnlSettings.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
 					this.groupBox1
-				});
+				}
+				);
 			this.pnlSettings.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlSettings.Location = new System.Drawing.Point(0, 80);
 			this.pnlSettings.Name = "pnlSettings";
@@ -392,10 +397,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			// 
 			this.groupBox1.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.chkRegEx,
-					this.chkWholeWord,
-					this.chkMatchCase
-				});
+					this.chkRegEx, this.chkWholeWord, this.chkMatchCase
+				}
+				);
 			this.groupBox1.Location = new System.Drawing.Point(8, 0);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(384, 88);
@@ -436,17 +440,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.ClientSize = new System.Drawing.Size(496, 178);
 			this.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.pnlSettings,
-					this.pnlReplace,
-					this.pnlFind,
-					this.pnlButtons
-				});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+					this.pnlSettings, this.pnlReplace, this.pnlFind, this.pnlButtons
+				}
+				);
+			this.FormBorderStyle =
+				System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "FindReplaceForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Find";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FindReplace_Closing);
+			this.Closing += new System.ComponentModel.CancelEventHandler
+				(this.FindReplace_Closing);
 			this.pnlButtons.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
 			this.pnlReplaceButtons.ResumeLayout(false);
@@ -466,7 +470,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			ShowReplace();
 		}
 
-		private void FindReplace_Closing(object sender, CancelEventArgs e)
+		private void FindReplace_Closing(object sender,
+		                                 CancelEventArgs e)
 		{
 			e.Cancel = true;
 			this.Hide();
@@ -512,7 +517,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			int y = mOwner.Caret.Position.Y;
 			mOwner.Caret.Position.X = 0;
 			mOwner.Caret.Position.Y = 0;
-			while (mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked, chkWholeWord.Checked, chkRegEx.Checked))
+			while (mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked,
+			                         chkWholeWord.Checked, chkRegEx.Checked))
 			{
 				this.mOwner.ReplaceSelection(cboReplace.Text);
 			}
@@ -547,7 +553,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			int y = mOwner.Caret.Position.Y;
 			mOwner.Caret.Position.X = 0;
 			mOwner.Caret.Position.Y = 0;
-			while (mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked, chkWholeWord.Checked, chkRegEx.Checked))
+			while (mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked,
+			                         chkWholeWord.Checked, chkRegEx.Checked))
 			{
 				this.mOwner.Caret.CurrentRow.Bookmarked = true;
 			}
@@ -588,7 +595,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			if (!found)
 				cboFind.Items.Add(text);
 
-			mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked, chkWholeWord.Checked, chkRegEx.Checked);
+			mOwner.SelectNext(cboFind.Text, chkMatchCase.Checked,
+			                  chkWholeWord.Checked, chkRegEx.Checked);
 		}
 	}
 }

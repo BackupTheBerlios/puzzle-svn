@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace Puzzle.Windows.Forms.SyntaxBox
@@ -50,7 +51,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
-			lblLines.Text = "Line number (1-" + (RowCount).ToString() + "):";
+			lblLines.Text = "Line number (1-" + (RowCount).ToString
+				(CultureInfo.InvariantCulture) + "):";
 			mOwner = Owner;
 		}
 
@@ -126,17 +128,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.ClientSize = new System.Drawing.Size(242, 82);
 			this.Controls.AddRange(new System.Windows.Forms.Control[]
 				{
-					this.lblLines,
-					this.txtRow,
-					this.btnOK,
-					this.btnCancel
-				});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+					this.lblLines, this.txtRow, this.btnOK, this.btnCancel
+				}
+				);
+			this.FormBorderStyle =
+				System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "GotoLineForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Go To Line";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.GotoLine_Closing);
+			this.Closing += new System.ComponentModel.CancelEventHandler
+				(this.GotoLine_Closing);
 			this.Activated += new System.EventHandler(this.GotoLine_Activated);
 			this.ResumeLayout(false);
 
@@ -162,7 +164,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			this.Close();
 		}
 
-		private void GotoLine_Closing(object sender, CancelEventArgs e)
+		private void GotoLine_Closing(object sender,
+		                              CancelEventArgs e)
 		{
 			//e.Cancel =true;
 			//this.Hide ();

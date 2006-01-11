@@ -179,6 +179,15 @@ namespace Puzzle.Windows
 
         #endregion
 
+		[DllImport("imm32.dll")]
+		public static extern IntPtr ImmGetDefaultIMEWnd(IntPtr hWnd);
+
+		[DllImport("user32.dll")]
+		public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, COMPOSITIONFORM lParam);
+
+		[DllImport("user32.dll")]
+		public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, LogFont lParam);
+
         [DllImport("user32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int DrawText(IntPtr hDC, string lpString, int nCount, ref APIRect Rect, int wFormat);
 

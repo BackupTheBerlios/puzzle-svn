@@ -30,5 +30,6 @@ namespace Puzzle.Windows.Forms
 		Dashed = 10,
 		Column = 11,
 		Row = 12,
+		NoCorners = 13,
 	}
 }

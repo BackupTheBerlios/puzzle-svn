@@ -1,13 +1,10 @@
 #region using...
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
-using System.IO;
-using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
 using Puzzle.Drawing.GDI;
@@ -23,27 +20,28 @@ namespace Puzzle.Windows.Forms
 	/// <summary>
 	/// Syntaxbox control that can be used as a pure text editor or as a code editor when a syntaxfile is used.
 	/// </summary>
-    [Designer(typeof (SyntaxBoxDesigner), typeof (IDesigner))]
-    public class SyntaxBoxControl : BaseControl
+	
+	[Designer(typeof(SyntaxBoxDesigner), typeof(IDesigner))]
+	public class SyntaxBoxControl : SplitViewParentControl
 	{
+		
+
 		protected internal bool DisableIntelliMouse = false;
 		protected internal bool DisableFindForm = false;
 		protected internal bool DisableAutoList = false;
 		protected internal bool DisableInfoTip = false;
-		protected internal bool DisableSplitView = false;
-		protected internal bool DisableScrollBars = false;
 
 		#region General Declarations
 
 		private IContainer components;
-		private ArrayList _Views = null;
 		private SyntaxDocument _Document = null;
 		private int _TooltipDelay = 240;
 		private int _TabSize = 4;
 		private int _GutterMarginWidth = 19;
+		private bool _TabsToSpaces = false;
 		private int _SmoothScrollSpeed = 2;
 		private int _RowPadding = 0;
-		private long _ticks = 0; //splitter doubleclick timer
+
 		private bool _ShowWhitespace = false;
 		private bool _ShowTabGuides = false;
 		private bool _ShowLineNumbers = true;
@@ -52,12 +50,16 @@ namespace Puzzle.Windows.Forms
 		private bool _HighLightActiveLine = false;
 		private bool _VirtualWhitespace = false;
 		private bool _BracketMatching = true;
+		private bool _OverWrite = false;
 		private bool _ParseOnPaste = false;
 		private bool _SmoothScroll = false;
 		private bool _AllowBreakPoints = true;
 		private bool _LockCursorUpdate = false;
 		private Color _BracketBorderColor = Color.DarkBlue;
-		private Color _TabGuideColor = ControlPaint.Light(SystemColors.ControlLight);
+
+		private Color _TabGuideColor = ControlPaint.Light(SystemColors.ControlLight)
+			;
+
 		private Color _OutlineColor = SystemColors.ControlDark;
 		private Color _WhitespaceColor = SystemColors.ControlDark;
 		private Color _SeparatorColor = SystemColors.Control;
@@ -82,26 +84,19 @@ namespace Puzzle.Windows.Forms
 		private IndentStyle _Indent = IndentStyle.LastRow;
 		private string _FontName = "Courier new";
 		private float _FontSize = 10f;
-		private EditViewControl _ActiveView = null;
+
 		private KeyboardActionList _KeyboardActions = new KeyboardActionList();
 
 		private string[] TextBorderStyles = new string[]
 			{
-				"****** * ******* * ******",
-				"+---+| | |+-+-+| | |+---+",
-				"+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+",
-				"+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
+				"****** * ******* * ******", "+---+| | |+-+-+| | |+---+",
+				"+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+", "+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
 			};
 
 		#endregion
 
 		#region Internal Components/Controls
 
-		private SplitViewControl splitView1;
-		private EditViewControl UpperLeft;
-		private EditViewControl UpperRight;
-		private EditViewControl LowerLeft;
-		private EditViewControl LowerRight;
 		private ImageList _GutterIcons;
 		private WeakTimer ParseTimer;
 		private ImageList _AutoListIcons;
@@ -178,8 +173,9 @@ namespace Puzzle.Windows.Forms
 
 		private bool _ShowEOLMarker = false;
 
-		[Category("Appearance"),
-			Description("Determines if a ¶ should be displayed at the end of a line")]
+		[Category("Appearance"), Description(
+			"Determines if a ¶ should be displayed at the end of a line")
+			]
 		[DefaultValue(false)]
 		public bool ShowEOLMarker
 		{
@@ -197,8 +193,8 @@ namespace Puzzle.Windows.Forms
 
 		private Color _EOLMarkerColor = Color.Red;
 
-		[Category("Appearance"),
-			Description("The color of the EOL marker")]
+		[Category("Appearance"), Description("The color of the EOL marker")
+			]
 		[DefaultValue(typeof (Color), "Red")]
 		public Color EOLMarkerColor
 		{
@@ -229,8 +225,9 @@ namespace Puzzle.Windows.Forms
 
 		private bool _CopyAsRTF = false;
 
-		[Category("Behavior - Clipboard"),
-			Description("determines if the copy actions should be stored as RTF")]
+		[Category("Behavior - Clipboard"), Description(
+			"determines if the copy actions should be stored as RTF")
+			]
 		[DefaultValue(typeof (Color), "false")]
 		public bool CopyAsRTF
 		{
@@ -240,9 +237,10 @@ namespace Puzzle.Windows.Forms
 
 		#endregion
 
-		[Category("Appearance - Scopes"),
-			Description("The color of the active scope")]
-		[DefaultValue(typeof (Color), "Transparent")]
+		[Category("Appearance - Scopes"), Description(
+			"The color of the active scope")]
+		[DefaultValue(typeof (Color),
+			"Transparent")]
 		public Color ScopeBackColor
 		{
 			get { return _ScopeBackColor; }
@@ -253,9 +251,10 @@ namespace Puzzle.Windows.Forms
 			}
 		}
 
-		[Category("Appearance - Scopes"),
-			Description("The color of the scope indicator")]
-		[DefaultValue(typeof (Color), "Transparent")]
+		[Category("Appearance - Scopes"), Description(
+			"The color of the scope indicator")]
+		[DefaultValue(typeof (Color),
+			"Transparent")]
 		public Color ScopeIndicatorColor
 		{
 			get { return _ScopeIndicatorColor; }
@@ -266,22 +265,40 @@ namespace Puzzle.Windows.Forms
 			}
 		}
 
+		#region PUBLIC PROPERTY SHOWSCOPEINDICATOR
+
+		private bool _ShowScopeIndicator;
+
+		[Category("Appearance - Scopes"), Description(
+			"Determines if the scope indicator should be shown")
+			]
+		[DefaultValue(true)]
+		public bool ShowScopeIndicator
+		{
+			get { return _ShowScopeIndicator; }
+			set
+			{
+				_ShowScopeIndicator = value;
+				this.Redraw();
+			}
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Positions the AutoList
 		/// </summary>
 		[Category("Behavior")]
 		[Browsable(false)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public TextPoint AutoListPosition
 		{
-			get { return _ActiveView.AutoListPosition; }
+			get { return ((EditViewControl) _ActiveView).AutoListPosition; }
 			set
 			{
-				if (_ActiveView == null)
+				if (((EditViewControl) _ActiveView) == null)
 					return;
 
-				_ActiveView.AutoListPosition = value;
+				((EditViewControl) _ActiveView).AutoListPosition = value;
 			}
 		}
 
@@ -290,97 +307,25 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		[Category("Behavior")]
 		[Browsable(false)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public TextPoint InfoTipPosition
 		{
-			get { return _ActiveView.InfoTipPosition; }
+			get { return ((EditViewControl) _ActiveView).InfoTipPosition; }
 			set
 			{
-				if (_ActiveView == null)
+				if (((EditViewControl) _ActiveView) == null)
 					return;
 
-				_ActiveView.InfoTipPosition = value;
+				((EditViewControl) _ActiveView).InfoTipPosition = value;
 			}
 		}
 
-		[Browsable(false)]
-		public int SplitviewV
-		{
-			get { return this.splitView1.SplitviewV; }
-			set
-			{
-				if (this.splitView1 == null)
-					return;
-
-				this.splitView1.SplitviewV = value;
-			}
-		}
-
-		[Browsable(false)]
-		public int SplitviewH
-		{
-			get { return this.splitView1.SplitviewH; }
-			set
-			{
-				if (this.splitView1 == null)
-					return;
-				this.splitView1.SplitviewH = value;
-			}
-		}
-
-
-		/// <summary>
-		/// Gets or Sets the active view
-		/// </summary>
-		[Browsable(false)]
-       // [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public ActiveView ActiveView
-		{
-			get
-			{
-				if (_ActiveView == UpperLeft)
-					return ActiveView.TopLeft;
-
-				if (_ActiveView == UpperRight)
-					return ActiveView.TopRight;
-
-				if (_ActiveView == LowerLeft)
-					return ActiveView.BottomLeft;
-
-				if (_ActiveView == LowerRight)
-					return ActiveView.BottomRight;
-
-				return (ActiveView) 0;
-			}
-			set
-			{
-				if (value != ActiveView.BottomRight)
-				{
-					ActivateSplits();
-				}
-
-
-				if (value == ActiveView.TopLeft)
-					_ActiveView = UpperLeft;
-
-				if (value == ActiveView.TopRight)
-					_ActiveView = UpperRight;
-
-				if (value == ActiveView.BottomLeft)
-					_ActiveView = LowerLeft;
-
-				if (value == ActiveView.BottomRight)
-					_ActiveView = LowerRight;
-
-			}
-
-		}
 
 		/// <summary>
 		/// Prevents the control from changing the cursor.
 		/// </summary>
 		[Description("Prevents the control from changing the cursor.")]
-		[Category("Appearance")]
+		[Category(
+			"Appearance")]
 		[Browsable(false)]
 		public bool LockCursorUpdate
 		{
@@ -391,9 +336,10 @@ namespace Puzzle.Windows.Forms
 		/// <summary>
 		/// The row padding in pixels.
 		/// </summary>
-		[Category("Appearance"),
-			Description("The number of pixels to add between rows")]
-		[DefaultValue(0)]
+		[Category("Appearance"), Description(
+			"The number of pixels to add between rows")]
+		[DefaultValue(0)
+			]
 		public int RowPadding
 		{
 			get { return _RowPadding; }
@@ -404,57 +350,61 @@ namespace Puzzle.Windows.Forms
 		/// <summary>
 		/// The selected index in the infotip.
 		/// </summary>
-		[Category("Appearance - Infotip"),
-			Description("The currently active selection in the infotip")]
-		[Browsable(false)]
+		[Category("Appearance - Infotip"), Description(
+			"The currently active selection in the infotip")]
+		[Browsable(false)
+			]
 		public int InfoTipSelectedIndex
 		{
-			get { return _ActiveView.InfoTip.SelectedIndex; }
+			get { return ((EditViewControl) _ActiveView).InfoTip.SelectedIndex; }
 			set
 			{
-				if (_ActiveView == null || _ActiveView.InfoTip == null)
+				if (((EditViewControl) _ActiveView) == null || ((EditViewControl)
+					_ActiveView).InfoTip == null)
 					return;
 
-				_ActiveView.InfoTip.SelectedIndex = value;
+				((EditViewControl) _ActiveView).InfoTip.SelectedIndex = value;
 			}
 		}
 
 		/// <summary>
 		/// Gets or Sets the image used in the infotip.
 		/// </summary>
-		[Category("Appearance - InfoTip"),
-			Description("An image to show in the infotip")]
+		[Category("Appearance - InfoTip"), Description(
+			"An image to show in the infotip")]
 		[DefaultValue(null)]
-       // [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Image InfoTipImage
+		public
+			Image InfoTipImage
 		{
-			get { return _ActiveView.InfoTip.Image; }
+			get { return ((EditViewControl) _ActiveView).InfoTip.Image; }
 			set
 			{
-				if (_ActiveView == null || _ActiveView.InfoTip == null)
+				if (((EditViewControl) _ActiveView) == null || ((EditViewControl)
+					_ActiveView).InfoTip == null)
 					return;
 
 
-				_ActiveView.InfoTip.Image = value;
+				((EditViewControl) _ActiveView).InfoTip.Image = value;
 			}
 		}
 
 		/// <summary>
 		/// Get or Sets the number of choices that could be made in the infotip.
 		/// </summary>
-		[Category("Appearance"),
-			Description("Get or Sets the number of choices that could be made in the infotip")]
+		[Category("Appearance"), Description(
+			"Get or Sets the number of choices that could be made in the infotip")]
 		[Browsable(false)]
 		public int InfoTipCount
 		{
-			get { return _ActiveView.InfoTip.Count; }
+			get { return ((EditViewControl) _ActiveView).InfoTip.Count; }
 			set
 			{
-				if (_ActiveView == null || _ActiveView.InfoTip == null)
+				if (((EditViewControl) _ActiveView) == null || ((EditViewControl)
+					_ActiveView).InfoTip == null)
 					return;
 
-				_ActiveView.InfoTip.Count = value;
-				_ActiveView.InfoTip.Init();
+				((EditViewControl) _ActiveView).InfoTip.Count = value;
+				((EditViewControl) _ActiveView).InfoTip.Init();
 			}
 		}
 
@@ -478,18 +428,19 @@ namespace Puzzle.Windows.Forms
 		/// MySyntaxBox.InfoTipText="public void MyMethod ( &lt;b&gt; string text &lt;/b&gt; );"; 		
 		/// </code>
 		/// </example>	
-		[Category("Appearance - InfoTip"),
-			Description("The infotip text")]
+		[Category("Appearance - InfoTip"), Description("The infotip text")
+			]
 		[DefaultValue("")]
 		public string InfoTipText
 		{
-			get { return _ActiveView.InfoTip.Data; }
+			get { return ((EditViewControl) _ActiveView).InfoTip.Data; }
 			set
 			{
-				if (_ActiveView == null || _ActiveView.InfoTip == null)
+				if (((EditViewControl) _ActiveView) == null || ((EditViewControl)
+					_ActiveView).InfoTip == null)
 					return;
 
-				_ActiveView.InfoTip.Data = value;
+				((EditViewControl) _ActiveView).InfoTip.Data = value;
 			}
 		}
 
@@ -497,14 +448,13 @@ namespace Puzzle.Windows.Forms
 		/// Gets the Selection object from the active view.
 		/// </summary>
 		[Browsable(false)]
-     //   [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Selection Selection
 		{
 			get
 			{
-				if (_ActiveView != null)
+				if (((EditViewControl) _ActiveView) != null)
 				{
-					return _ActiveView.Selection;
+					return ((EditViewControl) _ActiveView).Selection;
 				}
 				return null;
 			}
@@ -515,7 +465,6 @@ namespace Puzzle.Windows.Forms
 		/// Keyboard actions to add shortcut key combinations to certain tasks.
 		/// </summary>
 		[Browsable(false)]
-        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden)]
 		public KeyboardActionList KeyboardActions
 		{
 			get { return _KeyboardActions; }
@@ -525,44 +474,46 @@ namespace Puzzle.Windows.Forms
 		/// <summary>
 		/// Gets or Sets if the AutoList is visible in the active view.
 		/// </summary>
-		[Category("Appearance"),
-			Description("Gets or Sets if the AutoList is visible in the active view.")]
+		[Category("Appearance"), Description(
+			"Gets or Sets if the AutoList is visible in the active view.")
+			]
 		[Browsable(false)]
 		public bool AutoListVisible
 		{
 			get
 			{
-				if (_ActiveView != null)
-					return _ActiveView.AutoListVisible;
+				if (((EditViewControl) _ActiveView) != null)
+					return ((EditViewControl) _ActiveView).AutoListVisible;
 				else
 					return false;
 			}
 			set
 			{
-				if (_ActiveView != null)
-					_ActiveView.AutoListVisible = value;
+				if (((EditViewControl) _ActiveView) != null)
+					((EditViewControl) _ActiveView).AutoListVisible = value;
 			}
 		}
 
 		/// <summary>
 		/// Gets or Sets if the InfoTip is visible in the active view.
 		/// </summary>
-		[Category("Appearance"),
-			Description("Gets or Sets if the InfoTip is visible in the active view.")]
+		[Category("Appearance"), Description(
+			"Gets or Sets if the InfoTip is visible in the active view.")
+			]
 		[Browsable(false)]
 		public bool InfoTipVisible
 		{
 			get
 			{
-				if (_ActiveView != null)
-					return _ActiveView.InfoTipVisible;
+				if (((EditViewControl) _ActiveView) != null)
+					return ((EditViewControl) _ActiveView).InfoTipVisible;
 				else
 					return false;
 			}
 			set
 			{
-				if (_ActiveView != null)
-					_ActiveView.InfoTipVisible = value;
+				if (((EditViewControl) _ActiveView) != null)
+					((EditViewControl) _ActiveView).InfoTipVisible = value;
 			}
 		}
 
@@ -572,7 +523,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool CanCopy
 		{
-			get { return _ActiveView.CanCopy; }
+			get { return ((EditViewControl) _ActiveView).CanCopy; }
 		}
 
 		/// <summary>
@@ -582,7 +533,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool CanPaste
 		{
-			get { return _ActiveView.CanPaste; }
+			get { return ((EditViewControl) _ActiveView).CanPaste; }
 		}
 
 
@@ -592,7 +543,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool CanRedo
 		{
-			get { return _ActiveView.CanRedo; }
+			get { return ((EditViewControl) _ActiveView).CanRedo; }
 		}
 
 		/// <summary>
@@ -601,7 +552,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool CanUndo
 		{
-			get { return _ActiveView.CanUndo; }
+			get { return ((EditViewControl) _ActiveView).CanUndo; }
 		}
 
 		/// <summary>
@@ -611,9 +562,10 @@ namespace Puzzle.Windows.Forms
 		/// Image Index 0 is used to display the Breakpoint icon.
 		/// Image Index 1 is used to display the Bookmark icon.
 		/// </remarks>		
-		[Category("Appearance - Gutter Margin"),
-			Description("Gets or Sets the imagelist to use in the gutter margin.")]
-		public ImageList GutterIcons
+		[Category("Appearance - Gutter Margin"), Description(
+			"Gets or Sets the imagelist to use in the gutter margin.")]
+		public
+			ImageList GutterIcons
 		{
 			get { return _GutterIcons; }
 			set
@@ -627,8 +579,9 @@ namespace Puzzle.Windows.Forms
 		/// <summary>
 		/// Gets or Sets the imagelist to use in the autolist.
 		/// </summary>
-		[Category("Appearance"),
-			Description("Gets or Sets the imagelist to use in the autolist.")]
+		[Category("Appearance"), Description(
+			"Gets or Sets the imagelist to use in the autolist.")
+			]
 		[DefaultValue(null)]
 		public ImageList AutoListIcons
 		{
@@ -648,52 +601,17 @@ namespace Puzzle.Windows.Forms
 
 		}
 
-		/// <summary>
-		/// Gets or Sets the border styles of the split views.
-		/// </summary>
-		[Category("Appearance - Borders")]
-		[Description("Gets or Sets the border styles of the split views.")]
-        [DefaultValue(BorderStyle.FixedSingle)]
-        public BorderStyle ChildBorderStyle
-		{
-			get { return ((EditViewControl) Views[0]).BorderStyle; }
-			set
-			{
-				foreach (EditViewControl ev in this.Views)
-				{
-					ev.BorderStyle = value;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or Sets the border color of the split views.
-		/// </summary>
-		[Category("Appearance - Borders")]
-		[Description("Gets or Sets the border color of the split views.")]
-		[DefaultValue(typeof (Color), "ControlDark")]
-		public Color ChildBorderColor
-		{
-			get { return ((EditViewControl) Views[0]).BorderColor; }
-			set
-			{
-				foreach (EditViewControl ev in this.Views)
-				{
-					if (ev != null)
-					{
-						ev.BorderColor = value;
-					}
-				}
-			}
-		}
 
 		/// <summary>
 		/// Gets or Sets the color to use when rendering Tab guides.
 		/// </summary>
 		[Category("Appearance - Tabs")]
-		[Description("Gets or Sets the color to use when rendering Tab guides.")]
+		[Description(
+			"Gets or Sets the color to use when rendering Tab guides.")
+			]
 		[DefaultValue(typeof (Color), "Control")]
-		public Color TabGuideColor
+		public Color
+			TabGuideColor
 		{
 			get { return _TabGuideColor; }
 			set
@@ -710,9 +628,12 @@ namespace Puzzle.Windows.Forms
 		/// NOTE: use Color.Transparent to turn off the bracket match borders.
 		/// </remarks>
 		[Category("Appearance - Bracket Match")]
-		[Description("Gets or Sets the color of the bracket match borders.")]
+		[Description(
+			"Gets or Sets the color of the bracket match borders.")
+			]
 		[DefaultValue(typeof (Color), "DarkBlue")]
-		public Color BracketBorderColor
+		public Color
+			BracketBorderColor
 		{
 			get { return _BracketBorderColor; }
 			set
@@ -726,7 +647,9 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets if the control should render Tab guides.
 		/// </summary>
 		[Category("Appearance - Tabs")]
-		[Description("Gets or Sets if the control should render Tab guides.")]
+		[Description(
+			"Gets or Sets if the control should render Tab guides.")
+			]
 		[DefaultValue(false)]
 		public bool ShowTabGuides
 		{
@@ -743,7 +666,8 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the color to use when rendering whitespace characters
 		/// </summary>
 		[Category("Appearance")]
-		[Description("Gets or Sets the color to use when rendering whitespace characters.")]
+		[Description(
+			"Gets or Sets the color to use when rendering whitespace characters.")]
 		[DefaultValue(typeof (Color), "Control")]
 		public Color WhitespaceColor
 		{
@@ -759,7 +683,8 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the color of the code Outlining (both folding lines and collapsed blocks).
 		/// </summary>
 		[Category("Appearance")]
-		[Description("Gets or Sets the color of the code Outlining (both folding lines and collapsed blocks).")]
+		[Description(
+			"Gets or Sets the color of the code Outlining (both folding lines and collapsed blocks).")]
 		[DefaultValue(typeof (Color), "ControlDark")]
 		public Color OutlineColor
 		{
@@ -777,7 +702,8 @@ namespace Puzzle.Windows.Forms
 		/// Determines if the control should use a smooth scroll when scrolling one row up or down.
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines if the control should use a smooth scroll when scrolling one row up or down.")]
+		[Description(
+			"Determines if the control should use a smooth scroll when scrolling one row up or down.")]
 		[DefaultValue(typeof (Color), "False")]
 		public bool SmoothScroll
 		{
@@ -789,7 +715,8 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the speed of the vertical scroll when SmoothScroll is activated
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Gets or Sets the speed of the vertical scroll when SmoothScroll is activated")]
+		[Description(
+			"Gets or Sets the speed of the vertical scroll when SmoothScroll is activated")]
 		[DefaultValue(2)]
 		public int SmoothScrollSpeed
 		{
@@ -809,7 +736,9 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets if the control can display breakpoints or not.
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Gets or Sets if the control can display breakpoints or not.")]
+		[Description(
+			"Gets or Sets if the control can display breakpoints or not.")
+			]
 		[DefaultValue(true)]
 		public bool AllowBreakPoints
 		{
@@ -822,7 +751,8 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets if the control should perform a full parse of the document when content is drag dropped or pasted into the control
 		/// </summary>
 		[Category("Behavior - Clipboard")]
-		[Description("Gets or Sets if the control should perform a full parse of the document when content is drag dropped or pasted into the control")]
+		[Description(
+			"Gets or Sets if the control should perform a full parse of the document when content is drag dropped or pasted into the control")]
 		[DefaultValue(false)]
 		public bool ParseOnPaste
 		{
@@ -840,7 +770,7 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public bool OverWrite
 		{
-            get { return this._ActiveView.OverWrite; }
+			get { return _OverWrite; }
 		}
 
 
@@ -849,7 +779,8 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="FontName"/>
 		/// </summary>
 		[Category("Appearance - Font")]
-		[Description("The size of the font")]
+		[Description("The size of the font")
+			]
 		[DefaultValue(10f)]
 		public float FontSize
 		{
@@ -866,7 +797,9 @@ namespace Puzzle.Windows.Forms
 		/// Determines what indentstyle to use on a new line.
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines how the the control indents a new line")]
+		[Description(
+			"Determines how the the control indents a new line")
+			]
 		[DefaultValue(IndentStyle.LastRow)]
 		public IndentStyle Indent
 		{
@@ -878,8 +811,10 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the SyntaxDocument the control is currently attatched to.
 		/// </summary>
 		[Category("Content")]
-		[Description("The SyntaxDocument that is attatched to the contro")]
-		public SyntaxDocument Document
+		[Description(
+			"The SyntaxDocument that is attatched to the contro")]
+		public
+			SyntaxDocument Document
 		{
 			get { return _Document; }
 			set { AttachDocument(value); }
@@ -890,7 +825,8 @@ namespace Puzzle.Windows.Forms
 		/// Get or Set the delay before the tooltip is displayed over a collapsed block
 		/// </summary>
 		[Category("Behavior")]
-		[Description("The delay before the tooltip is displayed over a collapsed block")]
+		[Description(
+			"The delay before the tooltip is displayed over a collapsed block")]
 		[DefaultValue(240)]
 		public int TooltipDelay
 		{
@@ -899,12 +835,31 @@ namespace Puzzle.Windows.Forms
 
 		}
 
+		// ROB: Added property to turn collapsed block tooltips on and off.
+		private bool _CollapsedBlockTooltipsEnabled = true;
+
+		/// <summary>
+		/// Get or Set whether or not tooltips will be deplayed for collapsed blocks.
+		/// </summary>
+		[Category("Behavior")]
+		[Description("The delay before the tooltip is displayed over a collapsed block")]
+		[DefaultValue(true)]
+		public bool CollapsedBlockTooltipsEnabled
+		{
+			get { return _CollapsedBlockTooltipsEnabled; }
+			set { _CollapsedBlockTooltipsEnabled = value; }
+		}
+
+		// END-ROB ----------------------------------------------------------
+
 		/// <summary>
 		/// Get or Set the delay before the tooltip is displayed over a collapsed block
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines if the control is readonly or not")]
-		[DefaultValue(false)]
+		[Description(
+			"Determines if the control is readonly or not")]
+		[DefaultValue
+			(false)]
 		public bool ReadOnly
 		{
 			get { return _ReadOnly; }
@@ -916,9 +871,13 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="FontSize"/>
 		/// </summary>
 		[Category("Appearance - Font")]
-		[Description("The name of the font that is used to render the control")]
-		[Editor(typeof (FontList), typeof (UITypeEditor))]
-		[DefaultValue("Courier New")]
+		[Description(
+			"The name of the font that is used to render the control")
+			]
+		[Editor(typeof (FontList), typeof
+			(UITypeEditor))]
+		[DefaultValue("Courier New")
+			]
 		public string FontName
 		{
 			get { return _FontName; }
@@ -940,7 +899,8 @@ namespace Puzzle.Windows.Forms
 		/// Determines the style to use when painting with alt+arrow keys.
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines what type of chars to use when painting with ALT+arrow keys")]
+		[Description(
+			"Determines what type of chars to use when painting with ALT+arrow keys")]
 		[DefaultValue(TextDrawType.StarBorder)]
 		public TextDrawType TextDrawStyle
 		{
@@ -954,7 +914,9 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="BracketBackColor"/>
 		/// </summary>
 		[Category("Appearance - Bracket Match")]
-		[Description("Determines if the control should highlight scope patterns")]
+		[Description(
+			"Determines if the control should highlight scope patterns")
+			]
 		[DefaultValue(true)]
 		public bool BracketMatching
 		{
@@ -971,8 +933,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="ShowWhitespace"/>
 		/// </summary>
 		[Category("Behavior")]
-		[Description("Determines if virtual Whitespace is active")]
-		[DefaultValue(false)]
+		[Description(
+			"Determines if virtual Whitespace is active")]
+		[DefaultValue(false)
+			]
 		public bool VirtualWhitespace
 		{
 			get { return _VirtualWhitespace; }
@@ -990,7 +954,8 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		[Category("Appearance")]
 		[Description("The separator color")]
-		[DefaultValue(typeof (Color), "Control")]
+		[DefaultValue
+			(typeof (Color), "Control")]
 		public Color SeparatorColor
 		{
 			get { return _SeparatorColor; }
@@ -1008,9 +973,12 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="BracketBackColor"/>
 		/// </summary>
 		[Category("Appearance - Bracket Match")]
-		[Description("The foreground color to use when BracketMatching is activated")]
+		[Description(
+			"The foreground color to use when BracketMatching is activated")
+			]
 		[DefaultValue(typeof (Color), "Black")]
-		public Color BracketForeColor
+		public Color
+			BracketForeColor
 		{
 			get { return _BracketForeColor; }
 			set
@@ -1026,9 +994,12 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="BracketForeColor"/>
 		/// </summary>
 		[Category("Appearance - Bracket Match")]
-		[Description("The background color to use when BracketMatching is activated")]
+		[Description(
+			"The background color to use when BracketMatching is activated")
+			]
 		[DefaultValue(typeof (Color), "LightSteelBlue")]
-		public Color BracketBackColor
+		public Color
+			BracketBackColor
 		{
 			get { return _BracketBackColor; }
 			set
@@ -1043,8 +1014,10 @@ namespace Puzzle.Windows.Forms
 		/// The inactive selection background color.
 		/// </summary>
 		[Category("Appearance - Selection")]
-		[Description("The inactive selection background color.")]
-		[DefaultValue(typeof (Color), "ControlDark")]
+		[Description(
+			"The inactive selection background color.")]
+		[DefaultValue(typeof
+			(Color), "ControlDark")]
 		public Color InactiveSelectionBackColor
 		{
 			get { return _InactiveSelectionBackColor; }
@@ -1059,8 +1032,10 @@ namespace Puzzle.Windows.Forms
 		/// The inactive selection foreground color.
 		/// </summary>
 		[Category("Appearance - Selection")]
-		[Description("The inactive selection foreground color.")]
-		[DefaultValue(typeof (Color), "ControlLight")]
+		[Description(
+			"The inactive selection foreground color.")]
+		[DefaultValue(typeof
+			(Color), "ControlLight")]
 		public Color InactiveSelectionForeColor
 		{
 			get { return _InactiveSelectionForeColor; }
@@ -1075,8 +1050,10 @@ namespace Puzzle.Windows.Forms
 		/// The selection background color.
 		/// </summary>
 		[Category("Appearance - Selection")]
-		[Description("The selection background color.")]
-		[DefaultValue(typeof (Color), "Highlight")]
+		[Description(
+			"The selection background color.")]
+		[DefaultValue(typeof (Color),
+			"Highlight")]
 		public Color SelectionBackColor
 		{
 			get { return _SelectionBackColor; }
@@ -1091,8 +1068,10 @@ namespace Puzzle.Windows.Forms
 		/// The selection foreground color.
 		/// </summary>
 		[Category("Appearance - Selection")]
-		[Description("The selection foreground color.")]
-		[DefaultValue(typeof (Color), "HighlightText")]
+		[Description(
+			"The selection foreground color.")]
+		[DefaultValue(typeof (Color),
+			"HighlightText")]
 		public Color SelectionForeColor
 		{
 			get { return _SelectionForeColor; }
@@ -1108,8 +1087,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="GutterMarginColor"/>
 		/// </summary>
 		[Category("Appearance - Gutter Margin")]
-		[Description("The border color of the gutter margin")]
-		[DefaultValue(typeof (Color), "ControlDark")]
+		[Description(
+			"The border color of the gutter margin")]
+		[DefaultValue(typeof
+			(Color), "ControlDark")]
 		public Color GutterMarginBorderColor
 		{
 			get { return _GutterMarginBorderColor; }
@@ -1127,8 +1108,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="LineNumberBackColor"/>
 		/// </summary>
 		[Category("Appearance - Line Numbers")]
-		[Description("The border color of the line number margin")]
-		[DefaultValue(typeof (Color), "Teal")]
+		[Description(
+			"The border color of the line number margin")]
+		[DefaultValue
+			(typeof (Color), "Teal")]
 		public Color LineNumberBorderColor
 		{
 			get { return _LineNumberBorderColor; }
@@ -1146,8 +1129,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="BreakPointBackColor"/>
 		/// </summary>
 		[Category("Appearance - BreakPoints")]
-		[Description("The foreground color of a Breakpoint")]
-		[DefaultValue(typeof (Color), "White")]
+		[Description(
+			"The foreground color of a Breakpoint")]
+		[DefaultValue(typeof
+			(Color), "White")]
 		public Color BreakPointForeColor
 		{
 			get { return _BreakPointForeColor; }
@@ -1163,9 +1148,12 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="BreakPointForeColor"/>
 		/// </summary>
 		[Category("Appearance - BreakPoints")]
-		[Description("The background color to use when BracketMatching is activated")]
+		[Description(
+			"The background color to use when BracketMatching is activated")
+			]
 		[DefaultValue(typeof (Color), "DarkRed")]
-		public Color BreakPointBackColor
+		public Color
+			BreakPointBackColor
 		{
 			get { return _BreakPointBackColor; }
 			set
@@ -1181,8 +1169,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="LineNumberBackColor"/>
 		/// </summary>
 		[Category("Appearance - Line Numbers")]
-		[Description("The foreground color of line numbers")]
-		[DefaultValue(typeof (Color), "Teal")]
+		[Description(
+			"The foreground color of line numbers")]
+		[DefaultValue(typeof
+			(Color), "Teal")]
 		public Color LineNumberForeColor
 		{
 			get { return _LineNumberForeColor; }
@@ -1200,8 +1190,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="LineNumberBorderColor"/>
 		/// </summary>
 		[Category("Appearance - Line Numbers")]
-		[Description("The background color of line numbers")]
-		[DefaultValue(typeof (Color), "Window")]
+		[Description(
+			"The background color of line numbers")]
+		[DefaultValue(typeof
+			(Color), "Window")]
 		public Color LineNumberBackColor
 		{
 			get { return _LineNumberBackColor; }
@@ -1218,8 +1210,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="GutterMarginBorderColor"/>
 		/// </summary>
 		[Category("Appearance - Gutter Margin")]
-		[Description("The color of the gutter margin")]
-		[DefaultValue(typeof (Color), "Control")]
+		[Description(
+			"The color of the gutter margin")]
+		[DefaultValue(typeof (Color),
+			"Control")]
 		public Color GutterMarginColor
 		{
 			get { return _GutterMarginColor; }
@@ -1235,8 +1229,10 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the background Color of the client area.
 		/// </summary>
 		[Category("Appearance")]
-		[Description("The background color of the client area")]
-		[DefaultValue(typeof (Color), "Window")]
+		[Description(
+			"The background color of the client area")]
+		[DefaultValue(typeof
+			(Color), "Window")]
 		new public Color BackColor
 		{
 			get { return _BackColor; }
@@ -1253,8 +1249,10 @@ namespace Puzzle.Windows.Forms
 		/// <seealso cref="HighLightActiveLine"/>
 		/// </summary>
 		[Category("Appearance - Active Line")]
-		[Description("The background color of the active line")]
-		[DefaultValue(typeof (Color), "LightYellow")]
+		[Description(
+			"The background color of the active line")]
+		[DefaultValue(typeof
+			(Color), "LightYellow")]
 		public Color HighLightedLineColor
 		{
 			get { return _HighLightedLineColor; }
@@ -1270,7 +1268,9 @@ namespace Puzzle.Windows.Forms
 		/// Determines if the active line should be highlighted.
 		/// </summary>
 		[Category("Appearance - Active Line")]
-		[Description("Determines if the active line should be highlighted")]
+		[Description(
+			"Determines if the active line should be highlighted")
+			]
 		[DefaultValue(false)]
 		public bool HighLightActiveLine
 		{
@@ -1286,7 +1286,9 @@ namespace Puzzle.Windows.Forms
 		/// Determines if Whitespace should be rendered as symbols.
 		/// </summary>
 		[Category("Appearance")]
-		[Description("Determines if Whitespace should be rendered as symbols")]
+		[Description(
+			"Determines if Whitespace should be rendered as symbols")
+			]
 		[DefaultValue(false)]
 		public bool ShowWhitespace
 		{
@@ -1302,7 +1304,9 @@ namespace Puzzle.Windows.Forms
 		/// Determines if the line number margin should be visible.
 		/// </summary>
 		[Category("Appearance - Line Numbers")]
-		[Description("Determines if the line number margin should be visible")]
+		[Description(
+			"Determines if the line number margin should be visible")
+			]
 		[DefaultValue(true)]
 		public bool ShowLineNumbers
 		{
@@ -1318,7 +1322,9 @@ namespace Puzzle.Windows.Forms
 		/// Determines if the gutter margin should be visible.
 		/// </summary>
 		[Category("Appearance - Gutter Margin")]
-		[Description("Determines if the gutter margin should be visible")]
+		[Description(
+			"Determines if the gutter margin should be visible")
+			]
 		[DefaultValue(true)]
 		public bool ShowGutterMargin
 		{
@@ -1334,7 +1340,9 @@ namespace Puzzle.Windows.Forms
 		/// Gets or Sets the witdth of the gutter margin in pixels.
 		/// </summary>
 		[Category("Appearance - Gutter Margin")]
-		[Description("Determines the witdth of the gutter margin in pixels")]
+		[Description(
+			"Determines the width of the gutter margin in pixels")
+			]
 		[DefaultValue(19)]
 		public int GutterMarginWidth
 		{
@@ -1347,11 +1355,89 @@ namespace Puzzle.Windows.Forms
 
 		}
 
+		// ROB: Added .TabsToSpaces property.
+		/// <summary>
+		/// Gets or Sets the 'Tabs To Spaces' feature of the editor.
+		/// </summary>
+		[Category("Appearance - Tabs")]
+		[Description("Determines whether or not the SyntaxBox converts tabs to spaces as you type.")]
+		[DefaultValue(false)]
+		public bool TabsToSpaces
+		{
+			get { return this._TabsToSpaces; }
+			set { this._TabsToSpaces = value; }
+		}
+
+		// END-ROB
+
+		// ROB: Added method: ConvertTabsToSpaces()
+		/// <summary>
+		/// Converts all tabs to spaces the size of .TabSize in the Document.
+		/// </summary>
+		public void ConvertTabsToSpaces()
+		{
+			if (this._Document != null)
+			{
+				this._Document.StartUndoCapture();
+				string spaces = new string(' ', this._TabSize);
+				// Iterate all rows and convert tabs to spaces.
+				for (int count = 0; count < this._Document.Count; count++)
+				{
+					Row row = this._Document[count];
+
+					string rowText = row.Text;
+					string newText = rowText.Replace("\t", spaces);
+					// If this has made a change to the row, update it.
+					if (newText != rowText)
+					{
+						this._Document.DeleteRange(new TextRange(0, count, rowText.Length, count));
+						this._Document.InsertText(newText, 0, count, true);
+					}
+				}
+				this._Document.EndUndoCapture();
+			}
+		}
+
+		// END-ROB
+
+		// ROB: Added method: ConvertSpacesToTabs()
+		/// <summary>
+		/// Converts all spaces the size of .TabSize in the Document to tabs.
+		/// </summary>
+		public void ConvertSpacesToTabs()
+		{
+			if (this._Document != null)
+			{
+				this._Document.StartUndoCapture();
+				string spaces = new string(' ', this._TabSize);
+				// Iterate all rows and convert tabs to spaces.
+				for (int count = 0; count < this._Document.Count; count++)
+				{
+					Row row = this._Document[count];
+
+					string rowText = row.Text;
+					string newText = rowText.Replace(spaces, "\t");
+					// If this has made a change to the row, update it.
+					if (newText != rowText)
+					{
+						this._Document.DeleteRange(new TextRange(0, count, rowText.Length - 1, count));
+						this._Document.InsertText(newText, 0, count, true);
+					}
+				}
+				this._Document.EndUndoCapture();
+			}
+		}
+
+		// END-ROB
+
+
 		/// <summary>
 		/// Get or Sets the size of a TAB char in number of SPACES.
 		/// </summary>
 		[Category("Appearance - Tabs")]
-		[Description("Determines the size of a TAB in number of SPACE chars")]
+		[Description(
+			"Determines the size of a TAB in number of SPACE chars")
+			]
 		[DefaultValue(4)]
 		public int TabSize
 		{
@@ -1363,89 +1449,13 @@ namespace Puzzle.Windows.Forms
 			}
 		}
 
-		#region public property ScrollBars
-
-		private ScrollBars _ScrollBars;
-
-		[Category("Appearance"),
-			Description("Determines what Scrollbars should be visible")]
-		[DefaultValue(ScrollBars.Both)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public ScrollBars ScrollBars
-		{
-			get { return _ScrollBars; }
-
-			set
-			{
-				if (_Views == null)
-					return;
-
-				if (DisableScrollBars)
-					value = ScrollBars.None;
-
-				foreach (EditViewControl evc in _Views)
-				{
-					evc.ScrollBars = value;
-				}
-				_ScrollBars = value;
-			}
-		}
-
-		#endregion 
-
-		#region public property SplitView
-
-		//member variable
-		private bool _SplitView;
-
-		[Category("Appearance"),
-			Description("Determines if the controls should use splitviews")]        
-		[DefaultValue(true)]
-		public bool SplitView
-		{
-			get { return _SplitView; }
-
-			set
-			{
-				_SplitView = value;
-
-				if (this.splitView1 == null)
-					return;
-
-				if (!SplitView)
-				{
-					this.splitView1.Visible = false;
-					this.Controls.Add(LowerRight);
-					LowerRight.HideThumbs();
-					LowerRight.Dock = DockStyle.Fill;
-				}
-				else
-				{
-					this.splitView1.Visible = true;
-					this.splitView1.LowerRight = LowerRight;
-					LowerRight.Dock = DockStyle.None;
-					LowerRight.ShowThumbs();
-				}
-			}
-		}
-
-		#endregion //END PROPERTY SplitView
-
 		#endregion // PUBLIC PROPERTIES
 
 		#region Public Methods
 
-		/// <summary>
-		/// Resets the Splitview.
-		/// </summary>
-		public void ResetSplitview()
-		{
-			this.splitView1.ResetSplitview();
-		}
-
 		public void ScrollIntoView(int RowIndex)
 		{
-			_ActiveView.ScrollIntoView(RowIndex);
+			((EditViewControl) _ActiveView).ScrollIntoView(RowIndex);
 		}
 
 		/// <summary>
@@ -1467,7 +1477,7 @@ namespace Puzzle.Windows.Forms
 		/// </example>
 		public void AutoListBeginLoad()
 		{
-			this._ActiveView.AutoListBeginLoad();
+			((EditViewControl) _ActiveView).AutoListBeginLoad();
 		}
 
 		/// <summary>
@@ -1475,7 +1485,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>		
 		public void AutoListEndLoad()
 		{
-			this._ActiveView.AutoListEndLoad();
+			((EditViewControl) _ActiveView).AutoListEndLoad();
 		}
 
 		/// <summary>
@@ -1483,7 +1493,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void AutoListClear()
 		{
-			this._ActiveView.AutoList.Clear();
+			((EditViewControl) _ActiveView).AutoList.Clear();
 		}
 
 		/// <summary>
@@ -1504,7 +1514,7 @@ namespace Puzzle.Windows.Forms
 		/// <param name="ImageIndex">The image index in the AutoListIcons</param>
 		public void AutoListAdd(string Text, int ImageIndex)
 		{
-			this._ActiveView.AutoList.Add(Text, ImageIndex);
+			((EditViewControl) _ActiveView).AutoList.Add(Text, ImageIndex);
 		}
 
 		/// <summary>
@@ -1515,7 +1525,7 @@ namespace Puzzle.Windows.Forms
 		/// <param name="ImageIndex">The image index in the AutoListIcons</param>
 		public void AutoListAdd(string Text, string InsertText, int ImageIndex)
 		{
-			this._ActiveView.AutoList.Add(Text, InsertText, ImageIndex);
+			((EditViewControl) _ActiveView).AutoList.Add(Text, InsertText, ImageIndex);
 		}
 
 		/// <summary>
@@ -1525,9 +1535,11 @@ namespace Puzzle.Windows.Forms
 		/// <param name="InsertText">The text to insert in the code</param>
 		/// <param name="ToolTip"></param>
 		/// <param name="ImageIndex">The image index in the AutoListIcons</param>
-		public void AutoListAdd(string Text, string InsertText, string ToolTip, int ImageIndex)
+		public void AutoListAdd(string Text, string InsertText, string ToolTip, int
+			ImageIndex)
 		{
-			this._ActiveView.AutoList.Add(Text, InsertText, ToolTip, ImageIndex);
+			((EditViewControl) _ActiveView).AutoList.Add(Text, InsertText, ToolTip,
+			                                             ImageIndex);
 		}
 
 		/// <summary>
@@ -1538,7 +1550,7 @@ namespace Puzzle.Windows.Forms
 		/// <returns>The row and column at the given pixel coordinate.</returns>
 		public TextPoint CharFromPixel(int x, int y)
 		{
-			return _ActiveView.CharFromPixel(x, y);
+			return ((EditViewControl) _ActiveView).CharFromPixel(x, y);
 		}
 
 		/// <summary>
@@ -1546,7 +1558,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void ClearSelection()
 		{
-			_ActiveView.ClearSelection();
+			((EditViewControl) _ActiveView).ClearSelection();
 		}
 
 		/// <summary>
@@ -1554,7 +1566,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Copy()
 		{
-			_ActiveView.Copy();
+			((EditViewControl) _ActiveView).Copy();
 		}
 
 		/// <summary>
@@ -1562,7 +1574,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Cut()
 		{
-			_ActiveView.Cut();
+			((EditViewControl) _ActiveView).Cut();
 		}
 
 		/// <summary>
@@ -1570,7 +1582,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Delete()
 		{
-			_ActiveView.Delete();
+			((EditViewControl) _ActiveView).Delete();
 		}
 
 		/// <summary>
@@ -1579,7 +1591,7 @@ namespace Puzzle.Windows.Forms
 		/// <param name="RowIndex">the row to jump to</param>
 		public void GotoLine(int RowIndex)
 		{
-			_ActiveView.GotoLine(RowIndex);
+			((EditViewControl) _ActiveView).GotoLine(RowIndex);
 		}
 
 		/// <summary>
@@ -1587,7 +1599,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void GotoNextBookmark()
 		{
-			_ActiveView.GotoNextBookmark();
+			((EditViewControl) _ActiveView).GotoNextBookmark();
 		}
 
 		/// <summary>
@@ -1595,7 +1607,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void GotoPreviousBookmark()
 		{
-			_ActiveView.GotoPreviousBookmark();
+			((EditViewControl) _ActiveView).GotoPreviousBookmark();
 		}
 
 
@@ -1608,7 +1620,7 @@ namespace Puzzle.Windows.Forms
 		/// <returns>true if the position is inside the selection.</returns>
 		public bool IsOverSelection(int x, int y)
 		{
-			return _ActiveView.IsOverSelection(x, y);
+			return ((EditViewControl) _ActiveView).IsOverSelection(x, y);
 		}
 
 		/// <summary>
@@ -1616,7 +1628,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Paste()
 		{
-			_ActiveView.Paste();
+			((EditViewControl) _ActiveView).Paste();
 		}
 
 		/// <summary>
@@ -1624,7 +1636,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Redo()
 		{
-			_ActiveView.Redo();
+			((EditViewControl) _ActiveView).Redo();
 		}
 
 		/// <summary>
@@ -1632,7 +1644,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void ScrollIntoView()
 		{
-			_ActiveView.ScrollIntoView();
+			((EditViewControl) _ActiveView).ScrollIntoView();
 		}
 
 		/// <summary>
@@ -1641,7 +1653,7 @@ namespace Puzzle.Windows.Forms
 		/// <param name="Pos"></param>
 		public void ScrollIntoView(TextPoint Pos)
 		{
-			_ActiveView.ScrollIntoView(Pos);
+			((EditViewControl) _ActiveView).ScrollIntoView(Pos);
 		}
 
 		/// <summary>
@@ -1649,7 +1661,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void SelectAll()
 		{
-			_ActiveView.SelectAll();
+			((EditViewControl) _ActiveView).SelectAll();
 		}
 
 		/// <summary>
@@ -1659,9 +1671,11 @@ namespace Puzzle.Windows.Forms
 		/// <param name="MatchCase">Match case , true/false</param>
 		/// <param name="WholeWords">Match whole words only , true/false</param>
 		/// <param name="UseRegEx">To be implemented</param>
-		public void FindNext(string Pattern, bool MatchCase, bool WholeWords, bool UseRegEx)
+		public void FindNext(string Pattern, bool MatchCase, bool WholeWords, bool
+			UseRegEx)
 		{
-			_ActiveView.SelectNext(Pattern, MatchCase, WholeWords, UseRegEx);
+			((EditViewControl) _ActiveView).SelectNext(Pattern, MatchCase, WholeWords,
+			                                           UseRegEx);
 		}
 
 		/// <summary>
@@ -1669,7 +1683,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void FindNext()
 		{
-			_ActiveView.FindNext();
+			((EditViewControl) _ActiveView).FindNext();
 		}
 
 		/// <summary>
@@ -1683,7 +1697,7 @@ namespace Puzzle.Windows.Forms
 		/// </example>
 		public void ShowGotoLine()
 		{
-			_ActiveView.ShowGotoLine();
+			((EditViewControl) _ActiveView).ShowGotoLine();
 		}
 
 		/// <summary>
@@ -1691,7 +1705,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void ShowSettings()
 		{
-			_ActiveView.ShowSettings();
+			((EditViewControl) _ActiveView).ShowSettings();
 		}
 
 		/// <summary>
@@ -1699,7 +1713,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void ToggleBookmark()
 		{
-			_ActiveView.ToggleBookmark();
+			((EditViewControl) _ActiveView).ToggleBookmark();
 		}
 
 		/// <summary>
@@ -1707,7 +1721,7 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public void Undo()
 		{
-			_ActiveView.Undo();
+			((EditViewControl) _ActiveView).Undo();
 		}
 
 
@@ -1722,7 +1736,7 @@ namespace Puzzle.Windows.Forms
 		/// </example>
 		public void ShowFind()
 		{
-			_ActiveView.ShowFind();
+			((EditViewControl) _ActiveView).ShowFind();
 		}
 
 		/// <summary>
@@ -1736,7 +1750,7 @@ namespace Puzzle.Windows.Forms
 		/// </example>
 		public void ShowReplace()
 		{
-			_ActiveView.ShowReplace();
+			((EditViewControl) _ActiveView).ShowReplace();
 		}
 
 
@@ -1748,45 +1762,15 @@ namespace Puzzle.Windows.Forms
 		{
 			get
 			{
-				if (_ActiveView != null)
+				if (((EditViewControl) _ActiveView) != null)
 				{
-					return _ActiveView.Caret;
+					return ((EditViewControl) _ActiveView).Caret;
 				}
 				return null;
 			}
 		}
 
 		#endregion //END Public Methods
-
-        //protected virtual void OnCreate()
-        //{
-        //}
-
-        public void Save(string filename)
-        {
-            string text = this.Document.Text;
-
-            StreamWriter swr = new StreamWriter(filename);
-
-            swr.Write(text);
-
-            swr.Flush();
-
-            swr.Close();
-        }
-
-        public void Open(string filename)
-        {
-            if (this.Document == null)
-                throw new NullReferenceException("CodeEditorControl.Document");
-
-            StreamReader swr = new StreamReader(filename);
-
-            this.Document.Text = swr.ReadToEnd();
-
-            swr.Close();
-        }
-
 
 		#region Constructor
 
@@ -1795,195 +1779,78 @@ namespace Puzzle.Windows.Forms
 		/// </summary>
 		public SyntaxBoxControl() : base()
 		{
-			this.Document = new SyntaxDocument();
-			//this.OnCreate();
-
-			if (!DisableSplitView)
+			try
 			{
-				this.splitView1 = new SplitViewControl();
+				this.Document = new SyntaxDocument();
 
-				this.LowerRight = new EditViewControl(this);
-
-			}
-			else
-			{
-				this.LowerRight = new EditViewControl(this);
-				this.Controls.Add(LowerRight);
-				LowerRight.HideThumbs();
-				LowerRight.Dock = DockStyle.Fill;
-			}
-
-//			this.UpperLeft.Visible = false;
-//			this.UpperRight.Visible = false;
-//			this.LowerLeft.Visible = false;
-//			this.LowerRight.Visible = false;
-//			this.splitView1.Visible = false;
-
-
-			this.SuspendLayout();
-			// 
-			// splitView1
-			// 
-
-			if (!this.DisableSplitView)
-			{
-				this.splitView1.SuspendLayout();
-				this.splitView1.BackColor = SystemColors.Control;
-				this.splitView1.Controls.AddRange(new Control[]
-					{
-						this.LowerRight
-					});
-				this.splitView1.Dock = DockStyle.Fill;
-				this.splitView1.Location = new Point(0, 0);
-				this.splitView1.LowerRight = this.LowerRight;
-				this.splitView1.Name = "splitView1";
-				this.splitView1.Size = new Size(500, 364);
-				this.splitView1.TabIndex = 0;
-
-
-			}
-			// 
-			// LowerRight
-			// 
-			this.LowerRight.AllowDrop = true;
-			this.LowerRight.BorderColor = Color.White;
-            this.LowerRight.BorderStyle = BorderStyle.None;
-			this.LowerRight.Location = new Point(148, 124);
-			this.LowerRight.Name = "LowerRight";
-			this.LowerRight.Size = new Size(352, 240);
-			this.LowerRight.TabIndex = 3;
-			this.LowerRight.TextDrawStyle = TextDrawType.StarBorder;
-
-			// 
-			// SyntaxBoxControl
-			// 
-
-			if (!this.DisableSplitView)
-				this.Controls.AddRange(new Control[]
-					{
-						this.splitView1
-					});
-
-			this.Name = "SyntaxBoxControl";
-			this.Size = new Size(504, 368);
-			if (!this.DisableSplitView)
-			{
-				this.splitView1.ResumeLayout(false);
-				this.splitView1.Resizing += new EventHandler(this.SplitView_Resizing);
-				this.splitView1.HideLeft += new EventHandler(this.SplitView_HideLeft);
-				this.splitView1.HideTop += new EventHandler(this.SplitView_HideTop);
-			}
-
-			this.ResumeLayout(false);
-
-
-			this.Views = new ArrayList();
-			CreateViews();
-			_ActiveView = LowerRight;
-
-
-			InitializeComponent();
-			this.SetStyle(ControlStyles.Selectable, true);
-
-			//assign keys
-			KeyboardActions.Add(new KeyboardAction(Keys.Z, false, true, false, false, new ActionDelegate(this.Undo)));
-			KeyboardActions.Add(new KeyboardAction(Keys.Y, false, true, false, false, new ActionDelegate(this.Redo)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.F3, false, false, false, true, new ActionDelegate(this.FindNext)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.C, false, true, false, true, new ActionDelegate(this.Copy)));
-			KeyboardActions.Add(new KeyboardAction(Keys.X, false, true, false, false, new ActionDelegate(this.CutClear)));
-			KeyboardActions.Add(new KeyboardAction(Keys.V, false, true, false, false, new ActionDelegate(this.Paste)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.Insert, false, true, false, true, new ActionDelegate(this.Copy)));
-			KeyboardActions.Add(new KeyboardAction(Keys.Delete, true, false, false, false, new ActionDelegate(this.Cut)));
-			KeyboardActions.Add(new KeyboardAction(Keys.Insert, true, false, false, false, new ActionDelegate(this.Paste)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.A, false, true, false, true, new ActionDelegate(this.SelectAll)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.F, false, true, false, false, new ActionDelegate(this.ShowFind)));
-			KeyboardActions.Add(new KeyboardAction(Keys.H, false, true, false, false, new ActionDelegate(this.ShowReplace)));
-			KeyboardActions.Add(new KeyboardAction(Keys.G, false, true, false, true, new ActionDelegate(this.ShowGotoLine)));
-			KeyboardActions.Add(new KeyboardAction(Keys.T, false, true, false, false, new ActionDelegate(this.ShowSettings)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.F2, false, true, false, true, new ActionDelegate(this.ToggleBookmark)));
-			KeyboardActions.Add(new KeyboardAction(Keys.F2, false, false, false, true, new ActionDelegate(this.GotoNextBookmark)));
-			KeyboardActions.Add(new KeyboardAction(Keys.F2, true, false, false, true, new ActionDelegate(this.GotoPreviousBookmark)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.Escape, false, false, false, true, new ActionDelegate(this.ClearSelection)));
-
-			KeyboardActions.Add(new KeyboardAction(Keys.Tab, false, false, false, false, new ActionDelegate(Selection.Indent)));
-			KeyboardActions.Add(new KeyboardAction(Keys.Tab, true, false, false, false, new ActionDelegate(Selection.Outdent)));
-
-			AutoListIcons = _AutoListIcons;
-			this.SplitView = true;
-			this.ScrollBars = ScrollBars.Both;
-            this.BorderStyle = BorderStyle.None;
-			this.ChildBorderColor = SystemColors.ControlDark;
-            this.ChildBorderStyle = BorderStyle.FixedSingle;
-			this.BackColor = SystemColors.Window;
-
-//			this.UpperLeft.Visible = true;
-//			this.UpperRight.Visible = true;
-//			this.LowerLeft.Visible = true;
-//			this.LowerRight.Visible = true;
-//			this.splitView1.Visible = true;
-
-		}
-
-		#endregion //END Constructor
-
-		private void ActivateSplits()
-		{
-			if (this.UpperLeft == null)
-			{
-				this.UpperLeft = new EditViewControl(this);
-				this.UpperRight = new EditViewControl(this);
-				this.LowerLeft = new EditViewControl(this);
-
-
-				// 
-				// UpperLeft
-				// 
-				this.UpperLeft.AllowDrop = true;
-				this.UpperLeft.Name = "UpperLeft";
-				this.UpperLeft.TabIndex = 6;
-				// 
-				// UpperRight
-				// 
-				this.UpperRight.AllowDrop = true;
-				this.UpperRight.Name = "UpperRight";
-				this.UpperRight.TabIndex = 4;
-				// 
-				// LowerLeft
-				// 
-				this.LowerLeft.AllowDrop = true;
-				this.LowerLeft.Name = "LowerLeft";
-				this.LowerLeft.TabIndex = 5;
-
-
-				this.splitView1.Controls.AddRange(new Control[]
-					{
-						this.UpperLeft,
-						this.LowerLeft,
-						this.UpperRight
-					});
-
-				this.splitView1.UpperRight = this.LowerLeft;
-				this.splitView1.UpperLeft = this.UpperLeft;
-				this.splitView1.LowerLeft = this.UpperRight;
 
 				CreateViews();
 
-				this.AutoListIcons = this.AutoListIcons;
-				this.InfoTipImage = this.InfoTipImage;
-				this.ChildBorderStyle = this.ChildBorderStyle;
-				this.ChildBorderColor = this.ChildBorderColor;
-				this.BackColor = this.BackColor;
-				this.Document = this.Document;
-				this.Redraw();
+
+				InitializeComponent();
+				this.SetStyle(ControlStyles.Selectable, true);
+
+				//assign keys
+				KeyboardActions.Add(new KeyboardAction(Keys.Z, false, true, false,
+				                                       false, new ActionDelegate(this.Undo)));
+				KeyboardActions.Add(new KeyboardAction(Keys.Y, false, true, false,
+				                                       false, new ActionDelegate(this.Redo)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.F3, false, false, false,
+				                                       true, new ActionDelegate(this.FindNext)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.C, false, true, false, true,
+				                                       new ActionDelegate(this.Copy)));
+				KeyboardActions.Add(new KeyboardAction(Keys.X, false, true, false,
+				                                       false, new ActionDelegate(this.CutClear)));
+				KeyboardActions.Add(new KeyboardAction(Keys.V, false, true, false,
+				                                       false, new ActionDelegate(this.Paste)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.Insert, false, true, false,
+				                                       true, new ActionDelegate(this.Copy)));
+				KeyboardActions.Add(new KeyboardAction(Keys.Delete, true, false, false,
+				                                       false, new ActionDelegate(this.Cut)));
+				KeyboardActions.Add(new KeyboardAction(Keys.Insert, true, false, false,
+				                                       false, new ActionDelegate(this.Paste)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.A, false, true, false, true,
+				                                       new ActionDelegate(this.SelectAll)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.F, false, true, false,
+				                                       false, new ActionDelegate(this.ShowFind)));
+				KeyboardActions.Add(new KeyboardAction(Keys.H, false, true, false,
+				                                       false, new ActionDelegate(this.ShowReplace)));
+				KeyboardActions.Add(new KeyboardAction(Keys.G, false, true, false, true,
+				                                       new ActionDelegate(this.ShowGotoLine)));
+				KeyboardActions.Add(new KeyboardAction(Keys.T, false, true, false,
+				                                       false, new ActionDelegate(this.ShowSettings)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.F2, false, true, false,
+				                                       true, new ActionDelegate(this.ToggleBookmark)));
+				KeyboardActions.Add(new KeyboardAction(Keys.F2, false, false, false,
+				                                       true, new ActionDelegate(this.GotoNextBookmark)));
+				KeyboardActions.Add(new KeyboardAction(Keys.F2, true, false, false,
+				                                       true, new ActionDelegate(this.GotoPreviousBookmark))
+					);
+
+				KeyboardActions.Add(new KeyboardAction(Keys.Escape, false, false, false,
+				                                       true, new ActionDelegate(this.ClearSelection)));
+
+				KeyboardActions.Add(new KeyboardAction(Keys.Tab, false, false, false,
+				                                       false, new ActionDelegate(Selection.Indent)));
+				KeyboardActions.Add(new KeyboardAction(Keys.Tab, true, false, false,
+				                                       false, new ActionDelegate(Selection.Outdent)));
+
+				AutoListIcons = _AutoListIcons;
+
+			}
+			catch
+			{
+				//	Console.WriteLine (x.StackTrace);
 			}
 		}
+
+		#endregion //END Constructor		
 
 		#region EventHandlers
 
@@ -2042,105 +1909,39 @@ namespace Puzzle.Windows.Forms
 		protected override void OnEnter(EventArgs e)
 		{
 			base.OnEnter(e);
-			if (_ActiveView != null)
+			if (((EditViewControl) _ActiveView) != null)
 			{
-				_ActiveView.Focus();
+				((EditViewControl) _ActiveView).Focus();
 			}
 		}
 
-		private void TopThumb_DoubleClick(object sender, EventArgs e)
-		{
-			//splitView1.Split5050h ();
-		}
 
-		private void LeftThumb_DoubleClick(object sender, EventArgs e)
-		{
-			//splitView1.Split5050v ();
-		}
-
-		private void TopThumb_MouseDown(object sender, MouseEventArgs e)
-		{
-			this.ActivateSplits();
-
-			long t = DateTime.Now.Ticks - _ticks;
-			_ticks = DateTime.Now.Ticks;
-
-
-			if (t < 3000000)
-			{
-				splitView1.Split5050h();
-			}
-			else
-			{
-				splitView1.InvokeMouseDownh();
-			}
-		}
-
-		private void LeftThumb_MouseDown(object sender, MouseEventArgs e)
-		{
-			this.ActivateSplits();
-
-			long t = DateTime.Now.Ticks - _ticks;
-			_ticks = DateTime.Now.Ticks;
-
-
-			if (t < 3000000)
-			{
-				splitView1.Split5050v();
-			}
-			else
-			{
-				splitView1.InvokeMouseDownv();
-			}
-		}
-
-		private void SplitView_Resizing(object sender, EventArgs e)
-		{
-			LowerRight.TopThumbVisible = false;
-			LowerRight.LeftThumbVisible = false;
-		}
-
-		private void SplitView_HideTop(object sender, EventArgs e)
-		{
-			LowerRight.TopThumbVisible = true;
-		}
-
-		private void SplitView_HideLeft(object sender, EventArgs e)
-		{
-			LowerRight.LeftThumbVisible = true;
-		}
-
-		private void View_Enter(object sender, EventArgs e)
-		{
-			this._ActiveView = (EditViewControl) sender;
-		}
-
-		private void View_Leave(object sender, EventArgs e)
-		{
-			//	((EditViewControl)sender).RemoveFocus ();
-		}
-
-		private void View_RowClick(object sender, RowMouseEventArgs e)
+		private void View_RowClick(object sender,
+		                           RowMouseEventArgs e)
 		{
 			OnRowClick(e);
 		}
 
-		private void View_RowDoubleClick(object sender, RowMouseEventArgs e)
+		private void View_RowDoubleClick(object sender,
+		                                 RowMouseEventArgs e)
 		{
 			OnRowDoubleClick(e);
 		}
 
-		private void View_RowMouseDown(object sender, RowMouseEventArgs e)
+		private void View_RowMouseDown(object sender,
+		                               RowMouseEventArgs e)
 		{
 			OnRowMouseDown(e);
 		}
 
-		private void View_RowMouseMove(object sender, RowMouseEventArgs e)
+		private void View_RowMouseMove(object sender,
+		                               RowMouseEventArgs e)
 		{
 			OnRowMouseMove(e);
 		}
 
-		private void View_RowMouseUp(object sender, RowMouseEventArgs e)
+		private void View_RowMouseUp(object sender,
+		                             RowMouseEventArgs e)
 		{
 			OnRowMouseUp(e);
 		}
@@ -2196,17 +1997,23 @@ namespace Puzzle.Windows.Forms
 			OnDoubleClick(e);
 		}
 
-		private void View_MouseUp(object sender, MouseEventArgs e)
+		private void View_MouseUp(object sender,
+		                          MouseEventArgs e)
 		{
 			EditViewControl ev = (EditViewControl) sender;
-			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X + ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth, e.Delta);
+			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X +
+				ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth,
+			                                       e.Delta);
 			OnMouseUp(ea);
 		}
 
-		private void View_MouseMove(object sender, MouseEventArgs e)
+		private void View_MouseMove(object sender,
+		                            MouseEventArgs e)
 		{
 			EditViewControl ev = (EditViewControl) sender;
-			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X + ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth, e.Delta);
+			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X +
+				ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth,
+			                                       e.Delta);
 			OnMouseMove(ea);
 		}
 
@@ -2225,10 +2032,13 @@ namespace Puzzle.Windows.Forms
 			OnMouseEnter(e);
 		}
 
-		private void View_MouseDown(object sender, MouseEventArgs e)
+		private void View_MouseDown(object sender,
+		                            MouseEventArgs e)
 		{
 			EditViewControl ev = (EditViewControl) sender;
-			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X + ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth, e.Delta);
+			MouseEventArgs ea = new MouseEventArgs(e.Button, e.Clicks, e.X +
+				ev.Location.X + ev.BorderWidth, e.Y + ev.Location.Y + ev.BorderWidth,
+			                                       e.Delta);
 			OnMouseDown(ea);
 		}
 
@@ -2237,12 +2047,14 @@ namespace Puzzle.Windows.Forms
 			OnKeyUp(e);
 		}
 
-		private void View_KeyPress(object sender, KeyPressEventArgs e)
+		private void View_KeyPress(object sender,
+		                           KeyPressEventArgs e)
 		{
 			OnKeyPress(e);
 		}
 
-		private void View_KeyDown(object sender, KeyEventArgs e)
+		private void View_KeyDown(object sender, KeyEventArgs
+			e)
 		{
 			OnKeyDown(e);
 		}
@@ -2252,7 +2064,8 @@ namespace Puzzle.Windows.Forms
 			OnClick(e);
 		}
 
-		private void View_DragOver(object sender, DragEventArgs e)
+		private void View_DragOver(object sender,
+		                           DragEventArgs e)
 		{
 			OnDragOver(e);
 		}
@@ -2262,29 +2075,22 @@ namespace Puzzle.Windows.Forms
 			OnDragLeave(e);
 		}
 
-		private void View_DragEnter(object sender, DragEventArgs e)
+		private void View_DragEnter(object sender,
+		                            DragEventArgs e)
 		{
 			OnDragEnter(e);
 		}
 
-		private void View_DragDrop(object sender, DragEventArgs e)
+		private void View_DragDrop(object sender,
+		                           DragEventArgs e)
 		{
 			OnDragDrop(e);
 		}
 
-		private void View_InfoTipSelectedIndexChanged(object sender, EventArgs e)
+		private void View_InfoTipSelectedIndexChanged(object sender,
+		                                              EventArgs e)
 		{
 			OnInfoTipSelectedIndexChanged();
-		}
-
-		#endregion
-
-		#region Private Properties
-
-		private ArrayList Views
-		{
-			get { return _Views; }
-			set { _Views = value; }
 		}
 
 		#endregion
@@ -2296,18 +2102,6 @@ namespace Puzzle.Windows.Forms
 		/// <param name="disposing"></param>
 		protected override void Dispose(bool disposing)
 		{
-			//must destroy license
-#if DEBUG
-			try
-			{
-				Console.WriteLine("disposing syntaxbox");
-			}
-			catch
-			{
-			}
-#endif
-
-
 			if (disposing)
 			{
 				if (components != null)
@@ -2322,30 +2116,38 @@ namespace Puzzle.Windows.Forms
 
 		private void InitializeComponent()
 		{
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxBoxControl));
-            this._GutterIcons = new System.Windows.Forms.ImageList(this.components);
-            this._AutoListIcons = new System.Windows.Forms.ImageList(this.components);
-            this.ParseTimer = new Puzzle.Windows.Forms.CoreLib.WeakTimer(this.components);
-            this.SuspendLayout();
-            // 
-            // _GutterIcons
-            // 
-            this._GutterIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_GutterIcons.ImageStream")));
-            this._GutterIcons.TransparentColor = System.Drawing.Color.Transparent;
-//            this._GutterIcons.Images.SetKeyName(0, "break_point.png");
-            // 
-            // _AutoListIcons
-            // 
-            this._AutoListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_AutoListIcons.ImageStream")));
-            this._AutoListIcons.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // ParseTimer
-            // 
-            this.ParseTimer.Enabled = true;
-            this.ParseTimer.Interval = 1;
-            this.ParseTimer.Tick += new System.EventHandler(this.ParseTimer_Tick);
-            this.ResumeLayout(false);
+			this.components = new Container();
+			ResourceManager resources = new
+				ResourceManager(typeof (SyntaxBoxControl));
+			this._GutterIcons = new ImageList(this.components);
+			this._AutoListIcons = new ImageList(this.components);
+			this.ParseTimer = new WeakTimer
+				(this.components);
+			// 
+			// _GutterIcons
+			// 
+			this._GutterIcons.ColorDepth = ColorDepth.Depth32Bit;
+			this._GutterIcons.ImageSize = new Size(17, 17);
+			this._GutterIcons.ImageStream = ((ImageListStreamer)
+				(resources.GetObject(
+					"_GutterIcons.ImageStream")));
+			this._GutterIcons.TransparentColor = Color.Transparent;
+			// 
+			// _AutoListIcons
+			// 
+			this._AutoListIcons.ColorDepth =
+				ColorDepth.Depth8Bit;
+			this._AutoListIcons.ImageSize = new Size(16, 16);
+			this._AutoListIcons.ImageStream = (
+				(ImageListStreamer) (resources.GetObject(
+					"_AutoListIcons.ImageStream")));
+			this._AutoListIcons.TransparentColor = Color.Transparent;
+			// 
+			// ParseTimer
+			// 
+			this.ParseTimer.Enabled = true;
+			this.ParseTimer.Interval = 1;
+			this.ParseTimer.Tick += new EventHandler(this.ParseTimer_Tick);
 
 		}
 
@@ -2381,31 +2183,9 @@ namespace Puzzle.Windows.Forms
 		}
 
 
-		private bool DoOnce = false;
-
-		private void CreateViews()
+		protected override void CreateViews()
 		{
-			if (UpperRight != null)
-			{
-				Views.Add(UpperRight);
-				Views.Add(UpperLeft);
-				Views.Add(LowerLeft);
-			}
-
-			if (!DoOnce)
-			{
-				Views.Add(LowerRight);
-				LowerRight.TopThumbVisible = true;
-				LowerRight.LeftThumbVisible = true;
-				LowerRight.TopThumb.DoubleClick += new EventHandler(TopThumb_DoubleClick);
-				LowerRight.LeftThumb.DoubleClick += new EventHandler(LeftThumb_DoubleClick);
-
-				LowerRight.TopThumb.MouseDown += new MouseEventHandler(TopThumb_MouseDown);
-				LowerRight.LeftThumb.MouseDown += new MouseEventHandler(LeftThumb_MouseDown);
-
-
-			}
-
+			base.CreateViews();
 
 			foreach (EditViewControl ev in Views)
 			{
@@ -2438,7 +2218,8 @@ namespace Puzzle.Windows.Forms
 				if (ev.InfoTip != null)
 				{
 					ev.InfoTip.Data = "";
-					ev.InfoTip.SelectedIndexChanged += new EventHandler(this.View_InfoTipSelectedIndexChanged);
+					ev.InfoTip.SelectedIndexChanged += new EventHandler
+						(this.View_InfoTipSelectedIndexChanged);
 				}
 
 				ev.RowClick += new RowMouseHandler(this.View_RowClick);
@@ -2452,8 +2233,15 @@ namespace Puzzle.Windows.Forms
 			}
 
 			DoOnce = true;
-			this.Redraw();
 
+			this.AutoListIcons = this.AutoListIcons;
+			this.InfoTipImage = this.InfoTipImage;
+			this.ChildBorderStyle = this.ChildBorderStyle;
+			this.ChildBorderColor = this.ChildBorderColor;
+			this.BackColor = this.BackColor;
+			this.Document = this.Document;
+			this.ImeMode = this.ImeMode;
+			this.Redraw();
 		}
 
 		#endregion //END Private/Protected/Internal methods
@@ -2515,41 +2303,43 @@ namespace Puzzle.Windows.Forms
 
 		public void RemoveCurrentRow()
 		{
-			_ActiveView.RemoveCurrentRow();
+			((EditViewControl) _ActiveView).RemoveCurrentRow();
 		}
 
 		public void CutClear()
 		{
-			_ActiveView.CutClear();
+			((EditViewControl) _ActiveView).CutClear();
 		}
 
 
 		[Browsable(false)]
 		[Obsolete("Use .FontName and .FontSize", true)]
-		public override Font Font
+		public
+			override Font Font
 		{
 			get { return base.Font; }
 			set { base.Font = value; }
 		}
 
-//		[Browsable(true)]
-//		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-//		[RefreshProperties (RefreshProperties.All)]
-//		public override string Text
-//		{
-//			get
-//			{
-//				return this.Document.Text;
-//			}
-//			set
-//			{
-//				this.Document.Text=value;
-//			}
-//		}
+		//		[Browsable(true)]
+		//		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
+		//		[RefreshProperties (RefreshProperties.All)]
+		//		public override string Text
+		//		{
+		//			get
+		//			{
+		//				return this.Document.Text;
+		//			}
+		//			set
+		//			{
+		//				this.Document.Text=value;
+		//			}
+		//		}
 
 		[Browsable(false)]
 		[Obsolete("Apply a syntax instead", true)]
-		public override Color ForeColor
+		public override
+			Color ForeColor
 		{
 			get { return base.ForeColor; }
 			set { base.ForeColor = value; }
@@ -2557,7 +2347,7 @@ namespace Puzzle.Windows.Forms
 
 		public void AutoListInsertSelectedText()
 		{
-			_ActiveView.InsertAutolistText();
+			((EditViewControl) _ActiveView).InsertAutolistText();
 		}
 
 		/// <summary>
@@ -2566,29 +2356,30 @@ namespace Puzzle.Windows.Forms
 		[Browsable(false)]
 		public string AutoListSelectedText
 		{
-			get { return _ActiveView.AutoList.SelectedText; }
+			get { return ((EditViewControl) _ActiveView).AutoList.SelectedText; }
 			set
 			{
-				if (_ActiveView == null || _ActiveView.AutoList == null)
+				if (((EditViewControl) _ActiveView) == null || ((EditViewControl)
+					_ActiveView).AutoList == null)
 					return;
 
-				_ActiveView.AutoList.SelectItem(value);
+				((EditViewControl) _ActiveView).AutoList.SelectItem(value);
 			}
 		}
 
 
-		protected override void WndProc(ref Message m)
+		protected override SplitViewChildControl GetNewView()
 		{
-			base.WndProc(ref m);
-			if (m.Msg == (int) WindowMessage.WM_SETFOCUS)
-			{
-				if (_ActiveView != null)
-					_ActiveView.Focus();
-			}
+			return new EditViewControl(this);
 		}
 
-
-
-
+		protected override void OnImeModeChanged(EventArgs e)
+		{
+			base.OnImeModeChanged(e);
+			foreach (EditViewControl ev in this.Views)
+			{
+				ev.ImeMode = this.ImeMode;
+			}
+		}
 	}
 }

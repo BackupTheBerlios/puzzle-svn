@@ -87,14 +87,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		public void MoveRight(bool Select)
 		{
 			this.CropPosition();
-			this.Position.X ++;
+			this.Position.X++;
 
 			if (this.CurrentRow.IsCollapsed)
 			{
 				if (this.Position.X > this.CurrentRow.Expansion_EndChar)
 				{
 					this.Position.Y = this.CurrentRow.Expansion_EndRow.Index;
-					this.Position.X = this.CurrentRow.Expansion_EndRow.Expansion_StartChar;
+					this.Position.X =
+						this.CurrentRow.Expansion_EndRow.Expansion_StartChar;
 					this.CropPosition();
 				}
 				RememberXPos();
@@ -174,10 +175,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 				this.Position.Y = pos;
 
-//				for (int i=0;i<rows;i++)
-//				{
-//					this.Position.Y =  this.CurrentRow.PrevVisibleRow.Index;
-//				}
+				//				for (int i=0;i<rows;i++)
+				//				{
+				//					this.Position.Y =  this.CurrentRow.PrevVisibleRow.Index;
+				//				}
 				if (this.CurrentRow.IsCollapsed)
 				{
 					x = 0;
@@ -213,11 +214,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 				pos = r.Index;
 				this.Position.Y = pos;
 
-//				for (int i=0;i<rows;i++)
-//				{
-//					this.Position.Y =  this.CurrentRow.NextVisibleRow.Index;
-//					
-//				}
+				//				for (int i=0;i<rows;i++)
+				//				{
+				//					this.Position.Y =  this.CurrentRow.NextVisibleRow.Index;
+				//					
+				//				}
 				if (this.CurrentRow.IsCollapsed)
 				{
 					x = 0;
@@ -276,16 +277,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		public void MoveLeft(bool Select)
 		{
 			this.CropPosition();
-			this.Position.X --;
+			this.Position.X--;
 
 			if (this.CurrentRow.IsCollapsedEndPart)
 			{
 				if (this.Position.X < this.CurrentRow.Expansion_StartChar)
 				{
-					if (this.CurrentRow.Expansion_StartRow.Index == -1)
+					if (this.CurrentRow.Expansion_StartRow.Index == - 1)
 						Debugger.Break();
 					this.Position.Y = this.CurrentRow.Expansion_StartRow.Index;
-					this.Position.X = this.CurrentRow.Expansion_StartRow.Expansion_EndChar;
+					this.Position.X =
+						this.CurrentRow.Expansion_StartRow.Expansion_EndChar;
 					this.CropPosition();
 				}
 				RememberXPos();
@@ -395,7 +397,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 		/// <param name="Select">True if a selection should be created from the current caret pos to the new pos</param>
 		public void MoveAbsoluteEnd(bool Select)
 		{
-			this.Position.X = Control.Document[Control.Document.Count - 1].Text.Length;
+			this.Position.X = Control.Document[Control.Document.Count -
+				1].Text.Length;
 			;
 			this.Position.Y = Control.Document.Count - 1;
 			RememberXPos();
