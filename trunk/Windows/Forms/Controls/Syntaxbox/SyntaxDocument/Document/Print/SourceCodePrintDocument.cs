@@ -59,13 +59,13 @@ namespace Puzzle.SourceCode
 			base.OnBeginPrint(ev);
 			fontNormal = new Font("Courier new", 8, FontStyle.Regular);
 			fontBreak = new Font("Symbol", 8, FontStyle.Bold);
-//			fontBold						= new Font("Arial", 10,FontStyle.Bold);
-//			fontItalic						= new Font("Arial", 10,FontStyle.Italic);
-//			fontBoldItalic					= new Font("Arial", 10,FontStyle.Bold | FontStyle.Italic);
-//			fontUnderline					= new Font("Arial", 10,FontStyle.Underline);
-//			fontBoldUnderline				= new Font("Arial", 10,FontStyle.Bold | FontStyle.Underline);
-//			fontItalicUnderline				= new Font("Arial", 10,FontStyle.Italic | FontStyle.Underline);
-//			fontBoldItalicUnderline			= new Font("Arial", 10,FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
+			//			fontBold						= new Font("Arial", 10,FontStyle.Bold);
+			//			fontItalic						= new Font("Arial", 10,FontStyle.Italic);
+			//			fontBoldItalic					= new Font("Arial", 10,FontStyle.Bold | FontStyle.Italic);
+			//			fontUnderline					= new Font("Arial", 10,FontStyle.Underline);
+			//			fontBoldUnderline				= new Font("Arial", 10,FontStyle.Bold | FontStyle.Underline);
+			//			fontItalicUnderline				= new Font("Arial", 10,FontStyle.Italic | FontStyle.Underline);
+			//			fontBoldItalicUnderline			= new Font("Arial", 10,FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
 			RowIndex = 0;
 
 
@@ -158,7 +158,8 @@ namespace Puzzle.SourceCode
 				{
 					if (w.InfoTip != null && w.InfoTip == "break char")
 					{
-						ev.Graphics.DrawString(w.Text, fontBreak, Brushes.Black, x, yPos, new StringFormat());
+						ev.Graphics.DrawString(w.Text, fontBreak, Brushes.Black, x, yPos,
+						                       new StringFormat());
 					}
 					else
 					{
@@ -196,7 +197,8 @@ namespace Puzzle.SourceCode
 							if (!w.Style.Transparent)
 							{
 								Color bg = w.Style.BackColor;
-								ev.Graphics.FillRectangle(new SolidBrush(bg), x, yPos, sf.Width, fontNormal.GetHeight(ev.Graphics));
+								ev.Graphics.FillRectangle(new SolidBrush(bg), x, yPos, sf.Width,
+								                          fontNormal.GetHeight(ev.Graphics));
 
 
 							}
@@ -206,7 +208,8 @@ namespace Puzzle.SourceCode
 						c = Color.FromArgb(c.R, c.G, c.B);
 
 
-						ev.Graphics.DrawString(w.Text, f, new SolidBrush(c), x, yPos, new StringFormat());
+						ev.Graphics.DrawString(w.Text, f, new SolidBrush(c), x, yPos, new
+							StringFormat());
 						x += sf.Width;
 					}
 				}

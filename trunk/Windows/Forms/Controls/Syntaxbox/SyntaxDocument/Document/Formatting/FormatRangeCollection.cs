@@ -43,7 +43,8 @@ namespace Puzzle.SourceCode
 		{
 			foreach (FormatRange frang in this)
 			{
-				if (frang.Bounds.FirstRow <= row.Index && frang.Bounds.LastRow >= row.Index)
+				if (frang.Bounds.FirstRow <= row.Index && frang.Bounds.LastRow >=
+					row.Index)
 					return true;
 			}
 
@@ -89,7 +90,8 @@ namespace Puzzle.SourceCode
 
 					if (fr.InfoTip.Length > 0)
 					{
-						fr.InfoTip += Environment.NewLine + Environment.NewLine + frang.InfoTip;
+						fr.InfoTip += Environment.NewLine + Environment.NewLine +
+							frang.InfoTip;
 					}
 					else
 					{
@@ -121,7 +123,7 @@ namespace Puzzle.SourceCode
 						if (fr.Bounds.LastRow == yPos + tmplines.Length - 1)
 							fr.Bounds.LastColumn += tmplines[tmplines.Length - 1].Length;
 					}
-					if (res == -1)
+					if (res == - 1)
 					{
 						fr.Bounds.FirstRow += tmplines.Length - 1;
 						fr.Bounds.LastRow += tmplines.Length - 1;
@@ -155,7 +157,7 @@ namespace Puzzle.SourceCode
 				int res2 = fr.Contains(Range.LastColumn, Range.LastRow);
 
 				int rows = Range.LastRow - Range.FirstRow;
-				if (res == -1 && res2 == -1)
+				if (res == - 1 && res2 == - 1)
 				{
 					fr.Bounds.FirstRow -= rows;
 					fr.Bounds.LastRow -= rows;
@@ -174,7 +176,7 @@ namespace Puzzle.SourceCode
 						fr.Bounds.FirstColumn -= tmplines[tmplines.Length - 1].Length;
 					}
 				}
-				if (res == -1 && res2 == 0)
+				if (res == - 1 && res2 == 0)
 				{
 					fr.Bounds.FirstRow -= rows;
 					fr.Bounds.LastRow -= rows;
@@ -198,10 +200,10 @@ namespace Puzzle.SourceCode
 					fr.Bounds.LastRow = Range.FirstRow;
 				}
 
-				if (res == -1 && res2 == 1)
+				if (res == - 1 && res2 == 1)
 				{
 					//delete this range
-					fr.Bounds.SetBounds(-1, -1, -1, -1);
+					fr.Bounds.SetBounds(- 1, - 1, - 1, - 1);
 				}
 
 

@@ -92,7 +92,7 @@ namespace Puzzle.SourceCode
 						return x;
 					x += w.Text.Length;
 				}
-				return -1;
+				return - 1;
 			}
 		}
 

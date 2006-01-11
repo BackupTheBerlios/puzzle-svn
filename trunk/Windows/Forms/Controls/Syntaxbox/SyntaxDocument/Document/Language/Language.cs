@@ -91,7 +91,7 @@ namespace Puzzle.SourceCode
 
 		public void ChangeVersion()
 		{
-			this.Version ++;
+			this.Version++;
 			if (this.Version > long.MaxValue - 10)
 				this.Version = long.MinValue;
 		}
@@ -125,12 +125,6 @@ namespace Puzzle.SourceCode
 		{
 			SyntaxLoader sl = new SyntaxLoader();
 			return sl.Load(filename);
-		}
-
-		public static Language FromSyntaxXml(string xml)
-		{
-			SyntaxLoader sl = new SyntaxLoader();
-			return sl.LoadXML(xml);
 		}
 
 		public void MergeByMainBlock(Language Target)
@@ -240,14 +234,14 @@ namespace Puzzle.SourceCode
 		}
 
 
-//		/// <summary>
-//		/// Serializes the language object into an xml string.
-//		/// </summary>
-//		/// <returns></returns>
-//		public string ToXML()
-//		{
-//			return "";
-//		}
+		//		/// <summary>
+		//		/// Serializes the language object into an xml string.
+		//		/// </summary>
+		//		/// <returns></returns>
+		//		public string ToXML()
+		//		{
+		//			return "";
+		//		}
 
 
 	}

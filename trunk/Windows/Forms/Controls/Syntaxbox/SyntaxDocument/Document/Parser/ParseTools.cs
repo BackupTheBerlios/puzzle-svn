@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using System.Text;
 
 namespace Puzzle.SourceCode.SyntaxDocumentParsers
@@ -19,7 +20,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 		}
 
 
-		public static void AddPatternString(string Text, Row Row, Pattern Pattern, TextStyle Style, Segment Segment, bool HasError)
+		public static void AddPatternString(string Text, Row Row, Pattern Pattern,
+		                                    TextStyle Style, Segment Segment, bool
+		                                    	HasError)
 		{
 			Word x = Row.Add(Text);
 			x.Style = Style;
@@ -28,7 +31,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			x.Segment = Segment;
 		}
 
-		public static unsafe void AddString(string Text, Row Row, TextStyle Style, Segment Segment)
+		public static unsafe void AddString(string Text, Row Row, TextStyle Style,
+		                                    Segment Segment)
 		{
 			if (Text == "")
 				return;
@@ -49,7 +53,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 							CurrentWord = new StringBuilder();
 						}
 
-						Word ws = Row.Add(c[i].ToString());
+						Word ws = Row.Add(c[i].ToString
+							(CultureInfo.InvariantCulture));
 						if (c[i] == ' ')
 							ws.Type = WordType.xtSpace;
 						else
@@ -58,7 +63,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 						ws.Segment = Segment;
 					}
 					else
-						CurrentWord.Append(c[i].ToString());
+						CurrentWord.Append(c[i].ToString
+							(CultureInfo.InvariantCulture));
 				}
 				if (CurrentWord.Length != 0)
 				{
@@ -84,47 +90,51 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 						CurrentWord = new StringBuilder();
 					}
 
-					words.Add(c.ToString());
+					words.Add(c.ToString
+						(CultureInfo.InvariantCulture));
 
 				}
 				else
-					CurrentWord.Append(c.ToString());
+					CurrentWord.Append(c.ToString
+						(CultureInfo.InvariantCulture)
+						);
 			}
 			if (CurrentWord.ToString() != "")
 				words.Add(CurrentWord.ToString());
 			return words;
 		}
 
-		public static PatternScanResult GetFirstWord(char[] TextBuffer, PatternCollection Patterns, int StartPosition)
+		public static PatternScanResult GetFirstWord(char[] TextBuffer,
+		                                             PatternCollection Patterns, int StartPosition)
 		{
 			PatternScanResult Result;
 			Result.Index = 0;
 			Result.Token = "";
 
-//			for (int i=StartPosition;i<TextBuffer.Length;i++)
-//			{
-//
-//				//-----------------------------------------------
-//				if (c[i]==PatternBuffer[0])
-//				{
-//					bool found=true;
-//					for (int j=0;j<Pattern.Length;j++)
-//					{
-//						if (c[i+j]!=p[j])
-//						{
-//							found=false;
-//							break;
-//						}
-//					}
-//					if (found)
-//					{
-//						Result.Index =i+StartPosition;
-//						Result.Token = Text.Substring(i+StartPosition,this.Pattern.Length);
-//						return Result;
-//					}							
-//				}
-//				//-----------------------------------------------
-//			}
+			//			for (int i=StartPosition;i<TextBuffer.Length;i++)
+			//			{
+			//
+			//				//-----------------------------------------------
+			//				if (c[i]==PatternBuffer[0])
+			//				{
+			//					bool found=true;
+			//					for (int j=0;j<Pattern.Length;j++)
+			//					{
+			//						if (c[i+j]!=p[j])
+			//						{
+			//							found=false;
+			//							break;
+			//						}
+			//					}
+			//					if (found)
+			//					{
+			//						Result.Index =i+StartPosition;
+			//						Result.Token = Text.Substring(i+StartPosition,this.Pattern.Length);
+			//						return Result;
+			//					}							
+			//				}
+			//				//-----------------------------------------------
+			//			}
 
 
 			return Result;

@@ -8,8 +8,10 @@ namespace Puzzle.SourceCode
 	/// <summary>
 	/// TextStyles are used to describe the apperance of text.
 	/// </summary>
-	[Editor(typeof (TextStyleUIEditor), typeof (UITypeEditor))]
-	public class TextStyle : ICloneable
+	[Editor(typeof (TextStyleUIEditor), typeof
+		(UITypeEditor))]
+	public class TextStyle :
+		ICloneable
 	{
 		public event EventHandler Change = null;
 
@@ -32,7 +34,8 @@ namespace Puzzle.SourceCode
 		private bool _Bold;
 
 		[Category("Font")]
-		[Description("Gets or Sets if the style uses a BOLD font")]
+		[Description("Gets or Sets if the style uses a BOLD font")
+			]
 		public bool Bold
 		{
 			get { return _Bold; }
@@ -53,8 +56,10 @@ namespace Puzzle.SourceCode
 		private bool _Italic;
 
 		[Category("Font")]
-		[Description("Gets or Sets if the style uses an ITALIC font")]
-		public bool Italic
+		[Description(
+			"Gets or Sets if the style uses an ITALIC font")]
+		public bool
+			Italic
 		{
 			get { return _Italic; }
 			set
@@ -74,8 +79,10 @@ namespace Puzzle.SourceCode
 		private bool _Underline;
 
 		[Category("Font")]
-		[Description("Gets or Sets if the style uses an UNDERLINED font")]
-		public bool Underline
+		[Description(
+			"Gets or Sets if the style uses an UNDERLINED font")]
+		public bool
+			Underline
 		{
 			get { return _Underline; }
 			set
@@ -95,7 +102,8 @@ namespace Puzzle.SourceCode
 		private Color _ForeColor = Color.Black;
 
 		[Category("Color")]
-		[Description("Gets or Sets the fore color of the style")]
+		[Description("Gets or Sets the fore color of the style")
+			]
 		public Color ForeColor
 		{
 			get { return _ForeColor; }
@@ -116,8 +124,10 @@ namespace Puzzle.SourceCode
 		private Color _BackColor = Color.Transparent;
 
 		[Category("Color")]
-		[Description("Gets or Sets the background color of the style")]
-		public Color BackColor
+		[Description(
+			"Gets or Sets the background color of the style")]
+		public Color
+			BackColor
 		{
 			get { return _BackColor; }
 			set

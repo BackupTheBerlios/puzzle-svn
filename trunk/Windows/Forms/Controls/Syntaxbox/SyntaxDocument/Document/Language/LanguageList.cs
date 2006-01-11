@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using System.IO;
 
 namespace Puzzle.SourceCode
@@ -47,7 +48,10 @@ namespace Puzzle.SourceCode
 			{
 				foreach (FileType ft in lang.FileTypes)
 				{
-					if (extension.ToLower() == ft.Extension.ToLower())
+					if (extension.ToLower
+						(CultureInfo.InvariantCulture) ==
+						ft.Extension.ToLower
+							(CultureInfo.InvariantCulture))
 					{
 						return lang;
 					}

@@ -93,7 +93,6 @@ namespace Puzzle.Windows.Forms
 		[Browsable(true),
 			EditorBrowsable(EditorBrowsableState.Always)]
 		[Category("Appearance - Borders"), Description("The border style")]
-		[DefaultValue(BorderStyle.None)]
 		public BorderStyle BorderStyle
 		{
 			get { return borderStyle; }

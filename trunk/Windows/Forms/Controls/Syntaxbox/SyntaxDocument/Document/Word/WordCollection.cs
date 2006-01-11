@@ -7,7 +7,8 @@ namespace Puzzle.SourceCode
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class WordCollection : ICollection, IList, IEnumerable, ICloneable
+	public sealed class WordCollection : ICollection, IList, IEnumerable,
+		ICloneable
 	{
 		private const int DefaultMinimumCapacity = 16;
 
@@ -69,7 +70,8 @@ namespace Puzzle.SourceCode
 		public void CopyTo(T[] array, int start)
 		{
 			if (m_count > array.GetUpperBound(0) + 1 - start)
-				throw new ArgumentException("Destination array was not long enough.");
+				throw new ArgumentException(
+					"Destination array was not long enough.");
 
 			// for (int i=0; i < m_count; ++i) array[start+i] = m_array[i];
 			Array.Copy(m_array, 0, array, start, m_count);
@@ -129,7 +131,7 @@ namespace Puzzle.SourceCode
 		/// <returns></returns>
 		public bool Contains(T item)
 		{
-			return ((IndexOf(item) == -1) ? false : true);
+			return ((IndexOf(item) == - 1) ? false : true);
 		}
 
 		/// <summary>
@@ -142,7 +144,7 @@ namespace Puzzle.SourceCode
 			for (int i = 0; i < m_count; ++i)
 				if (m_array[i] == (item))
 					return i;
-			return -1;
+			return - 1;
 		}
 
 		/// <summary>
@@ -173,7 +175,8 @@ namespace Puzzle.SourceCode
 		{
 			int index = IndexOf(item);
 			if (index < 0)
-				throw new ArgumentException("Cannot remove the specified item because it was not found in the specified Collection.");
+				throw new ArgumentException(
+					"Cannot remove the specified item because it was not found in the specified Collection.");
 
 			RemoveAt(index);
 		}
@@ -231,10 +234,13 @@ namespace Puzzle.SourceCode
 			get { return m_array.Length; }
 			set
 			{
-				if (value < m_count) value = m_count;
-				if (value < DefaultMinimumCapacity) value = DefaultMinimumCapacity;
+				if (value < m_count)
+					value = m_count;
+				if (value < DefaultMinimumCapacity)
+					value = DefaultMinimumCapacity;
 
-				if (m_array.Length == value) return;
+				if (m_array.Length == value)
+					return;
 
 				++m_version;
 
@@ -256,7 +262,8 @@ namespace Puzzle.SourceCode
 			++m_version;
 
 			Capacity += collection.Count;
-			Array.Copy(collection.m_array, 0, this.m_array, m_count, collection.m_count);
+			Array.Copy(collection.m_array, 0, this.m_array, m_count,
+			           collection.m_count);
 			m_count += collection.Count;
 		}
 
@@ -286,7 +293,8 @@ namespace Puzzle.SourceCode
 		{
 			int max = (allowEqualEnd) ? (m_count) : (m_count - 1);
 			if (index < 0 || index > max)
-				throw new ArgumentOutOfRangeException("Index was out of range.  Must be non-negative and less than the size of the collection.", (object) index, "Specified argument was out of the range of valid values.");
+				throw new ArgumentOutOfRangeException(
+					"Index was out of range.  Must be non-negative and less than the size of the collection.", (object) index, "Specified argument was out of the range of valid values.");
 		}
 
 		private bool NeedsGrowth()
@@ -314,12 +322,12 @@ namespace Puzzle.SourceCode
 		// Implementation (ICollection)
 
 		/* redundant w/ type-safe method
-			int ICollection.Count
-			{
-				get
-				{ return m_count; }
-			}
-			*/
+    int ICollection.Count
+    {
+    get
+    { return m_count; }
+    }
+     */
 
 		bool ICollection.IsSynchronized
 		{
@@ -360,11 +368,11 @@ namespace Puzzle.SourceCode
 		}
 
 		/* redundant w/ type-safe method
-			void IList.Clear()
-			{
-				this.Clear();
-			}
-			*/
+    void IList.Clear()
+    {
+    this.Clear();
+    }
+     */
 
 		bool IList.Contains(object item)
 		{
@@ -387,11 +395,11 @@ namespace Puzzle.SourceCode
 		}
 
 		/* redundant w/ type-safe method
-			void IList.RemoveAt(int index)
-			{
-				this.RemoveAt(index);
-			}
-			*/
+    void IList.RemoveAt(int index)
+    {
+    this.RemoveAt(index);
+    }
+     */
 
 		// Implementation (IEnumerable)
 
@@ -423,7 +431,7 @@ namespace Puzzle.SourceCode
 			public Enumerator(WordCollection tc)
 			{
 				m_collection = tc;
-				m_index = -1;
+				m_index = - 1;
 				m_version = tc.m_version;
 			}
 
@@ -444,7 +452,8 @@ namespace Puzzle.SourceCode
 			public bool MoveNext()
 			{
 				if (m_version != m_collection.m_version)
-					throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
+					throw new InvalidOperationException(
+						"Collection was modified; enumeration operation may not execute.");
 
 				++m_index;
 				return (m_index < m_collection.Count) ? true : false;
@@ -456,9 +465,10 @@ namespace Puzzle.SourceCode
 			public void Reset()
 			{
 				if (m_version != m_collection.m_version)
-					throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
+					throw new InvalidOperationException(
+						"Collection was modified; enumeration operation may not execute.");
 
-				m_index = -1;
+				m_index = - 1;
 			}
 
 			// Implementation (IEnumerator)
@@ -469,18 +479,18 @@ namespace Puzzle.SourceCode
 			}
 
 			/* redundant w/ type-safe method
-				bool IEnumerator.MoveNext()
-				{
-					return this.MoveNext();
-				}
-				*/
+      bool IEnumerator.MoveNext()
+      {
+      return this.MoveNext();
+      }
+       */
 
 			/* redundant w/ type-safe method
-				void IEnumerator.Reset()
-				{
-					this.Reset();
-				}
-				*/
+      void IEnumerator.Reset()
+      {
+      this.Reset();
+      }
+       */
 		}
 	}
 }

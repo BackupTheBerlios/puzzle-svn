@@ -11,17 +11,20 @@ namespace Puzzle.SourceCode
 	{
 		private IWindowsFormsEditorService edSvc = null;
 
-		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+		public override object EditValue(ITypeDescriptorContext context,
+		                                 IServiceProvider provider, object value)
 		{
 			if (context != null && context.Instance != null && provider != null)
 			{
-				edSvc = (IWindowsFormsEditorService) provider.GetService(typeof (IWindowsFormsEditorService));
+				edSvc = (IWindowsFormsEditorService) provider.GetService(typeof
+					(IWindowsFormsEditorService));
 
 
 				if (edSvc != null)
 				{
 					TextStyle style = (TextStyle) value;
-					using (TextStyleDesignerDialog tsd = new TextStyleDesignerDialog(style))
+					using (TextStyleDesignerDialog tsd = new TextStyleDesignerDialog(style)
+						)
 					{
 						context.OnComponentChanging();
 						if (edSvc.ShowDialog(tsd) == DialogResult.OK)
@@ -39,7 +42,8 @@ namespace Puzzle.SourceCode
 		}
 
 
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext
+			context)
 		{
 			return UITypeEditorEditStyle.Modal;
 		}
@@ -81,7 +85,8 @@ namespace Puzzle.SourceCode
 
 		}
 
-		public override bool GetPaintValueSupported(ITypeDescriptorContext context)
+		public override bool GetPaintValueSupported
+			(ITypeDescriptorContext context)
 		{
 			return true;
 		}

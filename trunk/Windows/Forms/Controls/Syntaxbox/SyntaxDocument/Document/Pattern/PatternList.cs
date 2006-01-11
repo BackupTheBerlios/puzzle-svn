@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 
 namespace Puzzle.SourceCode
 {
@@ -66,26 +67,28 @@ namespace Puzzle.SourceCode
 		/// </summary>
 		public PatternList()
 		{
-			SimplePatterns = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+			SimplePatterns = new Hashtable(CaseInsensitiveHashCodeProvider.Default,
+			                               CaseInsensitiveComparer.Default);
 		}
 
 		/// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerator GetEnumerator()
 		{
 			return mPatterns.GetEnumerator();
 		}
 
 		/// <summary>
-/// 
-/// </summary>
-/// <param name="Pattern"></param>
-/// <returns></returns>
+		/// 
+		/// </summary>
+		/// <param name="Pattern"></param>
+		/// <returns></returns>
 		public Pattern Add(Pattern Pattern)
 		{
-			if (this.Parent != null && this.Parent.Parent != null && this.Parent.Parent.Parent != null)
+			if (this.Parent != null && this.Parent.Parent != null &&
+				this.Parent.Parent.Parent != null)
 			{
 				Pattern.Separators = this.Parent.Parent.Parent.Separators;
 				this.Parent.Parent.Parent.ChangeVersion();
@@ -102,7 +105,7 @@ namespace Puzzle.SourceCode
 				else
 					s = Pattern.StringPattern.Substring(0, 1) + " ";
 
-				s = s.ToLower();
+				s = s.ToLower(CultureInfo.InvariantCulture);
 
 				if (Pattern.StringPattern.Length == 1)
 				{
@@ -121,12 +124,12 @@ namespace Puzzle.SourceCode
 				else
 					SimplePatterns[Pattern.StringPattern] = Pattern;
 
-//				if (SimplePatterns[s]==null)
-//					SimplePatterns.Add (s,new ArrayList ());
-//				
-//				ArrayList bb=(ArrayList) SimplePatterns[s];
-//
-//				bb.Add (Pattern);
+				//				if (SimplePatterns[s]==null)
+				//					SimplePatterns.Add (s,new ArrayList ());
+				//				
+				//				ArrayList bb=(ArrayList) SimplePatterns[s];
+				//
+				//				bb.Add (Pattern);
 
 			}
 			else
@@ -145,8 +148,8 @@ namespace Puzzle.SourceCode
 		}
 
 		/// <summary>
-/// 
-/// </summary>
+		/// 
+		/// </summary>
 		public void Clear()
 		{
 			mPatterns.Clear();

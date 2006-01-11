@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Web;
 using System.Windows.Forms;
 using Puzzle.Drawing.GDI;
@@ -452,11 +453,11 @@ namespace Puzzle.Windows.Forms.CoreLib
 				else
 				{
 					string[] TagTextPair = part.Split('>');
-					cmd.Tag = TagTextPair[0].ToLower();
+					cmd.Tag = TagTextPair[0].ToLower(CultureInfo.InvariantCulture);
 					if (cmd.Tag.IndexOfAny(" \t".ToCharArray()) >= 0)
 					{
 						int ws = cmd.Tag.IndexOfAny(" \t".ToCharArray());
-						string s1 = TagTextPair[0].Substring(0, ws).ToLower();
+						string s1 = TagTextPair[0].Substring(0, ws).ToLower(CultureInfo.InvariantCulture);
 						string s2 = TagTextPair[0].Substring(ws + 1);
 						cmd.Tag = s1 + " " + s2;
 					}
@@ -783,7 +784,7 @@ namespace Puzzle.Windows.Forms.CoreLib
 
 					try
 					{
-						string SRC = GetAttrib("img", Element.Tag).ToLower();
+						string SRC = GetAttrib("img", Element.Tag).ToLower(CultureInfo.InvariantCulture);
 						if (IsIndex(SRC))
 						{
 							int index = int.Parse(SRC);

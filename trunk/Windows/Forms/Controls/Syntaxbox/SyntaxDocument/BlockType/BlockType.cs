@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Drawing;
+using System.Globalization;
 
 namespace Puzzle.SourceCode
 {
@@ -208,7 +209,8 @@ namespace Puzzle.SourceCode
 				}
 				else
 				{
-					string c = p.StringPattern.Substring(0, 3).ToLower();
+					string c = p.StringPattern.Substring(0, 3).ToLower
+						(CultureInfo.InvariantCulture);
 
 					if (LookupTable[c] == null)
 						LookupTable[c] = new PatternCollection();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Globalization;
 using System.Xml;
 
 namespace Puzzle.SourceCode
@@ -95,10 +96,12 @@ namespace Puzzle.SourceCode
 
 			foreach (XmlAttribute att in node.Attributes)
 			{
-				if (att.Name.ToLower() == "name")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "name")
 					Name = att.Value;
 
-				if (att.Name.ToLower() == "startblock")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "startblock")
 					StartBlock = att.Value;
 			}
 
@@ -109,11 +112,14 @@ namespace Puzzle.SourceCode
 			{
 				if (n.NodeType == XmlNodeType.Element)
 				{
-					if (n.Name.ToLower() == "filetypes")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "filetypes")
 						ParseFileTypes(n);
-					if (n.Name.ToLower() == "block")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "block")
 						ParseBlock(n);
-					if (n.Name.ToLower() == "style")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "style")
 						ParseStyle(n);
 				}
 			}
@@ -125,16 +131,20 @@ namespace Puzzle.SourceCode
 			{
 				if (n.NodeType == XmlNodeType.Element)
 				{
-					if (n.Name.ToLower() == "filetype")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "filetype")
 					{
 						//add filetype
 						string Extension = "";
 						string Name = "";
 						foreach (XmlAttribute a in n.Attributes)
 						{
-							if (a.Name.ToLower() == "name")
+							if (a.Name.ToLower
+								(CultureInfo.InvariantCulture) == "name")
 								Name = a.Value;
-							if (a.Name.ToLower() == "extension")
+							if (a.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"extension")
 								Extension = a.Value;
 						}
 						FileType ft = new FileType();
@@ -154,17 +164,23 @@ namespace Puzzle.SourceCode
 			Color BackColor = Color.Transparent;
 			foreach (XmlAttribute att in node.Attributes)
 			{
-				if (att.Name.ToLower() == "name")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "name")
 					Name = att.Value;
-				if (att.Name.ToLower() == "style")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "style")
 					Style = att.Value;
-				if (att.Name.ToLower() == "patternstyle")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "patternstyle")
 					PatternStyle = att.Value;
-				if (att.Name.ToLower() == "ismultiline")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "ismultiline")
 					IsMultiline = bool.Parse(att.Value);
-				if (att.Name.ToLower() == "terminatechildren")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "terminatechildren")
 					TerminateChildren = bool.Parse(att.Value);
-				if (att.Name.ToLower() == "backcolor")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "backcolor")
 				{
 					BackColor = Color.FromName(att.Value);
 					//Transparent =false;
@@ -187,7 +203,8 @@ namespace Puzzle.SourceCode
 			{
 				if (n.NodeType == XmlNodeType.Element)
 				{
-					if (n.Name.ToLower() == "scope")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "scope")
 					{
 						//bool IsComplex=false;
 						//bool IsSeparator=false;
@@ -210,35 +227,63 @@ namespace Puzzle.SourceCode
 
 						foreach (XmlAttribute att in n.Attributes)
 						{
-							if (att.Name.ToLower() == "start")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"start")
 								Start = att.Value;
-							if (att.Name.ToLower() == "escapechar")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"escapechar")
 								EscapeChar = att.Value;
-							if (att.Name.ToLower() == "end")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) == "end")
 								End = att.Value;
-							if (att.Name.ToLower() == "style")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"style")
 								style = att.Value;
-							if (att.Name.ToLower() == "text")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) == "text")
 								text = att.Value;
-							if (att.Name.ToLower() == "defaultexpanded")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"defaultexpanded")
 								expanded = bool.Parse(att.Value);
-							if (att.Name.ToLower() == "endisseparator")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endisseparator")
 								EndIsSeparator = att.Value;
-							if (att.Name.ToLower() == "startisseparator")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startisseparator")
 								StartIsSeparator = att.Value;
-							if (att.Name.ToLower() == "startiskeyword")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startiskeyword")
 								StartIsKeyword = att.Value;
-							if (att.Name.ToLower() == "startiscomplex")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startiscomplex")
 								StartIsComplex = att.Value;
-							if (att.Name.ToLower() == "endiscomplex")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endiscomplex")
 								EndIsComplex = att.Value;
-							if (att.Name.ToLower() == "endiskeyword")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endiskeyword")
 								EndIsKeyword = att.Value;
-							if (att.Name.ToLower() == "spawnblockonstart")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"spawnblockonstart")
 								spawnstart = att.Value;
-							if (att.Name.ToLower() == "spawnblockonend")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"spawnblockonend")
 								spawnend = att.Value;
-							if (att.Name.ToLower() == "causeindent")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"causeindent")
 								CauseIndent = att.Value;
 						}
 						if (Start != "")
@@ -254,15 +299,18 @@ namespace Puzzle.SourceCode
 							bool blnCauseIndent = bool.Parse(CauseIndent);
 							scop.CauseIndent = blnCauseIndent;
 
-							Pattern StartP = new Pattern(Start, blnStartIsComplex, false, bool.Parse(StartIsKeyword));
+							Pattern StartP = new Pattern(Start, blnStartIsComplex, false,
+							                             bool.Parse(StartIsKeyword));
 							Pattern EndP = null;
 							if (EscapeChar != "")
 							{
-								EndP = new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword), EscapeChar);
+								EndP = new Pattern(End, blnEndIsComplex, false, bool.Parse
+									(EndIsKeyword), EscapeChar);
 							}
 							else
 							{
-								EndP = new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword));
+								EndP = new Pattern(End, blnEndIsComplex, false, bool.Parse
+									(EndIsKeyword));
 							}
 
 							if (EndIsSeparator != "")
@@ -280,7 +328,8 @@ namespace Puzzle.SourceCode
 							}
 						}
 					}
-					if (n.Name.ToLower() == "bracket")
+					if (n.Name.ToLower(CultureInfo.InvariantCulture)
+						== "bracket")
 					{
 						//bool IsComplex=false;
 						//bool IsSeparator=false;
@@ -300,25 +349,44 @@ namespace Puzzle.SourceCode
 
 						foreach (XmlAttribute att in n.Attributes)
 						{
-							if (att.Name.ToLower() == "start")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"start")
 								Start = att.Value;
-							if (att.Name.ToLower() == "end")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) == "end")
 								End = att.Value;
-							if (att.Name.ToLower() == "style")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"style")
 								style = att.Value;
-							if (att.Name.ToLower() == "endisseparator")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endisseparator")
 								EndIsSeparator = att.Value;
-							if (att.Name.ToLower() == "startisseparator")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startisseparator")
 								StartIsSeparator = att.Value;
-							if (att.Name.ToLower() == "startiskeyword")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startiskeyword")
 								StartIsKeyword = att.Value;
-							if (att.Name.ToLower() == "startiscomplex")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"startiscomplex")
 								StartIsComplex = att.Value;
-							if (att.Name.ToLower() == "endiscomplex")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endiscomplex")
 								EndIsComplex = att.Value;
-							if (att.Name.ToLower() == "endiskeyword")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"endiskeyword")
 								EndIsKeyword = att.Value;
-							if (att.Name.ToLower() == "ismultiline")
+							if (att.Name.ToLower
+								(CultureInfo.InvariantCulture) ==
+								"ismultiline")
 								IsMultiLineB = att.Value;
 						}
 						if (Start != "")
@@ -330,14 +398,17 @@ namespace Puzzle.SourceCode
 							bool blnEndIsComplex = bool.Parse(EndIsComplex);
 							bool blnIsMultiLineB = bool.Parse(IsMultiLineB);
 
-							Pattern StartP = new Pattern(Start, blnStartIsComplex, false, bool.Parse(StartIsKeyword));
-							Pattern EndP = new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword));
+							Pattern StartP = new Pattern(Start, blnStartIsComplex, false,
+							                             bool.Parse(StartIsKeyword));
+							Pattern EndP = new Pattern(End, blnEndIsComplex, false,
+							                           bool.Parse(EndIsKeyword));
 
 							StartP.MatchingBracket = EndP;
 							EndP.MatchingBracket = StartP;
 							StartP.BracketType = BracketType.StartBracket;
 							EndP.BracketType = BracketType.EndBracket;
-							StartP.IsMultiLineBracket = EndP.IsMultiLineBracket = blnIsMultiLineB;
+							StartP.IsMultiLineBracket = EndP.IsMultiLineBracket =
+								blnIsMultiLineB;
 
 							pl.Add(StartP);
 							pl.Add(EndP);
@@ -347,31 +418,42 @@ namespace Puzzle.SourceCode
 
 				}
 
-				if (n.Name.ToLower() == "keywords")
+				if (n.Name.ToLower(CultureInfo.InvariantCulture)
+					== "keywords")
 					foreach (XmlNode cn in n.ChildNodes)
 					{
-						if (cn.Name.ToLower() == "patterngroup")
+						if (cn.Name.ToLower(CultureInfo.InvariantCulture)
+							== "patterngroup")
 						{
 							PatternList pl = new PatternList();
 							bl.KeywordsList.Add(pl);
 							foreach (XmlAttribute att in cn.Attributes)
 							{
-								if (att.Name.ToLower() == "style")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"style")
 									pl.Style = GetStyle(att.Value);
 
-								if (att.Name.ToLower() == "name")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) == "name")
 									pl.Name = att.Value;
 
-								if (att.Name.ToLower() == "normalizecase")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"normalizecase")
 									pl.NormalizeCase = bool.Parse(att.Value);
 
-								if (att.Name.ToLower() == "casesensitive")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"casesensitive")
 									pl.CaseSensitive = bool.Parse(att.Value);
 
 							}
 							foreach (XmlNode pt in cn.ChildNodes)
 							{
-								if (pt.Name.ToLower() == "pattern")
+								if (pt.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"pattern")
 								{
 									bool IsComplex = false;
 									bool IsSeparator = false;
@@ -381,26 +463,37 @@ namespace Puzzle.SourceCode
 									{
 										foreach (XmlAttribute att in pt.Attributes)
 										{
-											if (att.Name.ToLower() == "text")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"text")
 												Pattern = att.Value;
-											if (att.Name.ToLower() == "iscomplex")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"iscomplex")
 												IsComplex = bool.Parse(att.Value);
-											if (att.Name.ToLower() == "isseparator")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"isseparator")
 												IsSeparator = bool.Parse(att.Value);
-											if (att.Name.ToLower() == "category")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"category")
 												Category = (att.Value);
 
 										}
 									}
 									if (Pattern != "")
 									{
-										Pattern pat = new Pattern(Pattern, IsComplex, IsSeparator, true);
+										Pattern pat = new Pattern(Pattern, IsComplex, IsSeparator,
+										                          true);
 										pat.Category = Category;
 										pl.Add(pat);
 									}
 
 								}
-								else if (pt.Name.ToLower() == "patterns")
+								else if (pt.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"patterns")
 								{
 									string Patterns = pt.ChildNodes[0].Value;
 									Patterns = Patterns.Replace("\t", " ");
@@ -419,31 +512,42 @@ namespace Puzzle.SourceCode
 					}
 				//if (n.Name == "Operators")
 				//	ParseStyle(n);
-				if (n.Name.ToLower() == "operators")
+				if (n.Name.ToLower(CultureInfo.InvariantCulture)
+					== "operators")
 					foreach (XmlNode cn in n.ChildNodes)
 					{
-						if (cn.Name.ToLower() == "patterngroup")
+						if (cn.Name.ToLower(CultureInfo.InvariantCulture)
+							== "patterngroup")
 						{
 							PatternList pl = new PatternList();
 							bl.OperatorsList.Add(pl);
 							foreach (XmlAttribute att in cn.Attributes)
 							{
-								if (att.Name.ToLower() == "style")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"style")
 									pl.Style = GetStyle(att.Value);
 
-								if (att.Name.ToLower() == "name")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) == "name")
 									pl.Name = att.Value;
 
-								if (att.Name.ToLower() == "normalizecase")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"normalizecase")
 									pl.NormalizeCase = bool.Parse(att.Value);
 
-								if (att.Name.ToLower() == "casesensitive")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"casesensitive")
 									pl.CaseSensitive = bool.Parse(att.Value);
 							}
 
 							foreach (XmlNode pt in cn.ChildNodes)
 							{
-								if (pt.Name.ToLower() == "pattern")
+								if (pt.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"pattern")
 								{
 									bool IsComplex = false;
 									bool IsSeparator = false;
@@ -453,25 +557,36 @@ namespace Puzzle.SourceCode
 									{
 										foreach (XmlAttribute att in pt.Attributes)
 										{
-											if (att.Name.ToLower() == "text")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"text")
 												Pattern = att.Value;
-											if (att.Name.ToLower() == "iscomplex")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"iscomplex")
 												IsComplex = bool.Parse(att.Value);
-											if (att.Name.ToLower() == "isseparator")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"isseparator")
 												IsSeparator = bool.Parse(att.Value);
-											if (att.Name.ToLower() == "category")
+											if (att.Name.ToLower
+												(CultureInfo.InvariantCulture) ==
+												"category")
 												Category = (att.Value);
 
 										}
 									}
 									if (Pattern != "")
 									{
-										Pattern pat = new Pattern(Pattern, IsComplex, IsSeparator, false);
+										Pattern pat = new Pattern(Pattern, IsComplex, IsSeparator,
+										                          false);
 										pat.Category = Category;
 										pl.Add(pat);
 									}
 								}
-								else if (pt.Name.ToLower() == "patterns")
+								else if (pt.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"patterns")
 								{
 									string Patterns = pt.ChildNodes[0].Value;
 									Patterns = Patterns.Replace("\t", " ");
@@ -488,14 +603,18 @@ namespace Puzzle.SourceCode
 						}
 					}
 
-				if (n.Name.ToLower() == "childblocks")
+				if (n.Name.ToLower(CultureInfo.InvariantCulture)
+					== "childblocks")
 				{
 					foreach (XmlNode cn in n.ChildNodes)
 					{
-						if (cn.Name.ToLower() == "child")
+						if (cn.Name.ToLower
+							(CultureInfo.InvariantCulture) == "child")
 						{
 							foreach (XmlAttribute att in cn.Attributes)
-								if (att.Name.ToLower() == "name")
+								if (att.Name.ToLower
+									(CultureInfo.InvariantCulture) ==
+									"name")
 									bl.ChildBlocks.Add(GetBlock(att.Value));
 						}
 					}
@@ -521,7 +640,8 @@ namespace Puzzle.SourceCode
 		{
 			if (mBlocks[Name] == null)
 			{
-				BlockType b = new BlockType(mLanguage);
+				BlockType b = new BlockType
+					(mLanguage);
 				mBlocks.Add(Name, b);
 			}
 
@@ -538,22 +658,28 @@ namespace Puzzle.SourceCode
 
 			foreach (XmlAttribute att in node.Attributes)
 			{
-				if (att.Name.ToLower() == "name")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "name")
 					Name = att.Value;
 
-				if (att.Name.ToLower() == "forecolor")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "forecolor")
 					ForeColor = att.Value;
 
-				if (att.Name.ToLower() == "backcolor")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "backcolor")
 					BackColor = att.Value;
 
-				if (att.Name.ToLower() == "bold")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "bold")
 					Bold = bool.Parse(att.Value);
 
-				if (att.Name.ToLower() == "italic")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "italic")
 					Italic = bool.Parse(att.Value);
 
-				if (att.Name.ToLower() == "underline")
+				if (att.Name.ToLower(CultureInfo.InvariantCulture)
+					== "underline")
 					Underline = bool.Parse(att.Value);
 			}
 

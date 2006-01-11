@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Puzzle.SourceCode
@@ -103,7 +104,8 @@ namespace Puzzle.SourceCode
 			set
 			{
 				_StringPattern = value;
-				LowerStringPattern = _StringPattern.ToLower();
+				LowerStringPattern = _StringPattern.ToLower
+					(CultureInfo.InvariantCulture);
 			}
 
 
@@ -121,7 +123,8 @@ namespace Puzzle.SourceCode
 			{
 				IsComplex = true;
 				rx = new Regex(StringPattern, RegexOptions.Compiled);
-				rx2 = new Regex(StringPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				rx2 = new Regex(StringPattern, RegexOptions.Compiled |
+					RegexOptions.IgnoreCase);
 			}
 			else
 			{
@@ -143,7 +146,8 @@ namespace Puzzle.SourceCode
 			Init(pattern, iscomplex, separator, keyword);
 		}
 
-		private void Init(string pattern, bool iscomplex, bool separator, bool keyword)
+		private void Init(string pattern, bool iscomplex, bool separator, bool
+			keyword)
 		{
 			StringPattern = pattern;
 			IsSeparator = separator;
@@ -152,7 +156,8 @@ namespace Puzzle.SourceCode
 			{
 				IsComplex = true;
 				rx = new Regex(StringPattern, RegexOptions.Compiled);
-				rx2 = new Regex(StringPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				rx2 = new Regex(StringPattern, RegexOptions.Compiled |
+					RegexOptions.IgnoreCase);
 			}
 			else
 			{
@@ -169,10 +174,12 @@ namespace Puzzle.SourceCode
 		/// <param name="separator"></param>
 		/// <param name="keyword"></param>
 		/// <param name="EscapeChar"></param>
-		public Pattern(string pattern, bool iscomplex, bool separator, bool keyword, string EscapeChar)
+		public Pattern(string pattern, bool iscomplex, bool separator, bool keyword,
+		               string EscapeChar)
 		{
 			EscapeChar = Regex.Escape(EscapeChar);
-			string EscPattern = string.Format("(?<=((?<!{0})({0}{0})*))({1})", EscapeChar, pattern);
+			string EscPattern = string.Format("(?<=((?<!{0})({0}{0})*))({1})",
+			                                  EscapeChar, pattern);
 			Init(EscPattern, true, separator, keyword);
 		}
 
@@ -184,7 +191,8 @@ namespace Puzzle.SourceCode
 		/// <returns></returns>
 		public bool HasSeparators(string Text, int Position)
 		{
-			return (CharIsSeparator(Text, Position - 1) && CharIsSeparator(Text, Position + StringPattern.Length));
+			return (CharIsSeparator(Text, Position - 1) && CharIsSeparator(Text,
+			                                                               Position + StringPattern.Length));
 		}
 
 
@@ -207,7 +215,8 @@ namespace Puzzle.SourceCode
 		/// <param name="StartPosition">Start index in the string</param>
 		/// <param name="MatchCase">true if a case sensitive match should be performed</param>
 		/// <returns>A PatternScanResult containing information on where the pattern was found and also the text of the pattern</returns>
-		public PatternScanResult IndexIn(string Text, int StartPosition, bool MatchCase, string Separators)
+		public PatternScanResult IndexIn(string Text, int StartPosition, bool
+			MatchCase, string Separators)
 		{
 			if (Separators == null)
 			{
@@ -234,13 +243,15 @@ namespace Puzzle.SourceCode
 		}
 
 
-		private PatternScanResult SimpleFind(string Text, int StartPosition, bool MatchCase)
+		private PatternScanResult SimpleFind(string Text, int StartPosition, bool
+			MatchCase)
 		{
 			int Position = 0;
 			if (MatchCase)
 				Position = Text.IndexOf(StringPattern, StartPosition);
 			else
-				Position = Text.ToLower().IndexOf(this.LowerStringPattern, StartPosition);
+				Position = Text.ToLower
+					(CultureInfo.InvariantCulture).IndexOf(this.LowerStringPattern, StartPosition);
 
 			PatternScanResult Result;
 			if (Position >= 0)
@@ -257,7 +268,8 @@ namespace Puzzle.SourceCode
 			return Result;
 		}
 
-		private PatternScanResult SimpleFindKeyword(string Text, int StartPosition, bool MatchCase)
+		private PatternScanResult SimpleFindKeyword(string Text, int StartPosition,
+		                                            bool MatchCase)
 		{
 			PatternScanResult res;
 			while (true)
@@ -266,7 +278,8 @@ namespace Puzzle.SourceCode
 				if (res.Token == "")
 					return res;
 
-				if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text, res.Index + res.Token.Length))
+				if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text,
+				                                                            res.Index + res.Token.Length))
 					return res;
 
 				StartPosition = res.Index + 1;
@@ -289,7 +302,8 @@ namespace Puzzle.SourceCode
 				if (res.Token == "")
 					return res;
 
-				if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text, res.Index + res.Token.Length))
+				if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text,
+				                                                            res.Index + res.Token.Length))
 					return res;
 
 				StartPosition = res.Index + 1;
@@ -392,56 +406,56 @@ namespace Puzzle.SourceCode
 		//		}
 
 
-//		private PatternScanResult ComplexFind(string Text)
-//		{
-//			Match m= rx.Match (Text);
-//			int pos=0;
-//			string p="";
-//			if (m.Success)
-//			{
-//				pos=m.Index;
-//				p=m.Value;
-//				PatternScanResult t;
-//				t.Index =pos;
-//				t.Token = p;
-//				return t;
-//			}
-//			else
-//			{
-//				PatternScanResult res;
-//				res.Index =0;
-//				res.Token ="";
-//				return res;
-//			}
-//		}
+		//		private PatternScanResult ComplexFind(string Text)
+		//		{
+		//			Match m= rx.Match (Text);
+		//			int pos=0;
+		//			string p="";
+		//			if (m.Success)
+		//			{
+		//				pos=m.Index;
+		//				p=m.Value;
+		//				PatternScanResult t;
+		//				t.Index =pos;
+		//				t.Token = p;
+		//				return t;
+		//			}
+		//			else
+		//			{
+		//				PatternScanResult res;
+		//				res.Index =0;
+		//				res.Token ="";
+		//				return res;
+		//			}
+		//		}
 
-//		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
-//		{
-//		
-//		}
+		//		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
+		//		{
+		//		
+		//		}
 
-//		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
-//		{
-//			MatchCollection mc= rx.Matches (Text);
-//			int pos=0;
-//			string p="";
-//			foreach (Match m in mc)
-//			{
-//				pos=m.Index;
-//				p=m.Value;
-//				if (SeparatorPositions[pos]==(char)32 && SeparatorPositions[pos+p.Length+1]==(char)32 )
-//				{
-//					PatternScanResult t;
-//					t.Index =pos;
-//					t.Token = p;
-//					return t;
-//				}
-//			}
-//			PatternScanResult res;
-//			res.Index =0;
-//			res.Token ="";
-//			return res;
-//		}
+		//		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
+		//		{
+		//			MatchCollection mc= rx.Matches (Text);
+		//			int pos=0;
+		//			string p="";
+		//			foreach (Match m in mc)
+		//			{
+		//				pos=m.Index;
+		//				p=m.Value;
+		//				if (SeparatorPositions[pos]==(char)32 && SeparatorPositions[pos+p.Length+1]==(char)32 )
+		//				{
+		//					PatternScanResult t;
+		//					t.Index =pos;
+		//					t.Token = p;
+		//					return t;
+		//				}
+		//			}
+		//			PatternScanResult res;
+		//			res.Index =0;
+		//			res.Token ="";
+		//			return res;
+		//		}
 
 		#endregion
 	}

@@ -123,7 +123,8 @@ namespace Puzzle.SourceCode
 			this.Bounds.Change += new EventHandler(this.BoundsChanged);
 		}
 
-		public FormatRange(TextRange Bounds, Color ForeColor, Color BackColor, Color WaveColor)
+		public FormatRange(TextRange Bounds, Color ForeColor, Color BackColor,
+		                   Color WaveColor)
 		{
 			this.BackColor = BackColor;
 			this.ForeColor = ForeColor;
@@ -147,13 +148,13 @@ namespace Puzzle.SourceCode
 		public int Contains(int x, int y)
 		{
 			if (y < this.Bounds.FirstRow)
-				return -1;
+				return - 1;
 
 			if (y > this.Bounds.LastRow)
 				return 1;
 
 			if (y == this.Bounds.FirstRow && x < this.Bounds.FirstColumn)
-				return -1;
+				return - 1;
 
 			if (y == this.Bounds.LastRow && x > this.Bounds.LastColumn)
 				return 1;
@@ -169,13 +170,13 @@ namespace Puzzle.SourceCode
 		public int Contains2(int x, int y)
 		{
 			if (y < this.Bounds.FirstRow)
-				return -1;
+				return - 1;
 
 			if (y > this.Bounds.LastRow)
 				return 1;
 
 			if (y == this.Bounds.FirstRow && x <= this.Bounds.FirstColumn)
-				return -1;
+				return - 1;
 
 			if (y == this.Bounds.LastRow && x > this.Bounds.LastColumn)
 				return 1;

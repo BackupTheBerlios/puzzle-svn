@@ -8,18 +8,62 @@ namespace Puzzle.Collections
 
 	public class CollectionEventArgs : EventArgs
 	{
+		public readonly object Item = null;
+		public readonly int Index = 0;
+
 		public CollectionEventArgs()
 		{
+			try
+			{
+			}
+				#region ERROR HANDLER
+#if DEBUG_COMPONA
+			catch (Exception x)
+			{
+				System.Diagnostics.Debug.Write(x, "Puzzle");
+				throw;
+			}
+#else
+			catch
+			{
+				throw;
+			}
+#endif
+
+			#endregion
 		}
 
 		public CollectionEventArgs(object item, int index)
 		{
-			this.Index = index;
-			this.Item = item;
-		}
+			#region PARAMETER VALIDATIONS
 
-		public object Item = null;
-		public int Index = 0;
+			if (item == null)
+				throw new ArgumentNullException("item"); // Throw error if validation failed for "item"
+
+			#endregion
+
+			//IMPLEMENTATION 
+			try
+			{
+				this.Index = index;
+				this.Item = item;
+			}
+				#region ERROR HANDLER
+#if DEBUG_COMPONA
+			catch (Exception x)
+			{
+				System.Diagnostics.Debug.Write(x, "Puzzle");
+				throw;
+			}
+#else
+			catch
+			{
+				throw;
+			}
+#endif
+
+			#endregion
+		}
 	}
 
 	public delegate void CollectionEventHandler(object sender, CollectionEventArgs e);

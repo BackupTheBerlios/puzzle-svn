@@ -93,7 +93,6 @@ namespace Puzzle.Windows.Forms.CoreLib
 			DoResize();
 			ReSize(0, 0);
 			//this.Refresh ();
-			// TODO: Add any initialization after the InitForm call
 
 		}
 
@@ -482,6 +481,19 @@ namespace Puzzle.Windows.Forms.CoreLib
 				Point start;
 				int x = e.X - Center.Width/2;
 				int y = e.Y - Center.Height/2;
+
+				// ROB: Added fix for graphics splatter when sizing both splitters.
+				if (y + Horizontal.Top > this.Height - 4)
+					y = this.Height - 4 - Horizontal.Top;
+				if (y + Horizontal.Top < 0)
+					y = 0 - Horizontal.Top;
+
+				if (x + Vertical.Left > this.Width - 4)
+					x = this.Width - 4 - Vertical.Left;
+				if (x + Vertical.Left < 0)
+					x = 0 - Vertical.Left;
+				// END-ROB
+
 
 				if (!FirstTime)
 				{

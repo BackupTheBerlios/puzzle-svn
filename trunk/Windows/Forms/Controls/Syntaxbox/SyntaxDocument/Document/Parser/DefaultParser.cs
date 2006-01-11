@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 //no parsing , just splitting and making whitespace possible
 //1 sec to finnish ca 10000 rows
 
@@ -44,6 +45,15 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			set
 			{
 				mLanguage = value;
+
+				if (mLanguage == null)
+				{
+					Language l = new Language();
+					l.MainBlock = new BlockType(l);
+					l.MainBlock.MultiLine = true;
+					mLanguage = l;
+				}
+
 				this.Version = long.MinValue;
 				mLanguage.Version = long.MinValue + 1;
 				this.Document.ReParse();
@@ -133,7 +143,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 					break;
 				}
 
-				//Id1+=seg.BlockType.GetHashCode ().ToString ();
+				//Id1+=seg.BlockType.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture);
 				if (seg.BlockType != oseg.BlockType)
 				{
 					diff = true;
@@ -174,7 +184,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 		{
 			try
 			{
-				if (!SyntaxFile.ToLower().EndsWith(".syn"))
+				if (!SyntaxFile.ToLower
+					(CultureInfo.InvariantCulture).EndsWith(".syn")
+					)
 					SyntaxFile += ".syn";
 
 
@@ -189,7 +201,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 		{
 			try
 			{
-				if (!SyntaxFile.ToLower().EndsWith(".syn"))
+				if (!SyntaxFile.ToLower
+					(CultureInfo.InvariantCulture).EndsWith(".syn")
+					)
 					SyntaxFile += ".syn";
 
 
@@ -223,13 +237,14 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 		#endregion
 
-		private ScanResultWord GetNextWord(string Text, Segment CurrentSegment, int StartPos, ref bool HasComplex)
+		private ScanResultWord GetNextWord(string Text, Segment CurrentSegment, int
+			StartPos, ref bool HasComplex)
 		{
 			BlockType block = CurrentSegment.BlockType;
 
 			#region ComplexFind
 
-			int BestComplexPos = -1;
+			int BestComplexPos = - 1;
 			Pattern BestComplexPattern = null;
 			string BestComplexToken = "";
 			ScanResultWord complexword = new ScanResultWord();
@@ -237,10 +252,11 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			{
 				foreach (Pattern pattern in block.ComplexPatterns)
 				{
-					PatternScanResult scanres = pattern.IndexIn(Text, StartPos, pattern.Parent.CaseSensitive, this.Separators);
+					PatternScanResult scanres = pattern.IndexIn(Text, StartPos,
+					                                            pattern.Parent.CaseSensitive, this.Separators);
 					if (scanres.Token != "")
 					{
-						if (scanres.Index < BestComplexPos || BestComplexPos == -1)
+						if (scanres.Index < BestComplexPos || BestComplexPos == - 1)
 						{
 							BestComplexPos = scanres.Index;
 							BestComplexPattern = pattern;
@@ -280,8 +296,10 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 				if (i <= Text.Length - 3)
 				{
-					string key = Text.Substring(i, 3).ToLower();
-					PatternCollection patterns2 = (PatternCollection) block.LookupTable[key];
+					string key = Text.Substring(i, 3).ToLower
+						(CultureInfo.InvariantCulture);
+					PatternCollection patterns2 = (PatternCollection)
+						block.LookupTable[key];
 					//ok , there are patterns that start with this char
 					if (patterns2 != null)
 					{
@@ -291,20 +309,24 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 							if (i + len > Text.Length)
 								continue;
 
-							char lastpatternchar = char.ToLower(pattern.StringPattern[len - 1]);
+							char lastpatternchar = char.ToLower(pattern.StringPattern[len -
+								1]);
 							char lasttextchar = char.ToLower(Text[i + len - 1]);
 
 							#region Case Insensitive
 
 							if (lastpatternchar == lasttextchar)
 							{
-								if (!pattern.IsKeyword || (pattern.IsKeyword && pattern.HasSeparators(Text, i)))
+								if (!pattern.IsKeyword || (pattern.IsKeyword &&
+									pattern.HasSeparators(Text, i)))
 								{
 									if (!pattern.Parent.CaseSensitive)
 									{
-										string s = Text.Substring(i, len).ToLower();
+										string s = Text.Substring(i, len).ToLower
+											(CultureInfo.InvariantCulture);
 
-										if (s == pattern.StringPattern.ToLower())
+										if (s == pattern.StringPattern.ToLower
+											(CultureInfo.InvariantCulture))
 										{
 											simpleword.HasContent = true;
 											simpleword.ParentList = pattern.Parent;
@@ -368,11 +390,14 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 							if (char.ToLower(lastpatternchar) == char.ToLower(lasttextchar))
 							{
-								if (!pattern.IsKeyword || (pattern.IsKeyword && pattern.HasSeparators(Text, i)))
+								if (!pattern.IsKeyword || (pattern.IsKeyword &&
+									pattern.HasSeparators(Text, i)))
 								{
-									string s = Text.Substring(i, len).ToLower();
+									string s = Text.Substring(i, len).ToLower
+										(CultureInfo.InvariantCulture);
 
-									if (s == pattern.StringPattern.ToLower())
+									if (s == pattern.StringPattern.ToLower
+										(CultureInfo.InvariantCulture))
 									{
 										simpleword.HasContent = true;
 										simpleword.ParentList = pattern.Parent;
@@ -395,7 +420,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 							if (lastpatternchar == lasttextchar)
 							{
-								if (!pattern.IsKeyword || (pattern.IsKeyword && pattern.HasSeparators(Text, i)))
+								if (!pattern.IsKeyword || (pattern.IsKeyword &&
+									pattern.HasSeparators(Text, i)))
 								{
 									string s = Text.Substring(i, len);
 
@@ -459,23 +485,30 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			bool HasComplex = true;
 			while (true)
 			{
-				ScanResultWord Word = GetNextWord(Text, CurrentSegment, CurrentPosition, ref HasComplex);
+				ScanResultWord Word = GetNextWord(Text, CurrentSegment, CurrentPosition,
+				                                  ref HasComplex);
 
 				if (!Word.HasContent)
 				{
-					ParseTools.AddString(Text.Substring(CurrentPosition), Row, CurrentSegment.BlockType.Style, CurrentSegment);
+					ParseTools.AddString(Text.Substring(CurrentPosition), Row,
+					                     CurrentSegment.BlockType.Style, CurrentSegment);
 					break;
 				}
 				else
 				{
-					ParseTools.AddString(Text.Substring(CurrentPosition, Word.Position - CurrentPosition), Row, CurrentSegment.BlockType.Style, CurrentSegment);
-					ParseTools.AddPatternString(Word.Token, Row, Word.Pattern, Word.ParentList.Style, CurrentSegment, false);
+					ParseTools.AddString(Text.Substring(CurrentPosition, Word.Position -
+						CurrentPosition), Row,
+					                     CurrentSegment.BlockType.Style, CurrentSegment);
+					ParseTools.AddPatternString(Word.Token, Row, Word.Pattern,
+					                            Word.ParentList.Style, CurrentSegment,
+					                            false);
 					CurrentPosition = Word.Position + Word.Token.Length;
 				}
 			}
 		}
 
-		private ScanResultWord GetNextComplexWord(String Text, Segment CurrentSegment, int StartPositon)
+		private ScanResultWord GetNextComplexWord(String Text, Segment
+			CurrentSegment, int StartPositon)
 		{
 			if (StartPositon >= Text.Length)
 				return new ScanResultWord();
@@ -491,9 +524,11 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			{
 				foreach (Pattern Word in List.ComplexPatterns)
 				{
-					PatternScanResult psr = Word.IndexIn(Text, StartPositon, false, Separators);
+					PatternScanResult psr = Word.IndexIn(Text, StartPositon, false,
+					                                     Separators);
 					CurrentPosition = psr.Index;
-					if ((CurrentPosition < Result.Position || Result.HasContent == false) && psr.Token != "")
+					if ((CurrentPosition < Result.Position || Result.HasContent == false)
+						&& psr.Token != "")
 					{
 						Result.HasContent = true;
 						Result.Position = CurrentPosition;
@@ -513,9 +548,11 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			{
 				foreach (Pattern Word in List.ComplexPatterns)
 				{
-					PatternScanResult psr = Word.IndexIn(Text, StartPositon, false, Separators);
+					PatternScanResult psr = Word.IndexIn(Text, StartPositon, false,
+					                                     Separators);
 					CurrentPosition = psr.Index;
-					if ((CurrentPosition < Result.Position || Result.HasContent == false) && psr.Token != "")
+					if ((CurrentPosition < Result.Position || Result.HasContent == false)
+						&& psr.Token != "")
 					{
 						Result.HasContent = true;
 						Result.Position = CurrentPosition;
@@ -607,16 +644,21 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 			while (true)
 			{
-				ScanResultSegment ChildSegment = GetNextChildSegment(Row, CurrentSegment, CurrentPosition);
-				ScanResultSegment EndSegment = GetEndSegment(Row, CurrentSegment, CurrentPosition);
+				ScanResultSegment ChildSegment = GetNextChildSegment(Row,
+				                                                     CurrentSegment, CurrentPosition);
+				ScanResultSegment EndSegment = GetEndSegment(Row, CurrentSegment,
+				                                             CurrentPosition);
 
-				if ((EndSegment.HasContent && ChildSegment.HasContent && EndSegment.Position <= ChildSegment.Position) || (EndSegment.HasContent && ChildSegment.HasContent == false))
+				if ((EndSegment.HasContent && ChildSegment.HasContent &&
+					EndSegment.Position <= ChildSegment.Position) ||
+					(EndSegment.HasContent && ChildSegment.HasContent == false))
 				{
 					//this is an end segment
 
 					if (ParseKeywords)
 					{
-						string Text = Row.Text.Substring(CurrentPosition, EndSegment.Position - CurrentPosition);
+						string Text = Row.Text.Substring(CurrentPosition,
+						                                 EndSegment.Position - CurrentPosition);
 						ParseText(Row, CurrentSegment, Text);
 					}
 
@@ -630,7 +672,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 					TextStyle st2 = CurrentSegment.Scope.Style;
 
-					ParseTools.AddPatternString(EndSegment.Token, Row, EndSegment.Pattern, st2, CurrentSegment, false);
+					ParseTools.AddPatternString(EndSegment.Token, Row, EndSegment.Pattern,
+					                            st2, CurrentSegment, false);
 					while (oldseg != EndSegment.Segment)
 					{
 						oldseg.EndRow = Row;
@@ -653,7 +696,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
 					if (ParseKeywords)
 					{
-						string Text = Row.Text.Substring(CurrentPosition, ChildSegment.Position - CurrentPosition);
+						string Text = Row.Text.Substring(CurrentPosition,
+						                                 ChildSegment.Position - CurrentPosition);
 						//TextStyle st=CurrentSegment.BlockType.Style;
 						ParseText(Row, CurrentSegment, Text);
 						//ParseTools.AddString (Text,Row,st,CurrentSegment);
@@ -668,7 +712,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 					Row.StartSegments.Add(NewSeg);
 
 					TextStyle st2 = NewSeg.Scope.Style;
-					ParseTools.AddPatternString(ChildSegment.Token, Row, ChildSegment.Pattern, st2, NewSeg, false);
+					ParseTools.AddPatternString(ChildSegment.Token, Row,
+					                            ChildSegment.Pattern, st2, NewSeg, false);
 					NewSeg.StartRow = Row;
 					NewSeg.StartWord = Row[Row.Count - 1];
 
@@ -762,7 +807,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 		}
 
 
-		private ScanResultSegment GetEndSegment(Row Row, Segment CurrentSegment, int StartPos)
+		private ScanResultSegment GetEndSegment(Row Row, Segment CurrentSegment,
+		                                        int StartPos)
 		{
 			//this row has no text , just bail out...
 			if (StartPos >= Row.Text.Length || CurrentSegment.Scope == null)
@@ -785,11 +831,13 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 				{
 					foreach (Pattern end in seg.Scope.EndPatterns)
 					{
-						PatternScanResult psr = end.IndexIn(Row.Text, StartPos, seg.Scope.CaseSensitive, Separators);
+						PatternScanResult psr = end.IndexIn(Row.Text, StartPos,
+						                                    seg.Scope.CaseSensitive, Separators);
 						int CurrentPosition = psr.Index;
 						if (psr.Token != "")
 						{
-							if ((psr.Index < Result.Position && Result.HasContent) || !Result.HasContent)
+							if ((psr.Index < Result.Position && Result.HasContent) ||
+								!Result.HasContent)
 							{
 								//we found a better match
 								//store this new match
@@ -821,7 +869,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 			return Result;
 		}
 
-		private ScanResultSegment GetNextChildSegment(Row Row, Segment CurrentSegment, int StartPos)
+		private ScanResultSegment GetNextChildSegment(Row Row, Segment
+			CurrentSegment, int StartPos)
 		{
 			//this row has no text , just bail out...
 			if (StartPos >= Row.Text.Length)
@@ -838,9 +887,11 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 				//scan each scope in each childblock
 				foreach (Scope Scope in ChildBlock.ScopePatterns)
 				{
-					PatternScanResult psr = Scope.Start.IndexIn(Row.Text, StartPos, Scope.CaseSensitive, Separators);
+					PatternScanResult psr = Scope.Start.IndexIn(Row.Text, StartPos,
+					                                            Scope.CaseSensitive, Separators);
 					int CurrentPosition = psr.Index;
-					if ((!Result.HasContent || CurrentPosition < Result.Position) && psr.Token != "")
+					if ((!Result.HasContent || CurrentPosition < Result.Position) &&
+						psr.Token != "")
 					{
 						//we found a better match
 						//store this new match
