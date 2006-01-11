@@ -212,6 +212,7 @@ namespace Puzzle.NPath.Framework
 
 		private void ParseParenthesisGroup(NPathParenthesisGroup parenthesisGroup)
 		{
+            tokenizer.GetCurrentToken("(", "(");
 			tokenizer.MoveNext(); //step past (
 			if (tokenizer.GetCurrentToken().IsType("select"))
 			{
@@ -219,15 +220,18 @@ namespace Puzzle.NPath.Framework
 			}
 			else
 			{
-				parenthesisGroup.Expression = ParseExpression();
+				parenthesisGroup.Expression = ParseBooleanExpression();
 			}
+            tokenizer.GetCurrentToken(")", ")");
 			tokenizer.MoveNext(); // step past )
 		}
 
 		private void ParseBracketGroup(NPathBracketGroup bracketGroup)
 		{
+            tokenizer.GetCurrentToken("[", "[");
 			tokenizer.MoveNext(); //step past [
 			bracketGroup.Expression = ParseBooleanExpression();
+            tokenizer.GetCurrentToken("]", "]");
 			tokenizer.MoveNext(); //step past ]
 		}
 
