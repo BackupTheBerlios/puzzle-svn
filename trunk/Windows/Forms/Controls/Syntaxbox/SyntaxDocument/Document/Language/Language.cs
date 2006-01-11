@@ -121,6 +121,12 @@ namespace Puzzle.SourceCode
 		{
 		}
 
+		public static Language FromSyntaxXml(string xml)
+		{
+			SyntaxLoader sl = new SyntaxLoader();
+			return sl.LoadXML(xml);
+		}
+
 		public static Language FromSyntaxFile(string filename)
 		{
 			SyntaxLoader sl = new SyntaxLoader();

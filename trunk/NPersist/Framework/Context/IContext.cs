@@ -21,6 +21,9 @@ using Puzzle.NPersist.Framework.NPath;
 using Puzzle.NPersist.Framework.Persistence;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Validation;
+#if NET2
+using System.Collections.Generic;
+#endif
 
 namespace Puzzle.NPersist.Framework
 {
@@ -118,180 +121,23 @@ namespace Puzzle.NPersist.Framework
 
 		string DomainKey { get; set; }
 
-
 		ObjectStatus GetObjectStatus(object obj);
 
 		PropertyStatus GetPropertyStatus(object obj, string propertyName);
 
 		void LoadProperty(object obj, string propertyName);
 
-		object TryGetObject(object identity, Type type);
+        object ExecuteScalar(IQuery query);
 
-		object TryGetObject(IQuery query);
+        object ExecuteScalar(IQuery query, IDataSource dataSource);
 
-		object TryGetObject(IQuery query, Type type);
-		
-		object TryGetObject(IQuery query, Type type, IList parameters);
+        object ExecuteScalar(string npath, Type type);
 
-		//Moved to IPersistenceService
-		//object TryGetObjectById(object identity, Type type);
+        object ExecuteScalarByNPath(string npath, Type type);
 
-		object TryGetObjectByQuery(IQuery query);
+        object ExecuteScalarByNPath(string npath, Type type, IList parameters);
 
-		//Moved to IPersistenceService
-//		object TryGetObjectByNPath(NPathQuery npathQuery);
-//
-//		object TryGetObjectByNPath(string npathQuery, Type type);
-//
-//		object TryGetObjectByNPath(string npathQuery, Type type, IList parameters);
-
-		object TryGetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		object TryGetObjectBySql(SqlQuery sqlQuery);
-
-		object TryGetObjectBySql(string sqlQuery, Type type);
-
-		object TryGetObjectBySql(string sqlQuery, Type type, IList parameters);
-
-		object TryGetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		//Moved to IPersistenceService
-		//object TryGetObjectByKey(string keyPropertyName, object keyValue, Type type);
-
-		object GetObject(object identity, Type type);
-
-		object GetObject(IQuery query);
-
-		object GetObject(IQuery query, Type type);
-
-		object GetObject(IQuery query, Type type, IList parameters);
-
-		//Moved to IPersistenceService
-		//object GetObjectById(object identity, Type type);
-
-		object GetObjectById(object identity, Type type, bool lazy);
-
-		object GetObjectById(object identity, Type type, RefreshBehaviorType refreshBehavior); //Obs, special handling - needs to be converted into a query!
-
-		object GetObjectByQuery(IQuery query);
-
-		//Moved to IPersistenceService
-//		object GetObjectByNPath(NPathQuery npathQuery);
-//
-//		object GetObjectByNPath(string npathQuery, Type type);
-//
-//		object GetObjectByNPath(string npathQuery, Type type, IList parameters);
-
-		object GetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		object GetObjectBySql(SqlQuery sqlQuery);
-
-		object GetObjectBySql(string sqlQuery, Type type);
-
-		object GetObjectBySql(string sqlQuery, Type type, IList parameters);
-
-		object GetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		//Moved to IPersistenceService
-//		object GetObjectByKey(string keyPropertyName, object keyValue, Type type);
-//
-//		IList GetObjectsByNPath(NPathQuery npathQuery);
-//
-//		IList GetObjectsByNPath(string npathQuery, Type type);
-//
-//		IList GetObjectsByNPath(string npathQuery, Type type, IList parameters);
-//
-//		IList GetObjectsByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		IList GetObjectsBySql(SqlQuery sqlQuery);
-
-		IList GetObjectsBySql(SqlQuery sqlQuery, IList listToFill);
-
-		IList GetObjectsBySql(string sqlQuery, Type type);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList parameters);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
-
-		IList GetObjects(Type type);
-		
-		IList GetObjects(Type type, IList listToFill);
-
-		IList GetObjects(Type type, RefreshBehaviorType refreshBehavior);
-
-		IList GetObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill);
-
-
-		IList GetObjects(IQuery query, Type type);
-
-		IList GetObjects(IQuery query, Type type, IList parameters);
-
-		IList GetObjects(IQuery query, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
-
-		IList GetObjectsByQuery(IQuery query);
-
-		IList GetObjectsByQuery(IQuery query, IList listToFill);
-
-		IList FilterObjects(IList objects, NPathQuery query);
-
-		IList FilterObjects(IList objects, string npath, Type type);
-
-		IList FilterObjects(IList objects, string npath, Type type, IList parameters);
-
-
-		IList FilterObjects(NPathQuery query);
-
-		IList FilterObjects(string npath, Type type);
-
-		IList FilterObjects(string npath, Type type, IList parameters);
-		
-
-		DataTable FilterIntoDataTable(IList objects, NPathQuery query);
-
-		DataTable FilterIntoDataTable(IList objects, string npath, Type type);
-
-		DataTable FilterIntoDataTable(IList objects, string npath, Type type, IList parameters);
-
-
-		DataTable FilterIntoDataTable(NPathQuery query);
-
-		DataTable FilterIntoDataTable(string npath, Type type);
-
-		DataTable FilterIntoDataTable(string npath, Type type, IList parameters);
-
-		
-		DataTable GetDataTable(NPathQuery query);
-
-		DataTable GetDataTable(string npath, Type type);
-
-		DataTable GetDataTable(string npath, Type type, IList parameters);
-
-
-		#region .NET 2.0 Specific Code
-#if NET2
-	
-#endif
-		#endregion
-
-		object ExecuteScalar(IQuery query);
-
-		object ExecuteScalar(IQuery query, IDataSource dataSource);
-
-		object ExecuteScalar(string npath, Type type);
-
-		object ExecuteScalarByNPath(string npath, Type type);
-
-		object ExecuteScalarByNPath(string npath, Type type, IList parameters);
-
-		object ExecuteScalarByNPath(string npath, Type type, IList parameters, IDataSource dataSource);
+        object ExecuteScalarByNPath(string npath, Type type, IList parameters, IDataSource dataSource);
 
 		object ExecuteScalarBySql(string sql);
 
@@ -303,29 +149,15 @@ namespace Puzzle.NPersist.Framework
 
 		void RegisterObject(object obj);
 
-		//object CreateObject(object obj);
-
-		//object CreateObject(object identity, Type type, params object[] ctorParams);
-
-		//object CreateObject(Type type, params object[] ctorParams);
-
 		void CommitObject(object obj);
 
 		void CommitObject(object obj, int exceptionLimit);
-
-		//void DeleteObject(object obj);
 
 		void DeleteObjects(IList objects);
 
 		void PersistAll();
 
-		//void Commit();
-
 		void Commit(int exceptionLimit);
-
-		//bool GetNullValueStatus(object obj, string propertyName);
-
-		//void SetNullValueStatus(object obj, string propertyName, bool value);
 
 		void RefreshObject(object obj);
 
@@ -342,39 +174,6 @@ namespace Puzzle.NPersist.Framework
 		void UnloadObject(object obj);
 
 		void UnloadObjects(IList objects);
-
-//		void AddLogger(ILogger logger);
-//
-//		IList GetLoggers();
-
-//		void Debug(object message, object verbose);
-//		void Info(object message, object verbose);
-//		void Warn(object message, object verbose);
-//		void Error(object message, object verbose);
-//		void Fatal(object message, object verbose);
-//		
-//		void Debug(object message, object verbose, Exception t);
-//		void Info(object message, object verbose, Exception t);
-//		void Warn(object message, object verbose, Exception t);
-//		void Error(object message, object verbose, Exception t);
-//		void Fatal(object message, object verbose, Exception t);
-//
-//		
-//		void Debug(object sender, object message, object verbose);
-//		void Info(object sender, object message, object verbose);
-//		void Warn(object sender, object message, object verbose);
-//		void Error(object sender, object message, object verbose);
-//		void Fatal(object sender, object message, object verbose);
-//		
-//		void Debug(object sender, object message, object verbose, Exception t);
-//		void Info(object sender, object message, object verbose, Exception t);
-//		void Warn(object sender, object message, object verbose, Exception t);
-//		void Error(object sender, object message, object verbose, Exception t);
-//		void Fatal(object sender, object message, object verbose, Exception t);
-
-//		void AddIdentityGenerator(IIdentityGenerator identityGenerator);
-//
-//		void AddIdentityGenerator(IIdentityGenerator identityGenerator, Type type);
 
 		void AddObserver(IObserver observer);
 
@@ -395,7 +194,6 @@ namespace Puzzle.NPersist.Framework
 		IList GetObservers(Type type);
 
 		IList GetObservers(object obj);
-
 
 		IDbConnection GetConnection();
 
@@ -421,7 +219,6 @@ namespace Puzzle.NPersist.Framework
 
 		void SetConnectionString(string value, ISourceMap sourceMap);
 
-
 		IDataSource GetDataSource();
 
 		IDataSource GetDataSource(string sourceName);
@@ -431,8 +228,6 @@ namespace Puzzle.NPersist.Framework
 		ISourceMap GetSourceMap();
 
 		ISourceMap GetSourceMap(string sourceName);
-
-		//ITransaction BeginTransaction();
 
 		ITransaction BeginTransaction(IsolationLevel iso);
 
@@ -531,5 +326,138 @@ namespace Puzzle.NPersist.Framework
 
 		LoadBehavior LoadBehavior { get; set; }
 
-	}
+
+
+        object TryGetObject(object identity, Type type);
+
+        object TryGetObject(IQuery query);
+
+        object TryGetObject(IQuery query, Type type);
+
+        object TryGetObject(IQuery query, Type type, IList parameters);
+
+        object TryGetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        object TryGetObjectBySql(SqlQuery sqlQuery);
+
+        object TryGetObjectBySql(string sqlQuery, Type type);
+
+        object TryGetObjectBySql(string sqlQuery, Type type, IList parameters);
+
+        object TryGetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        object TryGetObjectByQuery(IQuery query);
+
+        object GetObject(object identity, Type type);
+
+        object GetObject(IQuery query);
+
+        object GetObject(IQuery query, Type type);
+
+        object GetObject(IQuery query, Type type, IList parameters);
+
+        object GetObjectById(object identity, Type type, bool lazy);
+
+        object GetObjectById(object identity, Type type, RefreshBehaviorType refreshBehavior); //Obs, special handling - needs to be converted into a query!
+
+        object GetObjectByQuery(IQuery query);
+
+        object GetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        object GetObjectBySql(SqlQuery sqlQuery);
+
+        object GetObjectBySql(string sqlQuery, Type type);
+
+        object GetObjectBySql(string sqlQuery, Type type, IList parameters);
+
+        object GetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        IList GetObjectsBySql(SqlQuery sqlQuery);
+
+        IList GetObjectsBySql(SqlQuery sqlQuery, IList listToFill);
+
+        IList GetObjectsBySql(string sqlQuery, Type type);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList parameters);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
+
+        IList GetObjects(Type type);
+
+        IList GetObjects(Type type, IList listToFill);
+
+        IList GetObjects(Type type, RefreshBehaviorType refreshBehavior);
+
+        IList GetObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill);
+
+        IList GetObjects(IQuery query, Type type);
+
+        IList GetObjects(IQuery query, Type type, IList parameters);
+
+        IList GetObjects(IQuery query, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
+
+        IList GetObjectsByQuery(IQuery query);
+
+        IList GetObjectsByQuery(IQuery query, IList listToFill);
+
+        IList FilterObjects(IList objects, NPathQuery query);
+
+        IList FilterObjects(IList objects, string npath, Type type);
+
+        IList FilterObjects(IList objects, string npath, Type type, IList parameters);
+
+        IList FilterObjects(NPathQuery query);
+
+        IList FilterObjects(string npath, Type type);
+
+        IList FilterObjects(string npath, Type type, IList parameters);
+
+        DataTable FilterIntoDataTable(IList objects, NPathQuery query);
+
+        DataTable FilterIntoDataTable(IList objects, string npath, Type type);
+
+        DataTable FilterIntoDataTable(IList objects, string npath, Type type, IList parameters);
+
+        DataTable FilterIntoDataTable(NPathQuery query);
+
+        DataTable FilterIntoDataTable(string npath, Type type);
+
+        DataTable FilterIntoDataTable(string npath, Type type, IList parameters);
+
+        DataTable GetDataTable(NPathQuery query);
+
+        DataTable GetDataTable(string npath, Type type);
+
+        DataTable GetDataTable(string npath, Type type, IList parameters);
+
+       
+
+
+        #region .NET 2.0 Specific Code
+#if NET2
+
+        T TryGetObjectById<T> (object identity);
+        T GetObjectbyId<T>(object identity);
+        T TryGetObjectByNPath<T>(string npathQuery);
+        T GetObjectByNPath<T>(string npathQuery);
+        T TryGetObjectByNPath<T>(string npathQuery, IList parameters);
+        T GetObjectByNPath<T>(string npathQuery, IList parameters);
+        
+        T CreateObject<T>(params object[] ctorArgs);
+
+        IList<T> GetObjects<T>();
+        IList<T> GetObjectsByNPath<T> (string npathQuery);
+        IList<T> GetObjectsByNPath<T> (string npathQuery, IList parameters);
+ 
+#endif
+        #endregion
+    }
 }

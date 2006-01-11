@@ -36,6 +36,9 @@ using Puzzle.NPersist.Framework.Mapping.Serialization;
 using Puzzle.NPersist.Framework.Remoting.Formatting;
 using Puzzle.NPersist.Framework.Remoting.WebService.Client;
 using Puzzle.NPersist.Framework.Validation;
+#if NET2
+using System.Collections.Generic;
+#endif
 
 namespace Puzzle.NPersist.Framework
 {
@@ -2581,5 +2584,75 @@ namespace Puzzle.NPersist.Framework
 		}
 
 		#endregion
-	}
+
+        #region .NET 2.0 Specific Code
+#if NET2
+
+        public virtual T TryGetObjectById<T>(object identity)
+        {
+            object o = this.TryGetObjectById(identity, typeof(T));
+            return (T)o;
+        }
+
+        public virtual T GetObjectbyId<T>(object identity)
+        {
+            object o = this.GetObjectById(identity, typeof(T));
+            return (T)o;
+        }
+
+        public virtual T TryGetObjectByNPath<T>(string npathQuery)
+        {
+            object o = this.TryGetObjectByNPath(npathQuery, typeof(T));
+            return (T)o;
+        }
+
+        public virtual T GetObjectByNPath<T>(string npathQuery)
+        {
+            object o = this.GetObjectByNPath(npathQuery, typeof(T));
+            return (T)o;
+        }
+
+        public virtual T TryGetObjectByNPath<T>(string npathQuery, IList parameters)
+        {
+            object o = this.TryGetObjectByNPath(npathQuery, typeof(T),parameters);
+            return (T)o;
+        }
+
+        public virtual T GetObjectByNPath<T>(string npathQuery, IList parameters)
+        {
+            object o = this.GetObjectByNPath(npathQuery, typeof(T),parameters);
+            return (T)o;
+        }
+
+        public virtual T CreateObject<T>(params object[] ctorArgs)
+        {
+            object o = this.CreateObject(typeof(T), ctorArgs);
+            return (T)o;
+        }
+
+        public virtual IList<T> GetObjects<T>()
+        {
+            List<T> list = new List<T>();
+            this.GetObjects (typeof(T), list);
+            return list;
+        }
+
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery)
+        {
+            List<T> list = new List<T>();
+            this.GetObjectsByNPath(new NPathQuery (npathQuery,typeof(T)), list);
+            return list;
+        }
+
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, IList parameters)
+        {
+            List<T> list = new List<T>();
+            this.GetObjectsByNPath(new NPathQuery(npathQuery, typeof(T), parameters), list);
+            return list;
+        }
+
+
+#endif
+        #endregion
+    }
 }
