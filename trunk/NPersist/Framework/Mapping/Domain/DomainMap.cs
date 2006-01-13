@@ -290,7 +290,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 						{
 							if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
 							{
-								throw new NPersistException(string.Format("Property '{0}' in type '{1}' is missing an foreignkey name",propertyInfo.Name,classMap.GetFullName()) );							
+								throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name",columnMap.Name,propertyInfo.Name,classMap.GetFullName()) );							
 							}							
 						}												
 					}
