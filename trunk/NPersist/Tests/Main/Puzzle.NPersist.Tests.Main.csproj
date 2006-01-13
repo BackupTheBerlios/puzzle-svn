@@ -219,6 +219,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Tests\ContextIntegrityTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Tests\SingleTableInheritanceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

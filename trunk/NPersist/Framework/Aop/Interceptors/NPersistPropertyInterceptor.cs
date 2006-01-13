@@ -34,9 +34,10 @@ namespace Puzzle.NPersist.Framework.Aop
 				if (call.Method.Name.StartsWith("set_") )
 					return HandleSetProperty(call);
 			}
-			catch (Exception x)
+			catch 
 			{
-				throw new Exception("Could not handle call "+call.Method.Name + " " + x.ToString()) ;
+				throw;
+				//throw new Exception("Could not handle call "+call.Method.Name + " " + x.ToString()) ;
 			}
 
 			throw new Exception ("Blame Roger for this bug! "+call.Method.Name);
