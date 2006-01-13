@@ -230,6 +230,37 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			string prevId;
 			string newId;
 			propertyMap = classMap.MustGetPropertyMap(propertyName);
+
+            if (propertyMap.ReferenceType != ReferenceType.None && value != null)
+            {
+                if (propertyMap.ReferenceType == ReferenceType.OneToMany || propertyMap.ReferenceType == ReferenceType.OneToOne)
+                {
+                    //parent object
+                    IInterceptable ivalue = value as IInterceptable;
+                    if (ivalue == null)
+                    {
+                        throw new NPersistException(string.Format("Object is not a NPersist managed object, do not use 'new' on Entities. (Property='{0}', Owner={1}", propertyName,obj));
+                    }
+                    else if (ivalue.GetInterceptor().Context != this.Context)
+                    {
+                        throw new NPersistException(string.Format("Object is does not belong to the same IContext as the property owner. (Property='{0}', Owner={1}", propertyName, obj));
+                    }
+
+                }
+                else if (propertyMap.ReferenceType == ReferenceType.ManyToOne || propertyMap.ReferenceType == ReferenceType.ManyToMany)
+                {
+                    IInterceptableList ivalue = value as InterceptableList;
+                    if (ivalue == null)
+                    {
+                        throw new NPersistException(string.Format("List is not a NPersist managed list, do not use 'new' to initialize lists, NPersist does this for you. (Property='{0}', Owner={1}", propertyName, obj));
+                    }
+                    else if (ivalue.Interceptable.GetInterceptor ().Context != this.Context)
+                    {
+                        throw new NPersistException(string.Format("List is does not belong to the same IContext as the property owner. (Property='{0}', Owner={1}", propertyName, obj));
+                    }
+                }
+            }
+
 			if (propertyMap.IsReadOnly)
 			{
 				//Let read-only inverse properties through
