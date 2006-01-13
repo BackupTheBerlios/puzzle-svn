@@ -34,7 +34,7 @@ namespace Puzzle.NPersist.Tests.Main
 		}
 
 		[Test()]
-		[ExpectedException (typeof(NPersistException),"Object is not a NPersist managed object, do not use 'new' on Entities. (Property='Employee', Owner=SngTblWorkFolderAopProxy")]
+		[ExpectedException (typeof(NPersistException),"Object is not a NPersist managed object, do not use 'new' on Entities. (Property='Employee', Owner=SngTblWorkFolderAopProxy)")]
 		public void AssignUnmanagedObjectToProperty()
 		{			
 			SngTblWorkFolder wf = (SngTblWorkFolder) m_Context.CreateObject(typeof(SngTblWorkFolder));
@@ -43,7 +43,7 @@ namespace Puzzle.NPersist.Tests.Main
 		}
 
 		[Test()]
-		[ExpectedException (typeof(NPersistException),"Object is does not belong to the same IContext as the property owner. (Property='Employee', Owner=SngTblWorkFolderAopProxy")]
+		[ExpectedException (typeof(NPersistException),"Object does not belong to the same context object as the property owner. (Property='Employee', Owner=SngTblWorkFolderAopProxy)")]
 		public void AssignManagedObjectOfOtherContextToProperty()
 		{			
 			SngTblWorkFolder wf = (SngTblWorkFolder) m_Context.CreateObject(typeof(SngTblWorkFolder));
