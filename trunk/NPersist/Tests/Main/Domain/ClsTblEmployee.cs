@@ -44,11 +44,5 @@ namespace Puzzle.NPersist.Tests.Main
                 m_WorkFolders = value;
             }
         }
-
-
-
-
-
-
     }
 }

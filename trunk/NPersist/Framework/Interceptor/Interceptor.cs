@@ -252,11 +252,11 @@ namespace Puzzle.NPersist.Framework.BaseClasses
                     IInterceptableList ivalue = value as InterceptableList;
                     if (ivalue == null)
                     {
-                        throw new NPersistException(string.Format("List is not a NPersist managed list, do not use 'new' to initialize lists, NPersist does this for you. (Property='{0}', Owner={1}", propertyName, obj));
+                        throw new NPersistException(string.Format("List is not a NPersist managed list, do not use 'new' to initialize lists, NPersist does this for you. (Property='{0}', Owner={1})", propertyName, obj));
                     }
                     else if (ivalue.Interceptable.GetInterceptor ().Context != this.Context)
                     {
-                        throw new NPersistException(string.Format("List is does not belong to the same IContext as the property owner. (Property='{0}', Owner={1}", propertyName, obj));
+                        throw new NPersistException(string.Format("List does not belong to the same context object as the property owner. (Property='{0}', Owner={1})", propertyName, obj));
                     }
                 }
             }

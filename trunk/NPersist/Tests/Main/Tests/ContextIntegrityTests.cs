@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using NUnit.Framework;
 using Puzzle.NPersist.Framework;
 using Puzzle.NPersist.Framework.Delegates;
@@ -50,6 +51,15 @@ namespace Puzzle.NPersist.Tests.Main
 			SngTblEmployee e = (SngTblEmployee) m_Context2.CreateObject(typeof(SngTblEmployee));
 			//this should fail
 			wf.Employee = e ;
+		}
+
+		[Test()]
+		[ExpectedException (typeof(NPersistException),"List is not a NPersist managed list, do not use 'new' to initialize lists, NPersist does this for you. (Property='WorkFolders', Owner=SngTblEmployeeAopProxy)")]
+		public void AssignUnmanagedListToListProperty()
+		{						
+			SngTblEmployee e = (SngTblEmployee) m_Context2.CreateObject(typeof(SngTblEmployee));
+			//this should fail
+			e.WorkFolders = new ArrayList();
 		}
 	}
 }
