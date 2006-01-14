@@ -2,7 +2,7 @@ using Puzzle.NCore.Framework.Compression;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Remoting.Formatting;
 // *
-// * Copyright (C) 2005 Mats Helander
+// * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
 // * This library is free software; you can redistribute it and/or modify it
 // * under the terms of the GNU Lesser General Public License 2.1 or later, as

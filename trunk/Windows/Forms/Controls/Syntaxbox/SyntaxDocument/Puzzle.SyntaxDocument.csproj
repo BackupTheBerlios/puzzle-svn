@@ -157,6 +157,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Document\Export\HTMLExporter2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Document\Formatting\FormatRange.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,10 +195,6 @@
                     RelPath = "Document\Parser\IParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Document\Parser\OldParser.txt"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Document\Parser\ParseTools.cs"

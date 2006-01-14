@@ -276,6 +276,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controls\ThumbControl\ThumbControl.resx"
+                    DependentUpon = "ThumbControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controls\Weaktimer\WeakTimer.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
