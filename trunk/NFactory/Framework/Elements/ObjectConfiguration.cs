@@ -113,7 +113,7 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 				string message = string.Format("Creating instance of type '{0}' from config '{1}'", this.Type, this.Name);
 				owner.LogManager.Info(this, message, "");
 			}
-			catch (Exception x)
+			catch 
 			{
 				string message = string.Format("Failed to create instance of type '{0}' from config '{1}'", this.Type, this.Name);
 				string verbose = "";

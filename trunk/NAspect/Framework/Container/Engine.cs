@@ -225,13 +225,13 @@ namespace Puzzle.NAspect.Framework
 		}
 
 #if NET2
-        public T Create<T>(params object[] args)
+        public T CreateProxy<T>(params object[] args)
         {
             Type type = typeof(T);
             return (T)CreateProxy(type, args);
         }
 
-        public T CreateWithState<T>(object state,params object[] args)
+        public T CreateProxyWithState<T>(object state,params object[] args)
         {
             Type type = typeof(T);
             return (T)CreateProxyWithState(state,type, args);

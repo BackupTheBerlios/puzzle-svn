@@ -20,10 +20,11 @@ namespace Puzzle.NFactory.Framework
 		void ConfigureObject(object target, string configureAs);
 		object CreateObject(Type objectType, params object[] args);
 		object WrapInstance(object target);
+        void PrepareNewGraph();
 #if NET2
-        T Create<T>(params object[] args);
-        T Get<T>(string name, bool forceNewInstance);
-        T Get<T>(string name);
+        T CreateObject<T>(params object[] args);
+        T GetObject<T>(string name, bool forceNewInstance);
+        T GetObject<T>(string name);
 #endif
 	}
 }

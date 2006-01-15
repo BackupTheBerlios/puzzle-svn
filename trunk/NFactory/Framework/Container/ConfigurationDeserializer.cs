@@ -16,6 +16,9 @@ namespace Puzzle.NFactory.Framework
 
 			XmlElement o = xmlRoot;
 
+            if (o == null)
+                return container;
+
 			ArrayList objectConfigurations = new ArrayList();
 			ArrayList listConfigurations = new ArrayList();
 			ArrayList factoryConfigurations = new ArrayList();

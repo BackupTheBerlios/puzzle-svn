@@ -11,13 +11,29 @@ namespace Puzzle.NFactory.Framework
 	{
 		internal Hashtable containerObjects = new Hashtable();
 		internal Hashtable graphObjects = new Hashtable();
+        private volatile object syncRoot = new object();
 
 		public Container()
 		{
 			this.ObjectFactory = new NAspectObjectFactory();
 			this.LogManager = new LogManager();
 			this.Configuration = new ContainerConfiguration();
-		}
+        }
+
+        #region Public Property ParentContainer
+        private IContainer parentContainer;
+        public virtual IContainer ParentContainer
+        {
+            get
+            {
+                return this.parentContainer;
+            }
+            set
+            {
+                this.parentContainer = value;
+            }
+        }
+        #endregion
 
 		#region Public Property LogManager
 
@@ -61,29 +77,39 @@ namespace Puzzle.NFactory.Framework
             return GetObject(name, false);
         }
 
+        public void PrepareNewGraph()
+        {
+            graphObjects.Clear();
+            if (ParentContainer != null)
+                ParentContainer.PrepareNewGraph();
+        }
+
 		public object GetObject(string name, bool forceNewInstance)
 		{
-			//clear the graph cache
-			graphObjects.Clear();
+            lock (syncRoot)
+            {
+                //clear the graph cache
+                PrepareNewGraph();
 
-			string message = string.Format("Getting object '{0}'", name);
-			string verbose = string.Format("Force new instance {0}", forceNewInstance);
-			LogManager.Info(this, message, verbose);
-			return GetObjectInternal(name, forceNewInstance ? InstanceMode.PerReference : InstanceMode.Default);
+                string message = string.Format("Getting object '{0}'", name);
+                string verbose = string.Format("Force new instance {0}", forceNewInstance);
+                LogManager.Info(this, message, verbose);
+                return GetObjectInternal(name, forceNewInstance ? InstanceMode.PerReference : InstanceMode.Default);
+            }
 		}
 
 #if NET2
-        public T Get<T>(string name)
+        public T GetObject<T>(string name)
         {
             return (T)GetObject(name, false);
         }
 
-        public T Get<T>(string name, bool forceNewInstance)
+        public T GetObject<T>(string name, bool forceNewInstance)
 		{
             return (T)GetObject(name, forceNewInstance);
 		}
 
-        public T Create<T>(params object[] args)
+        public T CreateObject<T>(params object[] args)
         {
             return (T)CreateObject(typeof(T), args);
         }
@@ -92,49 +118,58 @@ namespace Puzzle.NFactory.Framework
 
         public object GetObjectInternal(string name, InstanceMode instanceMode)
 		{
-			IObjectConfiguration objectConfig = Configuration.GetObjectConfiguration(name);
-			if (objectConfig == null)
-				throw new Exception(string.Format("Object not found '{0}'", name));
+            lock (syncRoot)
+            {
+                IObjectConfiguration objectConfig = Configuration.GetObjectConfiguration(name);
 
-			if (instanceMode == InstanceMode.Default)
-				instanceMode = objectConfig.InstanceMode;
+                if (objectConfig == null)
+                {
+                    if (ParentContainer == null)
+                        throw new Exception(string.Format("Object not found '{0}'", name));
+                    else
+                        return ParentContainer.GetObjectInternal(name, instanceMode);
+                }
 
-			if (instanceMode == InstanceMode.Default)
-				instanceMode = InstanceMode.PerContainer;
+                if (instanceMode == InstanceMode.Default)
+                    instanceMode = objectConfig.InstanceMode;
 
-			//fetch object from container cache
-			if (instanceMode == InstanceMode.PerContainer)
-			{
-				//only fetch from cache if we dont need a new instance
-				if (containerObjects[name] != null)
-					return containerObjects[name];
-			}
+                if (instanceMode == InstanceMode.Default)
+                    instanceMode = InstanceMode.PerContainer;
 
-			//fetch object from graph cache
-			if (instanceMode == InstanceMode.PerGraph)
-			{
-				//only fetch from cache if we dont need a new instance
-				if (graphObjects[name] != null)
-					return graphObjects[name];
-			}
+                //fetch object from container cache
+                if (instanceMode == InstanceMode.PerContainer)
+                {
+                    //only fetch from cache if we dont need a new instance
+                    if (containerObjects[name] != null)
+                        return containerObjects[name];
+                }
 
-			object instance = CreateInstance(objectConfig);
+                //fetch object from graph cache
+                if (instanceMode == InstanceMode.PerGraph)
+                {
+                    //only fetch from cache if we dont need a new instance
+                    if (graphObjects[name] != null)
+                        return graphObjects[name];
+                }
 
-			//store instance in container cache
-			if (instanceMode == InstanceMode.PerContainer)
-			{
-				containerObjects[objectConfig.Name] = instance;
-			}
+                object instance = CreateInstance(objectConfig);
 
-			//store instance in graph cache
-			if (instanceMode == InstanceMode.PerGraph)
-			{
-				graphObjects[objectConfig.Name] = instance;
-			}
+                //store instance in container cache
+                if (instanceMode == InstanceMode.PerContainer)
+                {
+                    containerObjects[objectConfig.Name] = instance;
+                }
 
-			ConfigureObject(objectConfig, instance);
+                //store instance in graph cache
+                if (instanceMode == InstanceMode.PerGraph)
+                {
+                    graphObjects[objectConfig.Name] = instance;
+                }
 
-			return instance;
+                ConfigureObject(objectConfig, instance);
+
+                return instance;
+            }
 		}
 
 		private object CreateInstance(IObjectConfiguration objectConfig)
