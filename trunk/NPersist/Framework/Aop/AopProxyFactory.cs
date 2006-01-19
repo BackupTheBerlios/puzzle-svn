@@ -10,6 +10,7 @@
 using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.BaseClasses;
 
 namespace Puzzle.NPersist.Framework.Aop
 {
@@ -34,6 +35,15 @@ namespace Puzzle.NPersist.Framework.Aop
 			{
 				return (Puzzle.NPersist.Framework.Interfaces.IInterceptableList) context.ObjectFactory.CreateInstance(baseType,ctorArgs);
 			}
+#if NET2
+            else if (baseType.IsGenericType && baseType.IsInterface)
+			{
+                Type subType = baseType.GetGenericArguments ()[0];
+                Type genericType = typeof(InterceptableGenericsList<>).MakeGenericType(subType);
+	
+                return (Puzzle.NPersist.Framework.Interfaces.IInterceptableList) context.ObjectFactory.CreateInstance(genericType,ctorArgs);				
+			}
+#endif
 			else
 			{
 				Type proxyType = aopEngine.CreateProxyType(baseType) ;
