@@ -229,9 +229,19 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
-			Assembly assembly = System.Reflection.Assembly.Load(this.AssemblyName);
+
+
+			Assembly assembly = null;
+
+			string assemblyName = this.AssemblyName;
+			if (assemblyName == null || assemblyName == "")
+			{
+				assemblyName = this.Name;
+			}
+
+			System.Reflection.Assembly.Load(assemblyName);
 			if (assembly == null)
-				throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",this.AssemblyName) );
+				throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",assemblyName) );
 
 			foreach (IClassMap classMap in this.ClassMaps)
 			{	
@@ -286,13 +296,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 					if (propertyMap.ReferenceType != ReferenceType.None)
 					{
-						foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+						if (!propertyMap.IsSlave)
 						{
-							if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+							foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
 							{
-								throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name",columnMap.Name,propertyInfo.Name,classMap.GetFullName()) );							
-							}							
-						}												
+								if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+								{
+									throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name",columnMap.Name,propertyInfo.Name,classMap.GetFullName()) );							
+								}							
+							}												
+						}
 					}
 				}
 			}	
