@@ -249,7 +249,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
                 }
                 else if (propertyMap.ReferenceType == ReferenceType.ManyToOne || propertyMap.ReferenceType == ReferenceType.ManyToMany)
                 {
-                    IInterceptableList ivalue = value as InterceptableList;
+                    IInterceptableList ivalue = value as IInterceptableList;
                     if (ivalue == null)
                     {
                         throw new NPersistException(string.Format("List is not a NPersist managed list, do not use 'new' to initialize lists, NPersist does this for you. (Property='{0}', Owner={1})", propertyName, obj));

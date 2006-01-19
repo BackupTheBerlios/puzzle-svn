@@ -50,7 +50,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IList newList = null;
 			IInterceptableList mList;
 #if NET2
-            if (listType == typeof(System.Collections.Generic.IList<>))
+            if (listType.IsGenericType && listType.IsInterface)
             {
                 Type subType = listType.GetGenericArguments ()[0];
                 

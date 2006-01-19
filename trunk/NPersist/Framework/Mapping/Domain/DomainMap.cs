@@ -229,86 +229,87 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
+            return;
 
 
-			Assembly assembly = null;
+            //Assembly assembly = null;
 
-			string assemblyName = this.AssemblyName;
-			if (assemblyName == null || assemblyName == "")
-			{
-				assemblyName = this.Name;
-			}
+            //string assemblyName = this.AssemblyName;
+            //if (assemblyName == null || assemblyName == "")
+            //{
+            //    assemblyName = this.Name;
+            //}
 
-			System.Reflection.Assembly.Load(assemblyName);
-			if (assembly == null)
-				throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",assemblyName) );
+            //System.Reflection.Assembly.Load(assemblyName);
+            //if (assembly == null)
+            //    throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",assemblyName) );
 
-			foreach (IClassMap classMap in this.ClassMaps)
-			{	
-				if (classMap.AssemblyName == null || classMap.AssemblyName == "")
-					assembly = System.Reflection.Assembly.Load(this.AssemblyName);
-				else
-				{
-					assembly = System.Reflection.Assembly.Load(classMap.AssemblyName);
-					if (assembly == null)
-						throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",this.AssemblyName) );
-				}
+            //foreach (IClassMap classMap in this.ClassMaps)
+            //{	
+            //    if (classMap.AssemblyName == null || classMap.AssemblyName == "")
+            //        assembly = System.Reflection.Assembly.Load(assemblyName);
+            //    else
+            //    {
+            //        assembly = System.Reflection.Assembly.Load(classMap.AssemblyName);
+            //        if (assembly == null)
+            //            throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'",this.AssemblyName) );
+            //    }
 
 				
 
-				Type type = assembly.GetType(classMap.GetFullName());
-				if (type == null)
-					throw new NPersistException(string.Format("Could not find type '{0}'",classMap.GetFullName()) );
+            //    Type type = assembly.GetType(classMap.GetFullName());
+            //    if (type == null)
+            //        throw new NPersistException(string.Format("Could not find type '{0}'",classMap.GetFullName()) );
 
-				foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
-				{
-					PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name);
-					if (propertyInfo == null)
-						throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'",propertyInfo.Name,classMap.GetFullName()) );
+            //    foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+            //    {
+            //        PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name);
+            //        if (propertyInfo == null)
+            //            throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'",propertyInfo.Name,classMap.GetFullName()) );
 
-					MethodInfo getMethod = propertyInfo.GetGetMethod();
-					if ( !getMethod.IsVirtual)
-						throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'",propertyInfo.Name,classMap.GetFullName()) );
+            //        MethodInfo getMethod = propertyInfo.GetGetMethod();
+            //        if ( !getMethod.IsVirtual)
+            //            throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'",propertyInfo.Name,classMap.GetFullName()) );
 
-					if ( getMethod.IsFinal)
-						throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'",propertyInfo.Name,classMap.GetFullName()) );
+            //        if ( getMethod.IsFinal)
+            //            throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'",propertyInfo.Name,classMap.GetFullName()) );
 
 
-					string fieldName = propertyMap.GetFieldName();
-					FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap,type,fieldName);
+            //        string fieldName = propertyMap.GetFieldName();
+            //        FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap,type,fieldName);
 
-					if (fieldInfo == null)
-						throw new NPersistException(string.Format("Could not find field '{0}' in type '{1}'",fieldName,classMap.GetFullName()) );
+            //        if (fieldInfo == null)
+            //            throw new NPersistException(string.Format("Could not find field '{0}' in type '{1}'",fieldName,classMap.GetFullName()) );
 
-					//validate list properties
-					if (propertyMap.ReferenceType == ReferenceType.ManyToMany || propertyMap.ReferenceType == ReferenceType.ManyToOne)
-					{
-						Type listType = getMethod.ReturnType;
-						if (! typeof(IList).IsAssignableFrom(listType))
-							throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class",propertyInfo.Name,classMap.GetFullName(),listType.FullName) );
+            //        //validate list properties
+            //        if (propertyMap.ReferenceType == ReferenceType.ManyToMany || propertyMap.ReferenceType == ReferenceType.ManyToOne)
+            //        {
+            //            Type listType = getMethod.ReturnType;
+            //            if (! typeof(IList).IsAssignableFrom(listType))
+            //                throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class",propertyInfo.Name,classMap.GetFullName(),listType.FullName) );
 
-						if (listType.IsClass)
-						{
-							if (listType.IsSealed)
-								throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is marked with 'sealed'",propertyInfo.Name,classMap.GetFullName(),listType.FullName) );							
-						}					
-					}
+            //            if (listType.IsClass)
+            //            {
+            //                if (listType.IsSealed)
+            //                    throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is marked with 'sealed'",propertyInfo.Name,classMap.GetFullName(),listType.FullName) );							
+            //            }					
+            //        }
 
-					if (propertyMap.ReferenceType != ReferenceType.None)
-					{
-						if (!propertyMap.IsSlave)
-						{
-							foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
-							{
-								if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
-								{
-									throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name",columnMap.Name,propertyInfo.Name,classMap.GetFullName()) );							
-								}							
-							}												
-						}
-					}
-				}
-			}	
+            //        if (propertyMap.ReferenceType != ReferenceType.None)
+            //        {
+            //            if (!propertyMap.IsSlave)
+            //            {
+            //                foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+            //                {
+            //                    if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+            //                    {
+            //                        throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name",columnMap.Name,propertyInfo.Name,classMap.GetFullName()) );							
+            //                    }							
+            //                }												
+            //            }
+            //        }
+            //    }
+            //}	
 		}
 
 		protected static IMapSerializer GetMapSerializerFromXml(string xml)

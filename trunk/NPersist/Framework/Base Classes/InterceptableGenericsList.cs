@@ -17,7 +17,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 {
 	class InterceptableGenericsList<T> : IList<T> , IInterceptableList
 	{
-        private List<T> list;
+        private List<T> list = new List<T>();
 
         public virtual int IndexOf(T item)
         {
