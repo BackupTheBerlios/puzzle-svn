@@ -163,7 +163,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         void ICollection.CopyTo(Array array, int index)
         {
-            list.CopyTo ((T[])array,index);
+            ((IList)list).CopyTo (array,index);
         }
 
         bool ICollection.IsSynchronized
