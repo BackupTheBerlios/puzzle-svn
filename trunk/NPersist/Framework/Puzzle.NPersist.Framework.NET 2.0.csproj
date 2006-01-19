@@ -168,6 +168,7 @@
     <Compile Include="Base Classes\Interceptable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Base Classes\InterceptableGenericsList.cs" />
     <Compile Include="Base Classes\InterceptableList.cs">
       <SubType>Code</SubType>
     </Compile>

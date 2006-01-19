@@ -49,7 +49,23 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			IList newList = null;
 			IInterceptableList mList;
-			if (listType == typeof(IList))
+#if NET2
+            if (listType == typeof(System.Collections.Generic.IList<>))
+            {
+                Type subType = listType.GetGenericArguments ()[0];
+                
+
+                Type genericType = typeof(InterceptableGenericsList<>).MakeGenericType(subType);
+
+                mList = (IInterceptableList) Activator.CreateInstance(genericType);
+				mList.Interceptable = (IInterceptable) obj;
+				mList.PropertyName = propertyName;
+				newList = mList;				
+            }
+            else if (listType == typeof(IList))
+#else
+            if (listType == typeof(IList))
+#endif			
 			{
 				mList = (IInterceptableList) Activator.CreateInstance(typeof(InterceptableList));
 				mList.Interceptable = (IInterceptable) obj;
