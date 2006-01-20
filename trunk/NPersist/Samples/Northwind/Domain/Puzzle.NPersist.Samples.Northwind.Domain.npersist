@@ -235,7 +235,7 @@
       <column name="Gnu" type="AnsiStringFixedLength" prec="10" allow-null="true" length="10" scale="0" />
     </table>
     <table name="Territories">
-      <column name="RegionID" type="Int32" prec="10" length="4" scale="0" foreign="true" primary-table="Region" primary-column="RegionID" foreign-key="FK_Territories_Region" />
+      <column name="RegionID" allow-null="true" type="Int32" prec="10" length="4" scale="0" foreign="true" primary-table="Region" primary-column="RegionID" foreign-key="FK_Territories_Region" />
       <column name="TerritoryDescription" type="StringFixedLength" prec="50" length="100" scale="0" />
       <column name="TerritoryID" primary="true" type="String" prec="20" length="40" scale="0" />
     </table>

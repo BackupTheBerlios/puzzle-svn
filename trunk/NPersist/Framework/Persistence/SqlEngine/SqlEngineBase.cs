@@ -313,14 +313,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (propertyMap.IsCollection)
 				{
-					if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
+					if (propertyMap.ReferenceType.Equals(ReferenceType.ManyToMany) || (!propertyMap.IsReadOnly && !propertyMap.IsSlave))
 					{
-						if (!(propertyMap.ReferenceType == ReferenceType.ManyToMany))
-						{
+						//if (!(propertyMap.ReferenceType == ReferenceType.ManyToMany))
+						//{
 							sql = GetRemoveCollectionPropertyStatement(obj, propertyMap, parameters);
 							ds = ctx.DataSourceManager.GetDataSource(propertyMap.GetSourceMap());
 							rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-						}
+						//}
 					}
 				}
 			}
