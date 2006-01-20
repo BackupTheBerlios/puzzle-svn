@@ -58,8 +58,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 					territory.Id = "Terra";
 					territory.TerritoryDescription = "A cool place";
 
-					territory.Employees.Add(employee)
-;
+					territory.Employees.Add(employee);  // <-------------------- this is the crucial line differing from the next test
+
 					//Ask the context to insert our new employee and territory into the database
 					context.Commit() ;
 
@@ -185,7 +185,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 					territory.Id = "Terra";
 					territory.TerritoryDescription = "A cool place";
 
-					employee.Territories.Add(territory);
+					employee.Territories.Add(territory);	// <-------------------- this is the crucial line differing from the previous test
 
 					//Ask the context to insert our new employee and territory into the database
 					context.Commit() ;
