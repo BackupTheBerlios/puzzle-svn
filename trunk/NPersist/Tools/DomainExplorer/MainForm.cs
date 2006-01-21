@@ -2518,54 +2518,72 @@ namespace Puzzle.NPersist.Tools.DomainExplorer
 			}		
 		}
 
+		private bool insideTreeViewDragOver = false;
+
 		private void TreeViewDragOver(TreeView treeView, System.Windows.Forms.DragEventArgs e)
 		{
-			Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+			if (insideTreeViewDragOver) 
+				return;
 
-	        int x = pt.X;
-		    int y = pt.Y;
-			string data = "";
-			bool doHilite = false;
+			insideTreeViewDragOver = true;
 
-	        ObjectTreeNode overNode = (ObjectTreeNode) treeView.GetNodeAt(new Point(x, y));
-
-			if (e.Data.GetDataPresent(typeof(string)))
+			try
 			{
-				data = (string) e.Data.GetData(typeof(string));
-			}
+				Point pt = treeView.PointToClient(new Point(e.X, e.Y));
 
-			if (data == null)
-				data = "";
+				int x = pt.X;
+				int y = pt.Y;
+				string data = "";
+				bool doHilite = false;
 
-			if (data.Length > 0)
-			{
-				string header;
-				XmlNode payload = ParseDragData(data, out header);
-				if (header == "object")
+				ObjectTreeNode overNode = (ObjectTreeNode) treeView.GetNodeAt(new Point(x, y));
+
+				if (e.Data.GetDataPresent(typeof(string)))
 				{
-					if (overNode != null)
+					data = (string) e.Data.GetData(typeof(string));
+				}
+
+				if (data == null)
+					data = "";
+
+				if (data.Length > 0)
+				{
+					string header;
+					XmlNode payload = ParseDragData(data, out header);
+					if (header == "object")
 					{
-						if (overNode.PropertyMap != null)
+						if (overNode != null)
 						{
-							object dropObject = GetDropObject(payload);
-							IClassMap dropClassMap = Context.DomainMap.MustGetClassMap(dropObject.GetType() );
-							if (dropClassMap.IsSubClassOrThisClass(overNode.PropertyMap.GetReferencedClassMap()))
+							if (overNode.PropertyMap != null)
 							{
-								doHilite = true ; 							
+								object dropObject = GetDropObject(payload);
+								IClassMap dropClassMap = Context.DomainMap.MustGetClassMap(dropObject.GetType() );
+								if (dropClassMap.IsSubClassOrThisClass(overNode.PropertyMap.GetReferencedClassMap()))
+								{
+									doHilite = true ; 							
+								}
 							}
 						}
 					}
 				}
-			}
 
 			
-            if (doHilite)
-            {
-                e.Effect = DragDropEffects.Copy;
-                TurnOnTreeDragHilite(overNode);              	
-            }
-            else
-                TurnOffTreeDragHilite();
+				if (doHilite)
+				{
+					e.Effect = DragDropEffects.Copy;
+					TurnOnTreeDragHilite(overNode);              	
+				}
+				else
+					TurnOffTreeDragHilite();				
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				insideTreeViewDragOver = false;
+			}
 		}	
 
 		private void TreeViewDragDrop(TreeView treeView, System.Windows.Forms.DragEventArgs e)
