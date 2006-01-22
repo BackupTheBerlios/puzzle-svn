@@ -255,7 +255,7 @@ namespace KumoUnitTests
 
             c.Configuration.Aspects.Add(new SignatureAspect("AddInterface", typeof(List<string>), new Type[] { typeof(ISomeListMarkerIFace), typeof(SayHelloMixin) } , new IPointcut[0]));
 
-            List<string> proxy = c.Create<List<string>>();
+            List<string> proxy = c.CreateProxy<List<string>>();
 
             ISayHello sayHello = (ISayHello)proxy;
 
@@ -272,7 +272,7 @@ namespace KumoUnitTests
             Engine c = new Engine("ProxyGenericList");
             c.Configuration.Aspects.Add(new SignatureAspect("ProxyGenericList", typeof(List<string>), "*Add*" , new PassiveInterceptor()));
 
-            List<string> proxy = c.Create<List<string>>();
+            List<string> proxy = c.CreateProxy<List<string>>();
             Assert.IsTrue(proxy != null, "Failed to proxy generic list");
             Assert.IsTrue(proxy is IAopProxy, "Failed to proxy generic list");
 

@@ -228,13 +228,15 @@ namespace Puzzle.NAspect.Framework
         public T CreateProxy<T>(params object[] args)
         {
             Type type = typeof(T);
-            return (T)CreateProxy(type, args);
+            object o = CreateProxy(type, args);
+            return (T)o;
         }
 
         public T CreateProxyWithState<T>(object state,params object[] args)
         {
             Type type = typeof(T);
-            return (T)CreateProxyWithState(state,type, args);
+            object o = CreateProxyWithState(state,type, args);
+            return (T)o;
         }
 #endif
 

@@ -101,12 +101,23 @@ namespace Puzzle.NFactory.Framework
 #if NET2
         public T GetObject<T>(string name)
         {
-            return (T)GetObject(name, false);
+            object o = GetObject(name, false);
+            ValidateType<T>(name, o);
+            return (T)o;
+        }
+
+        private static void ValidateType<T>(string name, object o)
+        {
+            Type type = typeof(T);
+            if (!(type.IsAssignableFrom(o.GetType())))
+                throw new Exception(string.Format("Cannot cast object '{0}' to type '{1}'", name, type.Name));
         }
 
         public T GetObject<T>(string name, bool forceNewInstance)
 		{
-            return (T)GetObject(name, forceNewInstance);
+            object o = GetObject(name, forceNewInstance);
+            ValidateType<T>(name, o);
+            return (T)o;
 		}
 
         public T CreateObject<T>(params object[] args)
