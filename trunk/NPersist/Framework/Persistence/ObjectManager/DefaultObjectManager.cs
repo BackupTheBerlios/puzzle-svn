@@ -56,7 +56,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void SetObjectIdentity(object obj, string identity)
 		{
-			m_helperPoco.SetObjectIdentity(obj, identity);
+            try
+            {
+			    m_helperPoco.SetObjectIdentity(obj, identity);
+            }
+            catch
+            {
+                throw new NPersistException(string.Format ("Could not set Identity '{0}' on object '{1}'",identity,obj));
+            }
 		}
 
 
