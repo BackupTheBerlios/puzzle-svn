@@ -1203,6 +1203,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					if (propertyMap.GetColumnMap().IsAutoIncrease)
 						ignore = true;
 
+                    //HACK: roger fixed the timestamp bug
                     if (propertyMap.GetColumnMap().SpecificDataType == "TIMESTAMP")
                         ignore = true;
 
