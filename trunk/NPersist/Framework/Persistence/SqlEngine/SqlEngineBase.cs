@@ -1202,6 +1202,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					ignore = false;
 					if (propertyMap.GetColumnMap().IsAutoIncrease)
 						ignore = true;
+
+                    if (propertyMap.GetColumnMap().SpecificDataType == "TIMESTAMP")
+                        ignore = true;
+
 					else if (!(propertyMap.ReferenceType == ReferenceType.None))
 					{
 						refObj = om.GetPropertyValue(obj, propertyMap.Name);
