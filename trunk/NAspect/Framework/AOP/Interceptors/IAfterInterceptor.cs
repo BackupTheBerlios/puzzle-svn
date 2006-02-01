@@ -10,9 +10,8 @@
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	public interface IInterceptor
+	public interface IAfterInterceptor
 	{
-		object HandleCall(MethodInvocation call);
-
+        void AfterCall(AfterMethodInvocation call);        
 	}
 }

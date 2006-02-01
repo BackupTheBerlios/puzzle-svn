@@ -45,10 +45,22 @@ namespace Puzzle.NAspect.Framework
 		{
 			if (Step < Interceptors.Count)
 			{
-				//invoke the next interceptor
-				IInterceptor interceptor = (IInterceptor) Interceptors[Step];
-				Step++;
-				return interceptor.HandleCall(this);
+                IInterceptor interceptor = null;
+                if (Interceptors[Step] is IAfterInterceptor)
+                {
+                    interceptor = new AfterInterceptorHandler((IAfterInterceptor)Interceptors[Step]);
+                }
+                else if (Interceptors[Step] is IAfterInterceptor)
+                {
+                    interceptor = new BeforeInterceptorHandler((IBeforeInterceptor)Interceptors[Step]);
+                }
+                else
+                {
+                    //invoke the next interceptor
+                    interceptor = (IInterceptor)Interceptors[Step];                    
+                }
+                Step++;
+                return interceptor.HandleCall(this);
 			}
 			else
 			{

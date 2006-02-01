@@ -93,6 +93,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOP\Interceptors\IAfterInterceptor.cs" />
+    <Compile Include="AOP\Interceptors\IAroundInterceptor.cs" />
     <Compile Include="AOP\Aspects\AspectBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -108,7 +110,8 @@
     <Compile Include="AOP\Aspects\SignatureAspect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AOP\IInterceptor.cs">
+    <Compile Include="AOP\Interceptors\IBeforeInterceptor.cs" />
+    <Compile Include="AOP\Interceptors\IInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AOP\IProxyAware.cs">
@@ -150,9 +153,13 @@
     <Compile Include="Elements\EngineConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\AfterInterceptorHandler.cs" />
+    <Compile Include="Proxy\AfterMethodInvocation.cs" />
     <Compile Include="Proxy\AOPProxyMixin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\BeforeInterceptorHandler.cs" />
+    <Compile Include="Proxy\BeforeMethodInvocation.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>
     </Compile>
