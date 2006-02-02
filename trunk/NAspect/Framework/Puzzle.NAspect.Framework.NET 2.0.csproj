@@ -153,12 +153,10 @@
     <Compile Include="Elements\EngineConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\AfterInterceptorHandler.cs" />
     <Compile Include="Proxy\AfterMethodInvocation.cs" />
     <Compile Include="Proxy\AOPProxyMixin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\BeforeInterceptorHandler.cs" />
     <Compile Include="Proxy\BeforeMethodInvocation.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>

@@ -44,23 +44,31 @@ namespace Puzzle.NAspect.Framework
 		public object Proceed()
 		{
 			if (Step < Interceptors.Count)
-			{
-                IInterceptor interceptor = null;
+			{               
                 if (Interceptors[Step] is IAfterInterceptor)
                 {
-                    interceptor = new AfterInterceptorHandler((IAfterInterceptor)Interceptors[Step]);
+                    object res = this.Proceed();
+                    IAfterInterceptor afterInterceptor = (IAfterInterceptor)Interceptors[Step];
+                    afterInterceptor.AfterCall(new AfterMethodInvocation(this));
+                    Step++;
+                    return res;
                 }
-                else if (Interceptors[Step] is IAfterInterceptor)
-                {
-                    interceptor = new BeforeInterceptorHandler((IBeforeInterceptor)Interceptors[Step]);
+                else if (Interceptors[Step] is IBeforeInterceptor)
+                {                    
+                    IBeforeInterceptor beforeInterceptor = (IBeforeInterceptor)Interceptors[Step];
+                    beforeInterceptor.BeforeCall(new BeforeMethodInvocation(this));
+                    object res = this.Proceed();
+                    Step++;
+                    return res;
                 }
                 else
                 {
                     //invoke the next interceptor
-                    interceptor = (IInterceptor)Interceptors[Step];                    
+                    IAroundInterceptor interceptor = (IAroundInterceptor)Interceptors[Step];
+                    Step++;
+                    return interceptor.HandleCall(this);
                 }
-                Step++;
-                return interceptor.HandleCall(this);
+                
 			}
 			else
 			{
