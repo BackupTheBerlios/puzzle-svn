@@ -601,7 +601,7 @@ namespace Puzzle.NPath.Framework
 			}
 
 
-			if (leftValue is IComparable || rightValue is IComparable)
+			if (  (leftValue is IComparable || rightValue is IComparable)  ||  (leftValue == null || rightValue == null)  )
 			{
 				int res = Comparer.DefaultInvariant.Compare(leftValue, rightValue);
 
@@ -723,6 +723,11 @@ namespace Puzzle.NPath.Framework
 				return EvalMethodCall(item, expression as NPathMethodCall);
 			}
 
+            if (expression is NPathNullValue)
+            {
+                return null;
+            }
+
 
 			throw new Exception(string.Format("unknown value {0}", expression.ToString())); // do not localize
 		}
@@ -744,6 +749,9 @@ namespace Puzzle.NPath.Framework
 			foreach (IValue parameterExpression in call.Parameters)
 			{
 				object parameterValue = this.EvalValue(item, parameterExpression);
+
+
+
 				parameters.Add(parameterValue);
 			}
 
@@ -769,7 +777,12 @@ namespace Puzzle.NPath.Framework
 				if (methodName == method.Name && method.GetParameters().Length == parameters.Count)
 				{
 					object[] methodParams = new object[parameters.Count];
-					parameters.CopyTo(methodParams);
+                    ParameterInfo[] paramInfo = method.GetParameters ();
+					for (int i=0;i<parameters.Count;i++)
+                    {
+                        object value = Convert.ChangeType (parameters[i],paramInfo[i].ParameterType);
+                        methodParams[i] = value;
+                    }                   
 
 					object result = method.Invoke(target, methodParams);
 

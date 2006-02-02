@@ -208,6 +208,7 @@
     <Compile Include="NPathParser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ObjectQueryEngine\DefaultObjectQueryEngineHelper.cs" />
     <Compile Include="ObjectQueryEngine\IObjectQueryEngine.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -226,6 +227,7 @@
     <Compile Include="ObjectQueryEngine\PropertyAccessorException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ObjectQueryEngine\SimpleEngine.cs" />
     <Compile Include="ObjectQueryEngine\SortOrderComparer.cs">
       <SubType>Code</SubType>
     </Compile>
