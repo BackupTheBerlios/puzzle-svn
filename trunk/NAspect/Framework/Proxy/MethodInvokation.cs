@@ -12,9 +12,11 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
+    [DebuggerStepThrough()]
 	public class MethodInvocation
 	{
 		public readonly IAopProxy Target;
@@ -27,6 +29,7 @@ namespace Puzzle.NAspect.Framework
 
 		#region constructor
 
+        [DebuggerStepThrough()]
 		public MethodInvocation(IAopProxy target, MethodBase method, MethodInfo endMethod, IList parameters, Type returnType, IList interceptors)
 		{
 			this.Target = target;
@@ -41,6 +44,8 @@ namespace Puzzle.NAspect.Framework
 
 		#region Proceed
 
+        [DebuggerStepThrough ()]
+        [DebuggerHidden ()]
 		public object Proceed()
 		{
 			if (Step < Interceptors.Count)
@@ -80,6 +85,8 @@ namespace Puzzle.NAspect.Framework
 
 		#region CallEndMethod
 
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
 		public object CallEndMethod()
 		{
 			if (EndMethod.GetParameters().Length != Parameters.Count)

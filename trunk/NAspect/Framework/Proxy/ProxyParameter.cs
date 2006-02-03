@@ -9,6 +9,7 @@
 // *
 
 using System;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -29,6 +30,7 @@ namespace Puzzle.NAspect.Framework
 
 		#region InterceptedParameter
 
+        [DebuggerStepThrough()]
 		public InterceptedParameter(string name, int index, Type type, object value, ParameterType parametertype)
 		{
 			Name = name;

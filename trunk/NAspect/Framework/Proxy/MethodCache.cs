@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -27,6 +28,7 @@ namespace Puzzle.NAspect.Framework
 		public static Hashtable methodInterceptorsLookup = new Hashtable();
 
         //gets the interceptos for a methodid
+        [DebuggerStepThrough()]
 		public static IList GetInterceptors(string methodId)
 		{
 			if (methodId == null)

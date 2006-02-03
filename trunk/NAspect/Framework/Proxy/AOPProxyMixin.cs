@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -42,6 +43,8 @@ namespace Puzzle.NAspect.Framework
 			this.target = target;
 		}
 
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
 		public object HandleCall(IAopProxy target, string methodId, IList parameters, Type returnType)
 		{
 			MethodBase method = (MethodBase) MethodCache.methodLookup[methodId];

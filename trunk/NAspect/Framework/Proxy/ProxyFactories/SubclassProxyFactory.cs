@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -196,6 +197,9 @@ namespace Puzzle.NAspect.Framework
 			
 
 			MethodBuilder methodBuilder = typeBuilder.DefineMethod(methodName, modifier | MethodAttributes.Virtual, CallingConventions.Standard, method.ReturnType, parameterTypes);
+            methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+            methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+
 			for (int i = 0; i < parameterInfos.Length; i++)
 			{
 				ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(i + 1, parameterInfos[i].Attributes, parameterInfos[i].Name);
@@ -324,6 +328,9 @@ namespace Puzzle.NAspect.Framework
 				returnType = ((MethodInfo) method).ReturnType;
 
 			MethodBuilder methodBuilder = typeBuilder.DefineMethod(wrapperName, MethodAttributes.Private, CallingConventions.Standard, returnType, parameterTypes);
+            methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+            methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+
 			for (int i = 0; i < parameterInfos.Length; i++)
 			{
 				methodBuilder.DefineParameter(i + 1, parameterInfos[i].Attributes, parameterInfos[i].Name);
@@ -536,6 +543,9 @@ namespace Puzzle.NAspect.Framework
 				parameterTypes[i] = parameterInfos[i].ParameterType;
 
 			MethodBuilder methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Public | MethodAttributes.Virtual, CallingConventions.Standard, method.ReturnType, parameterTypes);
+            methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+            methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+
 			for (int i = 0; i < parameterInfos.Length; i++)
 			{
 				ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(i + 1, parameterInfos[i].Attributes, parameterInfos[i].Name);
@@ -659,6 +669,8 @@ namespace Puzzle.NAspect.Framework
 				parameterTypes[i] = parameterInfos[i].ParameterType;
 
 			MethodBuilder methodBuilder = typeBuilder.DefineMethod(wrapperName, MethodAttributes.Public | MethodAttributes.Virtual, CallingConventions.Standard, method.ReturnType, parameterTypes);
+            methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+            methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
 
 			for (int i = 0; i < parameterInfos.Length; i++)
 			{
@@ -697,6 +709,22 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
+        private CustomAttributeBuilder DebuggerStepThroughBuilder()
+        {
+            Type t = typeof(DebuggerStepThroughAttribute);
+            ConstructorInfo ci = t.GetConstructor (new Type[] {});
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { });
+            return cb;
+        }
+
+        private CustomAttributeBuilder DebuggerHiddenBuilder()
+        {
+            Type t = typeof(DebuggerHiddenAttribute);
+            ConstructorInfo ci = t.GetConstructor(new Type[] { });
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { });
+            return cb;
+        }
+
 		private void BuildConstructor(Type baseType, ConstructorInfo constructor, TypeBuilder typeBuilder, IList mixins)
 		{
 			string wrapperName = GetMethodId(constructor.Name);
@@ -719,6 +747,8 @@ namespace Puzzle.NAspect.Framework
 			ConstructorBuilder proxyConstructor = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, parameterTypes);
 			ILGenerator il = proxyConstructor.GetILGenerator();
 
+            proxyConstructor.SetCustomAttribute(DebuggerStepThroughBuilder());
+            proxyConstructor.SetCustomAttribute(DebuggerHiddenBuilder());
 
 			foreach (Type mixinType in mixins)
 			{
