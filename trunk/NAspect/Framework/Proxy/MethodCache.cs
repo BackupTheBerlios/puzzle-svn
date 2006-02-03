@@ -46,6 +46,7 @@ namespace Puzzle.NAspect.Framework
 
         //used by the explicit iface proyfier
 		public static MethodInfo GetMethodMethodInfo = typeof(MethodCache).GetMethod("GetMethod");
+        [DebuggerStepThrough()]
 		public static MethodBase GetMethod(string methodId)
 		{
 			return (MethodBase)methodLookup[methodId];
