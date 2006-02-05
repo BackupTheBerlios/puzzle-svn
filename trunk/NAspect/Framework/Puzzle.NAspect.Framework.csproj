@@ -104,11 +104,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\IInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AOP\IProxyAware.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -135,6 +130,26 @@
                 />
                 <File
                     RelPath = "AOP\Aspects\SignatureAspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\IAfterInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\IAroundInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\IBeforeInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\IInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -194,7 +209,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\AfterMethodInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\AOPProxyMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\BeforeMethodInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

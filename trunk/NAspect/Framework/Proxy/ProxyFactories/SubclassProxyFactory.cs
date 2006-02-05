@@ -77,10 +77,16 @@ namespace Puzzle.NAspect.Framework
 
 
 			TypeBuilder typeBuilder = GetTypeBuilder(assemblyBuilder, moduleName, typeName, baseType, interfaces);
+#if NET2
+            typeBuilder.SetCustomAttribute(DebuggerVisualizerBuilder());
+#endif
+            
 
 			BuildMixinFields(typeBuilder, mixins);
 
 			BuildConstructors(baseType, typeBuilder, mixins);
+
+//            BuildDebugProperty(typeBuilder,baseType);
 
 			foreach (Type mixinType in mixins)
 			{
@@ -103,6 +109,25 @@ namespace Puzzle.NAspect.Framework
 
 			return proxyType;
 		}
+
+      //  private void BuildDebugProperty(TypeBuilder typeBuilder, Type baseType)
+      //  {
+      //      PropertyBuilder pb = typeBuilder.DefineProperty ("DebugObject", PropertyAttributes.SpecialName ,typeof(DebugObject),new Type[] {});
+
+      //      MethodBuilder methodBuilder = typeBuilder.DefineMethod("get_DebugObject",MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig | MethodAttributes.NewSlot, CallingConventions.Standard , typeof(DebugObject), new Type[] { baseType });
+            
+      //      pb.SetGetMethod (methodBuilder);
+            
+      ////      methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+      ////      methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+
+      //      ILGenerator il = methodBuilder.GetILGenerator();
+
+      //      il.Emit(OpCodes.Ldnull);
+      //      il.Emit(OpCodes.Ret);
+
+
+      //  }
 
 		private void BuildLookupTables(Type baseType, Type proxyType, IList aspects, IList mixins)
 		{
@@ -709,11 +734,22 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
+#if NET2
+        private CustomAttributeBuilder DebuggerVisualizerBuilder()
+        {
+            Type t = typeof(DebuggerVisualizerAttribute);
+            ConstructorInfo ci = t.GetConstructor(new Type[] { typeof(string)});
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { "Puzzle.NAspect.Debug.AopProxyVisualizer, Puzzle.NAspect.Debug.NET2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3" }, new PropertyInfo[] { typeof(DebuggerVisualizerAttribute).GetProperty("Description") }, new object[] { "Aop Visualizer" });
+            
+            return cb;
+        }
+#endif
+
         private CustomAttributeBuilder DebuggerStepThroughBuilder()
         {
             Type t = typeof(DebuggerStepThroughAttribute);
             ConstructorInfo ci = t.GetConstructor (new Type[] {});
-            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { });
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { });            
             return cb;
         }
 

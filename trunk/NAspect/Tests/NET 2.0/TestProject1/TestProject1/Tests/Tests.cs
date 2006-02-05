@@ -25,6 +25,9 @@ namespace KumoUnitTests
 
 			//note the "null" param is the state that was supposed to come from the previous level of proxying
 			SomeClass proxy = (SomeClass) e2.CreateProxy(proxyType,null);
+            IAopProxy iproxy = (IAopProxy)proxy;
+
+            object o = proxy.GetType().GetProperty("DebugObject");
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 			int result = proxy.MyIntMethod() ;
@@ -54,6 +57,8 @@ namespace KumoUnitTests
 			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "*", new ChangeReturnValueInterceptor()));
 
 			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+
+            Type t = Type.GetType("Puzzle.NAspect.Debug.AopProxyVisualizer, Puzzle.NAspect.Debug.NET2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3");
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
