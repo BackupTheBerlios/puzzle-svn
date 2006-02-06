@@ -21,7 +21,5 @@ namespace Puzzle.NAspect.Debug.Serialization
             }
         }                        
         #endregion
-
-
     }
 }

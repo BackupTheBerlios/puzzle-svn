@@ -10,9 +10,9 @@ namespace Puzzle.Naspect.Debug
     public class AopProxyVisualizer : DialogDebuggerVisualizer
     {
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
-        {
-            SerializedProxy s = (SerializedProxy)objectProvider.GetObject();
-            MessageBox.Show (s.TypeName);
+        {      
+            SerializedProxy data = (SerializedProxy)objectProvider.GetObject ();
+            MessageBox.Show ("apa" + data.TypeName);
         }
     }
 
@@ -20,11 +20,16 @@ namespace Puzzle.Naspect.Debug
     {
         public override void GetData(object target, System.IO.Stream outgoingData)
         {
-            ISerializableProxy realProxy = (ISerializableProxy)target;
-
+            ISerializableProxy realProxy = target as ISerializableProxy;
+           
             SerializedProxy serializedProxy = realProxy.GetSerializedProxy ();
-
-            base.GetData(serializedProxy, outgoingData);
+            SerializedProxy s2 = new  SerializedProxy();
+            s2.TypeName = serializedProxy.TypeName;
+            base.GetData(s2, outgoingData);
         }
+
+       
     }
+
+
 }
