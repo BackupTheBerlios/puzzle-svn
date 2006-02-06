@@ -43,5 +43,25 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
             }
         }
         #endregion
+
+        #region Property InterceptorType
+        private VizInterceptorType interceptorType;
+        public virtual VizInterceptorType InterceptorType
+        {
+            get
+            {
+                return this.interceptorType;
+            }
+            set
+            {
+                this.interceptorType = value;
+            }
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return string.Format("{0} : {1}", TypeName, InterceptorType);
+        }
     }
 }

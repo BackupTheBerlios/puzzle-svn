@@ -54,8 +54,12 @@ namespace Puzzle.NAspect.Framework
                     VizConstructor vizConstructor = new VizConstructor();
                     vizConstructor.Name = constructor.Name;
 
-                    IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
+                   
 
+                    ParameterInfo[] paramInfos = constructor.GetParameters();
+                    SerializeParameters(vizConstructor ,paramInfos);
+
+                    IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
                     SerializeInterceptors(vizConstructor, interceptors);
                     vizType.Methods.Add(vizConstructor);
                 }
@@ -64,9 +68,13 @@ namespace Puzzle.NAspect.Framework
                     MethodInfo method = (MethodInfo)methodBase;
                     VizMethod vizMethod = new VizMethod();
                     vizMethod.Name = method.Name;
+                    vizMethod.ReturnType = method.ReturnType.Name;
+
+
+                    ParameterInfo[] paramInfos = method.GetParameters();
+                    SerializeParameters(vizMethod, paramInfos);
 
                     IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
-
                     SerializeInterceptors(vizMethod, interceptors);
 
                     vizType.Methods.Add(vizMethod);
@@ -77,6 +85,17 @@ namespace Puzzle.NAspect.Framework
 
             proxy.ProxyType = vizType;
             return proxy;
+        }
+
+        private static void SerializeParameters(VizMethodBase vizMethodBase, ParameterInfo[] paramInfos)
+        {
+            foreach (ParameterInfo paramInfo in paramInfos)
+            {
+                VizParameter vizParameter = new VizParameter();
+                vizParameter.Name = paramInfo.Name;
+                vizParameter.ParameterTypeName = paramInfo.ParameterType.Name;
+                vizMethodBase.Parameters.Add(vizParameter);
+            }
         }
 
         private void SerializeInterceptors(VizMethodBase vizMethodBase,IList interceptors)

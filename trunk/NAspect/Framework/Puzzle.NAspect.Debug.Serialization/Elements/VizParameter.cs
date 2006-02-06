@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
+    [Serializable]
     public enum VizParameterDirection
     {
         Val,

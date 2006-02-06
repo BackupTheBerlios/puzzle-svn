@@ -15,6 +15,7 @@ namespace Puzzle.Naspect.Debug
             SerializedProxy data = (SerializedProxy)objectProvider.GetObject ();
             //MessageBox.Show(data.ProxyType.FullName);
             AopProxyVisualizerForm form = new AopProxyVisualizerForm();
+            form.Proxy = data;
             windowService.ShowDialog(form);
         }
     }

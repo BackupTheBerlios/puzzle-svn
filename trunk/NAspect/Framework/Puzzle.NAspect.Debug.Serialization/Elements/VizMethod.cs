@@ -43,6 +43,24 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
             }
         }
         #endregion
+
+        protected string GetParamTypes()
+        {
+            string paramString = "";
+            foreach (VizParameter parameter in Parameters)
+            {
+                paramString += parameter.ParameterTypeName + ",";
+            }
+            if (paramString.Length > 0)
+                paramString = paramString.Substring(0,paramString.Length - 1);
+
+            return paramString;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     [Serializable]
@@ -78,5 +96,10 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
             }
         }
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("{1} ({2}) : {0}", ReturnType, Name, GetParamTypes ());
+        }
     }
 }
