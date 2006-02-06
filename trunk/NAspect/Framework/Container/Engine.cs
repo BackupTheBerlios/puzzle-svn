@@ -142,7 +142,9 @@ namespace Puzzle.NAspect.Framework
 					IList typeMixins = GetMixinsForType(type);
 
 					typeMixins.Add(typeof (AopProxyMixin));
+#if NET2
                     typeMixins.Add(typeof (SerializableProxyMixin));
+#endif
 
 					proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
 					if (proxyType == null)

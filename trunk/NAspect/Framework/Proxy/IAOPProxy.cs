@@ -10,7 +10,9 @@
 
 using System;
 using System.Collections;
+#if NET2
 using Puzzle.NAspect.Debug.Serialization;
+#endif
 
 namespace Puzzle.NAspect.Framework
 {

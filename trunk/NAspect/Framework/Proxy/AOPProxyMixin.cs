@@ -13,7 +13,9 @@ using System.Collections;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
 using System.Diagnostics;
+#if NET2
 using Puzzle.NAspect.Debug.Serialization;
+#endif
 
 namespace Puzzle.NAspect.Framework
 {

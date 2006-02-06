@@ -15,7 +15,9 @@ using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
 using System.Diagnostics;
+#if NET2
 using Puzzle.NAspect.Debug.Serialization;
+#endif
 
 namespace Puzzle.NAspect.Framework
 {
@@ -532,9 +534,10 @@ namespace Puzzle.NAspect.Framework
             if (mixinInterfaceType == typeof(IAopProxy))
                 pointcut = false;
 
+#if NET2
             if (mixinInterfaceType == typeof(ISerializableProxy))
                 pointcut = false;
-
+#endif
 
 			BuildMixinMethods(methods, typeBuilder, mixinField, aspects,pointcut);
 
