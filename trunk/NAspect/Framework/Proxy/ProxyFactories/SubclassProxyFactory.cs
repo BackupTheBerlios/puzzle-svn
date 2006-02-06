@@ -738,8 +738,11 @@ namespace Puzzle.NAspect.Framework
         private CustomAttributeBuilder DebuggerVisualizerBuilder()
         {
             Type t = typeof(DebuggerVisualizerAttribute);
-            ConstructorInfo ci = t.GetConstructor(new Type[] { typeof(string)});
-            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { "Puzzle.NAspect.Debug.AopProxyVisualizer, Puzzle.NAspect.Debug.NET2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3" }, new PropertyInfo[] { typeof(DebuggerVisualizerAttribute).GetProperty("Description") }, new object[] { "Aop Visualizer" });
+            ConstructorInfo ci = t.GetConstructor(new Type[] { typeof(string),typeof(string)});
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] { 
+                "Puzzle.Naspect.Debug.AopProxyVisualizer, Puzzle.Naspect.Debug, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3",
+                "Puzzle.Naspect.Debug.AopProxyObjectSource, Puzzle.Naspect.Debug, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3"
+            }, new PropertyInfo[] { typeof(DebuggerVisualizerAttribute).GetProperty("Description") }, new object[] { "Aop Visualizer" });
             
             return cb;
         }

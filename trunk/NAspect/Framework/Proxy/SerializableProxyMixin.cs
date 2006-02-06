@@ -16,13 +16,25 @@ using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
-	public class SerializableProxyMixin : ISerializableProxy
+	public class SerializableProxyMixin : ISerializableProxy , IProxyAware
 	{
+        private IAopProxy target;
         #region ISerializableProxy Members
 
         public SerializedProxy GetSerializedProxy()
         {
-            return null;
+            SerializedProxy proxy = new SerializedProxy();
+            proxy.TypeName = target.GetType().FullName;
+            return proxy;
+        }
+
+        #endregion
+
+        #region IProxyAware Members
+
+        public void SetProxy(IAopProxy target)
+        {
+            this.target = target;
         }
 
         #endregion

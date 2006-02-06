@@ -30,16 +30,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="AopProxyVisualizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PuzzleKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj">
+      <Project>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</Project>
+      <Name>Puzzle.NAspect.Debug.Serialization</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

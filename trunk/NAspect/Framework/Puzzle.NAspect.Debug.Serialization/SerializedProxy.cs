@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization
 {
+    [Serializable]
     public class SerializedProxy
     {
         #region Property TypeName 
