@@ -4,6 +4,7 @@ using System.Text;
 using Puzzle.NAspect.Debug.Serialization;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.Windows.Forms;
+using Puzzle.Naspect.Debug.Forms;
 
 namespace Puzzle.Naspect.Debug
 {
@@ -12,7 +13,9 @@ namespace Puzzle.Naspect.Debug
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {      
             SerializedProxy data = (SerializedProxy)objectProvider.GetObject ();
-            MessageBox.Show ("apa" + data.TypeName);
+            //MessageBox.Show(data.ProxyType.FullName);
+            AopProxyVisualizerForm form = new AopProxyVisualizerForm();
+            windowService.ShowDialog(form);
         }
     }
 

@@ -17,6 +17,14 @@ namespace Puzzle.NAspect.Framework
 {
 	public class MethodCache
 	{
+        //contains an arraylist of affected mixins for a proxytype
+        public static Hashtable mixinsLookup = new Hashtable();
+
+        //contains an arraylist of affected aspects for a proxytype
+        public static Hashtable aspectsLookup = new Hashtable();
+
+        //contains an arraylist of affected methods for a proxytype
+        public static Hashtable methodsLookup = new Hashtable();
 
         //contains the base methodinfo for each methodid (wrappername)
 		public static Hashtable methodLookup = new Hashtable();

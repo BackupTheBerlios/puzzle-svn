@@ -132,6 +132,10 @@ namespace Puzzle.NAspect.Framework
 
 		private void BuildLookupTables(Type baseType, Type proxyType, IList aspects, IList mixins)
 		{
+            MethodCache.methodsLookup[proxyType] = wrapperMethods;
+            MethodCache.aspectsLookup[proxyType] = aspects;
+            MethodCache.mixinsLookup[proxyType] = mixins;
+
 			foreach (string methodId in wrapperMethods)
 			{
 				MethodInfo wrapperMethod = proxyType.GetMethod(methodId, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
