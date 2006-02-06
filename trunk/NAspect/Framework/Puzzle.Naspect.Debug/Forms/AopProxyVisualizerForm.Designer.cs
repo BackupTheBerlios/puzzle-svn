@@ -36,6 +36,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 295);
             this.Name = "AopProxyVisualizerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AopProxyVisualizerForm";
             this.ResumeLayout(false);
 
