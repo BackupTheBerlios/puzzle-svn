@@ -24,7 +24,7 @@ namespace Puzzle.NAspect.Framework
         public SerializedProxy GetSerializedProxy()
         {
             SerializedProxy proxy = new SerializedProxy();
-            proxy.TypeName = "kalle anka"; // target.GetType().FullName;
+            proxy.TypeName = target.GetType().FullName;
             return proxy;
         }
 

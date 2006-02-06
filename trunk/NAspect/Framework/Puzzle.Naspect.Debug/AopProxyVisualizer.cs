@@ -23,9 +23,7 @@ namespace Puzzle.Naspect.Debug
             ISerializableProxy realProxy = target as ISerializableProxy;
            
             SerializedProxy serializedProxy = realProxy.GetSerializedProxy ();
-            SerializedProxy s2 = new  SerializedProxy();
-            s2.TypeName = serializedProxy.TypeName;
-            base.GetData(s2, outgoingData);
+            base.GetData(serializedProxy, outgoingData);
         }
 
        

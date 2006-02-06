@@ -15,6 +15,7 @@ using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
 using System.Diagnostics;
+using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -521,10 +522,17 @@ namespace Puzzle.NAspect.Framework
 
 		public void MixinType(TypeBuilder typeBuilder, Type mixinInterfaceType, FieldBuilder mixinField, IList aspects)
 		{
+            bool pointcut = true;
 			MethodInfo[] methods = mixinInterfaceType.GetMethods();
 
+            if (mixinInterfaceType == typeof(IAopProxy))
+                pointcut = false;
 
-			BuildMixinMethods(methods, typeBuilder, mixinField, aspects);
+            if (mixinInterfaceType == typeof(ISerializableProxy))
+                pointcut = false;
+
+
+			BuildMixinMethods(methods, typeBuilder, mixinField, aspects,pointcut);
 
 			Type[] inheritedInterfaces = mixinInterfaceType.GetInterfaces();
 			foreach (Type inheritedInterface in  inheritedInterfaces)
@@ -533,11 +541,12 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
-		private void BuildMixinMethods(MethodInfo[] methods, TypeBuilder typeBuilder, FieldBuilder mixinField, IList aspects)
+		private void BuildMixinMethods(MethodInfo[] methods, TypeBuilder typeBuilder, FieldBuilder mixinField, IList aspects,bool pointcut)
 		{
 			foreach (MethodInfo method in methods)
 			{
-				if (method.IsVirtual && !method.IsFinal && engine.PointCutMatcher.MethodShouldBeProxied(method, aspects))
+
+				if (pointcut && (method.IsVirtual && !method.IsFinal && engine.PointCutMatcher.MethodShouldBeProxied(method, aspects)))
 				{
 					BuildMixinMethod(typeBuilder, method, mixinField);
 				}
