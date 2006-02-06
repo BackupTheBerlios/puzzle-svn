@@ -4,11 +4,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{922AF6BF-1E97-4410-8124-D77CAF774499}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InMemFilter</RootNamespace>
-    <AssemblyName>InMemFilter</AssemblyName>
+    <RootNamespace>Puzzle.NAspect.Debug.Serialization</RootNamespace>
+    <AssemblyName>Puzzle.NAspect.Debug.Serialization</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,19 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Puzzle.NPath.Framework.NET2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Puzzle.NPath.Framework.NET2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Address.cs" />
-    <Compile Include="Person.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ISerializableProxy.cs" />
+    <Compile Include="SerializedProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PuzzleKey.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -50,4 +50,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /u $(TargetPath)
+"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /i $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -51,6 +51,21 @@ namespace InMemFilter
         }                        
         #endregion
 
+        #region Property Address 
+        private Address address = new Address ();
+        public Address Address
+        {
+            get
+            {
+                return this.address;
+            }
+            set
+            {
+                this.address = value;
+            }
+        }                        
+        #endregion
+
         public int SomeMethod(int param)
         {
             return param * 2;

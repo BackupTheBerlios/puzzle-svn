@@ -25,9 +25,6 @@ namespace KumoUnitTests
 
 			//note the "null" param is the state that was supposed to come from the previous level of proxying
 			SomeClass proxy = (SomeClass) e2.CreateProxy(proxyType,null);
-            IAopProxy iproxy = (IAopProxy)proxy;
-
-            object o = proxy.GetType().GetProperty("DebugObject");
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 			int result = proxy.MyIntMethod() ;

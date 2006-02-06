@@ -177,6 +177,7 @@
     <Compile Include="Proxy\ProxyParameter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\SerializableProxyMixin.cs" />
     <Compile Include="Proxy\Tools.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,6 +189,10 @@
     <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
       <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
       <Name>Puzzle.NCore.Framework NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj">
+      <Project>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</Project>
+      <Name>Puzzle.NAspect.Debug.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

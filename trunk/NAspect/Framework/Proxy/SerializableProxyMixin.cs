@@ -10,16 +10,21 @@
 
 using System;
 using System.Collections;
+using System.Reflection;
+using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
-	public interface IAopProxy 
+	public class SerializableProxyMixin : ISerializableProxy
 	{
-		IDictionary Data { get; }
+        #region ISerializableProxy Members
 
-		object HandleCall(IAopProxy target, string wrappermethodname, IList parameters, Type returntype);
+        public SerializedProxy GetSerializedProxy()
+        {
+            return null;
+        }
 
-        
-	}
+        #endregion
+    }
 }
