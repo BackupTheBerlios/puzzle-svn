@@ -55,8 +55,6 @@ namespace KumoUnitTests
 
 			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
 
-            Type t = Type.GetType("Puzzle.NAspect.Debug.AopProxyVisualizer, Puzzle.NAspect.Debug.NET2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3");
-
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
 

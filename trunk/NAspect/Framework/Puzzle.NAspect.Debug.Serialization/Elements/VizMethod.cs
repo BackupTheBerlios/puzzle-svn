@@ -44,7 +44,38 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
         #endregion
 
-        protected string GetParamTypes()
+        #region Property OwnerType
+        private VizType ownerType;
+        public virtual VizType OwnerType
+        {
+            get
+            {
+                return this.ownerType;
+            }
+            set
+            {
+                this.ownerType = value;
+            }
+        }
+        #endregion
+
+
+        public virtual string GetProxyText()
+        {
+            return "hello";
+        }
+
+        public virtual string GetRealText()
+        {
+            return "hello";
+        }
+
+        public virtual string GetCallSample()
+        {
+            return "hello";
+        }
+
+        public string GetParamTypes()
         {
             string paramString = "";
             foreach (VizParameter parameter in Parameters)
@@ -97,9 +128,28 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
         #endregion
 
+        public override string GetProxyText()
+        {
+            return string.Format("{0}.{1} ({2})",this.OwnerType.Name,this.Name, this.GetParamTypes());
+        }
+
+        public override string GetRealText()
+        {
+            if (this.Mixin == null)
+                return string.Format("{0}.{1} ({2})", this.OwnerType.BaseName, this.Name, this.GetParamTypes());
+            else
+                return string.Format("{0}.{1} ({2})", Mixin.TypeName, this.Name, this.GetParamTypes());
+        }
+
         public override string ToString()
         {
             return string.Format("{1} ({2}) : {0}", ReturnType, Name, GetParamTypes ());
         }
+
+        public override string GetCallSample()
+        {
+            return string.Format("MyObject.{0} ({1})", this.Name, this.GetParamTypes());
+        }
+
     }
 }

@@ -30,6 +30,12 @@ namespace Puzzle.NAspect.Framework
             vizType.Name = target.GetType().Name;
             vizType.FullName = target.GetType().FullName;
 
+            Type tmp = target.GetType();
+            while (typeof(IAopProxy).IsAssignableFrom(tmp))
+                tmp = tmp.BaseType;
+
+            vizType.BaseName = tmp.Name;
+
             IList mixins = (IList)MethodCache.mixinsLookup[target.GetType()];
             foreach (Type mixinType in mixins)
             {
@@ -61,6 +67,7 @@ namespace Puzzle.NAspect.Framework
 
                     IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
                     SerializeInterceptors(vizConstructor, interceptors);
+                    vizConstructor.OwnerType = vizType;
                     vizType.Methods.Add(vizConstructor);
                 }
                 else if (methodBase is MethodInfo)
@@ -76,7 +83,7 @@ namespace Puzzle.NAspect.Framework
 
                     IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
                     SerializeInterceptors(vizMethod, interceptors);
-
+                    vizMethod.OwnerType = vizType;
                     vizType.Methods.Add(vizMethod);
                 }
             }

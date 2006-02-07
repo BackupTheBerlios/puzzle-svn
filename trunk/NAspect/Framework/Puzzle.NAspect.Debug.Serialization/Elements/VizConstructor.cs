@@ -11,5 +11,20 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         {
             return string.Format(".ctor ({0})", GetParamTypes());
         }
+
+        public override string GetCallSample()
+        {
+            return string.Format("{0} MyObject = engine.CreateProxy<{0}> ({1})", this.OwnerType.BaseName , this.GetParamTypes());
+        }
+
+        public override string GetProxyText()
+        {
+            return string.Format("Constructor {0} ({1})", this.OwnerType.Name, this.GetParamTypes());
+        }
+
+        public override string GetRealText()
+        {
+            return string.Format("Constructor {0} ({1})", this.OwnerType.BaseName, this.GetParamTypes());
+        }
     }
 }

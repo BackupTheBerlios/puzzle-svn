@@ -37,6 +37,21 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
         #endregion
 
+        #region Property BaseName
+        private string baseName;
+        public virtual string BaseName
+        {
+            get
+            {
+                return this.baseName;
+            }
+            set
+            {
+                this.baseName = value;
+            }
+        }
+        #endregion
+
         #region Property Methods
         private List<VizMethodBase> methods = new List<VizMethodBase> ();
         public virtual List<VizMethodBase> Methods
