@@ -25,8 +25,14 @@ namespace Puzzle.NAspect.Framework
 	{
 		public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
 		{
-			if (aspects.Count == 0 && mixins.Count == 1)
+#if NET2
+			if (aspects.Count == 0 && mixins.Count == 2)
 				return baseType;
+#else
+            if (aspects.Count == 0 && mixins.Count == 1)
+				return baseType;
+#endif
+
 
 			SubclassProxyFactory factory = new SubclassProxyFactory(engine);
 
