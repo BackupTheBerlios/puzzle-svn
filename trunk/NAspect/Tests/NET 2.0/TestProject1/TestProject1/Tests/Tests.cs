@@ -18,13 +18,13 @@ namespace KumoUnitTests
 		{
 			Engine e1 = new Engine("DoubleProxy2Container1");
 			Engine e2 = new Engine("DoubleProxy2Container2");
-			e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "MyInt*", new IncreaseReturnValueInterceptor()));
-			e2.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "MyInt*", new IncreaseReturnValueInterceptor()));
+			e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "MyInt*", new IncreaseReturnValueInterceptor()));
+			e2.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "MyInt*", new IncreaseReturnValueInterceptor()));
 
-			Type proxyType = e1.CreateProxyType (typeof (SomeClass));
+			Type proxyType = e1.CreateProxyType (typeof (Foo));
 
 			//note the "null" param is the state that was supposed to come from the previous level of proxying
-			SomeClass proxy = (SomeClass) e2.CreateProxy(proxyType,null);
+			Foo proxy = (Foo) e2.CreateProxy(proxyType,null);
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 			int result = proxy.MyIntMethod() ;
@@ -36,10 +36,10 @@ namespace KumoUnitTests
 		public void DoubleProxy1Container()
 		{
 			Engine e1 = new Engine("DoubleProxy1Container");			
-			e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "MyInt*", new IncreaseReturnValueInterceptor()));			
+			e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "MyInt*", new IncreaseReturnValueInterceptor()));			
 
-			Type proxyType = e1.CreateProxyType (typeof (SomeClass));
-			SomeClass proxy = (SomeClass) e1.CreateProxy(proxyType,null);
+			Type proxyType = e1.CreateProxyType (typeof (Foo));
+			Foo proxy = (Foo) e1.CreateProxy(proxyType,null);
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 			int result = proxy.MyIntMethod() ;
@@ -51,9 +51,9 @@ namespace KumoUnitTests
 		public void CreateProxyWithInterceptor()
 		{
 			Engine c = new Engine("CreateProxyWithInterceptor");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "*", new ChangeReturnValueInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "*", new ChangeReturnValueInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
@@ -62,9 +62,9 @@ namespace KumoUnitTests
 		public void CreateProxyWithCtorParamsWithInterceptor()
 		{
 			Engine c = new Engine("CreateProxyWithCtorParamsWithInterceptor");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "*", new ChangeReturnValueInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "*", new ChangeReturnValueInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass),555,"hello");
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo),555,"hello");
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
@@ -74,7 +74,7 @@ namespace KumoUnitTests
 		{
 			Engine c = new Engine("CreateProxy");
 		
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
@@ -84,7 +84,7 @@ namespace KumoUnitTests
 		{
 			Engine c = new Engine("CreateProxyWithCtorParams");
 		
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass),555,"hello");
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo),555,"hello");
 
 			Assert.IsTrue(proxy != null, "failed to create proxified instance");
 		}
@@ -93,11 +93,11 @@ namespace KumoUnitTests
 		public void ChangeReturnValue()
 		{
 			Engine c = new Engine("ChangeReturnValue");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "*", new ChangeReturnValueInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "*", new ChangeReturnValueInterceptor()));
 
-			SomeClass normal = new SomeClass();
+			Foo normal = new Foo();
 			
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			Assert.IsTrue(normal.MyIntMethod() != proxy.MyIntMethod(), "return value has not been changed");
 		}
@@ -106,9 +106,9 @@ namespace KumoUnitTests
 		public void ChangeRefParam()
 		{
 			Engine c = new Engine("ChangeRefParam");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeRefParam", typeof (SomeClass), "*MyRefParamMethod*", new ChangeRefParamValueInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeRefParam", typeof (Foo), "*MyRefParamMethod*", new ChangeRefParamValueInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			string refString = "some value";
 			proxy.MyRefParamMethod(ref refString);
@@ -121,8 +121,8 @@ namespace KumoUnitTests
 		public void PassAndReturnRefParam()
 		{
 			Engine c = new Engine("PassAndReturnRefParam");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeRefParam", typeof (SomeClass), "*PassAndReturnRefParam*", new ChangeRefParamValueInterceptor()));
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeRefParam", typeof (Foo), "*PassAndReturnRefParam*", new ChangeRefParamValueInterceptor()));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			string refString = "some value";
 			string result = proxy.PassAndReturnRefParam(ref refString);
@@ -136,9 +136,9 @@ namespace KumoUnitTests
 		public void PointcutTargetMatch()
 		{
 			Engine c = new Engine("PointcutTargetMatch");
-			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (SomeClass), "*MyIntMethod*" /*<-only MyIntMethod */, new ChangeReturnValueInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "*MyIntMethod*" /*<-only MyIntMethod */, new ChangeReturnValueInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			Assert.IsTrue(proxy.MyIntMethod() != 0, "return value has not been changed");
 			Assert.IsTrue(proxy.MyOtherIntMethod() == 0, "return value has been changed");
@@ -148,9 +148,9 @@ namespace KumoUnitTests
 		public void RemoveException()
 		{
 			Engine c = new Engine("RemoveException");
-			c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof (SomeClass), "*", new RemoveExceptionInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof (Foo), "*", new RemoveExceptionInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			proxy.MyExceptionMethod();
 		}
@@ -160,20 +160,34 @@ namespace KumoUnitTests
 		public void AddException()
 		{
 			Engine c = new Engine("AddException");
-			c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof (SomeClass), "*", new AddExceptionInterceptor()));
+			c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof (Foo), "*", new AddExceptionInterceptor()));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			proxy.MyExceptionMethod();
 		}
 
         [TestMethod()]
+        [ExpectedException(typeof(NullReferenceException), "added exception")]
+        public void AddExceptionWithMultipleInterceptors()
+        {
+            Engine c = new Engine("AddExceptionWithMultipleInterceptors");
+            c.Configuration.Aspects.Add(new SignatureAspect("Security", typeof(Foo), "*MyExceptionMethod*", new SecurityInterceptor()));
+            c.Configuration.Aspects.Add(new SignatureAspect("Invariant", typeof(Foo), "*MyExceptionMethod*", new InvariantInterceptor()));
+            c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof(Foo), "*MyExceptionMethod*", new AddExceptionInterceptor()));
+
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            proxy.MyExceptionMethod();
+        }
+
+        [TestMethod()]
 		public void MixinTest()
 		{
 			Engine c = new Engine("MixinTest");
-			c.Configuration.Aspects.Add(new SignatureAspect("MixinTest", typeof (SomeClass), new Type[] {typeof (SayHelloMixin)}, new IPointcut[0]));
+			c.Configuration.Aspects.Add(new SignatureAspect("MixinTest", typeof (Foo), new Type[] {typeof (SayHelloMixin)}, new IPointcut[0]));
 
-			SomeClass proxy = (SomeClass) c.CreateProxy(typeof (SomeClass));
+			Foo proxy = (Foo) c.CreateProxy(typeof (Foo));
 
 			ISayHello sayHello = (ISayHello) proxy;
 

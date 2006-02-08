@@ -12,12 +12,15 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
     public class AfterMethodInvocation
     {
         private MethodInvocation invocation;
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public AfterMethodInvocation(MethodInvocation invocation)
         {
             this.invocation = invocation;

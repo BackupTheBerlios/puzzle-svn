@@ -126,6 +126,7 @@ namespace Puzzle.NAspect.Framework
                 VizInterceptor vizInterceptor = new VizInterceptor();
                 vizInterceptor.TypeName = interceptor.GetType().Name;
                 vizInterceptor.FullTypeName = interceptor.GetType().FullName;
+                vizInterceptor.InterceptorType = interceptorType;
 
                 vizMethodBase.Interceptors.Add(vizInterceptor);
             }

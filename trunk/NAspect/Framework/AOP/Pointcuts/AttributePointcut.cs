@@ -30,7 +30,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
-		public AttributePointcut(Type attributeType, IInterceptor[] interceptors)
+		public AttributePointcut(Type attributeType, IAroundInterceptor[] interceptors)
 		{
 			this.AttributeType = attributeType;
 			this.Interceptors = new ArrayList(interceptors);
@@ -40,10 +40,10 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
-		public AttributePointcut(Type attributeType, IInterceptor interceptor)
+		public AttributePointcut(Type attributeType, IAroundInterceptor interceptor)
 		{
 			this.AttributeType = attributeType;
-			this.Interceptors = new ArrayList(new IInterceptor[] {interceptor});
+            this.Interceptors = new ArrayList(new IAroundInterceptor[] { interceptor });
 		}
 
 		#endregion

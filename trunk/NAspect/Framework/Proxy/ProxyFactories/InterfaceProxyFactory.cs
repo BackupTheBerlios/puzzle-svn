@@ -127,7 +127,7 @@ namespace Puzzle.NAspect.Framework
 					{
 						if (pointcut.IsMatch(baseMethod))
 						{
-							foreach (IInterceptor interceptor in pointcut.Interceptors)
+							foreach (object interceptor in pointcut.Interceptors)
 							{
 								methodinterceptors.Add(interceptor);
 							}

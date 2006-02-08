@@ -49,7 +49,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Aspect
 
-		public SignatureAspect(string Name, string TargetName, string TargetMethodsignature, IInterceptor Interceptor)
+        public SignatureAspect(string Name, string TargetName, string TargetMethodsignature, IAroundInterceptor Interceptor)
 		{
 			this.Name = Name;
 			this.TargetTypeSignature = TargetName;
@@ -57,6 +57,28 @@ namespace Puzzle.NAspect.Framework.Aop
 		}
 
 		#endregion
+
+        #region Aspect
+
+        public SignatureAspect(string Name, string TargetName, string TargetMethodsignature, IAfterInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.TargetTypeSignature = TargetName;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
+
+        #region Aspect
+
+        public SignatureAspect(string Name, string TargetName, string TargetMethodsignature, IBeforeInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.TargetTypeSignature = TargetName;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
 
 		#region Aspect
 
@@ -84,7 +106,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Aspect
 
-		public SignatureAspect(string Name, Type TargetType, string TargetMethodsignature, IInterceptor Interceptor)
+		public SignatureAspect(string Name, Type TargetType, string TargetMethodsignature, IAroundInterceptor Interceptor)
 		{
 			this.Name = Name;
 			this.TargetTypeSignature = TargetType.FullName;
@@ -92,6 +114,28 @@ namespace Puzzle.NAspect.Framework.Aop
 		}
 
 		#endregion
+
+        #region Aspect
+
+        public SignatureAspect(string Name, Type TargetType, string TargetMethodsignature, IBeforeInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.TargetTypeSignature = TargetType.FullName;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
+
+        #region Aspect
+
+        public SignatureAspect(string Name, Type TargetType, string TargetMethodsignature, IAfterInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.TargetTypeSignature = TargetType.FullName;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
 
 		public override bool IsMatch(Type type)
 		{

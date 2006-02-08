@@ -40,8 +40,10 @@
     <Compile Include="Interceptors\ChangeReturnValueInterceptor.cs" />
     <Compile Include="Interceptors\ExplicitIFaceClonableInterceptor.cs" />
     <Compile Include="Interceptors\IncreaseReturnValueInterceptor.cs" />
+    <Compile Include="Interceptors\InvariantInterceptor.cs" />
     <Compile Include="Interceptors\PassiveInterceptor.cs" />
     <Compile Include="Interceptors\RemoveExceptionInterceptor.cs" />
+    <Compile Include="Interceptors\SecurityInterceptor.cs" />
     <Compile Include="Mixins\ISomeListMarkerIFace.cs" />
     <Compile Include="Mixins\MyMixin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

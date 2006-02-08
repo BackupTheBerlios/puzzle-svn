@@ -52,18 +52,20 @@ namespace Puzzle.NAspect.Framework
 			{               
                 if (Interceptors[Step] is IAfterInterceptor)
                 {
-                    object res = this.Proceed();
                     IAfterInterceptor afterInterceptor = (IAfterInterceptor)Interceptors[Step];
-                    afterInterceptor.AfterCall(new AfterMethodInvocation(this));
                     Step++;
+                    object res = this.Proceed();                    
+                    afterInterceptor.AfterCall(new AfterMethodInvocation(this));
+                    
                     return res;
                 }
                 else if (Interceptors[Step] is IBeforeInterceptor)
                 {                    
                     IBeforeInterceptor beforeInterceptor = (IBeforeInterceptor)Interceptors[Step];
                     beforeInterceptor.BeforeCall(new BeforeMethodInvocation(this));
-                    object res = this.Proceed();
                     Step++;
+                    object res = this.Proceed();
+                    
                     return res;
                 }
                 else

@@ -2,9 +2,9 @@ using System;
 
 namespace KumoUnitTests
 {
-	public class SomeClass
+	public class Foo
 	{
-		public SomeClass()
+		public Foo()
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace KumoUnitTests
 		}
 		#endregion
 
-		public SomeClass(int a,string b)
+		public Foo(int a,string b)
 		{
 			A = a;
 			B = b;

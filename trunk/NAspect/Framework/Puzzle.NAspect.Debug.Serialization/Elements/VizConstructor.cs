@@ -14,7 +14,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         public override string GetCallSample()
         {
-            return string.Format("{0} MyObject = engine.CreateProxy<{0}> ({1})", this.OwnerType.BaseName , this.GetParamTypes());
+            return string.Format("{0} My{2}Obj = engine.CreateProxy<{0}> ({1})", this.OwnerType.BaseName , this.GetParamTypes(),this.OwnerType.BaseName);
         }
 
         public override string GetProxyText()

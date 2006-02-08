@@ -48,7 +48,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Aspect
 
-		public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IInterceptor Interceptor)
+		public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IAroundInterceptor Interceptor)
 		{
 			this.Name = Name;
 			this.AttributeType = attributeType;
@@ -56,6 +56,28 @@ namespace Puzzle.NAspect.Framework.Aop
 		}
 
 		#endregion
+
+        #region Aspect
+
+        public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IAfterInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.AttributeType = attributeType;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
+
+        #region Aspect
+
+        public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IBeforeInterceptor Interceptor)
+        {
+            this.Name = Name;
+            this.AttributeType = attributeType;
+            this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
+
+        #endregion
 
 		public override bool IsMatch(Type type)
 		{

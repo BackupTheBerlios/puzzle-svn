@@ -72,8 +72,15 @@ namespace Puzzle.Naspect.Debug.Forms
             g.Clear(Color.White);
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
+            Rectangle consumerBounds = new Rectangle(30, 30, 450, 30);      
+            Rectangle bg = consumerBounds;
+            bg.Inflate(30, 20);
+            g.FillRectangle(Brushes.LightYellow, bg);
+
             Pen pen = new Pen (Brushes.Silver,5f);
             pen.EndCap = LineCap.ArrowAnchor;
+
+
 
             int bottom = 230 + 70 * vizMethod.Interceptors.Count-70;
             g.DrawLine(pen, 100, 70, 100, bottom);
@@ -100,28 +107,46 @@ namespace Puzzle.Naspect.Debug.Forms
         {
             Rectangle consumerBounds = new Rectangle(30, 00 + y, 450, 30);
             DrawBox(consumerBounds, g, Color.White, Color.FromArgb(255, 230, 210));
-            DrawString(consumerBounds.X + 30, consumerBounds.Y + 10, vizMethod.GetRealText(), g);
+            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, "The real provider", g);
+            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, vizMethod.GetRealText(), g);
         }
 
         private void DrawInterceptor(VizInterceptor vizInterceptor, Graphics g, int y)
         {
             Rectangle consumerBounds = new Rectangle(30, y, 450, 30);
-            DrawBox(consumerBounds, g, Color.White, Color.FromArgb(230, 210, 255));
-            DrawString(consumerBounds.X + 30, consumerBounds.Y + 10, vizInterceptor.TypeName, g);
+            if (vizInterceptor.InterceptorType == VizInterceptorType.After)
+            {
+                consumerBounds = new Rectangle(130, y, 350, 30);
+                DrawBox(consumerBounds, g, Color.White, Color.FromArgb(230, 210, 255));
+            }
+            else if (vizInterceptor.InterceptorType == VizInterceptorType.Around)
+            {
+                DrawBox(consumerBounds, g, Color.White, Color.FromArgb(230, 210, 255));
+            }
+            else if (vizInterceptor.InterceptorType == VizInterceptorType.Before)
+            {
+                consumerBounds = new Rectangle(30, y, 350, 30);
+                DrawBox(consumerBounds, g, Color.White, Color.FromArgb(230, 210, 255));
+            }
+
+            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, string.Format ("{0} interceptor",vizInterceptor.InterceptorType), g);
+            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, string.Format ("{0} : from aspect {1}",vizInterceptor.TypeName,"xxx"), g);
         }
 
         private void DrawProxy(VizMethodBase vizMethod, Graphics g)
         {
             Rectangle consumerBounds = new Rectangle(30, 30 + 70, 450, 30);
             DrawBox(consumerBounds, g, Color.White, Color.FromArgb(255, 210, 230));
-            DrawString(consumerBounds.X + 30, consumerBounds.Y + 10, vizMethod.GetProxyText(), g);
+            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, "Aop Proxy [Debugger hidden]", g);
+            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, vizMethod.GetProxyText(), g);
         }
 
         private void DrawConsumer(VizMethodBase vizMethod, Graphics g)
         {
-            Rectangle consumerBounds = new Rectangle(30, 30, 450, 30);
+            Rectangle consumerBounds = new Rectangle(30, 30, 450, 30);            
             DrawBox(consumerBounds, g, Color.White, Color.FromArgb(210, 255, 230));
-            DrawString(consumerBounds.X + 30, consumerBounds.Y + 10, vizMethod.GetCallSample(), g);
+            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, "Your consumer code", g);
+            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, vizMethod.GetCallSample(), g);
         }
 
         private void DrawString(int x, int y, string text, Graphics g)

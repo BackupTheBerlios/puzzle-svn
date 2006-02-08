@@ -148,7 +148,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         public override string GetCallSample()
         {
-            return string.Format("MyObject.{0} ({1})", this.Name, this.GetParamTypes());
+            return string.Format("My{0}Obj.{1} ({2})",this.OwnerType.BaseName, this.Name, this.GetParamTypes());
         }
 
     }

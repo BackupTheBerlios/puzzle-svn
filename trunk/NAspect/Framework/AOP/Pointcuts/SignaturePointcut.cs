@@ -30,7 +30,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
-		public SignaturePointcut(string targetMethodSignature, IInterceptor[] interceptors)
+        public SignaturePointcut(string targetMethodSignature, IAroundInterceptor[] interceptors)
 		{
 			this.TargetMethodSignature = targetMethodSignature;
 			this.Interceptors = new ArrayList(interceptors);
@@ -40,13 +40,33 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
-		public SignaturePointcut(string targetMethodSignature, IInterceptor interceptor)
+		public SignaturePointcut(string targetMethodSignature, IAroundInterceptor interceptor)
 		{
 			this.TargetMethodSignature = targetMethodSignature;
-			this.Interceptors = new ArrayList(new IInterceptor[] {interceptor});
+            this.Interceptors = new ArrayList(new IAroundInterceptor[] { interceptor });
 		}
 
 		#endregion
+
+        #region Pointcut
+
+        public SignaturePointcut(string targetMethodSignature, IAfterInterceptor interceptor)
+        {
+            this.TargetMethodSignature = targetMethodSignature;
+            this.Interceptors = new ArrayList(new IAfterInterceptor[] { interceptor });
+        }
+
+        #endregion
+
+        #region Pointcut
+
+        public SignaturePointcut(string targetMethodSignature, IBeforeInterceptor interceptor)
+        {
+            this.TargetMethodSignature = targetMethodSignature;
+            this.Interceptors = new ArrayList(new IBeforeInterceptor[] { interceptor });
+        }
+
+        #endregion
 
 		public override bool IsMatch(MethodBase method)
 		{
