@@ -59,6 +59,47 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
         #endregion
 
+        #region Property MayBreakFlow 
+        private bool mayBreakFlow;
+        public bool MayBreakFlow
+        {
+            get
+            {
+                return this.mayBreakFlow;
+            }
+            set
+            {
+                this.mayBreakFlow = value;
+            }
+        }                        
+        #endregion
+
+        #region Property IsOptional 
+        private bool isOptional;
+        public bool IsOptional
+        {
+            get
+            {
+                return this.isOptional;
+            }
+            set
+            {
+                this.isOptional = value;
+            }
+        }                        
+        #endregion
+        
+        #region Property ThrowsExceptionTypes 
+        private List<string> throwsExceptionTypes = new List<string> ();
+        public List<string> ThrowsExceptionTypes
+        {
+            get
+            {
+                return this.throwsExceptionTypes;
+            }
+        }                        
+        #endregion
+
         public override string ToString()
         {
             return string.Format("{0} : {1}", TypeName, InterceptorType);

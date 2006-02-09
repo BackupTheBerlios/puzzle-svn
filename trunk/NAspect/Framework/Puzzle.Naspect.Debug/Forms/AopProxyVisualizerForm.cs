@@ -67,7 +67,12 @@ namespace Puzzle.Naspect.Debug.Forms
                 lstInterceptors.Items.Add(interceptor);
             }
 
-            Bitmap bmp = new Bitmap(500, 230 + 70 * vizMethod.Interceptors.Count);
+            int height = 230 + 70 * vizMethod.Interceptors.Count;
+            foreach (VizInterceptor vizInterceptor in vizMethod.Interceptors)
+            {
+                height += vizInterceptor.ThrowsExceptionTypes.Count * 20;
+            }
+            Bitmap bmp = new Bitmap(500,height );
             Graphics g = Graphics.FromImage(bmp);
             g.Clear(Color.White);
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -82,7 +87,7 @@ namespace Puzzle.Naspect.Debug.Forms
 
 
 
-            int bottom = 230 + 70 * vizMethod.Interceptors.Count-70;
+            int bottom = height-70;
             g.DrawLine(pen, 100, 70, 100, bottom);
             g.DrawLine(pen, 410, bottom, 410, 70);
 
@@ -95,6 +100,7 @@ namespace Puzzle.Naspect.Debug.Forms
             {
                 DrawInterceptor(vizInterceptor, g, y);
                 y += 70;
+                y += vizInterceptor.ThrowsExceptionTypes.Count * 20;
             }
 
             DrawBase(vizMethod, g,y);
@@ -131,6 +137,33 @@ namespace Puzzle.Naspect.Debug.Forms
 
             DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, string.Format ("{0} interceptor",vizInterceptor.InterceptorType), g);
             DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, string.Format ("{0} : from aspect {1}",vizInterceptor.TypeName,"xxx"), g);
+
+            
+
+            if (vizInterceptor.MayBreakFlow)
+            {
+                Pen pen = new Pen(Brushes.Silver, 3f);
+                pen.EndCap = LineCap.ArrowAnchor;
+                pen.DashStyle = DashStyle.Dash;
+                g.DrawLine(pen, consumerBounds.X+80, consumerBounds.Y + 43, consumerBounds.Right-80, consumerBounds.Y + 43);
+                DrawString(consumerBounds.X + 90, consumerBounds.Y + 45, "May break flow", g);
+            }
+
+            if (vizInterceptor.ThrowsExceptionTypes.Count > 0)
+            {
+                Pen pen = new Pen(Brushes.Red, 1);
+                int y2 = consumerBounds.Y + 50;
+                foreach (string exception in vizInterceptor.ThrowsExceptionTypes)
+                {
+                    for (int x = 30; x < 350 + 130; x += 20)
+                    {
+                        g.DrawLine(pen, x, y2, x + 10, y2 + 5);
+                        g.DrawLine(pen, x + 10, y2 + 5, x + 20, y2);
+                    }
+                    DrawString(consumerBounds.X + 90, y2+6, string.Format ("May throw {0}",exception), g);
+                    y2 += 20;
+                }
+            }
         }
 
         private void DrawProxy(VizMethodBase vizMethod, Graphics g)

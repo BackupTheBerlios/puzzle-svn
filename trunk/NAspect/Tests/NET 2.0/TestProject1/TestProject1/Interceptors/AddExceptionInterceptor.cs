@@ -1,9 +1,13 @@
 using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace KumoUnitTests.Interceptors
 {
+    [IsOptional]
+    [MayBreakFlow]
+    [ReplaceException(typeof(Exception),typeof(NullReferenceException))]
 	public class AddExceptionInterceptor : IInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
@@ -21,7 +25,5 @@ namespace KumoUnitTests.Interceptors
 
 			return res;
 		}
-
-
 	}
 }

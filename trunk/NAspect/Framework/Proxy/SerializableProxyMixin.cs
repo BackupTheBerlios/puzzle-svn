@@ -14,6 +14,7 @@ using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Debug.Serialization;
 using Puzzle.NAspect.Debug.Serialization.Elements;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -127,6 +128,22 @@ namespace Puzzle.NAspect.Framework
                 vizInterceptor.TypeName = interceptor.GetType().Name;
                 vizInterceptor.FullTypeName = interceptor.GetType().FullName;
                 vizInterceptor.InterceptorType = interceptorType;
+
+                if (interceptor.GetType().GetCustomAttributes(typeof(MayBreakFlow),false).Length > 0)
+                {
+                    vizInterceptor.MayBreakFlow = true;
+                }
+
+                if (interceptor.GetType().GetCustomAttributes(typeof(IsOptional), false).Length > 0)
+                {
+                    vizInterceptor.IsOptional = true;
+                }
+
+                object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof(Throws), false);
+                foreach (Throws throws in exceptionTypes)
+                {
+                    vizInterceptor.ThrowsExceptionTypes.Add(throws.ExceptionType.Name);
+                }
 
                 vizMethodBase.Interceptors.Add(vizInterceptor);
             }
