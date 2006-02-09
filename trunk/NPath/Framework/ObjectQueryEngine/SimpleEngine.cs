@@ -10,6 +10,7 @@
 
 using Puzzle.NPath.Framework.CodeDom;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Puzzle.NPath.Framework
 {
@@ -28,5 +29,23 @@ namespace Puzzle.NPath.Framework
             npathQuery = "select * from tmp " + npathQuery;
             return engine.GetObjectsByNPath (npathQuery,sourceList);
         }
+
+#if NET2
+        public IList<T> Select<T>(string npathQuery, IList<T> sourceList)
+        {
+            List<T> tmp = new List<T>(sourceList);
+
+            npathQuery = "select * from tmp " + npathQuery;
+            IList res = engine.GetObjectsByNPath(npathQuery, tmp);
+
+            tmp.Clear();
+            foreach (T item in res)
+            {
+                tmp.Add(item);
+            }
+            
+            return tmp;
+        }
+#endif
     }
 }
