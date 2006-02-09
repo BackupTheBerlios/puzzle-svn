@@ -88,6 +88,7 @@ namespace InMemFilter
 
             //run the query
             resultList = engine.Select<Person>(npathQuery, realList);
+            
             //-------------
 
             int i=1;
