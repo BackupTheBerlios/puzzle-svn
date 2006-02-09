@@ -134,9 +134,9 @@ namespace Puzzle.NAspect.Framework
                     vizInterceptor.MayBreakFlow = true;
                 }
 
-                if (interceptor.GetType().GetCustomAttributes(typeof(IsOptional), false).Length > 0)
+                if (interceptor.GetType().GetCustomAttributes(typeof(IsRequired), false).Length > 0)
                 {
-                    vizInterceptor.IsOptional = true;
+                    vizInterceptor.IsRequired = true;
                 }
 
                 object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof(Throws), false);

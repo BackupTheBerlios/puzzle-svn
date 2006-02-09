@@ -45,13 +45,34 @@ namespace Puzzle.NAspect.Framework.Interception
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class IsOptional : Attribute
+    public class IsRequired : Attribute
     {
-        public IsOptional()
+        #region Property required 
+        private bool required;
+        public bool Required
         {
+            get
+            {
+                return this.required;
+            }
+            set
+            {
+                this.required = value;
+            }
+        }                        
+        #endregion
+
+        public IsRequired()
+        {
+        }
+
+        public IsRequired(bool required)
+        {
+            this.Required = required;
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
     public class Throws : Attribute
     {
         #region Property ExceptionType 
@@ -75,6 +96,7 @@ namespace Puzzle.NAspect.Framework.Interception
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class)]
     public class Catches : Attribute
     {
         #region Property ExceptionType
@@ -98,6 +120,7 @@ namespace Puzzle.NAspect.Framework.Interception
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class)]
     public class ReplaceException : Attribute
     {
         #region Property CatchType 

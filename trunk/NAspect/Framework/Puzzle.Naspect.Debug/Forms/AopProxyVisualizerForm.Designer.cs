@@ -49,7 +49,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.lstMethods.IntegralHeight = false;
             this.lstMethods.Location = new System.Drawing.Point(10, 42);
             this.lstMethods.Name = "lstMethods";
-            this.lstMethods.Size = new System.Drawing.Size(226, 294);
+            this.lstMethods.Size = new System.Drawing.Size(225, 294);
             this.lstMethods.TabIndex = 0;
             this.lstMethods.SelectedIndexChanged += new System.EventHandler(this.lstMethods_SelectedIndexChanged);
             // 
@@ -60,7 +60,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.lblTypeName.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblTypeName.Location = new System.Drawing.Point(10, 10);
             this.lblTypeName.Name = "lblTypeName";
-            this.lblTypeName.Size = new System.Drawing.Size(226, 32);
+            this.lblTypeName.Size = new System.Drawing.Size(225, 32);
             this.lblTypeName.TabIndex = 1;
             this.lblTypeName.Text = "label1";
             this.lblTypeName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -93,7 +93,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(539, 340);
+            this.panel1.Size = new System.Drawing.Size(540, 340);
             this.panel1.TabIndex = 4;
             // 
             // picInterceptors
@@ -123,7 +123,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(3);
             this.splitContainer1.Size = new System.Drawing.Size(795, 346);
-            this.splitContainer1.SplitterDistance = 246;
+            this.splitContainer1.SplitterDistance = 245;
             this.splitContainer1.TabIndex = 5;
             // 
             // AopProxyVisualizerForm
@@ -134,10 +134,10 @@ namespace Puzzle.Naspect.Debug.Forms
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.lblMethodName);
             this.Controls.Add(this.lstInterceptors);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "AopProxyVisualizerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AopProxyVisualizerForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AopProxyVisualizerForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

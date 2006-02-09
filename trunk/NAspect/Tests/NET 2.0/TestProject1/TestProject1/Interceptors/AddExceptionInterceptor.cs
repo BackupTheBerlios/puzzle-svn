@@ -5,7 +5,7 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace KumoUnitTests.Interceptors
 {
-    [IsOptional]
+    [IsRequired]
     [MayBreakFlow]
     [ReplaceException(typeof(Exception),typeof(NullReferenceException))]
 	public class AddExceptionInterceptor : IInterceptor

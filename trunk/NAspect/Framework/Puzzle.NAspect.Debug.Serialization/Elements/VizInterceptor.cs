@@ -75,16 +75,16 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         #endregion
 
         #region Property IsOptional 
-        private bool isOptional;
-        public bool IsOptional
+        private bool isRequired;
+        public bool IsRequired
         {
             get
             {
-                return this.isOptional;
+                return this.isRequired;
             }
             set
             {
-                this.isOptional = value;
+                this.isRequired = value;
             }
         }                        
         #endregion
