@@ -10,7 +10,7 @@ namespace KumoUnitTests
 
 		#region Public Property B
 		private string b;
-		public string B
+        public virtual string B
 		{
 			get
 			{
@@ -25,7 +25,7 @@ namespace KumoUnitTests
 
 		#region Public Property A
 		private int a;
-		public int A
+		public virtual int A
 		{
 			get
 			{

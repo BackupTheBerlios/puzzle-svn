@@ -172,12 +172,12 @@ namespace KumoUnitTests
         public void AddExceptionWithMultipleInterceptors()
         {
             Engine c = new Engine("AddExceptionWithMultipleInterceptors");
-            c.Configuration.Aspects.Add(new SignatureAspect("Security", typeof(Foo), "*MyExceptionMethod*", new SecurityInterceptor()));
+            c.Configuration.Aspects.Add(new SignatureAspect("Security", typeof(Foo), "*", new SecurityInterceptor()));
             c.Configuration.Aspects.Add(new SignatureAspect("Invariant", typeof(Foo), "*MyExceptionMethod*", new InvariantInterceptor()));
             c.Configuration.Aspects.Add(new SignatureAspect("RemoveException", typeof(Foo), "*MyExceptionMethod*", new AddExceptionInterceptor()));
 
-            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
-
+            Foo proxy = c.CreateProxy<Foo>();
+            
             proxy.MyExceptionMethod();
         }
 

@@ -54,25 +54,20 @@ namespace Puzzle.Naspect.Debug.Forms
                 return;
 
             VizMethodBase vizMethod = (VizMethodBase)lstMethods.SelectedItem;
-
+            
             SelectMethod(vizMethod);
         }
 
         private void SelectMethod(VizMethodBase vizMethod)
         {
-            lblMethodName.Text = vizMethod.ToString ();
-            lstInterceptors.Items.Clear();
-            foreach (VizInterceptor interceptor in vizMethod.Interceptors)
-            {
-                lstInterceptors.Items.Add(interceptor);
-            }
+            
 
             int height = 230 + 70 * vizMethod.Interceptors.Count;
             foreach (VizInterceptor vizInterceptor in vizMethod.Interceptors)
             {
-                height += vizInterceptor.ThrowsExceptionTypes.Count * 20;
+                height += vizInterceptor.ThrowsExceptionTypes.Count * 15;
             }
-            Bitmap bmp = new Bitmap(700,height );
+            Bitmap bmp = new Bitmap(800,height );
             Graphics g = Graphics.FromImage(bmp);
             g.Clear(Color.White);
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -100,7 +95,7 @@ namespace Puzzle.Naspect.Debug.Forms
             {
                 DrawInterceptor(vizInterceptor, g, y);
                 y += 70;
-                y += vizInterceptor.ThrowsExceptionTypes.Count * 20;
+                y += vizInterceptor.ThrowsExceptionTypes.Count * 15;
             }
 
             DrawBase(vizMethod, g,y);
@@ -113,7 +108,7 @@ namespace Puzzle.Naspect.Debug.Forms
         {
             Rectangle consumerBounds = new Rectangle(30, 00 + y, 450, 30);
             DrawBox(consumerBounds, g, Color.White, Color.FromArgb(255, 230, 210));
-            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, "The real provider", g);
+            DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, "Provider [Aop Target]", g);
             DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, vizMethod.GetRealText(), g);
         }
 
@@ -146,6 +141,9 @@ namespace Puzzle.Naspect.Debug.Forms
                     g.DrawLine(pen, x, y2, x + 10, y2 + 5);
                     g.DrawLine(pen, x + 10, y2 + 5, x + 20, y2);
                 }
+
+                Rectangle exceptionBounds = new Rectangle(350 + 130 + 25 + 5, y2-5, 200, vizInterceptor.ThrowsExceptionTypes.Count * 15 + 5);
+                DrawBox(exceptionBounds, g, Color.White, Color.LightYellow);
 
                 foreach (string exception in vizInterceptor.ThrowsExceptionTypes)
                 {
@@ -210,6 +208,72 @@ namespace Puzzle.Naspect.Debug.Forms
             LinearGradientBrush bgbrush = new LinearGradientBrush(bounds, startColor, endColor, 0, false);
             g.FillRectangle(bgbrush, bounds);
             g.DrawRectangle(Pens.DarkGray, bounds);
+        }
+
+        private void lstMethods_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            bool selected = (e.State & DrawItemState.Selected) != 0;
+            if (selected)
+            {
+                Color c1 = SystemColors.ActiveCaption;
+                Color c2 = Color.White;
+                Color bgColor = Tools.MixColors(c1, c2);
+                bgColor = Tools.MixColors(bgColor, c2);
+                SolidBrush bgBrush = new SolidBrush(bgColor);
+                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+                Rectangle borderBounds = e.Bounds;
+                borderBounds.Width--;
+                borderBounds.Height--;
+                e.Graphics.DrawRectangle(SystemPens.ActiveCaption, borderBounds);
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+            }
+            
+
+            if (e.Index < 0)
+                return;
+
+            
+
+
+            VizMethodBase method = (VizMethodBase)lstMethods.Items[e.Index];
+
+            if (method is VizConstructor)
+            {
+                VizConstructor ctor = (VizConstructor)method;
+                imlIcons.Draw(e.Graphics, 3, e.Bounds.Y + 2, 1);
+                string text = string.Format("ctor: {0} ({1})", ctor.OwnerType.Name, ctor.GetParamTypes ());
+                e.Graphics.DrawString(text, lstMethods.Font, Brushes.Black, 25, e.Bounds.Y + 3);
+
+            }
+
+            Brush fgBrush = Brushes.Black;
+
+            if (method is VizMethod)
+            {
+                if (method.Name.StartsWith("get_"))
+                {
+                    imlIcons.Draw(e.Graphics, 3, e.Bounds.Y + 3, 2);
+                    string text = string.Format("getter: {0}", method.Name.Substring(4));
+                    e.Graphics.DrawString(text,lstMethods.Font,Brushes.Black,25,e.Bounds.Y+3);
+                }
+                else if (method.Name.StartsWith("set_"))
+                {
+                    imlIcons.Draw(e.Graphics, 3, e.Bounds.Y + 3, 2);
+                    string text = string.Format("setter: {0}", method.Name.Substring(4));
+                    e.Graphics.DrawString(text, lstMethods.Font, Brushes.Black, 25, e.Bounds.Y + 3);
+                }
+                else
+                {
+                    VizMethod meth = (VizMethod)method;
+                    imlIcons.Draw(e.Graphics, 3, e.Bounds.Y + 2, 0);
+                    string text = string.Format("{0} {1} ({2})", meth.ReturnType,meth.Name,meth.GetParamTypes ());
+                    e.Graphics.DrawString(text, lstMethods.Font, Brushes.Black, 25, e.Bounds.Y + 3);
+                }
+            }
+
         }
     }
 }

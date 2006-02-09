@@ -39,6 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AopProxyVisualizer.cs" />
+    <Compile Include="Controls\Caption.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Caption.Designer.cs">
+      <DependentUpon>Caption.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AopProxyVisualizerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -51,6 +57,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PuzzleKey.snk" />
@@ -63,6 +70,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Caption.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Caption.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AopProxyVisualizerForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AopProxyVisualizerForm.cs</DependentUpon>
