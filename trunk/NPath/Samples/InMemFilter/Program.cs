@@ -10,9 +10,9 @@ namespace InMemFilter
     {
         static void Main(string[] args)
         {
-            
 
-            IList realList = new List<Person>();
+
+            List<Person> realList = new List<Person>();
 
             Person p1 = new Person();
             p1.Age = 11;
@@ -77,17 +77,17 @@ namespace InMemFilter
 
         }
 
-        private static void RunQuery(string npathQuery, IList realList)
+        private static void RunQuery(string npathQuery, List<Person> realList)
         {
             Console.WriteLine ("Running query:");
             Console.WriteLine (npathQuery);
             Console.WriteLine ();
             SimpleEngine engine = new SimpleEngine();
-            IList resultList;
+            IList<Person> resultList;
 
 
             //run the query
-            resultList = engine.Select(npathQuery, realList);
+            resultList = engine.Select<Person>(npathQuery, realList);
             //-------------
 
             int i=1;
