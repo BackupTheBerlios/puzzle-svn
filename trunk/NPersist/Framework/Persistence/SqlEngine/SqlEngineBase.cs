@@ -129,7 +129,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			else
 			{
 				rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-				if (!(rowsAffected == 1))
+				if (rowsAffected < 1)
 				{
 					throw new RowNotInsertedException("A new row was not inserted in the data source for a new object."); // do not localize
 				}
