@@ -260,7 +260,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			int rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
 			parameters.Clear();
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
-			if (!(rowsAffected == 1))
+			if (rowsAffected < 1)
 			{
 				if (!(SqlEngineManager.Context.PersistenceManager.GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 				{
