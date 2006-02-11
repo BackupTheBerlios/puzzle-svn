@@ -159,7 +159,6 @@
     </Compile>
     <Compile Include="Proxy\Attributes\InterceptorAttributes.cs" />
     <Compile Include="Proxy\BeforeMethodInvocation.cs" />
-    <Compile Include="Proxy\Debug\FakeReference.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>
     </Compile>
