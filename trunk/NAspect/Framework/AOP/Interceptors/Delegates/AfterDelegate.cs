@@ -8,11 +8,13 @@
 // *
 // *
 
-namespace Puzzle.NAspect.Framework.Aop
+using System;
+using System.Collections;
+using System.Reflection;
+using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
+
+namespace Puzzle.NAspect.Framework.Interception
 {
-    //kept for backwards compatabillity (pre around/before/after introduction)
-	public interface IInterceptor : IAroundInterceptor
-	{
-		
-	}
+	public delegate void AfterDelegate(AfterMethodInvocation call);      
 }

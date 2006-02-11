@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace TestApp
 {

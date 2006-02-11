@@ -8,9 +8,9 @@
 // *
 // *
 
-namespace Puzzle.NAspect.Framework.Aop
+namespace Puzzle.NAspect.Framework.Interception
 {
-	public interface IAfterInterceptor
+    public interface IAfterInterceptor : IInterceptor
 	{
         void AfterCall(AfterMethodInvocation call);        
 	}

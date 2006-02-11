@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework.Aop
 {

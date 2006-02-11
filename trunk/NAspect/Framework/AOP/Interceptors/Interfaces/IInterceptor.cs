@@ -8,10 +8,10 @@
 // *
 // *
 
-namespace Puzzle.NAspect.Framework.Aop
+namespace Puzzle.NAspect.Framework.Interception
 {
-	public interface IAroundInterceptor
-	{
-        object HandleCall(MethodInvocation call);
-	}
+    public interface IInterceptor
+    {
+
+    }
 }

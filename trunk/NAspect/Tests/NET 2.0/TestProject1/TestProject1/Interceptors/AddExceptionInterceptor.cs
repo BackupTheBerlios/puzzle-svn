@@ -8,7 +8,7 @@ namespace KumoUnitTests.Interceptors
     [IsRequired]
     [MayBreakFlow]
     [ReplaceException(typeof(Exception),typeof(NullReferenceException))]
-	public class AddExceptionInterceptor : IInterceptor
+    public class AddExceptionInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{

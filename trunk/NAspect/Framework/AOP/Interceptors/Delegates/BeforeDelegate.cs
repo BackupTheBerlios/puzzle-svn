@@ -8,10 +8,13 @@
 // *
 // *
 
-namespace Puzzle.NAspect.Framework.Aop
+using System;
+using System.Collections;
+using System.Reflection;
+using Puzzle.NAspect.Framework.Aop;
+using System.Diagnostics;
+
+namespace Puzzle.NAspect.Framework.Interception
 {
-	public interface IBeforeInterceptor
-	{
-        void BeforeCall(BeforeMethodInvocation call);        
-	}
+    public delegate void BeforeDelegate(BeforeMethodInvocation call);
 }
