@@ -147,16 +147,9 @@ namespace Puzzle.NAspect.Framework
 					typeMixins.Add(typeof (AopProxyMixin));
 
 #if NET2
-                    try
+                    if (SerializerIsAvalable())
                     {
-                        if (SerializerIsAvalable())
-                        {
-                            AddSerializerMixin(typeMixins);
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("bla");
+                        AddSerializerMixin(typeMixins);
                     }
 #endif
 
@@ -266,7 +259,7 @@ namespace Puzzle.NAspect.Framework
             if (!serializerDoOnce)
             {
                 serializerDoOnce = true;
-                Type t = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization", false);
+                Type t = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3", false);
                 if (t == null)
                 {
                     serializerIsAvalable = false;
