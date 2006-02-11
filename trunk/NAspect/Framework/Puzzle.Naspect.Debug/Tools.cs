@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace Puzzle.Naspect.Debug
+namespace Puzzle.NAspect.Debug
 {
     class Tools
     {

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "Framework\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Naspect.Debug", "Framework\Puzzle.Naspect.Debug\Puzzle.Naspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug", "Framework\Puzzle.Naspect.Debug\Puzzle.NAspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

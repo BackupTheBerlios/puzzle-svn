@@ -7,8 +7,8 @@
     <ProjectGuid>{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Puzzle.Naspect.Debug</RootNamespace>
-    <AssemblyName>Puzzle.Naspect.Debug</AssemblyName>
+    <RootNamespace>Puzzle.NAspect.Debug</RootNamespace>
+    <AssemblyName>Puzzle.NAspect.Debug</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -96,7 +96,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /u $(TargetPath)
-"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /i $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "$(DevEnvDir)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -4,9 +4,9 @@ using System.Text;
 using Puzzle.NAspect.Debug.Serialization;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.Windows.Forms;
-using Puzzle.Naspect.Debug.Forms;
+using Puzzle.NAspect.Debug.Forms;
 
-namespace Puzzle.Naspect.Debug
+namespace Puzzle.NAspect.Debug
 {
     public class AopProxyVisualizer : DialogDebuggerVisualizer
     {

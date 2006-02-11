@@ -1,4 +1,4 @@
-namespace Puzzle.Naspect.Debug.Forms
+namespace Puzzle.NAspect.Debug.Forms
 {
     partial class AopProxyVisualizerForm
     {
@@ -34,7 +34,7 @@ namespace Puzzle.Naspect.Debug.Forms
             this.panel1 = new System.Windows.Forms.Panel();
             this.picInterceptors = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.lblTypeName = new Puzzle.Naspect.Debug.Controls.Caption();
+            this.lblTypeName = new Puzzle.NAspect.Debug.Controls.Caption();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -78,7 +78,7 @@ namespace Puzzle.Naspect.Debug.Forms
             // 
             // picInterceptors
             // 
-            this.picInterceptors.Image = global::Puzzle.Naspect.Debug.Properties.Resources.interceptor;
+            this.picInterceptors.Image = global::Puzzle.NAspect.Debug.Properties.Resources.interceptor;
             this.picInterceptors.Location = new System.Drawing.Point(0, -1);
             this.picInterceptors.Name = "picInterceptors";
             this.picInterceptors.Size = new System.Drawing.Size(330, 462);
@@ -219,7 +219,7 @@ namespace Puzzle.Naspect.Debug.Forms
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tpInterception;
         private System.Windows.Forms.TabPage tpComposition;
-        private Puzzle.Naspect.Debug.Controls.Caption lblTypeName;
+        private Puzzle.NAspect.Debug.Controls.Caption lblTypeName;
         private System.Windows.Forms.ImageList imlIcons;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

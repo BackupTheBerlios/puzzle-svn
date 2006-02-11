@@ -9,7 +9,7 @@ using Puzzle.NAspect.Debug.Serialization;
 using Puzzle.NAspect.Debug.Serialization.Elements;
 using System.Drawing.Drawing2D;
 
-namespace Puzzle.Naspect.Debug.Forms
+namespace Puzzle.NAspect.Debug.Forms
 {
     public partial class AopProxyVisualizerForm : Form
     {

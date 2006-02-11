@@ -1,4 +1,4 @@
-namespace Puzzle.Naspect.Debug.Controls
+namespace Puzzle.NAspect.Debug.Controls
 {
     partial class Caption
     {

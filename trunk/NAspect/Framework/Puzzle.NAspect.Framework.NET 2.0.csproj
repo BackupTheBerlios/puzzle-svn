@@ -75,6 +75,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -159,6 +160,7 @@
     </Compile>
     <Compile Include="Proxy\Attributes\InterceptorAttributes.cs" />
     <Compile Include="Proxy\BeforeMethodInvocation.cs" />
+    <Compile Include="Proxy\Debug\FakeReference.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -178,7 +180,7 @@
     <Compile Include="Proxy\ProxyParameter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\SerializableProxyMixin.cs" />
+    <Compile Include="Proxy\Debug\SerializableProxyMixin.cs" />
     <Compile Include="Proxy\Tools.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -194,6 +196,10 @@
     <ProjectReference Include="Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj">
       <Project>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</Project>
       <Name>Puzzle.NAspect.Debug.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="Puzzle.Naspect.Debug\Puzzle.NAspect.Debug.csproj">
+      <Project>{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}</Project>
+      <Name>Puzzle.NAspect.Debug</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
