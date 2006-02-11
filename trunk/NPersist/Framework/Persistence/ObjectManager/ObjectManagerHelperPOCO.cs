@@ -175,6 +175,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
 			FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap,type,propertyName);
+			if (fieldInfo == null)
+				throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + type.Name);
 			return fieldInfo.GetValue(obj) ;
 
 		}
@@ -188,6 +190,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
 			FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap,type,propertyName);
+			if (fieldInfo == null)
+				throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + type.Name);
 			if (fieldInfo.FieldType.IsEnum)
 			{
 				if (value != null)
