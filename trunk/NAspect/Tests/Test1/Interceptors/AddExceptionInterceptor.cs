@@ -1,10 +1,11 @@
 using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace KumoUnitTests.Interceptors
 {
-	public class AddExceptionInterceptor : IInterceptor
+	public class AddExceptionInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{

@@ -9,15 +9,16 @@
 // *
 using System;
 using Puzzle.NAspect.Framework;
+using Puzzle.NAspect.Framework.Interception;
 using Puzzle.NPersist.Framework.Interfaces;
-using IInterceptor = Puzzle.NAspect.Framework.Aop.IInterceptor;
+
 
 namespace Puzzle.NPersist.Framework.Aop
 {
 	/// <summary>
 	/// Summary description for NPersistCtorInterceptor.
 	/// </summary>
-	public class NPersistCtorInterceptor : IInterceptor
+	public class NPersistCtorInterceptor : IAroundInterceptor
 	{
 		public NPersistCtorInterceptor()
 		{

@@ -9,8 +9,9 @@
 // *
 using System;
 using Puzzle.NAspect.Framework;
+using Puzzle.NAspect.Framework.Interception;
 using Puzzle.NPersist.Framework.Interfaces;
-using IInterceptor = Puzzle.NAspect.Framework.Aop.IInterceptor;
+
 
 namespace Puzzle.NPersist.Framework.Aop
 
@@ -18,7 +19,7 @@ namespace Puzzle.NPersist.Framework.Aop
 	/// <summary>
 	/// Summary description for NPersistPropertyInterceptor.
 	/// </summary>
-	public class NPersistPropertyInterceptor : IInterceptor
+	public class NPersistPropertyInterceptor : IAroundInterceptor
 	{
 		public NPersistPropertyInterceptor()
 		{

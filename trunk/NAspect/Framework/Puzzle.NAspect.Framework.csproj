@@ -134,22 +134,75 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\IAfterInterceptor.cs"
+                    RelPath = "AOP\Interceptors\Attributes\InterceptorAttributes.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\IAroundInterceptor.cs"
+                    RelPath = "AOP\Interceptors\Attributes\.svn\empty-file"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\entries"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\format"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\README.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\prop-base\InterceptorAttributes.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\props\InterceptorAttributes.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Attributes\.svn\text-base\InterceptorAttributes.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\prop-base\" />
+                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\props\" />
+                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\text-base\" />
+                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\wcprops\" />
+                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\wcprops\" />
+                <File
+                    RelPath = "AOP\Interceptors\Delegates\AfterDelegate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\IBeforeInterceptor.cs"
+                    RelPath = "AOP\Interceptors\Delegates\AroundDelegate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\IInterceptor.cs"
+                    RelPath = "AOP\Interceptors\Delegates\BeforeDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Interfaces\IAfterInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Interfaces\IAroundInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Interfaces\IBeforeInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Interceptors\Interfaces\IInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -239,7 +292,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Proxy\MethodInvokation.cs"
+                    RelPath = "Proxy\MethodInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

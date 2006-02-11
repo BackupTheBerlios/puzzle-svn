@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace CacheSample
 {
-	public class CacheInterceptor : IInterceptor
+	public class CacheInterceptor : IAroundInterceptor
 	{
 		private Hashtable cache = new Hashtable();
 

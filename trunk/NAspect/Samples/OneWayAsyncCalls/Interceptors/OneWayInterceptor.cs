@@ -1,10 +1,11 @@
 using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace OneWayAsyncCalls.Interceptors
 {
-	public class OneWayInterceptor : IInterceptor
+	public class OneWayInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{

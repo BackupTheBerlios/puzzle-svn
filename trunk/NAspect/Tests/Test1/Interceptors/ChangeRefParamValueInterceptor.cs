@@ -1,9 +1,10 @@
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace KumoUnitTests.Interceptors
 {
-	public class ChangeRefParamValueInterceptor : IInterceptor
+	public class ChangeRefParamValueInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{

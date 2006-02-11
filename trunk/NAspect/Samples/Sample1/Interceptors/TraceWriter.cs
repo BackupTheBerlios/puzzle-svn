@@ -1,10 +1,11 @@
 using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace ConsoleApplication1
 {
-	public class TraceWriter : IInterceptor
+	public class TraceWriter : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{

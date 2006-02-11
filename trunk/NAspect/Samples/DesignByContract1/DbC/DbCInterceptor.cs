@@ -2,10 +2,11 @@ using System;
 using System.Reflection;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Interception;
 
 namespace DesignByContract1.DbC
 {
-	public class DbCInterceptor : IInterceptor
+	public class DbCInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
 		{
