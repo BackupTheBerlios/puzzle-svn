@@ -8,6 +8,7 @@
 // *
 // *
 
+#if NET2 && DEBUG
 using System;
 using System.Collections;
 using System.Reflection;
@@ -19,6 +20,8 @@ using Puzzle.NAspect.Framework.Interception;
 //this type is not used for real
 //its only here in order to get the debug project copied to your bin dir when debugging
 //the debug assembly can safely be removed when you go live..
+
+//this is also only available in debug builds
 namespace Puzzle.NAspect.Framework
 {
 	public class FakeReference
@@ -27,3 +30,4 @@ namespace Puzzle.NAspect.Framework
         private Type t = typeof(Puzzle.NAspect.Debug.AopProxyObjectSource);
 	}
 }
+#endif

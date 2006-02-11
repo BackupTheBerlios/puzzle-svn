@@ -13,6 +13,9 @@ using System.Collections;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
+#if NET2
+using Puzzle.NAspect.Debug.Serialization;
+#endif
 
 namespace Puzzle.NAspect.Framework
 {
@@ -142,9 +145,21 @@ namespace Puzzle.NAspect.Framework
 					IList typeMixins = GetMixinsForType(type);
 
 					typeMixins.Add(typeof (AopProxyMixin));
+
 #if NET2
-                    typeMixins.Add(typeof (SerializableProxyMixin));
+                    try
+                    {
+                        if (SerializerIsAvalable())
+                        {
+                            AddSerializerMixin(typeMixins);
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("bla");
+                    }
 #endif
+
 
 					proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
 					if (proxyType == null)
@@ -240,6 +255,32 @@ namespace Puzzle.NAspect.Framework
             Type type = typeof(T);
             object o = CreateProxyWithState(state,type, args);
             return (T)o;
+        }
+
+
+        private static bool serializerIsAvalable=true;
+        private static bool serializerDoOnce=false;
+
+        internal static bool SerializerIsAvalable()
+        {
+            if (!serializerDoOnce)
+            {
+                serializerDoOnce = true;
+                Type t = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization", false);
+                if (t == null)
+                {
+                    serializerIsAvalable = false;
+                }
+                serializerDoOnce = true;
+            }
+
+            return serializerIsAvalable;
+        }
+
+        protected void AddSerializerMixin(IList typeMixins)
+        {
+            Type t = Type.GetType("Puzzle.NAspect.Framework.SerializableProxyMixin", false);
+            typeMixins.Add(t);
         }
 #endif
 

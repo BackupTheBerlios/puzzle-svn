@@ -25,9 +25,18 @@ namespace Puzzle.NAspect.Framework
 	{
 		public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
 		{
-#if NET2
-			if (aspects.Count == 0 && mixins.Count == 2)
-				return baseType;
+#if NET2 
+
+            if (Engine.SerializerIsAvalable())
+            {
+                if (aspects.Count == 0 && mixins.Count == 2)
+                    return baseType;
+            }
+            else
+            {
+                if (aspects.Count == 0 && mixins.Count == 1)
+                    return baseType;
+            }
 #else
             if (aspects.Count == 0 && mixins.Count == 1)
 				return baseType;
@@ -541,7 +550,7 @@ namespace Puzzle.NAspect.Framework
                 pointcut = false;
 
 #if NET2
-            if (mixinInterfaceType == typeof(ISerializableProxy))
+            if (mixinInterfaceType.Name.Contains ("ISerializableProxy"))
                 pointcut = false;
 #endif
 

@@ -8,6 +8,7 @@
 // *
 // *
 
+#if NET2 && DEBUG
 using System;
 using System.Collections;
 using System.Reflection;
@@ -162,3 +163,4 @@ namespace Puzzle.NAspect.Framework
         #endregion
     }
 }
+#endif
