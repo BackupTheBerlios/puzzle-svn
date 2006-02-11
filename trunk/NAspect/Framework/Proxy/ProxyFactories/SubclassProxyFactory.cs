@@ -27,7 +27,7 @@ namespace Puzzle.NAspect.Framework
 		{
 #if NET2 
 
-            if (Engine.SerializerIsAvalable())
+            if (Engine.SerializerIsAvailable())
             {
                 if (aspects.Count == 0 && mixins.Count == 2)
                     return baseType;
