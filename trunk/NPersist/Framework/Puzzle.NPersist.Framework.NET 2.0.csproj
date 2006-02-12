@@ -202,6 +202,7 @@
     <Compile Include="Enums\AccessibilityEnum.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\AutoIncreaserStrategy.cs" />
     <Compile Include="Enums\ClassType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -765,6 +766,7 @@
     <Compile Include="Persistence\SqlEngine\SqlEngineMSSqlServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\SqlEngine\SqlEngineOracle.cs" />
     <Compile Include="Persistence\SqlEngine\SqlStatementAndParameters.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1113,6 +1115,7 @@
     <Compile Include="Query\Sql\SqlVisitor\SqlAccessVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Query\Sql\SqlVisitor\SqlOracleVisitor.cs" />
     <Compile Include="Query\Sql\SqlVisitor\SqlSqlServerVisitor.cs">
       <SubType>Code</SubType>
     </Compile>

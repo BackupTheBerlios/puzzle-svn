@@ -160,7 +160,6 @@
     <Compile Include="Proxy\AOPProxyMixin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AOP\Interceptors\Attributes\InterceptorAttributes.cs" />
     <Compile Include="Proxy\BeforeMethodInvocation.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>
@@ -201,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PuzzleKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AOP\Interceptors\Attributes\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
