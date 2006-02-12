@@ -23,6 +23,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	{
 		private ISqlEngine m_SqlEngineMSSqlServer;
 		private ISqlEngine m_SqlEngineMSAccess;
+		private ISqlEngine m_SqlEngineOracle;
 		private ISqlEngine m_SqlEngineOther;
 
 		private IList transactions = new ArrayList();
@@ -91,6 +92,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			else if (sourceType == SourceType.MSAccess)
 			{
 				return GetSqlEngineMSAccess();
+			}
+			else if (sourceType == SourceType.Oracle)
+			{
+				return GetSqlEngineOracle();
 			}
 			else if (sourceType == SourceType.Other)
 			{
@@ -177,6 +182,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 				m_SqlEngineMSAccess.SqlEngineManager = this;
 			}
 			return m_SqlEngineMSAccess;
+		}
+
+		protected virtual ISqlEngine GetSqlEngineOracle()
+		{
+			if (m_SqlEngineOracle == null)
+			{
+				m_SqlEngineOracle = new SqlEngineOracle();
+				m_SqlEngineOracle.SqlEngineManager = this;
+			}
+			return m_SqlEngineOracle;
 		}
 
 		protected virtual ISqlEngine GetSqlEngineOther()

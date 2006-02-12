@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.EventArguments;
@@ -40,6 +41,55 @@ namespace Puzzle.NPersist.Framework.Persistence
 				return null;
 			}
 		}
+
+		#region Template
+
+		#region Property  AutoIncreaserStrategy
+		
+		private AutoIncreaserStrategy autoIncreaserStrategy = AutoIncreaserStrategy.SelectNewIdentity;
+		
+		public virtual AutoIncreaserStrategy AutoIncreaserStrategy
+		{
+			get { return this.autoIncreaserStrategy; }
+			set { this.autoIncreaserStrategy = value; }
+		}
+		
+		#endregion
+
+		#region Property  SelectNewIdentity
+		
+		private string selectNewIdentity = "SELECT @@IDENTITY;";
+		
+		public virtual string SelectNewIdentity
+		{
+			get { return this.selectNewIdentity; }
+			set { this.selectNewIdentity = value; }
+		}
+		
+		#endregion
+
+		#region Method  SelectNextSequence
+				
+		public virtual string GetSelectNextSequence(string sequenceName)
+		{
+			return "SELECT " + sequenceName + ".nextval FROM dual";
+		}
+		
+		#endregion
+
+		#region Property  StatementDelimiter
+		
+		private string statementDelimiter = ";";
+		
+		public string StatementDelimiter
+		{
+			get { return this.statementDelimiter; }
+			set { this.statementDelimiter = value; }
+		}
+		
+		#endregion
+
+		#endregion
 
 		#region CRUD
 
@@ -77,11 +127,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			ArrayList collectionPropertyMaps = new ArrayList();
 			ArrayList sqlAndParamsList = new ArrayList();
 			int rowsAffected;
-			object autoID;
 			IPropertyMap autoProp;
-			IColumnMap autoPropCol;
-			string autoPropName;
-			string prevId;
 			IContext ctx = m_SqlEngineManager.Context;
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
 			ctx.EventManager.OnInsertingObject(this, e);
@@ -92,34 +138,30 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IObjectManager om = ctx.ObjectManager;
 			IListManager lm = ctx.ListManager;
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
-			string sql = GetInsertStatement(obj, propertyNames, stillDirty, nonPrimaryPropertyMaps, collectionPropertyMaps, parameters);
 			IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
-			if (classMap.HasSingleIdAutoIncreaser())
+			if (classMap.HasSingleIdAutoIncreaser() && this.AutoIncreaserStrategy == AutoIncreaserStrategy.SelectNextSequence)
 			{
-				sql += ";Select @@IDENTITY"; // do not localize
-				object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
+				autoProp = classMap.GetAutoIncreasingIdentityPropertyMap();
+				IColumnMap seqColMap = autoProp.MustGetColumnMap();
+				string seqName = seqColMap.Sequence ;
+				if (seqName.Length < 1)
+					throw new Exception("The column " + seqColMap.Name + " must have a sequence name associated with it (sequence=\"my_seq_name\" in the xml map file) since the column is marked as an autoincreaser and the SelectNextSequence AutoIncreasingStrategy is used!");
+
+				string sqlSeq = GetSelectNextSequence(seqName);
+				object newId = ctx.SqlExecutor.ExecuteScalar(sqlSeq, ds, new ArrayList() );					
+				UpdateAutoIncIdProperty(om, obj, classMap, newId);
+				
+			}			
+			string sql = GetInsertStatement(obj, propertyNames, stillDirty, nonPrimaryPropertyMaps, collectionPropertyMaps, parameters);
+			if (classMap.HasSingleIdAutoIncreaser() && this.AutoIncreaserStrategy == AutoIncreaserStrategy.SelectNewIdentity)
+			{
+				sql += this.StatementDelimiter + this.SelectNewIdentity;
+
+				object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);					
 				if (Util.IsArray(result))
 				{
-					prevId = om.GetObjectIdentity(obj);
-					autoProp = classMap.GetAutoIncreasingIdentityPropertyMap();
-					autoPropName = autoProp.Name;
-					autoPropCol = autoProp.GetColumnMap();
-					if (autoPropCol.DataType == DbType.Int64)
-					{
-						autoID = Convert.ToInt64(result[0, 0]);						
-					}
-					else if (autoPropCol.DataType == DbType.Int16)
-					{
-						autoID = Convert.ToInt16(result[0, 0]);						
-					}
-					else
-					{
-						autoID = Convert.ToInt32(result[0, 0]);						
-					}					
-					om.SetPropertyValue(obj, autoPropName, autoID);
-					//om.SetOriginalPropertyValue(obj, autoPropName, autoID);
-					om.SetNullValueStatus(obj, autoPropName, false);
-					ctx.IdentityMap.UpdateIdentity(obj, prevId);
+					object newId = result[0, 0];
+					UpdateAutoIncIdProperty(om, obj, classMap, newId);
 				}
 				else
 				{
@@ -169,6 +211,44 @@ namespace Puzzle.NPersist.Framework.Persistence
 			ctx.InverseManager.NotifyCreate(obj);
 			ObjectEventArgs e2 = new ObjectEventArgs(obj);
 			ctx.EventManager.OnInsertedObject(this, e2);
+		}
+
+		public virtual void UpdateAutoIncIdProperty(IObjectManager om, object obj, IClassMap classMap, object newId)
+		{
+			IContext ctx = m_SqlEngineManager.Context;
+			string prevId;
+			string autoPropName;
+			IPropertyMap autoProp;
+			object autoID = null;
+			prevId = om.GetObjectIdentity(obj);
+			autoProp = classMap.GetAutoIncreasingIdentityPropertyMap();
+			autoPropName = autoProp.Name;					
+			PropertyInfo propInfo = obj.GetType().GetProperty(autoProp.Name);
+	
+			if (propInfo.PropertyType == typeof(System.Int64))
+			{
+				autoID = Convert.ToInt64(newId);						
+			}
+			else if (propInfo.PropertyType == typeof(System.Int16))
+			{
+				autoID = Convert.ToInt16(newId);						
+			}
+			else if (propInfo.PropertyType == typeof(System.Double))
+			{
+				autoID = Convert.ToDouble(newId);						
+			}
+			else if (propInfo.PropertyType == typeof(System.Decimal))
+			{
+				autoID = Convert.ToDecimal(newId);						
+			}
+			else
+			{
+				autoID = Convert.ToInt32(newId);						
+			}					
+			om.SetPropertyValue(obj, autoPropName, autoID);
+			//om.SetOriginalPropertyValue(obj, autoPropName, autoID);
+			om.SetNullValueStatus(obj, autoPropName, false);
+			ctx.IdentityMap.UpdateIdentity(obj, prevId);
 		}
 
 

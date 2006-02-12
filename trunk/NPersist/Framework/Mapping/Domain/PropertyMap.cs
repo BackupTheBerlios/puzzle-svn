@@ -633,6 +633,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		public virtual IColumnMap MustGetColumnMap()
+		{
+			IColumnMap columnMap = GetColumnMap();
+
+			if (columnMap == null)
+				throw new MappingException("Could not find column '" + this.Column + "' for the property " + this.Name + " of type " + this.ClassMap.GetFullName() + " in map file!");
+
+			return columnMap;
+		}
+
 		public virtual IColumnMap GetColumnMap()
 		{
 			if (this.Column.Length < 1)

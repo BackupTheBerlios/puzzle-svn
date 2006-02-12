@@ -376,12 +376,40 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		private string AssembleQuery()
 		{
-			
-
-			ISqlVisitor visitor = new SqlVisitorBase();
+			ISqlVisitor visitor = GetSqlVisitor();
 			select.Accept(visitor);
 			sql = visitor.Sql;
 			return sql;
+		}
+
+		private ISqlVisitor GetSqlVisitor()
+		{
+			ISqlVisitor visitor = null;
+
+			if (this.RootClassMap != null)
+			{
+				ISourceMap sourceMap = this.RootClassMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.SourceType == SourceType.MSSqlServer)
+					{
+						visitor = new SqlSqlServerVisitor() ;	
+					}
+					if (sourceMap.SourceType == SourceType.MSAccess)
+					{
+						visitor = new SqlAccessVisitor() ;	
+					}
+					if (sourceMap.SourceType == SourceType.Oracle)
+					{
+						visitor = new SqlOracleVisitor() ;	
+					}
+				}
+			}
+
+			if (visitor == null)		
+				visitor = new SqlVisitorBase();
+	
+			return visitor;
 		}
 
 		#endregion

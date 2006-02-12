@@ -41,6 +41,59 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			set { this.sqlBuilder = value; }
 		}
 
+		#region Template
+
+		#region Property  LeftEncapsulator
+		
+		private string leftEncapsulator = "[";
+		
+		public virtual string LeftEncapsulator
+		{
+			get { return this.leftEncapsulator; }
+			set { this.leftEncapsulator = value; }
+		}
+		
+		#endregion
+
+		#region Property  RightEncapsulator
+		
+		private string rightEncapsulator = "]";
+		
+		public virtual string RightEncapsulator
+		{
+			get { return this.rightEncapsulator; }
+			set { this.rightEncapsulator = value; }
+		}
+		
+		#endregion
+
+		#region Property  ColumnAliasKeyword
+		
+		private string columnAliasKeyword = "As ";
+		
+		public virtual string ColumnAliasKeyword
+		{
+			get { return this.columnAliasKeyword; }
+			set { this.columnAliasKeyword = value; }
+		}
+		
+		#endregion
+
+		#region Property  TableAliasKeyword
+		
+		private string tableAliasKeyword = "As ";
+		
+		public virtual string TableAliasKeyword
+		{
+			get { return this.tableAliasKeyword; }
+			set { this.tableAliasKeyword = value; }
+		}
+		
+		#endregion
+
+
+		#endregion
+
 		#region Visiting
 
 		public virtual void Visiting(SqlParenthesisGroup parenthesisGroup)
@@ -171,7 +224,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			string alias = tableAlias.Alias;
 			sqlBuilder.Append(Encapsulate(tableName));
 			if (tableName != alias)
-				sqlBuilder.Append(" As " + Encapsulate(alias));
+				sqlBuilder.Append(" " + this.TableAliasKeyword + Encapsulate(alias));
 		}
 
 		public virtual void Visiting(SqlColumnAlias columnAlias)
@@ -182,7 +235,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			sqlBuilder.Append(Encapsulate(columnName));
 			if (alias.Length > 0)
 				if (columnName != alias)
-					sqlBuilder.Append(" As " + Encapsulate(alias));
+					sqlBuilder.Append(" " + this.ColumnAliasKeyword + Encapsulate(alias));
 		}
 
 		public virtual void Visiting(SqlExpressionAlias expressionAlias)
@@ -190,7 +243,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			expressionAlias.SqlExpression.Accept(this);
 			string alias = expressionAlias.Alias;
 			if (alias.Length > 0)
-				sqlBuilder.Append(" As " + Encapsulate(alias));
+				sqlBuilder.Append(" " + this.ColumnAliasKeyword + Encapsulate(alias));
 		}
 
 		public virtual void Visiting(SqlAllColumnsSelectListItem allColumnsSelectListItem)
@@ -947,7 +1000,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		protected virtual string Encapsulate(string content)
 		{
-			return "[" + content + "]";		
+			return this.LeftEncapsulator + content + this.RightEncapsulator;		
 		}
 
 		protected virtual string EncapsulateString(string content)

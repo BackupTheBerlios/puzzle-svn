@@ -60,9 +60,9 @@ namespace Puzzle.NPersist.Framework.Persistence
             {
 			    m_helperPoco.SetObjectIdentity(obj, identity);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new NPersistException(string.Format ("Could not set Identity '{0}' on object '{1}'",identity,obj));
+                throw new NPersistException(string.Format ("Could not set Identity '{0}' on object '{1}'",identity,obj), ex);
             }
 		}
 

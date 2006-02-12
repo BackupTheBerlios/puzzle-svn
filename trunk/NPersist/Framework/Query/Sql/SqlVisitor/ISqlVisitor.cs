@@ -264,5 +264,16 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		string Sql { get; }
 
+		#region Template
+
+		string LeftEncapsulator { get; set; }
+		
+		string RightEncapsulator { get; set; }
+
+		string ColumnAliasKeyword { get; set; }
+
+		string TableAliasKeyword { get; set; }
+
+		#endregion
 	}
 }

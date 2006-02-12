@@ -49,7 +49,7 @@ Public Class frmAddProperty
         '
         'SyntaxBoxControl1
         '
-        Me.SyntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.SyntaxBox.ActiveView.BottomRight
+        'Me.SyntaxBoxControl1.ActiveView = Puzzle.Windows.Forms.SyntaxBox.ActiveView.BottomRight
         Me.SyntaxBoxControl1.AutoListPosition = Nothing
         Me.SyntaxBoxControl1.AutoListSelectedText = "a123"
         Me.SyntaxBoxControl1.AutoListVisible = False

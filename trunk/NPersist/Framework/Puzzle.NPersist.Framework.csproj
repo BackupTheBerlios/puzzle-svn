@@ -254,6 +254,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Enums\AutoIncreaserStrategy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Enums\ClassType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1184,6 +1189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Persistence\SqlEngine\SqlEngineOracle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Persistence\SqlEngine\SqlStatementAndParameters.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1770,6 +1780,11 @@
                 />
                 <File
                     RelPath = "Query\Sql\SqlVisitor\SqlAccessVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Query\Sql\SqlVisitor\SqlOracleVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

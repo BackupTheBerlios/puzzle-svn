@@ -156,7 +156,13 @@ namespace Puzzle.NCore.Framework.Data
 
 		private int GetColumnIndex(string name)
 		{
-			return (int) columnLookup[name];
+			object colIndex = columnLookup[name];
+			if (colIndex != null)
+				return (int) colIndex;
+			colIndex = columnLookup[name.ToUpper()];
+			if (colIndex != null)
+				return (int) colIndex;
+			throw new ApplicationException("Column with name " + name + " not found");
 		}
 
 		object IDataRecord.this[int i]

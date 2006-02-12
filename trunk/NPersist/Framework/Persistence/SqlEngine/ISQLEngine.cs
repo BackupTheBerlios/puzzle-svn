@@ -38,5 +38,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
 
 		string DateDelimiter { get; set; }
+
+		AutoIncreaserStrategy AutoIncreaserStrategy { get; set; }
+
+		string SelectNewIdentity { get; set; }
+
+		string GetSelectNextSequence(string sequenceName);
+
+		string StatementDelimiter { get; set; }
+
 	}
 }

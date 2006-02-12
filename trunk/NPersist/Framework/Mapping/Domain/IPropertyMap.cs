@@ -70,6 +70,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		IColumnMap GetColumnMap();
 
+		IColumnMap MustGetColumnMap();
+
 		void SetColumnMap(IColumnMap value);
 
 		string IdColumn { get; set; }
