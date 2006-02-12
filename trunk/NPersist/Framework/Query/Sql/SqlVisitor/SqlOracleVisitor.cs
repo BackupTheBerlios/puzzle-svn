@@ -78,5 +78,6 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		#endregion
 
+
 	}
 }

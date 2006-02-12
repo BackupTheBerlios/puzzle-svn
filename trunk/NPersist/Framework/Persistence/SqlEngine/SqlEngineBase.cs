@@ -1280,7 +1280,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				else
 				{
 					ignore = false;
-					if (propertyMap.GetColumnMap().IsAutoIncrease)
+					if (propertyMap.GetColumnMap().IsAutoIncrease && this.AutoIncreaserStrategy == AutoIncreaserStrategy.SelectNewIdentity)
 						ignore = true;
 
                     //HACK: roger fixed the timestamp bug

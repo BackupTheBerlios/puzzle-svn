@@ -15,6 +15,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NPersist.Framework.Sql.Dom;
 using Puzzle.NPersist.Framework.Sql.Visitor;
 using Puzzle.NPersist.Framework.Utility;
 
@@ -44,6 +45,53 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected override ISqlVisitor GetVisitor()
 		{
 			return new SqlOracleVisitor();
+		}
+
+		protected override string GetParameterName(IPropertyMap propertyMap)
+		{
+			return GetParameterName(propertyMap, "");			
+		}
+
+		protected override string GetParameterName(IPropertyMap propertyMap, string prefix)
+		{
+			string name = prefix;
+			name = name + propertyMap.Name;
+			name = ":" + name + GetNextParamNr().ToString() ;
+			return name;
+		}
+
+		protected override string GetParameterName(IClassMap classMap)
+		{
+			return GetParameterName(classMap, "");			
+		}
+
+		protected override string GetParameterName(IClassMap classMap, string prefix)
+		{
+			string name = prefix;
+			name = name + classMap.Name;
+			name = ":" + name;
+			return name;
+		}
+
+		protected override string GetParameterName(IPropertyMap propertyMap, IColumnMap columnMap)
+		{
+			return GetParameterName(propertyMap, columnMap, "");			
+		}
+
+		protected override string GetParameterName(IPropertyMap propertyMap, IColumnMap columnMap, string prefix)
+		{
+			string name = prefix;
+			name = name + propertyMap.Name;
+			name = name + "_" + columnMap.Name;
+			name = ":" + name;
+			return name;
+		}
+
+		protected override string GenerateSql(SqlStatement statement)
+		{
+			ISqlVisitor visitor = GetVisitor();
+			statement.Accept(visitor);
+			return visitor.Sql;
 		}
 
 	}
