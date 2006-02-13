@@ -59,7 +59,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /u $(TargetPath)
-"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /i $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /u "$(TargetPath)"
+"$(DevEnvDir)..\..\SDK\v2.0\bin\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
