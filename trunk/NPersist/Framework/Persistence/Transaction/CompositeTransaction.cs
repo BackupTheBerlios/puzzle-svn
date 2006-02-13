@@ -84,7 +84,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					exceptions.Add(ex);
 				}
 			}
-			if (exceptions.Count > 0)
+			//Bug in following line fixed by Vlad Ivanov
+			if (exceptions!=null && exceptions.Count > 0)
 				throw new ExceptionLimitExceededException("Exceptions were encountered during rollback! One or more databases are potentially in a corrpt state!");
 		}
 

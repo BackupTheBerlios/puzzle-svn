@@ -257,7 +257,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					this.Context.ValidateUnitOfWork(exceptions);
 
-					if (exceptions.Count > 0)
+					//Bug in following line fixed by Vlad Ivanov
+					if (exceptions!=null && exceptions.Count > 0)
 					{
 						Abort();	
 
@@ -275,7 +276,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				
 				this.Context.PersistenceEngine.Commit();
 
-				if (exceptions.Count > 0)
+				//Bug in following line fixed by Vlad Ivanov
+				if (exceptions!=null && exceptions.Count > 0)
 				{
 					Abort();	
 
@@ -315,7 +317,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 				this.Context.PersistenceEngine.Commit();
 
-				if (exceptions.Count > 0)
+				//Bug in following line fixed by Vlad Ivanov
+				if (exceptions != null && exceptions.Count > 0)
 				{
 					this.Context.PersistenceEngine.Abort();
 					Abort();	
