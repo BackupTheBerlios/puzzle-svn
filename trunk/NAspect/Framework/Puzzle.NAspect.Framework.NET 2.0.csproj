@@ -97,6 +97,7 @@
     <Compile Include="AOP\Aspects\IAspect.cs" />
     <Compile Include="AOP\Aspects\ITypedAspect.cs" />
     <Compile Include="AOP\Aspects\TypedToGenericConverter.cs" />
+    <Compile Include="AOP\Interceptors\Attributes\InterceptorAttributes.cs" />
     <Compile Include="AOP\Interceptors\Delegates\AfterDelegate.cs" />
     <Compile Include="AOP\Interceptors\Delegates\AroundDelegate.cs" />
     <Compile Include="AOP\Interceptors\Delegates\BeforeDelegate.cs" />
@@ -204,9 +205,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PuzzleKey.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AOP\Interceptors\Attributes\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
