@@ -141,8 +141,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 						}
 					}
 				}
-			}
-			
+			}			
 			
 			domainMap = LoadFromXml(xml, mapSerializer);
 			DomainMapCache.AddMap(key,domainMap) ;
@@ -151,12 +150,22 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public static IDomainMap Load(string path, IMapSerializer mapSerializer)
 		{
+			return Load(path, mapSerializer, true);
+		}
+
+		public static IDomainMap Load(string path, IMapSerializer mapSerializer, bool useCache)
+		{
 			IDomainMap domainMap;
 			StreamReader reader = null;
 			String xml = "";
-			string key = string.Format("path://{0}:{1}",path,mapSerializer);
-			if (DomainMapCache.ContainsKey(key))
-				return DomainMapCache.GetMap(key);
+			string key = "";
+
+			if (useCache)
+			{
+				key = string.Format("path://{0}:{1}",path,mapSerializer);
+				if (DomainMapCache.ContainsKey(key))
+					return DomainMapCache.GetMap(key);				
+			}
 
 
 			try
@@ -182,7 +191,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			domainMap = LoadFromXml(xml, mapSerializer);
 			domainMap.SetLoadedFromPath(path);
-			DomainMapCache.AddMap(key,domainMap) ;
+
+			if (useCache)
+				DomainMapCache.AddMap(key,domainMap) ;
+
 			return domainMap;
 		}
 

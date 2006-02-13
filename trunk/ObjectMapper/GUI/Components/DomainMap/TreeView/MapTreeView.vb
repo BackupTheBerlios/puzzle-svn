@@ -71,10 +71,10 @@ Public Class MapTreeView
         End Set
     End Property
 
-    'This is the one place where new domain maps are loaded!
+    'This is the one place where new domain maps are loaded! Yes, here of all places......I know, I know, I should not be let near a keyboard....
     Public Overloads Function LoadDomain(ByVal path As String, Optional ByVal addNotToTree As Boolean = False) As IDomainMap
 
-        Dim newDomainMap As IDomainMap = DomainMap.Load(path)
+        Dim newDomainMap As IDomainMap = DomainMap.Load(path, Nothing, False)
 
         newDomainMap.UnFixate()
 
