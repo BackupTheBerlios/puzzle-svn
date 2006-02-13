@@ -121,7 +121,7 @@ namespace Puzzle.NAspect.Framework
 				//array to return
 				IList methodinterceptors = new ArrayList();
 				//fetch all aspects from the type-aspect lookup
-				foreach (IAspect aspect in aspects)
+				foreach (IGenericAspect aspect in aspects)
 				{
 					foreach (IPointcut pointcut in aspect.Pointcuts)
 					{

@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	public abstract class AspectBase : IAspect
+	public abstract class GenericAspectBase : IGenericAspect
 	{
 		private string name;
 		private IList mixins = new ArrayList();

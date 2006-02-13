@@ -129,43 +129,35 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AOP\Aspects\IGenericAspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Aspects\ITypedAspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AOP\Aspects\SignatureAspect.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\empty-file"
-                    BuildAction = "None"
+                    RelPath = "AOP\Aspects\TypedToGenericConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\entries"
-                    BuildAction = "None"
+                    RelPath = "AOP\Aspects\Attributes\TypedAspectAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\format"
-                    BuildAction = "None"
+                    RelPath = "AOP\Interceptors\Attributes\InterceptorAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\README.txt"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\prop-base\InterceptorAttributes.cs.svn-base"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\props\InterceptorAttributes.cs.svn-work"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "AOP\Interceptors\Attributes\.svn\text-base\InterceptorAttributes.cs.svn-base"
-                    BuildAction = "None"
-                />
-                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\prop-base\" />
-                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\props\" />
-                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\text-base\" />
-                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\tmp\wcprops\" />
-                <Folder RelPath = "AOP\Interceptors\Attributes\.svn\wcprops\" />
                 <File
                     RelPath = "AOP\Interceptors\Delegates\AfterDelegate.cs"
                     SubType = "Code"

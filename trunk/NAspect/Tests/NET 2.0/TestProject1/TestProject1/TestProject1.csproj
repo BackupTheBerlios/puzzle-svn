@@ -46,6 +46,7 @@
     <Compile Include="Interceptors\SecurityInterceptor.cs" />
     <Compile Include="Mixins\ISomeListMarkerIFace.cs" />
     <Compile Include="Mixins\MyMixin.cs" />
+    <Compile Include="MyTypedAspect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SomeClass.cs" />
     <Compile Include="SomeClassWithExplicitIFace.cs" />

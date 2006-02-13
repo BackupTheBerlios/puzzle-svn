@@ -87,7 +87,7 @@ namespace Puzzle.NAspect.Framework
 						}
 					}
 
-					IAspect aspect = null;
+					IGenericAspect aspect = null;
 
 					if (settingsNode.Attributes["target-signature"] != null)
 					{

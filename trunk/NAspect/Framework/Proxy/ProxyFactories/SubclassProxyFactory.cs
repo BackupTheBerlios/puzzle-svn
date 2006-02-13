@@ -162,20 +162,25 @@ namespace Puzzle.NAspect.Framework
 				//array to return
 				IList methodinterceptors = new ArrayList();
 				//fetch all aspects from the type-aspect lookup
-				foreach (IAspect aspect in aspects)
-				{
-					foreach (IPointcut pointcut in aspect.Pointcuts)
-					{
-						if (pointcut.IsMatch(baseMethod))
-						{
-							foreach (object interceptor in pointcut.Interceptors)
-							{
-								methodinterceptors.Add(interceptor);
-							}
-						}
-					}
-				}
+                foreach (IAspect aspect in aspects)
+                {
+                    IGenericAspect tmpAspect;
+                    if (aspect is IGenericAspect)
+                        tmpAspect = (IGenericAspect)aspect;
+                    else
+                        tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
 
+                    foreach (IPointcut pointcut in tmpAspect.Pointcuts)
+                    {
+                        if (pointcut.IsMatch(baseMethod))
+                        {
+                            foreach (object interceptor in pointcut.Interceptors)
+                            {
+                                methodinterceptors.Add(interceptor);
+                            }
+                        }
+                    }
+                }
 				MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;
 			}
 		}

@@ -26,8 +26,15 @@ namespace Puzzle.NAspect.Framework.Aop
 			IList matches = new ArrayList();
 			foreach (IAspect aspect in aspects)
 			{
-				if (aspect.IsMatch(type))
-					matches.Add(aspect);
+                IGenericAspect tmpAspect;
+                if (aspect is IGenericAspect)
+                    tmpAspect = (IGenericAspect)aspect;
+                else
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+
+
+                if (tmpAspect.IsMatch(type))
+                    matches.Add(aspect);
 			}
 			return matches;
 		}

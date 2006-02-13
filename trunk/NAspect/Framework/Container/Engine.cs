@@ -212,11 +212,18 @@ namespace Puzzle.NAspect.Framework
 			Hashtable mixins = new Hashtable();
 			foreach (IAspect aspect in typeAspects)
 			{
-				foreach (Type mixinType in aspect.Mixins)
-				{
-					//distinct add mixin..
-					mixins[mixinType] = mixinType;
-				}
+                IGenericAspect tmpAspect;
+                if (aspect is IGenericAspect)
+                    tmpAspect = (IGenericAspect)aspect;
+                else
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+
+                foreach (Type mixinType in tmpAspect.Mixins)
+                {
+                    //distinct add mixin..
+                    mixins[mixinType] = mixinType;
+                }
+                
 			}
 			IList distinctMixins = new ArrayList(mixins.Values);
 

@@ -50,31 +50,35 @@ namespace Puzzle.NAspect.Framework
 		public object Proceed()
 		{
 			if (Step < Interceptors.Count)
-			{               
-                if (Interceptors[Step] is IAfterInterceptor)
+			{
+                object currentInterceptor = Interceptors[Step];
+                if (currentInterceptor is IAfterInterceptor)
                 {
-                    IAfterInterceptor afterInterceptor = (IAfterInterceptor)Interceptors[Step];
-                    Step++;
-                    object res = this.Proceed();                    
-                    afterInterceptor.AfterCall(new AfterMethodInvocation(this));
-                    
-                    return res;
+                    return InterceptAfter(currentInterceptor);
                 }
-                else if (Interceptors[Step] is IBeforeInterceptor)
-                {                    
-                    IBeforeInterceptor beforeInterceptor = (IBeforeInterceptor)Interceptors[Step];
-                    beforeInterceptor.BeforeCall(new BeforeMethodInvocation(this));
-                    Step++;
-                    object res = this.Proceed();
-                    
-                    return res;
+                else if (currentInterceptor is IBeforeInterceptor)
+                {
+                    return InterceptBefore(currentInterceptor);
+                }
+                else if (currentInterceptor is IAroundInterceptor)
+                {
+                    return InterceptAround(currentInterceptor);
+                }
+                else if (currentInterceptor is AfterDelegate)
+                {
+                    return InterceptAfterDelegate(currentInterceptor);
+                }
+                else if (currentInterceptor is BeforeDelegate)
+                {
+                    return InterceptBeforeDelegate(currentInterceptor);
+                }
+                else if (currentInterceptor is AroundDelegate)
+                {
+                    return InterceptAroundDelegate(currentInterceptor);
                 }
                 else
                 {
-                    //invoke the next interceptor
-                    IAroundInterceptor interceptor = (IAroundInterceptor)Interceptors[Step];
-                    Step++;
-                    return interceptor.HandleCall(this);
+                    throw new Exception("Unknown interceptor type");
                 }
                 
 			}
@@ -83,6 +87,73 @@ namespace Puzzle.NAspect.Framework
 				return CallEndMethod();
 			}
 		}
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptAroundDelegate(object currentInterceptor)
+        {
+            AroundDelegate interceptor = (AroundDelegate)currentInterceptor;
+            Step++;
+            return interceptor(this);
+        }
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptBeforeDelegate(object currentInterceptor)
+        {
+            BeforeDelegate interceptor = (BeforeDelegate)currentInterceptor;
+            interceptor(new BeforeMethodInvocation(this));
+            Step++;
+            object res = this.Proceed();
+
+            return res;
+        }
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptAfterDelegate(object currentInterceptor)
+        {
+            AfterDelegate interceptor = (AfterDelegate)currentInterceptor;
+            Step++;
+            object res = this.Proceed();
+            interceptor(new AfterMethodInvocation(this));
+
+            return res;
+        }
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptAround(object currentInterceptor)
+        {
+            //invoke the next interceptor
+            IAroundInterceptor interceptor = (IAroundInterceptor)currentInterceptor;
+            Step++;
+            return interceptor.HandleCall(this);
+        }
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptBefore(object currentInterceptor)
+        {
+            IBeforeInterceptor beforeInterceptor = (IBeforeInterceptor)currentInterceptor;
+            beforeInterceptor.BeforeCall(new BeforeMethodInvocation(this));
+            Step++;
+            object res = this.Proceed();
+
+            return res;
+        }
+
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
+        private object InterceptAfter(object currentInterceptor)
+        {
+            IAfterInterceptor afterInterceptor = (IAfterInterceptor)currentInterceptor;
+            Step++;
+            object res = this.Proceed();
+            afterInterceptor.AfterCall(new AfterMethodInvocation(this));
+
+            return res;
+        }
 
 		#endregion
 

@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	public interface IAspect
-	{
-	}
+    public interface ITypedAspect : IAspect
+    {
+    }
 }

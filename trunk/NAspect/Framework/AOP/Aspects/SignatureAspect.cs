@@ -19,7 +19,7 @@ namespace Puzzle.NAspect.Framework.Aop
 	/// <summary>
 	/// Summary description for Aspect.
 	/// </summary>
-	public class SignatureAspect : AspectBase
+	public class SignatureAspect : GenericAspectBase
 	{
 		public string TargetTypeSignature;
 

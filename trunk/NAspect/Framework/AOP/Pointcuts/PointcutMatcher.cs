@@ -10,6 +10,7 @@
 
 using System.Collections;
 using System.Reflection;
+using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -19,18 +20,23 @@ namespace Puzzle.NAspect.Framework.Aop
 		{
 		}
 
-		public bool MethodShouldBeProxied(MethodInfo method, IList aspects)
-		{
-			foreach (IAspect aspect in aspects)
-			{
-				foreach (IPointcut pointcut in aspect.Pointcuts)
-				{
-					MethodBase methodbase = method;
-					if (pointcut.IsMatch(methodbase))
-						return true;
-				}
-			}
 
+		public bool MethodShouldBeProxied(MethodBase method, IList aspects)
+		{
+            foreach (IAspect aspect in aspects)
+            {
+                IGenericAspect tmpAspect;
+                if (aspect is IGenericAspect)
+                    tmpAspect = (IGenericAspect)aspect;
+                else
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+
+                foreach (IPointcut pointcut in tmpAspect.Pointcuts)
+                {
+                    if (pointcut.IsMatch(method))
+                        return true;
+                }
+            }
 			return false;
 		}
 	}

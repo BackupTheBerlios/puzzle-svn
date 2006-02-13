@@ -93,6 +93,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOP\Aspects\Attributes\TypedAspectAttributes.cs" />
+    <Compile Include="AOP\Aspects\IAspect.cs" />
+    <Compile Include="AOP\Aspects\ITypedAspect.cs" />
+    <Compile Include="AOP\Aspects\TypedToGenericConverter.cs" />
     <Compile Include="AOP\Interceptors\Delegates\AfterDelegate.cs" />
     <Compile Include="AOP\Interceptors\Delegates\AroundDelegate.cs" />
     <Compile Include="AOP\Interceptors\Delegates\BeforeDelegate.cs" />
@@ -107,7 +111,7 @@
     <Compile Include="AOP\Aspects\AttributeAspect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AOP\Aspects\IAspect.cs">
+    <Compile Include="AOP\Aspects\IGenericAspect.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AOP\Aspects\SignatureAspect.cs">

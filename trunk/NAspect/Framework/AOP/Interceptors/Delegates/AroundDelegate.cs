@@ -16,5 +16,5 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework.Interception
 {
-    public delegate void AroundDelegate(MethodInvocation call);
+    public delegate object AroundDelegate(MethodInvocation call);
 }

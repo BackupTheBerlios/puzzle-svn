@@ -18,7 +18,7 @@ namespace Puzzle.NAspect.Framework.Aop
 	/// <summary>
 	/// Summary description for Aspect.
 	/// </summary>
-	public class AttributeAspect : AspectBase
+	public class AttributeAspect : GenericAspectBase
 	{
 		public Type AttributeType;
 

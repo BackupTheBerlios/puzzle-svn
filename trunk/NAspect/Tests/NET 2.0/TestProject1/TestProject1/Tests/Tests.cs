@@ -317,7 +317,21 @@ namespace KumoUnitTests
             wrapperList.Add("c");
             wrapperList.RemoveAt(0);
             wrapperList.Remove("b");
+        }
 
+        [TestMethod()]
+        public void TypedAspectMixinTest()
+        {
+            Engine c = new Engine("TypedAspectMixinTest");
+            c.Configuration.Aspects.Add(new MyTypedAspect ());
+
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            ISayHello sayHello = (ISayHello)proxy;
+
+            string helloString = sayHello.SayHello();
+
+            Assert.IsTrue(helloString == "Hello", "SayHelloMixin did not work");
         }
 	}
 }

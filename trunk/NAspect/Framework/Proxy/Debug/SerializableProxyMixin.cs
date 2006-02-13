@@ -47,7 +47,7 @@ namespace Puzzle.NAspect.Framework
                 vizType.Mixins.Add(vizMixin);
             }
             IList aspects = (IList)MethodCache.aspectsLookup[target.GetType()];
-            foreach (IAspect aspect in aspects)
+            foreach (IGenericAspect aspect in aspects)
             {
                 VizAspect vizAspect = new VizAspect();
                 vizAspect.Name = aspect.Name;
@@ -130,18 +130,18 @@ namespace Puzzle.NAspect.Framework
                 vizInterceptor.FullTypeName = interceptor.GetType().FullName;
                 vizInterceptor.InterceptorType = interceptorType;
 
-                if (interceptor.GetType().GetCustomAttributes(typeof(MayBreakFlow),false).Length > 0)
+                if (interceptor.GetType().GetCustomAttributes(typeof(MayBreakFlowAttribute),false).Length > 0)
                 {
                     vizInterceptor.MayBreakFlow = true;
                 }
 
-                if (interceptor.GetType().GetCustomAttributes(typeof(IsRequired), false).Length > 0)
+                if (interceptor.GetType().GetCustomAttributes(typeof(IsRequiredAttribute), false).Length > 0)
                 {
                     vizInterceptor.IsRequired = true;
                 }
 
-                object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof(Throws), false);
-                foreach (Throws throws in exceptionTypes)
+                object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof(ThrowsAttribute), false);
+                foreach (ThrowsAttribute throws in exceptionTypes)
                 {
                     vizInterceptor.ThrowsExceptionTypes.Add(throws.ExceptionType.Name);
                 }
