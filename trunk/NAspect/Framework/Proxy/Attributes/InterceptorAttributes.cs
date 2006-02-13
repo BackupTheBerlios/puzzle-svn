@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace Puzzle.NAspect.Framework.Interception
 {
     [AttributeUsage (AttributeTargets.Class)]
-    public class MayBreakFlow : Attribute
+    public class MayBreakFlowAttribute : Attribute
     {
         #region Property Reason 
         private string reason;
@@ -34,18 +34,18 @@ namespace Puzzle.NAspect.Framework.Interception
         }                        
         #endregion
 
-        public MayBreakFlow()
+        public MayBreakFlowAttribute()
         {
         }
 
-        public MayBreakFlow(string reason)
+        public MayBreakFlowAttribute(string reason)
         {
             this.Reason = reason;
         }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class IsRequired : Attribute
+    public class IsRequiredAttribute : Attribute
     {
         #region Property required 
         private bool required;
@@ -62,18 +62,18 @@ namespace Puzzle.NAspect.Framework.Interception
         }                        
         #endregion
 
-        public IsRequired()
+        public IsRequiredAttribute()
         {
         }
 
-        public IsRequired(bool required)
+        public IsRequiredAttribute(bool required)
         {
             this.Required = required;
         }
     }
 
     [AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
-    public class Throws : Attribute
+    public class ThrowsAttribute : Attribute
     {
         #region Property ExceptionType 
         private Type exceptionType;
@@ -90,14 +90,14 @@ namespace Puzzle.NAspect.Framework.Interception
         }                        
         #endregion
 
-        public Throws(Type exceptionType)
+        public ThrowsAttribute(Type exceptionType)
         {
             this.ExceptionType = exceptionType;
         }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class Catches : Attribute
+    public class CatchesAttribute : Attribute
     {
         #region Property ExceptionType
         private Type exceptionType;
@@ -114,7 +114,7 @@ namespace Puzzle.NAspect.Framework.Interception
         }
         #endregion
 
-        public Catches(Type exceptionType)
+        public CatchesAttribute(Type exceptionType)
         {
             this.ExceptionType = exceptionType;
         }
