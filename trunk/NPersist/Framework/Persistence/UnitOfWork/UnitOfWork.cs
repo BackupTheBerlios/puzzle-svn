@@ -75,7 +75,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 			}
 			this.Context.ObjectCloner.EnsureIsClonedIfEditing(obj);
-			m_listDirty.Add(obj);
+
+			//Following bug fix (adding the if) submitted by Vlad Ivanov
+			if(m_listDirty.IndexOf(obj)==-1) 
+			{ 
+				m_listDirty.Add(obj); 
+			} 
+
 			m_objectStatusLookup[obj] = ObjectStatus.Dirty;
 			this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.Dirty);
 		}
