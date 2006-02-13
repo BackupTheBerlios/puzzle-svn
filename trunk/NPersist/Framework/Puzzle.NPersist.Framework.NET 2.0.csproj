@@ -409,6 +409,7 @@
     <Compile Include="IdentityGeneration\GuidIdentityGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IdentityGeneration\SequentialGuidIdentityGenerator.cs" />
     <Compile Include="Interceptor\IInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>

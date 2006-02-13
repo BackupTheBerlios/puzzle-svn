@@ -609,6 +609,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IdentityGeneration\SequentialGuidIdentityGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Interceptor\IInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
