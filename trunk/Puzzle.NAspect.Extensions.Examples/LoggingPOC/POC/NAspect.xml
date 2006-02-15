@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Puzzle.NAspect.Framework settings -->
+	<naspect>
+		<configuration>
+				
+			<aspect name="LogAspect" target-signature="*" >
+				<pointcut target-attribute="Puzzle.NAspect.Extensions.Attributes.Logging.Log4NET.Log4NETAttribute, Puzzle.NAspect.Extensions" >
+					<interceptor type="Puzzle.NAspect.Extensions.Interceptors.Logging.Log4NET.Log4NETInterceptor, Puzzle.NAspect.Extensions" />
+				</pointcut>
+			</aspect>
+			
+		</configuration>
+    </naspect>
