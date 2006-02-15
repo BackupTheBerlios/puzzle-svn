@@ -19,7 +19,7 @@ namespace Puzzle.NPersist.Framework.Aop
 	/// <summary>
 	/// Summary description for NPersistAspect.
 	/// </summary>
-	public class NPersistListAspect : IAspect
+	public class NPersistListAspect : IGenericAspect
 	{
 		private IContext context;
 		public NPersistListAspect(IContext context)
