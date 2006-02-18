@@ -26,8 +26,30 @@ namespace Puzzle.NAspect.Framework.Aop
 
             AddMixins(aspect, mixins);
 
-            MethodInfo[] methods = aspect.GetType().GetMethods( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            AddInterceptors(aspect, pointcuts);
+
+
+            newAspect = CreateAspect(aspect, newAspect, mixins, pointcuts);
+
+            return newAspect;
+        }
+
+        private static void AddInterceptors(ITypedAspect aspect, IList pointcuts)
+        {
+            ArrayList methodsList = new ArrayList();
+            MethodInfo[] methods = aspect.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             foreach (MethodInfo method in methods)
+            {
+                object[] interceptorAttributes = method.GetCustomAttributes(typeof(InterceptorAttribute), false);
+                if (interceptorAttributes != null)
+                {
+                    methodsList.Add(method);
+                }
+            }
+
+            methodsList.Sort(new InterceptorMethodSorter());
+
+            foreach (MethodInfo method in methodsList)
             {
                 object[] interceptorAttributes = method.GetCustomAttributes(typeof(InterceptorAttribute), false);
                 if (interceptorAttributes != null)
@@ -48,13 +70,8 @@ namespace Puzzle.NAspect.Framework.Aop
                         throw new Exception("Interceptor attribute does not contain any target info");
                     }
                     pointcuts.Add(pointcut);
-                }                
+                }
             }
-
-
-            newAspect = CreateAspect(aspect, newAspect, mixins, pointcuts);
-
-            return newAspect;
         }
 
         private static Delegate CreateDelegate(ITypedAspect aspect, MethodInfo method)
@@ -110,4 +127,18 @@ namespace Puzzle.NAspect.Framework.Aop
             }
         }
 	}
+
+    public class InterceptorMethodSorter : IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            MethodInfo m1 = (MethodInfo)x;
+            MethodInfo m2 = (MethodInfo)y;
+
+            InterceptorAttribute i1 = (InterceptorAttribute)m1.GetCustomAttributes(typeof(InterceptorAttribute), false)[0];
+            InterceptorAttribute i2 = (InterceptorAttribute)m2.GetCustomAttributes(typeof(InterceptorAttribute), false)[0];
+
+            return i1.Index - i2.Index;
+        }
+    }
 }
