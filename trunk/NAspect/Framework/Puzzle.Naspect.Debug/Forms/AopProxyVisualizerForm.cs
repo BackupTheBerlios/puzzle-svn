@@ -156,7 +156,7 @@ namespace Puzzle.NAspect.Debug.Forms
             DrawBox(consumerBounds, g, Color.White, Color.FromArgb(230, 210, 255));
 
             DrawStringBold(consumerBounds.X + 30, consumerBounds.Y + 3, string.Format ("{0} interceptor",vizInterceptor.InterceptorType), g);
-            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, string.Format ("{0} : from aspect {1}",vizInterceptor.TypeName,"xxx"), g);
+            DrawString(consumerBounds.X + 30, consumerBounds.Y + 15, string.Format ("{0} : from aspect {1}",vizInterceptor.Name,"xxx"), g);
 
             
 

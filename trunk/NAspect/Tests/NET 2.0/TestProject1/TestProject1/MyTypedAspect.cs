@@ -51,7 +51,7 @@ namespace KumoUnitTests
     public class ReturnValueChangerAspect : ITypedAspect
     {
         [Interceptor(Index = 1, TargetSignature = "MyInt*")]
-        public object MyAroundInterceptor(MethodInvocation call)
+        public object ChangeReturnValue(MethodInvocation call)
         {
             int res = (int)call.Proceed();
 

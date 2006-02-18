@@ -14,6 +14,21 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     [Serializable]
     public class VizInterceptor
     {
+        #region Property Name
+        private string name;
+        public virtual string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            set
+            {
+                this.name = value;
+            }
+        }
+        #endregion
+
         #region Property TypeName
         private string typeName;
         public virtual string TypeName
@@ -25,21 +40,6 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
             set
             {
                 this.typeName = value;
-            }
-        }
-        #endregion
-
-        #region Property FullTypeName
-        private string fullTypeName;
-        public virtual string FullTypeName
-        {
-            get
-            {
-                return this.fullTypeName;
-            }
-            set
-            {
-                this.fullTypeName = value;
             }
         }
         #endregion

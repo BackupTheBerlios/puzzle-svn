@@ -47,10 +47,17 @@ namespace Puzzle.NAspect.Framework
                 vizType.Mixins.Add(vizMixin);
             }
             IList aspects = (IList)MethodCache.aspectsLookup[target.GetType()];
-            foreach (IGenericAspect aspect in aspects)
+            foreach (IAspect aspect in aspects)
             {
+                IGenericAspect tmpAspect;
+                if (aspect is IGenericAspect)
+                    tmpAspect = (IGenericAspect)aspect;
+                else
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+
+
                 VizAspect vizAspect = new VizAspect();
-                vizAspect.Name = aspect.Name;
+                vizAspect.Name = tmpAspect.Name;
             }
             IList methods = (IList)MethodCache.methodsLookup[target.GetType()];
             foreach (string methodId in methods)
@@ -112,22 +119,44 @@ namespace Puzzle.NAspect.Framework
             foreach (object interceptor in interceptors)
             {
                 VizInterceptorType interceptorType = VizInterceptorType.Around;
+                VizInterceptor vizInterceptor = new VizInterceptor();
                 if (interceptor is IAfterInterceptor)
                 {
                     interceptorType = VizInterceptorType.After;
+                    vizInterceptor.Name = interceptor.GetType().Name;
                 }
                 else if (interceptor is IBeforeInterceptor)
                 {
                     interceptorType = VizInterceptorType.Before;
+                    vizInterceptor.Name = interceptor.GetType().Name;
                 }
                 else if (interceptor is IAroundInterceptor)
                 {
                     interceptorType = VizInterceptorType.Around;
+                    vizInterceptor.Name = interceptor.GetType().Name;
+                }
+                else if (interceptor is AroundDelegate)
+                {
+                    interceptorType = VizInterceptorType.Around;
+                    Delegate ad = (Delegate)interceptor;
+                    vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
+                }
+                else if (interceptor is AfterDelegate)
+                {
+                    interceptorType = VizInterceptorType.After;
+                    Delegate ad = (Delegate)interceptor;
+                    vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
+                }
+                else if (interceptor is BeforeDelegate)
+                {
+                    interceptorType = VizInterceptorType.Before;
+                    Delegate ad = (Delegate)interceptor;
+                    vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
                 }
 
-                VizInterceptor vizInterceptor = new VizInterceptor();
+                
                 vizInterceptor.TypeName = interceptor.GetType().Name;
-                vizInterceptor.FullTypeName = interceptor.GetType().FullName;
+
                 vizInterceptor.InterceptorType = interceptorType;
 
                 if (interceptor.GetType().GetCustomAttributes(typeof(MayBreakFlowAttribute),false).Length > 0)
