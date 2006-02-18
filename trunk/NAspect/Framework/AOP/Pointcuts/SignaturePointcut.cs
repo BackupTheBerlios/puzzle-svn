@@ -12,6 +12,7 @@ using System.Collections;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Tools;
 using Puzzle.NAspect.Framework.Interception;
+using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -48,6 +49,18 @@ namespace Puzzle.NAspect.Framework.Aop
 		}
 
 		#endregion
+
+        #region Pointcut
+
+        public SignaturePointcut(string targetMethodSignature, Delegate interceptor)
+        {
+            this.TargetMethodSignature = targetMethodSignature;
+            ArrayList arr = new ArrayList();
+            arr.Add(interceptor);
+            this.Interceptors = arr;
+        }
+
+        #endregion
 
 		public override bool IsMatch(MethodBase method)
 		{

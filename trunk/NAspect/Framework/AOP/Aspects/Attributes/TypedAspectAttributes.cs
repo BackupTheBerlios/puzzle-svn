@@ -67,26 +67,6 @@ namespace Puzzle.NAspect.Framework.Aop
         public InterceptorAttribute()
         {
         }
-
-        public bool IsMatch(MethodBase method)
-        {
-            if (targetSignature != null)
-            {
-                string methodsignature = AopTools.GetMethodSignature(method);
-                if (Text.IsMatch(methodsignature, TargetSignature))
-                    return true;
-                else
-                    return false;
-            }
-            else if (TargetAttribute != null)
-            {
-                if (method.GetCustomAttributes(TargetAttribute, true).Length > 0)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
     }
 
 
@@ -160,39 +140,5 @@ namespace Puzzle.NAspect.Framework.Aop
             }
         }
         #endregion
-
-        internal bool IsMatch(Type type)
-        {
-            if (this.TargetType == type)
-                return true;
-
-            if (this.TargetSignature != null)
-            {
-                Type tmp = type;
-                //traverse back in inheritance hierarchy to first non runtime emitted type 
-                while (tmp.Assembly is AssemblyBuilder)
-                    tmp = tmp.BaseType;
-
-
-                if (Text.IsMatch(tmp.FullName, TargetSignature))
-                    return true;
-                else
-                    return false;
-            }
-
-            if (this.TargetAttribute != null)
-            {
-                Type tmp = type;
-			    while (tmp.Assembly is AssemblyBuilder)
-				    tmp = tmp.BaseType;
-
-			    if (tmp.GetCustomAttributes(TargetAttribute, true).Length > 0)
-				    return true;
-			    else
-				    return false;
-            }
-
-            return false;
-        }
     }
 }

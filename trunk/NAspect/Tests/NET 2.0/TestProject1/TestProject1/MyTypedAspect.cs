@@ -46,4 +46,17 @@ namespace KumoUnitTests
             this.target = target;
         }
     }
+    
+    [AspectTarget(TargetType = typeof(Foo))]    //target of this aspect
+    public class ReturnValueChangerAspect : ITypedAspect
+    {
+        [Interceptor(Index = 1, TargetSignature = "MyInt*")]
+        public object MyAroundInterceptor(MethodInvocation call)
+        {
+            int res = (int)call.Proceed();
+
+            res++;
+            return res;
+        }
+    }
 }

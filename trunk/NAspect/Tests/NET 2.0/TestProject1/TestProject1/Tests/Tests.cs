@@ -333,5 +333,18 @@ namespace KumoUnitTests
 
             Assert.IsTrue(helloString == "Hello", "SayHelloMixin did not work");
         }
+
+        [TestMethod()]
+        public void TypedAspectInterceptorTest()
+        {
+            Engine c = new Engine("TypedAspectInterceptorTest");
+            c.Configuration.Aspects.Add(new ReturnValueChangerAspect());
+
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            int result = proxy.MyIntMethod();
+
+            Assert.IsTrue(result == 1, "return value has not been changed");
+        }
 	}
 }
