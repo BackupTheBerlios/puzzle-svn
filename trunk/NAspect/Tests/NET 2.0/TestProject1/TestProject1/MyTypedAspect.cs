@@ -11,7 +11,7 @@ namespace KumoUnitTests
     {
 
         //interceptor with index 1 , intercepting * 
-        [Interceptor(Index = 1,TargetSignature="*")]
+        [Interceptor(Index = 3,TargetSignature="*")]
         public object MyAroundInterceptor(MethodInvocation call)
         {
             Console.WriteLine("before");
@@ -26,7 +26,7 @@ namespace KumoUnitTests
             Console.WriteLine("after");
         }
 
-        [Interceptor(Index = 3, TargetSignature = "*")]
+        [Interceptor(Index = 1, TargetSignature = "*")]
         public void MyBeforeIntercepto(BeforeMethodInvocation call)
         {
             Console.WriteLine("before");           

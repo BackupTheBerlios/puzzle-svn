@@ -223,7 +223,14 @@ namespace Puzzle.NFactory.Framework
 					string property = properties[i];
 					Type tmpType = tmpTarget.GetType();
 					propertyInfo = tmpType.GetProperty(property);
+
+                    if (propertyInfo == null)
+                    {
+                        throw new NullReferenceException(string.Format("Property path {0} was not found", propertyPath));
+                    }
 				}
+
+                
 
 				target = tmpTarget;
 				propertyConfig.Type = propertyInfo.PropertyType;
