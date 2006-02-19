@@ -10,6 +10,8 @@ namespace AdvancedConfig
         static void Main(string[] args)
         {
             IContainer container = ApplicationContext.Configure();
+            
+            
             SomeClass myObject = container.GetObject<SomeClass>("MyObject");
 
             myObject.DoStuff();

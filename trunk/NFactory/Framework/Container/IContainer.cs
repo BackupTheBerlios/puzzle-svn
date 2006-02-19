@@ -11,7 +11,7 @@ namespace Puzzle.NFactory.Framework
 		IContainerConfiguration Configuration { get; set; }
 
 		IObjectFactory ObjectFactory { get; set; }
-
+        IContainer ParentContainer{ get; set; }
 
 		object GetObject(string name, bool forceNewInstance);
 		object GetObject(string name);
