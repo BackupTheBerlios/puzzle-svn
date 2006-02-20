@@ -261,19 +261,22 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public virtual int GetMaxLength()
 		{
-			IColumnMap columnMap = this.GetColumnMap();
-			if (columnMap != null)
+			if (!this.IsCollection)
 			{
-				switch (columnMap.DataType)
+				IColumnMap columnMap = this.GetColumnMap();
+				if (columnMap != null)
 				{
-					case DbType.AnsiString :
-						return columnMap.Precision ;
-					case DbType.AnsiStringFixedLength :
-						return columnMap.Precision ;
-					case DbType.String  :
-						return columnMap.Precision ;
-					case DbType.StringFixedLength :
-						return columnMap.Precision ;
+					switch (columnMap.DataType)
+					{
+						case DbType.AnsiString :
+							return columnMap.Precision ;
+						case DbType.AnsiStringFixedLength :
+							return columnMap.Precision ;
+						case DbType.String  :
+							return columnMap.Precision ;
+						case DbType.StringFixedLength :
+							return columnMap.Precision ;
+					}
 				}
 			}
 			return this.m_MaxLength;
