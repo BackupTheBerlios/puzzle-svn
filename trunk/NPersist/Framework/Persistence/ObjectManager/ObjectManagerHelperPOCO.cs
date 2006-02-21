@@ -57,7 +57,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					value = m_ObjectManager.GetPropertyValue(obj, propertyMap.Name);
 				}
-				if (value == null || m_ObjectManager.GetNullValueStatus(obj, propertyMap.Name) == true)
+				if (newPropertyMap == null && (value == null || m_ObjectManager.GetNullValueStatus(obj, propertyMap.Name) == true))
 				{
 					if (!(m_hashTempIds.ContainsKey(obj)))
 					{

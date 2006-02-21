@@ -241,7 +241,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
-            return;
+            //return;
 
 
             //Assembly assembly = null;

@@ -350,8 +350,6 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 					pe.LoadProperty(obj, propertyName);
 				}
 			}
-			om.SetNullValueStatus(obj, propertyName, false);
-			om.SetUpdatedStatus(obj, propertyName, true);
 			if (propertyMap.IsIdentity)
 			{
 				prevId = om .GetObjectIdentity(obj);
@@ -361,6 +359,8 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 					ctx.IdentityMap.UpdateIdentity(obj, prevId, newId);					
 				}
 			}
+			om.SetNullValueStatus(obj, propertyName, false);
+			om.SetUpdatedStatus(obj, propertyName, true);
 			if (hasOldValue)
 			{
 				ctx.InverseManager.NotifyPropertySet(obj, propertyName, value, oldValue);
