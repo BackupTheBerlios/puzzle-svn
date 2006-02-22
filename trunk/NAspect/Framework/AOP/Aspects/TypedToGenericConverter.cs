@@ -41,7 +41,7 @@ namespace Puzzle.NAspect.Framework.Aop
             foreach (MethodInfo method in methods)
             {
                 object[] interceptorAttributes = method.GetCustomAttributes(typeof(InterceptorAttribute), false);
-                if (interceptorAttributes != null)
+                if (interceptorAttributes != null && interceptorAttributes.Length > 0)
                 {
                     methodsList.Add(method);
                 }
