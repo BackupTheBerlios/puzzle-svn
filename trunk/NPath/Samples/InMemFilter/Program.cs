@@ -65,7 +65,7 @@ namespace InMemFilter
             RunQuery("where SomeMethod(Age + 3) != 12", realList);
 
             //property path 
-            RunQuery("where Address.City like 's%'", realList);
+            RunQuery("where Address.MyMethod() like '%eRe' order by Address.MyMethod() Asc", realList);
 
 
             //complex 

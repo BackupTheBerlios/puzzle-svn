@@ -50,5 +50,10 @@ namespace InMemFilter
             }
         }                        
         #endregion
+
+        public string MyMethod()
+        {
+            return city.ToLower();
+        }
     }
 }

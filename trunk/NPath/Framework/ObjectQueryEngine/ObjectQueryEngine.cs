@@ -1004,19 +1004,66 @@ namespace Puzzle.NPath.Framework
 
 		private static bool Like(string text, string pattern)
 		{
-			string regexpattern = "^";
-			foreach (char c in pattern)
-			{
-				if (c == '%')
-					regexpattern += @"\w*";
-				else if (c == '?')
-					regexpattern += @"\w";
-				else
-					regexpattern += Regex.Escape(c.ToString());
-			}
-			return Regex.IsMatch(text, regexpattern, RegexOptions.IgnoreCase);
-		}
+            //string regexpattern = "^";
+            //foreach (char c in pattern)
+            //{
+            //    if (c == '%')
+            //        regexpattern += @"\w*";
+            //    else if (c == '?')
+            //        regexpattern += @"\w";
+            //    else if (c == '@')
+            //        regexpattern += @"\@";
+            //    else
+            //        regexpattern += Regex.Escape(c.ToString());
+            //}
+            //return Regex.IsMatch(text, regexpattern, RegexOptions.IgnoreCase);
 
+            text = text.ToLower();
+            pattern = pattern.ToLower();
+
+            int cp=0, mp=0;
+            
+            int i=0;
+            int j=0;
+            while ((i<text.Length) && (pattern[j] != '%')) 
+            {
+                if ((pattern[j] != text[i]) && (pattern[j] != '?')) 
+                {
+                    return false;
+                }
+                i++;
+                j++;
+            }
+            
+            while (i<text.Length) 
+            {
+                if (j<pattern.Length && pattern[j] == '%') 
+                {
+                    if ((j++)>=pattern.Length) 
+                    {
+                        return true;
+                    }
+                    mp = j;
+                    cp = i+1;
+                } 
+                else if (j<pattern.Length && (pattern[j] == text[i] || pattern[j] == '?')) 
+                {
+                    j++;
+                    i++;
+                } 
+                else 
+                {
+                    j = mp;
+                    i = cp++;
+                }
+            }
+            
+            while (j<pattern.Length && pattern[j] == '%') 
+            {
+                j++;
+            }
+            return j>=pattern.Length;
+        }
 		#endregion
 	}
 }
