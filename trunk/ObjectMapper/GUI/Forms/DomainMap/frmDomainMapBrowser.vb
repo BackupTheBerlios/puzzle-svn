@@ -10446,6 +10446,8 @@ Public Class frmDomainMapBrowser
 
                     'Make sure target folder exists
 
+                    folderPath = ReplaceVars(folderPath)
+
                     If Len(folderPath) > 0 Then
 
                         Try
@@ -17299,9 +17301,29 @@ Public Class frmDomainMapBrowser
 
     End Sub
 
+    Private Shared Function ReplaceVars(ByVal text As String) As String
+
+        Dim dict As IDictionary = Environment.GetEnvironmentVariables()
+		for each variable as string in dict.Keys
+
+            Dim pattern As String = "%" + variable.ToLower() + "%"
+            Dim patternIndex As Integer = text.ToLower().IndexOf(pattern)
+            If patternIndex >= 0 Then
+                Dim left As String = text.Substring(0, patternIndex)
+                Dim right As String = text.Substring(patternIndex + pattern.Length)
+
+                text = left + Environment.GetEnvironmentVariable(variable) + right
+            End If
+        Next
+
+        Return text
+
+    End Function
+
+
     Private Function GetCustomCode(ByVal src As SourceCodeFile, ByVal classMap As IClassMap) As String
 
-        Return GetCustomCode(src, classMap, True)
+        Return GetCustomCode(src, ClassMap, True)
 
     End Function
 
