@@ -1677,7 +1677,7 @@ Public Class ClassesToCodeVb
 
     Protected Overridable Function GetRegion(ByVal name As String) As String
 
-        If Len(name) > 0 Then name = ": " & name
+        'If Len(name) > 0 Then name = ": " & name
 
         Return "#Region "" " & name & " """
 
@@ -1686,7 +1686,7 @@ Public Class ClassesToCodeVb
 
     Protected Overridable Function GetEndRegion(ByVal name As String) As String
 
-        If Len(name) > 0 Then name = ": " & name
+        'If Len(name) > 0 Then name = ": " & name
 
         Return "#End Region '" & name
 

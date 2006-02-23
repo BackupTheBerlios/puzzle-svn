@@ -75,6 +75,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPersist.Tools.Domai
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.ObjectMapper.Plugins.InfrastructureGenerator", "Plugins\InfrastructureGenerator\Puzzle.ObjectMapper.Plugins.InfrastructureGenerator.csproj", "{3CEF9869-4325-4608-9FEB-E820450AB5E3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -235,6 +239,14 @@ Global
 		{AA969B95-DCE5-4185-9AC1-415B3F3F7204}.Release.Build.0 = Release|.NET
 		{AA969B95-DCE5-4185-9AC1-415B3F3F7204}.TEST.ActiveCfg = Release|.NET
 		{AA969B95-DCE5-4185-9AC1-415B3F3F7204}.TEST.Build.0 = Release|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.Debug.ActiveCfg = Debug|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.Debug.Build.0 = Debug|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.NPDebug.ActiveCfg = Debug|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.NPDebug.Build.0 = Debug|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.Release.ActiveCfg = Release|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.Release.Build.0 = Release|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.TEST.ActiveCfg = Release|.NET
+		{3CEF9869-4325-4608-9FEB-E820450AB5E3}.TEST.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

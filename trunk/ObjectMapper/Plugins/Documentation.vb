@@ -4,7 +4,7 @@ Imports Puzzle.ObjectMapper.Tools
 Imports Puzzle.ObjectMapper.Plugin
 Imports System.Text
 
-<PluginClass("MatsSoft")> Public Class Documentation
+<PluginClass("Puzzle")> Public Class Documentation
 
     Public tab As String = "    "
 

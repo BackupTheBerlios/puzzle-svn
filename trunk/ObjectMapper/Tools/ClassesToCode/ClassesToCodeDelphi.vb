@@ -1917,7 +1917,7 @@ Public Class ClassesToCodeDelphi
 
     Protected Overridable Function GetRegion(ByVal name As String) As String
 
-        If Len(name) > 0 Then name = ": " & name
+        'If Len(name) > 0 Then name = ": " & name
 
         Return "#region "" " & name & " """
 
@@ -1926,7 +1926,7 @@ Public Class ClassesToCodeDelphi
 
     Protected Overridable Function GetEndRegion(ByVal name As String) As String
 
-        If Len(name) > 0 Then name = ": " & name
+        'If Len(name) > 0 Then name = ": " & name
 
         Return "#endregion //" & name
 

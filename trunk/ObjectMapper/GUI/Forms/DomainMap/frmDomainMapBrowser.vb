@@ -17420,9 +17420,16 @@ Public Class frmDomainMapBrowser
 
     Public Sub LoadPluginsAndConverters()
 
-        '        Dim path As String = Application.StartupPath & "\plugins"
-
         Dim path As String = Application.LocalUserAppDataPath & "\..\custom\plugins"
+        LoadPluginsAndConverters(path)
+
+        path = Application.StartupPath & "\plugins"
+        LoadPluginsAndConverters(path)
+
+    End Sub
+
+    Public Sub LoadPluginsAndConverters(ByVal path As String)
+
         Dim file As String
         Dim fileInfo As fileInfo
         Dim asmType As Type
@@ -17503,7 +17510,7 @@ Public Class frmDomainMapBrowser
 
                         Next
 
-                        For Each plugClassAttr In asmType.GetCustomAttributes(GetType(PluginClassAttribute), True)
+                        For Each plugClassAttr In asmType.GetCustomAttributes(GetType(Puzzle.ObjectMapper.Plugin.PluginClassAttribute), True)
 
                             Try
 
