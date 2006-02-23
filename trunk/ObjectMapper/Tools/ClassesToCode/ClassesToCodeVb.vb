@@ -216,7 +216,7 @@ Public Class ClassesToCodeVb
         If Not superClass Is Nothing Then
             codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.ClassIndent, 1))
             codeBuilder.Append("Inherits ")
-            codeBuilder.Append(superClass.Name)
+            codeBuilder.Append(superClass.GetFullName())
             codeBuilder.Append(vbCrLf)
         Else
 

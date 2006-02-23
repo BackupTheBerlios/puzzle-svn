@@ -242,7 +242,7 @@ Public Class ClassesToCodeDelphi
         superClass = classMap.GetInheritedClassMap
         If Not superClass Is Nothing Then
             codeBuilder.Append(implSep)
-            codeBuilder.Append(superClass.Name)
+            codeBuilder.Append(superClass.GetFullName())
             implSep = ", "
         Else
             codeBuilder.Append(implSep)
