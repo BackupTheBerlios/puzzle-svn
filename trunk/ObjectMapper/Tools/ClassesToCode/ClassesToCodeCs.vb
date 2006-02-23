@@ -91,9 +91,13 @@ Public Class ClassesToCodeCs
 
             For Each classMap In domainMap.GetNamespaceClassMaps(name)
 
-                'Class
-                codeBuilder.Append(ClassToTypedCollection(classMap, True, True))
-                codeBuilder.Append(vbCrLf)
+                If classMap.ClassType = ClassType.Class Or classMap.ClassType = ClassType.Default Then
+
+                    'Class
+                    codeBuilder.Append(ClassToTypedCollection(classMap, True, True))
+                    codeBuilder.Append(vbCrLf)
+
+                End If
 
             Next
 
