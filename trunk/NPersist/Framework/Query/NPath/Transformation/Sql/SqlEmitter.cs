@@ -1569,7 +1569,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			{
 				result = "?";
 			}			
-			if (sourceMap.SourceType == SourceType.Oracle)
+			else if (sourceMap.SourceType == SourceType.Oracle)
 			{
 				resultParameterCount++;
 				result = ":Param" + resultParameterCount.ToString() ;
