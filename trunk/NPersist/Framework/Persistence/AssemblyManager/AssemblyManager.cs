@@ -118,7 +118,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			else
 			{
-				 type = Type.GetType(dataType);		
+				type = Type.GetType(dataType);
+				if (type == null)
+				{
+					IDomainMap domainMap = propertyMap.ClassMap.DomainMap;
+					string fullName = dataType;
+					if (domainMap.RootNamespace.Length > 0)
+						fullName = domainMap.RootNamespace + "." + fullName;
+
+					type = Type.GetType(fullName + ", " + domainMap.GetAssemblyName());
+				}
 			}
 			return type;
 		}
