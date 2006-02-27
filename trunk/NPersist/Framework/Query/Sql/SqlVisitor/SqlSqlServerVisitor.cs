@@ -24,5 +24,13 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			// TODO: Add constructor logic here
 			//
 		}
+
+        protected override string FormatBoolean(bool content)
+        {
+            if (content)
+                return "1";
+            else
+                return "0";
+        }
 	}
 }
