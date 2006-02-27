@@ -11,6 +11,7 @@ using System;
 using Puzzle.NAspect.Framework;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.BaseClasses;
+using System.Collections;
 
 namespace Puzzle.NPersist.Framework.Aop
 {
@@ -31,8 +32,9 @@ namespace Puzzle.NPersist.Framework.Aop
 		{
 		//	return Puzzle.NPersist.Framework.Proxy.ListProxyFactory.CreateProxy(baseType,objectFactory,ctorArgs) ;
 
-			if (baseType == typeof(IInterceptableList))
+            if (baseType == typeof(IInterceptableList) || baseType == typeof(InterceptableList) || baseType == typeof(IList))
 			{
+                baseType = typeof(InterceptableList);
 				return (Puzzle.NPersist.Framework.Interfaces.IInterceptableList) context.ObjectFactory.CreateInstance(baseType,ctorArgs);
 			}
 #if NET2

@@ -67,9 +67,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             if (listType == typeof(IList))
 #endif			
 			{
-				mList = (IInterceptableList) Activator.CreateInstance(typeof(InterceptableList));
-				mList.Interceptable = (IInterceptable) obj;
-				mList.PropertyName = propertyName;
+                mList = new InterceptableList((IInterceptable)obj,propertyName);				
 				newList = mList;
 			}
 			else if (typeof(IList).IsAssignableFrom(listType))
@@ -104,23 +102,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return newList;
 		}
 
-//		public virtual IList CreateList(object obj, IPropertyMap propertyMap)
-//		{
-//			IInterceptableList list;
-//			list = (IInterceptableList) Activator.CreateInstance(typeof(InterceptableList));
-//			list.Interceptable = (IInterceptable) obj;
-//			list.PropertyName = propertyMap.Name;
-//			return (IList) list;
-//		}
-
 		public virtual IList CloneList(object obj, IPropertyMap propertyMap, IList orgList)
 		{
 			//IList newList = CreateList(orgList.GetType(), obj, propertyMap);
 			Type t = obj.GetType() ;
 			Type listType = t.GetProperty(propertyMap.Name).PropertyType;
 
-			if (listType == typeof(IList))
-				listType = typeof(ArrayList);
+			//if (listType == typeof(IList))
+			//	listType = typeof(IInterceptableList);
 
 
 			IList newList = Context.ProxyFactory.CreateListProxy(listType,Context.ObjectFactory,new object[0] ) ;
