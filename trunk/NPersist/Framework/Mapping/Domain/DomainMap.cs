@@ -264,7 +264,7 @@ namespace Puzzle.NPersist.Framework.Mapping
                 {
                     assembly = System.Reflection.Assembly.Load(classMap.AssemblyName);
                     if (assembly == null)
-                        throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'", this.AssemblyName));
+                        throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'", classMap.AssemblyName));
                 }
 
 
