@@ -61,7 +61,9 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			if (hash == null) { hash = propertyMap; }
 			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.GetTableMap(), hash)  ;
 
-			return tbl.GetSqlColumnAlias(propertyMap.GetColumnMap());
+            IColumnMap columnMap = propertyMap.GetColumnMap();
+
+            return tbl.GetSqlColumnAlias(columnMap);
 		}
 
 		public virtual string GetPathParent(string path)

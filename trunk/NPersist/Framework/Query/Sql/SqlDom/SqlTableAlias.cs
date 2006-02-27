@@ -89,6 +89,9 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 
 		public SqlColumnAlias GetSqlColumnAlias(IColumnMap columnMap, string alias)
 		{
+            if (columnMap == null)
+                throw new ArgumentNullException("columnMap");
+
 			SqlColumnAlias sqlColumnAlias = FindSqlColumnAlias(columnMap.Name, alias) ;
 			if (sqlColumnAlias == null)
 			{

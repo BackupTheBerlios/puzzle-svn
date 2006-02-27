@@ -40,7 +40,7 @@ namespace InMemFilter
             p4.Age = 55;
             p4.FirstName = "Bill";
             p4.LastName = "Gates";
-            p4.Address.City = "Somewhere";
+            p4.Address.City = "larsson";
             realList.Add (p4);
 
             Person p5 = new Person();
@@ -52,24 +52,24 @@ namespace InMemFilter
 
 
             
-            //sort
-            RunQuery("order by LastName desc,FirstName asc", realList);
+            ////sort
+            //RunQuery("order by LastName desc,FirstName asc", realList);
 
-            //not null
-            RunQuery("where FirstName != null", realList);
+            ////not null
+            //RunQuery("where FirstName != null", realList);
 
-            //sql like
-            RunQuery("where FirstName like 'b%'", realList);
+            ////sql like
+            //RunQuery("where FirstName like 'b%'", realList);
 
-            //filter on method result
-            RunQuery("where SomeMethod(Age + 3) != 12", realList);
+            ////filter on method result
+            //RunQuery("where SomeMethod(Age + 3) != 12", realList);
 
             //property path 
-            RunQuery("where Address.MyMethod() like '%eRe' order by Address.MyMethod() Asc", realList);
+            RunQuery("where Address.MyMethod() like 'LARSSON' order by Address.MyMethod() Asc", realList);
 
 
-            //complex 
-            RunQuery("where Address.City like 's%' and (FirstName != null or LastName = 'Johansson')", realList);
+            ////complex 
+            //RunQuery("where Address.City like 's%' and (FirstName != null or LastName = 'Johansson')", realList);
 
             
 
