@@ -220,7 +220,80 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						if (propertyMap.NullSubstitute.Length > 0)
 						{
-							return propertyMap.NullSubstitute;
+                                                    Type propType = obj.GetType().GetProperty(propertyMap.Name).PropertyType;
+                                                    if (propType.IsEnum)
+                                                    {
+                                                        return Enum.ToObject(propType, propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Boolean) || propType.IsSubclassOf(typeof(Boolean)))
+                                                    {
+                                                        return Convert.ToBoolean(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Byte) || propType.IsSubclassOf(typeof(Byte)))
+                                                    {
+                                                        return Convert.ToByte(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Char) || propType.IsSubclassOf(typeof(Char)))
+                                                    {
+                                                        return Convert.ToChar(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(DateTime) || propType.IsSubclassOf(typeof(DateTime)))
+                                                    {
+                                                        return DateTime.Parse(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Decimal) || propType.IsSubclassOf(typeof(Decimal)))
+                                                    {
+                                                        return Convert.ToDecimal(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Double) || propType.IsSubclassOf(typeof(Double)))
+                                                    {
+                                                        return Convert.ToDouble(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Guid) || propType.IsSubclassOf(typeof(Guid)))
+                                                    {
+                                                        return new Guid(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Int16) || propType.IsSubclassOf(typeof(Int16)))
+                                                    {
+                                                        return Convert.ToInt16(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Int32) || propType.IsSubclassOf(typeof(Int32)))
+                                                    {
+                                                        return Convert.ToInt32(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Int64) || propType.IsSubclassOf(typeof(Int64)))
+                                                    {
+                                                        return Convert.ToInt64(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(object) || propType.IsSubclassOf(typeof(object)))
+                                                    {
+                                                        return propertyMap.NullSubstitute;
+                                                    }
+                                                    else if (propType == typeof(SByte) || propType.IsSubclassOf(typeof(SByte)))
+                                                    {
+                                                        return Convert.ToByte(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(Single) || propType.IsSubclassOf(typeof(Single)))
+                                                    {
+                                                        return Convert.ToSingle(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(String) || propType.IsSubclassOf(typeof(String)))
+                                                    {
+                                                        return propertyMap.NullSubstitute;
+                                                    }
+                                                    else if (propType == typeof(ushort) || propType.IsSubclassOf(typeof(ushort)))
+                                                    {
+                                                        return Convert.ToUInt16(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(uint) || propType.IsSubclassOf(typeof(uint)))
+                                                    {
+                                                        return Convert.ToUInt32(propertyMap.NullSubstitute);
+                                                    }
+                                                    else if (propType == typeof(ulong) || propType.IsSubclassOf(typeof(ulong)))
+                                                    {
+                                                        return Convert.ToUInt64(propertyMap.NullSubstitute);
+                                                    }
+                                                    return propertyMap.NullSubstitute;
 						}
 						else
 						{
@@ -283,15 +356,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							else if (propType == typeof (ushort) || propType.IsSubclassOf(typeof (ushort)))
 							{
-								return Convert.ToInt16(0);
+								return Convert.ToUInt16(0);
 							}
 							else if (propType == typeof (uint) || propType.IsSubclassOf(typeof (uint)))
 							{
-								return Convert.ToInt32(0);
+								return Convert.ToUInt32(0);
 							}
 							else if (propType == typeof (ulong) || propType.IsSubclassOf(typeof (ulong)))
 							{
-								return Convert.ToInt64(0);
+								return Convert.ToUInt64(0);
 							}
 						}
 					}
