@@ -150,10 +150,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public static IDomainMap Load(string path, IMapSerializer mapSerializer)
 		{
-			return Load(path, mapSerializer, true);
+			return Load(path, mapSerializer, true,true);
 		}
 
-		public static IDomainMap Load(string path, IMapSerializer mapSerializer, bool useCache)
+		public static IDomainMap Load(string path, IMapSerializer mapSerializer, bool useCache,bool validate)
 		{
 			IDomainMap domainMap;
 			StreamReader reader = null;
@@ -189,7 +189,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 					throw new IOException("Could not load file from path: " + path + "! " + ex.Message, ex); // do not localize
 				}
 			}
-			domainMap = LoadFromXml(xml, mapSerializer);
+			domainMap = LoadFromXml(xml, mapSerializer,useCache,validate);
 			domainMap.SetLoadedFromPath(path);
 
 			if (useCache)
@@ -198,7 +198,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return domainMap;
 		}
 
-		public static IDomainMap LoadFromXml(string xml, IMapSerializer mapSerializer)
+		public static IDomainMap LoadFromXml(string xml, IMapSerializer mapSerializer,bool useCache,bool validate)
 		{
 			IDomainMap domainMap;
 
@@ -234,9 +234,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			domainMap.Dirty = false;
 
-			((DomainMap)domainMap).Validate();
+			if (validate)
+				((DomainMap)domainMap).Validate();
 
 			return domainMap;
+		}
+
+		public static IDomainMap LoadFromXml(string xml, IMapSerializer mapSerializer)
+		{
+			return DomainMap.LoadFromXml(xml,mapSerializer,true,true);
 		}
 
 		protected virtual void Validate()

@@ -80,11 +80,18 @@ namespace Puzzle.NCore.Framework.Text.PatternMatchers
 
 			while (matchAtIndex + length != textLength)
 			{
-				if (textToMatch[matchAtIndex + length] == EndChar && (matchAtIndex + length < textLength - 1 && textToMatch[matchAtIndex + length + 1] == EndChar))
+                int currentIndex = matchAtIndex + length;
+                char currentChar = textToMatch[currentIndex];
+
+                if (currentChar == escapeChar)
+                {
+                    length++;
+                }
+                else if (currentChar == EndChar && (currentIndex < textLength - 1 && textToMatch[currentIndex + 1] == EndChar))
 				{
 					length++;
 				}
-				else if (textToMatch[matchAtIndex + length] == EndChar && (matchAtIndex + length == textLength - 1 || textToMatch[matchAtIndex + length + 1] != EndChar))
+                else if (currentChar == EndChar && (currentIndex == textLength - 1 || textToMatch[currentIndex + 1] != EndChar))
 					return length + 1;
 
 				length ++;

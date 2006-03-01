@@ -135,13 +135,6 @@ namespace Puzzle.NPath.Framework
 			return this[currentIndex + 1];
 		}
 
-//		public Token GetPreviousToken(string ensureType)
-//		{
-//			Token token = GetPreviousToken();
-//			EnsureType(token, ensureType);
-//			return token;
-//		}
-
 		public Token GetCurrentToken(string ensureType, string expected)
 		{
 			Token tokenFound = GetCurrentToken();
@@ -173,12 +166,6 @@ namespace Puzzle.NPath.Framework
 			EnsureType(tokenFound, ensureType, tokenNear.Text, expected);
 			return tokenFound;
 		}
-
-//		private void EnsureType(Token token, string type)
-//		{
-//			if (!token.IsType( type))
-//				throw new ExpectedTokenException(token.Text,token.Index) ;
-//		}
 
 		private void EnsureType(Token token, string type, string near)
 		{
