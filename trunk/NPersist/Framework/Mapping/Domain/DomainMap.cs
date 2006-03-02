@@ -247,9 +247,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
-         //   return;
-
-
             Assembly assembly = null;
 
             string assemblyName = this.AssemblyName;
@@ -303,8 +300,16 @@ namespace Puzzle.NPersist.Framework.Mapping
                     if (propertyMap.ReferenceType == ReferenceType.ManyToMany || propertyMap.ReferenceType == ReferenceType.ManyToOne)
                     {
                         Type listType = getMethod.ReturnType;
-                        if (!typeof(IList).IsAssignableFrom(listType))
-                            throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
+
+#if NET2
+                        if (listType.IsGenericType && listType.IsInterface && listType.Name.Contains("IList"))
+                        {
+
+                        }
+                        else
+#endif
+                            if (!typeof(IList).IsAssignableFrom(listType))
+                                throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
 
                         if (listType.IsClass)
                         {
