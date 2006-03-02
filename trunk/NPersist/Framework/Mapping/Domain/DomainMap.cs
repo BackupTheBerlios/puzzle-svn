@@ -247,10 +247,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
+
             Assembly assembly = null;
 
             string assemblyName = this.GetAssemblyName();
-            
+
 
             assembly = System.Reflection.Assembly.Load(assemblyName);
             if (assembly == null)
@@ -342,7 +343,7 @@ namespace Puzzle.NPersist.Framework.Mapping
                         if (columnMap == null)
                         {
                             throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
-                        }                        
+                        }
                     }
                 }
             }	
