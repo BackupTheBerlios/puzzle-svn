@@ -223,7 +223,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                                                     Type propType = obj.GetType().GetProperty(propertyMap.Name).PropertyType;
                                                     if (propType.IsEnum)
                                                     {
-                                                        return Enum.ToObject(propType, propertyMap.NullSubstitute);
+                                                        return Enum.ToObject(propType, Convert.ToInt32(propertyMap.NullSubstitute));
                                                     }
                                                     else if (propType == typeof(Boolean) || propType.IsSubclassOf(typeof(Boolean)))
                                                     {
