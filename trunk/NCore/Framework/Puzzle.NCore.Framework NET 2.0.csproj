@@ -165,38 +165,6 @@
     <Compile Include="Logging\WebTraceLogger.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Parsing\AST\RogueBoolean.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueDecimal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueIdentifier.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueInteger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueOperator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueParenthesisGroup.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueRoot.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueScope.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\AST\RogueStatement.cs" />
-    <Compile Include="Parsing\AST\RogueString.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Parsing\MultiLineCommentPatternMatcher.cs" />
-    <Compile Include="Parsing\PreProcessorComment.cs" />
-    <Compile Include="Parsing\RogueParser.cs" />
-    <Compile Include="Parsing\RogueTokenizer.cs" />
     <Compile Include="Text\PatternMatchers\BinPatternMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -206,7 +174,6 @@
     <Compile Include="Text\PatternMatchers\HexPatternMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Text\PatternMatchers\IdentifierPatternMatcher.cs" />
     <Compile Include="Text\PatternMatchers\IntPatternMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -225,7 +192,6 @@
     <Compile Include="Text\PatternMatchers\RegionPatternMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Parsing\SingleLineCommentPatternMatcher.cs" />
     <Compile Include="Text\Tokenizer\CharUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -235,11 +201,9 @@
     <Compile Include="Text\Tokenizer\PatternMatchReference.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Parsing\RogueToken.cs" />
     <Compile Include="Text\Tokenizer\StringUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Text\Tokenizer\TokenizerBase.cs" />
     <Compile Include="Text\Tokenizer\TokenTree.cs">
       <SubType>Code</SubType>
     </Compile>
