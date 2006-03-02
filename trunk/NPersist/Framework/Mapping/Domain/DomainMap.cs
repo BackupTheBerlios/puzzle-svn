@@ -324,9 +324,12 @@ namespace Puzzle.NPersist.Framework.Mapping
                         {
                             foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
                             {
-                                if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+                                if (columnMap.IsForeignKey)
                                 {
-                                    throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name", columnMap.Name, propertyInfo.Name, classMap.GetFullName()));
+                                    if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+                                    {
+                                        throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name", columnMap.Name, propertyInfo.Name, classMap.GetFullName()));
+                                    }
                                 }
                             }
                         }
