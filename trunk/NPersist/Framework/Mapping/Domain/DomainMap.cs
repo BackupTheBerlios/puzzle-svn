@@ -268,10 +268,14 @@ namespace Puzzle.NPersist.Framework.Mapping
                 }
 
 
-
                 Type type = assembly.GetType(classMap.GetFullName());
                 if (type == null)
-                    throw new NPersistException(string.Format("Could not find type '{0}'", classMap.GetFullName()));
+                {
+                    if (assembly.GetType(classMap.GetFullName(), false, true) != null)
+                        throw new NPersistException(string.Format("Type '{0}' found, but type name casing does not match in mapping file and assembly.", classMap.GetFullName()));
+                    else
+                        throw new NPersistException(string.Format("Could not find type '{0}'", classMap.GetFullName()));
+                }
 
                 foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
                 {
