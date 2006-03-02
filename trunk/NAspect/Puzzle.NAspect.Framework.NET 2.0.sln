@@ -13,15 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		TestRunConfig1.testrunconfig = TestRunConfig1.testrunconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "Framework\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug", "Framework\Puzzle.Naspect.Debug\Puzzle.NAspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DebuggerVisualizer", "DebuggerVisualizer", "{66010D44-F7A6-414C-AE9B-E9218B2BF4F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{981884B9-FBE6-4275-AD4A-1888D9EAB87E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "Framework\Debugger\TestApp\TestApp.csproj", "{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Naspect.Debug", "Debugger\Puzzle.Naspect.Debug\Puzzle.Naspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "Debugger\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -44,18 +42,14 @@ Global
 		{CCAD4EE0-C75F-48AE-9F71-72D01B8F7192}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCAD4EE0-C75F-48AE-9F71-72D01B8F7192}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCAD4EE0-C75F-48AE-9F71-72D01B8F7192}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +58,5 @@ Global
 		{CCAD4EE0-C75F-48AE-9F71-72D01B8F7192} = {981884B9-FBE6-4275-AD4A-1888D9EAB87E}
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66} = {66010D44-F7A6-414C-AE9B-E9218B2BF4F2}
 		{DE0778EC-55D2-49F5-9984-99B6A769B2A8} = {66010D44-F7A6-414C-AE9B-E9218B2BF4F2}
-		{2A2F26BA-5017-4F0E-AB78-B00BFB37B2F4} = {66010D44-F7A6-414C-AE9B-E9218B2BF4F2}
 	EndGlobalSection
 EndGlobal
