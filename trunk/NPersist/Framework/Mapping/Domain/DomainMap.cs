@@ -249,11 +249,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
             Assembly assembly = null;
 
-            string assemblyName = this.AssemblyName;
-            if (assemblyName == null || assemblyName == "")
-            {
-                assemblyName = this.Name;
-            }
+            string assemblyName = this.GetAssemblyName();
+            
 
             assembly = System.Reflection.Assembly.Load(assemblyName);
             if (assembly == null)
@@ -261,11 +258,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 
             foreach (IClassMap classMap in this.ClassMaps)
             {
-                if (classMap.AssemblyName == null || classMap.AssemblyName == "")
+                if (classMap.GetAssemblyName() == null || classMap.GetAssemblyName() == "")
                     assembly = System.Reflection.Assembly.Load(assemblyName);
                 else
                 {
-                    assembly = System.Reflection.Assembly.Load(classMap.AssemblyName);
+                    assembly = System.Reflection.Assembly.Load(classMap.GetAssemblyName());
                     if (assembly == null)
                         throw new NPersistException(string.Format("Could not find Domain Model assembly '{0}'", classMap.AssemblyName));
                 }
