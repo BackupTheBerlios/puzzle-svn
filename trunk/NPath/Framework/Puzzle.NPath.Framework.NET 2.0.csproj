@@ -196,6 +196,7 @@
     <Compile Include="NPathDom\NPathSelectScalarClause.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NPathDom\NPathSoundexStatement.cs" />
     <Compile Include="NPathDom\NPathStringValue.cs">
       <SubType>Code</SubType>
     </Compile>

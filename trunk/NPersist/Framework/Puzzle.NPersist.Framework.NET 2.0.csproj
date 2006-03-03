@@ -1071,6 +1071,7 @@
     <Compile Include="Query\Sql\SqlDom\SqlSelectStatement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Query\Sql\SqlDom\SqlSoundex.cs" />
     <Compile Include="Query\Sql\SqlDom\SqlStatement.cs">
       <SubType>Code</SubType>
     </Compile>

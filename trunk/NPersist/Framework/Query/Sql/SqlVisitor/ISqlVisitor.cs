@@ -122,6 +122,8 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		void Visiting(SqlSumFunction sumFunction);
 
+        void Visiting(SqlSoundexFunction sumFunction);
+
 		void Visiting(SqlDeleteStatement deleteStatement);
 
 		void Visiting(SqlDeleteClause deleteClause);
@@ -243,6 +245,8 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 		void Visited(SqlMaxFunction maxFunction);
 
 		void Visited(SqlSumFunction sumFunction);
+
+        void Visited(SqlSoundexFunction sumFunction);
 
 		void Visited(SqlDeleteStatement deleteStatement);
 

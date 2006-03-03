@@ -12,6 +12,7 @@ using System;
 using System.Text;
 using Puzzle.NPersist.Framework.Sql.Dom;
 using Puzzle.NPersist.Framework.Sql.Visitor;
+using Puzzle.NPersist.Framework.Exceptions;
 
 namespace Puzzle.NPersist.Framework.Sql.Visitor
 {
@@ -575,6 +576,18 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 				sqlBuilder.Append("Sum(*)");							
 		}
 
+        public void Visiting(SqlSoundexFunction soundexFunction)
+        {
+            if (soundexFunction.SqlExpression != null)
+            {
+                sqlBuilder.Append("Soundex(");
+                soundexFunction.SqlExpression.Accept(this);
+                sqlBuilder.Append(")");
+            }
+            else
+                throw new NPersistException("Soundex must take a parameter");
+        }
+
 		public virtual void Visiting(SqlDeleteStatement deleteStatement)
 		{
 			
@@ -955,6 +968,11 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 		{
 			
 		}
+
+        public void Visited(SqlSoundexFunction soundexFunction)
+        {
+
+        }
 
 		public virtual void Visited(SqlDeleteStatement deleteStatement)
 		{

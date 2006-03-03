@@ -651,6 +651,8 @@ namespace Puzzle.NPath.Framework
 			{
 				NPathFunction functionOperand = new NPathFunction();
 
+                if (currentToken.IsType("soundex"))
+                    functionOperand = new NPathSoundexStatement();
 				if (currentToken.IsType("sum"))
 					functionOperand = new NPathSumStatement();
 				if (currentToken.IsType("isnull"))

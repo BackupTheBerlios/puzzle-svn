@@ -45,6 +45,7 @@ namespace Puzzle.NPath.Framework
 			tree.AddToken("max", false, true, new string[] {"function", "value", "max"});
 			tree.AddToken("avg", false, true, new string[] {"function", "value", "avg"});
 			tree.AddToken("sum", false, true, new string[] {"function", "value", "sum"});
+            tree.AddToken("soundex", false, true, new string[] { "function", "value", "soundex" });
 			tree.AddToken("count", false, true, new string[] {"function", "value", "count"});
 			tree.AddToken("isnull", false, true, new string[] {"function", "value", "isnull"});
 

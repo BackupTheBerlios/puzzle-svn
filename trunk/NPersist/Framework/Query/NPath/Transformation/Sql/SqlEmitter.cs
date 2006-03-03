@@ -1393,6 +1393,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		private SqlFunction EvalFunction(NPathFunction function)
 		{
+            if (function is NPathSoundexStatement)
+                return new SqlSoundexFunction(EvalExpression(function.Expression));
 			if (function is NPathSumStatement)
 				return new SqlSumFunction(EvalExpression(function.Expression), function.Distinct );
 			if (function is NPathCountStatement)
