@@ -445,17 +445,17 @@ namespace Puzzle.NPersist.Framework
 #if NET2
 
         T TryGetObjectById<T> (object identity);
-        T GetObjectbyId<T>(object identity);
-        T TryGetObjectByNPath<T>(string npathQuery);
-        T GetObjectByNPath<T>(string npathQuery);
-        T TryGetObjectByNPath<T>(string npathQuery, IList parameters);
-        T GetObjectByNPath<T>(string npathQuery, IList parameters);
+        T GetObjectById<T>(object identity);
+        T TryGetObjectByNPath<T>(string npathQuery,params QueryParameter[] parameters);
+        T GetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters);
         
         T CreateObject<T>(params object[] ctorArgs);
 
         IList<T> GetObjects<T>();
-        IList<T> GetObjectsByNPath<T> (string npathQuery);
-        IList<T> GetObjectsByNPath<T> (string npathQuery, IList parameters);
+        IList<T> GetObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters);
+
+        T[] GetArrayByNPath<T>(string npathQuery, params QueryParameter[] parameters);       
+        IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters);
  
 #endif
         #endregion

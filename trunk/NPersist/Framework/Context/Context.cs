@@ -2594,33 +2594,23 @@ namespace Puzzle.NPersist.Framework
             return (T)o;
         }
 
-        public virtual T GetObjectbyId<T>(object identity)
+        public virtual T GetObjectById<T>(object identity)
         {
             object o = this.GetObjectById(identity, typeof(T));
             return (T)o;
         }
 
-        public virtual T TryGetObjectByNPath<T>(string npathQuery)
+        public virtual T TryGetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
-            object o = this.TryGetObjectByNPath(npathQuery, typeof(T));
+            IList parameterList = new ArrayList(parameters);
+            object o = this.TryGetObjectByNPath(npathQuery, typeof(T), parameterList);
             return (T)o;
         }
 
-        public virtual T GetObjectByNPath<T>(string npathQuery)
+        public virtual T GetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
-            object o = this.GetObjectByNPath(npathQuery, typeof(T));
-            return (T)o;
-        }
-
-        public virtual T TryGetObjectByNPath<T>(string npathQuery, IList parameters)
-        {
-            object o = this.TryGetObjectByNPath(npathQuery, typeof(T),parameters);
-            return (T)o;
-        }
-
-        public virtual T GetObjectByNPath<T>(string npathQuery, IList parameters)
-        {
-            object o = this.GetObjectByNPath(npathQuery, typeof(T),parameters);
+            IList parameterList = new ArrayList(parameters);
+            object o = this.GetObjectByNPath(npathQuery, typeof(T), parameterList);
             return (T)o;
         }
 
@@ -2637,21 +2627,65 @@ namespace Puzzle.NPersist.Framework
             return list;
         }
 
-        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery)
+
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
             List<T> list = new List<T>();
-            this.GetObjectsByNPath(new NPathQuery (npathQuery,typeof(T)), list);
+            IList parameterList = new ArrayList(parameters);
+            this.GetObjectsByNPath(new NPathQuery(npathQuery, typeof(T), parameterList), list);
             return list;
         }
 
-        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, IList parameters)
+        public virtual T[] GetArrayByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
-            List<T> list = new List<T>();
-            this.GetObjectsByNPath(new NPathQuery(npathQuery, typeof(T), parameters), list);
-            return list;
+            IList parameterList = new ArrayList(parameters);
+            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameterList);
+            if (res.Columns.Count != 1)
+                throw new NPersistException("Query must return one column only");
+
+            T[] elements = new T[res.Rows.Count];
+            for (int i = 0; i < res.Rows.Count; i++)
+            {
+                elements[i] = (T)Convert.ChangeType(res.Rows[i][0], typeof(T));
+            }
+
+            return elements;
         }
 
+        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        {
+            IList parameterList = new ArrayList(parameters);
+            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameterList);
+            ConstructorInfo[] constructors = typeof(T).GetConstructors();
+            ConstructorInfo usedConstructor = null;
+            foreach (ConstructorInfo constructor in constructors)
+            {
+                if (constructor.GetParameters().Length == res.Columns.Count)
+                {
+                    usedConstructor = constructor;
+                    break;
+                }
+            }
+            if (usedConstructor == null)
+            {
+                throw new NPersistException(string.Format("Cound not find a constructor that matches your NPath query on type {0}", typeof(T).Name));
+            }
 
+            IList<T> snapshotObjects = new List<T>();
+            foreach (DataRow dr in res.Rows)
+            {
+                for (int i = 0; i < res.Columns.Count; i++)
+                {
+                    if (dr[i] == DBNull.Value)
+                        dr[i] = null;
+                }
+
+                T snapshotObject = (T)Activator.CreateInstance(typeof(T), dr.ItemArray);
+                snapshotObjects.Add(snapshotObject);
+            }
+
+            return snapshotObjects;
+        }
 #endif
         #endregion
     }
