@@ -647,166 +647,166 @@ namespace Puzzle.NPath.Framework
 			{
 				return ParseSearchFunctionExpression();
 			}
-			else if (currentToken.IsType("function") && IsInSelectClause() || currentToken.IsType("isnull"))
-			{
-				NPathFunction functionOperand = new NPathFunction();
+            else if (currentToken.IsType("function") && IsInSelectClause() || currentToken.IsType("isnull") || currentToken.IsType("soundex"))
+            {
+                NPathFunction functionOperand = new NPathFunction();
 
                 if (currentToken.IsType("soundex"))
                     functionOperand = new NPathSoundexStatement();
-				if (currentToken.IsType("sum"))
-					functionOperand = new NPathSumStatement();
-				if (currentToken.IsType("isnull"))
-					functionOperand = new NPathIsNullStatement();
-				if (currentToken.IsType("count"))
-					functionOperand = new NPathCountStatement();
-				if (currentToken.IsType("avg"))
-					functionOperand = new NPathAvgStatement();
-				if (currentToken.IsType("min"))
-					functionOperand = new NPathMinStatement();
-				if (currentToken.IsType("max"))
-					functionOperand = new NPathMaxStatement();
+                if (currentToken.IsType("sum"))
+                    functionOperand = new NPathSumStatement();
+                if (currentToken.IsType("isnull"))
+                    functionOperand = new NPathIsNullStatement();
+                if (currentToken.IsType("count"))
+                    functionOperand = new NPathCountStatement();
+                if (currentToken.IsType("avg"))
+                    functionOperand = new NPathAvgStatement();
+                if (currentToken.IsType("min"))
+                    functionOperand = new NPathMinStatement();
+                if (currentToken.IsType("max"))
+                    functionOperand = new NPathMaxStatement();
 
-				tokenizer.MoveNext();
-				tokenizer.GetCurrentToken("(", "(");
-				tokenizer.MoveNext();
-				if (tokenizer.GetCurrentToken().IsType("distinct"))
-				{
-					functionOperand.Distinct = true;
-					tokenizer.MoveNext();
-				}
+                tokenizer.MoveNext();
+                tokenizer.GetCurrentToken("(", "(");
+                tokenizer.MoveNext();
+                if (tokenizer.GetCurrentToken().IsType("distinct"))
+                {
+                    functionOperand.Distinct = true;
+                    tokenizer.MoveNext();
+                }
 
-				functionOperand.Expression = ParseBooleanExpression();
-				tokenizer.GetCurrentToken(")", ")");
-				tokenizer.MoveNext();
+                functionOperand.Expression = ParseBooleanExpression();
+                tokenizer.GetCurrentToken(")", ")");
+                tokenizer.MoveNext();
 
-				operand = functionOperand;
-			}
-			else if (currentToken.IsType("date"))
-			{
-				NPathDateTimeValue dateOperand = new NPathDateTimeValue();
-				dateOperand.Value = DateTime.Parse(currentToken.Text);
-				operand = dateOperand;
-				tokenizer.MoveNext();
-			}
-			else if (currentToken.IsType("decimal"))
-			{
-				NPathDecimalValue decimalOperand = new NPathDecimalValue();
-				decimalOperand.Value = double.Parse(currentToken.Text, NumberFormatInfo.InvariantInfo);
-				decimalOperand.IsNegative = isNegative;
-				operand = decimalOperand;
-				tokenizer.MoveNext();
-			}
-			else if (currentToken.IsType("string"))
-			{
-				NPathStringValue stringOperand = new NPathStringValue();
-				string text = currentToken.Text;
-				text = text.Substring(1, text.Length - 2);
+                operand = functionOperand;
+            }
+            else if (currentToken.IsType("date"))
+            {
+                NPathDateTimeValue dateOperand = new NPathDateTimeValue();
+                dateOperand.Value = DateTime.Parse(currentToken.Text);
+                operand = dateOperand;
+                tokenizer.MoveNext();
+            }
+            else if (currentToken.IsType("decimal"))
+            {
+                NPathDecimalValue decimalOperand = new NPathDecimalValue();
+                decimalOperand.Value = double.Parse(currentToken.Text, NumberFormatInfo.InvariantInfo);
+                decimalOperand.IsNegative = isNegative;
+                operand = decimalOperand;
+                tokenizer.MoveNext();
+            }
+            else if (currentToken.IsType("string"))
+            {
+                NPathStringValue stringOperand = new NPathStringValue();
+                string text = currentToken.Text;
+                text = text.Substring(1, text.Length - 2);
 
-				if (currentToken.IsType("string '")) // do not localize
-					text = text.Replace("''", "'");
-				else if (currentToken.IsType("string \""))
-					text = text.Replace("\"\"", "\""); // do not localize
+                if (currentToken.IsType("string '")) // do not localize
+                    text = text.Replace("''", "'");
+                else if (currentToken.IsType("string \""))
+                    text = text.Replace("\"\"", "\""); // do not localize
 
-				stringOperand.Value = text;
-				operand = stringOperand;
-				tokenizer.MoveNext();
-			}
-			else if (currentToken.IsType("boolean"))
-			{
-				NPathBooleanValue booleanOperand = new NPathBooleanValue();
-				booleanOperand.Value = bool.Parse(currentToken.Text);
-				operand = booleanOperand;
-				tokenizer.MoveNext();
-			}
-			else if (currentToken.IsType("guid"))
-			{
-				NPathGuidValue guidOperand = new NPathGuidValue();
-				guidOperand.Value = currentToken.Text;
-				operand = guidOperand;
-				tokenizer.MoveNext();
-			}
-			else if (currentToken.IsType("property path")) // do not localize
-			{
-				if (tokenizer.GetNextToken().IsType("("))
-				{
-					string fullPath = currentToken.Text;
-					string propertyPath = "";
-					string methodName = "";
-					int lastIndexOfDot = fullPath.LastIndexOf(".");
-					if (lastIndexOfDot > 0)
-					{
-						propertyPath = fullPath.Substring(0, lastIndexOfDot);
-						methodName = fullPath.Substring(lastIndexOfDot + 1);
-					}
-					else
-					{
-						methodName = fullPath;
-					}
+                stringOperand.Value = text;
+                operand = stringOperand;
+                tokenizer.MoveNext();
+            }
+            else if (currentToken.IsType("boolean"))
+            {
+                NPathBooleanValue booleanOperand = new NPathBooleanValue();
+                booleanOperand.Value = bool.Parse(currentToken.Text);
+                operand = booleanOperand;
+                tokenizer.MoveNext();
+            }
+            else if (currentToken.IsType("guid"))
+            {
+                NPathGuidValue guidOperand = new NPathGuidValue();
+                guidOperand.Value = currentToken.Text;
+                operand = guidOperand;
+                tokenizer.MoveNext();
+            }
+            else if (currentToken.IsType("property path")) // do not localize
+            {
+                if (tokenizer.GetNextToken().IsType("("))
+                {
+                    string fullPath = currentToken.Text;
+                    string propertyPath = "";
+                    string methodName = "";
+                    int lastIndexOfDot = fullPath.LastIndexOf(".");
+                    if (lastIndexOfDot > 0)
+                    {
+                        propertyPath = fullPath.Substring(0, lastIndexOfDot);
+                        methodName = fullPath.Substring(lastIndexOfDot + 1);
+                    }
+                    else
+                    {
+                        methodName = fullPath;
+                    }
 
-					NPathMethodCall call = new NPathMethodCall();
-					call.MethodName = methodName;
+                    NPathMethodCall call = new NPathMethodCall();
+                    call.MethodName = methodName;
 
-					call.PropertyPath = new NPathIdentifier();
-					call.PropertyPath.Path = propertyPath;
-					call.PropertyPath.IsNegative = isNegative;
+                    call.PropertyPath = new NPathIdentifier();
+                    call.PropertyPath.Path = propertyPath;
+                    call.PropertyPath.IsNegative = isNegative;
 
-					//TODO:add method support here
-					tokenizer.MoveNext(); //move past "("
-					tokenizer.MoveNext();
-					while (!tokenizer.GetCurrentToken().IsType(")"))
-					{
-						IValue param = ParseExpression();
-						call.Parameters.Add(param);
-						if (tokenizer.GetCurrentToken().IsType("comma"))
-						{
-							tokenizer.MoveNext();
-						}
-						else
-						{
-							tokenizer.GetCurrentToken(")", ")");
-						}
+                    //TODO:add method support here
+                    tokenizer.MoveNext(); //move past "("
+                    tokenizer.MoveNext();
+                    while (!tokenizer.GetCurrentToken().IsType(")"))
+                    {
+                        IValue param = ParseExpression();
+                        call.Parameters.Add(param);
+                        if (tokenizer.GetCurrentToken().IsType("comma"))
+                        {
+                            tokenizer.MoveNext();
+                        }
+                        else
+                        {
+                            tokenizer.GetCurrentToken(")", ")");
+                        }
 
-					}
-					tokenizer.MoveNext();
-					operand = call;
-				}
-				else if (tokenizer.GetNextToken().IsType("["))
-				{
-					CurrentPropertyPrefix = currentToken.Text + ".";
-					NPathBracketGroup bracketGroup = new NPathBracketGroup();
-					tokenizer.MoveNext();
-					ParseBracketGroup(bracketGroup);
-					CurrentPropertyPrefix = "";
-					NPathParenthesisGroup parens = new NPathParenthesisGroup();
-					parens.Expression = bracketGroup.Expression;
-					operand = parens;
-				}
-				else
-				{
-					NPathIdentifier propertyOperand = new NPathIdentifier();
-					propertyOperand.Path = CurrentPropertyPrefix + currentToken.Text;
+                    }
+                    tokenizer.MoveNext();
+                    operand = call;
+                }
+                else if (tokenizer.GetNextToken().IsType("["))
+                {
+                    CurrentPropertyPrefix = currentToken.Text + ".";
+                    NPathBracketGroup bracketGroup = new NPathBracketGroup();
+                    tokenizer.MoveNext();
+                    ParseBracketGroup(bracketGroup);
+                    CurrentPropertyPrefix = "";
+                    NPathParenthesisGroup parens = new NPathParenthesisGroup();
+                    parens.Expression = bracketGroup.Expression;
+                    operand = parens;
+                }
+                else
+                {
+                    NPathIdentifier propertyOperand = new NPathIdentifier();
+                    propertyOperand.Path = CurrentPropertyPrefix + currentToken.Text;
 
-					propertyOperand.ReferenceLocation = IsInSelectClause() ? NPathPropertyPathReferenceLocation.SelectClause : NPathPropertyPathReferenceLocation.WhereClause;
+                    propertyOperand.ReferenceLocation = IsInSelectClause() ? NPathPropertyPathReferenceLocation.SelectClause : NPathPropertyPathReferenceLocation.WhereClause;
 
-					//CurrentQuery.AddPropertyPathReference(propertyOperand.Path) ;
+                    //CurrentQuery.AddPropertyPathReference(propertyOperand.Path) ;
 
-					propertyOperand.IsNegative = isNegative;
-					operand = propertyOperand;
-					tokenizer.MoveNext();
-				}
-			}
-			else if (currentToken.IsType("("))
-			{
-				NPathParenthesisGroup parenthesisOperand = new NPathParenthesisGroup();
-				ParseParenthesisGroup(parenthesisOperand);
-				parenthesisOperand.IsNegative = isNegative;
-				operand = parenthesisOperand;
-			}
-			else
-			{
-				//unknown value?
-				throw GetUnknownTokenException();
-			}
+                    propertyOperand.IsNegative = isNegative;
+                    operand = propertyOperand;
+                    tokenizer.MoveNext();
+                }
+            }
+            else if (currentToken.IsType("("))
+            {
+                NPathParenthesisGroup parenthesisOperand = new NPathParenthesisGroup();
+                ParseParenthesisGroup(parenthesisOperand);
+                parenthesisOperand.IsNegative = isNegative;
+                operand = parenthesisOperand;
+            }
+            else
+            {
+                //unknown value?
+                throw GetUnknownTokenException();
+            }
 
 			#endregion
 
