@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCtorConfig", "Samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedConfig", "Samples\NET2\AdvancedConfig\AdvancedConfig.csproj", "{79369E49-B141-42E8-8B0F-6EFB6108AD87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "..\NAspect\Framework\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug", "..\NAspect\Framework\Puzzle.Naspect.Debug\Puzzle.NAspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NAspect", "NAspect", "{0B929A21-7B46-4A28-87D9-7A8DE2D6D607}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "..\NAspect\Debugger\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Naspect.Debug", "..\NAspect\Debugger\Puzzle.Naspect.Debug\Puzzle.Naspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,11 +64,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
+		{DE0778EC-55D2-49F5-9984-99B6A769B2A8} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
+		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
 		{4E23FD0F-521F-426B-A00C-BD6D1E0850D6} = {72AA5F7A-C22E-40B0-ACD1-101F88C17F78}
 		{528DE737-178F-423C-88F2-7C1403164D1A} = {72AA5F7A-C22E-40B0-ACD1-101F88C17F78}
 		{79369E49-B141-42E8-8B0F-6EFB6108AD87} = {72AA5F7A-C22E-40B0-ACD1-101F88C17F78}
-		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
-		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8} = {0B929A21-7B46-4A28-87D9-7A8DE2D6D607}
 	EndGlobalSection
 EndGlobal

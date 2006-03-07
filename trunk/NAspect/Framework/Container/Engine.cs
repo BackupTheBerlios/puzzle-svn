@@ -19,7 +19,7 @@ using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
-	public class Engine
+	public class Engine : IEngine
 	{
 		private IDictionary proxyLookup;
 		private IDictionary wrapperLookup;

@@ -105,6 +105,7 @@
     <Compile Include="Container\Container.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Container\ContainerFactory.cs" />
     <Compile Include="Container\IContainer.cs">
       <SubType>Code</SubType>
     </Compile>

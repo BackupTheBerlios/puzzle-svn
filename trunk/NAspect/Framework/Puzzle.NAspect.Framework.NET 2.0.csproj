@@ -155,9 +155,11 @@
     <Compile Include="Container\ConfigurationDeserializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Container\EngineFactory.cs" />
     <Compile Include="Container\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Container\IEngine.cs" />
     <Compile Include="Elements\EngineConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
