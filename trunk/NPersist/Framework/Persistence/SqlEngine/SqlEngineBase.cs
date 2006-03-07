@@ -920,16 +920,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						ds = ctx.DataSourceManager.GetDataSource(obj, propertyMap.Name);
                         if (ds == null)
-                            throw new NPersistException( string.Format ("Datasource may not be null (Property '{0}')",propertyMap.Name));
+                            throw new NPersistException(string.Format("Datasource may not be null (Property '{0}')", propertyMap.Name));// do not localize
 
 						break;
 					}
 
                     if (ds == null)
-                        throw new NPersistException(string.Format("Datasource may not be null (No property found)"));
+                        throw new NPersistException(string.Format("Datasource may not be null (No property found)"));// do not localize
                 
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-					if (!(rowsAffected == 1))
+					if (rowsAffected != 1)
 					{
 						if (!(SqlEngineManager.Context.PersistenceManager.GetUpdateOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 						{
