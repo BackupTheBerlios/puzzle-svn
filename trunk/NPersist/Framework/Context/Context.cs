@@ -2600,17 +2600,37 @@ namespace Puzzle.NPersist.Framework
             return (T)o;
         }
 
+        public virtual T TryGetObjectByNPath<T>(string npathQuery)
+        {
+            return TryGetObjectByNPath<T>(npathQuery, new ArrayList());
+        }
+
         public virtual T TryGetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
             IList parameterList = new ArrayList(parameters);
-            object o = this.TryGetObjectByNPath(npathQuery, typeof(T), parameterList);
+            return TryGetObjectByNPath<T>(npathQuery, parameterList);
+        }
+
+        public virtual T TryGetObjectByNPath<T>(string npathQuery, IList parameters)
+        {
+            object o = this.TryGetObjectByNPath(npathQuery, typeof(T), parameters);
             return (T)o;
+        }
+
+        public virtual T GetObjectByNPath<T>(string npathQuery)
+        {
+            return GetObjectByNPath<T>(npathQuery, new ArrayList());
         }
 
         public virtual T GetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
             IList parameterList = new ArrayList(parameters);
-            object o = this.GetObjectByNPath(npathQuery, typeof(T), parameterList);
+            return GetObjectByNPath<T>(npathQuery, parameterList);
+        }
+
+        public virtual T GetObjectByNPath<T>(string npathQuery, IList parameters)
+        {
+            object o = this.GetObjectByNPath(npathQuery, typeof(T), parameters);
             return (T)o;
         }
 
@@ -2627,19 +2647,38 @@ namespace Puzzle.NPersist.Framework
             return list;
         }
 
-
-        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        #region GetObjectsByNPath
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery)
         {
             List<T> list = new List<T>();
-            IList parameterList = new ArrayList(parameters);
+            IList parameterList = new ArrayList();
             this.GetObjectsByNPath(new NPathQuery(npathQuery, typeof(T), parameterList), list);
             return list;
         }
 
-        public virtual T[] GetArrayByNPath<T>(string npathQuery, params QueryParameter[] parameters)
-        {
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        {            
             IList parameterList = new ArrayList(parameters);
-            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameterList);
+            return GetObjectsByNPath<T>(npathQuery, parameterList);
+        }
+
+        public virtual IList<T> GetObjectsByNPath<T>(string npathQuery, IList parameters)
+        {
+            List<T> list = new List<T>();
+            this.GetObjectsByNPath(new NPathQuery(npathQuery, typeof(T), parameters), list);
+            return list;
+        }
+#endregion
+
+        #region GetArrayByNPath
+        public virtual T[] GetArrayByNPath<T>(string npathQuery)
+        {
+            return GetArrayByNPath<T>(npathQuery, new ArrayList());
+        }
+
+        public virtual T[] GetArrayByNPath<T>(string npathQuery, IList parameters)
+        {
+            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameters);
             if (res.Columns.Count != 1)
                 throw new NPersistException("Query must return one column only");
 
@@ -2652,10 +2691,23 @@ namespace Puzzle.NPersist.Framework
             return elements;
         }
 
-        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        public virtual T[] GetArrayByNPath<T>(string npathQuery, params QueryParameter[] parameters)
         {
             IList parameterList = new ArrayList(parameters);
-            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameterList);
+            return GetArrayByNPath<T>(npathQuery, parameterList);
+        }
+#endregion
+
+        #region GetSnapshotObjectsByNPath
+
+        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery)
+        {
+            return GetSnapshotObjectsByNPath<T>(npathQuery, new ArrayList());
+        }
+
+        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, IList parameters)
+        {
+            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameters);
             ConstructorInfo[] constructors = typeof(T).GetConstructors();
             ConstructorInfo usedConstructor = null;
             foreach (ConstructorInfo constructor in constructors)
@@ -2686,6 +2738,14 @@ namespace Puzzle.NPersist.Framework
 
             return snapshotObjects;
         }
+
+        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        {
+            IList parameterList = new ArrayList(parameters);
+            return GetSnapshotObjectsByNPath<T>(npathQuery, parameterList);
+        }
+#endregion
+
 #endif
         #endregion
     }
