@@ -294,6 +294,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NPathDom\NPathSoundexStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NPathDom\NPathStringValue.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

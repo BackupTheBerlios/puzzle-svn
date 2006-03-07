@@ -1714,6 +1714,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Query\Sql\SqlDom\SqlSoundex.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Query\Sql\SqlDom\SqlStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

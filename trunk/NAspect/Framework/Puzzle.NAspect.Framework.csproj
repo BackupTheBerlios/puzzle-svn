@@ -244,6 +244,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Container\EngineFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Container\IEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Elements\EngineConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
