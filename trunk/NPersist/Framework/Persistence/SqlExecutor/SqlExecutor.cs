@@ -117,6 +117,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual int ExecuteNonQuery(string sql, IDataSource dataSource, IList parameters)
 		{
+            if (dataSource == null)
+                throw new ArgumentNullException("dataSource");
+
 			this.Context.LogManager.Info(this, "Executing non query", "Sql: " + sql); // do not localize
 			IDbConnection connection;
 			IDbCommand cmd;

@@ -914,13 +914,20 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propertyList = iPropertyList;
 				parameters.Clear() ;
 				sql = GetUpdateNonPrimaryStatement(obj, propertyList, stillDirty, parameters);
-				if (!(sql == ""))
+				if (sql != "")
 				{
 					foreach (IPropertyMap propertyMap in propertyList)
 					{
 						ds = ctx.DataSourceManager.GetDataSource(obj, propertyMap.Name);
+                        if (ds == null)
+                            throw new NPersistException( string.Format ("Datasource may not be null (Property '{0}')",propertyMap.Name));
+
 						break;
 					}
+
+                    if (ds == null)
+                        throw new NPersistException(string.Format("Datasource may not be null (No property found)"));
+                
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
 					if (!(rowsAffected == 1))
 					{

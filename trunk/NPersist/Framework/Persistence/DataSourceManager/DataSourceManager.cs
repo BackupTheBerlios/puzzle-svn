@@ -39,7 +39,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual IDataSource GetDataSource(object obj, string propertyName)
 		{
-			string name = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName).GetSourceMap().Name;
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+            IPropertyMap propertyMap = classMap.MustGetPropertyMap(propertyName);
+            ISourceMap sourceMap = propertyMap.GetSourceMap ();
+            string name = sourceMap.Name;
+
 			return (IDataSource) m_hashDataSources[name];
 		}
 
