@@ -191,6 +191,16 @@
     <Compile Include="Proxy\Tools.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serializer\Elements\VizAspect.cs" />
+    <Compile Include="Serializer\Elements\VizConstructor.cs" />
+    <Compile Include="Serializer\Elements\VizInterceptor.cs" />
+    <Compile Include="Serializer\Elements\VizMethod.cs" />
+    <Compile Include="Serializer\Elements\VizMixin.cs" />
+    <Compile Include="Serializer\Elements\VizParameter.cs" />
+    <Compile Include="Serializer\Elements\VizPointcut.cs" />
+    <Compile Include="Serializer\Elements\VizType.cs" />
+    <Compile Include="Serializer\ISerializableProxy.cs" />
+    <Compile Include="Serializer\SerializedProxy.cs" />
     <Compile Include="Tools\Text.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -199,10 +209,6 @@
     <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
       <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
       <Name>Puzzle.NCore.Framework NET 2.0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Debugger\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj">
-      <Project>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</Project>
-      <Name>Puzzle.NAspect.Debug.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

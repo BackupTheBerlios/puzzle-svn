@@ -263,17 +263,18 @@ namespace Puzzle.NAspect.Framework
 
         internal static bool SerializerIsAvailable()
         {
-            if (!serializerDoOnce)
-            {
-                serializerDoOnce = true;
-                Type type = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3", false);
-                if (type == null)
-                    serializerIsAvailable = false;
+            //if (!serializerDoOnce)
+            //{
+            //    serializerDoOnce = true;
+            //    Type type = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3", false);
+            //    if (type == null)
+            //        serializerIsAvailable = false;
 
-                serializerDoOnce = true;
-            }
+            //    serializerDoOnce = true;
+            //}
 
-            return serializerIsAvailable;
+            //return serializerIsAvailable;
+            return true;
         }
 
         protected void AddSerializerMixin(IList typeMixins)

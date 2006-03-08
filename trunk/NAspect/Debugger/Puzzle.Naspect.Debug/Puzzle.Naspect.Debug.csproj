@@ -63,13 +63,6 @@
     <None Include="PuzzleKey.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj">
-      <Project>{DE0778EC-55D2-49F5-9984-99B6A769B2A8}</Project>
-      <Name>Puzzle.NAspect.Debug.Serialization</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Controls\Caption.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Caption.cs</DependentUpon>
@@ -86,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\interceptor.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
+      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
+      <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

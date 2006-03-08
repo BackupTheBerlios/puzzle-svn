@@ -24,9 +24,14 @@ namespace Puzzle.NAspect.Debug
     {
         public override void GetData(object target, System.IO.Stream outgoingData)
         {
+            
+
             ISerializableProxy realProxy = target as ISerializableProxy;
+
+            
            
             SerializedProxy serializedProxy = realProxy.GetSerializedProxy ();
+
             base.GetData(serializedProxy, outgoingData);
         }
 

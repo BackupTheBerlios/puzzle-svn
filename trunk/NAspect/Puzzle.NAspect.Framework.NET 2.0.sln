@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Naspect.Debug", "Debugger\Puzzle.Naspect.Debug\Puzzle.Naspect.Debug.csproj", "{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Debug.Serialization", "Debugger\Puzzle.NAspect.Debug.Serialization\Puzzle.NAspect.Debug.Serialization.csproj", "{DE0778EC-55D2-49F5-9984-99B6A769B2A8}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Puzzle.NAspect.Framework.NET 2.0.vsmdi
@@ -46,10 +44,6 @@ Global
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +51,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CCAD4EE0-C75F-48AE-9F71-72D01B8F7192} = {981884B9-FBE6-4275-AD4A-1888D9EAB87E}
 		{D50AB15F-D86B-4BA5-8E8C-95D4E9608B66} = {66010D44-F7A6-414C-AE9B-E9218B2BF4F2}
-		{DE0778EC-55D2-49F5-9984-99B6A769B2A8} = {66010D44-F7A6-414C-AE9B-E9218B2BF4F2}
 	EndGlobalSection
 EndGlobal
