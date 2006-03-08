@@ -273,7 +273,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
 			string sql = GetUpdateStatement(obj, propertyMaps, stillDirty, nonPrimaryPropertyMaps, collectionPropertyMaps, parameters);
-			if (!(sql == ""))
+			if (sql != "")
 			{
 				ds = ctx.DataSourceManager.GetDataSource(obj);
 				rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
@@ -913,18 +913,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				propertyList = iPropertyList;
 				parameters.Clear() ;
+                foreach (IPropertyMap propertyMap in propertyList)
+                {
+                    ds = ctx.DataSourceManager.GetDataSource(obj, propertyMap.Name);
+                    break;
+                }
 				sql = GetUpdateNonPrimaryStatement(obj, propertyList, stillDirty, parameters);
 				if (sql != "")
 				{
-					foreach (IPropertyMap propertyMap in propertyList)
-					{
-						ds = ctx.DataSourceManager.GetDataSource(obj, propertyMap.Name);
-                        if (ds == null)
-                            throw new NPersistException(string.Format("Datasource may not be null (Property '{0}')", propertyMap.Name));// do not localize
-
-						break;
-					}
-
                     if (ds == null)
                         throw new NPersistException(string.Format("Datasource may not be null (No property found)"));// do not localize
                 
