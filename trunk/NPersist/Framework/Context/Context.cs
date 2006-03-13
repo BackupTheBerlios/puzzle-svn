@@ -1148,8 +1148,10 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual object CreateObject(Type type, params object[] ctorParams)
 		{
-			object obj;
+			object obj;            
+
 			obj = m_AssemblyManager.CreateInstance(type, ctorParams);
+            
 			IClassMap classMap = this.DomainMap.MustGetClassMap(type);
 
 			if (classMap.HasIdentityGenerators())

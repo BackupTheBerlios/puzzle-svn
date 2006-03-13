@@ -140,15 +140,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			while(typeof(IInterceptable).IsAssignableFrom(type))
 				type = type.BaseType;
 
-//			if (typeof(IInterceptable).IsAssignableFrom(type))
-//			{
-//				obj = this.Context.ObjectFactory.CreateInstance(type, ctorParams);				
-//			}
-//			else
-//			{
-				IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
-				obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);
-//			}
+            
+			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+			obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);            
 			return obj;
 		}
 

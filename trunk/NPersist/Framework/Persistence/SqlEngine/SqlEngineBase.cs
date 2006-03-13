@@ -1355,6 +1355,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return GetSelectStatement(obj, propertyNames, "", "", parameters);
 		}
 
+        //NOTE: shouldnt this also load related tables in inheritance scenarios? , eg classtable inheritance?
 		protected virtual string GetSelectStatement(object obj, ArrayList propertyNames, string keyPropertyName, object keyValue, IList parameters)
 		{
 			IPropertyMap propertyMap;

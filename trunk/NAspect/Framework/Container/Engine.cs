@@ -134,6 +134,7 @@ namespace Puzzle.NAspect.Framework
 
 		public Type CreateProxyType(Type type)
 		{
+            
 			lock (proxyLookup.SyncRoot)
 			{
 				Type proxyType = null;
@@ -152,11 +153,14 @@ namespace Puzzle.NAspect.Framework
                         AddSerializerMixin(typeMixins);
                     }
 #endif
+                    
 
 
 					proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
 					if (proxyType == null)
 						throw new NullReferenceException(string.Format("Could not generate proxy for type '{0}'", type.FullName));
+
+                    
 
 					proxyLookup[type] = proxyType;
 					string message = string.Format("Emitting new proxy type for type {0}", type.FullName);
@@ -263,18 +267,11 @@ namespace Puzzle.NAspect.Framework
 
         internal static bool SerializerIsAvailable()
         {
-            //if (!serializerDoOnce)
-            //{
-            //    serializerDoOnce = true;
-            //    Type type = Type.GetType("Puzzle.NAspect.Debug.Serialization.ISerializableProxy, Puzzle.NAspect.Debug.Serialization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a8e5914f83beaab3", false);
-            //    if (type == null)
-            //        serializerIsAvailable = false;
-
-            //    serializerDoOnce = true;
-            //}
-
-            //return serializerIsAvailable;
+#if NET2 && DEBUG
             return true;
+#else
+            return false;
+#endif
         }
 
         protected void AddSerializerMixin(IList typeMixins)

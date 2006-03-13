@@ -27,6 +27,7 @@ namespace Puzzle.NAspect.Framework
 		{
 #if NET2 
 
+            
             if (Engine.SerializerIsAvailable())
             {
                 if (aspects.Count == 0 && mixins.Count == 2)
@@ -41,9 +42,12 @@ namespace Puzzle.NAspect.Framework
             if (aspects.Count == 0 && mixins.Count == 1)
 				return baseType;
 #endif
+            
 
 
 			SubclassProxyFactory factory = new SubclassProxyFactory(engine);
+
+            
 
 			return factory.CreateType(baseType, aspects, mixins);
 		}
@@ -87,15 +91,15 @@ namespace Puzzle.NAspect.Framework
 		{
 			string typeName = baseType.Name + "AopProxy";
 			string moduleName = "MatsSoft.NPersist.Runtime.Proxy";
-
+            
 			AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();
-
+            
 			Type[] interfaces = GetInterfaces(baseType, mixins);
 			Type[] mixinInterfaces = GetMixinInterfaces(baseType, mixins);
 
-
+            
 			TypeBuilder typeBuilder = GetTypeBuilder(assemblyBuilder, moduleName, typeName, baseType, interfaces);
-#if NET2
+#if NET2 && DEBUG
             typeBuilder.SetCustomAttribute(DebuggerVisualizerBuilder());
 #endif
             
@@ -508,9 +512,9 @@ namespace Puzzle.NAspect.Framework
 		}
 
 		private static Type[] GetInterfaces(Type baseType, IList mixins)
-		{
-			Type[] mixinInterfaces = GetMixinInterfaces(baseType,mixins);
-			Type[] baseInterfaces =  baseType.GetInterfaces();
+		{            
+			Type[] mixinInterfaces = GetMixinInterfaces(baseType,mixins);           
+			Type[] baseInterfaces =  baseType.GetInterfaces();            
 
 			Type[] interfaces = new Type[mixinInterfaces.Length+baseInterfaces.Length] ;
 			Array.Copy(mixinInterfaces,0,interfaces,0,mixinInterfaces.Length) ;
@@ -521,12 +525,12 @@ namespace Puzzle.NAspect.Framework
 
 		private static Type[] GetMixinInterfaces(Type baseType, IList mixins)
 		{
-			Type[] mixinInterfaces = new Type[mixins.Count];
+			Type[] mixinInterfaces = new Type[mixins.Count];            
 			for (int i = 0; i < mixins.Count; i++)
-			{
-				Type mixin = mixins[i] as Type;
+			{                
+				Type mixin = mixins[i] as Type;                
 				if (mixin.IsInterface)
-				{
+				{                    
 					mixinInterfaces[i] = mixin;
 				}
 				else
@@ -535,7 +539,7 @@ namespace Puzzle.NAspect.Framework
 					mixinInterfaces[i] = mixinInterface;
 				}
 			}
-
+            
 			return mixinInterfaces;
 		}
 

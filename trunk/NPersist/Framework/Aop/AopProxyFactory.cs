@@ -57,9 +57,10 @@ namespace Puzzle.NPersist.Framework.Aop
 		}
 
 		public object CreateEntityProxy(Type baseType, Puzzle.NPersist.Framework.Persistence.IObjectFactory objectFactory, Puzzle.NPersist.Framework.Mapping.IClassMap classMap, object[] ctorArgs)
-		{			
-
+		{
+            
 			Type proxyType = aopEngine.CreateProxyType(baseType) ;
+
 			object[] proxyArgs = aopEngine.AddStateToCtorParams(context,ctorArgs);
 
 			return context.ObjectFactory.CreateInstance(proxyType,proxyArgs);
