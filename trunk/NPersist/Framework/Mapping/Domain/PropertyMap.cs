@@ -237,12 +237,26 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public virtual bool GetIsNullable()
 		{
+            if (IsFixed("GetIsNullable"))
+            {
+                return (bool)GetFixedValue("GetIsNullable");
+            }
 			IColumnMap columnMap = this.GetColumnMap();
-			if (columnMap != null)
-			{
-				return columnMap.AllowNulls;
-			}
-			return this.m_IsNullable;
+            bool isNullable = false;
+            if (columnMap != null)
+            {
+                isNullable = columnMap.AllowNulls;
+            }
+            else
+            {
+                isNullable = this.m_IsNullable;
+            }
+            if (IsFixed())
+            {
+                SetFixedValue("GetIsNullable", isNullable);
+            }
+
+            return isNullable;
 		}
 
 
@@ -335,7 +349,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				fn = m_FieldName;
 			}
-			if (IsFixed())
+            if (IsFixed())
 			{
 				SetFixedValue("GetFieldName", fn);
 			}
@@ -456,24 +470,39 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			get
 			{
+                if (IsFixed("IsCollection"))
+                {
+                    return (bool)GetFixedValue("IsCollection");
+                }
+
+                bool isCollection = false;
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
 					if (inv.ReferenceType == ReferenceType.ManyToMany || inv.ReferenceType == ReferenceType.OneToMany)
 					{
-						return true;
+						isCollection = true;
 					}
-					else if (inv.ReferenceType == ReferenceType.ManyToOne || inv.ReferenceType == ReferenceType.OneToOne)
-					{
-						return false;
-					}
-					return false;
+                    else if (inv.ReferenceType == ReferenceType.ManyToOne || inv.ReferenceType == ReferenceType.OneToOne)
+                    {
+                        isCollection = false;
+                    }
+                    else
+                    {
+                        isCollection = false;
+                    }
 				}
 				else
 				{
-					return m_IsCollection;
+                    isCollection = m_IsCollection;
 				}
-			}
+
+                if (IsFixed())
+                {
+                    SetFixedValue("IsCollection", isCollection);
+                }
+                return isCollection;
+            }
 			set
 			{
 				m_IsCollection = value;
