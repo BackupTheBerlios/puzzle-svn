@@ -15,6 +15,7 @@ using System.Reflection;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Utility;
+using Puzzle.NCore.Framework.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -177,10 +178,16 @@ namespace Puzzle.NPersist.Framework.Persistence
         //[DebuggerStepThrough()]
         public virtual object GetPropertyValue(object obj, Type type, string propertyName)
         {
-            IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
-            FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, propertyName);
+       //     IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
+
+       //     FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, propertyName);
+
+            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType(), propertyName];
             if (fieldInfo == null)
-                throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + type.Name);
+            {
+                fieldInfo = GetFieldInfo(obj, propertyName);
+            }
+
             return fieldInfo.GetValue(obj);
 
         }
@@ -190,12 +197,24 @@ namespace Puzzle.NPersist.Framework.Persistence
             SetPropertyValue(obj, obj.GetType(), propertyName, value);
         }
 
-        public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
+        private FieldInfo GetFieldInfo(object obj, string propertyName)
         {
             IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
-            FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, propertyName);
+            FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, obj.GetType (), propertyName);
             if (fieldInfo == null)
-                throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + type.Name);
+                throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + obj.GetType().Name);
+            propertyLookup[obj.GetType(), propertyName] = fieldInfo;
+            return fieldInfo;
+        }
+
+        private MultiHashtable propertyLookup = new MultiHashtable();
+        public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
+        {
+            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType(),propertyName];
+            if (fieldInfo == null)
+            {
+                fieldInfo = GetFieldInfo(obj, propertyName);
+            }
             if (fieldInfo.FieldType.IsEnum)
             {
                 if (value != null)
@@ -204,7 +223,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                     return;
                 }
             }
-            fieldInfo.SetValue(obj, value);
+            fieldInfo.SetValue(obj, value);           
         }
 
         public virtual PropertyStatus GetPropertyStatus(object obj, string propertyName)

@@ -20,6 +20,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Utility;
+using System.Reflection;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -709,23 +710,44 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
-		
+        private Hashtable nullValueStatusTemplateCache = new Hashtable();
 		public virtual void SetupNullValueStatuses(object obj)
 		{
-			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
-			IObjectManager om = this.Context.ObjectManager;
-			if (classMap != null)
-			{
-				foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
-				{
-					if (propertyMap.IsCollection == false)
-					{
-						if (propertyMap.GetIsNullable() || propertyMap.IsIdentity)
-							om.SetNullValueStatus(obj, propertyMap.Name, true);							
-					}
-				}
-			}
+            NullValueStatusTemplate template = (NullValueStatusTemplate)nullValueStatusTemplateCache[obj.GetType()];
+            if (template == null)
+            {
+                template = BuildNullValueStatusTemplate(obj);
+
+            }
+            IObjectManager om = this.Context.ObjectManager;
+            foreach (string propertyName in template.Properties)
+            {
+                om.SetNullValueStatus(obj, propertyName, true);
+            }
 		}
+
+        private NullValueStatusTemplate BuildNullValueStatusTemplate(object obj)
+        {
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+            IObjectManager om = this.Context.ObjectManager;
+            NullValueStatusTemplate template = new NullValueStatusTemplate();
+            if (classMap != null)
+            {
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+                {
+                    if (propertyMap.IsCollection == false)
+                    {
+                        if (propertyMap.GetIsNullable() || propertyMap.IsIdentity)
+                        {
+                            template.Properties.Add(propertyMap.Name);
+                        }                            
+                    }
+                }
+            }
+            nullValueStatusTemplateCache[obj.GetType()] = template;
+            return template;
+
+        }
 
 		public virtual void RegisterObject(object obj)
 		{

@@ -683,6 +683,7 @@
     <Compile Include="Persistence\ListManager\ListManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\ListManager\ListValueTemplate.cs" />
     <Compile Include="Persistence\NPathEngine\INPathEngine.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -746,6 +747,7 @@
     <Compile Include="Persistence\PersistenceManager\IPersistenceManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\PersistenceManager\NullValueStatusTemplate.cs" />
     <Compile Include="Persistence\PersistenceManager\PersistenceManager.cs">
       <SubType>Code</SubType>
     </Compile>

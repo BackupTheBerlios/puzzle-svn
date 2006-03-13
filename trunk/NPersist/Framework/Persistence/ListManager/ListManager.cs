@@ -139,8 +139,25 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return newList;
 		}
 
-		public virtual void SetupListProperties(object obj)
+        private Hashtable listValueTemplateCache = new Hashtable();
+        public virtual void SetupListProperties(object obj)
+        {
+            ListValueTemplate template = (ListValueTemplate)listValueTemplateCache[obj.GetType()];
+            if (template == null)
+            {
+                template = BuildListValueTemplate(obj);
+            }
+
+            IObjectManager om = this.Context.ObjectManager;
+            foreach (PropertyMap propertyMap in template.PropertyMaps)
+                om.SetPropertyValue(obj, propertyMap.Name, CreateList(obj, propertyMap));
+
+
+        }
+
+		public virtual ListValueTemplate BuildListValueTemplate(object obj)
 		{
+            ListValueTemplate template = new ListValueTemplate();
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
 			IList value;
 			IObjectManager om = this.Context.ObjectManager;
@@ -151,14 +168,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 					value = (IList) om.GetPropertyValue(obj, propertyMap.Name);
 					if (value == null)
 					{
-						om.SetPropertyValue(obj, propertyMap.Name, CreateList(obj, propertyMap));
+                        template.PropertyMaps.Add(propertyMap);
+						//om.SetPropertyValue(obj, propertyMap.Name, CreateList(obj, propertyMap));
 						//list should /not/ have original value or it will not be considered NotLoaded
 						//om.SetOriginalPropertyValue(obj, propertyMap.Name, CreateList(obj, propertyMap));
 					}
 				}				
 				
 			}
-
+            listValueTemplateCache[obj.GetType()] = template;
+            return template;
 		}
 
 		public bool CompareLists(IList newList, IList oldList)
