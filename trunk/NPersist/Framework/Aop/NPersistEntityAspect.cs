@@ -49,6 +49,7 @@ namespace Puzzle.NPersist.Framework.Aop
 				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.CloneHelperMixin ));
 				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.OriginalValueHelperMixin ));
 				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.UpdatedPropertyTrackerMixin ));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.IdentityHelperMixin));
 				return arr;
 			}
 		}

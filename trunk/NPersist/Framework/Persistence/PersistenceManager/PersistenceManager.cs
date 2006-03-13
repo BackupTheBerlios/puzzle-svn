@@ -1167,126 +1167,64 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.ListManager.SetupListProperties(obj);						
 		}
 
-		protected virtual void CascadeCreate(object obj)
-		{
-			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
-			object refObj;
-			Type refType = null;
-			IClassMap refClassMap;
-			//IPropertyMap invPropertyMap;
-			IList list;
-			IObjectManager om = this.Context.ObjectManager;
-			if (classMap != null)
-			{
-				foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
-				{
-					if (!(propertyMap.ReferenceType == ReferenceType.None))
-					{
-						if (propertyMap.CascadingCreate)
-						{
-							if (propertyMap.IsCollection)
-							{
-								refClassMap = propertyMap.GetReferencedClassMap();
-								refType = this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap);
-							}
-							else
-							{
-								refType = obj.GetType().GetProperty(propertyMap.Name).PropertyType;
-							}
-							this.Context.LogManager.Info(this, "Cascade creating and referencing object", "Type: " + obj.GetType().ToString() + ", Creating Type: " + refType.ToString() + ", Property: " + propertyMap.Name); // do not localize
-//							if (!(propertyMap.IsReadOnly))
-//							{
-								if (propertyMap.IsCollection)
-								{
-									list = (IList) om.GetPropertyValue(obj, propertyMap.Name);
-									int amount = 1;
-									if (propertyMap.MinLength > 1)
-										amount = propertyMap.MinLength;
+        protected virtual void CascadeCreate(object obj)
+        {
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+            object refObj;
+            Type refType = null;
+            IClassMap refClassMap;
+            //IPropertyMap invPropertyMap;
+            IList list;
+            IObjectManager om = this.Context.ObjectManager;
+            if (classMap != null)
+            {
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+                {
+                    if (propertyMap.ReferenceType != ReferenceType.None)
+                    {
+                        if (propertyMap.CascadingCreate)
+                        {
+                            if (propertyMap.IsCollection)
+                            {
+                                refClassMap = propertyMap.GetReferencedClassMap();
+                                refType = this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap);
+                            }
+                            else
+                            {
+                                refType = obj.GetType().GetProperty(propertyMap.Name).PropertyType;
+                            }
+                            this.Context.LogManager.Info(this, "Cascade creating and referencing object", "Type: " + obj.GetType().ToString() + ", Creating Type: " + refType.ToString() + ", Property: " + propertyMap.Name); // do not localize
 
-									for (int i = 0; i < amount; i++)
-									{
-										refObj = this.Context.CreateObject(refType);
-										list.Add(refObj);										
-									}
-									om.SetPropertyValue(obj, propertyMap.Name, list);
-									IList clone = this.Context.ListManager.CloneList(obj, propertyMap, list);
-									om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);
-								}
-								else
-								{
-									refObj = this.Context.CreateObject(refType);
-									this.Context.InverseManager.NotifyPropertySet(obj, propertyMap.Name, refObj);
-									om.SetPropertyValue(obj, propertyMap.Name, refObj);
-									om.SetOriginalPropertyValue(obj, propertyMap.Name, refObj);
-								}
-								om.SetNullValueStatus(obj, propertyMap.Name, false);
-//								invPropertyMap = propertyMap.GetInversePropertyMap();
-//								if (invPropertyMap != null)
-//								{
-//									if (invPropertyMap.IsCollection)
-//									{
-//										list = (IList) om.GetPropertyValue(refObj, invPropertyMap.Name);
-//										list.Add(obj);
-//										om.SetPropertyValue(refObj, invPropertyMap.Name, list);
-//										om.SetOriginalPropertyValue(refObj, invPropertyMap.Name, list);
-//									}
-//									else
-//									{
-//										om.SetPropertyValue(refObj, invPropertyMap.Name, obj);
-//										om.SetOriginalPropertyValue(refObj, invPropertyMap.Name, obj);
-//										om.SetNullValueStatus(refObj, invPropertyMap.Name, false);
-//									}
-//								}
-//							}
-//							else
-//							{
-//								invPropertyMap = propertyMap.GetInversePropertyMap();
-//								if (invPropertyMap != null)
-//								{
-//									if (!(invPropertyMap.IsReadOnly))
-//									{
-//										if (invPropertyMap.IsCollection)
-//										{
-//											list = (IList) om.GetPropertyValue(refObj, invPropertyMap.Name);
-//											list.Add(obj);
-//											om.SetPropertyValue(refObj, invPropertyMap.Name, list);
-//											om.SetOriginalPropertyValue(refObj, invPropertyMap.Name, list);
-//										}
-//										else
-//										{
-//											om.SetPropertyValue(refObj, invPropertyMap.Name, obj);
-//											om.SetOriginalPropertyValue(refObj, invPropertyMap.Name, obj);
-//										}
-//										om.SetNullValueStatus(refObj, invPropertyMap.Name, false);
-//										if (propertyMap.IsCollection)
-//										{
-//											list = (IList) om.GetPropertyValue(obj, propertyMap.Name);
-//											list.Add(refObj);
-//											om.SetPropertyValue(obj, propertyMap.Name, list);
-//											om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
-//										}
-//										else
-//										{
-//											om.SetPropertyValue(obj, propertyMap.Name, refObj);
-//											om.SetOriginalPropertyValue(obj, propertyMap.Name, refObj);
-//										}
-//										om.SetNullValueStatus(obj, propertyMap.Name, false);
-//									}
-//									else
-//									{
-//										throw new NPersistException("Could not add reference to new object created by cascading create feature because both the cascading create property and the inverse property are read-only!"); // do not localize
-//									}
-//								}
-//								else
-//								{
-//									throw new NPersistException("Could not add reference to new object created by cascading create feature because the cascading create property and no inverse property is specified that could be used instead!"); // do not localize
-//								}
-							}
-//						}
-					}
-				}
-			}
-		}
+                            if (propertyMap.IsCollection)
+                            {
+                                list = (IList)om.GetPropertyValue(obj, propertyMap.Name);
+                                int amount = 1;
+                                if (propertyMap.MinLength > 1)
+                                    amount = propertyMap.MinLength;
+
+                                for (int i = 0; i < amount; i++)
+                                {
+                                    refObj = this.Context.CreateObject(refType);
+                                    list.Add(refObj);
+                                }
+                                om.SetPropertyValue(obj, propertyMap.Name, list);
+                                IList clone = this.Context.ListManager.CloneList(obj, propertyMap, list);
+                                om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);
+                            }
+                            else
+                            {
+                                refObj = this.Context.CreateObject(refType);
+                                this.Context.InverseManager.NotifyPropertySet(obj, propertyMap.Name, refObj);
+                                om.SetPropertyValue(obj, propertyMap.Name, refObj);
+                                om.SetOriginalPropertyValue(obj, propertyMap.Name, refObj);
+                            }
+                            om.SetNullValueStatus(obj, propertyMap.Name, false);
+
+                        }
+                    }
+                }
+            }
+        }
 
 		protected virtual void CascadeDelete(object obj)
 		{

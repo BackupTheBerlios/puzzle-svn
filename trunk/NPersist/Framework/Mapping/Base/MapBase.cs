@@ -226,10 +226,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			if (m_FixedValues != null)
 			{
-				if (m_FixedValues.ContainsKey(memberName))
-				{
-					return m_FixedValues[memberName];
-				}
+                object res = m_FixedValues[memberName];
+                return res;
 			}
 			return null;
 		}

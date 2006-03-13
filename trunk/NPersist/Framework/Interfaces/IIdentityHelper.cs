@@ -19,5 +19,7 @@ namespace Puzzle.NPersist.Framework.Interfaces
 		string GetIdentity(IPropertyMap propertyMap, object value);
 
 		void SetIdentity(string identity);
+
+        bool IsInvalid { get;set;}
 	}
 }

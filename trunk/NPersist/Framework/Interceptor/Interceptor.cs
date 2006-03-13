@@ -135,6 +135,12 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 		//[DebuggerStepThrough()]
 		public virtual void NotifyPropertySet(object obj, string propertyName, ref object value, ref bool cancel)
 		{
+            if (obj is IIdentityHelper)
+            {
+                IIdentityHelper idObj = (IIdentityHelper)obj;
+                idObj.IsInvalid = true;
+            }
+
 			if (this.isDisposed) { return; }
 			if (notification == Notification.Disabled) { return; }
 			DoNotifyPropertySet(obj, propertyName, ref value, null, false, ref cancel);

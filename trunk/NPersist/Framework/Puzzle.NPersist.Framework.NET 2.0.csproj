@@ -812,6 +812,7 @@
     <Compile Include="Proxy\Mixins\CloneHelperMixin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\Mixins\IdentityHelperMixin.cs" />
     <Compile Include="Proxy\Mixins\NullValueHelperMixin.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -3312,6 +3312,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string name = prefix;
 			name = name + classMap.Name;
 			name = "@" + name;
+            name = name.Replace('.', '_');
 			return name;
 		}
 

@@ -16,6 +16,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Utility;
 using Puzzle.NCore.Framework.Collections;
+using Puzzle.NPersist.Framework.Interfaces;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -35,8 +36,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             return GetObjectIdentity(obj, null, null);
         }
 
-
-        public virtual string GetObjectIdentity(object obj, IPropertyMap newPropertyMap, object newValue)
+        private string BuildObjectIdentity(object obj, IPropertyMap newPropertyMap, object newValue)
         {
             string id = "";
             IClassMap classMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType());
@@ -83,6 +83,23 @@ namespace Puzzle.NPersist.Framework.Persistence
             {
                 id = id.Substring(0, id.Length - sep.Length);
             }
+            return id;
+        }
+
+        public virtual string GetObjectIdentity(object obj, IPropertyMap newPropertyMap, object newValue)
+        {
+            //to be implemented: idhelper
+            
+            //IIdentityHelper idObj = (IIdentityHelper)obj;
+            //if (idObj.IsInvalid)
+            //{
+            //    string id = BuildObjectIdentity(obj, newPropertyMap, newValue);
+            //    idObj.SetIdentity(id);
+            //    idObj.IsInvalid = false;
+            //}
+
+            //return idObj.GetIdentity();           
+            string id = BuildObjectIdentity(obj, newPropertyMap, newValue);
             return id;
         }
 
