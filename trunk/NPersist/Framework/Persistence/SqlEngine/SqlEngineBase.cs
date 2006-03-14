@@ -198,7 +198,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					sql = sqlAndParams.SqlStatement;
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, sqlAndParams.DbParameters);
-					if (!(rowsAffected == 1))
+					if (rowsAffected < 1)
 					{
 						throw new RowNotInsertedException("A new row was not inserted in the data source for a collection property of a new object."); // do not localize
 					}
@@ -277,7 +277,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				ds = ctx.DataSourceManager.GetDataSource(obj);
 				rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-				if (!(rowsAffected == 1))
+				if (rowsAffected < 1)
 				{
 					if (!(SqlEngineManager.Context.PersistenceManager.GetUpdateOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 					{
@@ -307,7 +307,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					sql = sqlAndParams.SqlStatement;
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, sqlAndParams.DbParameters );
-					if (!(rowsAffected == 1))
+					if (rowsAffected < 1)
 					{
 						if (!(SqlEngineManager.Context.PersistenceManager.GetUpdateOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 						{
@@ -456,7 +456,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					break;
 				}
 				rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-				if (!(rowsAffected == 1))
+				if (rowsAffected < 1)
 				{
 					if (!(SqlEngineManager.Context.PersistenceManager.GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 					{
@@ -868,7 +868,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				if (!(sql == ""))
 				{
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-					if (!(rowsAffected == 1))
+					if (rowsAffected < 1)
 					{
 						throw new RowNotInsertedException("A new row was not inserted in the data source in a non-primary table for a new object."); // do not localize
 					}
@@ -925,7 +925,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                         throw new NPersistException(string.Format("Datasource may not be null (No property found)"));// do not localize
                 
 					rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-					if (rowsAffected != 1)
+					if (rowsAffected < 1)
 					{
 						if (!(SqlEngineManager.Context.PersistenceManager.GetUpdateOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 						{
