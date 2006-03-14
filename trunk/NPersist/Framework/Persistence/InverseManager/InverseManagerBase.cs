@@ -183,7 +183,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						invPropertyMap = propertyMap.GetInversePropertyMap();
 						if (invPropertyMap != null)
 						{
-							if (propertyMap.GetIsNullable() )
+							if (invPropertyMap.GetIsNullable() )
 							{								
 								NullifyInverseReference(propertyMap, obj, invPropertyMap, om);
 							}
