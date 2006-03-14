@@ -1064,6 +1064,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Persistence\ListManager\ListValueTemplate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Persistence\NPathEngine\INPathEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1165,6 +1170,11 @@
                 />
                 <File
                     RelPath = "Persistence\PersistenceManager\IPersistenceManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Persistence\PersistenceManager\NullValueStatusTemplate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1280,6 +1290,11 @@
                 />
                 <File
                     RelPath = "Proxy\Mixins\CloneHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\Mixins\IdentityHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
