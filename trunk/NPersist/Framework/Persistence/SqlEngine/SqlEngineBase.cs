@@ -3842,34 +3842,38 @@ namespace Puzzle.NPersist.Framework.Persistence
 										if (propertyMap != null && !(CurrLevel == 0 && propertyMap.IsIdentity))
 										{
 											IList listColumnIndexes = objColumnIndex as IList;
-											if (listColumnIndexes != null)
+											if (listColumnIndexes != null )
 											{
-                                                //HACK: roger tried to fix this
-												//IClassMap otherClassMap = propertyMap.GetReferencedClassMap();
-                                                IClassMap otherClassMap = propertyMap.GetInversePropertyMap().ClassMap;//propertyMap.ClassMap;
-												IColumnMap typeColumnMap = otherClassMap.GetTypeColumnMap();
-												int startIndex = 0;
-												if (typeColumnMap != null)
-												{
-                                                    bool foundTypeCol = false;
-                                                    foreach (IColumnMap idColumnMap in propertyMap.GetAllColumnMaps() )
-	                                                    if (idColumnMap.GetPrimaryKeyColumnMap() == typeColumnMap)
-		                                                    foundTypeCol = true;
+                                                int startIndex = 0;
+                                                if (propertyMap.GetInversePropertyMap() != null)
+                                                {
+                                                    //HACK: roger tried to fix this
+                                                    //IClassMap otherClassMap = propertyMap.GetReferencedClassMap();
+                                                    IClassMap otherClassMap = propertyMap.GetInversePropertyMap().ClassMap;//propertyMap.ClassMap;
+                                                    IColumnMap typeColumnMap = otherClassMap.GetTypeColumnMap();
+                                                    
+                                                    if (typeColumnMap != null)
+                                                    {
+                                                        bool foundTypeCol = false;
+                                                        foreach (IColumnMap idColumnMap in propertyMap.GetAllColumnMaps())
+                                                            if (idColumnMap.GetPrimaryKeyColumnMap() == typeColumnMap)
+                                                                foundTypeCol = true;
 
-													//if the referenced class has a type column our property
-													//has a column mapping to that type column, we should 
-													//assume that the first column in the column list
-													//is the type column, set the discriminator to this value 
-													//and remove it from the result
-													if (foundTypeCol)
-													{
-														if (Util.IsNumeric(Convert.ToString(listColumnIndexes[0])))
-															discriminator = dr[Convert.ToInt32(listColumnIndexes[0])];
-														else
-															discriminator = dr[Convert.ToString(listColumnIndexes[0])];
-														startIndex = 1;
-													}
-												}
+                                                        //if the referenced class has a type column our property
+                                                        //has a column mapping to that type column, we should 
+                                                        //assume that the first column in the column list
+                                                        //is the type column, set the discriminator to this value 
+                                                        //and remove it from the result
+                                                        if (foundTypeCol)
+                                                        {
+                                                            if (Util.IsNumeric(Convert.ToString(listColumnIndexes[0])))
+                                                                discriminator = dr[Convert.ToInt32(listColumnIndexes[0])];
+                                                            else
+                                                                discriminator = dr[Convert.ToString(listColumnIndexes[0])];
+                                                            startIndex = 1;
+                                                        }
+                                                    }
+                                                }
 												orgValue = new ArrayList();
 												for (int i = startIndex; i < listColumnIndexes.Count; i++)
 												{
