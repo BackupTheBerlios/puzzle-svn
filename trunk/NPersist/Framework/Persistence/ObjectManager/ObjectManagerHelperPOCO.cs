@@ -199,7 +199,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
        //     FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, propertyName);
 
-            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType(), propertyName];
+            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType().Name +"."+ propertyName];
             if (fieldInfo == null)
             {
                 fieldInfo = GetFieldInfo(obj, propertyName);
@@ -214,20 +214,21 @@ namespace Puzzle.NPersist.Framework.Persistence
             SetPropertyValue(obj, obj.GetType(), propertyName, value);
         }
 
+        private Hashtable propertyLookup = new Hashtable();
         private FieldInfo GetFieldInfo(object obj, string propertyName)
         {
             IPropertyMap propertyMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
             FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, obj.GetType (), propertyName);
             if (fieldInfo == null)
                 throw new MappingException("Could not find a field with the name '" + propertyMap.GetFieldName() + "' in class " + obj.GetType().Name);
-            propertyLookup[obj.GetType(), propertyName] = fieldInfo;
+            propertyLookup[obj.GetType().Name + "." + propertyName] = fieldInfo;
             return fieldInfo;
         }
 
-        private MultiHashtable propertyLookup = new MultiHashtable();
+        
         public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
         {
-            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType(),propertyName];
+            FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType().Name + "." + propertyName];
             if (fieldInfo == null)
             {
                 fieldInfo = GetFieldInfo(obj, propertyName);
