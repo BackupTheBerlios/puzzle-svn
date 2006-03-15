@@ -187,6 +187,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 						{
 							string separator = refClassMap.GetIdentitySeparator();
 
+                            if (separator == "")
+                            {
+                                separator = "|";
+                            }
+
 							StringBuilder identityBuilder = new StringBuilder() ;
 							foreach (object valueItem in valueAsList)
 								identityBuilder.Append(Convert.ToString(valueItem) + separator) ;
@@ -197,7 +202,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					if (isIdentity)
 					{
-						return this.Context.GetObjectById(identity, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
+					    return this.Context.GetObjectById(identity, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
 					}
 					else
 						return this.Context.GetObjectByKey(mapToId.Name, Convert.ToString(value), obj.GetType().GetProperty(propertyMap.Name).PropertyType);

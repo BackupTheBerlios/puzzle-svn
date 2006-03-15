@@ -577,6 +577,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			{
 				SqlJoinTableSource join = select.SqlFromClause.AddSqlJoinTableSource(fromTable.Alias, fromTable.LinksToAlias, SqlJoinType.LeftOuter);
 				int i = 0;
+
 				foreach (SqlColumnAlias column in fromTable.Columns)
 				{
 					SqlColumnAlias linksToColumn = (SqlColumnAlias) fromTable.LinksToColumns[i];
@@ -586,6 +587,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 					i++;
 				}
+
 			}
 			else
 			{

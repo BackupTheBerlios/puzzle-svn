@@ -3553,7 +3553,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			bool doWriteOrg;
 			PropertyStatus propStatus;
 			string strTypeValue;
-			object discriminator;
+			object discriminator; //TODO: ensure disc is set
 			IClassMap useClassMap;
 			IClassMap refClassMap;
 			Type useType;
@@ -3844,16 +3844,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 											IList listColumnIndexes = objColumnIndex as IList;
 											if (listColumnIndexes != null)
 											{
+                                                //HACK: roger tried to fix this
 												//IClassMap otherClassMap = propertyMap.GetReferencedClassMap();
-												IClassMap otherClassMap = propertyMap.ClassMap;
+                                                IClassMap otherClassMap = propertyMap.GetInversePropertyMap().ClassMap;//propertyMap.ClassMap;
 												IColumnMap typeColumnMap = otherClassMap.GetTypeColumnMap();
 												int startIndex = 0;
 												if (typeColumnMap != null)
 												{
-													bool foundTypeCol = false;
-													foreach (IColumnMap idColumnMap in propertyMap.GetAllColumnMaps() )
-														if (idColumnMap.GetPrimaryKeyColumnMap() == typeColumnMap)
-															foundTypeCol = true;
+                                                    bool foundTypeCol = false;
+                                                    foreach (IColumnMap idColumnMap in propertyMap.GetAllColumnMaps() )
+	                                                    if (idColumnMap.GetPrimaryKeyColumnMap() == typeColumnMap)
+		                                                    foundTypeCol = true;
 
 													//if the referenced class has a type column our property
 													//has a column mapping to that type column, we should 

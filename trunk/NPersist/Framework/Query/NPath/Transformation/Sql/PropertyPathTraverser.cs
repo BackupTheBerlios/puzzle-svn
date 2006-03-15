@@ -101,9 +101,34 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				}
 			}
 
+            if (suggestion == "")
+                suggestion = path;
+      //      bool hasTypeColumn = false;
+            foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+            {
+                if (propertyMap.GetInversePropertyMap() != null && propertyMap.GetInversePropertyMap().ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap())
+                {
+                    string suggestionString;
+                    suggestionString = path + ".NPersistTypeColumn";
+
+                    SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
+                    columnAliases.Add(column);
+                }                
+            }
+
 			foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
 			{
-				SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestion);
+                
+                if ( propertyMap.GetInversePropertyMap () != null && propertyMap.GetInversePropertyMap ().ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap ())
+                {
+                    continue;
+                }
+
+                string suggestionString;
+
+                suggestionString = suggestion;
+                    
+				SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
 				columnAliases.Add(column);
 			}
  
@@ -199,6 +224,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 						}
 						else
 						{
+                            //HACK: hmmm * => ID ??
 							special = name;
 							//special - we trade for the first id property
 							propertyMap = (IPropertyMap) classMap.GetIdentityPropertyMaps()[0];
@@ -303,7 +329,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 											else
 											{
 												//GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path, path + "." + iPropertyMap.Name, "");
-												GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);
+												GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
 											}
 											if (iPropertyMap.GetTableMap() != iPropertyMap.ClassMap.GetTableMap())
 											{
