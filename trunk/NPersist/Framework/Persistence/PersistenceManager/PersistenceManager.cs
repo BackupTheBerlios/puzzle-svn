@@ -217,7 +217,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (Convert.IsDBNull(value))
 				{
-					this.Context.ObjectManager.SetNullValueStatus(obj, propertyMap.Name, true);
+					//The ManageLoadedValue method should be side-effect free....otherwise we
+					//risk overwriting dirty objects with incorrect nullvalue statuses
+					//this.Context.ObjectManager.SetNullValueStatus(obj, propertyMap.Name, true);
 					if (!(propertyMap.ReferenceType == ReferenceType.None))
 					{
 						return null;
@@ -375,10 +377,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 					}
 				}
-				else
-				{
-					this.Context.ObjectManager.SetNullValueStatus(obj, propertyMap.Name, false);
-				}					
+//				else
+//				{
+//					//The ManageLoadedValue method should be side-effect free....otherwise we
+//					//risk overwriting dirty objects with incorrect nullvalue statuses
+//					//this.Context.ObjectManager.SetNullValueStatus(obj, propertyMap.Name, false);
+//				}					
 			}
 
 			return value;

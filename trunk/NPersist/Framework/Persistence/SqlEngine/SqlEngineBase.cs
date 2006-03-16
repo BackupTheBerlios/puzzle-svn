@@ -547,6 +547,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
 				om.SetPropertyValue(obj, propertyName, value);
 				om.SetOriginalPropertyValue(obj, propertyName, orgValue);
+				om.SetNullValueStatus(obj, propertyName, DBNull.Value.Equals(orgValue));
 			}
 			else
 			{
@@ -643,6 +644,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
 						om.SetPropertyValue(obj, propName, value);
 						om.SetOriginalPropertyValue(obj, propName, orgValue);
+						om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
 					}
 				}
 			}
@@ -3978,8 +3980,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 												//case of MergeBehaviorType.OverwriteDirty)
 												//and perform proper inverse management on that object...
 
-												if (doWrite)
+                                                if (doWrite)
+                                                {
 													om.SetPropertyValue(refObj, strPropertyName, value);
+													om.SetNullValueStatus(refObj, strPropertyName, DBNull.Value.Equals(orgValue));
+                                                }
 
 												if (doWriteOrg)
 												{
