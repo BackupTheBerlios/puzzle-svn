@@ -102,14 +102,14 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			}
 
             if (suggestion == "")
-                suggestion = path;
+                suggestion = propPath;
       //      bool hasTypeColumn = false;
             foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
             {
                 if (propertyMap.GetInversePropertyMap() != null && propertyMap.GetInversePropertyMap().ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap())
                 {
                     string suggestionString;
-                    suggestionString = path + ".NPersistTypeColumn";
+                    suggestionString = propPath + ".NPersistTypeColumn";
 
                     SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
                     columnAliases.Add(column);
