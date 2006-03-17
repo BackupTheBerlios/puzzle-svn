@@ -2702,15 +2702,15 @@ namespace Puzzle.NPersist.Framework
 
         #region GetSnapshotObjectsByNPath
 
-        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery)
+        public virtual IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery)
         {
-            return GetSnapshotObjectsByNPath<T>(npathQuery, new ArrayList());
+            return GetSnapshotObjectsByNPath<snapT, sourceT>(npathQuery, new ArrayList());
         }
 
-        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, IList parameters)
+        public virtual IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery, IList parameters)
         {
-            DataTable res = this.GetDataTable(npathQuery, typeof(T), parameters);
-            ConstructorInfo[] constructors = typeof(T).GetConstructors();
+            DataTable res = this.GetDataTable(npathQuery, typeof(sourceT), parameters);
+            ConstructorInfo[] constructors = typeof(snapT).GetConstructors();
             ConstructorInfo usedConstructor = null;
             foreach (ConstructorInfo constructor in constructors)
             {
@@ -2722,10 +2722,10 @@ namespace Puzzle.NPersist.Framework
             }
             if (usedConstructor == null)
             {
-                throw new NPersistException(string.Format("Cound not find a constructor that matches your NPath query on type {0}", typeof(T).Name));
+                throw new NPersistException(string.Format("Cound not find a constructor that matches your NPath query on type {0}", typeof(snapT).Name));
             }
 
-            IList<T> snapshotObjects = new List<T>();
+            IList<snapT> snapshotObjects = new List<snapT>();
             foreach (DataRow dr in res.Rows)
             {
                 for (int i = 0; i < res.Columns.Count; i++)
@@ -2734,17 +2734,17 @@ namespace Puzzle.NPersist.Framework
                         dr[i] = null;
                 }
 
-                T snapshotObject = (T)Activator.CreateInstance(typeof(T), dr.ItemArray);
+                snapT snapshotObject = (snapT)Activator.CreateInstance(typeof(snapT), dr.ItemArray);
                 snapshotObjects.Add(snapshotObject);
             }
 
             return snapshotObjects;
         }
 
-        public virtual IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters)
+        public virtual IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery, params QueryParameter[] parameters)
         {
             IList parameterList = new ArrayList(parameters);
-            return GetSnapshotObjectsByNPath<T>(npathQuery, parameterList);
+            return GetSnapshotObjectsByNPath<snapT, sourceT>(npathQuery, parameterList);
         }
 #endregion
 

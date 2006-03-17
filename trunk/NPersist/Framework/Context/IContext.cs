@@ -466,9 +466,9 @@ namespace Puzzle.NPersist.Framework
         T[] GetArrayByNPath<T>(string npathQuery, params QueryParameter[] parameters);
         T[] GetArrayByNPath<T>(string npathQuery, IList parameters);
 
-        IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery);
-        IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters);
-        IList<T> GetSnapshotObjectsByNPath<T>(string npathQuery, IList parameters);
+        IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery);
+        IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery, params QueryParameter[] parameters);
+        IList<snapT> GetSnapshotObjectsByNPath<snapT, sourceT>(string npathQuery, IList parameters);
  
 #endif
         #endregion
