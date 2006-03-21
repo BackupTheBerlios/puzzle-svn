@@ -798,7 +798,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			parameters.Clear();
 			if (Util.IsArray(result))
 			{
-				ctx.IdentityMap.RegisterLoadedObject(obj);
+				
 				for (int row = 0; row <= result.GetUpperBound(1); row++)
 				{
 					for (int col = 0; col <= result.GetUpperBound(0); col++)
@@ -825,6 +825,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 					}
 				}
+                ctx.IdentityMap.RegisterLoadedObject(obj);
 			}
 			else
 			{
