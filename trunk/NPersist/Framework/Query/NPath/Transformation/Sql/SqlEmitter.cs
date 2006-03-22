@@ -154,12 +154,11 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			set { this.columnAliases = value; }
 		}
 
-		private IList resultParameters = new ArrayList() ;
+		//private IList resultParameters = new ArrayList() ;
 		
 		public IList ResultParameters
 		{
-			get { return this.resultParameters; }
-			set { this.resultParameters = value; }
+			get { return this.NPathEngine.ResultParameters;  }
 		}
 
 		#endregion
@@ -1428,7 +1427,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 //			string paramName = GetParameterName();
 //			IQueryParameter param = new QueryParameter(paramName, DbType.String, value.Value ) ;
-//			resultParameters.Add(param);
+//			ResultParameters.Add(param);
 //			SqlParameter sqlParam = select.AddSqlParameter(paramName, DbType.String, value.Value) ;
 //			return sqlParam ;
 		}
@@ -1437,7 +1436,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		{
 			string paramName = GetParameterName();
 			IQueryParameter param = new QueryParameter(paramName, DbType.Guid, value.Value ) ;
-			resultParameters.Add(param);
+			ResultParameters.Add(param);
 			SqlParameter sqlParam = select.AddSqlParameter(paramName, DbType.Guid, value.Value) ;
 			return sqlParam ;
 		}
@@ -1448,7 +1447,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			return dateTimeLiteral;
 //			string paramName = GetParameterName();
 //			IQueryParameter param = new QueryParameter(paramName, DbType.DateTime, value.Value ) ;
-//			resultParameters.Add(param);
+//			ResultParameters.Add(param);
 //			SqlParameter sqlParam = select.AddSqlParameter(paramName, DbType.DateTime, value.Value) ;
 //			return sqlParam ;
 		}
@@ -1459,7 +1458,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			return numericLiteral;
 //			string paramName = GetParameterName();
 //			IQueryParameter param = new QueryParameter(paramName, DbType.Decimal, value.Value ) ;
-//			resultParameters.Add(param);
+//			ResultParameters.Add(param);
 //			SqlParameter sqlParam = select.AddSqlParameter(paramName, DbType.Decimal, value.Value) ;
 //			return sqlParam ;
 		}
@@ -1470,7 +1469,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			return booleanValue;
 //			string paramName = GetParameterName();
 //			IQueryParameter param = new QueryParameter(paramName, DbType.Boolean, value.Value ) ;
-//			resultParameters.Add(param);
+//			ResultParameters.Add(param);
 //			SqlParameter sqlParam = select.AddSqlParameter(paramName, DbType.Boolean, value.Value) ;
 //			return sqlParam ;
 		}
@@ -1481,7 +1480,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			string paramName = GetParameterName();
 			IQueryParameter inParam = (IQueryParameter)parameter.Value;
 			IQueryParameter param = TransformParameter(inParam, paramName);
-			resultParameters.Add(param);
+			ResultParameters.Add(param);
 			SqlParameter sqlParam = select.AddSqlParameter(paramName, param.DbType, param.Value) ;
 			return sqlParam ;
 		}

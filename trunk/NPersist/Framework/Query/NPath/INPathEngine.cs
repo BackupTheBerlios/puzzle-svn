@@ -33,5 +33,7 @@ namespace Puzzle.NPersist.Framework.NPath
 
 		NPathQueryType GetNPathQueryType(string npath);
 
+        IList ResultParameters { get; set; }
+
 	}
 }

@@ -57,6 +57,8 @@ namespace Puzzle.NPersist.Framework.NPath
 
 			IClassMap rootClassMap = this.Context.DomainMap.MustGetClassMap(type);
 
+            this.ResultParameters.Clear();
+
 			SqlEmitter sqlEmitter = new SqlEmitter(this, query,queryType, rootClassMap, propertyColumnMap);
 
 			string sql = sqlEmitter.EmitSql();
@@ -72,6 +74,8 @@ namespace Puzzle.NPersist.Framework.NPath
 			NPathSelectQuery query = parser.ParseSelectQuery(npath, inParameters) ;
 
 			IClassMap rootClassMap = this.Context.DomainMap.MustGetClassMap(type);
+
+            this.ResultParameters.Clear();
 
 			SqlEmitter sqlEmitter = new SqlEmitter(this, query,NPathQueryType.SelectScalar, rootClassMap);
 
@@ -116,5 +120,14 @@ namespace Puzzle.NPersist.Framework.NPath
 		{
 			return SqlEmitter.DeduceQueryType(query);
 		}
+
+        private IList resultParameters = new ArrayList();
+
+        public IList ResultParameters
+        {
+            get { return this.resultParameters; }
+            set { this.resultParameters = value; }
+        }
+
 	}
 }
