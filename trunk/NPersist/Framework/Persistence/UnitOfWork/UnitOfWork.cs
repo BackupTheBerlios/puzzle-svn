@@ -21,7 +21,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 	public class UnitOfWork : ContextChild, IUnitOfWork
 	{
 		private ArrayList m_listCreated = new ArrayList();
-        private ArrayList m_listIgnore = new ArrayList();
 		private ArrayList m_listDirty = new ArrayList();
 		private Hashtable m_hashStillDirty = new Hashtable();
 		private ArrayList m_listDeleted = new ArrayList();
@@ -92,25 +91,30 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.LogManager.Info(this, "Registering object as up for deletion", "Type: " + obj.GetType().ToString()); // do not localize
 
 			object result = m_objectStatusLookup[obj];
+            bool addToDeleted = true;
 			if (result != null)
 			{
 				ObjectStatus objStatus = (ObjectStatus) result;
 				if (objStatus == ObjectStatus.UpForCreation)
 				{
-                    int beforeCount = m_listCreated.Count;
+                    //If the object has been created during the same Unit of Work, we don't have to
+                    //wait for a commit operation to let the object enter a state of Deleted (that is,
+                    //the object does not have to enter the state of UpForDeletion until commit makes it Deleted)
 					m_listCreated.Remove(obj);
-                    if (m_listCreated.Count != beforeCount)
-                    {
-                        m_listIgnore.Add(obj);
-                    }
 					m_objectStatusLookup.Remove(obj);
+                    this.Context.ObjectManager.ClearUpdatedStatuses(obj);
+                    this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.Deleted);
+                    addToDeleted = false;
 				}
 			}
 			this.Context.ObjectCloner.EnsureIsClonedIfEditing(obj);
-			m_listDirty.Remove(obj);
-			m_listDeleted.Add(obj);
-			m_objectStatusLookup[obj] = ObjectStatus.UpForDeletion;
-			this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.UpForDeletion);
+            if (addToDeleted)
+            {
+                m_listDirty.Remove(obj);
+                m_listDeleted.Add(obj);
+                m_objectStatusLookup[obj] = ObjectStatus.UpForDeletion;
+                this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.UpForDeletion);
+            }
 			this.Context.IdentityMap.RemoveObject(obj);
 		}
 
@@ -780,10 +784,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				cnt = m_listDeleted.Count;
 				IObjectManager om = this.Context.ObjectManager;
 				IPersistenceEngine pe = this.Context.PersistenceEngine;
-                foreach (object obj in m_listIgnore)
-                {
-                    m_listDeleted.Remove(obj);
-                }
 				while (cnt > 0)
 				{
 					try
