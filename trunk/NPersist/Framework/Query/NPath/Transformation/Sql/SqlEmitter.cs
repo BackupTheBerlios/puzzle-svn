@@ -162,14 +162,6 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			set { this.resultParameters = value; }
 		}
 
-		private int resultParameterCount = 0;
-		
-		public int ResultParameterCount
-		{
-			get { return this.resultParameterCount; }
-			set { this.resultParameterCount = value; }
-		}
-
 		#endregion
 
 		#region Public Methods
@@ -1566,8 +1558,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			string result = "";
 			if (sourceMap.SourceType == SourceType.MSSqlServer)
 			{
-				resultParameterCount++;
-				result = "@Param" + resultParameterCount.ToString() ;
+				result = "@Param" + this.NPathEngine.Context.GetNextParamNr().ToString() ;
 			}			
 			else if (sourceMap.SourceType == SourceType.MSAccess)
 			{
@@ -1575,8 +1566,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			}			
 			else if (sourceMap.SourceType == SourceType.Oracle)
 			{
-				resultParameterCount++;
-				result = ":Param" + resultParameterCount.ToString() ;
+                result = ":Param" + this.NPathEngine.Context.GetNextParamNr().ToString();
 			}			
 			else
 			{

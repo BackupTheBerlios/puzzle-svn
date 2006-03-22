@@ -121,6 +121,11 @@ namespace Puzzle.NPersist.Framework
 
 		string DomainKey { get; set; }
 
+        long ParamCounter { get; set; }
+
+        long GetNextParamNr();
+
+
 		ObjectStatus GetObjectStatus(object obj);
 
 		PropertyStatus GetPropertyStatus(object obj, string propertyName);

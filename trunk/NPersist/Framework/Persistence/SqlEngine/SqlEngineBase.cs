@@ -3287,23 +3287,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual long GetNextParamNr()
 		{
-			paramCounter++;
-			if (paramCounter == Int64.MaxValue)  // yeah, right....
-				paramCounter= 0;
-			return paramCounter;
+			return this.Context.GetNextParamNr();
 		}
-
-		#region Property  ParamCounter
-		
-		private long paramCounter = 0;
-		
-		public long ParamCounter
-		{
-			get { return this.paramCounter; }
-			set { this.paramCounter = value; }
-		}
-		
-		#endregion
 
 		protected virtual string GetParameterName(IClassMap classMap)
 		{
@@ -3314,7 +3299,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			string name = prefix;
 			name = name + classMap.Name;
-			name = "@" + name;
+			name = "@" + name + GetNextParamNr().ToString() ;
             name = name.Replace('.', '_');
 			return name;
 		}
@@ -3329,7 +3314,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string name = prefix;
 			name = name + propertyMap.Name;
 			name = name + "_" + columnMap.Name;
-			name = "@" + name;
+            name = "@" + name + GetNextParamNr().ToString();
 			return name;
 		}
 

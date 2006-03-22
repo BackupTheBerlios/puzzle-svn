@@ -79,7 +79,7 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 		{
 			if (this.name == "")
 				this.name = "@param" + this.SqlStatement.GetNextParameterIndex().ToString();
-			return this.name;
+            return this.name;
 		}
 
 		public override void Accept(ISqlVisitor visitor)

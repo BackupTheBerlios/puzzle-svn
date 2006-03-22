@@ -614,12 +614,35 @@ namespace Puzzle.NPersist.Framework
 		
 		#endregion
 
+        #region Property  ParamCounter
 
-		#endregion
+        private long paramCounter = 0;
 
-		#region Public Methods
+        public long ParamCounter
+        {
+            get { return this.paramCounter; }
+            set { this.paramCounter = value; }
+        }
 
-		public virtual ObjectStatus GetObjectStatus(object obj)
+        #endregion
+
+        #region Method  GetNextParamNr
+
+        public virtual long GetNextParamNr()
+        {
+            paramCounter++;
+            if (paramCounter == Int64.MaxValue)  // yeah, right....
+                paramCounter = 0;
+            return paramCounter;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Public Methods
+
+        public virtual ObjectStatus GetObjectStatus(object obj)
 		{
 			return m_ObjectManager.GetObjectStatus(obj);
 		}
