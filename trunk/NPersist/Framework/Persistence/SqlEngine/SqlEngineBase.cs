@@ -1301,7 +1301,8 @@ namespace Puzzle.NPersist.Framework.Persistence
                                 if (om.GetObjectStatus(refObj) == ObjectStatus.UpForCreation)
                                 {
                                     ignore = true;
-                                    stillDirty.Add(propertyMap);
+                                    if (!propertyMap.IsReadOnly)
+                                        stillDirty.Add(propertyMap);
                                 }
                             }
                         }
