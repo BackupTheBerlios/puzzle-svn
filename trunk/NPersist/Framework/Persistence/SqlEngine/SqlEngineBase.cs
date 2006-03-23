@@ -1276,69 +1276,70 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
 			{
-				if (propertyMap.IsCollection)
-				{
-					if (propertyMap.IsReadOnly == false && propertyMap.IsSlave == false)
-					{
-						collectionPropertyMaps.Add(propertyMap);
-					}
-				}
-				else
-				{
-					ignore = false;
-					if (propertyMap.GetColumnMap().IsAutoIncrease && this.AutoIncreaserStrategy == AutoIncreaserStrategy.SelectNewIdentity)
-						ignore = true;
+                if (!propertyMap.IsSlave)
+                {
+                    if (propertyMap.IsCollection)
+                    {
+                        if (!propertyMap.IsReadOnly)
+                            collectionPropertyMaps.Add(propertyMap);
+                    }
+                    else
+                    {
+                        ignore = false;
+                        if (propertyMap.GetColumnMap().IsAutoIncrease && this.AutoIncreaserStrategy == AutoIncreaserStrategy.SelectNewIdentity)
+                            ignore = true;
 
-                    //HACK: roger fixed the timestamp bug
-                    if (propertyMap.GetColumnMap().SpecificDataType == "TIMESTAMP")
-                        ignore = true;
+                        //HACK: roger fixed the timestamp bug
+                        if (propertyMap.GetColumnMap().SpecificDataType == "TIMESTAMP")
+                            ignore = true;
 
-					else if (!(propertyMap.ReferenceType == ReferenceType.None))
-					{
-						refObj = om.GetPropertyValue(obj, propertyMap.Name);
-						if (refObj != null)
-						{
-							if (om.GetObjectStatus(refObj) == ObjectStatus.UpForCreation)
-							{
-								ignore = true;
-								stillDirty.Add(propertyMap);
-							}
-						}
-					}
-					if (!(ignore))
-					{
-						if (!(propertyMap.GetTableMap() == tableMap))
-						{
-							nonPrimaryPropertyMaps.Add(propertyMap);
-						}
-						else
-						{
-							if (!(ignore))
-							{
-								columnMap = propertyMap.GetColumnMap();
-								SqlColumnAlias column = table.GetSqlColumnAlias(columnMap);								
+                        else if (!(propertyMap.ReferenceType == ReferenceType.None))
+                        {
+                            refObj = om.GetPropertyValue(obj, propertyMap.Name);
+                            if (refObj != null)
+                            {
+                                if (om.GetObjectStatus(refObj) == ObjectStatus.UpForCreation)
+                                {
+                                    ignore = true;
+                                    stillDirty.Add(propertyMap);
+                                }
+                            }
+                        }
+                        if (!(ignore))
+                        {
+                            if (!(propertyMap.GetTableMap() == tableMap))
+                            {
+                                nonPrimaryPropertyMaps.Add(propertyMap);
+                            }
+                            else
+                            {
+                                if (!(ignore))
+                                {
+                                    columnMap = propertyMap.GetColumnMap();
+                                    SqlColumnAlias column = table.GetSqlColumnAlias(columnMap);
 
-								paramName = GetParameterName(propertyMap);								
-								SqlParameter param = AddSqlParameter(insert, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
-								
-								insert.AddSqlColumnAndValue(column, param);
+                                    paramName = GetParameterName(propertyMap);
+                                    SqlParameter param = AddSqlParameter(insert, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
 
-								propertyNames.Add(propertyMap.Name);
+                                    insert.AddSqlColumnAndValue(column, param);
 
-								foreach (IColumnMap iColumnMap in propertyMap.GetAdditionalColumnMaps())
-								{
-									columnMap = iColumnMap;
-									column = table.GetSqlColumnAlias(columnMap);								
-									
-									paramName = GetParameterName(propertyMap, columnMap);
-									param = AddSqlParameter(insert, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
+                                    propertyNames.Add(propertyMap.Name);
 
-									insert.AddSqlColumnAndValue(column, param);
-								}
-							}
-						}
-					}
-				}
+                                    foreach (IColumnMap iColumnMap in propertyMap.GetAdditionalColumnMaps())
+                                    {
+                                        columnMap = iColumnMap;
+                                        column = table.GetSqlColumnAlias(columnMap);
+
+                                        paramName = GetParameterName(propertyMap, columnMap);
+                                        param = AddSqlParameter(insert, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
+
+                                        insert.AddSqlColumnAndValue(column, param);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }				
 			}
 			typeColMap = classMap.GetTypeColumnMap();
 			if (typeColMap != null)

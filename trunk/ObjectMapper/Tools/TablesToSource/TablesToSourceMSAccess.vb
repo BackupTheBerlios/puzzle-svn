@@ -717,18 +717,50 @@ Public Class TablesToSourceMSAccess
 
         'Constraint
         dtdBuilder.Append(columnIndent)
-        dtdBuilder.Append("CONSTRAINT [FK_")
-        dtdBuilder.Append(tableMap.Name)
+
+        Dim fkName As String = ""
+
+        'Construct an FK name
 
         For Each columnMap In columnMaps
 
-            dtdBuilder.Append("_")
-            dtdBuilder.Append(columnMap.Name)
+            If columnMap.ForeignKeyName.Length > 0 Then
+
+                fkName = columnMap.ForeignKeyName
+                Exit For
+
+            End If
 
         Next
 
-        dtdBuilder.Append("] FOREIGN KEY ")
+        If fkName.Length < 1 Then
+
+            fkName = "FK_" & tableMap.Name
+
+            For Each columnMap In columnMaps
+
+                fkName += "_"
+                fkName += columnMap.Name
+
+            Next
+
+        End If
+
+        dtdBuilder.Append("CONSTRAINT [" + fkName + "] FOREIGN KEY ")
         dtdBuilder.Append(vbCrLf)
+
+        'dtdBuilder.Append("CONSTRAINT [FK_")
+        'dtdBuilder.Append(tableMap.Name)
+
+        'For Each columnMap In columnMaps
+
+        '    dtdBuilder.Append("_")
+        '    dtdBuilder.Append(columnMap.Name)
+
+        'Next
+
+        'dtdBuilder.Append("] FOREIGN KEY ")
+        'dtdBuilder.Append(vbCrLf)
 
         dtdBuilder.Append(columnIndent)
         dtdBuilder.Append("(")
