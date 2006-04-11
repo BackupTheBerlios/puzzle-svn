@@ -202,7 +202,9 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			IClassMap classMap = sqlEmitter.RootClassMap;
 			bool skip = false;
 			bool first = true;
-			foreach (string name in GetPathPropertyNames(propertyPath))
+            int cnt = 1;
+            IList pathPropertyNames = GetPathPropertyNames(propertyPath); 
+			foreach (string name in pathPropertyNames)
 			{
 				if (name.Length > 0)
 				{
@@ -221,7 +223,9 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 						{
 							propertyMap = classMap.MustGetPropertyMap(name);
 							propertyMaps.Add(propertyMap);
-							classMap = propertyMap.MustGetReferencedClassMap();					
+
+                            if (cnt < pathPropertyNames.Count)
+							    classMap = propertyMap.MustGetReferencedClassMap();					
 						}
 						else
 						{
@@ -233,6 +237,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 						}
 					}					
 				}
+                cnt++;
 			}
 			return propertyMaps;
 		}
