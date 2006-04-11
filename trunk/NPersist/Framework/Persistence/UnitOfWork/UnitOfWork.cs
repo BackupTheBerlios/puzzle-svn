@@ -872,7 +872,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					if (!(propertyMap.ReferenceType == ReferenceType.None))
 					{
-						if (checkAllReferences || propertyMap.GetReferencedClassMap().HasIdAssignedBySource())
+						if (checkAllReferences || propertyMap.MustGetReferencedClassMap().HasIdAssignedBySource())
 						{
 							if (propertyMap.IsCollection)
 							{

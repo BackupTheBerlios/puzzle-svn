@@ -412,7 +412,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		private void GetWhereClauseJoinTables()
 		{
 			JoinTree joinTree = this.propertyPathTraverser.JoinTree;
-			joinTree.TableMap = rootClassMap.GetTableMap();
+			joinTree.TableMap = rootClassMap.MustGetTableMap();
 
 			GetWhereClauseJoinTables(joinTree.TableJoins);
 		}
@@ -449,7 +449,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		private void EmitOldStyleInnerJoin(TableJoin tableJoin) 
 		{
 			IPropertyMap propertyMap = tableJoin.PropertyMap;
-			ITableMap tableMap = propertyMap.GetTableMap();
+			ITableMap tableMap = propertyMap.MustGetTableMap();
 			ArrayList columnMaps = tableJoin.ColumnMaps;
 			object hashObject = tableJoin.Parent;
 			if (hashObject == null) { hashObject = propertyMap; }
@@ -461,10 +461,10 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			{
 				if (idtbl == null) 
 				{
-					idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), tableJoin);					
+					idtbl = GetTableAlias(columnMap.MustGetPrimaryKeyTableMap(), tableJoin);					
 				}
 				col = tbl.GetSqlColumnAlias(columnMap);
-				idcol = idtbl.GetSqlColumnAlias(columnMap.GetPrimaryKeyColumnMap());
+				idcol = idtbl.GetSqlColumnAlias(columnMap.MustGetPrimaryKeyColumnMap());
 
 				SqlSearchCondition search = select.SqlWhereClause.GetNextSqlSearchCondition();
 				search.GetSqlComparePredicate(col, SqlCompareOperatorType.Equals, idcol);
@@ -497,13 +497,13 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 								hashObject = tableJoin;	
 							}
 						}
-                        idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
+                        idtbl = GetTableAlias(columnMap.MustGetPrimaryKeyTableMap(), hashObject);					
 						
                        
 						
 					}
 					col = tbl.GetSqlColumnAlias(columnMap);
-					idcol = idtbl.GetSqlColumnAlias(columnMap.GetPrimaryKeyColumnMap());
+					idcol = idtbl.GetSqlColumnAlias(columnMap.MustGetPrimaryKeyColumnMap());
 
 					SqlSearchCondition search = select.SqlWhereClause.GetNextSqlSearchCondition();
 					search.GetSqlComparePredicate(col, SqlCompareOperatorType.Equals, idcol);				
@@ -519,14 +519,14 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		private void CreateJoin(TableJoin tableJoin) 
 		{
 			IPropertyMap propertyMap = tableJoin.PropertyMap;
-			tableJoin.TableMap = propertyMap.GetTableMap();
+			tableJoin.TableMap = propertyMap.MustGetTableMap();
 			tableJoin.ColumnMaps = propertyMap.GetAllColumnMaps();
 			//fails on self-join
 			//if (tableJoin.TableMap != propertyMap.ClassMap.GetTableMap())
 			ArrayList idColumns = propertyMap.GetAllIdColumnMaps();
 			if (idColumns.Count > 0 )
 			{
-				tableJoin.BaseTableMap = propertyMap.ClassMap.GetTableMap();
+				tableJoin.BaseTableMap = propertyMap.ClassMap.MustGetTableMap();
 				tableJoin.BaseColumnMaps = idColumns;
 			}
 		}
@@ -612,7 +612,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		{
 			StringBuilder clause = new StringBuilder() ;
 			IPropertyMap propertyMap = tableJoin.PropertyMap ;
-			ITableMap tableMap = propertyMap.GetTableMap();
+			ITableMap tableMap = propertyMap.MustGetTableMap();
 			ArrayList columnMaps = tableJoin.ColumnMaps;
 			object hashObject = tableJoin.Parent;
 			if (hashObject == null) { hashObject = propertyMap; }
@@ -625,11 +625,11 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			{
 				if (idtbl == null)
 				{
-					idTableMap = columnMap.GetPrimaryKeyTableMap();
+					idTableMap = columnMap.MustGetPrimaryKeyTableMap();
 					idtbl = GetTableAlias(idTableMap, tableJoin);
 				}
 				col = tbl.GetSqlColumnAlias(columnMap);
-				idcol = idtbl.GetSqlColumnAlias(columnMap.GetPrimaryKeyColumnMap());
+				idcol = idtbl.GetSqlColumnAlias(columnMap.MustGetPrimaryKeyColumnMap());
 				fromTable.Alias = idtbl;
 				fromTable.LinksToAlias = tbl;
 				fromTable.Columns.Add(idcol); 
@@ -646,10 +646,10 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 					if (idtbl == null)
 					{
 						if (hashObject is IPropertyMap) { hashObject = ((IPropertyMap) hashObject).ClassMap ; }
-						idtbl = GetTableAlias(columnMap.GetPrimaryKeyTableMap(), hashObject);					
+						idtbl = GetTableAlias(columnMap.MustGetPrimaryKeyTableMap(), hashObject);					
 					}
 					col = tbl.GetSqlColumnAlias(columnMap);
-					idcol = idtbl.GetSqlColumnAlias(columnMap.GetPrimaryKeyColumnMap());
+					idcol = idtbl.GetSqlColumnAlias(columnMap.MustGetPrimaryKeyColumnMap());
 
 //					fromTable.Alias = idtbl;
 //					fromTable.LinksToAlias = tbl;
@@ -765,7 +765,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			IColumnMap typeColumnMap = classMap.GetTypeColumnMap(); 
 			if (typeColumnMap != null)
 			{
-				ITableMap tableMap = classMap.GetTableMap();
+				ITableMap tableMap = classMap.MustGetTableMap();
 				SqlTableAlias tbl = null ;
 				foreach (IPropertyMap idPropertyMap in classMap.GetIdentityPropertyMaps())
 				{

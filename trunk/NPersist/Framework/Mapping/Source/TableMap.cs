@@ -79,6 +79,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_ColumnMaps = value; }
 		}
 
+		public virtual IColumnMap MustGetColumnMap(string findName)
+		{
+			IColumnMap columnMap = GetColumnMap(findName);
+
+			if (columnMap == null)
+				throw new MappingException("Could not find column " + findName + " in table " + m_name + " in map file!");
+
+			return columnMap;
+		}
+
 		public virtual IColumnMap GetColumnMap(string findName)
 		{
 			if (findName == null) { return null; }

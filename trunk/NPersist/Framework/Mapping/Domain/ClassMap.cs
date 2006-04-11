@@ -335,6 +335,17 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_Table = value; }
 		}
 
+						
+		public virtual ITableMap MustGetTableMap()
+		{
+			ITableMap tableMap = GetTableMap();
+
+			if (tableMap == null)
+				throw new MappingException("Could not find table " + m_Table + " mapped to by type " + this.GetFullName() + " in map file!");
+
+			return tableMap;
+		}
+
 		public virtual ITableMap GetTableMap()
 		{
 			ISourceMap sourceMap = GetSourceMap();

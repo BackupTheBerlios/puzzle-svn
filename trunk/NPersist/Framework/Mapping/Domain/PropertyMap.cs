@@ -509,6 +509,28 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		public virtual IClassMap MustGetReferencedClassMap()
+		{
+			IClassMap classMap = GetReferencedClassMap();
+
+			if (classMap == null)
+			{
+				string className;
+				if (m_IsCollection)
+				{
+					className = m_ItemType;
+				}
+				else
+				{
+					className = m_DataType;
+				}
+				
+				throw new MappingException("Could not find type " + className + ", referenced by property " + this.ClassMap.Name + "." + this.Name + ", in map file!");
+			}
+
+			return classMap;
+		}
+
 		public virtual IClassMap GetReferencedClassMap()
 		{
 			if (m_ReferenceType == ReferenceType.None)
@@ -606,6 +628,18 @@ namespace Puzzle.NPersist.Framework.Mapping
 				m_Table = value;
 			}
 		}
+
+
+		public virtual ITableMap MustGetTableMap()
+		{
+			ITableMap tableMap = GetTableMap();
+
+			if (tableMap == null)
+				throw new MappingException("Could not find table " + m_Table + ", mapped to by property " + this.ClassMap.Name + "." + this.Name + ", in map file!");
+
+			return tableMap;
+		}
+
 
 		public virtual ITableMap GetTableMap()
 		{
@@ -835,6 +869,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				m_Inverse = value;
 			}
+		}
+
+		public virtual IPropertyMap MustGetInversePropertyMap()
+		{
+			IPropertyMap propertyMap = GetInversePropertyMap();
+
+			if (propertyMap == null)
+				throw new MappingException("Could not find property " + m_Inverse + ", specified as inverse to property " + this.ClassMap.Name + "." + this.Name + ", in map file!");
+
+			return propertyMap;
 		}
 
 		public virtual IPropertyMap GetInversePropertyMap()

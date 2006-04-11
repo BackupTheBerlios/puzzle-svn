@@ -59,6 +59,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		string Table { get; set; }
 
+		ITableMap MustGetTableMap();
+
 		ITableMap GetTableMap();
 
 		void SetTableMap(ITableMap value);

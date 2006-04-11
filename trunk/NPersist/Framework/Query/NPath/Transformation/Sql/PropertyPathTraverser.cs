@@ -26,7 +26,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 			joinTree = new JoinTree(this);
 
-			joinTree.TableMap = sqlEmitter.RootClassMap.GetTableMap();
+			joinTree.TableMap = sqlEmitter.RootClassMap.MustGetTableMap();
 
 		}
 
@@ -50,7 +50,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		public virtual SqlTableAlias GetClassTable(string className)
 		{
 			IClassMap classMap = sqlEmitter.RootClassMap.DomainMap.MustGetClassMap(className);
-			ITableMap tableMap = classMap.GetTableMap();
+			ITableMap tableMap = classMap.MustGetTableMap();
 
 			return sqlEmitter.Select.GetSqlTableAlias(tableMap);						
 		}
@@ -59,7 +59,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		public virtual SqlColumnAlias GetPropertyColumn(IPropertyMap propertyMap, object hash) 
 		{	
 			if (hash == null) { hash = propertyMap; }
-			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.GetTableMap(), hash)  ;
+			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), hash)  ;
 
             IColumnMap columnMap = propertyMap.GetColumnMap();
 
@@ -86,7 +86,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		{	
 
 			if (hash == null) { hash = propertyMap; }
-			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.GetTableMap(), hash)  ;
+			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), hash)  ;
 			IList columnAliases = new ArrayList();
 
 			if (propertyMap.IsIdentity)
@@ -106,7 +106,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
       //      bool hasTypeColumn = false;
             foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
             {
-                if (propertyMap.GetInversePropertyMap() != null && propertyMap.GetInversePropertyMap().ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap())
+				IPropertyMap inverse = propertyMap.GetInversePropertyMap();
+                if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap())
                 {
                     string suggestionString;
                     suggestionString = propPath + ".NPersistTypeColumn";
@@ -118,8 +119,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 			foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
 			{
-                
-                if ( propertyMap.GetInversePropertyMap () != null && propertyMap.GetInversePropertyMap ().ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap ())
+                IPropertyMap inverse = propertyMap.GetInversePropertyMap ();
+                if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap ())
                 {
                     continue;
                 }
@@ -167,7 +168,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		public virtual SqlTableAlias GetClassTableAlias(string className)
 		{	
 			IClassMap classMap = sqlEmitter.RootClassMap.DomainMap.MustGetClassMap(className);
-			return sqlEmitter.GetTableAlias(classMap.GetTableMap(), classMap)  ;
+			return sqlEmitter.GetTableAlias(classMap.MustGetTableMap(), classMap)  ;
 		}
 
 		public virtual SqlColumnAlias GetPropertyColumnAlias(SqlTableAlias tableAlias, string propertyPath, IColumnMap columnMap, string suggestion)
@@ -220,7 +221,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 						{
 							propertyMap = classMap.MustGetPropertyMap(name);
 							propertyMaps.Add(propertyMap);
-							classMap = propertyMap.GetReferencedClassMap();					
+							classMap = propertyMap.MustGetReferencedClassMap();					
 						}
 						else
 						{
@@ -331,7 +332,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 												//GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path, path + "." + iPropertyMap.Name, "");
 												GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
 											}
-											if (iPropertyMap.GetTableMap() != iPropertyMap.ClassMap.GetTableMap())
+											if (iPropertyMap.MustGetTableMap() != iPropertyMap.ClassMap.MustGetTableMap())
 											{
 												JoinNonPrimary(iPropertyMap);
 											}																							
@@ -352,7 +353,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 							//GetPropertyColumnNamesAndAliases(propertyMap, path, selectedColumns, columnOrder, path, path + "." + propertyMap.Name, suggestion);
 							GetPropertyColumnNamesAndAliases(propertyMap, path, selectedColumns, columnOrder, path + "." + propertyMap.Name, path + "." + propertyMap.Name, suggestion);
 						}													
-						if (propertyMap.GetTableMap() != propertyMap.ClassMap.GetTableMap())
+						if (propertyMap.MustGetTableMap() != propertyMap.ClassMap.MustGetTableMap())
 						{
 							JoinNonPrimary(propertyMap);
 						}

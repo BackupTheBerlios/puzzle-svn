@@ -365,7 +365,7 @@ namespace Puzzle.NPersist.Framework.Remoting.Marshaling
 			}
 			else
 			{
-				IClassMap refClassMap = propertyMap.GetReferencedClassMap() ;
+				IClassMap refClassMap = propertyMap.MustGetReferencedClassMap() ;
 				if (refClassMap != null)
 					mr.Type = refClassMap.GetName() ;				
 				mr.IsNull = true;
@@ -384,7 +384,7 @@ namespace Puzzle.NPersist.Framework.Remoting.Marshaling
 				}
 				else
 				{
-					IClassMap refClassMap = propertyMap.GetReferencedClassMap() ;
+					IClassMap refClassMap = propertyMap.MustGetReferencedClassMap() ;
 					if (refClassMap != null)
 						mr.OriginalType = refClassMap.GetName() ;				
 					mr.WasNull = true;
@@ -404,7 +404,7 @@ namespace Puzzle.NPersist.Framework.Remoting.Marshaling
 			MarshalReferenceValue mrv = new MarshalReferenceValue() ;
 			if (value != null)
 			{
-				foreach (IPropertyMap idPropertyMap in propertyMap.GetReferencedClassMap().GetIdentityPropertyMaps())
+				foreach (IPropertyMap idPropertyMap in propertyMap.MustGetReferencedClassMap().GetIdentityPropertyMaps())
 				{
 					if (idPropertyMap.ReferenceType == ReferenceType.None)
 					{					

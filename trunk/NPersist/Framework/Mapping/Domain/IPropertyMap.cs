@@ -52,6 +52,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		bool GetIsAssignedBySource();
 
+		IClassMap MustGetReferencedClassMap();
+
 		IClassMap GetReferencedClassMap();
 
 		string Source { get; set; }
@@ -61,6 +63,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 		void SetSourceMap(ISourceMap value);
 
 		string Table { get; set; }
+
+		ITableMap MustGetTableMap();
 
 		ITableMap GetTableMap();
 
@@ -89,6 +93,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 		ArrayList GetAdditionalIdColumnMaps();
 
 		string Inverse { get; set; }
+
+		IPropertyMap MustGetInversePropertyMap();
 
 		IPropertyMap GetInversePropertyMap();
 

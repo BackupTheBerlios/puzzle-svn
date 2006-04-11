@@ -49,9 +49,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		string PrimaryKeyTable { get; set; }
 
+		ITableMap MustGetPrimaryKeyTableMap();
+
 		ITableMap GetPrimaryKeyTableMap();
 
 		string PrimaryKeyColumn { get; set; }
+
+		IColumnMap MustGetPrimaryKeyColumnMap();
 
 		IColumnMap GetPrimaryKeyColumnMap();
 

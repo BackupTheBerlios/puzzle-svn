@@ -179,7 +179,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			domainMap = SqlEngineManager.Context.DomainMap;
 			classMap = domainMap.MustGetClassMap(obj.GetType());
 			om = SqlEngineManager.Context.ObjectManager;
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 			table = tableMap.Name;
 			schema = tableMap.SourceMap.Schema;
 			if (schema.Length < 1)
@@ -225,7 +225,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						if (!(ignore))
 						{
-							if (!(propertyMap.GetTableMap() == tableMap))
+							if (!(propertyMap.MustGetTableMap() == tableMap))
 							{
 								nonPrimaryPropertyMaps.Add(propertyMap);
 							}

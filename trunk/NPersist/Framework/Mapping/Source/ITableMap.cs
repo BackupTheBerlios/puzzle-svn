@@ -26,6 +26,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 		[XmlArrayItem(typeof (IColumnMap))]
 		ArrayList ColumnMaps { get; set; }
 
+		IColumnMap MustGetColumnMap(string findName);
+
 		IColumnMap GetColumnMap(string findName);
 
 		ArrayList GetPrimaryKeyColumnMaps();

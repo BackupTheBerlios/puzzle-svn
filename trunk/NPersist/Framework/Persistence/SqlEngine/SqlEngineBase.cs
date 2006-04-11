@@ -358,7 +358,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IClassMap classMap = domainMap.MustGetClassMap(obj.GetType());
 			ITableMap myTableMap;
 			ITableMap primTableMap;
-			myTableMap = classMap.GetTableMap();
+			myTableMap = classMap.MustGetTableMap();
 			if (myTableMap != null)
 			{
 				foreach (ITableMap tableMap in myTableMap.SourceMap.TableMaps)
@@ -367,7 +367,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						if (columnMap.IsForeignKey)
 						{
-							primTableMap = columnMap.GetPrimaryKeyTableMap();
+							primTableMap = columnMap.MustGetPrimaryKeyTableMap();
 							if (primTableMap == myTableMap)
 							{
 								RemoveReferencesToObjectInTable(obj, classMap, myTableMap, tableMap);
@@ -419,14 +419,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IContext ctx = m_SqlEngineManager.Context;
 
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
 			{
 				if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
 				{
 					if (!(propertyMap.IsCollection))
 					{
-						if (!(propertyMap.GetTableMap() == tableMap))
+						if (!(propertyMap.MustGetTableMap() == tableMap))
 						{
 							if (!(propertyMap.InheritInverseMappings))
 							{
@@ -438,7 +438,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			foreach (IPropertyMap propertyMap in propertyMaps)
 			{
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				key = tableMap.SourceMap.Name + "." + tableMap.Name;
 				if (!(hashTables.ContainsKey(key)))
 				{
@@ -482,7 +482,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap columnMap in tableMap.ColumnMaps)
 			{
 				if (columnMap.IsForeignKey) {
-					primTableMap = columnMap.GetPrimaryKeyTableMap();
+					primTableMap = columnMap.MustGetPrimaryKeyTableMap();
 					if (primTableMap == myTableMap) {
 						foreach (IPropertyMap propertyMap in domainMap.GetPropertyMapsForColumn(columnMap, true)) {
 							if (!(propertyMaps.Contains(propertyMap))) {
@@ -530,7 +530,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				LoadReferenceProperty(obj, propertyMap);
 				return;
 			}
-			if (!(propertyMap.GetTableMap() == classMap.GetTableMap()))
+			if (!(propertyMap.MustGetTableMap() == classMap.MustGetTableMap()))
 			{
 				LoadNonPrimaryProperty(obj, propertyMap);
 				return;
@@ -569,7 +569,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			if (!(propertyMap.ReferenceType == ReferenceType.None))
 			{
-				itemType = m_SqlEngineManager.Context.AssemblyManager.MustGetTypeFromClassMap(propertyMap.GetReferencedClassMap());
+				itemType = m_SqlEngineManager.Context.AssemblyManager.MustGetTypeFromClassMap(propertyMap.MustGetReferencedClassMap());
 				LoadReferenceCollectionProperty(obj, propertyMap, itemType);
 				return;
 			}
@@ -850,7 +850,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IObjectManager om = ctx.ObjectManager;
 			foreach (IPropertyMap propertyMap in nonPrimaryPropertyMaps)
 			{
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				key = tableMap.SourceMap.Name + "." + tableMap.Name;
 				if (!(hashTables.ContainsKey(key)))
 				{
@@ -904,7 +904,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
 			foreach (IPropertyMap propertyMap in nonPrimaryPropertyMaps)
 			{
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				key = tableMap.SourceMap.Name + "." + tableMap.Name;
 				if (!(hashTables.ContainsKey(key)))
 				{
@@ -1008,8 +1008,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						else
 						{
-							refClassMap = propertyMap.GetReferencedClassMap();
-							forColMap = columnMap.GetPrimaryKeyColumnMap();
+							refClassMap = propertyMap.MustGetReferencedClassMap();
+							forColMap = columnMap.MustGetPrimaryKeyColumnMap();
 							dataType = forColMap.DataType;
 
 							if (refClassMap.GetTypeColumnMap() != null && refClassMap.GetTypeColumnMap() == forColMap)
@@ -1137,8 +1137,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						else
 						{
-							refClassMap = propertyMap.GetReferencedClassMap();
-							forColMap = columnMap.GetPrimaryKeyColumnMap();
+							refClassMap = propertyMap.MustGetReferencedClassMap();
+							forColMap = columnMap.MustGetPrimaryKeyColumnMap();
 							dataType = forColMap.DataType;
 							if (refClassMap.GetTypeColumnMap() != null && refClassMap.GetTypeColumnMap() == forColMap)
 							{
@@ -1214,8 +1214,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						else
 						{
-							refClassMap = propertyMap.GetReferencedClassMap();
-							forColMap = columnMap.GetPrimaryKeyColumnMap();
+							refClassMap = propertyMap.MustGetReferencedClassMap();
+							forColMap = columnMap.MustGetPrimaryKeyColumnMap();
 							dataType = forColMap.DataType;
 							if (refClassMap.GetTypeColumnMap() != null && refClassMap.GetTypeColumnMap() == forColMap)
 							{
@@ -1267,7 +1267,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			domainMap = m_SqlEngineManager.Context.DomainMap;
 			classMap = domainMap.MustGetClassMap(obj.GetType());
 			om = m_SqlEngineManager.Context.ObjectManager;
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 
 			SqlInsertStatement insert = new SqlInsertStatement(tableMap.SourceMap);
 			SqlTableAlias table = insert.GetSqlTableAlias(tableMap);
@@ -1308,7 +1308,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                         }
                         if (!(ignore))
                         {
-                            if (!(propertyMap.GetTableMap() == tableMap))
+                            if (!(propertyMap.MustGetTableMap() == tableMap))
                             {
                                 nonPrimaryPropertyMaps.Add(propertyMap);
                             }
@@ -1373,7 +1373,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 			ISourceMap sourceMap = tableMap.SourceMap;
 
 			SqlSelectStatement select = new SqlSelectStatement(sourceMap) ; 
@@ -1382,7 +1382,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IPropertyMap iPropertyMap in classMap.GetAllPropertyMaps())
 			{
 				propertyMap = iPropertyMap;
-				if (propertyMap.GetTableMap() == tableMap)
+				if (propertyMap.MustGetTableMap() == tableMap)
 				{
 					//if (!((propertyMap.IsCollection || (propertyMap.ReferenceType != ReferenceType.None && !(propertyMap.IsIdentity)))))
 					if (!(propertyMap.IsCollection || propertyMap.GetAllColumnMaps().Count > 1))
@@ -1468,7 +1468,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 			om = m_SqlEngineManager.Context.ObjectManager;
 			pm = m_SqlEngineManager.Context.PersistenceManager;
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 
 			
 			SqlUpdateStatement update = new SqlUpdateStatement(tableMap.SourceMap) ;
@@ -1531,7 +1531,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 								}
 								if (!(ignore))
 								{
-									if (!(propertyMap.GetTableMap() == tableMap))
+									if (!(propertyMap.MustGetTableMap() == tableMap))
 									{
 										if (propStatus == PropertyStatus.Dirty)
 										{
@@ -1645,7 +1645,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			om = m_SqlEngineManager.Context.ObjectManager;
 			pm = m_SqlEngineManager.Context.PersistenceManager;
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 
 			SqlDeleteStatement delete = new SqlDeleteStatement(tableMap.SourceMap) ; 
 			SqlTableAlias table = delete.GetSqlTableAlias(tableMap);
@@ -1663,7 +1663,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						{
 							if (!(propertyMap.IsCollection))
 							{
-								if (propertyMap.GetTableMap() == tableMap)
+								if (propertyMap.MustGetTableMap() == tableMap)
 								{
 									propOptBehavior = pm.GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, propertyMap);
 									if (propOptBehavior == OptimisticConcurrencyBehaviorType.IncludeWhenLoaded || (propOptBehavior == OptimisticConcurrencyBehaviorType.IncludeWhenDirty && om.GetPropertyStatus(obj, propertyMap.Name) == PropertyStatus.Dirty))
@@ -1747,7 +1747,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 
 			propertyMap = classMap.MustGetPropertyMap(propertyName);
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			SqlSelectStatement select = new SqlSelectStatement(tableMap.SourceMap) ; 
 			SqlTableAlias table = select.GetSqlTableAlias(tableMap);
@@ -1758,10 +1758,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			select.SqlFromClause.AddSqlAliasTableSource(table);
 
 			om = m_SqlEngineManager.Context.ObjectManager;
-			if (!(propertyMap.GetTableMap() == classMap.GetTableMap()))
+			if (!(propertyMap.MustGetTableMap() == classMap.MustGetTableMap()))
 			{
 				idColumnMap = propertyMap.GetIdColumnMap();
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(idPropertyMap, "Id_");
@@ -1773,12 +1773,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 				foreach (IColumnMap iIdColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 				{
 					idColumnMap = iIdColumnMap;
-					idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+					idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 
 					idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 					paramName = GetParameterName(propertyMap, idColumnMap, "Id_");
-					if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+					if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 						param = AddSqlParameter(select, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 					else
 						param = AddSqlParameter(select, parameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap, true);
@@ -1823,7 +1823,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IObjectManager om = ctx.ObjectManager;
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			SqlSelectStatement select = new SqlSelectStatement(tableMap.SourceMap) ; 
 			SqlTableAlias table = select.GetSqlTableAlias(tableMap);
@@ -1837,7 +1837,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IPropertyMap iAddPropertyMap in classMap.GetAllPropertyMaps())
 			{
 				addPropertyMap = iAddPropertyMap;
-				if (addPropertyMap.GetTableMap() == tableMap)
+				if (addPropertyMap.MustGetTableMap() == tableMap)
 				{
 					if (!(addPropertyMap == propertyMap))
 					{
@@ -1861,10 +1861,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			select.SqlFromClause.AddSqlAliasTableSource(table);
 
-			if (!(propertyMap.GetTableMap() == classMap.GetTableMap()))
+			if (!(propertyMap.MustGetTableMap() == classMap.MustGetTableMap()))
 			{
 				idColumnMap = propertyMap.GetIdColumnMap();
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 
 				SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
 
@@ -1877,12 +1877,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 				foreach (IColumnMap iIdColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 				{
 					idColumnMap = iIdColumnMap;
-					idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+					idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 
 					idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 					paramName = GetParameterName(propertyMap, idColumnMap, "Id_");
-					if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+					if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 						param = AddSqlParameter(select, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 					else
 						param = AddSqlParameter(select, parameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap, true);
@@ -1928,7 +1928,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 
 			propertyMap = classMap.MustGetPropertyMap(propertyName);
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			ISourceMap sourceMap = tableMap.SourceMap;
 			SqlSelectStatement select = new SqlSelectStatement(sourceMap) ; 
@@ -1942,7 +1942,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			om = m_SqlEngineManager.Context.ObjectManager;
 			idColumnMap = propertyMap.GetIdColumnMap();
-			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 			SqlColumnAlias idColumn = select.GetSqlColumnAlias(idColumnMap); 
 
 			paramName = GetParameterName(propertyMap, "Id_");
@@ -1955,9 +1955,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				idColumnMap = iIdColumnMap;
 				idColumn = select.GetSqlColumnAlias(idColumnMap); 
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				paramName = GetParameterName(propertyMap, idColumnMap, "Id_");
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 				{
 					param = AddSqlParameter(select, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				}
@@ -2069,7 +2069,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string paramName = "";
 			IObjectManager om = m_SqlEngineManager.Context.ObjectManager;
 			classMap = propertyMap.ClassMap;
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			
 			SqlDeleteStatement delete = new SqlDeleteStatement(tableMap.SourceMap) ; 
@@ -2078,7 +2078,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			delete.SqlFromClause.AddSqlAliasTableSource(table);
 
 			idColumnMap = propertyMap.GetIdColumnMap();
-			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 			SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 			paramName = GetParameterName(idPropertyMap);
@@ -2090,11 +2090,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iIdColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 			{
 				idColumnMap = iIdColumnMap;
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(idPropertyMap, idColumnMap);
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 				{
 					param = AddSqlParameter(delete, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				}
@@ -2129,7 +2129,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IObjectManager om = m_SqlEngineManager.Context.ObjectManager;
 			string paramName;
 			classMap = propertyMap.ClassMap;
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			SqlInsertStatement insert = new SqlInsertStatement(tableMap.SourceMap);
 			SqlTableAlias table = insert.GetSqlTableAlias(tableMap);
@@ -2137,7 +2137,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			insert.SqlInsertClause.SqlTable = table.SqlTable;
 
 			idColumnMap = propertyMap.GetIdColumnMap();
-			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 			SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 			paramName = GetParameterName(idPropertyMap);
@@ -2146,12 +2146,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iIdColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 			{
 				idColumnMap = iIdColumnMap;
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(propertyMap, idColumnMap);
 
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 					param = AddSqlParameter(insert, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				else
 					param = AddSqlParameter(insert, parameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap);
@@ -2197,9 +2197,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propertyMap = iPropertyMap;
 				firstPropertyMap = propertyMap;
 				classMap = propertyMap.ClassMap;
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				idColumnMap = propertyMap.GetIdColumnMap();
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				break;
 			}
 			SqlInsertStatement insert = new SqlInsertStatement(tableMap.SourceMap);
@@ -2215,12 +2215,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iIdColumnMap in firstPropertyMap.GetAdditionalIdColumnMaps())
 			{
 				idColumnMap = iIdColumnMap;
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(firstPropertyMap, idColumnMap);					
 				
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 					param = AddSqlParameter(insert, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				else
 					param = AddSqlParameter(insert, parameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap, true);
@@ -2313,9 +2313,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propertyMap = iPropertyMap;
 				firstPropertyMap = propertyMap;
 				classMap = propertyMap.ClassMap;
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				idColumnMap = propertyMap.GetIdColumnMap();
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				break;
 			}
 
@@ -2437,11 +2437,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iIdColumnMap in firstPropertyMap.GetAdditionalIdColumnMaps())
 			{
 				idColumnMap = iIdColumnMap;
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(firstPropertyMap, idColumnMap, "Id_");
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 					param = AddSqlParameter(update, orgParameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				else
 					param = AddSqlParameter(update, orgParameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap, true);
@@ -2476,16 +2476,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IDomainMap domainMap;
 			bool isBackRef = false;
 			string paramName = "";
-			classMap = propertyMap.GetReferencedClassMap();
-			if (classMap == null)
-			{
-				throw new MappingException("ClassMap '" + propertyMap.DataType + "' Not Found!"); // do not localize
-			}
+			classMap = propertyMap.MustGetReferencedClassMap();
 			if (propertyMap.ReferenceType == ReferenceType.OneToOne)
 			{
 				columnMap = propertyMap.GetColumnMap();
 				if (columnMap != null)
-					if (columnMap.TableMap == propertyMap.GetReferencedClassMap().GetTableMap())
+					if (columnMap.TableMap == propertyMap.MustGetReferencedClassMap().MustGetTableMap())
 						if (columnMap.IsPrimaryKey)
 							isBackRef = true;
 				columnMap = null;
@@ -2500,7 +2496,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			if (isBackRef)
 			{
-				tableMap = propertyMap.ClassMap.GetTableMap();
+				tableMap = propertyMap.ClassMap.MustGetTableMap();
 
 				select = new SqlSelectStatement(tableMap.SourceMap) ; 
 				table = select.GetSqlTableAlias(tableMap);
@@ -2515,7 +2511,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				forTableMap = theColumnMap.TableMap;
 
 				forColumnMap = theColumnMap;
-				theColumnMap = forColumnMap.GetPrimaryKeyColumnMap();
+				theColumnMap = forColumnMap.MustGetPrimaryKeyColumnMap();
 				if (forTableMap == null)
 					throw new MappingException("TableMap '" + theColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 				if (forColumnMap == null)
@@ -2526,7 +2522,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			else
 			{
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				
 				select = new SqlSelectStatement(tableMap.SourceMap) ; 
 				table = select.GetSqlTableAlias(tableMap);
@@ -2534,8 +2530,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				theColumnMap = propertyMap.GetColumnMap();
 				//theColumn = table.GetSqlColumnAlias(theColumnMap);
 
-				forTableMap = theColumnMap.GetPrimaryKeyTableMap();
-				forColumnMap = theColumnMap.GetPrimaryKeyColumnMap();
+				forTableMap = theColumnMap.MustGetPrimaryKeyTableMap();
+				forColumnMap = theColumnMap.MustGetPrimaryKeyColumnMap();
 				if (forTableMap == null)
 					throw new MappingException("TableMap '" + theColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 				if (forColumnMap == null)
@@ -2599,7 +2595,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				addColumnMap = iAddColumnMap;
 				addForTableMap = addColumnMap.GetPrimaryKeyTableMap();
-				addForColumnMap = addColumnMap.GetPrimaryKeyColumnMap();
+				addForColumnMap = addColumnMap.MustGetPrimaryKeyColumnMap();
 				if (addForTableMap == null)
 					throw new MappingException("TableMap '" + addColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 				if (addForColumnMap == null)
@@ -2663,13 +2659,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IColumnMap typeColumnMap;
 			IPropertyMap orderByMap;
 			string paramName = "";
-			classMap = propertyMap.GetReferencedClassMap();
-			if (classMap == null)
-				throw new MappingException("ClassMap '" + propertyMap.DataType + "' Not Found!"); // do not localize
+			classMap = propertyMap.MustGetReferencedClassMap();
 
 			IClassMap rootClassMap = classMap;
-			rootTableMap = classMap.GetTableMap();
-			tableMap = propertyMap.GetTableMap();
+			rootTableMap = classMap.MustGetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			if (tableMap != rootTableMap)
 			{
@@ -2680,7 +2674,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					IClassMap super = rootClassMap.GetInheritedClassMap();
 					if (super != null)
 					{
-						if (super.GetTableMap() == rootTableMap)
+						if (super.MustGetTableMap() == rootTableMap)
 						{
 							rootClassMap = super ; 
 							done = false;
@@ -2699,8 +2693,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			idColumnMap = propertyMap.GetIdColumnMap();
 			SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
 
-			myTableMap = idColumnMap.GetPrimaryKeyTableMap();
-			myColumnMap = idColumnMap.GetPrimaryKeyColumnMap();
+			myTableMap = idColumnMap.MustGetPrimaryKeyTableMap();
+			myColumnMap = idColumnMap.MustGetPrimaryKeyColumnMap();
 
 			if (myTableMap == null)
 				throw new MappingException("TableMap '" + idColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
@@ -2772,7 +2766,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				addIdColumnMap = iAddIdColumnMap;
 				addMyTableMap = addIdColumnMap.GetPrimaryKeyTableMap();
-				addMyColumnMap = addIdColumnMap.GetPrimaryKeyColumnMap();
+				addMyColumnMap = addIdColumnMap.MustGetPrimaryKeyColumnMap();
 				if (addMyTableMap == null)
 					throw new MappingException("TableMap '" + addIdColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 				if (addMyColumnMap == null)
@@ -2788,14 +2782,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				foreach (IPropertyMap testPropertyMap in classMap.GetAllPropertyMaps())
 				{
-					if (testPropertyMap.GetTableMap() == propertyMap.GetTableMap())
+					if (testPropertyMap.MustGetTableMap() == propertyMap.MustGetTableMap())
 					{
 						foreach (IColumnMap iAddIdColumnMap in testPropertyMap.GetAllIdColumnMaps())
 						{
 							addIdColumnMap = iAddIdColumnMap;
 
 							SqlColumnAlias addIdColumn = table.GetSqlColumnAlias(addIdColumnMap);
-							SqlColumnAlias rootColumn = rootTable.GetSqlColumnAlias(addIdColumnMap.GetPrimaryKeyColumnMap());
+							SqlColumnAlias rootColumn = rootTable.GetSqlColumnAlias(addIdColumnMap.MustGetPrimaryKeyColumnMap());
 				
 							search = select.SqlWhereClause.GetNextSqlSearchCondition();
 							search.GetSqlComparePredicate(addIdColumn, SqlCompareOperatorType.Equals,  rootColumn);
@@ -2857,22 +2851,20 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IColumnMap typeColumnMap;
 			IPropertyMap orderByMap;
 			string paramName = "";
-			classMap = propertyMap.GetReferencedClassMap();
-			if (classMap == null)
-				throw new MappingException("ClassMap '" + propertyMap.DataType + "' Not Found!"); // do not localize
+			classMap = propertyMap.MustGetReferencedClassMap();
 
-			tableMap = classMap.GetTableMap();
+			tableMap = classMap.MustGetTableMap();
 			SqlSelectStatement select = new SqlSelectStatement(tableMap.SourceMap) ; 
 			SqlTableAlias table = select.GetSqlTableAlias(tableMap);
 
-			joinTableMap = propertyMap.GetTableMap();
+			joinTableMap = propertyMap.MustGetTableMap();
 			SqlTableAlias joinTable = select.GetSqlTableAlias(joinTableMap);
 
 			idColumnMap = propertyMap.GetIdColumnMap();
 			SqlColumnAlias idColumn = joinTable.GetSqlColumnAlias(idColumnMap);
 
-			myTableMap = idColumnMap.GetPrimaryKeyTableMap();
-			myColumnMap = idColumnMap.GetPrimaryKeyColumnMap();
+			myTableMap = idColumnMap.MustGetPrimaryKeyTableMap();
+			myColumnMap = idColumnMap.MustGetPrimaryKeyColumnMap();
 			if (myTableMap == null)
 				throw new MappingException("TableMap '" + idColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 			if (myColumnMap == null)
@@ -2880,8 +2872,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			SqlTableAlias myTable;
 
 			colColumnMap = propertyMap.GetColumnMap();
-			forTableMap = colColumnMap.GetPrimaryKeyTableMap();
-			forColumnMap = colColumnMap.GetPrimaryKeyColumnMap();
+			forTableMap = colColumnMap.MustGetPrimaryKeyTableMap();
+			forColumnMap = colColumnMap.MustGetPrimaryKeyColumnMap();
 			if (forTableMap == null)
 				throw new MappingException("TableMap '" + idColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
 			if (forColumnMap == null)
@@ -2939,7 +2931,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iAddColumnMap in propertyMap.GetAdditionalColumnMaps())
 			{
 				addColumnMap = iAddColumnMap;
-				addMyColumnMap = addColumnMap.GetPrimaryKeyColumnMap();
+				addMyColumnMap = addColumnMap.MustGetPrimaryKeyColumnMap();
 				if (addMyColumnMap == null)
 					throw new MappingException("ColumnMap '" + addColumnMap.PrimaryKeyColumn + "' Not Found!"); // do not localize
 
@@ -2955,8 +2947,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iAddIdColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 			{
 				addIdColumnMap = iAddIdColumnMap;
-				addMyTableMap = addIdColumnMap.GetPrimaryKeyTableMap();
-				addMyColumnMap = addIdColumnMap.GetPrimaryKeyColumnMap();
+				addMyTableMap = addIdColumnMap.MustGetPrimaryKeyTableMap();
+				addMyColumnMap = addIdColumnMap.MustGetPrimaryKeyColumnMap();
 
 				if (addMyTableMap == null)
 					throw new MappingException("TableMap '" + addIdColumnMap.PrimaryKeyTable + "' Not Found!"); // do not localize
@@ -3132,7 +3124,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string paramName = "";
 			IObjectManager om = m_SqlEngineManager.Context.ObjectManager;
 			classMap = propertyMap.ClassMap;
-			tableMap = propertyMap.GetTableMap();
+			tableMap = propertyMap.MustGetTableMap();
 
 			SqlDeleteStatement delete = new SqlDeleteStatement(tableMap.SourceMap) ; 
 			SqlTableAlias table = delete.GetSqlTableAlias(tableMap);
@@ -3141,7 +3133,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			idColumnMap = propertyMap.GetIdColumnMap();
 			SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
-			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+			idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 			
 			paramName = GetParameterName(idPropertyMap, "Id_");
 			SqlParameter param =  AddSqlParameter(delete, parameters, paramName, obj, idPropertyMap, om.GetPropertyValue(obj, idPropertyMap.Name), idColumnMap);
@@ -3153,10 +3145,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				idColumnMap = iIdColumnMap;
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 
 				paramName = GetParameterName(propertyMap, idColumnMap, "Id_");
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 				{
 					param = AddSqlParameter(delete, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				}
@@ -3192,9 +3184,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propertyMap = iPropertyMap;
 				firstPropertyMap = propertyMap;
 				classMap = propertyMap.ClassMap;
-				tableMap = propertyMap.GetTableMap();
+				tableMap = propertyMap.MustGetTableMap();
 				idColumnMap = propertyMap.GetIdColumnMap();
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				break;
 			}
 
@@ -3213,11 +3205,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (IColumnMap iIdColumnMap in firstPropertyMap.GetAdditionalIdColumnMaps())
 			{
 				idColumnMap = iIdColumnMap;
-				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.GetPrimaryKeyColumnMap());
+				idPropertyMap = classMap.GetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());
 				idColumn = table.GetSqlColumnAlias(idColumnMap);
 
 				paramName = GetParameterName(firstPropertyMap, idColumnMap, "Id_");
-				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.GetPrimaryKeyColumnMap()))
+				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
 				{
 					param = AddSqlParameter(delete, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
 				}
@@ -3710,7 +3702,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 											if (listObject != null)
 											{
 												string refId = "";
-												IClassMap refObjClassMap = dm.MustGetClassMap(prevObj.GetType()).MustGetPropertyMap(arr[i]).GetReferencedClassMap() ;
+												IClassMap refObjClassMap = dm.MustGetClassMap(prevObj.GetType()).MustGetPropertyMap(arr[i]).MustGetReferencedClassMap() ;
 												Type refType = am.GetTypeFromClassMap(refObjClassMap);
 												foreach (IPropertyMap refIdPropertyMap in refObjClassMap.GetIdentityPropertyMaps() )
 												{
@@ -3835,18 +3827,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 											if (listColumnIndexes != null )
 											{
                                                 int startIndex = 0;
-                                                if (propertyMap.GetInversePropertyMap() != null)
+												IPropertyMap inverse = propertyMap.GetInversePropertyMap();
+                                                if (inverse != null)
                                                 {
                                                     //HACK: roger tried to fix this
                                                     //IClassMap otherClassMap = propertyMap.GetReferencedClassMap();
-                                                    IClassMap otherClassMap = propertyMap.GetInversePropertyMap().ClassMap;//propertyMap.ClassMap;
+                                                    IClassMap otherClassMap = inverse.ClassMap;//propertyMap.ClassMap;
                                                     IColumnMap typeColumnMap = otherClassMap.GetTypeColumnMap();
                                                     
                                                     if (typeColumnMap != null)
                                                     {
                                                         bool foundTypeCol = false;
                                                         foreach (IColumnMap idColumnMap in propertyMap.GetAllColumnMaps())
-                                                            if (idColumnMap.GetPrimaryKeyColumnMap() == typeColumnMap)
+                                                            if (idColumnMap.MustGetPrimaryKeyColumnMap() == typeColumnMap)
                                                                 foundTypeCol = true;
 
                                                         //if the referenced class has a type column our property

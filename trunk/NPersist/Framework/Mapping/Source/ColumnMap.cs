@@ -198,6 +198,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_PrimaryKeyTable = value; }
 		}
 
+		public virtual IColumnMap MustGetPrimaryKeyColumnMap()
+		{
+			IColumnMap columnMap = GetPrimaryKeyColumnMap();
+
+			if (columnMap == null)
+				throw new MappingException("Could not find column " + m_PrimaryKeyTable + "." + m_PrimaryKeyColumn + ", specified as primary column for foreign key column " + this.TableMap.Name + "." + this.Name + ", in map file!");
+
+			return columnMap;
+		}
+
 		public virtual IColumnMap GetPrimaryKeyColumnMap()
 		{
 			if (m_PrimaryKeyTable.Length < 1)
@@ -214,6 +224,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return tableMap.GetColumnMap(m_PrimaryKeyColumn);
 			}
 			return null;
+		}
+
+		public virtual ITableMap MustGetPrimaryKeyTableMap()
+		{
+			ITableMap tableMap = GetPrimaryKeyTableMap();
+
+			if (tableMap == null)
+				throw new MappingException("Could not find table " + m_PrimaryKeyTable + ", specified as primary table for foreign key column " + this.TableMap.Name + "." + this.Name + ", in map file!");
+
+			return tableMap;
 		}
 
 		public virtual ITableMap GetPrimaryKeyTableMap()

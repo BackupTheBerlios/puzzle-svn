@@ -197,7 +197,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 				else
 				{
-					IClassMap refClassMap = propertyMap.GetReferencedClassMap() ;
+					IClassMap refClassMap = propertyMap.MustGetReferencedClassMap() ;
 					if (refClassMap.IsReadOnly)
 					{
 						if (propertyMap.IsCollection)
@@ -280,7 +280,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 				else
 				{
-					IClassMap refClassMap = propertyMap.GetReferencedClassMap() ;
+					IClassMap refClassMap = propertyMap.MustGetReferencedClassMap() ;
 					if (refClassMap.IsReadOnly)
 					{
 						if (propertyMap.IsCollection)

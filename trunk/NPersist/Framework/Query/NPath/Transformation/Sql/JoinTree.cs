@@ -86,13 +86,13 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				if (parentMap == null)
 				{
 					tableJoin.JoinTree = this;
-					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.GetTableMap(), propertyMap);
+					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), propertyMap);
 				}
 				else
 				{
 					//make sure the table has an alias
 					tableJoin.Parent = GetTableJoinForPropertyPath(propertyPath.Substring(0, propertyPath.Length - propertyMap.Name.Length - 1));
-					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.GetTableMap(), tableJoin.Parent);
+					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), tableJoin.Parent);
 				}
 			}
 		}

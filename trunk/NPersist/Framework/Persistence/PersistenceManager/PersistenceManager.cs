@@ -164,7 +164,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				if (value != null)
 				{
 					string identity = "";
-					refClassMap = propertyMap.GetReferencedClassMap();
+					refClassMap = propertyMap.MustGetReferencedClassMap();
 					if (discriminator != null)
 					{
 						try
@@ -176,7 +176,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (refClassMap == null)
 							throw new NPersistException("Could not find class map with type value '" + (string) discriminator + "'");
 					}
-					mapToId = refClassMap.GetPropertyMapForColumnMap(propertyMap.GetColumnMap().GetPrimaryKeyColumnMap());
+					mapToId = refClassMap.GetPropertyMapForColumnMap(propertyMap.GetColumnMap().MustGetPrimaryKeyColumnMap());
 					if (mapToId.IsIdentity)
 					{
 						isIdentity = true;
@@ -1195,7 +1195,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                         {
                             if (propertyMap.IsCollection)
                             {
-                                refClassMap = propertyMap.GetReferencedClassMap();
+                                refClassMap = propertyMap.MustGetReferencedClassMap();
                                 refType = this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap);
                             }
                             else
