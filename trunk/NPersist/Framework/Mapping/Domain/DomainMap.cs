@@ -282,7 +282,7 @@ namespace Puzzle.NPersist.Framework.Mapping
                 {
                     PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name);
                     if (propertyInfo == null)
-                        throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyInfo.Name, classMap.GetFullName()));
+                        throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
                     MethodInfo getMethod = propertyInfo.GetGetMethod();
                     if (!getMethod.IsVirtual)

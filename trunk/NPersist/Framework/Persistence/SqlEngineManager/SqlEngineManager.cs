@@ -47,7 +47,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}				
 			}
 		}
-
+            
 		public void Commit()
 		{
 			foreach (ITransaction transaction in transactions)
