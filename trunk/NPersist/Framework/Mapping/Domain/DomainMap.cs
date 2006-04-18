@@ -285,12 +285,14 @@ namespace Puzzle.NPersist.Framework.Mapping
                         throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
                     MethodInfo getMethod = propertyInfo.GetGetMethod();
-                    if (!getMethod.IsVirtual)
-                        throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'", propertyInfo.Name, classMap.GetFullName()));
+                    if (!propertyMap.IsCollection) 
+                    {
+                        if (!getMethod.IsVirtual)
+                            throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'", propertyInfo.Name, classMap.GetFullName()));
 
-                    if (getMethod.IsFinal)
-                        throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'", propertyInfo.Name, classMap.GetFullName()));
-
+                        if (getMethod.IsFinal)
+                            throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'", propertyInfo.Name, classMap.GetFullName()));
+                    }
 
                     string fieldName = propertyMap.GetFieldName();
                     FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, fieldName);

@@ -137,6 +137,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		InheritanceType InheritanceType { get; set; }
 
+		IPropertyMap MustGetPropertyMapForColumnMap(IColumnMap columnMap);
+
 		IPropertyMap GetPropertyMapForColumnMap(IColumnMap columnMap);
 
 		ArrayList GetDirectSubClassMaps();

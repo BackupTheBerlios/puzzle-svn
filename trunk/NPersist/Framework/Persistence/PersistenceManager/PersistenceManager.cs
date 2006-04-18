@@ -176,7 +176,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (refClassMap == null)
 							throw new NPersistException("Could not find class map with type value '" + (string) discriminator + "'");
 					}
-					mapToId = refClassMap.GetPropertyMapForColumnMap(propertyMap.GetColumnMap().MustGetPrimaryKeyColumnMap());
+					mapToId = refClassMap.MustGetPropertyMapForColumnMap(propertyMap.GetColumnMap().MustGetPrimaryKeyColumnMap());
 					if (mapToId.IsIdentity)
 					{
 						isIdentity = true;

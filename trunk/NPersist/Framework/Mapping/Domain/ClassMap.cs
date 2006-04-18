@@ -961,6 +961,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_InheritanceType = value; }
 		}
 
+		public virtual IPropertyMap MustGetPropertyMapForColumnMap(IColumnMap columnMap)
+		{
+			IPropertyMap propertyMap = GetPropertyMapForColumnMap(columnMap);
+
+			if (propertyMap == null)
+				throw new MappingException("Could not find any property mapping to column " + columnMap.TableMap.Name + "." + columnMap.Name + " in the type " + this.GetFullName() + " in map file!");
+
+			return propertyMap;
+		}
+
 		public virtual IPropertyMap GetPropertyMapForColumnMap(IColumnMap columnMap)
 		{
 			IColumnMap testColumnMap;
