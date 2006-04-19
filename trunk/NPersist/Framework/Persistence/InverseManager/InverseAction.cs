@@ -26,6 +26,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private object obj;
 		private string propertyName;
 		private object value;
+		private object master;
 		
 		public InverseActionType ActionType
 		{
@@ -51,6 +52,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			get { return this.value; }
 			set { this.value = value; }
+		}
+		
+		public object Master
+		{
+			get { return this.master; }
+			set { this.master = value; }
 		}
 	}
 }

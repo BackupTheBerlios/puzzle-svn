@@ -140,6 +140,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void Complete()
 		{
+            NotifyCommitted();
 			CommitInserted();
 			CommitUpdated();
 			CommitRemoved();
@@ -197,6 +198,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 				m_listDeleted.Add(obj);
 			}			
 			m_listRemoved.Clear() ;
+		}
+
+        public virtual void NotifyCommitted()
+		{
+			foreach (object obj in m_listInserted)
+			{
+                this.Context.InverseManager.NotifyCommitted(obj);
+			}
+			foreach (object obj in m_listUpdated)
+			{
+                this.Context.InverseManager.NotifyCommitted(obj);
+			}			
+			foreach (object obj in m_listRemoved)
+			{
+                this.Context.InverseManager.NotifyCommitted(obj);
+			}			
 		}
 
 		public virtual void CommitInserted()

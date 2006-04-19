@@ -24,6 +24,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	{
 
 		private Hashtable inverseActions = new Hashtable();
+		private Hashtable inverseMasters = new Hashtable();
 
 		public InverseManager()
 		{		
@@ -38,23 +39,28 @@ namespace Puzzle.NPersist.Framework.Persistence
 		
 		public override void NotifyPropertyGet(object obj, string propertyName)
 		{
-			ArrayList actions = GetActionsForProperty(obj, propertyName);
-			foreach (InverseAction action in actions)
-			{
-				if (action.ActionType == InverseActionType.Add)
-				{
-					PerformAddAction(action);					
-				}
-				else if (action.ActionType == InverseActionType.Remove)
-				{
-					PerformRemoveAction(action);					
-				}
-				else if (action.ActionType == InverseActionType.Set)
-				{
-					PerformSetAction(action);					
-				}
-			}
+            ExecuteInverseActions(obj, propertyName);
 		}
+
+        private void ExecuteInverseActions(object obj, string propertyName)
+        {
+            ArrayList actions = GetActionsForProperty(obj, propertyName);
+            foreach (InverseAction action in actions)
+            {
+                if (action.ActionType == InverseActionType.Add)
+                {
+                    PerformAddAction(action);
+                }
+                else if (action.ActionType == InverseActionType.Remove)
+                {
+                    PerformRemoveAction(action);
+                }
+                else if (action.ActionType == InverseActionType.Set)
+                {
+                    PerformSetAction(action);
+                }
+            }
+        }
 
 		public override void NotifyCreate(object obj)
 		{
@@ -71,6 +77,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			;
 		}
 
+		public override void NotifyCommitted(object obj)
+		{
+			ClearActionsForMaster(obj);
+		}
+
 		//[DebuggerStepThrough()]
 		public override void NotifyPropertySet(object obj, string propertyName, object value)
 		{
@@ -85,7 +96,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//[DebuggerStepThrough()]
 		protected virtual void DoNotifyPropertySet(object obj, string propertyName, object value, object oldValue, bool hasOldValue)
 		{
-			IPropertyMap propertyMap = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
+            
+            ExecuteInverseActions(obj, propertyName);
+
+            IPropertyMap propertyMap = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
 			if (propertyMap.NoInverseManagement)
 			{
 				return;
@@ -153,7 +167,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
 					value = iValue;
-					AddAction(InverseActionType.Add, value, invPropertyMap.Name, obj);					
+					AddAction(InverseActionType.Add, value, invPropertyMap.Name, obj, obj);					
 				}
 				else
 				{
@@ -178,7 +192,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
 					value = iValue;
-					AddAction(InverseActionType.Remove, value, invPropertyMap.Name, obj);					
+					AddAction(InverseActionType.Remove, value, invPropertyMap.Name, obj, obj);					
 				}
 				else
 				{
@@ -215,7 +229,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
-					AddAction(InverseActionType.Add, value, invPropertyMap.Name, obj);					
+					AddAction(InverseActionType.Add, value, invPropertyMap.Name, obj, obj);					
 				}
 				else
 				{
@@ -238,7 +252,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propStatus = om.GetPropertyStatus(oldValue, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
-					AddAction(InverseActionType.Remove, oldValue, invPropertyMap.Name, obj);					
+					AddAction(InverseActionType.Remove, oldValue, invPropertyMap.Name, obj, obj);					
 				}
 				else
 				{
@@ -270,7 +284,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
-					AddAction(InverseActionType.Set, value, invPropertyMap.Name, obj);					
+					AddAction(InverseActionType.Set, value, invPropertyMap.Name, obj, obj);					
 				}
 				else
 				{
@@ -286,7 +300,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
-					AddAction(InverseActionType.Set, value, invPropertyMap.Name, null);					
+					AddAction(InverseActionType.Set, value, invPropertyMap.Name, null, obj);					
 				}
 				else
 				{
@@ -298,7 +312,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
-		protected virtual void AddAction(InverseActionType actionType, object obj, string propertyName, object value)
+		protected virtual void AddAction(InverseActionType actionType, object obj, string propertyName, object value, object master)
 		{
 			if (value == null)
 				this.Context.LogManager.Debug(this, "Caching inverse action", "Action type: " + actionType.ToString() + ", Object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value: null"); // do not localize
@@ -310,8 +324,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			action.Obj = obj;
 			action.PropertyName = propertyName;
 			action.Value = value;
+			action.Master = master;
 			Hashtable objActions;
 			ArrayList propActions;
+			ArrayList masterActions;
 			if (!(inverseActions.ContainsKey(obj)))
 			{
 				inverseActions[obj] = new Hashtable();
@@ -323,9 +339,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			propActions = (ArrayList) objActions[propertyName] ;
 			propActions.Add(action);			
-		}
 
-		protected virtual ArrayList GetActionsForProperty(object obj, string propertyName)
+            
+			if (!(inverseMasters.ContainsKey(master)))
+			{
+				inverseMasters[master] = new ArrayList();
+			}
+			masterActions = (ArrayList) inverseMasters[master] ;
+            masterActions.Add(action);
+        }
+
+        protected virtual ArrayList GetActionsForProperty(object obj, string propertyName)
+		{
+            return GetActionsForProperty(obj, propertyName, false);
+        }
+
+		protected virtual ArrayList GetActionsForProperty(object obj, string propertyName, bool keepMasters)
 		{
 			Hashtable objActions;
 			ArrayList propActions;
@@ -344,8 +373,41 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				inverseActions.Remove(obj);				
 			}
+            if (!keepMasters)
+            {
+                foreach (InverseAction action in propActions)
+                {
+                    RemoveActionFromMasters(action);
+                }
+            }
 			return propActions;			
 		}
+
+        protected virtual void RemoveActionFromMasters(InverseAction action)
+        {
+            if (inverseMasters.ContainsKey(action.Master))
+            {
+                ArrayList masterActions = (ArrayList) inverseMasters[action.Master];
+                masterActions.Remove(action);
+                if (masterActions.Count < 1)
+                    inverseMasters.Remove(action.Master);
+            }
+        }
+
+
+        protected virtual void ClearActionsForMaster(object master)
+        {
+            if (inverseMasters.ContainsKey(master))
+            {
+                ArrayList masterActions = (ArrayList) inverseMasters[master];
+                foreach (InverseAction action in masterActions)
+                {
+                    GetActionsForProperty(action.Obj, action.PropertyName, true);
+                }
+                inverseMasters.Remove(master);
+            }
+        }
+
 
 		protected virtual void PerformAddAction(InverseAction action)
 		{

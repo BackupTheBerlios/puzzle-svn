@@ -51,6 +51,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public abstract void NotifyDelete(object obj);
 
+        public abstract void NotifyCommitted(object obj);
+
 		public virtual void RemoveAllReferencesToObject(object obj)
 		{
 			RemoveInverseReferences(obj);
