@@ -107,7 +107,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
             foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
             {
 				IPropertyMap inverse = propertyMap.GetInversePropertyMap();
-                if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap())
+                //if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap())
+                if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap())
                 {
                     string suggestionString;
                     suggestionString = propPath + ".NPersistTypeColumn";
@@ -120,7 +121,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
 			{
                 IPropertyMap inverse = propertyMap.GetInversePropertyMap ();
-                if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap ())
+                //if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap ())
+                if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap ())
                 {
                     continue;
                 }

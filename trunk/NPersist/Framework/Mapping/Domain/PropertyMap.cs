@@ -241,8 +241,16 @@ namespace Puzzle.NPersist.Framework.Mapping
             {
                 return (bool)GetFixedValue("GetIsNullable");
             }
-			IColumnMap columnMap = this.GetColumnMap();
             bool isNullable = false;
+			IColumnMap columnMap = null;
+            if (this.ReferenceType == ReferenceType.OneToOne && this.IsSlave)
+            {
+			    columnMap = this.GetIdColumnMap();
+            }
+            else
+            {
+			    columnMap = this.GetColumnMap();
+            }
             if (columnMap != null)
             {
                 isNullable = columnMap.AllowNulls;
