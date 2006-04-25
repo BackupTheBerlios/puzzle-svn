@@ -827,10 +827,21 @@ namespace Puzzle.NPersist.Framework.Persistence
                                     {
                                         if (MayForceDelete(obj))
                                         {
-                                            IList dummyStillDirty = new ArrayList();
-            								pe.UpdateObject(obj, dummyStillDirty);
-                                            tryForce = false;
-                                        }
+											//Force an update all the referencing objects, which should have had their
+											//references to our object set to null in advance during the delete operation.
+											//This way all the references to our object should be set to null in the database.
+											TopologicalNode node = (TopologicalNode) m_topologicalDelete.Graph[obj];
+											if (node != null)
+											{
+												foreach (TopologicalNode waitForNode in node.WaitFor)
+												{
+													IList dummyStillDirty = new ArrayList();
+													pe.UpdateObject(waitForNode.Obj, dummyStillDirty);													
+												}
+											}
+											tryForce = false;
+											removeObjects.Add(obj);												
+										}
                                     }
                                     else
                                     {

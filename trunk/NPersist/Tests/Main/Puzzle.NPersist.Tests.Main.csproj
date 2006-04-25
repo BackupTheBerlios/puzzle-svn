@@ -160,6 +160,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Domain\CyclicA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Domain\CyclicB.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Domain\FolderID.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
