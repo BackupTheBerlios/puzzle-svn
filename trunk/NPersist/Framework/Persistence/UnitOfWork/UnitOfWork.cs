@@ -31,7 +31,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private ArrayList m_listUpdated = new ArrayList();
 		private ArrayList m_listRemoved = new ArrayList();
 
-		public virtual void RegisterCreated(object obj)
+		private TopologicalGraph m_topologicalDelete = new TopologicalGraph();
+
+        public virtual void RegisterCreated(object obj)
 		{	
 			this.Context.LogManager.Info(this, "Registering object as up for creation", "Type: " + obj.GetType().ToString()); // do not localize
 			object result = m_objectStatusLookup[obj];
@@ -305,7 +307,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				InsertCreated(exceptionLimit); 
 				UpdateDirty(exceptionLimit);
 				UpdateStillDirty(exceptionLimit);
-				RemoveDeleted(exceptionLimit);				
+                ExamineDeletedObjects();
+				RemoveDeleted(exceptionLimit);	
 				
 				this.Context.PersistenceEngine.Commit();
 
@@ -346,6 +349,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				InsertCreated(obj, exceptionLimit);
 				UpdateDirty(obj, exceptionLimit);
 				UpdateStillDirty(obj, exceptionLimit);
+                ExamineDeletedObjects();
 				RemoveDeleted(obj, exceptionLimit);
 
 				this.Context.PersistenceEngine.Commit();
@@ -838,6 +842,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							{
 								m_listDeleted.Remove(obj);
 								m_listRemoved.Add(obj);
+								m_topologicalDelete.RemoveNode(obj);
 								pe.RemoveObject(obj);
 								this.Context.LogManager.Debug(this, "Removed object", "" ); // do not localize						
 							}
@@ -988,49 +993,54 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual bool MayRemove(object obj)
 		{
-			IObjectManager om = this.Context.ObjectManager;
-			object refObj;
-			IList list;
-			IClassMap delObjClassMap;
-			foreach (object delObj in m_listDeleted)
-			{
-				delObjClassMap = this.Context.DomainMap.MustGetClassMap(delObj.GetType());
-				foreach (IPropertyMap propertyMap in delObjClassMap.GetAllPropertyMaps())
-				{
-					if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
-					{
-						if (!(propertyMap.ReferenceType == ReferenceType.None))
-						{
-							if (propertyMap.IsCollection)
-							{
-								list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
-								if (list != null)
-								{
-									foreach (object itemRefObj in list)
-									{
-										if (itemRefObj == obj)
-										{
-											return false;
-										}
-									}
-								}
-							}
-							else
-							{
-								refObj = om.GetPropertyValue(delObj, propertyMap.Name);
-								if (refObj != null)
-								{
-									if (refObj == obj)
-									{
-										return false;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			return true;
+            if (m_topologicalDelete.IsWaiting(obj))
+                return false;
+            return true;
+
+            //Old implementation, replaced with topological sort...
+            
+            //IObjectManager om = this.Context.ObjectManager;
+            //object refObj;
+            //IList list;
+            //IClassMap delObjClassMap;
+            //foreach (object delObj in m_listDeleted)
+            //{
+            //    delObjClassMap = this.Context.DomainMap.MustGetClassMap(delObj.GetType());
+            //    foreach (IPropertyMap propertyMap in delObjClassMap.GetAllPropertyMaps())
+            //    {
+            //        if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
+            //        {
+            //            if (!(propertyMap.ReferenceType == ReferenceType.None))
+            //            {
+            //                if (propertyMap.IsCollection)
+            //                {
+            //                    list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+            //                    if (list != null)
+            //                    {
+            //                        foreach (object itemRefObj in list)
+            //                        {
+            //                            if (itemRefObj == obj)
+            //                            {
+            //                                return false;
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+            //                    if (refObj != null)
+            //                    {
+            //                        if (refObj == obj)
+            //                        {
+            //                            return false;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+			//}
 		}
 
 		public ArrayList GetCreatedObjects()
@@ -1047,5 +1057,61 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			return m_listDirty;
 		}
+
+        private void ExamineDeletedObjects()
+        {
+            m_topologicalDelete.Graph.Clear();
+            IObjectManager om = this.Context.ObjectManager;
+            Hashtable hashDeleted = new Hashtable();
+			foreach (object delObj in m_listDeleted)
+			{
+                hashDeleted[delObj] = delObj;
+            }
+			foreach (object delObj in m_listDeleted)
+			{
+                ExamineDeletedObject(hashDeleted, om, delObj);
+            }
+        }
+
+        private void ExamineDeletedObject(Hashtable hashDeleted, IObjectManager om, object delObj)
+        {
+			IClassMap delObjClassMap = this.Context.DomainMap.MustGetClassMap(delObj.GetType());
+			foreach (IPropertyMap propertyMap in delObjClassMap.GetAllPropertyMaps())
+			{
+				if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
+				{
+					if (propertyMap.ReferenceType != ReferenceType.None)
+					{
+						if (propertyMap.IsCollection)
+						{
+							IList list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+							if (list != null)
+							{
+								foreach (object itemRefObj in list)
+								{
+                                    object isDeleted = hashDeleted[itemRefObj];
+									if (isDeleted != null)
+									{
+										m_topologicalDelete.AddNode(delObj, itemRefObj);
+									}
+								}
+							}
+						}
+						else
+						{
+							object refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+							if (refObj != null)
+							{
+                                object isDeleted = hashDeleted[refObj];
+								if (isDeleted != null)
+								{
+									m_topologicalDelete.AddNode(delObj, refObj);
+								}
+							}
+						}
+					}
+				}
+			}
+        }
 	}
 }

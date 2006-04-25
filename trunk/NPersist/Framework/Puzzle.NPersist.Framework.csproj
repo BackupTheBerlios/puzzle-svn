@@ -1254,6 +1254,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Persistence\UnitOfWork\TopologicalGraph.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Persistence\UnitOfWork\TopologicalNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Persistence\UnitOfWork\UnitOfWork.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -34,6 +34,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		bool IsCollection { get; set; }
 
+        //This value is overridden by the nullability 
+        //of the column if the property maps to a column
+        //EXCEPT for a slave OneToOne property!!
 		bool IsNullable { get; set; }
 
 		bool GetIsNullable();

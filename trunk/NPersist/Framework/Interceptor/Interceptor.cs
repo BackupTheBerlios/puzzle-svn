@@ -40,7 +40,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
 		public virtual void NotifyPropertyGet(object obj, string propertyName)
 		{
-			if (this.isDisposed) { return; }
+			    if (this.isDisposed) { return; }
 			if (notification == Notification.Disabled) { return; }
 			object value = null;
 			bool cancel = false;

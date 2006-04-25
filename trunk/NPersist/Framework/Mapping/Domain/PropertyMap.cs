@@ -235,6 +235,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_MinValue = value; }
 		}
 
+        //Because there is no difference in the table model when 
+        //the slave table has the same number of rows as the master table 
+        //(for example: Users and Profiles)) and when the slave table
+        //has more rows than the master, it is not dicernable from the 
+        //table model if the slave property in a OneToOne relationship
+        //is nullable or not! Thus we have to use the Nullable attribute
+        //of the propertyMap for a slave OneToOne property!!
 		public virtual bool GetIsNullable()
 		{
             if (IsFixed("GetIsNullable"))
@@ -245,7 +252,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 			IColumnMap columnMap = null;
             if (this.ReferenceType == ReferenceType.OneToOne && this.IsSlave)
             {
-			    columnMap = this.GetIdColumnMap();
+                //This would have worked if it wasn't for the fact that when 
+                //the id column is /not/ nullable, the slave OneToOne property 
+                //may still be nullable if the slave table contains more rows
+                //than the master table (see comment ^^)
+			    //columnMap = this.GetIdColumnMap();
             }
             else
             {

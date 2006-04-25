@@ -104,27 +104,34 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
             if (suggestion == "")
                 suggestion = propPath;
       //      bool hasTypeColumn = false;
-            foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
-            {
-				IPropertyMap inverse = propertyMap.GetInversePropertyMap();
-                //if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap())
-                if (inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap())
-                {
-                    string suggestionString;
-                    suggestionString = propPath + ".NPersistTypeColumn";
 
-                    SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
-                    columnAliases.Add(column);
-                }                
+            IPropertyMap inverse = propertyMap.GetInversePropertyMap();
+
+            if (inverse != null)
+            {
+                foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+                {
+                    IColumnMap inverseTypeColumnMap = inverse.ClassMap.GetTypeColumnMap();
+                    if (inverseTypeColumnMap != null && inverseTypeColumnMap == columnMap.GetPrimaryKeyColumnMap())
+                    {
+                        string suggestionString;
+                        suggestionString = propPath + ".NPersistTypeColumn";
+
+                        SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
+                        columnAliases.Add(column);
+                    }                
+                }
             }
 
 			foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
 			{
-                IPropertyMap inverse = propertyMap.GetInversePropertyMap ();
-                //if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.MustGetPrimaryKeyColumnMap ())
-                if ( inverse != null && inverse.ClassMap.GetTypeColumnMap() == columnMap.GetPrimaryKeyColumnMap ())
+                if (inverse != null) 
                 {
-                    continue;
+                    IColumnMap inverseTypeColumnMap = inverse.ClassMap.GetTypeColumnMap();
+                    if ( inverseTypeColumnMap != null && inverseTypeColumnMap == columnMap.GetPrimaryKeyColumnMap())
+                    {
+                        continue;
+                    }
                 }
 
                 string suggestionString;
@@ -314,37 +321,43 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 							{
 								if (!(iPropertyMap.IsCollection))
 								{
-									if (iPropertyMap.Column.Length > 0)
-									{
-										//Exclude inverse property to property leading to this point in the path
-										bool isInverse = false;
-										if (parentMap != null)
-										{											
-											if (iPropertyMap.Inverse.Length > 0)
-											{
-												if (parentMap == iPropertyMap.GetInversePropertyMap())
-												{
-													isInverse = true;
-												}
-											}
-										}
-										if (!isInverse)
-										{
-											if (path == "")
-											{
-												GetPropertyColumnNamesAndAliases(iPropertyMap, iPropertyMap, selectedColumns, columnOrder, iPropertyMap.Name, iPropertyMap.Name, "");
-											}
-											else
-											{
-												//GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path, path + "." + iPropertyMap.Name, "");
-												GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
-											}
-											if (iPropertyMap.MustGetTableMap() != iPropertyMap.ClassMap.MustGetTableMap())
-											{
-												JoinNonPrimary(iPropertyMap);
-											}																							
-										}
-									}
+                                    //This if should be removed some day when the "JoinNonPrimary()" call a bit further down
+                                    //has been refined to handle nullable OneToOne slaves...
+                                    if (!(iPropertyMap.ReferenceType == ReferenceType.OneToOne && iPropertyMap.IsSlave && HasNullableColumn(iPropertyMap)))
+                                    {
+									    if (iPropertyMap.Column.Length > 0)
+									    {
+										    //Exclude inverse property to property leading to this point in the path
+										    bool isInverse = false;
+										    if (parentMap != null)
+										    {											
+											    if (iPropertyMap.Inverse.Length > 0)
+											    {
+												    if (parentMap == iPropertyMap.GetInversePropertyMap())
+												    {
+													    isInverse = true;
+												    }
+											    }
+										    }
+										    if (!isInverse)
+										    {
+											    if (path == "")
+											    {
+												    GetPropertyColumnNamesAndAliases(iPropertyMap, iPropertyMap, selectedColumns, columnOrder, iPropertyMap.Name, iPropertyMap.Name, "");
+											    }
+											    else
+											    {
+												    //GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path, path + "." + iPropertyMap.Name, "");
+												    GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
+											    }
+											    if (iPropertyMap.MustGetTableMap() != iPropertyMap.ClassMap.MustGetTableMap())
+											    {
+												    JoinNonPrimary(iPropertyMap);
+											    }																							
+										    }
+									    }
+
+                                    }
 								}
 							}
 						}						
