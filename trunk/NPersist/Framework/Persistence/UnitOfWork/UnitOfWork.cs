@@ -349,7 +349,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				InsertCreated(obj, exceptionLimit);
 				UpdateDirty(obj, exceptionLimit);
 				UpdateStillDirty(obj, exceptionLimit);
-                ExamineDeletedObjects();
 				RemoveDeleted(obj, exceptionLimit);
 
 				this.Context.PersistenceEngine.Commit();
@@ -800,7 +799,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			try
 			{
 				long cnt;
-				bool noCheck = false;
+				long staleCnt = 0;
+				bool tryForce = false;
 				ArrayList removeObjects = new ArrayList();
 				cnt = m_listDeleted.Count;
 				IObjectManager om = this.Context.ObjectManager;
@@ -823,10 +823,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 								}
 								else
 								{
-									if (noCheck || MayRemove(obj))
-									{
-										removeObjects.Add(obj);
-									}
+                                    if (tryForce)
+                                    {
+                                        if (MayForceDelete(obj))
+                                        {
+                                            IList dummyStillDirty = new ArrayList();
+            								pe.UpdateObject(obj, dummyStillDirty);
+                                            tryForce = false;
+                                        }
+                                    }
+                                    else
+                                    {
+									    if (MayRemove(obj))
+									    {
+										    removeObjects.Add(obj);
+									    }
+                                    }
 								}						
 							}
 							catch (Exception ex)
@@ -855,8 +867,20 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						if (m_listDeleted.Count == cnt)
 						{
-							noCheck = true;
+                            if (staleCnt > 0)
+                            {
+                                throw new UnitOfWorkException("The objects that are up for deletion in the unit of work are arranged in an unresolvable graph!");
+                            }
+                            else 
+                            {
+							    tryForce = true;
+                                staleCnt++;
+                            }
 						}
+                        else
+                        {
+                            staleCnt = 0;
+                        }
 						if (forObj != null)
 						{
 							cnt = 0;
@@ -1095,7 +1119,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                                     object isDeleted = hashDeleted[itemRefObj];
 									if (isDeleted != null)
 									{
-										m_topologicalDelete.AddNode(delObj, itemRefObj);
+										m_topologicalDelete.AddNode(itemRefObj, delObj);
 									}
 								}
 							}
@@ -1111,7 +1135,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                                 object isDeleted = hashDeleted[refObj];
 								if (isDeleted != null)
 								{
-									m_topologicalDelete.AddNode(delObj, refObj);
+									m_topologicalDelete.AddNode(refObj, delObj);
 								}
 							}
 						}
@@ -1119,5 +1143,63 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 			}
         }
-	}
+
+        private bool MayForceDelete(object delObj)
+        {
+            TopologicalNode node = (TopologicalNode) m_topologicalDelete.Graph[delObj];
+            if (node == null)
+                return true;
+
+            IObjectManager om = this.Context.ObjectManager;
+            foreach (TopologicalNode waitForNode in node.WaitFor)
+            {
+                if (!ExamineWaitForNode(om, delObj, waitForNode.Obj))
+                    return false;
+            }
+
+            return true;
+        }
+ 
+        private bool ExamineWaitForNode(IObjectManager om, object delObj, object waitForObj)
+        {
+			IClassMap waitForObjClassMap = this.Context.DomainMap.MustGetClassMap(waitForObj.GetType());
+			foreach (IPropertyMap propertyMap in waitForObjClassMap.GetAllPropertyMaps())
+			{
+				if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
+				{
+					if (propertyMap.ReferenceType != ReferenceType.None)
+					{
+						if (propertyMap.IsCollection)
+						{
+							IList list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+							if (list != null)
+							{
+								foreach (object itemRefObj in list)
+								{
+									if (itemRefObj == delObj)
+									{
+										return false;
+									}
+								}
+							}
+						}
+						else
+						{
+							object refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+							if (refObj != null)
+							{
+								if (refObj == delObj)
+								{
+									return false;
+								}
+							}
+						}
+					}
+				}
+			}
+            return true;
+        }
+   
+
+    }
 }
