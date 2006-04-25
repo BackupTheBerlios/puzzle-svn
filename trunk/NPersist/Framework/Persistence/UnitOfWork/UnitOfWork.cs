@@ -1084,7 +1084,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						if (propertyMap.IsCollection)
 						{
-							IList list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+                            //It is the value in the database, not the current value, that is of importance
+                            //for avoiding violations of the foreign key constraint 
+							//IList list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+							IList list = (IList) om.GetOriginalPropertyValue(delObj, propertyMap.Name);
 							if (list != null)
 							{
 								foreach (object itemRefObj in list)
@@ -1099,7 +1102,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						else
 						{
-							object refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+                            //It is the value in the database, not the current value, that is of importance
+                            //for avoiding violations of the foreign key constraint 
+							//object refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+							object refObj = om.GetOriginalPropertyValue(delObj, propertyMap.Name);
 							if (refObj != null)
 							{
                                 object isDeleted = hashDeleted[refObj];
