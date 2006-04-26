@@ -656,9 +656,6 @@
     <Compile Include="Persistence\InverseManager\IInverseManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\InverseManager\IInverseManagerEntry.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Persistence\InverseManager\InverseAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -669,12 +666,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\InverseManager\InverseManagerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Persistence\InverseManager\InverseManagerEntry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Persistence\InverseManager\OnWriteInverseManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\ListManager\IListManager.cs">
