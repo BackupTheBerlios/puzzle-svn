@@ -408,6 +408,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			throw new IAmOpenSourcePleaseImplementMeException("Query capabilities not implemented in DocumentPersistenceEngine! Please load the entire set that you need to search into memory and use the IContext.FilterObjects() method instead.");
 		}
 
+		public virtual IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			throw new IAmOpenSourcePleaseImplementMeException("");			
+		}
 
 		#endregion
 

@@ -31,6 +31,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void LoadProperty(object obj, string propertyName);
 
+		IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj);
+
 		IList LoadObjects(IQuery query, IList listToFill);
 
 		DataTable LoadDataTable(IQuery query);

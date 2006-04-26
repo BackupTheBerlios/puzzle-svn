@@ -281,6 +281,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			GetPersistenceEngine(GetSourceMap(obj, propertyName)).LoadProperty(obj, propertyName);
 		}
 
+
+		public virtual IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			return GetPersistenceEngine(GetSourceMap(obj)).GetObjectsOfClassWithUniReferencesToObject(type, obj);
+		}
+
+
 		#region Query
 
 		public IList LoadObjects(IQuery query, IList listToFill)

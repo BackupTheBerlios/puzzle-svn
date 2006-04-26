@@ -129,6 +129,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			GetSqlEngine(GetSourceType(obj)).RemoveObject(obj);
 		}
 
+		public IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			return GetSqlEngine(GetSourceType(obj)).GetObjectsOfClassWithUniReferencesToObject(type, obj);
+		}
+
 		public virtual void UpdateObject(object obj, IList stillDirty)
 		{
 			GetSqlEngine(GetSourceType(obj)).UpdateObject(obj, stillDirty);
@@ -218,7 +223,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			return this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName).GetSourceMap().SourceType;
 		}
-
 
 
 	}

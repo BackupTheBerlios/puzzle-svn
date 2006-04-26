@@ -57,6 +57,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			RemoveInverseReferences(obj);
 			RemoveNonInverseReferences(obj);
+			RemoveInsertedReferences(obj);
 		}
 
 
@@ -65,35 +66,109 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IDomainMap domainMap = this.Context.DomainMap; 
 			IClassMap classMap = domainMap.MustGetClassMap(obj.GetType() );
 			IList classMaps = this.Context.DomainMap.GetClassMapsWithUniDirectionalReferenceTo(classMap, true);
-			NullifyReferencesInCache(obj, classMap, classMaps);
+			NullifyUniReferences(obj, classMap, classMaps);
+			//NullifyReferencesInCache(obj, classMap, classMaps);
 		}
 
-		protected virtual void NullifyReferencesInCache(object obj, IClassMap classMap, IList classMapsWithUniRefs)
-		{
-			if (classMapsWithUniRefs.Count < 1) 
-				return;
 
+		protected virtual void RemoveInsertedReferences(object obj)
+		{
 			IDomainMap domainMap = this.Context.DomainMap; 
-			IIdentityMap im = this.Context.IdentityMap;
-			Hashtable classMaps = new Hashtable() ;
-			foreach(IClassMap testClassMap in classMapsWithUniRefs)
+			IClassMap classMap = domainMap.MustGetClassMap(obj.GetType() );
+
+			IUnitOfWork uow = this.Context.UnitOfWork;
+
+			foreach(object test in uow.GetCreatedObjects())
 			{
-				classMaps[testClassMap] = testClassMap;
+				NullifyReferencesInInsertedObject(obj, classMap, test);
+			}
+		}
+
+		protected virtual void NullifyReferencesInInsertedObject(object obj, IClassMap classMap, object refering)
+		{
+			IDomainMap domainMap = this.Context.DomainMap; 
+			IClassMap referingClassMap = domainMap.MustGetClassMap(refering.GetType() );
+
+			IObjectManager om = this.Context.ObjectManager ;
+
+			foreach (IPropertyMap refPropertyMap in referingClassMap.GetAllPropertyMaps())
+			{
+				if (!(refPropertyMap.ReferenceType == ReferenceType.None))
+				{
+					NullifyReferenceInInsertedObject(obj, refering, refPropertyMap, om);
+				}
 			}
 
-			foreach(object test in im.GetObjects())
+		}
+
+		private void NullifyReferenceInInsertedObject(object obj, object refering, IPropertyMap refPropMap, IObjectManager om)
+		{
+			bool stackMute = false;
+			IInterceptableList mList;
+			IList refList;
+			object thisObj;
+
+			if (refPropMap.IsCollection)
 			{
-				IClassMap testClassMap = domainMap.MustGetClassMap(obj.GetType());
-				if (classMaps[testClassMap] != null)
+				if (!(this.Context.GetPropertyStatus(refering, refPropMap.Name) == PropertyStatus.NotLoaded))
 				{
-					NullifyReferencesInObject(obj, classMap, test, testClassMap);
+					refList = ((IList) (om.GetPropertyValue(refering, refPropMap.Name)));
+					if (refList.Contains(obj))
+					{
+						mList = refList as IInterceptableList;					
+						if (mList != null)
+						{
+							stackMute = mList.MuteNotify;
+							mList.MuteNotify = true;
+						}
+						refList.Remove(obj);
+						if (mList != null) { mList.MuteNotify = stackMute; }
+
+						om.SetUpdatedStatus(refering, refPropMap.Name, true);
+					}
+
+				}
+			}
+			else
+			{
+				if (!(this.Context.GetPropertyStatus(refering, refPropMap.Name) == PropertyStatus.NotLoaded))
+				{
+					thisObj = this.Context.ObjectManager.GetPropertyValue(refering, refPropMap.Name);
+					if (thisObj != null)
+					{
+						if (thisObj == obj)
+						{
+							om.SetPropertyValue(refering, refPropMap.Name, null);
+							om.SetUpdatedStatus(refering, refPropMap.Name, true);
+						}
+					}
 				}
 			}
 		}
 
-		protected virtual void NullifyReferencesInObject(object obj, IClassMap classMap, object refering, IClassMap referingClassMap)
+		protected virtual void NullifyUniReferences(object obj, IClassMap classMap, IList classMapsWithUniRefs)
 		{
-			IList uniRefPropertyMaps = referingClassMap.GetUniDirectionalReferencesTo(classMap, true);
+			if (classMapsWithUniRefs.Count < 1) 
+				return;
+
+			IDomainMap domainMap = this.Context.DomainMap;
+			IPersistenceEngine pe = this.Context.PersistenceEngine;
+			IAssemblyManager am = this.Context.AssemblyManager;
+			foreach (IClassMap classMapWithUniRef in classMapsWithUniRefs)
+			{
+				Type classWithUniRef = am.GetTypeFromClassMap(classMapWithUniRef);
+				IList objectsWithUniRefs = pe.GetObjectsOfClassWithUniReferencesToObject(classWithUniRef, obj);				
+				IList uniRefPropertyMaps = classMapWithUniRef.GetUniDirectionalReferencesTo(classMap, true);
+				foreach(object test in objectsWithUniRefs)
+				{
+					IClassMap testClassMap = domainMap.MustGetClassMap(test.GetType());
+					NullifyUniReferencesInObject(obj, classMap, test, testClassMap, uniRefPropertyMaps);
+				}
+			}
+		}
+
+		protected virtual void NullifyUniReferencesInObject(object obj, IClassMap classMap, object refering, IClassMap referingClassMap, IList uniRefPropertyMaps)
+		{
 			IObjectManager om = this.Context.ObjectManager ;
 			foreach (IPropertyMap uniRefPropertyMap in uniRefPropertyMaps)
 			{
@@ -123,25 +198,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						refList.Remove(obj);
 						if (mList != null) { mList.MuteNotify = stackMute; }
-						//om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
-
-					}
-
-					//remove from original value to get optimistic concurrency right!
-					//This is since the SqlEngine RemoveObject method will set
-					//all referencing columns to null
-					refList = ((IList) (this.Context.ObjectManager.GetOriginalPropertyValue(refering, uniRefPropertyMap.Name)));
-					if (refList.Contains(obj))
-					{
-						mList = refList as IInterceptableList;					
-						if (mList != null)
-						{
-							stackMute = mList.MuteNotify;
-							mList.MuteNotify = true;
-						}
-						refList.Remove(obj);
-						if (mList != null) { mList.MuteNotify = stackMute; }
-						//om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
+						om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
 
 					}
 				}
@@ -156,15 +213,110 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (thisObj == obj)
 						{
 							this.Context.ObjectManager.SetPropertyValue(refering, uniRefPropertyMap.Name, null);
-							//set original value to null to get optimistic concurrency right!
-							//This is since the SqlEngine RemoveObject method will set
-							//all referencing columns to null
-							this.Context.ObjectManager.SetOriginalPropertyValue(refering, uniRefPropertyMap.Name, null);
+							om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
 						}
 					}
 				}
 			}
 		}
+
+//		protected virtual void NullifyReferencesInCache(object obj, IClassMap classMap, IList classMapsWithUniRefs)
+//		{
+//			if (classMapsWithUniRefs.Count < 1) 
+//				return;
+//
+//			IDomainMap domainMap = this.Context.DomainMap; 
+//			IIdentityMap im = this.Context.IdentityMap;
+//			Hashtable classMaps = new Hashtable() ;
+//			foreach(IClassMap testClassMap in classMapsWithUniRefs)
+//			{
+//				classMaps[testClassMap] = testClassMap;
+//			}
+//
+//			foreach(object test in im.GetObjects())
+//			{
+//				IClassMap testClassMap = domainMap.MustGetClassMap(obj.GetType());
+//				if (classMaps[testClassMap] != null)
+//				{
+//					NullifyReferencesInObject(obj, classMap, test, testClassMap);
+//				}
+//			}
+//		}
+
+//		protected virtual void NullifyUniReferencesInObject(object obj, IClassMap classMap, object refering, IClassMap referingClassMap)
+//		{
+//			IList uniRefPropertyMaps = referingClassMap.GetUniDirectionalReferencesTo(classMap, true);
+//			IObjectManager om = this.Context.ObjectManager ;
+//			foreach (IPropertyMap uniRefPropertyMap in uniRefPropertyMaps)
+//			{
+//				NullifyUniReference(obj, refering, uniRefPropertyMap, om);
+//			}
+//		}
+//
+//		private void NullifyUniReference(object obj, object refering, IPropertyMap uniRefPropertyMap, IObjectManager om)
+//		{
+//			bool stackMute = false;
+//			IInterceptableList mList;
+//			IList refList;
+//			object thisObj;
+//
+//			if (uniRefPropertyMap.IsCollection)
+//			{
+//				if (!(this.Context.GetPropertyStatus(refering, uniRefPropertyMap.Name) == PropertyStatus.NotLoaded))
+//				{
+//					refList = ((IList) (om.GetPropertyValue(refering, uniRefPropertyMap.Name)));
+//					if (refList.Contains(obj))
+//					{
+//						mList = refList as IInterceptableList;					
+//						if (mList != null)
+//						{
+//							stackMute = mList.MuteNotify;
+//							mList.MuteNotify = true;
+//						}
+//						refList.Remove(obj);
+//						if (mList != null) { mList.MuteNotify = stackMute; }
+//						//om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
+//
+//					}
+//
+//					//remove from original value to get optimistic concurrency right!
+//					//This is since the SqlEngine RemoveObject method will set
+//					//all referencing columns to null
+//					refList = ((IList) (this.Context.ObjectManager.GetOriginalPropertyValue(refering, uniRefPropertyMap.Name)));
+//					if (refList.Contains(obj))
+//					{
+//						mList = refList as IInterceptableList;					
+//						if (mList != null)
+//						{
+//							stackMute = mList.MuteNotify;
+//							mList.MuteNotify = true;
+//						}
+//						refList.Remove(obj);
+//						if (mList != null) { mList.MuteNotify = stackMute; }
+//						//om.SetUpdatedStatus(refering, uniRefPropertyMap.Name, true);
+//
+//					}
+//				}
+//			}
+//			else
+//			{
+//				if (!(this.Context.GetPropertyStatus(refering, uniRefPropertyMap.Name) == PropertyStatus.NotLoaded))
+//				{
+//					thisObj = this.Context.ObjectManager.GetPropertyValue(refering, uniRefPropertyMap.Name);
+//					if (thisObj != null)
+//					{
+//						if (thisObj == obj)
+//						{
+//							this.Context.ObjectManager.SetPropertyValue(refering, uniRefPropertyMap.Name, null);
+//							//set original value to null to get optimistic concurrency right!
+//							//This is since the SqlEngine RemoveObject method will set
+//							//all referencing columns to null
+//							this.Context.ObjectManager.SetOriginalPropertyValue(refering, uniRefPropertyMap.Name, null);
+//						}
+//					}
+//				}
+//			}
+//		}
 
 
 

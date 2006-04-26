@@ -33,8 +33,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void RemoveObject(object obj);
 
-//		void GetAllObjectsOfClassWithUniReferencesToObject(Type type, object obj);
-
+		IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj);
 
 		void LoadObject(ref object obj);
 

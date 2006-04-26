@@ -31,6 +31,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private ArrayList m_listUpdated = new ArrayList();
 		private ArrayList m_listRemoved = new ArrayList();
 
+		private Hashtable m_hashSpeciallyUpdated = new Hashtable();
+
 		private TopologicalGraph m_topologicalDelete = new TopologicalGraph();
 
         public virtual void RegisterCreated(object obj)
@@ -146,6 +148,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			CommitInserted();
 			CommitUpdated();
 			CommitRemoved();
+			CommitSpeciallyUpdated();
 			if (this.Context.IsEditing)
 				this.Context.EndEdit() ;
 		}
@@ -155,6 +158,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			AbortInserted();
 			AbortUpdated();
 			AbortRemoved();
+			AbortSpeciallyUpdated();
 			if (this.Context.IsEditing)
 				this.Context.CancelEdit() ;
 		}
@@ -202,6 +206,55 @@ namespace Puzzle.NPersist.Framework.Persistence
 			m_listRemoved.Clear() ;
 		}
 
+   
+		protected void AddSpeciallyUpdated(object obj)
+		{
+			Hashtable cachedOriginals = (Hashtable) m_hashSpeciallyUpdated[obj];
+			if (cachedOriginals != null)
+				return;
+
+			cachedOriginals = new Hashtable();
+			m_hashSpeciallyUpdated[obj] = cachedOriginals;
+
+			IObjectManager om = this.Context.ObjectManager;
+			IListManager lm = this.Context.ListManager;
+			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
+
+			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
+			{
+				cachedOriginals[propertyMap.Name] = om.GetOriginalPropertyValue(obj, propertyMap.Name);			
+				CopyValuesToOriginals(propertyMap, lm, obj, om);
+			}
+		}
+
+		protected void AbortSpeciallyUpdated()
+		{
+			foreach (object obj in m_hashSpeciallyUpdated.Keys)
+			{
+				AbortSpeciallyUpdated(obj);
+			}
+		}
+
+		protected void AbortSpeciallyUpdated(object obj)
+		{
+			Hashtable cachedOriginals = (Hashtable) m_hashSpeciallyUpdated[obj];
+			if (cachedOriginals != null)
+				return;
+
+			cachedOriginals = new Hashtable();
+			m_hashSpeciallyUpdated[obj] = cachedOriginals;
+
+			IObjectManager om = this.Context.ObjectManager;
+			IListManager lm = this.Context.ListManager;
+			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
+
+			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
+			{
+				om.SetOriginalPropertyValue(obj, propertyMap.Name, cachedOriginals[propertyMap.Name]);
+			}
+		}
+
+
         public virtual void NotifyCommitted()
 		{
 			foreach (object obj in m_listInserted)
@@ -247,6 +300,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			m_listRemoved.Clear() ;
 		}
 
+		public virtual void CommitSpeciallyUpdated()
+		{
+			m_hashSpeciallyUpdated.Clear() ;
+		}
+
 		protected virtual void CommitPersisted(object obj)
 		{
 			IObjectManager om = this.Context.ObjectManager;
@@ -254,26 +312,31 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
 			{
-				if (propertyMap.IsCollection)
-				{
-					IList list =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
-					om.SetOriginalPropertyValue(obj, propertyMap.Name, list);						
-				}
-				else
-				{
-					if (om.GetNullValueStatus(obj, propertyMap.Name))
-					{
-						om.SetOriginalPropertyValue(obj, propertyMap.Name, System.DBNull.Value);						
-					}
-					else
-					{						
-						om.SetOriginalPropertyValue(obj, propertyMap.Name, om.GetPropertyValue(obj, propertyMap.Name));
-					}						
-				}
+				CopyValuesToOriginals(propertyMap, lm, obj, om);
 			}
 			m_objectStatusLookup.Remove(obj);
 			this.Context.ObjectManager.ClearUpdatedStatuses(obj);
 			this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);
+		}
+
+		protected void CopyValuesToOriginals(IPropertyMap propertyMap, IListManager lm, object obj, IObjectManager om)
+		{
+			if (propertyMap.IsCollection)
+			{
+				IList list =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);						
+			}
+			else
+			{
+				if (om.GetNullValueStatus(obj, propertyMap.Name))
+				{
+					om.SetOriginalPropertyValue(obj, propertyMap.Name, System.DBNull.Value);						
+				}
+				else
+				{						
+					om.SetOriginalPropertyValue(obj, propertyMap.Name, om.GetPropertyValue(obj, propertyMap.Name));
+				}						
+			}
 		}
 
 
@@ -284,6 +347,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.LogManager.Info(this, "Committing Unit of Work", ""); // do not localize
 
 			exceptions = new ArrayList(); 
+			m_hashSpeciallyUpdated.Clear() ;
 
 			try
 			{
@@ -328,6 +392,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				Abort();	
 
+				if (exceptionLimit == 1)
+					throw ex;
+
 				if (ex != null && ex.GetType() != typeof(ExceptionLimitExceededException))
 					exceptions.Add(ex);
 
@@ -342,6 +409,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			this.Context.LogManager.Info(this, "Committing object", "Type: " + obj.GetType().ToString()); // do not localize
 
+			exceptions = new ArrayList(); 
+			m_hashSpeciallyUpdated.Clear() ;
+			
 			try
 			{
 				this.Context.PersistenceEngine.Begin();
@@ -370,6 +440,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				this.Context.PersistenceEngine.Abort();
 				Abort();				
+
+				if (exceptionLimit == 1)
+					throw ex;
 
 				if (ex != null && ex.GetType() != typeof(ExceptionLimitExceededException) )
 					exceptions.Add(ex);
@@ -438,7 +511,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -470,7 +543,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -500,7 +573,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					catch (Exception ex)
 					{
-						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 							throw ex;
 						exceptions.Add(ex);
 					}
@@ -508,7 +581,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			catch (Exception ex)
 			{
-				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 					throw ex;
 				exceptions.Add(ex);
 			}
@@ -559,7 +632,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -585,7 +658,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -606,7 +679,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					catch (Exception ex)
 					{
-						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 							throw ex;
 						exceptions.Add(ex);
 					}
@@ -614,7 +687,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			catch (Exception ex)
 			{
-				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 					throw ex;
 				exceptions.Add(ex);
 			}
@@ -665,7 +738,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -690,7 +763,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -711,7 +784,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					catch (Exception ex)
 					{
-						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 							throw ex;
 						exceptions.Add(ex);
 					}
@@ -720,72 +793,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			catch (Exception ex)
 			{
-				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 					throw ex;
 				exceptions.Add(ex);
 			}
 		}
-
-
-//		protected virtual void NullifyReferencesToDeleted()
-//		{
-//			NullifyReferencesToDeleted(null);
-//		}
-//
-//		protected virtual void NullifyReferencesToDeleted(object forObj)
-//		{
-//			this.Context.LogManager.Debug(this, "Nullifying references to objects that are up for deletion", ""); // do not localize				
-//			long cnt;
-//			bool noCheck = false;
-//			IList removeObjects = new ArrayList();
-//			IList listDeletedCopy = new ArrayList();
-//			foreach (object obj in m_listDeleted)
-//			{
-//				listDeletedCopy.Add(obj);
-//			}
-//			cnt = listDeletedCopy.Count;
-//			IObjectManager om = this.Context.ObjectManager;
-//			IPersistenceEngine pe = this.Context.PersistenceEngine;
-//			while (cnt > 0)
-//			{
-//				removeObjects.Clear();
-//				foreach (object obj in listDeletedCopy)
-//				{
-//					if (forObj != null)
-//					{
-//						if (obj == forObj)
-//						{
-//							removeObjects.Add(obj);
-//						}
-//					}
-//					else
-//					{
-//						if (noCheck || MayRemove(obj))
-//						{
-//							removeObjects.Add(obj);
-//						}
-//					}
-//				}
-//				foreach (object obj in removeObjects)
-//				{
-//					listDeletedCopy.Remove(obj);
-//					pe.NullifyReferencesToObject(obj);
-//					this.Context.LogManager.Debug(this, "Nullified references to object", "" ); // do not localize
-//				}
-//				if (listDeletedCopy.Count == cnt)
-//				{
-//					noCheck = true;
-//				}
-//				if (forObj != null)
-//				{
-//					cnt = 0;
-//				}
-//				else
-//				{
-//					cnt = listDeletedCopy.Count;
-//				}
-//			}
-//		}
 
 		protected virtual void RemoveDeleted(int exceptionLimit)
 		{
@@ -836,7 +848,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 												foreach (TopologicalNode waitForNode in node.WaitFor)
 												{
 													IList dummyStillDirty = new ArrayList();
-													pe.UpdateObject(waitForNode.Obj, dummyStillDirty);													
+													pe.UpdateObject(waitForNode.Obj, dummyStillDirty);
+													AddSpeciallyUpdated(waitForNode.Obj);
 												}
 											}
 											tryForce = false;
@@ -854,7 +867,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -871,7 +884,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 							catch (Exception ex)
 							{
-								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+								if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 									throw ex;
 								exceptions.Add(ex);
 							}
@@ -903,7 +916,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					catch (Exception ex)
 					{
-						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+						if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 							throw ex;
 						exceptions.Add(ex);
 					}
@@ -911,7 +924,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			catch (Exception ex)
 			{
-				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit)
+				if (exceptionLimit > 0 && exceptions.Count >= exceptionLimit - 1)
 					throw ex;
 				exceptions.Add(ex);
 			}
@@ -1031,51 +1044,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             if (m_topologicalDelete.IsWaiting(obj))
                 return false;
             return true;
-
-            //Old implementation, replaced with topological sort...
-            
-            //IObjectManager om = this.Context.ObjectManager;
-            //object refObj;
-            //IList list;
-            //IClassMap delObjClassMap;
-            //foreach (object delObj in m_listDeleted)
-            //{
-            //    delObjClassMap = this.Context.DomainMap.MustGetClassMap(delObj.GetType());
-            //    foreach (IPropertyMap propertyMap in delObjClassMap.GetAllPropertyMaps())
-            //    {
-            //        if (!propertyMap.IsReadOnly && !propertyMap.IsSlave)
-            //        {
-            //            if (!(propertyMap.ReferenceType == ReferenceType.None))
-            //            {
-            //                if (propertyMap.IsCollection)
-            //                {
-            //                    list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
-            //                    if (list != null)
-            //                    {
-            //                        foreach (object itemRefObj in list)
-            //                        {
-            //                            if (itemRefObj == obj)
-            //                            {
-            //                                return false;
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //                else
-            //                {
-            //                    refObj = om.GetPropertyValue(delObj, propertyMap.Name);
-            //                    if (refObj != null)
-            //                    {
-            //                        if (refObj == obj)
-            //                        {
-            //                            return false;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-			//}
 		}
 
 		public ArrayList GetCreatedObjects()
@@ -1182,7 +1150,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						if (propertyMap.IsCollection)
 						{
-							IList list = (IList) om.GetPropertyValue(delObj, propertyMap.Name);
+							IList list = (IList) om.GetPropertyValue(waitForObj, propertyMap.Name);
 							if (list != null)
 							{
 								foreach (object itemRefObj in list)
@@ -1196,7 +1164,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 						else
 						{
-							object refObj = om.GetPropertyValue(delObj, propertyMap.Name);
+							object refObj = om.GetPropertyValue(waitForObj, propertyMap.Name);
 							if (refObj != null)
 							{
 								if (refObj == delObj)
@@ -1210,7 +1178,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
             return true;
         }
-   
 
     }
 }

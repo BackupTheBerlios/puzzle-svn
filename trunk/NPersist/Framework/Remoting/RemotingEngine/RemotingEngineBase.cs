@@ -187,6 +187,8 @@ namespace Puzzle.NPersist.Framework.Remoting
 
 		public abstract void LoadProperty(object obj, string propertyName);
 
+		public abstract IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj);
+
 		public abstract IList LoadObjects(IQuery query, IList listToFill);
 
 		public abstract DataTable LoadDataTable(IQuery query);

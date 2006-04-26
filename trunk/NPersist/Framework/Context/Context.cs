@@ -1249,7 +1249,7 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual void CommitObject(object obj)
 		{
-			CommitObject(obj, 0);
+			CommitObject(obj, 1);
 		}
 
 		public virtual void CommitObject(object obj, int exceptionLimit)
@@ -1299,12 +1299,13 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual void PersistAll()
 		{
-			Commit(0);
+			Commit(1);
 		}
 
+		//Default is to use exceptionLimit = 1. exceptionLimit = 0 means no limit.
 		public virtual void Commit()
 		{
-			Commit(0);
+			Commit(1);
 		}
 
 		public virtual void Commit(int exceptionLimit)

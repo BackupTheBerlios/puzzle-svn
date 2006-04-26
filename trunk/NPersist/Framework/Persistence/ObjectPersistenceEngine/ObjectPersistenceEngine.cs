@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Threading;
+using Puzzle.NCore.Framework.Exceptions;
 using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
@@ -344,7 +345,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 				Monitor.Exit(sourceContext);			
 			}
 		}
+
+
+		public virtual IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			throw new IAmOpenSourcePleaseImplementMeException("");			
+		}
 		
+
 		//Refresh Issues!!
 		public virtual IList LoadObjects(IQuery query, IList listToFill)
 		{

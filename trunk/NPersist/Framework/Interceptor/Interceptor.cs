@@ -247,9 +247,17 @@ namespace Puzzle.NPersist.Framework.BaseClasses
                     {
                         throw new NPersistException(string.Format("Object is not a NPersist managed object, do not use 'new' on Entities. (Property='{0}', Owner={1})", propertyName,obj));
                     }
-                    else if (ivalue.GetInterceptor().Context != this.Context)
+                    else
                     {
-                        throw new NPersistException(string.Format("Object does not belong to the same context object as the property owner. (Property='{0}', Owner={1})", propertyName, obj));
+						if (ivalue.GetInterceptor().Context != this.Context)
+						{
+							throw new NPersistException(string.Format("Object does not belong to the same context object as the property owner. (Property='{0}', Owner={1})", propertyName, obj));
+						}
+						ObjectStatus valueObjectStatus = om.GetObjectStatus(value);
+						if (valueObjectStatus == ObjectStatus.UpForDeletion || valueObjectStatus == ObjectStatus.Deleted)
+						{
+							throw new DeletedObjectException(string.Format("Object has been deleted. (Object={0})", value), value);
+						}
                     }
 
                 }

@@ -13,36 +13,36 @@ namespace Puzzle.NPersist.Tests.Main
 
 		#region Property  Id
 		
-		private int id;
+		private int m_Id;
 		
-		public int Id
+		public virtual int Id
 		{
-			get { return this.id; }
-			set { this.id = value; }
+			get { return this.m_Id; }
+			set { this.m_Id = value; }
 		}
 		
 		#endregion
 
 		#region Property  CyclicA 
 		
-		private CyclicA cyclicA ;
+		private CyclicA m_CyclicA ;
 		
-		public CyclicA CyclicA 
+		public virtual CyclicA CyclicA 
 		{
-			get { return this.cyclicA ; }
-			set { this.cyclicA  = value; }
+			get { return this.m_CyclicA ; }
+			set { this.m_CyclicA  = value; }
 		}
 		
 		#endregion
 
 		#region Property  SomeText
 		
-		private string someText;
+		private string m_SomeText;
 		
-		public string SomeText
+		public virtual string SomeText
 		{
-			get { return this.someText; }
-			set { this.someText = value; }
+			get { return this.m_SomeText; }
+			set { this.m_SomeText = value; }
 		}
 		
 		#endregion

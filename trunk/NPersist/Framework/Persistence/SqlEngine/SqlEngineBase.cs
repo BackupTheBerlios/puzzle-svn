@@ -466,6 +466,61 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
+		public virtual IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			NPathQuery query = GetNPathQueryForObjectsOfClassWithUniReferencesToObject(type, obj);
+			if (query != null)
+				return this.Context.GetObjects(query, type);
+			return new ArrayList();
+		}
+
+		protected virtual NPathQuery GetNPathQueryForObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+			IClassMap refToClassMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+			IList parameters = new ArrayList();
+			string npath = "Select * From " + classMap.GetName();
+			string whereClause = "";
+			IObjectManager om = this.Context.ObjectManager;
+
+			int cnt = 0;
+			IList uniRefPropertyMaps = classMap.GetUniDirectionalReferencesTo(refToClassMap, true);
+			foreach (IPropertyMap uniRefPropertyMap in uniRefPropertyMaps)
+			{
+				if (uniRefPropertyMap.IsCollection)
+				{
+					string idMatch = "";
+					IList idPropertyMaps = refToClassMap.GetIdentityPropertyMaps();
+					int cnt2 = 0;
+					foreach (IPropertyMap idPropertyMap in idPropertyMaps)
+					{
+						idMatch += " " + idPropertyMap.Name + " = ?";
+						parameters.Add(new QueryParameter(om.GetPropertyValue(obj, idPropertyMap.Name)));					
+
+						cnt2++;
+						if (cnt2 < idPropertyMaps.Count)
+							idMatch += " And";
+					}
+					whereClause += " (Select Count(*) From " + uniRefPropertyMap.Name + " Where" + idMatch + ") > 0" ;
+				}
+				else
+				{
+					whereClause += " " + uniRefPropertyMap.Name + " = ?";
+					parameters.Add(new QueryParameter(DbType.Object, obj));					
+				}
+				
+				cnt++;
+				if (cnt < uniRefPropertyMaps.Count)
+					whereClause += " Or";
+			}
+
+			if (whereClause.Length < 1)
+				return null;
+
+			npath += " Where " + whereClause;
+			return new NPathQuery(npath, type, parameters);
+		}
+
 		protected virtual void RemoveReferencesToObjectInTable(object obj, IClassMap classMap, ITableMap myTableMap, ITableMap tableMap)
 		{
 			this.SqlEngineManager.Context.LogManager.Debug(this, "Removing references to object in table", "Type: " + obj.GetType().ToString() + ", Table: " + tableMap.Name); // do not localize

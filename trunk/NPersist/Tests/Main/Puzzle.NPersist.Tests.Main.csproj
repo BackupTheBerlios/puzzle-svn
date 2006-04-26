@@ -175,6 +175,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Domain\InvCyclicA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Domain\InvCyclicB.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Domain\Section.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -230,6 +240,11 @@
                 />
                 <File
                     RelPath = "Tests\ContextIntegrityTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Tests\CyclicGraphTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

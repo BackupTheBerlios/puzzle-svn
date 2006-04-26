@@ -99,6 +99,28 @@
     <property name="Section" table="tblProfile" columns="SectionID" id-columns="UserID" ref="OneToMany" type="Section" />
     <property name="DateOfBirth" table="tblProfile" columns="DOB" id-columns="UserID" type="System.String" />
   </class>
+  <class name="CyclicA" table="tblCyclicA">
+    <property name="Id" id="true" columns="CyclicAID" type="System.Int32" />
+    <property name="SomeText" columns="SomeText" type="System.String" />
+    <property name="CyclicB" columns="CyclicBID" ref="OneToOne" type="CyclicB" />
+  </class>
+  <class name="CyclicB" table="tblCyclicB">
+    <property name="Id" id="true" columns="CyclicBID" type="System.Int32" />
+    <property name="SomeText" columns="SomeText" type="System.String" />
+    <property name="CyclicA" columns="CyclicAID" ref="OneToOne" type="CyclicA" />
+  </class>
+  <class name="InvCyclicA" table="tblInvCyclicA">
+    <property name="Id" id="true" columns="InvCyclicAID" type="System.Int32" />
+    <property name="SomeText" columns="SomeText" type="System.String" />
+    <property name="InvCyclicB" columns="InvCyclicBID" ref="OneToOne" type="InvCyclicB" inverse="InvOfInvCyclicB" />
+    <property name="InvOfInvCyclicA" nullable="true" table="tblInvCyclicB" columns="InvCyclicBID" id-columns="InvCyclicAID" slave="true" ref="OneToOne" inverse="InvCyclicA" inherits-inverse="true" type="InvCyclicB" />
+  </class>
+  <class name="InvCyclicB" table="tblInvCyclicB">
+    <property name="Id" id="true" columns="InvCyclicBID" type="System.Int32" />
+    <property name="SomeText" columns="SomeText" type="System.String" />
+    <property name="InvCyclicA" columns="InvCyclicAID" ref="OneToOne" type="InvCyclicA" inverse="InvOfInvCyclicA" />
+    <property name="InvOfInvCyclicB" nullable="true" table="tblInvCyclicA" columns="InvCyclicAID" id-columns="InvCyclicBID" slave="true" ref="OneToOne" inverse="InvCyclicB" inherits-inverse="true" type="InvCyclicA" />
+  </class>
   <source name="NUnitTests" type="MSSqlServer" provider="SqlClient" schema="dbo">
     <connection-string>SERVER=(local);DATABASE=NPersistNUnitTests;integrated security=true</connection-string>
     <table name="FolderID">
@@ -212,5 +234,26 @@
       <column name="LastLogon" type="DateTime" prec="23" length="8" scale="3" specific-type="True" />
       <column name="UserID" primary="true" type="AnsiStringFixedLength" prec="10" length="10" scale="0" />
     </table>
+    <table name="tblCyclicA">
+      <column name="CyclicAID" auto-inc="true" primary="true" type="Int32" prec="10" length="4" scale="0" allow-null="false" />
+      <column name="SomeText" type="AnsiString" prec="255" allow-null="true" length="255" scale="0" />
+      <column name="CyclicBID" type="Int32" prec="10" length="4" scale="0" allow-null="true" foreign="true" primary-table="tblCyclicB" primary-column="CyclicBID" foreign-key="FK_CyclicA_CyclicB" />
+    </table>
+    <table name="tblCyclicB">
+      <column name="CyclicBID" auto-inc="true" primary="true" type="Int32" prec="10" length="4" scale="0" allow-null="false" />
+      <column name="SomeText" type="AnsiString" prec="255" allow-null="true" length="255" scale="0" />
+      <column name="CyclicAID" type="Int32" prec="10" length="4" scale="0" allow-null="true" foreign="true" primary-table="tblCyclicA" primary-column="CyclicAID" foreign-key="FK_CyclicB_CyclicA" />
+    </table>
+    <table name="tblInvCyclicA">
+      <column name="InvCyclicAID" auto-inc="true" primary="true" type="Int32" prec="10" length="4" scale="0" allow-null="false" />
+      <column name="SomeText" type="AnsiString" prec="255" allow-null="true" length="255" scale="0" />
+      <column name="InvCyclicBID" type="Int32" prec="10" length="4" scale="0" allow-null="true" foreign="true" primary-table="tblInvCyclicB" primary-column="InvCyclicBID" foreign-key="FK_InvCyclicA_InvCyclicB" />
+    </table>
+    <table name="tblInvCyclicB">
+      <column name="InvCyclicBID" auto-inc="true" primary="true" type="Int32" prec="10" length="4" scale="0" allow-null="false" />
+      <column name="SomeText" type="AnsiString" prec="255" allow-null="true" length="255" scale="0" />
+      <column name="InvCyclicAID" type="Int32" prec="10" length="4" scale="0" allow-null="true" foreign="true" primary-table="tblInvCyclicA" primary-column="InvCyclicAID" foreign-key="FK_InvCyclicB_InvCyclicA" />
+    </table>
+    
   </source>
 </domain>

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using Puzzle.NCore.Framework.Compression;
+using Puzzle.NCore.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
@@ -395,7 +396,14 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client
 		
 		public override IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
-			return null;
+			throw new IAmOpenSourcePleaseImplementMeException("Query capabilities not implemented in DocumentPersistenceEngine! Please load the entire set that you need to search into memory and use the IContext.FilterObjects() method instead.");			
+			//return null;
+		}
+
+
+		public override IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
+		{
+			throw new IAmOpenSourcePleaseImplementMeException("");			
 		}
 
 	}
