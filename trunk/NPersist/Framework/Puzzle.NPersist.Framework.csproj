@@ -1019,11 +1019,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Persistence\InverseManager\IInverseManagerEntry.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Persistence\InverseManager\InverseAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1040,16 +1035,6 @@
                 />
                 <File
                     RelPath = "Persistence\InverseManager\InverseManagerBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Persistence\InverseManager\InverseManagerEntry.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Persistence\InverseManager\OnWriteInverseManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
