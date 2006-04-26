@@ -175,11 +175,6 @@ namespace Puzzle.NPersist.Framework.Remoting
 			listUpdate.Add(obj);			
 		}
 
-		public virtual void NullifyReferencesToObject(object obj)
-		{
-			;						
-		}
-
 		public virtual void RemoveObject(object obj)
 		{
 			listRemove.Add(obj);						

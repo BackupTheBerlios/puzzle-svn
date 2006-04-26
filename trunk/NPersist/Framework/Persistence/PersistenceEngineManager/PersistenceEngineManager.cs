@@ -257,15 +257,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			GetPersistenceEngine(GetSourceMap(obj)).InsertObject(obj, stillDirty);
 		}
 
-//		public virtual void NullifyReferencesToObject(object obj)
-//		{
-//			foreach (ISourceMap sourceMap in this.Context.DomainMap.SourceMaps )
-//			{
-//				GetPersistenceEngine(sourceMap).NullifyReferencesToObject(obj);				
-//			}
-//			//GetPersistenceEngine(GetSourceMap(obj)).NullifyReferencesToObject(obj);
-//		}
-
 		public virtual void RemoveObject(object obj)
 		{
 			GetPersistenceEngine(GetSourceMap(obj)).RemoveObject(obj);

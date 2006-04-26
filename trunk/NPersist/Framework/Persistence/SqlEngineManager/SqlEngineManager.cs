@@ -118,11 +118,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			GetSqlEngine(GetSourceType(obj)).InsertObject(obj, stillDirty);
 		}
-//
-//		public virtual void NullifyReferencesToObject(object obj)
-//		{
-//			GetSqlEngine(GetSourceType(obj)).NullifyReferencesToObject(obj);
-//		}
 
 		public virtual void RemoveObject(object obj)
 		{
