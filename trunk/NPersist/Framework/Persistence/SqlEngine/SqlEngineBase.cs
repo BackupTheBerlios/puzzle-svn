@@ -2182,6 +2182,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IObjectManager om;
 			IColumnMap idColumnMap = null;
 			IPropertyMap idPropertyMap = null;
+			IClassMap objClassMap = this.Context.DomainMap.GetClassMap(obj.GetType());
 			bool ignore;
 			object refObj;
 			string paramName = "";
@@ -2216,7 +2217,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				paramName = GetParameterName(firstPropertyMap, idColumnMap);					
 				
 				if (!(classMap.GetTypeColumnMap() == null && classMap.GetTypeColumnMap() == idColumnMap.MustGetPrimaryKeyColumnMap()))
-					param = AddSqlParameter(insert, parameters, paramName, obj, null, classMap.TypeValue, idColumnMap, true);
+					param = AddSqlParameter(insert, parameters, paramName, obj, null, objClassMap.TypeValue, idColumnMap, true);
 				else
 				{
 					idPropertyMap = classMap.MustGetPropertyMapForColumnMap(idColumnMap.MustGetPrimaryKeyColumnMap());					
