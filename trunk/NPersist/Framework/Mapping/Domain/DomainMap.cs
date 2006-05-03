@@ -280,7 +280,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 
                 foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
                 {
-                    PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name);
+                    PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
                     if (propertyInfo == null)
                         throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
