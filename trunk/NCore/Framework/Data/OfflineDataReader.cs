@@ -19,9 +19,11 @@ namespace Puzzle.NCore.Framework.Data
 	{
 		private IList records = new ArrayList();
 		private DataTable schemaTable;
-		private Hashtable columnLookup = new Hashtable();
+       
+        private Hashtable columnLookup = new Hashtable();
 
-		public OfflineDataReader Clone()
+
+        public OfflineDataReader Clone()
 		{
 			OfflineDataReader clone = new OfflineDataReader();
 			clone.schemaTable = this.schemaTable;
@@ -44,7 +46,7 @@ namespace Puzzle.NCore.Framework.Data
 			int j = 0;
 			foreach (DataRow dr in schemaTable.Rows)
 			{
-				columnLookup[dr["ColumnName"]] = j;
+                columnLookup[dr["ColumnName"].ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture)] = j;
 				j++;
 			}
 
@@ -156,7 +158,7 @@ namespace Puzzle.NCore.Framework.Data
 
 		private int GetColumnIndex(string name)
 		{
-			object colIndex = columnLookup[name];
+			object colIndex = columnLookup[name.ToLower(System.Globalization.CultureInfo.InvariantCulture)];
 			if (colIndex != null)
 				return (int) colIndex;
 			colIndex = columnLookup[name.ToUpper()];
