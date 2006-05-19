@@ -364,7 +364,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			int rowsAffected;
 			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
 			{
-				if (propertyMap.IsCollection)
+				if (propertyMap.IsCollection && !propertyMap.IsReadOnly)
 				{
 					if (propertyMap.ReferenceType.Equals(ReferenceType.ManyToMany) || (!propertyMap.IsReadOnly && !propertyMap.IsSlave))
 					{
