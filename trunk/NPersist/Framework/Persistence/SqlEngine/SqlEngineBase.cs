@@ -666,10 +666,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				break;
 			}
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, orgValue);
-			if (Convert.IsDBNull(orgValue))
-			{
-				om.SetNullValueStatus(obj, propertyMap.Name, true);
-			}
+            om.SetNullValueStatus(obj, propertyMap.Name, Convert.IsDBNull(orgValue));
 		}
 
 		protected virtual void LoadReferenceCollectionProperty(object obj, IPropertyMap propertyMap, Type itemType)
