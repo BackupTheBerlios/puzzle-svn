@@ -8,22 +8,29 @@ namespace CacheSample
 {
 	public class CacheInterceptor : IAroundInterceptor
 	{
-		private Hashtable cache = new Hashtable();
-
 		public object HandleCall(MethodInvocation call)
 		{
-			string key = call.ValueSignature;
-			if (!cache.ContainsKey(key))
-			{				
-				cache[key] = call.Proceed();
-				Console.WriteLine("adding result to cache") ;
+			ICacheHolder cacheHolder = call.Target as ICacheHolder;
+			if (cacheHolder != null)
+			{
+				Hashtable cache = cacheHolder.Cache;
+				string key = call.ValueSignature;
+				if (!cache.ContainsKey(key))
+				{				
+					cache[key] = call.Proceed();
+					Console.WriteLine("adding result to cache") ;
+				}
+				else
+				{
+					Console.WriteLine("result fetched from cache") ;
+				}
+
+				return cache[key];				
 			}
 			else
-			{
-				Console.WriteLine("result fetched from cache") ;
+			{	
+				return call.Proceed();
 			}
-
-			return cache[key];
 		}
 	}
 }

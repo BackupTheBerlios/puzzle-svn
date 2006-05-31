@@ -36,15 +36,15 @@ namespace KumoUnitTests
 		public void DoubleProxy1Container()
 		{
 			Engine e1 = new Engine("DoubleProxy1Container");			
-			e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "MyInt*", new IncreaseReturnValueInterceptor()));			
+            e1.Configuration.Aspects.Add(new SignatureAspect("ChangeReturnValue", typeof (Foo), "MyInt*", new IncreaseReturnValueInterceptor()));			
 
-			Type proxyType = e1.CreateProxyType (typeof (Foo));
-			Foo proxy = (Foo) e1.CreateProxy(proxyType,null);
+            Type proxyType = e1.CreateProxyType (typeof (Foo));
+            Foo proxy = (Foo) e1.CreateProxy(proxyType,null);
 
-			Assert.IsTrue(proxy != null, "failed to create proxified instance");
-			int result = proxy.MyIntMethod() ;
+            Assert.IsTrue(proxy != null, "failed to create proxified instance");
+            int result = proxy.MyIntMethod() ;
 
-			Assert.IsTrue(result == 2, "return value has not been changed");
+            Assert.IsTrue(result == 2, "return value has not been changed");
 		}
 
         [TestMethod()]
