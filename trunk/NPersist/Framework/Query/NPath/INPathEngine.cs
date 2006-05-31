@@ -19,13 +19,15 @@ namespace Puzzle.NPersist.Framework.NPath
 	{
 		string ToSql(string npath, Type type, ref Hashtable propertyColumnMap);
 
-		string ToScalarSql(string npath, Type type);
-
 		string ToSql(string npath, Type type, ref Hashtable propertyColumnMap, ref IList outParameters);
 
-		string ToScalarSql(string npath, Type type, ref IList outParameters);
-
 		string ToSql(string npath, Type type, ref Hashtable propertyColumnMap, ref IList outParameters, IList inParameters);
+
+		string ToSql(string npath,NPathQueryType queryType, Type type, ref Hashtable propertyColumnMap, ref IList outParameters, IList inParameters);
+
+		string ToScalarSql(string npath, Type type);
+
+		string ToScalarSql(string npath, Type type, ref IList outParameters);
 
 		string ToScalarSql(string npath, Type type, ref IList outParameters, IList inParameters);
 

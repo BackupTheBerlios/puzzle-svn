@@ -19,6 +19,7 @@ using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NPersist.Framework.NPath;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Sql.Dom;
 using Puzzle.NPersist.Framework.Sql.Visitor;
@@ -1036,7 +1037,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			else if (dataType == DbType.Boolean)
 			{
-				return WrapBoolean((bool) value);
+				return WrapBoolean(Convert.ToBoolean(value));
 			}
 			else if (dataType == DbType.Currency)
 			{
@@ -3340,7 +3341,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					idColumns.Add(columnMap.Name);
 				}
 			}
-			string sql = this.Context.NPathEngine.ToSql(npathQuery, type, ref propertyColumnMap, ref outParameters, parameters);
+			string sql = this.Context.NPathEngine.ToSql(npathQuery, NPathQueryType.SelectObjects, type, ref propertyColumnMap, ref outParameters, parameters);
 			GetObjectsBySql(sql, type, idColumns, typeColumns, propertyColumnMap, outParameters, refreshBehavior, listToFill);
 		}
 
