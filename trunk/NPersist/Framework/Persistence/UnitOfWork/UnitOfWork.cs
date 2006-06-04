@@ -24,7 +24,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private ArrayList m_listDirty = new ArrayList();
 		private Hashtable m_hashStillDirty = new Hashtable();
 		private ArrayList m_listDeleted = new ArrayList();
-		private ArrayList m_listPOCO = new ArrayList();
+//		private ArrayList m_listPOCO = new ArrayList();
 		private Hashtable m_objectStatusLookup = new Hashtable() ;
 
 		private ArrayList m_listInserted = new ArrayList();

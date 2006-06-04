@@ -20,7 +20,7 @@ namespace Puzzle.NPersist.Framework.Aop
 	/// </summary>
 	public class NPersistEntityCtorPointcut : IPointcut
 	{
-		private IContext context; 
+	//	private IContext context; 
 		private static volatile IList interceptors = CreateInterceptors();
 		private static IList CreateInterceptors()
 		{
@@ -31,7 +31,7 @@ namespace Puzzle.NPersist.Framework.Aop
 
 		public NPersistEntityCtorPointcut(IContext context)
 		{
-			this.context = context;
+		//	this.context = context;
 		}
 
 		public IList Interceptors

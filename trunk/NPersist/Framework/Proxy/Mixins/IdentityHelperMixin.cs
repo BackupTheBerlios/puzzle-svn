@@ -18,7 +18,7 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
 {
 	public class IdentityHelperMixin : IIdentityHelper , IProxyAware
 	{
-        private IAopProxy target;
+    //    private IAopProxy target;
         private string identity;
         public string GetIdentity()
         {
@@ -37,7 +37,7 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
 
         public void SetProxy(IAopProxy target)
         {
-            this.target = target;
+        //    this.target = target;
         }
 
         #region Property IsInvalid 
