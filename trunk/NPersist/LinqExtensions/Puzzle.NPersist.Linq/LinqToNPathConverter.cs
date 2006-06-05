@@ -47,17 +47,21 @@ namespace Puzzle.NPersist.Linq
                 return ConvertUnaryExpression((UnaryExpression) expression);
             }
 
-
-        
-
-
             throw new Exception("The method or operation is not implemented.");
         }
 
         private static string ConvertUnaryExpression(UnaryExpression expression)
         {
-            string operand = ConvertExpression(expression.Operand);
-            return operand;
+            if (expression.NodeType == ExpressionType.Not)
+            {
+                string operand = ConvertExpression(expression.Operand);
+                return string.Format ("not ({0})",operand);
+            }
+            else
+            {
+                string operand = ConvertExpression(expression.Operand);
+                return operand;
+            }
         }
 
         private static string ConvertConstantExpression(ConstantExpression expression)
@@ -99,6 +103,10 @@ namespace Puzzle.NPersist.Linq
             {
                 return ConvertToEqualityExpression(expression);
             }
+            if (expression.Method.Name == "op_Inequality")
+            {
+                return ConvertToInequalityExpression(expression);
+            }
             if (expression.Method.Name == "Like" && expression.Method.ReflectedType == typeof(StringExtensions))
             {
                 return ConvertLikeExpression(expression);
@@ -109,6 +117,15 @@ namespace Puzzle.NPersist.Linq
             }
 
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        private static string ConvertToInequalityExpression(MethodCallExpression expression)
+        {
+            string left = ConvertExpression (expression.Parameters[0]);
+            string right = ConvertExpression (expression.Parameters[1]);
+
+
+            return string.Format ("{0} != {1}",left,right);
         }
 
         private static string ConvertSoundexExpression(MethodCallExpression expression)
@@ -155,6 +172,17 @@ namespace Puzzle.NPersist.Linq
             {
                 return string.Format ("({0} < {1})",left,right);
             }
+
+            if (expression.NodeType == ExpressionType.GE)
+            {
+                return string.Format ("({0} >= {1})",left,right);
+            }
+
+            if (expression.NodeType == ExpressionType.LE)
+            {
+                return string.Format ("({0} <= {1})",left,right);
+            }
+
 
             if (expression.NodeType == ExpressionType.AndAlso)
             {
