@@ -21,19 +21,13 @@ namespace Puzzle.NPersist.Linq
 
 
 
-        public static LinqQuery<T> Where<T>(this LinqQuery<T> source, Expression<Func<T, bool>> predicate) {
-            if (source == null) throw new Exception("You suck1");
-            if (predicate == null) throw new Exception("You suck2");
-            
+        public static LinqQuery<T> Where<T>(this LinqQuery<T> source, Expression<Func<T, bool>> predicate) {           
             source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
 
             return source;
         }
 
-        public static LinqQuery<T> Select<T, S>(this LinqQuery<T> source, Expression<Func<T, S>> selector) {
-            if (source == null) throw new Exception("You suck5");
-            if (selector == null) throw new Exception("You suck6");
-       
+        public static LinqQuery<T> Select<T, S>(this LinqQuery<T> source, Expression<Func<T, S>> selector) {       
             if (selector.Body is NewExpression)
             {
                 LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source);
