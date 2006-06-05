@@ -9,7 +9,16 @@ namespace Puzzle.NPersist.Linq
     {
         public static LinqQuery<T> Repository<T> (this IContext context)
         {
-            return new LinqQuery<T>();
+            LinqQuery<T> query = new LinqQuery<T>();
+            query.Context = context;
+
+            return query;
+        }
+
+        public static IList<T> GetObjects<T>(this IContext context,LinqQuery<T> query)
+        {
+            string npath = query.ToNPath();
+            return context.GetObjectsByNPath <T>(npath);
         }
     }
 }

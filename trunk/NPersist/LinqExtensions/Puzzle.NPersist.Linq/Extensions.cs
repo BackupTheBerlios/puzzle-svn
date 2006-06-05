@@ -34,6 +34,10 @@ namespace Puzzle.NPersist.Linq
             if (source == null) throw new Exception("You suck5");
             if (selector == null) throw new Exception("You suck6");
        
+            if (selector.Body is NewExpression)
+            {
+                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source);
+            }
 
             return source;
         }  

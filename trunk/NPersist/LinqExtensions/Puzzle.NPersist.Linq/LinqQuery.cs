@@ -2,16 +2,37 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Query;
+using Puzzle.NPersist.Framework;
 
 namespace Puzzle.NPersist.Linq
 {
     public class LinqQuery<T>
     {
+        #region Property Context
+        private IContext context;
+        public virtual IContext Context
+        {
+            get
+            {
+                return this.context;
+            }
+            set
+            {
+                this.context = value;
+            }
+        }
+        #endregion
+
+        string selectClause = "select *";
         public string SelectClause
         {
             get
             {
-                return "select *";
+                return selectClause;
+            }
+            set
+            {
+                selectClause = value;
             }
         }
 

@@ -49,6 +49,7 @@
     <Compile Include="IContextExtensions.cs" />
     <Compile Include="LinqQuery.cs" />
     <Compile Include="LinqToNPathConverter.cs" />
+    <Compile Include="LoadSpan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>

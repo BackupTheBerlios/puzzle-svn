@@ -168,5 +168,22 @@ namespace Puzzle.NPersist.Linq
 
              throw new Exception("The method or operation is not implemented.");
         }
+
+        public static void CreateLoadspan<T>(NewExpression expression,LinqQuery<T> query)
+        {
+            NewArrayExpression newArray = (NewArrayExpression)expression.Args[0];
+
+            query.SelectClause = "select ";
+            int i = 0;
+            foreach (Expression arg in newArray.Expressions)
+            {
+                string path = ConvertExpression(arg);
+                query.SelectClause += path;
+
+                i++;
+                if (i<newArray.Expressions.Count)
+                    query.SelectClause += ",";
+            }
+        }
     }
 }
