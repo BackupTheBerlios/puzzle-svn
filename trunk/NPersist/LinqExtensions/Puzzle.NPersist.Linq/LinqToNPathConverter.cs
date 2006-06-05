@@ -185,5 +185,21 @@ namespace Puzzle.NPersist.Linq
                     query.SelectClause += ",";
             }
         }
+
+        public static void CreateLoadspan<T>(MemberInitExpression expression,LinqQuery<T> query)
+        {
+
+            query.SelectClause = "select ";
+            int i = 0;
+            foreach (MemberAssignment binding in expression.Bindings)
+            {
+                string path = ConvertExpression(binding.Expression);
+                query.SelectClause += path;
+
+                i++;
+                if (i<expression.Bindings.Count)
+                    query.SelectClause += ",";
+            }
+        }
     }
 }

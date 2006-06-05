@@ -39,6 +39,11 @@ namespace Puzzle.NPersist.Linq
                 LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source);
             }
 
+            if (selector.Body is MemberInitExpression)
+            {
+                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body,source);
+            }
+
             return source;
         }  
   
