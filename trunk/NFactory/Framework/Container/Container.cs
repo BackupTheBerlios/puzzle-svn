@@ -9,6 +9,8 @@ namespace Puzzle.NFactory.Framework
 {
 	public class Container : IContainer
 	{
+        public static readonly IContainer Default = ApplicationContext.Configure();
+
 		internal Hashtable containerObjects = new Hashtable();
 		internal Hashtable graphObjects = new Hashtable();
         private volatile object syncRoot = new object();

@@ -21,11 +21,13 @@ namespace Puzzle.NAspect.Framework
 {
 	public class Engine : IEngine
 	{
+        public static readonly IEngine Default = ApplicationContext.Configure();
+
 		private IDictionary proxyLookup;
 		private IDictionary wrapperLookup;
 
 		public readonly AspectMatcher AspectMatcher = new AspectMatcher();
-		public readonly PointcutMatcher PointCutMatcher = new PointcutMatcher();
+		public readonly PointcutMatcher PointCutMatcher = new PointcutMatcher();        
 
 		#region Engine
 
