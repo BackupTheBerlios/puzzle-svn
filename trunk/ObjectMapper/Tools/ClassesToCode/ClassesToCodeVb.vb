@@ -338,9 +338,17 @@ Public Class ClassesToCodeVb
                 codeBuilder.Append(propertyMap.GetFieldName)
                 codeBuilder.Append(" As ")
 
-                If UseTypedCollections And (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+                If (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
 
-                    convDataType = GetListType(propertyMap.GetReferencedClassMap, propertyMap.DataType)
+                    If UseTypedCollections Then
+
+                        convDataType = GetListType(propertyMap.GetReferencedClassMap, propertyMap.DataType)
+
+                    ElseIf UseGenericCollections Then
+
+                        convDataType = GetGenericListType(propertyMap.GetReferencedClassMap, propertyMap.DataType)
+
+                    End If
 
                 Else
 
@@ -753,9 +761,17 @@ Public Class ClassesToCodeVb
 
         End If
 
-        If UseTypedCollections And (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+        If (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
 
-            convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+            If UseTypedCollections Then
+
+                convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+
+            ElseIf UseGenericCollections Then
+
+                convDataType = GetGenericListType(propertyMap.GetReferencedClassMap, convDataType)
+
+            End If
 
         End If
 
@@ -2099,5 +2115,21 @@ Public Class ClassesToCodeVb
 
     End Function
 
+
+    Protected Overrides Function GetGenericListType(ByVal refClassMap As ClassMap, ByVal defaultName As String) As String
+
+        If UseGenericCollections Then
+
+            If Not refClassMap Is Nothing Then
+
+                Return "System.Collections.Generic.IList(Of " & refClassMap.Name & ")"
+
+            End If
+
+        End If
+
+        Return defaultName
+
+    End Function
 
 End Class

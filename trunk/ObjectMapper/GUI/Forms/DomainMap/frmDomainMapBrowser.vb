@@ -7858,6 +7858,10 @@ Public Class frmDomainMapBrowser
                         m_ClassesToCodeVb.XmlFilePerClass = .XmlFilePerClass
                         m_ClassesToCodeDelphi.XmlFilePerClass = .XmlFilePerClass
 
+                        m_ClassesToCodeCs.UseGenericCollections = .UseGenericCollections
+                        m_ClassesToCodeVb.UseGenericCollections = .UseGenericCollections
+                        m_ClassesToCodeDelphi.UseGenericCollections = .UseGenericCollections
+
                         m_ClassesToCodeCs.EmbedXml = .EmbedXml
                         m_ClassesToCodeVb.EmbedXml = .EmbedXml
                         m_ClassesToCodeDelphi.EmbedXml = .EmbedXml
@@ -7991,9 +7995,9 @@ Public Class frmDomainMapBrowser
                         m_ClassesToCodeVb.WrapCollections = .WrapCollections
                         m_ClassesToCodeDelphi.WrapCollections = .WrapCollections
 
-                        m_ClassesToCodeCs.XmlFilePerClass = .XmlFilePerClass
-                        m_ClassesToCodeVb.XmlFilePerClass = .XmlFilePerClass
-                        m_ClassesToCodeDelphi.XmlFilePerClass = .XmlFilePerClass
+                        m_ClassesToCodeCs.UseGenericCollections = .UseGenericCollections
+                        m_ClassesToCodeVb.UseGenericCollections = .UseGenericCollections
+                        m_ClassesToCodeDelphi.UseGenericCollections = .UseGenericCollections
 
                         m_ClassesToCodeCs.EmbedXml = .EmbedXml
                         m_ClassesToCodeVb.EmbedXml = .EmbedXml

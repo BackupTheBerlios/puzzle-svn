@@ -389,9 +389,17 @@ Public Class ClassesToCodeCs
 
                         End If
 
-                        If UseTypedCollections And (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+                        If (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
 
-                            convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+                            If UseTypedCollections Then
+
+                                convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+
+                            ElseIf UseGenericCollections Then
+
+                                convDataType = GetGenericListType(propertyMap.GetReferencedClassMap, convDataType)
+
+                            End If
 
                         End If
 
@@ -876,10 +884,15 @@ Public Class ClassesToCodeCs
         End If
 
 
-        If UseTypedCollections And (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+        If (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+            If UseTypedCollections Then
+                convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
 
-            convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+            ElseIf UseGenericCollections Then
 
+                convDataType = GetGenericListType(propertyMap.GetReferencedClassMap, convDataType)
+
+            End If
         End If
 
         If TargetPlatform = TargetPlatformEnum.NHibernate And propertyMap.IsCollection Then
@@ -968,10 +981,15 @@ Public Class ClassesToCodeCs
         End If
 
 
-        If UseTypedCollections And (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+        If (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then
+            If UseTypedCollections Then
+                convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
 
-            convDataType = GetListType(propertyMap.GetReferencedClassMap, convDataType)
+            ElseIf UseGenericCollections Then
 
+                convDataType = GetGenericListType(propertyMap.GetReferencedClassMap, convDataType)
+
+            End If
         End If
 
         If TargetPlatform = TargetPlatformEnum.NHibernate And propertyMap.IsCollection Then

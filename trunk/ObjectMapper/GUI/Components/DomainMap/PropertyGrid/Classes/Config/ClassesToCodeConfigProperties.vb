@@ -323,6 +323,21 @@ Public Class ClassesToCodeConfigProperties
         End Set
     End Property
 
+    <Category("Collections"), _
+    Description("Set to true if you want to generate collections that are typed using generics."), _
+    DisplayName("Generic collections"), _
+    DefaultValue(True)> Public Property UseGenericCollections() As Boolean
+        Get
+            Return m_ClassesToCodeConfig.UseGenericCollections
+        End Get
+        Set(ByVal Value As Boolean)
+            If Value <> m_ClassesToCodeConfig.UseGenericCollections Then
+                m_ClassesToCodeConfig.UseGenericCollections = Value
+                RaiseEvent AfterPropertySet(m_ClassesToCodeConfig, "UseGenericCollections")
+            End If
+        End Set
+    End Property
+
     '<Category("Collections"), _
     'Description("Set to true if you want to wrap collections properties with methods."), _
     'DisplayName("Wrap collections"), _

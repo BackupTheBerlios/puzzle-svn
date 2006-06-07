@@ -45,6 +45,8 @@ Public Class ClassesToCodeBase
 
     Private m_DocCommentPrefix As String
 
+    Private m_UseGenericCollections As Boolean = True
+
     Public tab As String = "    "
 
     Public Function GetTabs(ByVal index As Integer) As String
@@ -327,6 +329,15 @@ Public Class ClassesToCodeBase
         End Get
         Set(ByVal Value As Boolean)
             m_EmbedXml = Value
+        End Set
+    End Property
+
+    Public Property UseGenericCollections() As Boolean Implements IClassesToCode.UseGenericCollections
+        Get
+            Return m_UseGenericCollections
+        End Get
+        Set(ByVal Value As Boolean)
+            m_UseGenericCollections = Value
         End Set
     End Property
 
@@ -1121,6 +1132,22 @@ Public Class ClassesToCodeBase
             If Not refClassMap Is Nothing Then
 
                 Return refClassMap.Name & "Collection"
+
+            End If
+
+        End If
+
+        Return defaultName
+
+    End Function
+
+    Protected Overridable Function GetGenericListType(ByVal refClassMap As ClassMap, ByVal defaultName As String) As String
+
+        If m_UseGenericCollections Then
+
+            If Not refClassMap Is Nothing Then
+
+                Return "System.Collections.Generic.IList<" & refClassMap.Name & ">"
 
             End If
 

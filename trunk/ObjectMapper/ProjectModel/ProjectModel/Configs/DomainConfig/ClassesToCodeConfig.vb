@@ -40,6 +40,8 @@ Namespace ProjectModel
         Private m_PutAllClassesInOneFile As Boolean = False
         Private m_XmlFilePerClass As Boolean = False
 
+        Private m_UseGenericCollections As Boolean
+
         Private m_SourceCodeFiles As New ArrayList
 
         Public Property TargetFolder() As String
@@ -270,6 +272,15 @@ Namespace ProjectModel
             End Get
             Set(ByVal Value As Boolean)
                 m_XmlFilePerClass = Value
+            End Set
+        End Property
+
+        Public Property UseGenericCollections() As Boolean
+            Get
+                Return m_UseGenericCollections
+            End Get
+            Set(ByVal Value As Boolean)
+                m_UseGenericCollections = Value
             End Set
         End Property
 

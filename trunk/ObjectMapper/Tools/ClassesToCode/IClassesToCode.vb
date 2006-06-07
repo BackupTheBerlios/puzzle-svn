@@ -85,6 +85,8 @@ Public Interface IClassesToCode
 
     Property EmbedXml() As Boolean
 
+    Property UseGenericCollections() As Boolean
+
     'Property 
 
     Function GetFilePathRelativeToProject(ByVal projPath As String, ByVal filePath As String) As String
