@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="IContextExtensions.cs" />
+    <Compile Include="ILinqList.cs" />
+    <Compile Include="LinqList.cs" />
     <Compile Include="LinqQuery.cs" />
     <Compile Include="LinqToNPathConverter.cs" />
     <Compile Include="LoadSpan.cs" />

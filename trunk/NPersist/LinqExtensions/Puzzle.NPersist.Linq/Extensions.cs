@@ -17,48 +17,68 @@ namespace Puzzle.NPersist.Linq
 
     public static class Sequence
     {
-        
+        public static ILinqList<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate) 
+        {           
+           //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
+          
+            LinqList<T> list = new LinqList<T>();
 
+            return list;
+        }
 
+        public static ILinqList<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate) 
+        {           
+           //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
 
-        public static LinqQuery<T> Where<T>(this LinqQuery<T> source, Expression<Func<T, bool>> predicate) {           
-            source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
+            LinqList<T> list = new LinqList<T>();
+
+            return list;
+        }
+
+        public static ILinqList<T> Where<T>(this ILinqList<T> source, Expression<Func<T, bool>> predicate) 
+        {           
+           source.Query.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
 
             return source;
         }
 
-        public static LinqQuery<T> Select<T, S>(this LinqQuery<T> source, Expression<Func<T, S>> selector) {       
+        public static ILinqList<T> Select<T, S>(this ILinqList<T> source, Expression<Func<T, S>> selector) 
+        {       
             if (selector.Body is NewExpression)
             {
-                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source);
+                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source.Query);
             }
 
             if (selector.Body is MemberInitExpression)
             {
-                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body,source);
+                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body,source.Query);
             }
 
             return source;
         }  
   
-        public static LinqQuery<T> OrderBy<T, K>(this LinqQuery<T> source, Expression<Func<T, K>> keySelector) {
-            source.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector);
+        public static ILinqList<T> OrderBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        {
+            source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector);
             return source;
         }
 
-        public static LinqQuery<T> OrderByDescending<T, K>(this LinqQuery<T> source, Expression<Func<T, K>> keySelector) {
+        public static ILinqList<T> OrderByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        {
            
-            source.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
+            source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
             return source;
         }
 
-        public static LinqQuery<T> ThenBy<T, K>(this LinqQuery<T> source, Expression<Func<T, K>> keySelector) {
-             source.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector);
+        public static ILinqList<T> ThenBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        {
+            source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector);
             return source;
         }
 
-        public static LinqQuery<T> ThenByDescending<T, K>(this LinqQuery<T> source, Expression<Func<T, K>> keySelector) {
-            source.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
+        public static ILinqList<T> ThenByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        {
+            source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
             return source;
         }
     }    

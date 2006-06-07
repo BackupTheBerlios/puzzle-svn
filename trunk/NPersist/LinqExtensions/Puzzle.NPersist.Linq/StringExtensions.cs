@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Linq.Strings
 {
     public static class StringExtensions
     {

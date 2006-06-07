@@ -4,6 +4,7 @@ using System.Text;
 using System.Expressions;
 using Puzzle.NPath.Framework.CodeDom;
 using System.Collections;
+using Puzzle.NPersist.Linq.Strings;
 
 namespace Puzzle.NPersist.Linq
 {
@@ -83,18 +84,49 @@ namespace Puzzle.NPersist.Linq
 
         private static string ConvertMemberExpression(MemberExpression expression)
         {
-            string prefix = ConvertExpression (expression.Expression);
             string suffix = expression.Member.Name;
 
-            if (suffix == "Count" && expression.Member.ReflectedType == typeof(ICollection))
+            if (expression.Expression is UnaryExpression && suffix == "Count")
             {
-                suffix += "()";
+                return ConvertSubquery((UnaryExpression)expression.Expression);
+            }
+            else
+            {
+
+                string prefix = ConvertExpression (expression.Expression);
+
+
+                if (suffix == "Count" && expression.Member.ReflectedType == typeof(ICollection))
+                {
+                    suffix += "()";
+                }
+
+                if (prefix != "")
+                    return string.Format ("{0}.{1}",prefix,suffix);
+                else
+                    return suffix;
+            }
+        }
+
+
+
+        private static string ConvertSubquery(UnaryExpression expression)
+        {
+            if (expression.Operand is MethodCallExpression && ((MethodCallExpression)expression.Operand).Method.Name == "Where")
+            {
+                MethodCallExpression methodCall = (MethodCallExpression)expression.Operand;
+                
+                
+                
+                string propPath = ConvertExpression (methodCall.Parameters[0]);
+                
+                LambdaExpression exp = (LambdaExpression)methodCall.Parameters[1];
+                
+                string whereClause = ConvertExpression(exp.Body);
+                return string.Format ("(select count(*) from {0} where {1})",propPath,whereClause);
             }
 
-            if (prefix != "")
-                return string.Format ("{0}.{1}",prefix,suffix);
-            else
-                return suffix;
+            throw new Exception("The method or operation is not implemented.");        
         }
 
         private static string ConvertMethodCallExpression(MethodCallExpression expression)
@@ -114,10 +146,11 @@ namespace Puzzle.NPersist.Linq
             if (expression.Method.Name == "Soundex" && expression.Method.ReflectedType == typeof(StringExtensions))
             {
                 return ConvertSoundexExpression(expression);
-            }
+            }            
 
             throw new Exception("The method or operation is not implemented.");
         }
+
 
         private static string ConvertToInequalityExpression(MethodCallExpression expression)
         {

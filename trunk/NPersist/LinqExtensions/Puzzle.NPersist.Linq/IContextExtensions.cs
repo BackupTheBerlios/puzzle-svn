@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using System.Text;
 using Puzzle.NPersist.Framework;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Linq.Context
 {
     public static class IContextExtensions
     {
-        public static LinqQuery<T> Repository<T> (this IContext context)
+        public static ILinqList<T> Repository<T> (this IContext context)
         {
+            /*
             LinqQuery<T> query = new LinqQuery<T>();
             query.Context = context;
+             */
 
-            return query;
+            LinqList<T> list = new LinqList<T>();
+            list.Query = new LinqQuery<T>();
+            list.Query.Context = context;
+
+
+            return list;
         }
 
-        public static IList<T> GetObjects<T>(this IContext context,LinqQuery<T> query)
-        {
-            string npath = query.ToNPath();
-            return context.GetObjectsByNPath <T>(npath);
-        }
+        //public static IList<T> GetObjects<T>(this IContext context,LinqQuery<T> query)
+        //{
+        //    string npath = query.ToNPath();
+        //    return context.GetObjectsByNPath <T>(npath);
+        //}
     }
 }
