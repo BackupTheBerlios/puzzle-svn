@@ -2,7 +2,7 @@ using System;
 
 namespace CacheSample
 {
-	//some class that will be the target of our async interceptor
+	//some class that will be the target of our caching interceptor
 	public class SomeAopTarget
 	{
 		public SomeAopTarget()

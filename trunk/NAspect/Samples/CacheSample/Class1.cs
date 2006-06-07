@@ -17,7 +17,11 @@ namespace CacheSample
 			Engine e = ApplicationContext.Configure();
 
 			//create an instance of "SomeAopTarget" through the aop container
+<<<<<<< .mine
+			SomeAopTarget myObj = e.CreateProxy<SomeAopTarget>();
+=======
 			SomeAopTarget myObj = e.CreateProxy(typeof (SomeAopTarget)) as SomeAopTarget;
+>>>>>>> .r209
 
 			for (int i=0;i<4;i++)
 			{
