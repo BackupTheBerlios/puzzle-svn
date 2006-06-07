@@ -6,6 +6,8 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace CacheSample
 {
+    [MayBreakFlow]
+    [Throws(typeof(Exception))]
 	public class CacheInterceptor : IAroundInterceptor
 	{
 		public object HandleCall(MethodInvocation call)
