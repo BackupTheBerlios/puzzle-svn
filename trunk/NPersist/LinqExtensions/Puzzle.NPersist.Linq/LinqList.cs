@@ -24,6 +24,21 @@ namespace Puzzle.NPersist.Linq
         }
         #endregion
 
+        #region Property IsDirty
+        private bool isDirty;
+        public virtual bool IsDirty
+        {
+            get
+            {
+                return this.isDirty;
+            }
+            set
+            {
+                this.isDirty = value;
+            }
+        }
+        #endregion
+
        #region Property Query
        private LinqQuery<T> query;
        public virtual LinqQuery<T> Query
@@ -42,12 +57,28 @@ namespace Puzzle.NPersist.Linq
 
         protected virtual void EnsureLoaded()
         {
-            if (!IsLoaded)
+            if (IsDirty)
             {
-                NPathQuery npquery = new NPathQuery(query.ToNPath(),typeof(T));
-                innerList.Clear ();
-                query.Context.GetObjectsByNPath (npquery,innerList);
-                IsLoaded = true;
+                if (!IsLoaded)
+                {
+                    NPathQuery npquery = new NPathQuery(query.ToNPath(),typeof(T));
+                    innerList.Clear ();
+                    query.Context.GetObjectsByNPath (npquery,innerList);
+                    IsLoaded = true;
+                }
+                else
+                {
+                    NPathQuery npquery = new NPathQuery(query.ToNPath(),typeof(T));
+                    List<T> oldList = innerList;
+                    IList tmp = query.Context.FilterObjects (innerList,npquery);
+                    List<T> newList = new List<T>();
+                    foreach (T item in tmp)
+                    {
+                        newList.Add (item);
+                    }
+                    this.innerList = newList;
+                }
+                IsDirty = false;
             }
         }
 

@@ -36,14 +36,29 @@ namespace Puzzle.NPersist.Linq
         }
 
         public static ILinqList<T> Where<T>(this ILinqList<T> source, Expression<Func<T, bool>> predicate) 
-        {           
-           source.Query.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
+        {   
+            source.IsDirty = true;
+            
+            
+    
+            string whereClause = LinqToNPathConverter.ConvertToString(predicate);
+
+            if ( source.Query.WhereClause != "" ) 
+            {
+                source.Query.WhereClause += string.Format (" and ({0})",whereClause);
+            }
+            else
+            {
+                source.Query.WhereClause = string.Format ("where ({0})",whereClause);
+            }
 
             return source;
         }
 
         public static ILinqList<T> Select<T, S>(this ILinqList<T> source, Expression<Func<T, S>> selector) 
         {       
+            source.IsDirty = true;
+
             if (selector.Body is NewExpression)
             {
                 LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source.Query);
@@ -59,25 +74,32 @@ namespace Puzzle.NPersist.Linq
   
         public static ILinqList<T> OrderBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source.IsDirty = true;
+
             source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector);
             return source;
         }
 
         public static ILinqList<T> OrderByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
-           
+            source.IsDirty = true;
+
             source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
             return source;
         }
 
         public static ILinqList<T> ThenBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source.IsDirty = true;
+
             source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector);
             return source;
         }
 
         public static ILinqList<T> ThenByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source.IsDirty = true;
+
             source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
             return source;
         }
