@@ -13,5 +13,7 @@ namespace Puzzle.NPersist.Linq
         bool IsLoaded {get;set;}
         bool IsDirty {get;set;}
         LinqQuery<T> Query {get;}        
+
+        ILinqList<T> Clone();
     }
 }

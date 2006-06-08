@@ -37,9 +37,9 @@ namespace Puzzle.NPersist.Linq
 
         public static ILinqList<T> Where<T>(this ILinqList<T> source, Expression<Func<T, bool>> predicate) 
         {   
+            source = source.Clone ();
+
             source.IsDirty = true;
-            
-            
     
             string whereClause = LinqToNPathConverter.ConvertToString(predicate);
 
@@ -57,6 +57,8 @@ namespace Puzzle.NPersist.Linq
 
         public static ILinqList<T> Select<T, S>(this ILinqList<T> source, Expression<Func<T, S>> selector) 
         {       
+            source = source.Clone ();
+
             source.IsDirty = true;
 
             if (selector.Body is NewExpression)
@@ -74,6 +76,8 @@ namespace Puzzle.NPersist.Linq
   
         public static ILinqList<T> OrderBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source = source.Clone ();
+
             source.IsDirty = true;
 
             source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector);
@@ -82,6 +86,8 @@ namespace Puzzle.NPersist.Linq
 
         public static ILinqList<T> OrderByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source = source.Clone ();
+
             source.IsDirty = true;
 
             source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
@@ -90,6 +96,8 @@ namespace Puzzle.NPersist.Linq
 
         public static ILinqList<T> ThenBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source = source.Clone ();
+
             source.IsDirty = true;
 
             source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector);
@@ -98,6 +106,8 @@ namespace Puzzle.NPersist.Linq
 
         public static ILinqList<T> ThenByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
         {
+            source = source.Clone ();
+
             source.IsDirty = true;
 
             source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";

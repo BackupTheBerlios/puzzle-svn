@@ -6,7 +6,7 @@ using Puzzle.NPersist.Framework;
 
 namespace Puzzle.NPersist.Linq
 {
-    public class LinqQuery<T>
+    public class LinqQuery<T> 
     {
         #region Property Context
         private IContext context;
@@ -78,5 +78,16 @@ namespace Puzzle.NPersist.Linq
             }
         }
         #endregion
+
+        public LinqQuery<T> Clone()
+        {
+            LinqQuery<T> clone = new LinqQuery<T>();
+            clone.Context = this.Context;            
+            clone.OrderByClause = this.OrderByClause;
+            clone.SelectClause = this.SelectClause;
+            clone.WhereClause = this.WhereClause;
+
+            return clone;
+        }
     }
 }

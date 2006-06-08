@@ -176,5 +176,17 @@ namespace Puzzle.NPersist.Linq
            EnsureLoaded();
            return innerList.GetEnumerator ();
        }
+
+       public ILinqList<T> Clone()
+       {
+           LinqList<T> clone = new LinqList<T>();
+           
+           clone.innerList.AddRange (this.innerList);
+           clone.IsDirty = this.IsDirty;
+           clone.IsLoaded = this.IsLoaded;
+           clone.Query = this.Query.Clone();
+
+           return clone;
+       }
    }
 }
