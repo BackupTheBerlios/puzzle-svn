@@ -4,10 +4,11 @@ using System.Text;
 using System.Query;
 using System.Collections;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NPersist.Framework;
 
 namespace Puzzle.NPersist.Linq
 {
-    public class LinqList<T> :  ILinqList<T>
+    public class LinqList<T> :  ILinqList<T> , ILinqList
     {
        #region Property IsLoaded
         private bool isLoaded;
@@ -40,7 +41,7 @@ namespace Puzzle.NPersist.Linq
         #endregion
 
        #region Property Query
-       private LinqQuery<T> query;
+       private LinqQuery<T> query = new LinqQuery<T> ();
        public virtual LinqQuery<T> Query
        {
            get
@@ -188,5 +189,14 @@ namespace Puzzle.NPersist.Linq
 
            return clone;
        }
+
+       #region ILinqList Members
+
+       public void AttachContext(IContext context)
+       {
+           this.Query.Context = context;
+       }
+
+       #endregion
    }
 }

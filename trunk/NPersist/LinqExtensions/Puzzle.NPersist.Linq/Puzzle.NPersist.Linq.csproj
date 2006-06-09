@@ -45,6 +45,7 @@
     <Reference Include="System.Xml.XLinq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContext.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IContextExtensions.cs" />
     <Compile Include="ILinqList.cs" />
