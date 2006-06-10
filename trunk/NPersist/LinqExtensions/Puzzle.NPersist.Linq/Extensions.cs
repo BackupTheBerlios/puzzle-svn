@@ -17,25 +17,25 @@ namespace Puzzle.NPersist.Linq
 
     public static class Sequence
     {
-        public static ILinqList<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate) 
+        public static ITable<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate) 
         {           
            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
           
-            LinqList<T> list = new LinqList<T>();
+            Table<T> list = new Table<T>();
 
             return list;
         }
 
-        public static ILinqList<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate) 
+        public static ITable<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate) 
         {           
            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
 
-            LinqList<T> list = new LinqList<T>();
+            Table<T> list = new Table<T>();
 
             return list;
         }
 
-        public static ILinqList<T> Where<T>(this ILinqList<T> source, Expression<Func<T, bool>> predicate) 
+        public static ITable<T> Where<T>(this ITable<T> source, Expression<Func<T, bool>> predicate) 
         {   
             source = source.Clone ();
 
@@ -55,7 +55,7 @@ namespace Puzzle.NPersist.Linq
             return source;
         }
 
-        public static ILinqList<T> Select<T, S>(this ILinqList<T> source, Expression<Func<T, S>> selector) 
+        public static ITable<T> Select<T, S>(this ITable<T> source, Expression<Func<T, S>> selector) 
         {       
             source = source.Clone ();
 
@@ -74,7 +74,7 @@ namespace Puzzle.NPersist.Linq
             return source;
         }  
   
-        public static ILinqList<T> OrderBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> OrderBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
         {
             source = source.Clone ();
 
@@ -84,7 +84,7 @@ namespace Puzzle.NPersist.Linq
             return source;
         }
 
-        public static ILinqList<T> OrderByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> OrderByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
         {
             source = source.Clone ();
 
@@ -94,7 +94,7 @@ namespace Puzzle.NPersist.Linq
             return source;
         }
 
-        public static ILinqList<T> ThenBy<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> ThenBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
         {
             source = source.Clone ();
 
@@ -104,7 +104,7 @@ namespace Puzzle.NPersist.Linq
             return source;
         }
 
-        public static ILinqList<T> ThenByDescending<T, K>(this ILinqList<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> ThenByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
         {
             source = source.Clone ();
 

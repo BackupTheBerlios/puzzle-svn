@@ -482,6 +482,7 @@
     <Compile Include="Interfaces\IValueHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IPropertyChangedHelper.cs" />
     <Compile Include="IPersistenceService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -815,6 +816,7 @@
     <Compile Include="Proxy\Mixins\OriginalValueHelperMixin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\Mixins\PropertyChangedMixin.cs" />
     <Compile Include="Proxy\Mixins\UpdatedPropertyTrackerMixin.cs">
       <SubType>Code</SubType>
     </Compile>

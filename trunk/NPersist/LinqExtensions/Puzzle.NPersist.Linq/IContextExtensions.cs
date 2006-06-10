@@ -7,10 +7,10 @@ namespace Puzzle.NPersist.Linq
 {
     public static class IContextExtensions
     {
-        public static ILinqList<T> Repository<T> (this IContext context)
+        public static ITable<T> Repository<T> (this IContext context)
         {
-            LinqList<T> list = new LinqList<T>();
-            ILinqList ilinqList = (ILinqList)list;
+            Table<T> list = new Table<T>();
+            ITable ilinqList = (ITable)list;
             ilinqList.AttachContext (context);
 
             return list;

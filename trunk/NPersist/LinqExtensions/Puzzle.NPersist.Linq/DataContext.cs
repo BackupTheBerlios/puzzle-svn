@@ -27,11 +27,11 @@ namespace Puzzle.NPersist.Linq
             FieldInfo[] fields = this.GetType ().GetFields ();
             foreach(FieldInfo field in fields)
             {
-                if (field.FieldType.Name.StartsWith ("LinqList"))
+                if (field.FieldType.Name.StartsWith ("Table"))
                 {
                     Type genericType = field.FieldType.GetGenericArguments ()[0];
 
-                    ILinqList instance = (ILinqList)Activator.CreateInstance(field.FieldType);
+                    ITable instance = (ITable)Activator.CreateInstance(field.FieldType);
                     instance.AttachContext (this.context);
 
                     field.SetValue (this,instance);                    

@@ -7,18 +7,18 @@ using Puzzle.NPersist.Framework;
 
 namespace Puzzle.NPersist.Linq
 {
-    public interface ILinqList
+    public interface ITable
     {
         void AttachContext(IContext context);
 
     }
     
-    public interface ILinqList<T> : IList<T> 
+    public interface ITable<T> : IList<T> 
     {
         bool IsLoaded {get;set;}
         bool IsDirty {get;set;}
         LinqQuery<T> Query {get;}        
 
-        ILinqList<T> Clone();
+        ITable<T> Clone();
     }
 }

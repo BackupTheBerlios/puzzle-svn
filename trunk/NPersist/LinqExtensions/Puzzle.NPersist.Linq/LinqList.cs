@@ -8,7 +8,7 @@ using Puzzle.NPersist.Framework;
 
 namespace Puzzle.NPersist.Linq
 {
-    public class LinqList<T> :  ILinqList<T> , ILinqList
+    public class Table<T> :  ITable<T> , ITable
     {
        #region Property IsLoaded
         private bool isLoaded;
@@ -178,9 +178,9 @@ namespace Puzzle.NPersist.Linq
            return innerList.GetEnumerator ();
        }
 
-       public ILinqList<T> Clone()
+       public ITable<T> Clone()
        {
-           LinqList<T> clone = new LinqList<T>();
+           Table<T> clone = new Table<T>();
            
            clone.innerList.AddRange (this.innerList);
            clone.IsDirty = this.IsDirty;
