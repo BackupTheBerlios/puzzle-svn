@@ -6,6 +6,7 @@ using System.Expressions;
 using Puzzle.NPersist.Framework;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPath.Framework.CodeDom;
+using System.ComponentModel;
 
 namespace Puzzle.NPersist.Linq
 {
@@ -17,102 +18,108 @@ namespace Puzzle.NPersist.Linq
 
     public static class Sequence
     {
-        public static ITable<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate) 
-        {           
-           //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
-          
-            Table<T> list = new Table<T>();
-
-            return list;
-        }
-
-        public static ITable<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate) 
-        {           
-           //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
+        public static ITable<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate)
+        {
+            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
 
             Table<T> list = new Table<T>();
 
             return list;
         }
 
-        public static ITable<T> Where<T>(this ITable<T> source, Expression<Func<T, bool>> predicate) 
-        {   
-            source = source.Clone ();
+        public static ITable<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate)
+        {
+            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
+
+            Table<T> list = new Table<T>();
+
+            return list;
+        }
+
+        public static ITable<T> Where<T>(this ITable<T> source, Expression<Func<T, bool>> predicate)
+        {
+            source = source.Clone();
 
             source.IsDirty = true;
-    
+
             string whereClause = LinqToNPathConverter.ConvertToString(predicate);
 
-            if ( source.Query.WhereClause != "" ) 
+            if (source.Query.WhereClause != "")
             {
-                source.Query.WhereClause += string.Format (" and ({0})",whereClause);
+                source.Query.WhereClause += string.Format(" and ({0})", whereClause);
             }
             else
             {
-                source.Query.WhereClause = string.Format ("where ({0})",whereClause);
+                source.Query.WhereClause = string.Format("where ({0})", whereClause);
             }
 
             return source;
         }
 
-        public static ITable<T> Select<T, S>(this ITable<T> source, Expression<Func<T, S>> selector) 
-        {       
-            source = source.Clone ();
+        public static ITable<T> Select<T, S>(this ITable<T> source, Expression<Func<T, S>> selector)
+        {
+            source = source.Clone();
 
             source.IsDirty = true;
 
             if (selector.Body is NewExpression)
             {
-                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body,source.Query);
+                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body, source.Query);
             }
 
             if (selector.Body is MemberInitExpression)
             {
-                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body,source.Query);
+                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body, source.Query);
             }
 
             return source;
-        }  
-  
-        public static ITable<T> OrderBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
+        }
+
+        public static ITable<T> OrderBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector)
         {
-            source = source.Clone ();
+            source = source.Clone();
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector);
+            source.Query.OrderByClause = "order by " + LinqToNPathConverter.ConvertToString(keySelector);
             return source;
         }
 
-        public static ITable<T> OrderByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> OrderByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector)
         {
-            source = source.Clone ();
+            source = source.Clone();
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause ="order by " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
+            source.Query.OrderByClause = "order by " + LinqToNPathConverter.ConvertToString(keySelector) + " desc";
             return source;
         }
 
-        public static ITable<T> ThenBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> ThenBy<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector)
         {
-            source = source.Clone ();
+            source = source.Clone();
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector);
+            source.Query.OrderByClause += ", " + LinqToNPathConverter.ConvertToString(keySelector);
             return source;
         }
 
-        public static ITable<T> ThenByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector) 
+        public static ITable<T> ThenByDescending<T, K>(this ITable<T> source, Expression<Func<T, K>> keySelector)
         {
-            source = source.Clone ();
+            source = source.Clone();
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause +=", " + LinqToNPathConverter.ConvertToString (keySelector) + " desc";
+            source.Query.OrderByClause += ", " + LinqToNPathConverter.ConvertToString(keySelector) + " desc";
             return source;
         }
-    }    
+
+
+        public static BindingList<T> ToBindingList<T>(this ITable<T> source)
+        {
+            return new DataBindingList<T>(source,source.Query.Context);           
+        }
+    }
 }
 

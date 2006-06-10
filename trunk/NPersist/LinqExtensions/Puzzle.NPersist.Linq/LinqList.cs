@@ -25,8 +25,8 @@ namespace Puzzle.NPersist.Linq
         }
         #endregion
 
-        #region Property IsDirty
-        private bool isDirty;
+       #region Property IsDirty
+        private bool isDirty = true;
         public virtual bool IsDirty
         {
             get
@@ -65,7 +65,7 @@ namespace Puzzle.NPersist.Linq
                     NPathQuery npquery = new NPathQuery(query.ToNPath(),typeof(T));
                     innerList.Clear ();
                     query.Context.GetObjectsByNPath (npquery,innerList);
-                    IsLoaded = true;
+                //    IsLoaded = true;
                 }
                 else
                 {

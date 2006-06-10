@@ -12,10 +12,11 @@ using System;
 using System.Collections;
 using Puzzle.NPersist.Framework.Interfaces;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Puzzle.NPersist.Framework.BaseClasses
 {
-	class InterceptableGenericsList<T> : IList<T> , IInterceptableList
+	class InterceptableGenericsList<T> : IList<T> , IInterceptableList , IBindingList , ICancelAddNew
 	{
         private List<T> list = new List<T>();
 
@@ -213,6 +214,141 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         {
             get { return interceptor.MuteNotify; }
 			set { interceptor.MuteNotify = value; }
+        }
+
+        #endregion
+
+        public IContext Context
+        {
+            get
+            {
+                return this.interceptor.Interceptable.GetInterceptor ().Context;
+            }
+        }
+
+        #region IBindingList Members
+
+        private void OnListChanged(ListChangedType type, int index)
+        {
+              if (this.ListChanged != null)
+              {
+                    this.ListChanged(this, new ListChangedEventArgs(type, index));
+              }
+        }
+
+        public void AddIndex(PropertyDescriptor property)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public object AddNew()
+        {
+           T entity = this.Context.CreateObject<T>();
+            this.Add (entity);
+            return entity;
+        }
+
+        public bool AllowEdit
+        {
+            get 
+            { 
+                return true; 
+            }
+        }
+
+        public bool AllowNew
+        {
+            get 
+            { 
+                return true; 
+            }
+        }
+
+        public bool AllowRemove
+        {
+            get 
+            { 
+                return true; 
+            }
+        }
+
+        public void ApplySort(PropertyDescriptor property, ListSortDirection direction)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public int Find(PropertyDescriptor property, object key)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public bool IsSorted
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public event ListChangedEventHandler ListChanged;
+
+        public void RemoveIndex(PropertyDescriptor property)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public void RemoveSort()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public ListSortDirection SortDirection
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public PropertyDescriptor SortProperty
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public bool SupportsChangeNotification
+        {
+              get
+              {
+                    return false;
+              }
+        }
+
+        public bool SupportsSearching
+        {
+              get
+              {
+                    return false;
+              }
+        }
+
+        public bool SupportsSorting
+        {
+            get
+            {
+                return false;
+            }
+
+        }
+
+        #endregion
+
+        #region ICancelAddNew Members
+
+        public void CancelNew(int itemIndex)
+        {
+            T entity = this[itemIndex];
+            this.RemoveAt (itemIndex);
+
+            this.Context.DeleteObject (entity);
+        }
+
+        public void EndNew(int itemIndex)
+        {
+            
         }
 
         #endregion
