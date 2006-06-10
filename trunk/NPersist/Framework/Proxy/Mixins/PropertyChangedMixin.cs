@@ -17,7 +17,7 @@ using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NPersist.Framework.Proxy.Mixins
 {
-    public class PropertyChangedHelperMixin : IPropertyChangedHelper , IProxyAware
+    public class PropertyChangedHelperMixin : IPropertyChangedHelper , IProxyAware 
     {
         private IAopProxy target;
 

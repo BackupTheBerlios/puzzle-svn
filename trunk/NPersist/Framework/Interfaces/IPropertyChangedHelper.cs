@@ -12,10 +12,10 @@ using System.Collections;
 using System.ComponentModel;
 namespace Puzzle.NPersist.Framework.Interfaces
 {
-	public interface IPropertyChangedHelper : INotifyPropertyChanged
+	public interface IPropertyChangedHelper : INotifyPropertyChanged 
 	{
-         event System.ComponentModel.PropertyChangedEventHandler PropertyChanging;
-         //event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        event System.ComponentModel.PropertyChangedEventHandler PropertyChanging;
+         
 
         void OnPropertyChanging(string propertyName);
         void OnPropertyChanged(string propertyName);
