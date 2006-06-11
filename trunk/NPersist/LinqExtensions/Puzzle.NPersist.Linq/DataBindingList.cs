@@ -7,10 +7,10 @@ using System.Reflection;
 
 namespace Puzzle.NPersist.Linq
 {
-    public class DataBindingList<T> : BindingList<T>
+    public class EntityBindingList<T> : BindingList<T>
     {
         private IContext context;
-        public DataBindingList(IList<T> fromItems, IContext context)
+        public EntityBindingList(IList<T> fromItems, IContext context)
         {
             FieldInfo field = this.GetType ().BaseType.GetField ("raiseItemChangedEvents",BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
             field.SetValue (this,true);
@@ -50,7 +50,5 @@ namespace Puzzle.NPersist.Linq
                 return false;
             }
         }
-
-
     }
 }

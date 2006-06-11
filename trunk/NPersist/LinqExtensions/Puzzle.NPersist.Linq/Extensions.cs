@@ -118,7 +118,7 @@ namespace Puzzle.NPersist.Linq
 
         public static BindingList<T> ToBindingList<T>(this ITable<T> source)
         {
-            return new DataBindingList<T>(source,source.Query.Context);           
+            return new EntityBindingList<T>(source,source.Query.Context);           
         }
     }
 }
