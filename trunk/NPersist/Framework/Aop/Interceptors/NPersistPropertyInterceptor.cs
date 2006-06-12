@@ -51,17 +51,19 @@ namespace Puzzle.NPersist.Framework.Aop
 			object value = ((InterceptedParameter)call.Parameters[0]).Value;
 			string propertyName = call.Method.Name.Substring(4);
 			object refValue = value;
-
+#if NET2
             IPropertyChangedHelper propertyChangedObj = (IPropertyChangedHelper)proxy;
             propertyChangedObj.OnPropertyChanging (propertyName);
+#endif
 
 			Puzzle.NPersist.Framework.Interfaces.IInterceptor interceptor = proxy.GetInterceptor();
 			if (interceptor != null) { interceptor.NotifyPropertySet(call.Target, propertyName, ref refValue, ref cancel); }
 			if (cancel) { return null; }
 			((InterceptedParameter)call.Parameters[0]).Value = refValue;
 			call.Proceed();		
-
+#if NET2
             propertyChangedObj.OnPropertyChanged (propertyName);
+#endif
 			return null;
 		}
 

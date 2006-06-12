@@ -704,11 +704,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Interfaces\IPropertyChangedHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Interfaces\IProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1310,11 +1305,6 @@
                 />
                 <File
                     RelPath = "Proxy\Mixins\OriginalValueHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\PropertyChangedMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
