@@ -27,18 +27,15 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public virtual void Insert(int index, T item)
         {
-            interceptor.BeforeCall() ;
-			list.Insert (index,item);
-			interceptor.AfterCall() ;
-            this.OnListChanged (ListChangedType.ItemAdded , index);
+            ((IList)this).Insert (index,item);            
         }
 
         public virtual void RemoveAt(int index)
         {
             interceptor.BeforeCall() ;
-            list.RemoveAt (index);
-            interceptor.AfterCall() ;
-            this.OnListChanged (ListChangedType.ItemDeleted ,index);
+			this.list.RemoveAt (index);
+			interceptor.AfterCall() ;
+            OnListChanged(ListChangedType.ItemDeleted,index);
         }
 
         public virtual T this[int index]
@@ -49,25 +46,18 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             }
             set
             {
-                list[index] = value;
-                this.OnListChanged (ListChangedType.ItemChanged ,index);
+                ((IList)this)[index]=value;
             }
         }
 
         public virtual void Add(T item)
         {
-            interceptor.BeforeCall() ;
-            list.Add (item);
-            interceptor.AfterCall() ;
-            this.OnListChanged (ListChangedType.ItemAdded ,this.Count-1);
+            ((IList)this).Add (item);
         }
 
         public virtual void Clear()
         {
-            interceptor.BeforeCall() ;
-			list.Clear ();
-			interceptor.AfterCall() ;
-            this.OnListChanged (ListChangedType.Reset ,0);
+            ((IList)this).Clear ();
         }
 
         public virtual bool Contains(T item)
@@ -93,16 +83,9 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         public virtual bool Remove(T item)
         {
          
-            int index = list.IndexOf (item);
-            if (index == -1)
-                return false;
-   
-            interceptor.BeforeCall() ;
-            list.RemoveAt (index);
-            interceptor.AfterCall() ;           
-            this.OnListChanged (ListChangedType.ItemDeleted ,index);
-
-            return true;
+            int oldCount = this.Count;
+            ((IList)this).Remove(item);
+            return oldCount != this.Count;
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
