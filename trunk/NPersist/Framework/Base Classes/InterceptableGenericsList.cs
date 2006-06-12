@@ -30,6 +30,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.Insert (index,item);
 			interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.ItemAdded , index);
         }
 
         public virtual void RemoveAt(int index)
@@ -37,6 +38,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
             list.RemoveAt (index);
             interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.ItemDeleted ,index);
         }
 
         public virtual T this[int index]
@@ -48,6 +50,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             set
             {
                 list[index] = value;
+                this.OnListChanged (ListChangedType.ItemChanged ,index);
             }
         }
 
@@ -56,6 +59,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
             list.Add (item);
             interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.ItemAdded ,this.Count-1);
         }
 
         public virtual void Clear()
@@ -63,6 +67,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.Clear ();
 			interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.Reset ,0);
         }
 
         public virtual bool Contains(T item)
@@ -87,10 +92,17 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public virtual bool Remove(T item)
         {
+         
+            int index = list.IndexOf (item);
+            if (index == -1)
+                return false;
+   
             interceptor.BeforeCall() ;
-            bool res = list.Remove (item);
-            interceptor.AfterCall() ;
-            return res;
+            list.RemoveAt (index);
+            interceptor.AfterCall() ;           
+            this.OnListChanged (ListChangedType.ItemDeleted ,index);
+
+            return true;
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -110,13 +122,25 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.Add ((T)value);
 			interceptor.AfterCall() ;
-			
-            return this.Count-1;
+            int index = this.Count-1;
+			this.OnListChanged (ListChangedType.ItemAdded ,index);
+            return index;
         }
 
         bool IList.Contains(object value)
         {
-            return list.Contains ((T)value);
+            if (value == null)
+                return false;
+
+            if (typeof(T).IsAssignableFrom (value.GetType()))
+            {
+                //TODO: make it return if datatype is mismatch
+                return list.Contains ((T)value);           
+            }
+            else
+            {
+                return false;
+            }
         }
 
         int IList.IndexOf(object value)
@@ -129,6 +153,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.Insert (index,(T)value);
 			interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.ItemAdded ,index);
         }
 
         bool IList.IsFixedSize
@@ -141,9 +166,16 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         void IList.Remove(object value)
         {
+            int index = list.IndexOf ((T)value);   
+
+            //the item does not exist in the list
+            if (index == -1)
+                return;
+
             interceptor.BeforeCall() ;
-			list.Remove ((T)value);
+			list.RemoveAt (index);
 			interceptor.AfterCall() ;
+            this.OnListChanged (ListChangedType.ItemDeleted ,index);
         }
 
         object IList.this[int index]
@@ -155,6 +187,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             set
             {
                 list[index]=(T)value;
+                this.OnListChanged (ListChangedType.ItemChanged ,index);
             }
         }
 

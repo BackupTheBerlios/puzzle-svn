@@ -28,14 +28,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Puzzle.NPath.Framework.NET2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Framework\bin\Debug\Puzzle.NPath.Framework.NET2.dll</HintPath>
-    </Reference>
-    <Reference Include="Puzzle.NPersist.Framework.NET2, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Framework\bin\Debug\Puzzle.NPersist.Framework.NET2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -56,6 +48,16 @@
     <Compile Include="LoadSpan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NPath\Framework\Puzzle.NPath.Framework.NET 2.0.csproj">
+      <Project>{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}</Project>
+      <Name>Puzzle.NPath.Framework.NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\Puzzle.NPersist.Framework.NET 2.0.csproj">
+      <Project>{E6C03D2A-D150-4473-9439-D300746A1390}</Project>
+      <Name>Puzzle.NPersist.Framework.NET 2.0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(ProgramFiles)\LINQ Preview\Misc\Linq.targets" />
 </Project>
