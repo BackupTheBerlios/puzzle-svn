@@ -16,7 +16,7 @@ using System.ComponentModel;
 
 namespace Puzzle.NPersist.Framework.BaseClasses
 {
-	class InterceptableGenericsList<T> : IList<T> , IInterceptableList , IBindingList , ICancelAddNew
+    class InterceptableGenericsList<T> : IList<T> , IInterceptableList , IBindingList , ICancelAddNew , IRaiseItemChangedEvents
 	{
         private List<T> list = new List<T>();
 
@@ -32,9 +32,11 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public virtual void RemoveAt(int index)
         {
+            T item = list[index];
             interceptor.BeforeCall() ;
 			this.list.RemoveAt (index);
 			interceptor.AfterCall() ;
+            UnhookPropertyChanged(item);
             OnListChanged(ListChangedType.ItemDeleted,index);
         }
 
@@ -106,6 +108,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			list.Add ((T)value);
 			interceptor.AfterCall() ;
             int index = this.Count-1;
+            HookPropertyChanged((T)value);
 			this.OnListChanged (ListChangedType.ItemAdded ,index);
             return index;
         }
@@ -136,6 +139,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.Insert (index,(T)value);
 			interceptor.AfterCall() ;
+            HookPropertyChanged((T)value);
             this.OnListChanged (ListChangedType.ItemAdded ,index);
         }
 
@@ -158,6 +162,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             interceptor.BeforeCall() ;
 			list.RemoveAt (index);
 			interceptor.AfterCall() ;
+            UnhookPropertyChanged((T)value);
             this.OnListChanged (ListChangedType.ItemDeleted ,index);
         }
 
@@ -169,7 +174,10 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             }
             set
             {
+                //TODO: unhook events on old item?
+
                 list[index]=(T)value;
+                HookPropertyChanged((T)value);
                 this.OnListChanged (ListChangedType.ItemChanged ,index);
             }
         }
@@ -249,6 +257,14 @@ namespace Puzzle.NPersist.Framework.BaseClasses
               if (this.ListChanged != null)
               {
                     this.ListChanged(this, new ListChangedEventArgs(type, index));
+              }
+        }
+
+        private void OnListChanged(ListChangedEventArgs args)
+        {
+              if (this.ListChanged != null)
+              {
+                    this.ListChanged(this, args);
               }
         }
 
@@ -350,7 +366,88 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         }
 
+        protected virtual void HookPropertyChanged(T item)
+        {
+              INotifyPropertyChanged notificationItem = item as INotifyPropertyChanged;
+              if (notificationItem != null)
+              {
+                    if (this.propertyChangedEventHandler == null)
+                    {
+                          this.propertyChangedEventHandler = new PropertyChangedEventHandler(this.Child_PropertyChanged);
+                    }
+                    notificationItem.PropertyChanged += this.propertyChangedEventHandler;
+              }
+        }
+
+        private int lastChangeIndex = -1;
+        private void Child_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+              T item;
+
+              if (((sender == null) || (e == null)) || string.IsNullOrEmpty(e.PropertyName))
+              {
+                    this.ResetBindings();
+                    return;
+              }
+              try
+              {
+                    item = (T) sender;
+              }
+              catch (InvalidCastException)
+              {
+                    this.ResetBindings();
+                    return;
+              }
+              int index = this.lastChangeIndex;
+              if ((index >= 0) && (index < Count))
+              {
+                    T local2 = this[index];
+                    if (local2.Equals(item))
+                    {
+                          goto Label_007B;
+                    }
+              }
+              index = IndexOf(item);
+              this.lastChangeIndex = index;
+        Label_007B:
+              if (index == -1)
+              {
+                    this.UnhookPropertyChanged(item);
+                    this.ResetBindings();
+              }
+              else
+              {
+                    if (this.itemTypeProperties == null)
+                    {
+                          this.itemTypeProperties = TypeDescriptor.GetProperties(typeof(T));
+                    }
+                    PropertyDescriptor changedProperty = this.itemTypeProperties.Find(e.PropertyName, true);
+                    ListChangedEventArgs changeArgs = new ListChangedEventArgs(ListChangedType.ItemChanged, index, changedProperty);
+                    this.OnListChanged(changeArgs);
+              }
+        }
+
+        private void ResetBindings()
+        {
+            OnListChanged(ListChangedType.Reset,-1);
+        }
+
+        protected virtual void UnhookPropertyChanged(T item)
+        {
+              INotifyPropertyChanged notificationItem = item as INotifyPropertyChanged;
+              if ((notificationItem != null) && (this.propertyChangedEventHandler != null))
+              {
+                    notificationItem.PropertyChanged -= this.propertyChangedEventHandler;
+              }
+        }
+
+ 
+
+
+
         #endregion
+
+
 
         #region ICancelAddNew Members
 
@@ -365,6 +462,18 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         public void EndNew(int itemIndex)
         {
             
+        }
+
+        #endregion
+
+        #region IRaiseItemChangedEvents Members
+
+        private PropertyDescriptorCollection itemTypeProperties;
+        private PropertyChangedEventHandler propertyChangedEventHandler;
+ 
+        public bool RaisesItemChangedEvents
+        {
+            get { return true; }
         }
 
         #endregion
