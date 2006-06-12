@@ -275,8 +275,10 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public object AddNew()
         {
-           T entity = this.Context.CreateObject<T>();
+            T entity = this.Context.CreateObject<T>();
             this.Add (entity);
+            this.addNewPos = (entity != null) ? IndexOf(entity) : -1;
+
             return entity;
         }
 
@@ -451,13 +453,31 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         #region ICancelAddNew Members
 
+        private int addNewPos=-1;
         public void CancelNew(int itemIndex)
         {
-            T entity = this[itemIndex];
-            this.RemoveAt (itemIndex);
-
-            this.Context.DeleteObject (entity);
+             T entity = list[itemIndex];
+             if ((this.addNewPos >= 0) && (this.addNewPos == itemIndex))
+              {                    
+                    this.RemoveItem(this.addNewPos);                 
+                    this.addNewPos = -1;
+                    this.Context.DeleteObject (entity);
+              }
         }
+
+        protected virtual void RemoveItem(int index)
+        {
+              if (!this.AllowRemove && ((this.addNewPos < 0) || (this.addNewPos != index)))
+              {
+                    throw new NotSupportedException();
+              }
+              this.EndNew(this.addNewPos);            
+              this.UnhookPropertyChanged(this[index]);              
+              this.RemoveAt (index);
+              this.OnListChanged(ListChangedType.ItemDeleted, index);
+        }
+
+
 
         public void EndNew(int itemIndex)
         {
