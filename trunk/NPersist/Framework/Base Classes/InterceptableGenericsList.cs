@@ -481,7 +481,10 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public void EndNew(int itemIndex)
         {
-            
+             if ((this.addNewPos >= 0) && (this.addNewPos == itemIndex))
+              {
+                    this.addNewPos = -1;
+              }
         }
 
         #endregion
