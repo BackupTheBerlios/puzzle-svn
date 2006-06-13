@@ -19,6 +19,7 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// Attribute that can be applied to interceptor methods in a typed aspect.
     /// Interceptor methods must match delegate signatures of either <c>AroundDelegate</c>, <c>BeforeDelegate</c> or <c>AfterDelegate</c> 
+    /// <seealso cref="InterceptorAttribute"/>
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
@@ -141,6 +142,10 @@ namespace Puzzle.NAspect.Framework.Aop
     /// }
     /// </code>
     /// </example>
+    /// <seealso cref="InterceptorAttribute"/>
+    /// <seealso cref="MixinAttribute"/>
+    /// <seealso cref="AspectTargetAttribute"/>
+    /// <seealso cref="MixinAttribute"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class MixinAttribute : Attribute
@@ -199,11 +204,24 @@ namespace Puzzle.NAspect.Framework.Aop
     /// public class MyAspect : ITypedAspect ...
     /// </code>
     /// </example>
+    /// <seealso cref="InterceptorAttribute"/>
+    /// <seealso cref="MixinAttribute"/>
+    /// <seealso cref="AspectTargetAttribute"/>
+    /// <seealso cref="MixinAttribute"/>
     /// </summary>
     public class AspectTargetAttribute : Attribute
     {
         #region Property TargetAttribute
         private Type targetAttribute;
+        /// <summary>
+        /// Every type decorated with an attribute of this type will get the current aspect applied.
+        /// <example>
+        /// <code >
+        /// [AspectTarget(TargetAttribute=typeof(SomeAttribute)] //every type decorated with SomeAttribute will get this aspect applied to it
+        /// public class MyAspect : ITypedAspect ...
+        /// </code>
+        /// </example>
+        /// </summary>
         public virtual Type TargetAttribute
         {
             get
@@ -219,6 +237,15 @@ namespace Puzzle.NAspect.Framework.Aop
 
         #region Property TargetSignature
         private string targetSignature;
+        /// <summary>
+        /// Every type with a signature that matches this pattern will get the current aspect applied.
+        /// <example>
+        /// <code >
+        /// [AspectTarget(TargetSignature="*SomeClass*")] //every type whose name matches *SomeClass* will get the current aspect applied
+        /// public class MyAspect : ITypedAspect ...
+        /// </code>
+        /// </example>
+        /// </summary>
         public virtual string TargetSignature
         {
             get
@@ -234,6 +261,16 @@ namespace Puzzle.NAspect.Framework.Aop
 
         #region Property TargetType
         private Type targetType;
+        /// <summary>
+        /// Assigns a single type that should get this aspect applied to it.
+        /// <example>
+        /// <code>
+        /// [AspectTarget(TargetType=typeof(SomeClass)] //SomeClass will get the MyAspect applied to it
+        /// [Mixin(typeof(MyMixin))] 
+        /// public class MyAspect : ITypedAspect ...
+        /// </code>
+        /// </example> 
+        /// </summary>
         public virtual Type TargetType
         {
             get

@@ -15,6 +15,11 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Cache used by the emitter to store various lookup values.
+    /// There is actually not a single person alive that knows exactly what these lists hold.
+    /// It has been long forgotten by the ancients.
+    /// </summary>
 	public class MethodCache
 	{
         //contains an arraylist of affected mixins for a proxytype

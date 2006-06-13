@@ -13,6 +13,10 @@ using System.Collections;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// For internal use only.
+    /// This class loops through all aspects and tries to match them for a given type.
+    /// </summary>
 	public class AspectMatcher
 	{
 		public AspectMatcher()

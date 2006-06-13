@@ -19,6 +19,12 @@ namespace Puzzle.NAspect.Framework
     public class AfterMethodInvocation
     {
         private MethodInvocation invocation;
+
+        /// <summary>
+        /// Representation of an "after" method call.
+        /// Meaning this will fire after the base implementation is invoked.
+        /// </summary>
+        /// <param name="invocation">MethodInvocation that should be wrapped</param>
         [DebuggerHidden]
         [DebuggerStepThrough]
         public AfterMethodInvocation(MethodInvocation invocation)
@@ -26,6 +32,9 @@ namespace Puzzle.NAspect.Framework
             this.invocation = invocation;
         }
 
+        /// <summary>
+        /// Untyped list of InterceptedParameter instances.
+        /// </summary>
         public IList Parameters
         {
             get
@@ -34,6 +43,9 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        /// <summary>
+        /// The intercepted method. (in the dynamic proxy)
+        /// </summary>
         public MethodBase Method
         {
             get
@@ -42,6 +54,9 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        /// <summary>
+        /// The object on which the method was invoked.
+        /// </summary>
         public IAopProxy Target
         {
             get
@@ -50,6 +65,9 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        /// <summary>
+        /// The return type of the method (if available, ctors do not have a return type).
+        /// </summary>
         public Type ReturnType
         {
             get
@@ -58,6 +76,9 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        /// <summary>
+        /// Returns the absolute signature of the call.
+        /// </summary>
         public string Signature
         {
             get
@@ -66,6 +87,10 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        /// <summary>
+        /// Returns the value signature of the call.
+        /// parameter values are represented with ".ToString()"
+        /// </summary>
         public string ValueSignature
         {
             get

@@ -17,19 +17,53 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Representation of a method call.
+    /// </summary>
     [DebuggerStepThrough()]
 	public class MethodInvocation
 	{
+        /// <summary>
+        /// The object on which the method was invoked.
+        /// </summary>
 		public readonly IAopProxy Target;
+        /// <summary>
+        /// The intercepted method. (in the dynamic proxy)
+        /// </summary>
 		public readonly MethodBase Method;
+        /// <summary>
+        /// Untyped list of <c>InterceptedParameters</c>.
+        /// </summary>
 		public readonly IList Parameters;
+        /// <summary>
+        /// The return type of the method (if available, ctors do not have a return type).
+        /// </summary>
 		public readonly Type ReturnType;
+        /// <summary>
+        /// The intercepted methods base implementation. (in the base type)
+        /// </summary>
 		private readonly MethodInfo EndMethod;
+        /// <summary>
+        /// Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c>
+        /// </summary>
 		private IList Interceptors;
+
+        /// <summary>
+        /// current interception chain step. (current interceptor index)
+        /// </summary>
 		private int Step = 0;
 
 		#region constructor
 
+        /// <summary>
+        /// Ctor for MethodInvocation
+        /// </summary>
+        /// <param name="target">The object on which the method was invoked.</param>
+        /// <param name="method">The intercepted method. (in the dynamic proxy)</param>
+        /// <param name="endMethod">The intercepted methods base implementation. (in the base type)</param>
+        /// <param name="parameters">Untyped list of <c>InterceptedParameters</c>.</param>
+        /// <param name="returnType">The return type of the method (if available, ctors do not have a return type).</param>
+        /// <param name="interceptors">Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c></param>
         [DebuggerStepThrough()]
 		public MethodInvocation(IAopProxy target, MethodBase method, MethodInfo endMethod, IList parameters, Type returnType, IList interceptors)
 		{
@@ -45,6 +79,11 @@ namespace Puzzle.NAspect.Framework
 
 		#region Proceed
 
+
+        /// <summary>
+        /// Executes the next step of the interception chain.
+        /// </summary>
+        /// <returns>The result of the next interceptor or base implementation</returns>
         [DebuggerStepThrough ()]
         [DebuggerHidden ()]
 		public object Proceed()
@@ -161,7 +200,7 @@ namespace Puzzle.NAspect.Framework
 
         [DebuggerStepThrough()]
         [DebuggerHidden()]
-		public object CallEndMethod()
+		private object CallEndMethod()
 		{
 			if (EndMethod.GetParameters().Length != Parameters.Count)
 			{
@@ -202,6 +241,9 @@ namespace Puzzle.NAspect.Framework
 
 		#region Signature
 
+        /// <summary>
+        /// Returns the absolute signature of the call.
+        /// </summary>
 		public string Signature
 		{
 			get
@@ -228,6 +270,10 @@ namespace Puzzle.NAspect.Framework
 
 		#region ValueSignature
 
+        /// <summary>
+        /// Returns the value signature of the call.
+        /// parameter values are represented with ".ToString()"
+        /// </summary>
 		public string ValueSignature
 		{
 			get

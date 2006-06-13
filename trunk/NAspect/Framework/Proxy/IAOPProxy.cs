@@ -10,12 +10,16 @@
 
 using System;
 using System.Collections;
-#if NET2
-using Puzzle.NAspect.Debug.Serialization;
-#endif
+//#if NET2
+//using Puzzle.NAspect.Debug.Serialization;
+//#endif
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Interface implemented by all subclass and interface proxies.
+    /// <seealso cref="AopProxyMixin"/>
+    /// </summary>
 	public interface IAopProxy 
 	{
 		IDictionary Data { get; }

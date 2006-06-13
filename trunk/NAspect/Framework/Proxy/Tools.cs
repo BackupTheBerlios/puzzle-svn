@@ -13,12 +13,17 @@ using System.Reflection;
 namespace Puzzle.NAspect.Framework
 {
 	/// <summary>
-	/// Summary description for Tools.
+	/// Util class.
 	/// </summary>
 	public class AopTools
 	{
 		#region GetMethodSignature
 
+        /// <summary>
+        /// Returns the signature for a method,property or ctor.
+        /// </summary>
+        /// <param name="method">a method,property or ctor</param>
+        /// <returns>string based representation of the method signature</returns>
 		public static string GetMethodSignature(MethodBase method)
 		{
 			return method.ToString();

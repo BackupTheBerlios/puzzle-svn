@@ -17,10 +17,17 @@ using Puzzle.NAspect.Framework.Interception;
 namespace Puzzle.NAspect.Framework.Aop
 {
 	/// <summary>
-	/// Summary description for Aspect.
+	/// Aspect that matches target types based on wildcard signatures.
+    /// ? for ignoring single characters
+    /// * for ignoring one or more characters
 	/// </summary>
 	public class SignatureAspect : GenericAspectBase
 	{
+        /// <summary>
+        /// Signature of the type to match.
+        /// ? for ignoring single characters
+        /// * for ignoring one or more characters
+        /// </summary>
 		public string TargetTypeSignature;
 
 		#region Aspect

@@ -12,6 +12,11 @@ using System;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Base class for interface proxies.
+    /// Used incase we make something up that we need to do with interface proxies.
+    /// This is really anti YAGNI..
+    /// </summary>
 	public class InterfaceProxyBase
 	{
 
