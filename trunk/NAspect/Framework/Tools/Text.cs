@@ -12,10 +12,19 @@ using System.Text.RegularExpressions;
 
 namespace Puzzle.NAspect.Framework.Tools
 {
+    /// <summary>
+    /// Util class for strings
+    /// </summary>
 	public class Text
 	{
 		#region IsMatch
 
+        /// <summary>
+        /// Matches wildcard patterns in strings.
+        /// </summary>
+        /// <param name="text">string to match.</param>
+        /// <param name="pattern">matching pattern.</param>
+        /// <returns>true if match, otherwise false.</returns>
 		public static bool IsMatch(string text, string pattern)
 		{
 			string regexpattern = "";

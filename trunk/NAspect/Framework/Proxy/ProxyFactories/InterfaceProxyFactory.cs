@@ -17,8 +17,19 @@ using Puzzle.NAspect.Framework.Aop;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Factory that produces interface proxy types
+    /// </summary>
 	public class InterfaceProxyFactory
 	{
+        /// <summary>
+        /// Creates a proxy type of a given type.
+        /// </summary>
+        /// <param name="baseType">Type to proxyfy</param>
+        /// <param name="aspects">Untyped list of <c>IAspects</c> to apply to the proxy.</param>
+        /// <param name="mixins">Untyped list of <c>System.Type</c>s that will be mixed in.</param>
+        /// <param name="engine">The AopEngine requesting the proxy type</param>
+        /// <returns></returns>
 		public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
 		{
 			if (aspects.Count == 0 && mixins.Count == 1)
@@ -48,7 +59,7 @@ namespace Puzzle.NAspect.Framework
 		private Engine engine;
 		private ArrayList wrapperMethods = new ArrayList();
 
-		public InterfaceProxyFactory(Engine engine)
+		private InterfaceProxyFactory(Engine engine)
 		{
 			this.engine = engine;
 		}
@@ -64,7 +75,7 @@ namespace Puzzle.NAspect.Framework
 			return assemblyBuilder;
 		}
 
-		public Type CreateType(Type baseType, IList aspects, IList mixins)
+		private Type CreateType(Type baseType, IList aspects, IList mixins)
 		{
 			string typeName = baseType.Name + "AopWrapper";
 			string moduleName = "Puzzle.NAspect.Runtime.Proxy";
@@ -620,7 +631,7 @@ namespace Puzzle.NAspect.Framework
 			il.Emit(OpCodes.Ret);
 		}
 
-		public void BuildConstructors(Type baseType,TypeBuilder typeBuilder, IList mixins)
+		private void BuildConstructors(Type baseType,TypeBuilder typeBuilder, IList mixins)
 		{
 			ConstructorInfo constructor = typeof(object).GetConstructor(new Type[]{});
 			BuildConstructor(baseType, constructor, typeBuilder, mixins);

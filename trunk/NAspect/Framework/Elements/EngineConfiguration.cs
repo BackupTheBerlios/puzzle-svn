@@ -12,12 +12,19 @@ using System.Collections;
 
 namespace Puzzle.NAspect.Framework.ConfigurationElements
 {
+    /// <summary>
+    /// Configutration class that holds a set of aspects
+    /// </summary>
 	public class EngineConfiguration
 	{
 		#region Public Property Aspects
 
 		private IList aspects;
 
+
+        /// <summary>
+        /// Untyped list of <c>IAspect</c>s
+        /// </summary>
 		public IList Aspects
 		{
 			get { return this.aspects; }
@@ -30,6 +37,9 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
 
 		private string name;
 
+        /// <summary>
+        /// Name of this configuration.
+        /// </summary>
 		public string Name
 		{
 			get { return this.name; }
@@ -38,6 +48,9 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
 
 		#endregion
 
+        /// <summary>
+        /// EngineConfiguration ctor.
+        /// </summary>
 		public EngineConfiguration()
 		{
 			aspects = new ArrayList();

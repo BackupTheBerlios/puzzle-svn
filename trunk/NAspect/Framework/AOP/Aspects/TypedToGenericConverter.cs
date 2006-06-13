@@ -15,8 +15,16 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// Class that converts typed aspects into generic aspects.
+    /// </summary>
 	public class TypedToGenericConverter
 	{
+        /// <summary>
+        /// Convert a typed aspect into a generic one.
+        /// </summary>
+        /// <param name="aspect"></param>
+        /// <returns></returns>
         public static IGenericAspect Convert(ITypedAspect aspect)
         {
             IGenericAspect newAspect = null;
@@ -128,8 +136,17 @@ namespace Puzzle.NAspect.Framework.Aop
         }
 	}
 
+    /// <summary>
+    /// Class that sorts interceptor methods based on index parameters
+    /// </summary>
     public class InterceptorMethodSorter : IComparer
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(object x, object y)
         {
             MethodInfo m1 = (MethodInfo)x;

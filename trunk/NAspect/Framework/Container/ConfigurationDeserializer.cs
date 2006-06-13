@@ -15,9 +15,17 @@ using Puzzle.NAspect.Framework.Aop;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Class that deserializes engine configurations from xml
+    /// </summary>
 	public class ConfigurationDeserializer
 	{
-		public Engine Configure(XmlElement xmlRoot)
+        /// <summary>
+        /// return a configured <c>IEngine/c> from an xml element.
+        /// </summary>
+        /// <param name="xmlRoot">xml node to deserialize</param>
+        /// <returns>a configured <c>IEngine/c></returns>
+		public IEngine Configure(XmlElement xmlRoot)
 		{
 			Engine engine = new Engine("App.Config");
 

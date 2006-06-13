@@ -16,5 +16,10 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework.Interception
 {
+    /// <summary>
+    /// Delegate that represents an "around" interceptor in a typed aspect.
+    /// </summary>
+    /// <param name="call">The method call</param>
+    /// <returns>The result of the interceptor</returns>
     public delegate object AroundDelegate(MethodInvocation call);
 }

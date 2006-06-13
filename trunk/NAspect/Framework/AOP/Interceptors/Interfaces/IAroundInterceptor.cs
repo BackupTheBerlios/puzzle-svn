@@ -10,8 +10,16 @@
 
 namespace Puzzle.NAspect.Framework.Interception
 {
+    /// <summary>
+    /// Represents an "around" interceptor that may proceed or break a call.
+    /// </summary>
     public interface IAroundInterceptor : IInterceptor
 	{
+        /// <summary>
+        /// Intercepts a call.
+        /// </summary>
+        /// <param name="call"></param>
+        /// <returns></returns>
         object HandleCall(MethodInvocation call);
 	}
 }

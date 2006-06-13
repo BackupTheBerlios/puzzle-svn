@@ -10,6 +10,9 @@
 
 namespace Puzzle.NAspect.Framework.Interception
 {
+    /// <summary>
+    /// Marker interface for all interceptor types
+    /// </summary>
     public interface IInterceptor
     {
 

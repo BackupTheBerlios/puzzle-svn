@@ -16,5 +16,9 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework.Interception
 {
+    /// <summary>
+    /// Delegate that represents an "after" interceptor in a typed aspect.
+    /// </summary>
+    /// <param name="call">The method call</param>
 	public delegate void AfterDelegate(AfterMethodInvocation call);      
 }

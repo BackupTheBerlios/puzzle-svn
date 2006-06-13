@@ -19,7 +19,7 @@ namespace Puzzle.NAspect.Framework
 	{
 		private static volatile Hashtable configurations = new Hashtable();
 
-		public static Engine Configure()
+		public static IEngine Configure()
 		{
 #if NET2
 			XmlElement o = (XmlElement) ConfigurationManager.GetSection("naspect");
@@ -44,7 +44,7 @@ namespace Puzzle.NAspect.Framework
 				XmlElement xmlRoot = (XmlElement) ConfigurationSettings.GetConfig("naspect");
 #endif
 
-				Engine res = deserializer.Configure(xmlRoot);
+				IEngine res = deserializer.Configure(xmlRoot);
 
 				configurations["app.config"] = res.Configuration;
 				return res;

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public enum VizParameterDirection
     {
@@ -12,11 +15,17 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         Out,
     }
 
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public class VizParameter
     {
         #region Property Name
         private string name;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string Name
         {
             get
@@ -32,6 +41,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property ParameterTypeName
         private string parameterTypeName;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string ParameterTypeName
         {
             get
@@ -47,6 +59,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property Direction
         private VizParameterDirection direction;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual VizParameterDirection Direction
         {
             get

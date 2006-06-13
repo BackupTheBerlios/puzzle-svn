@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public class VizMethodBase
     {
@@ -94,6 +97,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
     }
 
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public class VizMethod : VizMethodBase
     {

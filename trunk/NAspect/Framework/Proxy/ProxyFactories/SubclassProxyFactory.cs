@@ -21,8 +21,20 @@ using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Factory that produces subclass proxy types.
+    /// </summary>
 	public class SubclassProxyFactory
 	{
+
+        /// <summary>
+        /// Creates a proxy type of a given type.
+        /// </summary>
+        /// <param name="baseType">Type to proxyfy</param>
+        /// <param name="aspects">Untyped list of <c>IAspects</c> to apply to the proxy.</param>
+        /// <param name="mixins">Untyped list of <c>System.Type</c>s that will be mixed in.</param>
+        /// <param name="engine">The AopEngine requesting the proxy type</param>
+        /// <returns></returns>
 		public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
 		{
 #if NET2 
@@ -71,7 +83,7 @@ namespace Puzzle.NAspect.Framework
 		private Engine engine;
 		private ArrayList wrapperMethods = new ArrayList();
 
-		public SubclassProxyFactory(Engine engine)
+		private SubclassProxyFactory(Engine engine)
 		{
 			this.engine = engine;
 		}
@@ -87,7 +99,7 @@ namespace Puzzle.NAspect.Framework
 			return assemblyBuilder;
 		}
 
-		public Type CreateType(Type baseType, IList aspects, IList mixins)
+		private Type CreateType(Type baseType, IList aspects, IList mixins)
 		{
 			string typeName = baseType.Name + "AopProxy";
 			string moduleName = "MatsSoft.NPersist.Runtime.Proxy";
@@ -550,7 +562,7 @@ namespace Puzzle.NAspect.Framework
 			return moduleBuilder.DefineType(typeName, typeAttributes, baseType, interfaces);
 		}
 
-		public void MixinType(TypeBuilder typeBuilder, Type mixinInterfaceType, FieldBuilder mixinField, IList aspects)
+		private void MixinType(TypeBuilder typeBuilder, Type mixinInterfaceType, FieldBuilder mixinField, IList aspects)
 		{
             bool pointcut = true;
 			MethodInfo[] methods = mixinInterfaceType.GetMethods();
@@ -757,7 +769,7 @@ namespace Puzzle.NAspect.Framework
 
 		}
 
-		public void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins)
+		private void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins)
 		{
 			ConstructorInfo[] constructors = baseType.GetConstructors();
 			foreach (ConstructorInfo constructor in constructors)

@@ -30,77 +30,102 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
 		public string TargetTypeSignature;
 
-		#region Aspect
 
-		public SignatureAspect(string Name, string TargetName, IList mixins, IList pointcuts)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect</param>
+        /// <param name="targetName">Signature of the target type</param>
+        /// <param name="mixins">Untyped list of <c>System.Type</c>s to mixin</param>
+        /// <param name="pointcuts">Untyped list of IPointcut instances</param>
+		public SignatureAspect(string name, string targetName, IList mixins, IList pointcuts)
 		{
-			this.Name = Name;
-			this.TargetTypeSignature = TargetName;
+			this.Name = name;
+			this.TargetTypeSignature = targetName;
 			this.Mixins = mixins;
 			this.Pointcuts = pointcuts;
 
 		}
 
-		#endregion
-
-		#region Aspect
-
-		public SignatureAspect(string Name, string TargetName, Type[] mixins, IPointcut[] pointcuts)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect</param>
+        /// <param name="targetName">Signature of the target type</param>
+        /// <param name="mixins">Array of <c>System.Type</c>s to mixin</param>
+        /// <param name="pointcuts">Array of IPointcut instances</param>
+		public SignatureAspect(string name, string targetName, Type[] mixins, IPointcut[] pointcuts)
 		{
-			this.Name = Name;
-			this.TargetTypeSignature = TargetName;
+			this.Name = name;
+			this.TargetTypeSignature = targetName;
 			this.Mixins = new ArrayList(mixins);
 			this.Pointcuts = new ArrayList(pointcuts);
 		}
 
-		#endregion
-
-		#region Aspect
-
-        public SignatureAspect(string Name, string TargetName, string TargetMethodsignature, IInterceptor Interceptor)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect.</param>
+        /// <param name="targetName">Signature of the target type.</param>
+        /// <param name="TargetMethodsignature">Signature of the target methods.</param>
+        /// <param name="Interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
+        public SignatureAspect(string name, string targetName, string TargetMethodsignature, IInterceptor Interceptor)
 		{
-			this.Name = Name;
-			this.TargetTypeSignature = TargetName;
+			this.Name = name;
+			this.TargetTypeSignature = targetName;
 			this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
 		}
 
-		#endregion
-
-		#region Aspect
-
-		public SignatureAspect(string Name, Type TargetType, IList mixins, IList pointcuts)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect</param>
+        /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
+        /// <param name="mixins">Untyped list of <c>System.Type</c>s to mixin</param>
+        /// <param name="pointcuts">Untyped list of IPointcut instances</param>
+		public SignatureAspect(string name, Type TargetType, IList mixins, IList pointcuts)
 		{
-			this.Name = Name;
+			this.Name = name;
 			this.TargetTypeSignature = TargetType.FullName;
 			this.Mixins = mixins;
 			this.Pointcuts = pointcuts;
 		}
 
-		#endregion
-
-		#region Aspect
-
-		public SignatureAspect(string Name, Type TargetType, Type[] mixins, IPointcut[] pointcuts)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect</param>
+        /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
+        /// <param name="mixins">Array of <c>System.Type</c>s to mixin</param>
+        /// <param name="pointcuts">Array of IPointcut instances</param>
+		public SignatureAspect(string name, Type TargetType, Type[] mixins, IPointcut[] pointcuts)
 		{
-			this.Name = Name;
+			this.Name = name;
 			this.TargetTypeSignature = TargetType.FullName;
 			this.Mixins = new ArrayList(mixins);
 			this.Pointcuts = new ArrayList(pointcuts);
 		}
 
-		#endregion
-
-		#region Aspect
-
-		public SignatureAspect(string Name, Type TargetType, string TargetMethodsignature, IInterceptor Interceptor)
+        /// <summary>
+        /// Signature aspect ctor.
+        /// </summary>
+        /// <param name="name">Name of the aspect</param>
+        /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
+        /// <param name="TargetMethodsignature">Signature of the target methods.</param>
+        /// <param name="Interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
+		public SignatureAspect(string name, Type TargetType, string TargetMethodsignature, IInterceptor Interceptor)
 		{
-			this.Name = Name;
+			this.Name = name;
 			this.TargetTypeSignature = TargetType.FullName;
 			this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
 		}
 
-		#endregion
-
+        /// <summary>
+        /// Implementation of AspectBase.IsMatch
+        /// <seealso cref="IGenericAspect.IsMatch"/>
+        /// </summary>
+        /// <param name="type">Type to match</param>
+        /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
 		public override bool IsMatch(Type type)
 		{
 			Type tmp = type;

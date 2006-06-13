@@ -5,6 +5,9 @@ using Puzzle.NAspect.Debug.Serialization.Elements;
 
 namespace Puzzle.NAspect.Debug.Serialization
 {
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public class SerializedProxy
     {

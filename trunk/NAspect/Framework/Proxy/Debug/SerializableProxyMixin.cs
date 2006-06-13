@@ -19,6 +19,10 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Mixin used by the VS.NET 2005 debugger visualizer.
+    /// this is only mixed in if the debugger visualizer is available.
+    /// </summary>
 	public class SerializableProxyMixin : ISerializableProxy , IProxyAware
 	{
         private IAopProxy target;

@@ -19,14 +19,27 @@ using Puzzle.NAspect.Debug.Serialization;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Default NAspect implementation of the aop engine.
+    /// </summary>
 	public class Engine : IEngine
 	{
+        /// <summary>
+        /// Singleton engine instance configured from app.config.
+        /// </summary>
         public static readonly IEngine Default = ApplicationContext.Configure();
 
 		private IDictionary proxyLookup;
 		private IDictionary wrapperLookup;
 
+        /// <summary>
+        /// The aspect matcher to use when matching aspects.
+        /// </summary>
 		public readonly AspectMatcher AspectMatcher = new AspectMatcher();
+
+        /// <summary>
+        /// The pointcut matcher to use when matching pointcuts.
+        /// </summary>
 		public readonly PointcutMatcher PointCutMatcher = new PointcutMatcher();        
 
 		#region Engine
@@ -64,6 +77,14 @@ namespace Puzzle.NAspect.Framework
 
 		private ILogManager logManager;
 
+        /// <summary>
+        /// Log manager.
+        /// <example>
+        /// <code>
+        /// aopEngine.LogManager.Loggers.Add(new ConsoleLogger());
+        /// </code>
+        /// </example>
+        /// </summary>
 		public ILogManager LogManager
 		{
 			get { return this.logManager; }
@@ -74,15 +95,18 @@ namespace Puzzle.NAspect.Framework
 
 		#region CreateProxy
 
-
-
-
-		/// <summary>
-		/// Creates a dynamic proxy type and returns an instance of the proxy
-		/// </summary>
-		/// <param name="type">type to be proxied</param>
-		/// <param name="args">constructor args</param>
-		/// <returns>instance of the proxy type</returns>
+        /// <summary>
+        /// Creates a subclass proxy.
+        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
+        /// <example>
+        /// <code>
+        /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="type">Type to proxify</param>
+        /// <param name="args">Object array of boxed parameter values</param>
+        /// <returns>The proxy instance</returns>
 		public object CreateProxy(Type type, params object[] args)
 		{
 			string message = string.Format("Creating proxy for type {0}", type.FullName);
@@ -91,6 +115,11 @@ namespace Puzzle.NAspect.Framework
 			return CreateProxyWithState(null, type, args);
 		}
 
+        /// <summary>
+        /// Creates a interface wrapper proxy
+        /// </summary>
+        /// <param name="instance">The instance to wrap</param>
+        /// <returns>Proxy object which redirect calls to the real instance</returns>
 		public object CreateWrapper(object instance)
 		{
 			string message = string.Format("Creating wrapper for type {0}", instance.GetType().FullName);
@@ -102,6 +131,12 @@ namespace Puzzle.NAspect.Framework
 			return wrapperObject;
 		}
 
+        /// <summary>
+        /// Util. method that inserts an object in the beginning of a parameter list
+        /// </summary>
+        /// <param name="state">State object to insert in parameter list. this object can be intercepted by ctor interceptors later on.</param>
+        /// <param name="args">object array of boxed parameter values</param>
+        /// <returns>A new array of parameters, including the state object</returns>
 		public object[] AddStateToCtorParams(object state, object[] args)
 		{
 			if (args == null)
@@ -114,6 +149,19 @@ namespace Puzzle.NAspect.Framework
 			return proxyArgs;
 		}
 
+        /// <summary>
+        /// Creates a subclass proxy.
+        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
+        /// <example>
+        /// <code>
+        /// Foo myFoo = (Foo)engine.CreateProxyWithState(typeof(Foo),"I can be used in an ctor interceptor");
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="type">Type to proxify</param>
+        /// <param name="args">Object array of boxed parameter values</param>
+        /// <returns>The proxy instance</returns>
 		public object CreateProxyWithState(object state, Type type, params object[] args)
 		{
 			string message = string.Format("Creating context bound wrapper for type {0}", type.FullName);
@@ -134,6 +182,11 @@ namespace Puzzle.NAspect.Framework
 			return proxyObject;
 		}
 
+        /// <summary>
+        /// Creates a subclass proxy type
+        /// </summary>
+        /// <param name="type">Type to proxify</param>
+        /// <returns>The proxy type</returns>
 		public Type CreateProxyType(Type type)
 		{
             
@@ -179,6 +232,11 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
+        /// <summary>
+        /// Creates an interface wrapper proxy type
+        /// </summary>
+        /// <param name="type">Type to proxify</param>
+        /// <returns>The proxy type</returns>
 		public Type CreateWrapperType(Type type)
 		{
 			lock (wrapperLookup.SyncRoot)
@@ -249,6 +307,12 @@ namespace Puzzle.NAspect.Framework
 		}
 
 #if NET2
+        /// <summary>
+        /// Creates a subclass proxy of type <c>T</c>.
+        /// </summary>
+        /// <typeparam name="T">Type to proxify</typeparam>
+        /// <param name="args">Object array of boxed parameter values</param>
+        /// <returns>The proxy instance</returns>
         public T CreateProxy<T>(params object[] args)
         {
             Type type = typeof(T);
@@ -256,6 +320,13 @@ namespace Puzzle.NAspect.Framework
             return (T)o;
         }
 
+        /// <summary>
+        /// Creates a subclass proxy of type <c>T</c>.
+        /// </summary>
+        /// <typeparam name="T">Type to proxify</typeparam>
+        /// <param name="state">State object that should be used by ctor interceptors</param>
+        /// <param name="args">Object array of boxed parameter values</param>
+        /// <returns>The proxy instance</returns>
         public T CreateProxyWithState<T>(object state,params object[] args)
         {
             Type type = typeof(T);
@@ -276,7 +347,7 @@ namespace Puzzle.NAspect.Framework
 #endif
         }
 
-        protected void AddSerializerMixin(IList typeMixins)
+        private void AddSerializerMixin(IList typeMixins)
         {
             Type t = Type.GetType("Puzzle.NAspect.Framework.SerializableProxyMixin", false);
             typeMixins.Add(t);

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     public enum VizInterceptorType
     {
         Before,
@@ -11,11 +14,17 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         Around,
     }
 
+    /// <summary>
+    /// DTO for the VS.NET 2005 debugger visualiser
+    /// </summary>
     [Serializable]
     public class VizInterceptor
     {
         #region Property Name
         private string name;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string Name
         {
             get
@@ -31,6 +40,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property TypeName
         private string typeName;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string TypeName
         {
             get
@@ -46,6 +58,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property InterceptorType
         private VizInterceptorType interceptorType;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual VizInterceptorType InterceptorType
         {
             get
@@ -61,6 +76,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property MayBreakFlow 
         private bool mayBreakFlow;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool MayBreakFlow
         {
             get
@@ -76,6 +94,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property IsOptional 
         private bool isRequired;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsRequired
         {
             get
@@ -91,6 +112,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         
         #region Property ThrowsExceptionTypes 
         private List<string> throwsExceptionTypes = new List<string> ();
+        /// <summary>
+        /// 
+        /// </summary>
         public List<string> ThrowsExceptionTypes
         {
             get
@@ -100,6 +124,10 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }                        
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("{0} : {1}", TypeName, InterceptorType);
