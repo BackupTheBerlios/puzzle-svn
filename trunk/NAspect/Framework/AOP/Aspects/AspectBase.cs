@@ -19,9 +19,10 @@ namespace Puzzle.NAspect.Framework.Aop
     /// Contains lists of mixins and pointcuts for the aspect.
     /// You generally do not need to use this class by your self.
     /// Use the AttributeAspect , SignatureAspect or Typed aspects.
+    /// </summary>
     /// <example>
-    /// When inheriting this class you must override the <c>IsMatch</c> method.
-    /// <code>
+    /// <para>When inheriting this class you must override the <c>IsMatch</c> method.</para>
+    /// <code lang="CS">
     /// //aspect that matches all types whose name start with MyClass
     /// public override bool IsMatch(Type type)
     /// {
@@ -32,7 +33,6 @@ namespace Puzzle.NAspect.Framework.Aop
     /// }
     /// </code>
     /// </example>
-    /// </summary>
 	public abstract class GenericAspectBase : IGenericAspect
 	{
 		private string name;
@@ -60,15 +60,15 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <summary>
         /// List of mixin types.
         /// Since this is .NET 1.x compatible and we are lazy farts, you get this in an untyped manner.
-        /// The element type of this list should be <c>System.Type</c>
-        /// <example>
-        /// <code>
+        /// The element type of this list should be <c>System.Type</c>        
+        /// </summary>
+		/// <example>
+        /// <code lang="CS">
         /// myAspect.Mixins.Add(typeof(MyMixin));
         /// myAspect.Mixins.Add(typeof(ISomeMarkerInterfaceWOImplementation));
         /// </code>
         /// </example>
-        /// </summary>
-		public IList Mixins
+        public IList Mixins
 		{
 			get { return mixins; }
 			set { mixins = value; }

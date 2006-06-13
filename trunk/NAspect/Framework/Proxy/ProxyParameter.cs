@@ -18,8 +18,17 @@ namespace Puzzle.NAspect.Framework
     /// </summary>
 	public enum ParameterType
 	{
+        /// <summary>
+        /// ByValue parameter
+        /// </summary>
 		ByVal,
+        /// <summary>
+        /// ByReference parameter
+        /// </summary>
 		Ref,
+        /// <summary>
+        /// Output parameter
+        /// </summary>
 		Out
 	}
 

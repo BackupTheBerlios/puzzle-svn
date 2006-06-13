@@ -13,12 +13,20 @@ using System.Collections;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// For internal use only
+    /// </summary>
 	public class ConfigurationCache
 	{
 		private static volatile Hashtable proxyCache = new Hashtable();
 		private static volatile Hashtable wrapperCache = new Hashtable();
 		private static volatile object syncRoot = new object();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configurationName"></param>
+        /// <returns></returns>
 		public static IDictionary GetProxyLookup(string configurationName)
 		{
 			lock (syncRoot)
@@ -30,6 +38,11 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configurationName"></param>
+        /// <returns></returns>
 		public static IDictionary GetWrapperLookup(string configurationName)
 		{
 			lock (syncRoot)

@@ -10,8 +10,15 @@
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// Interface used to make mixins aware of their owning proxy.
+    /// </summary>
 	public interface IProxyAware
 	{
+        /// <summary>
+        /// Assigns the proxy to the mixin
+        /// </summary>
+        /// <param name="target">The proxy instance</param>
 		void SetProxy(IAopProxy target);
 	}
 }

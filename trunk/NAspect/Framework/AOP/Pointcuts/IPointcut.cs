@@ -13,9 +13,20 @@ using System.Reflection;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// Interface implemented by all pointcuts.
+    /// </summary>
 	public interface IPointcut
 	{
+        /// <summary>
+        /// Untyped list of <c>IInterceptor</c>s and <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c>
+        /// </summary>
 		IList Interceptors { get; }
+        /// <summary>
+        /// Matches a method with the pointuct
+        /// </summary>
+        /// <param name="method">The method to match</param>
+        /// <returns>True if the pointcut matched the method, otherwise false</returns>
 		bool IsMatch(MethodBase method);
 	}
 }

@@ -14,13 +14,26 @@ using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// For internal use only.
+    /// This class loops through all pointcuts in all aspects and tries to match them for a given method.
+    /// </summary>
 	public class PointcutMatcher
 	{
+        /// <summary>
+        /// PointcutMatcher ctor.
+        /// </summary>
 		public PointcutMatcher()
 		{
 		}
 
 
+        /// <summary>
+        /// Loops through all pointcuts in all aspects and tries to match them for a given method.
+        /// </summary>
+        /// <param name="method">The method to match</param>
+        /// <param name="aspects">Untyped list of <c>IAspects</c></param>
+        /// <returns></returns>
 		public bool MethodShouldBeProxied(MethodBase method, IList aspects)
 		{
             foreach (IAspect aspect in aspects)

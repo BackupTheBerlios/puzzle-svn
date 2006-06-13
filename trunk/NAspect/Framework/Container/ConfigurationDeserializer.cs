@@ -21,10 +21,10 @@ namespace Puzzle.NAspect.Framework
 	public class ConfigurationDeserializer
 	{
         /// <summary>
-        /// return a configured <c>IEngine/c> from an xml element.
+        /// return a configured <c>IEngine</c> from an xml element.
         /// </summary>
         /// <param name="xmlRoot">xml node to deserialize</param>
-        /// <returns>a configured <c>IEngine/c></returns>
+        /// <returns>a configured <c>IEngine</c></returns>
 		public IEngine Configure(XmlElement xmlRoot)
 		{
 			Engine engine = new Engine("App.Config");

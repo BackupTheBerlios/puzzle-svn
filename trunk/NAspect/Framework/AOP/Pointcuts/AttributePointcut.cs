@@ -15,12 +15,22 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// Pointcut that matches attributes on target methods.
+    /// </summary>
 	public class AttributePointcut : PointcutBase
 	{
+        /// <summary>
+        /// The attribute type that should be matched by this pointcut.
+        /// </summary>
 		public Type AttributeType;
 
 		#region Pointcut
-
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeType">Attribute type to match</param>
+        /// <param name="interceptors">Untyped list of <c>IInterceptor</c>s to apply on matched methods</param>
 		public AttributePointcut(Type attributeType, IList interceptors)
 		{
 			this.AttributeType = attributeType;
@@ -31,6 +41,11 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeType">Attribute type to match</param>
+        /// <param name="interceptors">Array of <c>IInterceptor</c>s to apply on matched methods</param>
 		public AttributePointcut(Type attributeType, IInterceptor[] interceptors)
 		{
 			this.AttributeType = attributeType;
@@ -41,6 +56,11 @@ namespace Puzzle.NAspect.Framework.Aop
 
 		#region Pointcut
 
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeType">Attribute type to match</param>
+        /// <param name="interceptor"><c>IInterceptor</c> instance to appy on matched methods.</param>
         public AttributePointcut(Type attributeType, IInterceptor interceptor)
 		{
 			this.AttributeType = attributeType;
@@ -51,6 +71,11 @@ namespace Puzzle.NAspect.Framework.Aop
 
         #region Pointcut
 
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeType">Attribute type to match</param>
+        /// <param name="interceptor">Interceptor delegate to apply on matched methods, valid delegates are <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c></param>
         public AttributePointcut(Type attributeType, Delegate interceptor)
         {
             this.AttributeType = attributeType;
@@ -61,6 +86,11 @@ namespace Puzzle.NAspect.Framework.Aop
 
         #endregion
 
+        /// <summary>
+        /// Matches a method with the pointuct
+        /// </summary>
+        /// <param name="method">The method to match</param>
+        /// <returns>True if the pointcut matched the method, otherwise false</returns>
 		public override bool IsMatch(MethodBase method)
 		{
 			if (method.GetCustomAttributes(AttributeType, true).Length > 0)

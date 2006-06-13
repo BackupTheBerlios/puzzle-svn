@@ -16,14 +16,17 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Representation of a "before" method call.
+    /// Meaning this will fire before the base implementation is invoked.
+    /// </summary>
 	public class BeforeMethodInvocation
 	{
         private MethodInvocation invocation;
 
 
         /// <summary>
-        /// Representation of a "before" method call.
-        /// Meaning this will fire before the base implementation is invoked.
+        /// BeforeMethodInvocation ctor.
         /// </summary>
         /// <param name="invocation">MethodInvocation that should be wrapped</param>
         [DebuggerHidden]

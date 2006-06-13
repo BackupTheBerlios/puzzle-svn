@@ -37,17 +37,17 @@ namespace Puzzle.NAspect.Framework
 		}
 
         /// <summary>
-        /// custom data associated with the proxy instance
+        /// Custom data associated with the proxy instance
         /// </summary>
 		public IDictionary Data
 		{
 			get { return data; }
 		}
 
-        /// <summary>
-        /// The proxy instance.
-        /// </summary>
-		private IAopProxy target;
+        ///// <summary>
+        ///// The proxy instance.
+        ///// </summary>
+        //private IAopProxy target;
 
         /// <summary>
         /// Assigns a proxy instance to the mixin.
@@ -55,7 +55,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="target"></param>
 		public void SetProxy(IAopProxy target)
 		{
-			this.target = target;
+		//	this.target = target;
 		}
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="methodId">Unique identifier of the method</param>
         /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
         /// <param name="returnType">The return type of the invoked method</param>
-        /// <returns></returns>
+        /// <returns>The result of the call chain</returns>
         [DebuggerStepThrough()]
         [DebuggerHidden()]
 		public object HandleCall(IAopProxy target, string methodId, IList parameters, Type returnType)

@@ -13,12 +13,27 @@ using System.Xml;
 
 namespace Puzzle.NAspect.Framework.Configuration
 {
+    //TODO: fix documentation
+
+    /// <summary>
+    /// 
+    /// </summary>
 	public class NAspectConfigurationHandler : IConfigurationSectionHandler
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public NAspectConfigurationHandler()
 		{
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="configContext"></param>
+        /// <param name="section"></param>
+        /// <returns></returns>
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			return section.SelectSingleNode("configuration");

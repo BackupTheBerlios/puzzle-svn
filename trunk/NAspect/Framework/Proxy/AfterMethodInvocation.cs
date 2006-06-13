@@ -16,12 +16,16 @@ using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Representation of an "after" method call.
+    /// Meaning this will fire after the base implementation is invoked.
+    /// </summary>
     public class AfterMethodInvocation
     {
         private MethodInvocation invocation;
 
         /// <summary>
-        /// Representation of an "after" method call.
+        /// AfterMethodInvocation ctor.
         /// Meaning this will fire after the base implementation is invoked.
         /// </summary>
         /// <param name="invocation">MethodInvocation that should be wrapped</param>

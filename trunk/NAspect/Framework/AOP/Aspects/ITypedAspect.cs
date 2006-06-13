@@ -14,9 +14,10 @@ using System.Collections;
 namespace Puzzle.NAspect.Framework.Aop
 {
     /// <summary>
-    /// Marker interface for typed aspects.
+    /// Marker interface for typed aspects.    
+    /// </summary>
     /// <example >
-    /// <code>
+    /// <code lang="CS">
     /// [AspectTarget(TargetSignature = "*")]
     /// [Mixin(typeof(MyMixin))]
     /// [Mixin(typeof(MyOtherMixin))]
@@ -40,7 +41,6 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    /// </summary>
     public interface ITypedAspect : IAspect
     {
     }

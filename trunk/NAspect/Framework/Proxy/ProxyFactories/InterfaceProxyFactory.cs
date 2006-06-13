@@ -434,7 +434,7 @@ namespace Puzzle.NAspect.Framework
 			return moduleBuilder.DefineType(typeName, typeAttributes, baseType, interfaces);
 		}
 
-		public void MixinType(TypeBuilder typeBuilder, Type mixinInterfaceType, FieldBuilder mixinField, IList aspects)
+		private void MixinType(TypeBuilder typeBuilder, Type mixinInterfaceType, FieldBuilder mixinField, IList aspects)
 		{
 			MethodInfo[] methods = mixinInterfaceType.GetMethods();
 

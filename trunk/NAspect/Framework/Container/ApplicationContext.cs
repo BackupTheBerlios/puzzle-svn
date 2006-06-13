@@ -15,10 +15,17 @@ using Puzzle.NAspect.Framework.ConfigurationElements;
 
 namespace Puzzle.NAspect.Framework
 {
+    /// <summary>
+    /// Factory class that creates and configures an IEngine from app.config
+    /// </summary>
 	public class ApplicationContext
 	{
 		private static volatile Hashtable configurations = new Hashtable();
 
+        /// <summary>
+        /// Deserializes app.config and configures an IEngine.
+        /// </summary>
+        /// <returns>a default configured IEngine</returns>
 		public static IEngine Configure()
 		{
 #if NET2

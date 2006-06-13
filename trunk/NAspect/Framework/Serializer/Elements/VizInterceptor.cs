@@ -9,8 +9,17 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     /// </summary>
     public enum VizInterceptorType
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Before,
+        /// <summary>
+        /// 
+        /// </summary>
         After,
+        /// <summary>
+        /// 
+        /// </summary>
         Around,
     }
 

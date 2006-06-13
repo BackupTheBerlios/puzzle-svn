@@ -28,6 +28,10 @@ namespace Puzzle.NAspect.Framework
         private IAopProxy target;
         #region ISerializableProxy Members
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public SerializedProxy GetSerializedProxy()
         {
             SerializedProxy proxy = new SerializedProxy();
@@ -188,6 +192,10 @@ namespace Puzzle.NAspect.Framework
 
         #region IProxyAware Members
 
+        /// <summary>
+        /// Assigns the proxy to the mixin.
+        /// </summary>
+        /// <param name="target">The proxy</param>
         public void SetProxy(IAopProxy target)
         {
             this.target = target;

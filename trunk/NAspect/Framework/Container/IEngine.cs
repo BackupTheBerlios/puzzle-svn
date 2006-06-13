@@ -39,16 +39,16 @@ namespace Puzzle.NAspect.Framework
         
         /// <summary>
         /// Creates a subclass proxy.
-        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
-        /// <example>
-        /// <code>
-        /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
-        /// </code>
-        /// </example>
+        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.        
         /// </summary>
         /// <param name="type">Type to proxify</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
+        /// <example>
+        /// <code lang="CS">
+        /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
+        /// </code>
+        /// </example>
         object CreateProxy(Type type, params object[] args);
 
         /// <summary>
@@ -82,17 +82,17 @@ namespace Puzzle.NAspect.Framework
 
         /// <summary>
         /// Creates a subclass proxy.
-        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
-        /// <example>
-        /// <code>
-        /// Foo myFoo = (Foo)engine.CreateProxyWithState(typeof(Foo),"I can be used in an ctor interceptor");
-        /// </code>
-        /// </example>
+        /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.        
         /// </summary>
         /// <param name="state"></param>
         /// <param name="type">Type to proxify</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
+        /// <example>
+        /// <code lang="CS">
+        /// Foo myFoo = (Foo)engine.CreateProxyWithState(typeof(Foo),"I can be used in an ctor interceptor");
+        /// </code>
+        /// </example>
         object CreateProxyWithState(object state, Type type, params object[] args);
 
         /// <summary>
@@ -111,12 +111,12 @@ namespace Puzzle.NAspect.Framework
 
         /// <summary>
         /// Log manager.
+        /// </summary>
         /// <example>
-        /// <code>
+        /// <code lang="CS">
         /// aopEngine.LogManager.Loggers.Add(new ConsoleLogger());
         /// </code>
         /// </example>
-        /// </summary>
         Puzzle.NCore.Framework.Logging.ILogManager LogManager { get; set; }
     }
 }

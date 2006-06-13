@@ -22,6 +22,19 @@ namespace Puzzle.NAspect.Framework
     /// <summary>
     /// Default NAspect implementation of the aop engine.
     /// </summary>
+    /// <example>
+    /// <para>To create and use an NAspect engine:</para>
+    /// <para>.NET 1.x :</para>
+    /// <code lang="CS">
+    /// Engine engine = Engine.Default;
+    /// Car myCar = (Car)engine.CreateProxy(typeof(Car));
+    /// </code>
+    /// <para>.NET 2.0 :</para>
+    /// <code lang="CS">
+    /// Engine engine = Engine.Default;
+    /// Car myCar = engine.CreateProxy&lt;Car&gt;();
+    /// </code>
+    /// </example>
 	public class Engine : IEngine
 	{
         /// <summary>
@@ -47,7 +60,19 @@ namespace Puzzle.NAspect.Framework
         /// <summary>
         /// AOP Engine constructor
         /// </summary>
-        /// <param name="configurationName">name of configuration/type cache to use</param>
+        /// <param name="configurationName">Name of configuration/type cache to use</param>
+        /// <example >
+        /// <para>You can create Engine instances when you want to be sure 
+        /// they run with a totally unique configuration.
+        /// This is very useful in unit testing scenarios.
+        /// </para>
+        /// <code lang="CS">
+        /// 
+        /// Engine engine = new Engine("MyUniqueConfig");
+        /// engine.Configuration.Aspects.Add(someAspect);
+        /// 
+        /// </code>
+        /// </example>
 		public Engine(string configurationName)
 		{
 			configuration = new EngineConfiguration();
@@ -79,13 +104,13 @@ namespace Puzzle.NAspect.Framework
 
         /// <summary>
         /// Log manager.
-        /// <example>
-        /// <code>
+        /// </summary>
+		/// <example>
+        /// <code lang="CS">
         /// aopEngine.LogManager.Loggers.Add(new ConsoleLogger());
         /// </code>
         /// </example>
-        /// </summary>
-		public ILogManager LogManager
+        public ILogManager LogManager
 		{
 			get { return this.logManager; }
 			set { this.logManager = value; }
@@ -98,16 +123,16 @@ namespace Puzzle.NAspect.Framework
         /// <summary>
         /// Creates a subclass proxy.
         /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
-        /// <example>
-        /// <code>
-        /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
-        /// </code>
-        /// </example>
         /// </summary>
         /// <param name="type">Type to proxify</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
-		public object CreateProxy(Type type, params object[] args)
+		/// <example>
+        /// <code lang="CS">
+        /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
+        /// </code>
+        /// </example>
+        public object CreateProxy(Type type, params object[] args)
 		{
 			string message = string.Format("Creating proxy for type {0}", type.FullName);
 			LogManager.Info(this, message, "");
@@ -116,10 +141,18 @@ namespace Puzzle.NAspect.Framework
 		}
 
         /// <summary>
-        /// Creates a interface wrapper proxy
+        /// Creates a interface wrapper proxy.
+        /// This is useful when you want to create an AOP'ed Facade for an existing object.
+        /// The wrapper will implement all of the interfaces implmented by the real instance and
+        /// simply redirect every call from the wrapper to the real instance through its interceptors.
         /// </summary>
         /// <param name="instance">The instance to wrap</param>
         /// <returns>Proxy object which redirect calls to the real instance</returns>
+        /// <example>
+        /// <code lang="CS">
+        /// IFoo myFoo = (IFoo)engine.CreateWrapper(someFooInstance);
+        /// </code>
+        /// </example>
 		public object CreateWrapper(object instance)
 		{
 			string message = string.Format("Creating wrapper for type {0}", instance.GetType().FullName);
@@ -152,17 +185,17 @@ namespace Puzzle.NAspect.Framework
         /// <summary>
         /// Creates a subclass proxy.
         /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.
-        /// <example>
-        /// <code>
-        /// Foo myFoo = (Foo)engine.CreateProxyWithState(typeof(Foo),"I can be used in an ctor interceptor");
-        /// </code>
-        /// </example>
         /// </summary>
         /// <param name="state"></param>
         /// <param name="type">Type to proxify</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
-		public object CreateProxyWithState(object state, Type type, params object[] args)
+        /// <example>
+        /// <code lang="CS">
+        /// Foo myFoo = (Foo)engine.CreateProxyWithState(typeof(Foo),"I can be used in an ctor interceptor");
+        /// </code>
+        /// </example>
+        public object CreateProxyWithState(object state, Type type, params object[] args)
 		{
 			string message = string.Format("Creating context bound wrapper for type {0}", type.FullName);
 			LogManager.Info(this, message, "");
@@ -313,6 +346,13 @@ namespace Puzzle.NAspect.Framework
         /// <typeparam name="T">Type to proxify</typeparam>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
+        /// <example>
+        /// <para>.NET 2.0 :</para>
+        /// <code lang="CS">
+        /// IEngine engine = Engine.Default;
+        /// Car myCar = engine.CreateProxy&lt;Car&gt;();
+        /// </code>
+        /// </example>
         public T CreateProxy<T>(params object[] args)
         {
             Type type = typeof(T);
@@ -335,8 +375,8 @@ namespace Puzzle.NAspect.Framework
         }
 
 
-        private static bool serializerIsAvailable=true;
-        private static bool serializerDoOnce=false;
+        //private static bool serializerIsAvailable=true;
+        //private static bool serializerDoOnce=false;
 
         internal static bool SerializerIsAvailable()
         {

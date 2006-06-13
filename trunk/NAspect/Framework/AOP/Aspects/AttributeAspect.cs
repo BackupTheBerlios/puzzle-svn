@@ -72,8 +72,8 @@ namespace Puzzle.NAspect.Framework.Aop
 
 
         /// <summary>
-        /// Implementation of AspectBase.IsMatch
-        /// <seealso cref="AspectBase.IsMatch"/>
+        /// Implementation of IGenericAspect.IsMatch
+        /// <seealso cref="IGenericAspect.IsMatch"/>
         /// </summary>
         /// <param name="type">Type to match</param>
         /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>

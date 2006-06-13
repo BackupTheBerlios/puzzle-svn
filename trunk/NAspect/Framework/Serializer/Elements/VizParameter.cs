@@ -10,8 +10,17 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     [Serializable]
     public enum VizParameterDirection
     {
+        /// <summary>
+        /// ByVal type of parameter
+        /// </summary>
         Val,
-        Ref,        
+        /// <summary>
+        /// ByRef type of parameter
+        /// </summary>
+        Ref,    
+        /// <summary>
+        /// Output parameter
+        /// </summary>
         Out,
     }
 

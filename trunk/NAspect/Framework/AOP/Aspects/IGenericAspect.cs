@@ -36,14 +36,14 @@ namespace Puzzle.NAspect.Framework.Aop
         /// List of mixin types.
         /// Since this is .NET 1.x compatible and we are lazy farts, you get this in an untyped manner.
         /// The element type of this list should be <c>System.Type</c>
-        /// <example>
-        /// <code>
+        /// </summary>
+		/// <example>
+        /// <code lang="CS">
         /// myAspect.Mixins.Add(typeof(MyMixin));
         /// myAspect.Mixins.Add(typeof(ISomeMarkerInterfaceWOImplementation));
         /// </code>
         /// </example>
-        /// </summary>
-		IList Mixins { get; }
+        IList Mixins { get; }
 
         /// <summary>
         /// List of pointcuts.

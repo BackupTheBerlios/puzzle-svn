@@ -19,12 +19,21 @@ namespace Puzzle.NAspect.Framework.Aop
     /// </summary>
 	public class AspectMatcher
 	{
+        /// <summary>
+        /// Aspect matcher ctor
+        /// </summary>
 		public AspectMatcher()
 		{
 		}
 
 		#region GetAspectsForType
 
+        /// <summary>
+        /// Matches a list of IAspects for a given type
+        /// </summary>
+        /// <param name="type">The type to match</param>
+        /// <param name="aspects">Untyped list of <c>IAspect</c></param>
+        /// <returns></returns>
 		public IList MatchAspectsForType(Type type, IList aspects)
 		{
 			IList matches = new ArrayList();

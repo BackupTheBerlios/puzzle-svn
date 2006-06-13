@@ -12,6 +12,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     {
         #region Property Name
         private string name;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string Name
         {
             get
@@ -27,6 +30,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property Parameters
         private List<VizParameter> parameters = new List<VizParameter> ();
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual List<VizParameter> Parameters
         {
             get
@@ -38,6 +44,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
        
         #region Property Interceptors
         private List<VizInterceptor> interceptors = new List<VizInterceptor> ();
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual List<VizInterceptor> Interceptors
         {
             get
@@ -49,6 +58,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
 
         #region Property OwnerType
         private VizType ownerType;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual VizType OwnerType
         {
             get
@@ -63,21 +75,38 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         #endregion
 
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual string GetProxyText()
         {
             return "hello";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual string GetRealText()
         {
             return "hello";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual string GetCallSample()
         {
             return "hello";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string GetParamTypes()
         {
             string paramString = "";
@@ -91,6 +120,10 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
             return paramString;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Name;
@@ -105,6 +138,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     {
         #region Property ReturnType
         private string returnType;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string ReturnType
         {
             get
@@ -121,6 +157,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         //owner mixin
         #region Property Mixin
         private VizMixin mixin;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual VizMixin Mixin
         {
             get
@@ -134,11 +173,19 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         }
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string GetProxyText()
         {
             return string.Format("{0}.{1} ({2})",this.OwnerType.Name,this.Name, this.GetParamTypes());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string GetRealText()
         {
             if (this.Mixin == null)
@@ -147,11 +194,19 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
                 return string.Format("{0}.{1} ({2})", Mixin.TypeName, this.Name, this.GetParamTypes());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("{1} ({2}) : {0}", ReturnType, Name, GetParamTypes ());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string GetCallSample()
         {
             return string.Format("My{0}Obj.{1} ({2})",this.OwnerType.BaseName, this.Name, this.GetParamTypes());

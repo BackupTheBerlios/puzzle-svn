@@ -19,11 +19,11 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// Attribute that can be applied to interceptor methods in a typed aspect.
     /// Interceptor methods must match delegate signatures of either <c>AroundDelegate</c>, <c>BeforeDelegate</c> or <c>AfterDelegate</c> 
+    /// </summary>
     /// <seealso cref="InterceptorAttribute"/>
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    /// </summary>
     [AttributeUsage ( AttributeTargets.Method )]
 	public class InterceptorAttribute : Attribute
 	{
@@ -48,19 +48,19 @@ namespace Puzzle.NAspect.Framework.Aop
         #region Property TargetAttribute
         private Type targetAttribute;
         /// <summary>
-        /// When a type is matched, every method decorated with an attribute of this type with get the current interceptor applied.
-        /// 
+        /// When a type is matched, every method decorated with an attribute of this type with get the current interceptor applied.        
+        /// </summary>
         /// <example>
-        /// Sample of method that should get the interceptor applied:
-        /// <code>
+        /// <para>Sample of method that should get the interceptor applied:</para>
+        /// <code lang="CS">
         /// [AttributeThatIWantToPointcutOn]
         /// public virtual void Foo()
         /// {
         /// }
         /// </code>
         /// 
-        /// Sample interceptor in your typed aspect:
-        /// <code>
+        /// <para>Sample interceptor in your typed aspect:</para>
+        /// <code lang="CS">
         /// [Interceptor(Index=1,TargetAttribute=typeof(AttributeThatIWantToPointcutOn))]
         /// private object MyAroundInterceptor(MethodInvocation call)
         /// {
@@ -68,7 +68,6 @@ namespace Puzzle.NAspect.Framework.Aop
         /// }
         /// </code>
         /// </example>
-        /// </summary>
         public virtual Type TargetAttribute
         {
             get
@@ -89,17 +88,17 @@ namespace Puzzle.NAspect.Framework.Aop
         /// Valid wildcards are:
         /// ? for ignoring single characters
         /// * for ignoring one or more characters
-        /// 
+        /// </summary>
         /// <example>
-        /// Sample of method that should get the interceptor applied:
-        /// <code>      
+        /// <para>Sample of method that should get the interceptor applied:</para>
+        /// <code lang="CS">      
         /// public virtual void Foo()
         /// {
         /// }
         /// </code>
         /// 
-        /// Sample interceptor in your typed aspect:
-        /// <code>
+        /// <para>Sample interceptor in your typed aspect:</para>
+        /// <code lang="CS">
         /// [Interceptor(Index=1,TargetSignature="*void Foo()"))]
         /// private object MyAroundInterceptor(MethodInvocation call)
         /// {
@@ -107,7 +106,6 @@ namespace Puzzle.NAspect.Framework.Aop
         /// }
         /// </code>
         /// </example>
-        /// </summary>
         public virtual string TargetSignature
         {
             get
@@ -121,6 +119,9 @@ namespace Puzzle.NAspect.Framework.Aop
         }
         #endregion
 
+        /// <summary>
+        /// InterceptorAttribute ctor.
+        /// </summary>
         public InterceptorAttribute()
         {
             
@@ -130,9 +131,10 @@ namespace Puzzle.NAspect.Framework.Aop
 
     /// <summary>
     /// Attribute that can be applied to typed aspects.
+    /// </summary>
     /// <example>
-    /// Example of typed aspect:
-    /// <code>
+    /// <para>Example of typed aspect:</para>
+    /// <code lang="CS">
     /// [AspectTarget(TargetType=typeof(SomeClassThatGetsThisAspectApplied)]
     /// [Mixin(typeof(MyMixin))]
     /// [Mixin(typeof(MyOther))]
@@ -146,7 +148,6 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class MixinAttribute : Attribute
     {
@@ -154,15 +155,15 @@ namespace Puzzle.NAspect.Framework.Aop
         private Type mixinType;
         /// <summary>
         /// Type of the mixin to be applied to this aspect.
+        /// </summary>
         /// <example>
-        /// Example of typed aspect:
-        /// <code>
+        /// <para>Example of typed aspect:</para>
+        /// <code lang="CS">
         /// [AspectTarget(TargetType=typeof(SomeClassThatGetsThisAspectApplied)]
         /// [Mixin(typeof(MyMixin))] //mixes in MyMixin on all targets
         /// public class MyAspect : ITypedAspect ...
         /// </code>
         /// </example>
-        /// </summary>
         public virtual Type MixinType
         {
             get
@@ -178,16 +179,16 @@ namespace Puzzle.NAspect.Framework.Aop
 
         /// <summary>
         /// Mixin attribute Ctor.
+        /// </summary>
+        /// <param name="mixinType">A type that should be mixed into every target of this aspect</param>
         /// <example>
-        /// Example of typed aspect:
-        /// <code>
+        /// <para>Example of typed aspect:</para>
+        /// <code lang="CS">
         /// [AspectTarget(TargetType=typeof(SomeClassThatGetsThisAspectApplied)]
         /// [Mixin(typeof(MyMixin))] //mixes in MyMixin on all targets
         /// public class MyAspect : ITypedAspect ...
         /// </code>
         /// </example>
-        /// </summary>
-        /// <param name="mixinType">A type that should be mixed into every target of this aspect</param>
         public MixinAttribute(Type mixinType)
         {
             this.MixinType = mixinType;
@@ -197,8 +198,9 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// Attribute that can be applied to typed aspects.
     /// Determines what types should get this aspect applied.
+    /// </summary>
     /// <example>
-    /// <code>
+    /// <code lang="CS">
     /// [AspectTarget(TargetType=typeof(SomeClass)] //SomeClass will get the MyAspect applied to it
     /// [Mixin(typeof(MyMixin))] 
     /// public class MyAspect : ITypedAspect ...
@@ -208,20 +210,19 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    /// </summary>
     public class AspectTargetAttribute : Attribute
     {
         #region Property TargetAttribute
         private Type targetAttribute;
         /// <summary>
         /// Every type decorated with an attribute of this type will get the current aspect applied.
+        /// </summary>
         /// <example>
-        /// <code >
+        /// <code lang="CS">
         /// [AspectTarget(TargetAttribute=typeof(SomeAttribute)] //every type decorated with SomeAttribute will get this aspect applied to it
         /// public class MyAspect : ITypedAspect ...
         /// </code>
         /// </example>
-        /// </summary>
         public virtual Type TargetAttribute
         {
             get
@@ -239,13 +240,13 @@ namespace Puzzle.NAspect.Framework.Aop
         private string targetSignature;
         /// <summary>
         /// Every type with a signature that matches this pattern will get the current aspect applied.
+        /// </summary>
         /// <example>
-        /// <code >
+        /// <code lang="CS">
         /// [AspectTarget(TargetSignature="*SomeClass*")] //every type whose name matches *SomeClass* will get the current aspect applied
         /// public class MyAspect : ITypedAspect ...
         /// </code>
         /// </example>
-        /// </summary>
         public virtual string TargetSignature
         {
             get
@@ -263,14 +264,14 @@ namespace Puzzle.NAspect.Framework.Aop
         private Type targetType;
         /// <summary>
         /// Assigns a single type that should get this aspect applied to it.
+        /// </summary>
         /// <example>
-        /// <code>
+        /// <code lang="CS">
         /// [AspectTarget(TargetType=typeof(SomeClass)] //SomeClass will get the MyAspect applied to it
         /// [Mixin(typeof(MyMixin))] 
         /// public class MyAspect : ITypedAspect ...
         /// </code>
         /// </example> 
-        /// </summary>
         public virtual Type TargetType
         {
             get

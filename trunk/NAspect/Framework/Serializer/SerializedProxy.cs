@@ -13,6 +13,9 @@ namespace Puzzle.NAspect.Debug.Serialization
     {
         #region Property ProxyType
         private VizType proxyType;
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual VizType ProxyType
         {
             get
