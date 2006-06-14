@@ -17,7 +17,6 @@ namespace TestProject1.Aspects
                     return true;
             }
 
-
             return false;
         }
     }
