@@ -10,7 +10,7 @@
 
 using System.Reflection;
 
-namespace Puzzle.NAspect.Framework
+namespace Puzzle.NAspect.Framework.Utils
 {
 	/// <summary>
 	/// Util class.

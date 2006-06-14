@@ -6,6 +6,8 @@ using Puzzle.NAspect.Framework.Aop;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestProject1.Aspects;
+using System.Collections.ObjectModel;
 
 namespace KumoUnitTests
 {
@@ -346,5 +348,73 @@ namespace KumoUnitTests
 
             Assert.IsTrue(result == 1, "return value has not been changed");
         }
+
+        [TestMethod()]
+        public void CustomAspectMatchOnGenericType()
+        {
+            Engine c = new Engine("CustomAspectMatchOnGenericType");
+            CustomAspectOnGenericType myCustomAspect = new CustomAspectOnGenericType();
+            myCustomAspect.Pointcuts.Add (new SignaturePointcut("*GetValue123*",new IncreaseReturnValueInterceptor()));
+            c.Configuration.Aspects.Add (myCustomAspect);
+
+            SomeGenericClass<string> someGenericStringClass = c.CreateProxy <SomeGenericClass<string>>();
+
+            int valueOf123 = someGenericStringClass.GetValue123();
+
+            Assert.IsTrue (valueOf123 == 124,"IncreaseReturnValueInterceptor was not applied to GetValue123 method for SomeGenericClass<string>");
+
+            int valueOf567 = someGenericStringClass.GetValue567 ();
+
+            Assert.IsTrue (valueOf567 == 567,"IncreaseReturnValueInterceptor was applied to GetValue567 method for SomeGenericClass<string>");
+
+
+
+            SomeGenericClass<int> someGenericIntClass = c.CreateProxy <SomeGenericClass<int>>();
+
+            valueOf123 = someGenericIntClass.GetValue123();
+
+            Assert.IsTrue (valueOf123 == 123,"IncreaseReturnValueInterceptor was applied to GetValue123 method for SomeGenericClass<int>");
+
+            valueOf567 = someGenericIntClass.GetValue567 ();
+
+            Assert.IsTrue (valueOf567 == 567,"IncreaseReturnValueInterceptor was applied to GetValue567 method for SomeGenericClass<int>");
+
+
+        }
+
+        [TestMethod()]
+        public void CustomAspectMatchOnGenericType_RefType()
+        {
+            Engine c = new Engine("CustomAspectMatchOnGenericType_RefType");
+            CustomAspectOnGenericType_RefType  myCustomAspect = new CustomAspectOnGenericType_RefType();
+            myCustomAspect.Pointcuts.Add (new SignaturePointcut("*GetValue123*",new IncreaseReturnValueInterceptor()));
+            c.Configuration.Aspects.Add (myCustomAspect);
+
+            SomeGenericClass<string> someGenericStringClass = c.CreateProxy <SomeGenericClass<string>>();
+
+            int valueOf123 = someGenericStringClass.GetValue123();
+
+            Assert.IsTrue (valueOf123 == 124,"IncreaseReturnValueInterceptor was not applied to GetValue123 method for SomeGenericClass<string>");
+
+            int valueOf567 = someGenericStringClass.GetValue567 ();
+
+            Assert.IsTrue (valueOf567 == 567,"IncreaseReturnValueInterceptor was applied to GetValue567 method for SomeGenericClass<string>");
+
+
+
+            SomeGenericClass<int> someGenericIntClass = c.CreateProxy <SomeGenericClass<int>>();
+
+            valueOf123 = someGenericIntClass.GetValue123();
+
+            Assert.IsTrue (valueOf123 == 123,"IncreaseReturnValueInterceptor was applied to GetValue123 method for SomeGenericClass<int>");
+
+            valueOf567 = someGenericIntClass.GetValue567 ();
+
+            Assert.IsTrue (valueOf567 == 567,"IncreaseReturnValueInterceptor was applied to GetValue567 method for SomeGenericClass<int>");
+
+
+        }
+
+
 	}
 }

@@ -35,6 +35,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aspects\CustomAspectOnGenericType.cs" />
+    <Compile Include="Aspects\CustomAspectOnGenericType_RefType.cs" />
     <Compile Include="Interceptors\AddExceptionInterceptor.cs" />
     <Compile Include="Interceptors\ChangeRefParamValueInterceptor.cs" />
     <Compile Include="Interceptors\ChangeReturnValueInterceptor.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SomeClass.cs" />
     <Compile Include="SomeClassWithExplicitIFace.cs" />
+    <Compile Include="SomeGenericClass.cs" />
     <Compile Include="Tests\Tests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +63,9 @@
       <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
       <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pointcuts\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>

@@ -231,7 +231,7 @@ namespace Puzzle.NAspect.Framework
 				{
 					IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
-					IList typeMixins = GetMixinsForType(type);
+					IList typeMixins = GetMixinsForType(type,typeAspects);
 
 					typeMixins.Add(typeof (AopProxyMixin));
 
@@ -280,7 +280,7 @@ namespace Puzzle.NAspect.Framework
 				{
 					IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
-					IList typeMixins = GetMixinsForType(type);
+					IList typeMixins = GetMixinsForType(type,typeAspects);
 
 					typeMixins.Add(typeof (AopProxyMixin));
 
@@ -303,9 +303,9 @@ namespace Puzzle.NAspect.Framework
 			}
 		}
 
-		private IList GetMixinsForType(Type type)
+		private IList GetMixinsForType(Type type,IList typeAspects)
 		{
-			IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
+		//	IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 			Hashtable mixins = new Hashtable();
 			foreach (IAspect aspect in typeAspects)
 			{

@@ -13,6 +13,7 @@ using System.Reflection;
 using Puzzle.NAspect.Framework.Tools;
 using Puzzle.NAspect.Framework.Interception;
 using System;
+using Puzzle.NAspect.Framework.Utils;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
