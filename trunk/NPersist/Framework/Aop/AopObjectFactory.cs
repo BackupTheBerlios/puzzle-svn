@@ -20,7 +20,7 @@ namespace Puzzle.NPersist.Framework.Aop
 	/// </summary>
 	public class AopObjectFactory : ContextChild, IObjectFactory
 	{
-		private Engine aopEngine;
+		private IEngine aopEngine;
 
 		public AopObjectFactory() 
 		{
