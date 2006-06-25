@@ -5,7 +5,7 @@ namespace Puzzle.NFactory.Framework
 {
 	public class NAspectObjectFactory : IObjectFactory
 	{
-		private Engine engine;
+		private IEngine engine;
 
 		public NAspectObjectFactory()
 		{
