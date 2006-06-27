@@ -12,5 +12,7 @@ namespace Puzzle.NCore.Runtime.Serialization
 
 		public abstract void SerializeReference(XmlTextWriter xml);
 
+        public abstract object GetValue();
+
 	}
 }

@@ -28,5 +28,11 @@ namespace Puzzle.NCore.Runtime.Serialization
             xml.WriteAttributeString ("value",Value);
             xml.WriteAttributeString ("type",Type.FullName);
         }
+
+        public override object GetValue()
+        {
+            object res = Convert.ChangeType(Value,Type);
+            return res;
+        }
     }
 }

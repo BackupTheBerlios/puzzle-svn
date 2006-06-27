@@ -34,5 +34,10 @@ namespace Puzzle.NCore.Runtime.Serialization
         {
             xml.WriteAttributeString ("id-ref",ID.ToString());                        
         }
+
+        public override object GetValue()
+        {
+            return null;
+        }
     }
 }

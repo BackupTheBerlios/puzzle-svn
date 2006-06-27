@@ -21,5 +21,10 @@ namespace Puzzle.NCore.Runtime.Serialization
 		{
 			xml.WriteAttributeString("null", "true");
 		}
+
+        public override object GetValue()
+        {
+            return null;
+        }
 	}
 }

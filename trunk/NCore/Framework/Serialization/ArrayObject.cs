@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Xml;
+using System;
 
 namespace Puzzle.NCore.Runtime.Serialization
 {
@@ -34,5 +35,18 @@ namespace Puzzle.NCore.Runtime.Serialization
 			xml.WriteAttributeString("id-ref", ID.ToString());
 		}
 
-	}
+
+        public override object GetValue()
+        {            
+            Type elementType = Type.GetElementType();
+            object arr = Array.CreateInstance (elementType,Items.Count);
+            for (int i = 0;i<Items.Count;i++)
+            {
+                ObjectBase element = (ObjectBase)Items[i];               
+                ((Array)arr).SetValue(element.GetValue(),i);
+            }
+
+            return arr;
+        }
+    }
 }
