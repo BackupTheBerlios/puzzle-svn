@@ -59,7 +59,7 @@ namespace NCoreMain.Serialization
         }
 
         [TestMethod]
-        public void DeserializeArrayObject()
+        public void Deserialize_1D_ArrayObject()
         {
             ArrayObject arr = GetIntegerArrayObject();
 
@@ -68,6 +68,28 @@ namespace NCoreMain.Serialization
             for (int i=0;i<res.Length;i++)
             {
                 Assert.AreEqual(i,res[i]);
+            }
+        }
+
+        [TestMethod]
+        public void Deserialize_Jagged_ArrayObject()
+        {
+            ArrayObject arr = new ArrayObject();
+            arr.ID = 0;
+            arr.Type = typeof(int[][]);
+            arr.Items.Add (GetIntegerArrayObject());
+            arr.Items.Add (GetIntegerArrayObject());
+            arr.Items.Add (GetIntegerArrayObject());
+            arr.Items.Add (GetIntegerArrayObject());
+
+            int[][] res = (int[][])arr.GetValue ();
+
+            for (int i=0;i<4;i++)
+            {
+                for (int j=0;j<4;j++)
+                {
+                    Assert.AreEqual(j,res[i][j]);
+                }
             }
         }
 
