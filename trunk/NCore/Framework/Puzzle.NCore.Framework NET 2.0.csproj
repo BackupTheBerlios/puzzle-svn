@@ -165,6 +165,14 @@
     <Compile Include="Logging\WebTraceLogger.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serialization\ArrayObject.cs" />
+    <Compile Include="Serialization\NullObject.cs" />
+    <Compile Include="Serialization\ObjectBase.cs" />
+    <Compile Include="Serialization\Property.cs" />
+    <Compile Include="Serialization\ReferenceObject.cs" />
+    <Compile Include="Serialization\SerializerEngine.cs" />
+    <Compile Include="Serialization\ValueObject.cs" />
+    <Compile Include="Serialization\XmlFormatter.cs" />
     <Compile Include="Text\PatternMatchers\BinPatternMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
