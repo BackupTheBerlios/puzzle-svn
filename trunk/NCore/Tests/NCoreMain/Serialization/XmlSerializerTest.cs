@@ -61,13 +61,7 @@ namespace NCoreMain.Serialization
         [TestMethod]
         public void DeserializeArrayObject()
         {
-            ArrayObject arr = new ArrayObject();
-            arr.ID = 0;
-            arr.Type = typeof(int[]);
-            arr.Items.Add (GetIntegerValueObject(0));
-            arr.Items.Add (GetIntegerValueObject(1));
-            arr.Items.Add (GetIntegerValueObject(2));
-            arr.Items.Add (GetIntegerValueObject(3));
+            ArrayObject arr = GetIntegerArrayObject();
 
             int[] res = (int[])arr.GetValue();
 
@@ -75,6 +69,18 @@ namespace NCoreMain.Serialization
             {
                 Assert.AreEqual(i,res[i]);
             }
+        }
+
+        private static ArrayObject GetIntegerArrayObject()
+        {
+            ArrayObject arr = new ArrayObject();
+            arr.ID = 0;
+            arr.Type = typeof(int[]);
+            arr.Items.Add(GetIntegerValueObject(0));
+            arr.Items.Add(GetIntegerValueObject(1));
+            arr.Items.Add(GetIntegerValueObject(2));
+            arr.Items.Add(GetIntegerValueObject(3));
+            return arr;
         }
     }
 }
