@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Puzzle.NCore.Runtime.Serialization
 {
-    internal class SerializerEngine
+    public class SerializerEngine
     {
         public Hashtable objectLoookup = new Hashtable();
         private IList allObjects = new ArrayList();
@@ -64,7 +64,7 @@ namespace Puzzle.NCore.Runtime.Serialization
             }
             else if (item.GetType().IsArray)
             {
-                return BuildArrayObject((IEnumerable)item);
+                return BuildArrayObject((Array)item);
             }
             else
             {
@@ -78,15 +78,13 @@ namespace Puzzle.NCore.Runtime.Serialization
             return tc.CanConvertFrom(typeof(string)) || item is Type;
         }
 
-        private ArrayObject BuildArrayObject(IEnumerable item)
+        private ArrayObject BuildArrayObject(Array item)
         {
             ArrayObject current = new ArrayObject();
             RegisterObject(current, item);
 
-            foreach (object o in item)
-            {
-                current.Items.Add(GetObject(o));
-            }
+            current.Build(this,item);
+            
             return current;
         }
 

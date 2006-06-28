@@ -72,15 +72,49 @@ namespace NCoreMain.Serialization
         }
 
         [TestMethod]
+        public void Deserialize_2D_ArrayObject()
+        {
+            int z = 0;
+
+            ArrayObject arr = new ArrayObject();
+            arr.ID = 0;
+            arr.Type = typeof(int[,]);
+
+            ObjectBase[,] items = new ObjectBase[4,4];
+
+           for(int x=0;x<4;x++)
+                for(int y=0;y<4;y++)
+                    items[x,y] = GetIntegerValueObject(z++);
+
+            arr.Items = items;
+
+            int[,] res = (int[,])arr.GetValue ();
+
+            z = 0;
+            for(int x=0;x<4;x++)
+                for(int y=0;y<4;y++)
+                {
+                    Assert.AreEqual(z,res[x,y]);
+                    z++;
+                }
+        }
+
+        [TestMethod]
         public void Deserialize_Jagged_ArrayObject()
         {
             ArrayObject arr = new ArrayObject();
             arr.ID = 0;
             arr.Type = typeof(int[][]);
-            arr.Items.Add (GetIntegerArrayObject());
-            arr.Items.Add (GetIntegerArrayObject());
-            arr.Items.Add (GetIntegerArrayObject());
-            arr.Items.Add (GetIntegerArrayObject());
+
+            ArrayObject[] arrObjects = new ArrayObject[4];
+            arrObjects[0] = GetIntegerArrayObject();
+            arrObjects[1] = GetIntegerArrayObject();
+            arrObjects[2] = GetIntegerArrayObject();
+            arrObjects[3] = GetIntegerArrayObject();
+
+            arr.Items = new ObjectBase[4] {arrObjects[0],arrObjects[1],arrObjects[2],arrObjects[3]};
+
+            
 
             int[][] res = (int[][])arr.GetValue ();
 
@@ -98,10 +132,13 @@ namespace NCoreMain.Serialization
             ArrayObject arr = new ArrayObject();
             arr.ID = 0;
             arr.Type = typeof(int[]);
-            arr.Items.Add(GetIntegerValueObject(0));
-            arr.Items.Add(GetIntegerValueObject(1));
-            arr.Items.Add(GetIntegerValueObject(2));
-            arr.Items.Add(GetIntegerValueObject(3));
+
+            int[] ints = new int[4];
+            for (int i=0;i<4;i++)
+                ints[i] = i;
+
+            arr.Items = new ObjectBase[4] { GetIntegerValueObject(0), GetIntegerValueObject(1), GetIntegerValueObject(2), GetIntegerValueObject(3) };
+           
             return arr;
         }
     }
