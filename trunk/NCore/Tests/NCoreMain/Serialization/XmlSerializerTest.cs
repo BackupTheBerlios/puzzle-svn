@@ -1,6 +1,8 @@
+using System.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Puzzle.NCore.Runtime.Serialization;
 using NCoreMain.Data;
+using System.Reflection;
 
 namespace NCoreMain.Serialization
 {
@@ -176,7 +178,6 @@ namespace NCoreMain.Serialization
             robj.ID = 0;
             robj.Type = typeof(SomeClass);
 
-
             Field nameField = new Field();
             Field ageField = new Field();
             Field parentField = new Field();
@@ -198,8 +199,24 @@ namespace NCoreMain.Serialization
             Assert.AreEqual(res.Name, null);
             Assert.AreEqual(res.Parent, res);
             Assert.AreEqual(res.Age, 55);
-        }
-
+        }   
         
+        [TestMethod]
+        public void DeserializeEnum()
+        {
+            ValueObject vobj = new ValueObject();
+            vobj.ID = 0;
+            vobj.Type = typeof (BindingFlags);
+
+            TypeConverter tc = TypeDescriptor.GetConverter(typeof(BindingFlags));
+
+
+            vobj.Value = tc.ConvertToString(BindingFlags.ExactBinding | BindingFlags.IgnoreCase);
+
+            BindingFlags res = (BindingFlags)vobj.GetValue();
+
+            Assert.AreEqual(res, BindingFlags.ExactBinding | BindingFlags.IgnoreCase);
+            
+        }
     }
 }

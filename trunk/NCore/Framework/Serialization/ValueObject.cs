@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel;
 using System.Xml;
 
 namespace Puzzle.NCore.Runtime.Serialization
@@ -29,7 +29,8 @@ namespace Puzzle.NCore.Runtime.Serialization
 
         public override object GetValue()
         {
-            object res = Convert.ChangeType(Value, Type);
+            TypeConverter tc = TypeDescriptor.GetConverter(Type);
+            object res = tc.ConvertFromString(Value);
             return res;
         }
     }

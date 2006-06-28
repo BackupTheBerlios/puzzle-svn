@@ -92,7 +92,8 @@ namespace Puzzle.NCore.Runtime.Serialization
         {
             ValueObject current = new ValueObject();
             RegisterObject(current, item);
-            current.Value = item.ToString();
+            TypeConverter tc = TypeDescriptor.GetConverter(item.GetType());
+            current.Value = tc.ConvertToString(item);
             return current;
         }
 
