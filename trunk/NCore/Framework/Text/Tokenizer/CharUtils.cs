@@ -12,127 +12,126 @@ using System.Globalization;
 
 namespace Puzzle.NCore.Framework.Text
 {
-	//(c) WE WASTE MEMORY 2004
-	public class CharUtils
-	{
-		private static bool[] isLetterOrDigitLookup = null;
-		private static bool[] isLetterLookup = null;
-		private static char[] lowerCharLookup = null;
-		private static char[] upperCharLookup = null;
-		private static bool[] separatorCharLookup = null;
+    //(c) WE WASTE MEMORY 2004
+    public class CharUtils
+    {
+        private static bool[] isLetterOrDigitLookup = null;
+        private static bool[] isLetterLookup = null;
+        private static char[] lowerCharLookup = null;
+        private static char[] upperCharLookup = null;
+        private static bool[] separatorCharLookup = null;
 
-		public static bool[] IsLetterOrDigitLookup
-		{
-			get
-			{
-				if (isLetterOrDigitLookup == null)
-				{
-					isLetterOrDigitLookup = new bool[65536];
-					for (int i = 0; i < 65536; i++)
-					{
-						isLetterOrDigitLookup[i] = char.IsLetterOrDigit((char) i);
-					}
-				}
+        public static bool[] IsLetterOrDigitLookup
+        {
+            get
+            {
+                if (isLetterOrDigitLookup == null)
+                {
+                    isLetterOrDigitLookup = new bool[65536];
+                    for (int i = 0; i < 65536; i++)
+                    {
+                        isLetterOrDigitLookup[i] = char.IsLetterOrDigit((char) i);
+                    }
+                }
 
-				return isLetterOrDigitLookup;
-			}
-		}
+                return isLetterOrDigitLookup;
+            }
+        }
 
-		public static bool[] IsLetterLookup
-		{
-			get
-			{
-				if (isLetterLookup == null)
-				{
-					isLetterLookup = new bool[65536];
-					for (int i = 0; i < 65536; i++)
-					{
-						isLetterLookup[i] = char.IsLetter((char) i);
-					}
-				}
+        public static bool[] IsLetterLookup
+        {
+            get
+            {
+                if (isLetterLookup == null)
+                {
+                    isLetterLookup = new bool[65536];
+                    for (int i = 0; i < 65536; i++)
+                    {
+                        isLetterLookup[i] = char.IsLetter((char) i);
+                    }
+                }
 
-				return isLetterLookup;
-			}
-		}
+                return isLetterLookup;
+            }
+        }
 
-		public static bool[] SeparatorCharLookup
-		{
-			get
-			{
-				if (separatorCharLookup == null)
-				{
-					separatorCharLookup = new bool[65536];
-					for (int i = 0; i < 65536; i++)
-					{
-						separatorCharLookup[i] = char.IsSeparator((char) i);
-					}
-				}
+        public static bool[] SeparatorCharLookup
+        {
+            get
+            {
+                if (separatorCharLookup == null)
+                {
+                    separatorCharLookup = new bool[65536];
+                    for (int i = 0; i < 65536; i++)
+                    {
+                        separatorCharLookup[i] = char.IsSeparator((char) i);
+                    }
+                }
 
-				return separatorCharLookup;
-			}
-		}
+                return separatorCharLookup;
+            }
+        }
 
-		public static char[] LowerCharLookup
-		{
-			get
-			{
-				if (lowerCharLookup == null)
-				{
-					lowerCharLookup = new char[65536];
-					for (int i = 0; i < 65536; i++)
-					{
-						lowerCharLookup[i] = char.ToLower((char) i, CultureInfo.InvariantCulture);
-					}
-				}
+        public static char[] LowerCharLookup
+        {
+            get
+            {
+                if (lowerCharLookup == null)
+                {
+                    lowerCharLookup = new char[65536];
+                    for (int i = 0; i < 65536; i++)
+                    {
+                        lowerCharLookup[i] = char.ToLower((char) i, CultureInfo.InvariantCulture);
+                    }
+                }
 
-				return lowerCharLookup;
-			}
-		}
+                return lowerCharLookup;
+            }
+        }
 
-		public static char[] UpperCharLookup
-		{
-			get
-			{
-				if (upperCharLookup == null)
-				{
-					upperCharLookup = new char[65536];
-					for (int i = 0; i < 65536; i++)
-					{
-						upperCharLookup[i] = char.ToUpper((char) i, CultureInfo.InvariantCulture);
-					}
-				}
+        public static char[] UpperCharLookup
+        {
+            get
+            {
+                if (upperCharLookup == null)
+                {
+                    upperCharLookup = new char[65536];
+                    for (int i = 0; i < 65536; i++)
+                    {
+                        upperCharLookup[i] = char.ToUpper((char) i, CultureInfo.InvariantCulture);
+                    }
+                }
 
-				return upperCharLookup;
-			}
-		}
+                return upperCharLookup;
+            }
+        }
 
-		//This is 4.5 times faster than a standard char.ToUpper
-		public static char ToUpper(char c)
-		{
-			return UpperCharLookup[(int) c];
-		}
+        //This is 4.5 times faster than a standard char.ToUpper
+        public static char ToUpper(char c)
+        {
+            return UpperCharLookup[(int) c];
+        }
 
-		//This is 4.5 times faster than a standard char.ToLower
-		public static char ToLower(char c)
-		{
-			return LowerCharLookup[(int) c];
-		}
+        //This is 4.5 times faster than a standard char.ToLower
+        public static char ToLower(char c)
+        {
+            return LowerCharLookup[(int) c];
+        }
 
-		//This is 2.4 times faster than a standard char.IsSeparator
-		public static bool IsSeparator(char c)
-		{
-			return SeparatorCharLookup[(int) c];
-		}
+        //This is 2.4 times faster than a standard char.IsSeparator
+        public static bool IsSeparator(char c)
+        {
+            return SeparatorCharLookup[(int) c];
+        }
 
-		public static bool IsLetter(char c)
-		{
-			return IsLetterLookup[(int) c];
-		}
+        public static bool IsLetter(char c)
+        {
+            return IsLetterLookup[(int) c];
+        }
 
-		public static bool IsLetterOrDigit(char c)
-		{
-			return IsLetterOrDigitLookup[(int) c];
-		}
-
-	}
+        public static bool IsLetterOrDigit(char c)
+        {
+            return IsLetterOrDigitLookup[(int) c];
+        }
+    }
 }

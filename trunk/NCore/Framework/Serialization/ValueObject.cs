@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Xml;
 
 namespace Puzzle.NCore.Runtime.Serialization
@@ -15,7 +14,6 @@ namespace Puzzle.NCore.Runtime.Serialization
 
         public override void Serialize(XmlTextWriter xml)
         {
-            
             //xml.WriteStartElement ("value");
             //xml.WriteAttributeString ("id",ID.ToString());
             //xml.WriteAttributeString ("value",Value);
@@ -25,13 +23,13 @@ namespace Puzzle.NCore.Runtime.Serialization
 
         public override void SerializeReference(XmlTextWriter xml)
         {
-            xml.WriteAttributeString ("value",Value);
-            xml.WriteAttributeString ("type",Type.FullName);
+            xml.WriteAttributeString("value", Value);
+            xml.WriteAttributeString("type", Type.FullName);
         }
 
         public override object GetValue()
         {
-            object res = Convert.ChangeType(Value,Type);
+            object res = Convert.ChangeType(Value, Type);
             return res;
         }
     }

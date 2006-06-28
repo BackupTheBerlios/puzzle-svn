@@ -11,32 +11,35 @@ using System;
 
 namespace Puzzle.NCore.Framework.Logging
 {
-	public class ConsoleLogger : SimpleLogger
-	{
-		public ConsoleLogger()
-		{
-		}
+    public class ConsoleLogger : SimpleLogger
+    {
+        public ConsoleLogger()
+        {
+        }
 
-		public ConsoleLogger(LoggingLevel level) : base(level)
-		{
-		}
+        public ConsoleLogger(LoggingLevel level) : base(level)
+        {
+        }
 
-		public ConsoleLogger(LoggingLevel level, bool isVerboseEnabled) : base(level, isVerboseEnabled)
-		{
-		}
+        public ConsoleLogger(LoggingLevel level, bool isVerboseEnabled) : base(level, isVerboseEnabled)
+        {
+        }
 
-		public ConsoleLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled, bool isFatalEnabled) : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled)
-		{
-		}
+        public ConsoleLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled,
+                             bool isFatalEnabled)
+            : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled)
+        {
+        }
 
-		public ConsoleLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled, bool isFatalEnabled, bool isVerboseEnabled) : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled, isVerboseEnabled)
-		{
-		}
+        public ConsoleLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled,
+                             bool isFatalEnabled, bool isVerboseEnabled)
+            : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled, isVerboseEnabled)
+        {
+        }
 
-		protected override void WriteLine(LoggingLevel level, string text)
-		{
-			Console.WriteLine(text);
-		}
-
-	}
+        protected override void WriteLine(LoggingLevel level, string text)
+        {
+            Console.WriteLine(text);
+        }
+    }
 }

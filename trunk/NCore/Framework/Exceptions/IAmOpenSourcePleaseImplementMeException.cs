@@ -13,22 +13,27 @@ using System.Runtime.Serialization;
 
 namespace Puzzle.NCore.Framework.Exceptions
 {
-	public class IAmOpenSourcePleaseImplementMeException : NotImplementedException
-	{
-		public IAmOpenSourcePleaseImplementMeException() : base("You have encountered a feature of this framework that has not yet been implemented. Since this is an open source effort, we would of course appreciate all help you could offer in implementing this functionality! Thank you! :-) /Sincerely, the Puzzle.NET team")
-		{
-		}
+    public class IAmOpenSourcePleaseImplementMeException : NotImplementedException
+    {
+        public IAmOpenSourcePleaseImplementMeException()
+            : base(
+                "You have encountered a feature of this framework that has not yet been implemented. Since this is an open source effort, we would of course appreciate all help you could offer in implementing this functionality! Thank you! :-) /Sincerely, the Puzzle.NET team"
+                )
+        {
+        }
 
-		public IAmOpenSourcePleaseImplementMeException(string message) : base(message)
-		{
-		}
+        public IAmOpenSourcePleaseImplementMeException(string message) : base(message)
+        {
+        }
 
-		public IAmOpenSourcePleaseImplementMeException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+        public IAmOpenSourcePleaseImplementMeException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 
-		public IAmOpenSourcePleaseImplementMeException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-	}
+        public IAmOpenSourcePleaseImplementMeException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
 }

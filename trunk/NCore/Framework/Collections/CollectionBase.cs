@@ -14,67 +14,67 @@ using System.Collections;
 namespace Puzzle.NCore.Framework.Collections
 {
     public abstract class CollectionBase : System.Collections.CollectionBase, IList
-	{
-		protected CollectionBase()
-		{
-		}
+    {
+        protected CollectionBase()
+        {
+        }
 
-		#region Events
+        #region Events
 
-		public event CollectionEventHandler ItemAdded;
+        public event CollectionEventHandler ItemAdded;
 
-		protected virtual void OnItemAdded(int index, object item)
-		{
-			if (this.ItemAdded != null)
-			{
-				CollectionEventArgs e = new CollectionEventArgs(item, index);
+        protected virtual void OnItemAdded(int index, object item)
+        {
+            if (ItemAdded != null)
+            {
+                CollectionEventArgs e = new CollectionEventArgs(item, index);
 
-				this.ItemAdded(this, e);
-			}
-		}
+                ItemAdded(this, e);
+            }
+        }
 
-		public event CollectionEventHandler ItemRemoved;
+        public event CollectionEventHandler ItemRemoved;
 
-		protected virtual void OnItemRemoved(int index, object item)
-		{
-			if (this.ItemRemoved != null)
-			{
-				CollectionEventArgs e = new CollectionEventArgs(item, index);
+        protected virtual void OnItemRemoved(int index, object item)
+        {
+            if (ItemRemoved != null)
+            {
+                CollectionEventArgs e = new CollectionEventArgs(item, index);
 
-				this.ItemRemoved(this, e);
-			}
-		}
+                ItemRemoved(this, e);
+            }
+        }
 
-		public event EventHandler ItemsCleared;
+        public event EventHandler ItemsCleared;
 
-		protected virtual void OnItemsCleared()
-		{
-			if (this.ItemsCleared != null)
-				this.ItemsCleared(this, EventArgs.Empty);
-		}
+        protected virtual void OnItemsCleared()
+        {
+            if (ItemsCleared != null)
+                ItemsCleared(this, EventArgs.Empty);
+        }
 
-		#endregion
+        #endregion
 
-		#region Overrides
+        #region Overrides
 
-		protected override void OnClearComplete()
-		{
-			base.OnClearComplete();
-			this.OnItemsCleared();
-		}
+        protected override void OnClearComplete()
+        {
+            base.OnClearComplete();
+            OnItemsCleared();
+        }
 
-		protected override void OnRemoveComplete(int index, object value)
-		{
-			base.OnRemoveComplete(index, value);
-			this.OnItemRemoved(index, value);
-		}
+        protected override void OnRemoveComplete(int index, object value)
+        {
+            base.OnRemoveComplete(index, value);
+            OnItemRemoved(index, value);
+        }
 
-		protected override void OnInsertComplete(int index, object value)
-		{
-			base.OnInsertComplete(index, value);
-			this.OnItemAdded(index, value);
-		}
+        protected override void OnInsertComplete(int index, object value)
+        {
+            base.OnInsertComplete(index, value);
+            OnItemAdded(index, value);
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

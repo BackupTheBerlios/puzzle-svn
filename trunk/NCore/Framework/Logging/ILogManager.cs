@@ -12,32 +12,32 @@ using System.Collections;
 
 namespace Puzzle.NCore.Framework.Logging
 {
-	public interface ILogManager
-	{
-		void Debug(object message, object verbose);
-		void Info(object message, object verbose);
-		void Warn(object message, object verbose);
-		void Error(object message, object verbose);
-		void Fatal(object message, object verbose);
+    public interface ILogManager
+    {
+        void Debug(object message, object verbose);
+        void Info(object message, object verbose);
+        void Warn(object message, object verbose);
+        void Error(object message, object verbose);
+        void Fatal(object message, object verbose);
 
-		void Debug(object message, object verbose, Exception t);
-		void Info(object message, object verbose, Exception t);
-		void Warn(object message, object verbose, Exception t);
-		void Error(object message, object verbose, Exception t);
-		void Fatal(object message, object verbose, Exception t);
+        void Debug(object message, object verbose, Exception t);
+        void Info(object message, object verbose, Exception t);
+        void Warn(object message, object verbose, Exception t);
+        void Error(object message, object verbose, Exception t);
+        void Fatal(object message, object verbose, Exception t);
 
-		void Debug(object sender, object message, object verbose);
-		void Info(object sender, object message, object verbose);
-		void Warn(object sender, object message, object verbose);
-		void Error(object sender, object message, object verbose);
-		void Fatal(object sender, object message, object verbose);
+        void Debug(object sender, object message, object verbose);
+        void Info(object sender, object message, object verbose);
+        void Warn(object sender, object message, object verbose);
+        void Error(object sender, object message, object verbose);
+        void Fatal(object sender, object message, object verbose);
 
-		void Debug(object sender, object message, object verbose, Exception t);
-		void Info(object sender, object message, object verbose, Exception t);
-		void Warn(object sender, object message, object verbose, Exception t);
-		void Error(object sender, object message, object verbose, Exception t);
-		void Fatal(object sender, object message, object verbose, Exception t);
+        void Debug(object sender, object message, object verbose, Exception t);
+        void Info(object sender, object message, object verbose, Exception t);
+        void Warn(object sender, object message, object verbose, Exception t);
+        void Error(object sender, object message, object verbose, Exception t);
+        void Fatal(object sender, object message, object verbose, Exception t);
 
-		IList Loggers { get; set; }
-	}
+        IList Loggers { get; set; }
+    }
 }

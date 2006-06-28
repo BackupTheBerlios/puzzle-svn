@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 [assembly : CLSCompliant(true)]
-[assembly: ComVisible(false)]
+[assembly : ComVisible(false)]
 //
 // Version information for an assembly consists of the following four values:
 //

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization;
-using Puzzle.NCore.Runtime.Serialization.Xml;
 
 namespace Puzzle.NCore.Runtime.Serialization.Xml
 {
@@ -29,7 +28,7 @@ namespace Puzzle.NCore.Runtime.Serialization.Xml
         public void Serialize(Stream output, object graph)
         {
             SerializerEngine context = new SerializerEngine();
-            context.Serialize(output,graph);
+            context.Serialize(output, graph);
         }
 
         public ISurrogateSelector SurrogateSelector

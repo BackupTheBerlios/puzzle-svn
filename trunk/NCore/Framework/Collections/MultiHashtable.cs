@@ -12,80 +12,79 @@ using System.Collections;
 
 namespace Puzzle.NCore.Framework.Collections
 {
-	public struct KeyStruct
-	{
-		private int hashCode;
-		public readonly object[] keys;
+    public struct KeyStruct
+    {
+        private int hashCode;
+        public readonly object[] keys;
 
-		public KeyStruct(object[] keys)
-		{
-			this.keys = keys;
-			hashCode = 0;
-			hashCode = CreateHashCode();
-		}
+        public KeyStruct(object[] keys)
+        {
+            this.keys = keys;
+            hashCode = 0;
+            hashCode = CreateHashCode();
+        }
 
-		private int CreateHashCode()
-		{
-			int hash = 0;
-			for (int i = 0; i < this.keys.Length; i++)
-			{
-				hash ^= keys[i].GetHashCode();
-			}
-			return hash;
-		}
+        private int CreateHashCode()
+        {
+            int hash = 0;
+            for (int i = 0; i < keys.Length; i++)
+            {
+                hash ^= keys[i].GetHashCode();
+            }
+            return hash;
+        }
 
-		public override int GetHashCode()
-		{
-			return hashCode;
-		}
+        public override int GetHashCode()
+        {
+            return hashCode;
+        }
 
 
-		public override bool Equals(object obj)
-		{
-			KeyStruct other = (KeyStruct) obj;
+        public override bool Equals(object obj)
+        {
+            KeyStruct other = (KeyStruct) obj;
 
-			for (int i = 0; i < this.keys.Length; i++)
-			{
-				if (this.keys[i] != other.keys[i])
-					return false;
-			}
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (keys[i] != other.keys[i])
+                    return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
+    }
 
-	}
+    public class MultiHashtable
+    {
+        private Hashtable baseLookup = new Hashtable();
 
-	public class MultiHashtable
-	{
-		private Hashtable baseLookup = new Hashtable();
+        public bool ContainsKeys(params object[] keys)
+        {
+            return false;
+        }
 
-		public bool ContainsKeys(params object[] keys)
-		{
-			return false;
-		}
+        public void Add(object value, object[] keys)
+        {
+            KeyStruct key = new KeyStruct(keys);
+            baseLookup[key] = value;
+        }
 
-		public void Add(object value, object[] keys)
-		{
-			KeyStruct key = new KeyStruct(keys);
-			baseLookup[key] = value;
-		}
+        private Hashtable GetLastHashtable(object[] keys)
+        {
+            Hashtable current = baseLookup;
+            return current;
+        }
 
-		private Hashtable GetLastHashtable(object[] keys)
-		{
-			Hashtable current = baseLookup;
-			return current;
-		}
+        private object GetValue(object[] keys)
+        {
+            KeyStruct key = new KeyStruct(keys);
+            return baseLookup[key];
+        }
 
-		private object GetValue(object[] keys)
-		{
-			KeyStruct key = new KeyStruct(keys);
-			return baseLookup[key];
-		}
-
-		public object this[params object[] keys]
-		{
-			get { return GetValue(keys); }
-			set { Add(value, keys); }
-		}
-	}
+        public object this[params object[] keys]
+        {
+            get { return GetValue(keys); }
+            set { Add(value, keys); }
+        }
+    }
 }

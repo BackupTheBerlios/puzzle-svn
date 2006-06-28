@@ -14,7 +14,7 @@ namespace Puzzle.NCore.Framework.Text.PatternMatchers
     {
         public override string[] DefaultPrefixes
         {
-            get { return new string[] { StartChar.ToString() }; }
+            get { return new string[] {StartChar.ToString()}; }
         }
 
         #region Property STARTCHAR
@@ -80,11 +80,13 @@ namespace Puzzle.NCore.Framework.Text.PatternMatchers
 
             while (matchAtIndex + length != textLength)
             {
-                if (textToMatch[matchAtIndex + length] == EndChar && (matchAtIndex + length < textLength - 1 && textToMatch[matchAtIndex + length + 1] == EndChar))
+                if (textToMatch[matchAtIndex + length] == EndChar &&
+                    (matchAtIndex + length < textLength - 1 && textToMatch[matchAtIndex + length + 1] == EndChar))
                 {
                     length++;
                 }
-                else if (textToMatch[matchAtIndex + length] == EndChar && (matchAtIndex + length == textLength - 1 || textToMatch[matchAtIndex + length + 1] != EndChar))
+                else if (textToMatch[matchAtIndex + length] == EndChar &&
+                         (matchAtIndex + length == textLength - 1 || textToMatch[matchAtIndex + length + 1] != EndChar))
                     return length + 1;
 
                 length++;

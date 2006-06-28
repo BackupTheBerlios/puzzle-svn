@@ -11,293 +11,294 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Globalization;
 using Puzzle.NCore.Framework.Exceptions;
 
 namespace Puzzle.NCore.Framework.Data
 {
-	public class OfflineDataReader : IDataReader
-	{
-		private IList records = new ArrayList();
-		private DataTable schemaTable;
-       
+    public class OfflineDataReader : IDataReader
+    {
+        private IList records = new ArrayList();
+        private DataTable schemaTable;
+
         private Hashtable columnLookup = new Hashtable();
 
 
         public OfflineDataReader Clone()
-		{
-			OfflineDataReader clone = new OfflineDataReader();
-			clone.schemaTable = this.schemaTable;
-			clone.columnLookup = this.columnLookup;
-			clone.records = this.records;
-			clone.MoveFirst();
-			return clone;
-		}
+        {
+            OfflineDataReader clone = new OfflineDataReader();
+            clone.schemaTable = schemaTable;
+            clone.columnLookup = columnLookup;
+            clone.records = records;
+            clone.MoveFirst();
+            return clone;
+        }
 
 
-		public OfflineDataReader()
-		{
-		}
+        public OfflineDataReader()
+        {
+        }
 
-		public OfflineDataReader(IDataReader reader)
-		{
-			schemaTable = reader.GetSchemaTable();
+        public OfflineDataReader(IDataReader reader)
+        {
+            schemaTable = reader.GetSchemaTable();
 
-			//build column index lookup
-			int j = 0;
-			foreach (DataRow dr in schemaTable.Rows)
-			{
-                columnLookup[dr["ColumnName"].ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture)] = j;
-				j++;
-			}
+            //build column index lookup
+            int j = 0;
+            foreach (DataRow dr in schemaTable.Rows)
+            {
+                columnLookup[dr["ColumnName"].ToString().ToLower(CultureInfo.InvariantCulture)] = j;
+                j++;
+            }
 
 
-			//copy data
-			while (reader.Read())
-			{
-				object[] fields = new object[schemaTable.Rows.Count];
-				for (int i = 0; i < fields.Length; i++)
-				{
-					fields[i] = reader.GetValue(i);
-				}
-				records.Add(fields);
-			}
-			reader.Close();
-			reader.Dispose();
+            //copy data
+            while (reader.Read())
+            {
+                object[] fields = new object[schemaTable.Rows.Count];
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    fields[i] = reader.GetValue(i);
+                }
+                records.Add(fields);
+            }
+            reader.Close();
+            reader.Dispose();
 
-			this.MoveFirst();
-		}
+            MoveFirst();
+        }
 
-		public void MoveFirst()
-		{
-			this.Position = -1;
-		}
+        public void MoveFirst()
+        {
+            Position = -1;
+        }
 
-		#region Public Property Position
+        #region Public Property Position
 
-		private int position;
+        private int position;
 
-		public int Position
-		{
-			get { return this.position; }
-			set { this.position = value; }
-		}
+        public int Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property RecordsAffected
+        #region Public Property RecordsAffected
 
-		public int RecordsAffected
-		{
-			get { throw new IAmOpenSourcePleaseImplementMeException(); }
-		}
+        public int RecordsAffected
+        {
+            get { throw new IAmOpenSourcePleaseImplementMeException(); }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property IsClosed		
+        #region Public Property IsClosed		
 
-		public bool IsClosed
-		{
-			get { throw new IAmOpenSourcePleaseImplementMeException(); }
-		}
+        public bool IsClosed
+        {
+            get { throw new IAmOpenSourcePleaseImplementMeException(); }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property Count
+        #region Public Property Count
 
-		public int Count
-		{
-			get { return records.Count; }
-		}
+        public int Count
+        {
+            get { return records.Count; }
+        }
 
-		#endregion
+        #endregion
 
-		public bool NextResult()
-		{
-			throw new IAmOpenSourcePleaseImplementMeException("NextResult is not implemented");
-		}
+        public bool NextResult()
+        {
+            throw new IAmOpenSourcePleaseImplementMeException("NextResult is not implemented");
+        }
 
-		public void Close()
-		{
-			// TODO:  Add ICacheDataReader.Close implementation
-		}
+        public void Close()
+        {
+            // TODO:  Add ICacheDataReader.Close implementation
+        }
 
-		public bool Read()
-		{
-			Position ++;
-			return Position < Count;
-		}
+        public bool Read()
+        {
+            Position ++;
+            return Position < Count;
+        }
 
-		public int Depth
-		{
-			get { return 0; }
-		}
+        public int Depth
+        {
+            get { return 0; }
+        }
 
-		public DataTable GetSchemaTable()
-		{
-			return schemaTable;
-		}
+        public DataTable GetSchemaTable()
+        {
+            return schemaTable;
+        }
 
-		public void Dispose()
-		{
-		}
+        public void Dispose()
+        {
+        }
 
-		public int GetInt32(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (int) fields[i];
-		}
+        public int GetInt32(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (int) fields[i];
+        }
 
-		public object this[string name]
-		{
-			get
-			{
-				int colIndex = GetColumnIndex(name);
-				return GetValue(colIndex);
-			}
-		}
+        public object this[string name]
+        {
+            get
+            {
+                int colIndex = GetColumnIndex(name);
+                return GetValue(colIndex);
+            }
+        }
 
-		private int GetColumnIndex(string name)
-		{
-			object colIndex = columnLookup[name.ToLower(System.Globalization.CultureInfo.InvariantCulture)];
-			if (colIndex != null)
-				return (int) colIndex;
-			colIndex = columnLookup[name.ToUpper()];
-			if (colIndex != null)
-				return (int) colIndex;
-			throw new ApplicationException("Column with name " + name + " not found");
-		}
+        private int GetColumnIndex(string name)
+        {
+            object colIndex = columnLookup[name.ToLower(CultureInfo.InvariantCulture)];
+            if (colIndex != null)
+                return (int) colIndex;
+            colIndex = columnLookup[name.ToUpper()];
+            if (colIndex != null)
+                return (int) colIndex;
+            throw new ApplicationException("Column with name " + name + " not found");
+        }
 
-		object IDataRecord.this[int i]
-		{
-			get { return GetValue(i); }
-		}
+        object IDataRecord.this[int i]
+        {
+            get { return GetValue(i); }
+        }
 
-		public object GetValue(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return fields[i];
-		}
+        public object GetValue(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return fields[i];
+        }
 
-		public bool IsDBNull(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return fields[i] == DBNull.Value;
-		}
+        public bool IsDBNull(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return fields[i] == DBNull.Value;
+        }
 
-		public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
-		{
-			// TODO:  Add ICacheDataReader.GetBytes implementation
-			return 0;
-		}
+        public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
+        {
+            // TODO:  Add ICacheDataReader.GetBytes implementation
+            return 0;
+        }
 
-		public byte GetByte(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (byte) fields[i];
-		}
+        public byte GetByte(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (byte) fields[i];
+        }
 
-		public Type GetFieldType(int i)
-		{
-			return (Type) schemaTable.Rows[i]["DataType"];
-		}
+        public Type GetFieldType(int i)
+        {
+            return (Type) schemaTable.Rows[i]["DataType"];
+        }
 
-		public decimal GetDecimal(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (decimal) fields[i];
-		}
+        public decimal GetDecimal(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (decimal) fields[i];
+        }
 
-		public int GetValues(object[] values)
-		{
-			// TODO:  Add ICacheDataReader.GetValues implementation
-			return 0;
-		}
+        public int GetValues(object[] values)
+        {
+            // TODO:  Add ICacheDataReader.GetValues implementation
+            return 0;
+        }
 
-		public string GetName(int i)
-		{
-			return (string) schemaTable.Rows[i]["ColumnName"];
-		}
+        public string GetName(int i)
+        {
+            return (string) schemaTable.Rows[i]["ColumnName"];
+        }
 
-		public int FieldCount
-		{
-			get { return schemaTable.Rows.Count; }
-		}
+        public int FieldCount
+        {
+            get { return schemaTable.Rows.Count; }
+        }
 
-		public long GetInt64(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (Int64) fields[i];
-		}
+        public long GetInt64(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (Int64) fields[i];
+        }
 
-		public double GetDouble(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (double) fields[i];
-		}
+        public double GetDouble(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (double) fields[i];
+        }
 
-		public bool GetBoolean(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (bool) fields[i];
-		}
+        public bool GetBoolean(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (bool) fields[i];
+        }
 
-		public Guid GetGuid(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (Guid) fields[i];
-		}
+        public Guid GetGuid(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (Guid) fields[i];
+        }
 
-		public DateTime GetDateTime(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (DateTime) fields[i];
-		}
+        public DateTime GetDateTime(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (DateTime) fields[i];
+        }
 
-		public int GetOrdinal(string name)
-		{
-			return 0;
-		}
+        public int GetOrdinal(string name)
+        {
+            return 0;
+        }
 
-		public string GetDataTypeName(int i)
-		{
-			// TODO:  Add ICacheDataReader.GetDataTypeName implementation
-			return null;
-		}
+        public string GetDataTypeName(int i)
+        {
+            // TODO:  Add ICacheDataReader.GetDataTypeName implementation
+            return null;
+        }
 
-		public float GetFloat(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (float) fields[i];
-		}
+        public float GetFloat(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (float) fields[i];
+        }
 
-		public IDataReader GetData(int i)
-		{
-			// TODO:  Add ICacheDataReader.GetData implementation
-			return null;
-		}
+        public IDataReader GetData(int i)
+        {
+            // TODO:  Add ICacheDataReader.GetData implementation
+            return null;
+        }
 
-		public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
-		{
-			// TODO:  Add ICacheDataReader.GetChars implementation
-			return 0;
-		}
+        public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
+        {
+            // TODO:  Add ICacheDataReader.GetChars implementation
+            return 0;
+        }
 
-		public string GetString(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (string) fields[i];
-		}
+        public string GetString(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (string) fields[i];
+        }
 
-		public char GetChar(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (char) fields[i];
-		}
+        public char GetChar(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (char) fields[i];
+        }
 
-		public short GetInt16(int i)
-		{
-			object[] fields = (object[]) records[position];
-			return (Int16) fields[i];
-		}
-	}
+        public short GetInt16(int i)
+        {
+            object[] fields = (object[]) records[position];
+            return (Int16) fields[i];
+        }
+    }
 }

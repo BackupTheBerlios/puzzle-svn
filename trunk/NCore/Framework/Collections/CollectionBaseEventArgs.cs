@@ -13,19 +13,19 @@ using System;
 namespace Puzzle.NCore.Framework.Collections
 {
 
-	#region EventArgs and Delegate
+    #region EventArgs and Delegate
 
-	public class CollectionEventArgs : EventArgs
-	{
-		public CollectionEventArgs()
-		{
-		}
+    public class CollectionEventArgs : EventArgs
+    {
+        public CollectionEventArgs()
+        {
+        }
 
-		public CollectionEventArgs(object item, int index)
-		{
-			this.Index = index;
-			this.Item = item;
-		}
+        public CollectionEventArgs(object item, int index)
+        {
+            Index = index;
+            Item = item;
+        }
 
         private object item;
 
@@ -42,9 +42,9 @@ namespace Puzzle.NCore.Framework.Collections
             get { return index; }
             set { index = value; }
         }
-	}
+    }
 
-	public delegate void CollectionEventHandler(object sender, CollectionEventArgs e);
+    public delegate void CollectionEventHandler(object sender, CollectionEventArgs e);
 
-	#endregion
+    #endregion
 }

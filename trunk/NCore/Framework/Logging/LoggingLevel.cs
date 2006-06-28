@@ -1,4 +1,4 @@
- // *
+// *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
 // * This library is free software; you can redistribute it and/or modify it
@@ -10,17 +10,17 @@
 
 namespace Puzzle.NCore.Framework.Logging
 {
-	/// <summary>
-	/// Summary description for LoggingLevel.
-	/// </summary>
-	public enum LoggingLevel
-	{
-		All = 0,
-		Debug = 1,
-		Info = 2,
-		Warn = 3,
-		Error = 4,
-		Fatal = 5,
-		Off = 6
-	}
+    /// <summary>
+    /// Summary description for LoggingLevel.
+    /// </summary>
+    public enum LoggingLevel
+    {
+        All = 0,
+        Debug = 1,
+        Info = 2,
+        Warn = 3,
+        Error = 4,
+        Fatal = 5,
+        Off = 6
+    }
 }

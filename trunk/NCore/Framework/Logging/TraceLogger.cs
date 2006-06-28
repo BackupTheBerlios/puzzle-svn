@@ -11,31 +11,35 @@ using System.Diagnostics;
 
 namespace Puzzle.NCore.Framework.Logging
 {
-	public class TraceLogger : SimpleLogger
-	{
-		public TraceLogger()
-		{
-		}
+    public class TraceLogger : SimpleLogger
+    {
+        public TraceLogger()
+        {
+        }
 
-		public TraceLogger(LoggingLevel level) : base(level)
-		{
-		}
+        public TraceLogger(LoggingLevel level) : base(level)
+        {
+        }
 
-		public TraceLogger(LoggingLevel level, bool isVerboseEnabled) : base(level, isVerboseEnabled)
-		{
-		}
+        public TraceLogger(LoggingLevel level, bool isVerboseEnabled) : base(level, isVerboseEnabled)
+        {
+        }
 
-		public TraceLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled, bool isFatalEnabled) : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled)
-		{
-		}
+        public TraceLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled,
+                           bool isFatalEnabled)
+            : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled)
+        {
+        }
 
-		public TraceLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled, bool isFatalEnabled, bool isVerboseEnabled) : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled, isVerboseEnabled)
-		{
-		}
+        public TraceLogger(bool isDebugEnabled, bool isInfoEnabled, bool isWarnEnabled, bool isErrorEnabled,
+                           bool isFatalEnabled, bool isVerboseEnabled)
+            : base(isDebugEnabled, isInfoEnabled, isWarnEnabled, isErrorEnabled, isFatalEnabled, isVerboseEnabled)
+        {
+        }
 
-		protected override void WriteLine(LoggingLevel level, string text)
-		{
-			Trace.WriteLine(text, level.ToString());
-		}
-	}
+        protected override void WriteLine(LoggingLevel level, string text)
+        {
+            Trace.WriteLine(text, level.ToString());
+        }
+    }
 }
