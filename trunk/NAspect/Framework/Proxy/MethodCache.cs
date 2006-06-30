@@ -89,5 +89,30 @@ namespace Puzzle.NAspect.Framework
         {
             return (MethodBase) methodLookup[methodId];
         }
+
+
+
+        private static Hashtable callInfoMapper = new Hashtable();
+        private static ArrayList callInfos = new ArrayList();
+        internal static CallInfo GetCallInfo(int methodIndex)
+        {
+            return (CallInfo)callInfos[methodIndex];
+        }
+
+        internal static CallInfo GetCallInfo(string methodId)
+        {
+            return (CallInfo)callInfoMapper[methodId];
+        }
+        
+        internal static int AddCallInfo(CallInfo callInfo, string methodId)
+        {
+            int res = 0;
+            lock(callInfos.SyncRoot)
+            {
+                res = callInfos.Add(callInfo);
+                callInfoMapper[methodId] = callInfo;
+            }
+            return res;
+        }
     }
 }

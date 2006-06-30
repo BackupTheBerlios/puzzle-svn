@@ -11,10 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneWayAsyncCalls", "Samples
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheSample", "Samples\CacheSample\CacheSample.csproj", "{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework", "Framework\Puzzle.NAspect.Framework.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -45,10 +41,6 @@ Global
 		{E73C1A11-1610-4A17-AFBD-3458C87C77B5}.Debug.Build.0 = Debug|.NET
 		{E73C1A11-1610-4A17-AFBD-3458C87C77B5}.Release.ActiveCfg = Release|.NET
 		{E73C1A11-1610-4A17-AFBD-3458C87C77B5}.Release.Build.0 = Release|.NET
-		{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}.Debug.ActiveCfg = Debug|.NET
-		{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}.Debug.Build.0 = Debug|.NET
-		{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}.Release.ActiveCfg = Release|.NET
-		{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}.Release.Build.0 = Release|.NET
 		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Debug.ActiveCfg = Debug|.NET
 		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Debug.Build.0 = Debug|.NET
 		{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}.Release.ActiveCfg = Release|.NET

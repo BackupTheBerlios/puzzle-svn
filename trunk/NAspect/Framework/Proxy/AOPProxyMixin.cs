@@ -24,11 +24,6 @@ namespace Puzzle.NAspect.Framework
     public class AopProxyMixin : IAopProxy, IProxyAware
     {
         /// <summary>
-        /// custom data associated with the proxy instance
-        /// </summary>
-        private IDictionary data = new Hashtable();
-
-        /// <summary>
         /// Default ctor.
         /// </summary>
         public AopProxyMixin()
@@ -36,25 +31,11 @@ namespace Puzzle.NAspect.Framework
         }
 
         /// <summary>
-        /// Custom data associated with the proxy instance
-        /// </summary>
-        public IDictionary Data
-        {
-            get { return data; }
-        }
-
-        ///// <summary>
-        ///// The proxy instance.
-        ///// </summary>
-        //private IAopProxy target;
-
-        /// <summary>
         /// Assigns a proxy instance to the mixin.
         /// </summary>
         /// <param name="target"></param>
         public void SetProxy(IAopProxy target)
         {
-            //	this.target = target;
         }
 
         /// <summary>
@@ -68,21 +49,22 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The result of the call chain</returns>
         [DebuggerStepThrough()]
         [DebuggerHidden()]
-        public object HandleCall(IAopProxy target, object executionTarget, string methodId, IList parameters,
-                                 Type returnType)
+        public object HandleFastCall(IAopProxy target, object executionTarget, int methodIndex, IList parameters, Type returnType)
         {
-            MethodBase method = (MethodBase) MethodCache.methodLookup[methodId];
+            CallInfo info = MethodCache.GetCallInfo(methodIndex);
 
+            MethodBase method = info.Method;
+            IList interceptors = info.Interceptors;
 
-            IList interceptors = MethodCache.GetInterceptors(methodId);
+            
 #if NET2
-            MethodInvocation invocation =
-                new MethodInvocation(target, executionTarget, method, method /*wrappermethod*/, parameters, returnType,
-                                     interceptors);
-#else
-            MethodInfo wrappermethod = (MethodInfo) MethodCache.wrapperMethodLookup[methodId];
-            MethodInvocation invocation = new MethodInvocation(target, method, wrappermethod, parameters, returnType, interceptors);
+			MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method , parameters, returnType, interceptors);
+			invocation.Handler = info.Handler;
+#else            
+			MethodInfo wrapperMethod = (MethodInfo) MethodCache.wrapperMethodLookup[info.MethodId];
+			MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, wrapperMethod , parameters, returnType, interceptors);
 #endif
+            
             return invocation.Proceed();
         }
 

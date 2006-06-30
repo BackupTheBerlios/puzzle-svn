@@ -167,6 +167,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\BeforeMethodInvocation.cs" />
+    <Compile Include="Proxy\CallInfo.cs" />
     <Compile Include="Proxy\FastCall.cs" />
     <Compile Include="Proxy\IAOPProxy.cs">
       <SubType>Code</SubType>

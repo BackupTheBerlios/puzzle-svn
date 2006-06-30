@@ -151,6 +151,8 @@ namespace Puzzle.NAspect.Framework
                 }
 
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;
+                CallInfo callInfo = MethodCache.GetCallInfo(methodId);
+                callInfo.Interceptors = methodinterceptors;
             }
         }
 
@@ -254,14 +256,20 @@ namespace Puzzle.NAspect.Framework
 
                 j++;
             }
-
-            MethodInfo handleCallMethod = typeof (IAopProxy).GetMethod("HandleCall");
+#if NET2
+            CallInfo callInfo = new CallInfo(wrapperName, method, new ArrayList(), FastCall.GetMethodInvoker(method));
+#else
+			CallInfo callInfo = new CallInfo(wrapperName,method, new ArrayList());
+#endif
+            MethodInfo handleCallMethod = typeof(IAopProxy).GetMethod("HandleFastCall");
+            int methodNr = MethodCache.AddCallInfo(callInfo, wrapperName);
+            //il.Emit(OpCodes.Ldc_I4 ,methodNr);
 
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldfld, that); // load the execution target
-            il.Emit(OpCodes.Ldstr, wrapperName);
+            il.Emit(OpCodes.Ldc_I4, methodNr);
             il.Emit(OpCodes.Ldloc, paramList);
             il.Emit(OpCodes.Ldstr, method.ReturnType.FullName);
             il.Emit(OpCodes.Call, getTypeMethod);

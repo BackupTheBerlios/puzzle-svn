@@ -46,6 +46,10 @@ namespace Puzzle.NAspect.Framework
         /// The return type of the method (if available, ctors do not have a return type).
         /// </summary>
         public readonly Type ReturnType;
+        
+#if NET2
+        public FastInvokeHandler Handler;
+#endif
 
         /// <summary>
         /// The intercepted methods base implementation. (in the base type)
@@ -226,7 +230,7 @@ namespace Puzzle.NAspect.Framework
 
             //call the end method
 #if NET2
-            FastCall.FastInvokeHandler fastCall = FastCall.GetMethodInvoker(EndMethod);
+            FastInvokeHandler fastCall = Handler;
             object result = fastCall(ExecutionTarget, parr);
 #else
             object result = EndMethod.Invoke(Target, parr);

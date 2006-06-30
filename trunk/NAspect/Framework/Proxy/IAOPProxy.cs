@@ -23,11 +23,6 @@ namespace Puzzle.NAspect.Framework
     public interface IAopProxy
     {
         /// <summary>
-        /// Custom data associated with the proxy instance
-        /// </summary>
-        IDictionary Data { get; }
-
-        /// <summary>
         /// This is one of the key methods of the entire interception process.
         /// This method handles calls from the proxy and redirects them to the interceptors.
         /// </summary>
@@ -36,6 +31,6 @@ namespace Puzzle.NAspect.Framework
         /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
         /// <param name="returnType">The return type of the invoked method</param>
         /// <returns>The result of the call chain</returns>
-        object HandleCall(IAopProxy target, object executionTarget, string methodId, IList parameters, Type returnType);
+        object HandleFastCall(IAopProxy target, object executionTarget, int methodId, IList parameters, Type returnType);
     }
 }

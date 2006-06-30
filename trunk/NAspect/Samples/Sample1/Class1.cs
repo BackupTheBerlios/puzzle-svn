@@ -19,7 +19,7 @@ namespace ConsoleApplication1
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			Engine c = ApplicationContext.Configure();
+			IEngine c = ApplicationContext.Configure();
 			IMyTestClass t = c.CreateProxy(typeof (MyTestClass)) as IMyTestClass;
 
 

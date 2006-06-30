@@ -17,11 +17,11 @@ using System.Reflection.Emit;
 
 namespace Puzzle.NAspect.Framework
 {
-    
+    public delegate object FastInvokeHandler(object target, object[] paramters);
+
     public static class FastCall
     {
-        public delegate object FastInvokeHandler(object target, object[] paramters);
-
+        
         private static Dictionary<MethodBase, FastInvokeHandler> delegateCache =
             new Dictionary<MethodBase, FastInvokeHandler>();
 
