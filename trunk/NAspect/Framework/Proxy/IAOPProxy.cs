@@ -36,7 +36,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
         /// <param name="returnType">The return type of the invoked method</param>
         /// <returns>The result of the call chain</returns>
-		object HandleCall(IAopProxy target, string methodId, IList parameters, Type returnType);
+		object HandleCall(IAopProxy target,object executionTarget, string methodId, IList parameters, Type returnType);
 
         
 	}

@@ -69,14 +69,19 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The result of the call chain</returns>
         [DebuggerStepThrough()]
         [DebuggerHidden()]
-		public object HandleCall(IAopProxy target, string methodId, IList parameters, Type returnType)
+		public object HandleCall(IAopProxy target,object executionTarget, string methodId, IList parameters, Type returnType)
 		{
 			MethodBase method = (MethodBase) MethodCache.methodLookup[methodId];
-			MethodInfo wrappermethod = (MethodInfo) MethodCache.wrapperMethodLookup[methodId];
+			
 
 			IList interceptors = MethodCache.GetInterceptors(methodId);
-			MethodInvocation invocation = new MethodInvocation(target, method, wrappermethod, parameters, returnType, interceptors);
-			return invocation.Proceed();
+#if NET2
+            MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method/*wrappermethod*/, parameters, returnType, interceptors);
+#else
+            MethodInfo wrappermethod = (MethodInfo) MethodCache.wrapperMethodLookup[methodId];
+            MethodInvocation invocation = new MethodInvocation(target, method, wrappermethod, parameters, returnType, interceptors);
+#endif
+            return invocation.Proceed();
 		}
 
         /// <summary>
