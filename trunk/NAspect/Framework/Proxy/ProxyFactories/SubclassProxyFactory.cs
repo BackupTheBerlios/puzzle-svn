@@ -139,25 +139,6 @@ namespace Puzzle.NAspect.Framework
             return proxyType;
         }
 
-        //  private void BuildDebugProperty(TypeBuilder typeBuilder, Type baseType)
-        //  {
-        //      PropertyBuilder pb = typeBuilder.DefineProperty ("DebugObject", PropertyAttributes.SpecialName ,typeof(DebugObject),new Type[] {});
-
-        //      MethodBuilder methodBuilder = typeBuilder.DefineMethod("get_DebugObject",MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig | MethodAttributes.NewSlot, CallingConventions.Standard , typeof(DebugObject), new Type[] { baseType });
-
-        //      pb.SetGetMethod (methodBuilder);
-
-        ////      methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
-        ////      methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
-
-        //      ILGenerator il = methodBuilder.GetILGenerator();
-
-        //      il.Emit(OpCodes.Ldnull);
-        //      il.Emit(OpCodes.Ret);
-
-
-        //  }
-
         private void BuildLookupTables(Type proxyType, IList aspects, IList mixins)
         {
             MethodCache.methodsLookup[proxyType] = wrapperMethods;

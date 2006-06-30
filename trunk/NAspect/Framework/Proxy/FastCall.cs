@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace Puzzle.NAspect.Framework
 {
+    
     public static class FastCall
     {
         public delegate object FastInvokeHandler(object target, object[] paramters);
@@ -12,13 +14,8 @@ namespace Puzzle.NAspect.Framework
         private static Dictionary<MethodBase, FastInvokeHandler> delegateCache =
             new Dictionary<MethodBase, FastInvokeHandler>();
 
-
-        //{
-        //    FastInvokeHandler res;
-        //    delegateCache.TryGetValue(method, out res);
-        //    if (res != null)
-        //        return res;
-
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public static FastInvokeHandler GetMethodInvoker(MethodBase methodBase)
         {
             FastInvokeHandler res;
@@ -101,6 +98,8 @@ namespace Puzzle.NAspect.Framework
             return invoder;
         }
 
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private static void EmitCastToReference(ILGenerator il, Type type)
         {
             if (type.IsValueType)
@@ -113,6 +112,8 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private static void EmitBoxIfNeeded(ILGenerator il, Type type)
         {
             if (type.IsValueType)
@@ -121,6 +122,8 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private static void EmitFastInt(ILGenerator il, int value)
         {
             switch (value)

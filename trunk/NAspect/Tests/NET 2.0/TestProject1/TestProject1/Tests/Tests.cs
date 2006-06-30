@@ -23,7 +23,7 @@ namespace KumoUnitTests
             SomeClassWithExplicitIFace proxy =
                 (SomeClassWithExplicitIFace) c.CreateProxy(typeof (SomeClassWithExplicitIFace));
 
-            ICloneable cloneable = (ICloneable) proxy;
+            ICloneable cloneable = proxy;
 
             SomeClassWithExplicitIFace res = (SomeClassWithExplicitIFace) cloneable.Clone();
 
@@ -123,7 +123,7 @@ namespace KumoUnitTests
             proxy.RemoveAt(0);
             proxy.Remove("b");
 
-            IList ilist = (IList) proxy;
+            IList ilist = proxy;
             ilist.Add("hej");
         }
 
