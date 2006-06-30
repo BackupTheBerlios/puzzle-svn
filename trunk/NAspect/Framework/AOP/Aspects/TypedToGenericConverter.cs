@@ -18,8 +18,8 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// Class that converts typed aspects into generic aspects.
     /// </summary>
-	public class TypedToGenericConverter
-	{
+    public class TypedToGenericConverter
+    {
         /// <summary>
         /// Convert a typed aspect into a generic one.
         /// </summary>
@@ -45,10 +45,12 @@ namespace Puzzle.NAspect.Framework.Aop
         private static void AddInterceptors(ITypedAspect aspect, IList pointcuts)
         {
             ArrayList methodsList = new ArrayList();
-            MethodInfo[] methods = aspect.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            MethodInfo[] methods =
+                aspect.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                            BindingFlags.DeclaredOnly);
             foreach (MethodInfo method in methods)
             {
-                object[] interceptorAttributes = method.GetCustomAttributes(typeof(InterceptorAttribute), false);
+                object[] interceptorAttributes = method.GetCustomAttributes(typeof (InterceptorAttribute), false);
                 if (interceptorAttributes != null && interceptorAttributes.Length > 0)
                 {
                     methodsList.Add(method);
@@ -59,10 +61,10 @@ namespace Puzzle.NAspect.Framework.Aop
 
             foreach (MethodInfo method in methodsList)
             {
-                object[] interceptorAttributes = method.GetCustomAttributes(typeof(InterceptorAttribute), false);
+                object[] interceptorAttributes = method.GetCustomAttributes(typeof (InterceptorAttribute), false);
                 if (interceptorAttributes != null)
                 {
-                    InterceptorAttribute interceptor = (InterceptorAttribute)interceptorAttributes[0];
+                    InterceptorAttribute interceptor = (InterceptorAttribute) interceptorAttributes[0];
                     IPointcut pointcut = null;
                     Delegate interceptorDelegate = CreateDelegate(aspect, method);
                     if (interceptor.TargetAttribute != null)
@@ -86,17 +88,17 @@ namespace Puzzle.NAspect.Framework.Aop
         {
             Delegate interceptorDelegate = null;
             Type paramType = method.GetParameters()[0].ParameterType;
-            if (paramType == typeof(MethodInvocation))
+            if (paramType == typeof (MethodInvocation))
             {
-                interceptorDelegate = Delegate.CreateDelegate(typeof(AroundDelegate), aspect, method.Name);
+                interceptorDelegate = Delegate.CreateDelegate(typeof (AroundDelegate), aspect, method.Name);
             }
-            else if (paramType == typeof(AfterMethodInvocation))
+            else if (paramType == typeof (AfterMethodInvocation))
             {
-                interceptorDelegate = Delegate.CreateDelegate(typeof(AfterDelegate), aspect, method.Name);
+                interceptorDelegate = Delegate.CreateDelegate(typeof (AfterDelegate), aspect, method.Name);
             }
-            else if (paramType == typeof(BeforeMethodInvocation))
+            else if (paramType == typeof (BeforeMethodInvocation))
             {
-                interceptorDelegate = Delegate.CreateDelegate(typeof(BeforeDelegate), aspect, method.Name);
+                interceptorDelegate = Delegate.CreateDelegate(typeof (BeforeDelegate), aspect, method.Name);
             }
             else
             {
@@ -105,18 +107,25 @@ namespace Puzzle.NAspect.Framework.Aop
             return interceptorDelegate;
         }
 
-        private static IGenericAspect CreateAspect(ITypedAspect aspect, IGenericAspect newAspect, IList mixins, IList pointcuts)
+        private static IGenericAspect CreateAspect(ITypedAspect aspect, IGenericAspect newAspect, IList mixins,
+                                                   IList pointcuts)
         {
-            object[] aspectTargetAttributes = aspect.GetType().GetCustomAttributes(typeof(AspectTargetAttribute), false);
+            object[] aspectTargetAttributes =
+                aspect.GetType().GetCustomAttributes(typeof (AspectTargetAttribute), false);
             if (aspectTargetAttributes != null)
             {
-                AspectTargetAttribute aspectTargetAttribute = (AspectTargetAttribute)aspectTargetAttributes[0];
+                AspectTargetAttribute aspectTargetAttribute = (AspectTargetAttribute) aspectTargetAttributes[0];
                 if (aspectTargetAttribute.TargetAttribute != null)
-                    newAspect = new AttributeAspect(aspect.GetType().Name, aspectTargetAttribute.TargetAttribute, mixins, pointcuts);
+                    newAspect =
+                        new AttributeAspect(aspect.GetType().Name, aspectTargetAttribute.TargetAttribute, mixins,
+                                            pointcuts);
                 else if (aspectTargetAttribute.TargetSignature != null)
-                    newAspect = new SignatureAspect(aspect.GetType().Name, aspectTargetAttribute.TargetSignature, mixins, pointcuts);
+                    newAspect =
+                        new SignatureAspect(aspect.GetType().Name, aspectTargetAttribute.TargetSignature, mixins,
+                                            pointcuts);
                 else if (aspectTargetAttribute.TargetType != null)
-                    newAspect = new SignatureAspect(aspect.GetType().Name, aspectTargetAttribute.TargetType, mixins, pointcuts);
+                    newAspect =
+                        new SignatureAspect(aspect.GetType().Name, aspectTargetAttribute.TargetType, mixins, pointcuts);
                 else
                     throw new Exception("No target specified");
             }
@@ -125,7 +134,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
         private static void AddMixins(ITypedAspect aspect, IList mixins)
         {
-            object[] mixinAttributes = aspect.GetType().GetCustomAttributes(typeof(MixinAttribute), false);
+            object[] mixinAttributes = aspect.GetType().GetCustomAttributes(typeof (MixinAttribute), false);
             if (mixinAttributes != null)
             {
                 foreach (MixinAttribute mixinAttribute in mixinAttributes)
@@ -134,7 +143,7 @@ namespace Puzzle.NAspect.Framework.Aop
                 }
             }
         }
-	}
+    }
 
     /// <summary>
     /// Class that sorts interceptor methods based on index parameters
@@ -149,11 +158,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <returns></returns>
         public int Compare(object x, object y)
         {
-            MethodInfo m1 = (MethodInfo)x;
-            MethodInfo m2 = (MethodInfo)y;
+            MethodInfo m1 = (MethodInfo) x;
+            MethodInfo m2 = (MethodInfo) y;
 
-            InterceptorAttribute i1 = (InterceptorAttribute)m1.GetCustomAttributes(typeof(InterceptorAttribute), false)[0];
-            InterceptorAttribute i2 = (InterceptorAttribute)m2.GetCustomAttributes(typeof(InterceptorAttribute), false)[0];
+            InterceptorAttribute i1 =
+                (InterceptorAttribute) m1.GetCustomAttributes(typeof (InterceptorAttribute), false)[0];
+            InterceptorAttribute i2 =
+                (InterceptorAttribute) m2.GetCustomAttributes(typeof (InterceptorAttribute), false)[0];
 
             return i1.Index - i2.Index;
         }

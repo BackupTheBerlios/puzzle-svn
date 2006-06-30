@@ -8,12 +8,6 @@
 // *
 // *
 
-using System;
-using System.Collections;
-using System.Reflection;
-using Puzzle.NAspect.Framework.Aop;
-using System.Diagnostics;
-
 namespace Puzzle.NAspect.Framework.Interception
 {
     /// <summary>

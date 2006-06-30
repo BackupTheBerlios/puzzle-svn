@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
@@ -11,17 +10,17 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     public class VizPointcut
     {
         #region Property Interceptors
-        private List<VizInterceptor> interceptors = new List<VizInterceptor> ();
+
+        private List<VizInterceptor> interceptors = new List<VizInterceptor>();
+
         /// <summary>
         /// 
         /// </summary>
         public virtual List<VizInterceptor> Interceptors
         {
-            get
-            {
-                return this.interceptors;
-            }
+            get { return interceptors; }
         }
+
         #endregion
     }
 }

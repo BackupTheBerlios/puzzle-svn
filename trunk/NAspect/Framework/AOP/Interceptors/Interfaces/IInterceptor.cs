@@ -15,6 +15,5 @@ namespace Puzzle.NAspect.Framework.Interception
     /// </summary>
     public interface IInterceptor
     {
-
     }
 }

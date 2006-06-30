@@ -8,18 +8,13 @@
 // *
 // *
 
-using System;
-using System.Collections;
-
-
 namespace Puzzle.NAspect.Framework
 {
-
     /// <summary>
     /// Factory that creates default AopEngine instances.
     /// </summary>
-	public class EngineFactory
-	{
+    public class EngineFactory
+    {
         /// <summary>
         /// Create an AopEngine from app or web.config.
         /// </summary>
@@ -59,5 +54,5 @@ namespace Puzzle.NAspect.Framework
         {
             return null;
         }
-	}
+    }
 }

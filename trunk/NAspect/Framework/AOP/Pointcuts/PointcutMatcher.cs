@@ -10,7 +10,6 @@
 
 using System.Collections;
 using System.Reflection;
-using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -18,14 +17,14 @@ namespace Puzzle.NAspect.Framework.Aop
     /// For internal use only.
     /// This class loops through all pointcuts in all aspects and tries to match them for a given method.
     /// </summary>
-	public class PointcutMatcher
-	{
+    public class PointcutMatcher
+    {
         /// <summary>
         /// PointcutMatcher ctor.
         /// </summary>
-		public PointcutMatcher()
-		{
-		}
+        public PointcutMatcher()
+        {
+        }
 
 
         /// <summary>
@@ -34,15 +33,15 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="method">The method to match</param>
         /// <param name="aspects">Untyped list of <c>IAspects</c></param>
         /// <returns></returns>
-		public bool MethodShouldBeProxied(MethodBase method, IList aspects)
-		{
+        public bool MethodShouldBeProxied(MethodBase method, IList aspects)
+        {
             foreach (IAspect aspect in aspects)
             {
                 IGenericAspect tmpAspect;
                 if (aspect is IGenericAspect)
-                    tmpAspect = (IGenericAspect)aspect;
+                    tmpAspect = (IGenericAspect) aspect;
                 else
-                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect) aspect);
 
                 foreach (IPointcut pointcut in tmpAspect.Pointcuts)
                 {
@@ -50,7 +49,7 @@ namespace Puzzle.NAspect.Framework.Aop
                         return true;
                 }
             }
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

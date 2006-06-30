@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
@@ -17,7 +15,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <summary>
         /// ByRef type of parameter
         /// </summary>
-        Ref,    
+        Ref,
         /// <summary>
         /// Output parameter
         /// </summary>
@@ -31,57 +29,48 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     public class VizParameter
     {
         #region Property Name
+
         private string name;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual string Name
         {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-            }
+            get { return name; }
+            set { name = value; }
         }
+
         #endregion
 
         #region Property ParameterTypeName
+
         private string parameterTypeName;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual string ParameterTypeName
         {
-            get
-            {
-                return this.parameterTypeName;
-            }
-            set
-            {
-                this.parameterTypeName = value;
-            }
+            get { return parameterTypeName; }
+            set { parameterTypeName = value; }
         }
+
         #endregion
 
         #region Property Direction
+
         private VizParameterDirection direction;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual VizParameterDirection Direction
         {
-            get
-            {
-                return this.direction;
-            }
-            set
-            {
-                this.direction = value;
-            }
+            get { return direction; }
+            set { direction = value; }
         }
+
         #endregion
     }
 }

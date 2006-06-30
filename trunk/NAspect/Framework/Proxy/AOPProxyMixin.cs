@@ -10,11 +10,10 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Aop;
-using System.Diagnostics;
 #if NET2
-using Puzzle.NAspect.Debug.Serialization;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -22,27 +21,27 @@ namespace Puzzle.NAspect.Framework
     /// <summary>
     /// Implementation of IAopProxy that is mixed into every subclass and interface proxy.    
     /// </summary>
-	public class AopProxyMixin : IAopProxy, IProxyAware
-	{
+    public class AopProxyMixin : IAopProxy, IProxyAware
+    {
         /// <summary>
         /// custom data associated with the proxy instance
         /// </summary>
-		private IDictionary data = new Hashtable();
+        private IDictionary data = new Hashtable();
 
         /// <summary>
         /// Default ctor.
         /// </summary>
-		public AopProxyMixin()
-		{
-		}
+        public AopProxyMixin()
+        {
+        }
 
         /// <summary>
         /// Custom data associated with the proxy instance
         /// </summary>
-		public IDictionary Data
-		{
-			get { return data; }
-		}
+        public IDictionary Data
+        {
+            get { return data; }
+        }
 
         ///// <summary>
         ///// The proxy instance.
@@ -53,10 +52,10 @@ namespace Puzzle.NAspect.Framework
         /// Assigns a proxy instance to the mixin.
         /// </summary>
         /// <param name="target"></param>
-		public void SetProxy(IAopProxy target)
-		{
-		//	this.target = target;
-		}
+        public void SetProxy(IAopProxy target)
+        {
+            //	this.target = target;
+        }
 
         /// <summary>
         /// This is one of the key methods of the entire interception process.
@@ -69,20 +68,23 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The result of the call chain</returns>
         [DebuggerStepThrough()]
         [DebuggerHidden()]
-		public object HandleCall(IAopProxy target,object executionTarget, string methodId, IList parameters, Type returnType)
-		{
-			MethodBase method = (MethodBase) MethodCache.methodLookup[methodId];
-			
+        public object HandleCall(IAopProxy target, object executionTarget, string methodId, IList parameters,
+                                 Type returnType)
+        {
+            MethodBase method = (MethodBase) MethodCache.methodLookup[methodId];
 
-			IList interceptors = MethodCache.GetInterceptors(methodId);
+
+            IList interceptors = MethodCache.GetInterceptors(methodId);
 #if NET2
-            MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method/*wrappermethod*/, parameters, returnType, interceptors);
+            MethodInvocation invocation =
+                new MethodInvocation(target, executionTarget, method, method /*wrappermethod*/, parameters, returnType,
+                                     interceptors);
 #else
             MethodInfo wrappermethod = (MethodInfo) MethodCache.wrapperMethodLookup[methodId];
             MethodInvocation invocation = new MethodInvocation(target, method, wrappermethod, parameters, returnType, interceptors);
 #endif
             return invocation.Proceed();
-		}
+        }
 
         /// <summary>
         /// .NET 1.x hack to get the default value of a type.
@@ -91,11 +93,11 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-		public object GetTypeDefaultValue(Type type)
-		{
-			Array array = Array.CreateInstance(type, 1);
-			object value = array.GetValue(0);
-			return value;
-		}
-	}
+        public object GetTypeDefaultValue(Type type)
+        {
+            Array array = Array.CreateInstance(type, 1);
+            object value = array.GetValue(0);
+            return value;
+        }
+    }
 }

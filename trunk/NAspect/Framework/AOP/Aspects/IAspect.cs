@@ -8,16 +8,13 @@
 // *
 // *
 
-using System;
-using System.Collections;
-
 namespace Puzzle.NAspect.Framework.Aop
 {
     /// <summary>
     /// Marker interface for all aspects.
     /// If you need to create your own aspect types you have to create your own <c>AspectMatcher</c> and assign to yor <c>AopEngine</c>
     /// </summary>
-	public interface IAspect
-	{
-	}
+    public interface IAspect
+    {
+    }
 }

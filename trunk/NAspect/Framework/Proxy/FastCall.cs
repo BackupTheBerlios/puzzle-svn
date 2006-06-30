@@ -25,8 +25,10 @@ namespace Puzzle.NAspect.Framework
             delegateCache.TryGetValue(methodBase, out res);
             if (res != null)
                 return res;
-            
-            DynamicMethod dynamicMethod = new DynamicMethod(string.Empty, typeof(object), new Type[] { typeof(object), typeof(object[]) }, methodBase.DeclaringType.Module,true);
+
+            DynamicMethod dynamicMethod =
+                new DynamicMethod(string.Empty, typeof (object), new Type[] {typeof (object), typeof (object[])},
+                                  methodBase.DeclaringType.Module, true);
             ILGenerator il = dynamicMethod.GetILGenerator();
             ParameterInfo[] ps = methodBase.GetParameters();
             Type[] paramTypes = new Type[ps.Length];
@@ -69,9 +71,9 @@ namespace Puzzle.NAspect.Framework
             }
             else
             {
-                MethodInfo methodInfo = (MethodInfo)methodBase;
+                MethodInfo methodInfo = (MethodInfo) methodBase;
                 il.Emit(OpCodes.Call, methodInfo);
-                if (methodInfo.ReturnType == typeof(void))
+                if (methodInfo.ReturnType == typeof (void))
                     il.Emit(OpCodes.Ldnull);
                 else
                     EmitBoxIfNeeded(il, methodInfo.ReturnType);
@@ -92,14 +94,14 @@ namespace Puzzle.NAspect.Framework
             }
 
             il.Emit(OpCodes.Ret);
-            FastInvokeHandler invoder = (FastInvokeHandler)dynamicMethod.CreateDelegate(typeof(FastInvokeHandler));
-            
+            FastInvokeHandler invoder = (FastInvokeHandler) dynamicMethod.CreateDelegate(typeof (FastInvokeHandler));
+
             delegateCache[methodBase] = invoder;
-            
+
             return invoder;
         }
 
-        private static void EmitCastToReference(ILGenerator il, System.Type type)
+        private static void EmitCastToReference(ILGenerator il, Type type)
         {
             if (type.IsValueType)
             {
@@ -111,7 +113,7 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
-        private static void EmitBoxIfNeeded(ILGenerator il, System.Type type)
+        private static void EmitBoxIfNeeded(ILGenerator il, Type type)
         {
             if (type.IsValueType)
             {
@@ -157,7 +159,7 @@ namespace Puzzle.NAspect.Framework
 
             if (value > -129 && value < 128)
             {
-                il.Emit(OpCodes.Ldc_I4_S, (SByte)value);
+                il.Emit(OpCodes.Ldc_I4_S, (SByte) value);
             }
             else
             {

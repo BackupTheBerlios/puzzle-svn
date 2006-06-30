@@ -18,14 +18,14 @@ namespace Puzzle.NAspect.Framework.Configuration
     /// <summary>
     /// 
     /// </summary>
-	public class NAspectConfigurationHandler : IConfigurationSectionHandler
-	{
+    public class NAspectConfigurationHandler : IConfigurationSectionHandler
+    {
         /// <summary>
         /// 
         /// </summary>
-		public NAspectConfigurationHandler()
-		{
-		}
+        public NAspectConfigurationHandler()
+        {
+        }
 
         /// <summary>
         /// 
@@ -34,10 +34,9 @@ namespace Puzzle.NAspect.Framework.Configuration
         /// <param name="configContext"></param>
         /// <param name="section"></param>
         /// <returns></returns>
-		public object Create(object parent, object configContext, XmlNode section)
-		{
-			return section.SelectSingleNode("configuration");
-		}
-
-	}
+        public object Create(object parent, object configContext, XmlNode section)
+        {
+            return section.SelectSingleNode("configuration");
+        }
+    }
 }

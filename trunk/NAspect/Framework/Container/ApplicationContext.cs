@@ -18,44 +18,44 @@ namespace Puzzle.NAspect.Framework
     /// <summary>
     /// Factory class that creates and configures an IEngine from app.config
     /// </summary>
-	public class ApplicationContext
-	{
-		private static volatile Hashtable configurations = new Hashtable();
+    public class ApplicationContext
+    {
+        private static volatile Hashtable configurations = new Hashtable();
 
         /// <summary>
         /// Deserializes app.config and configures an IEngine.
         /// </summary>
         /// <returns>a default configured IEngine</returns>
-		public static IEngine Configure()
-		{
+        public static IEngine Configure()
+        {
 #if NET2
-			XmlElement o = (XmlElement) ConfigurationManager.GetSection("naspect");
+            XmlElement o = (XmlElement) ConfigurationManager.GetSection("naspect");
 #else
             XmlElement o = (XmlElement) ConfigurationSettings.GetConfig("naspect");
 #endif
 
             if (configurations.ContainsKey("app.config"))
-			{
-				Engine engine = new Engine("app.config");
-				EngineConfiguration configuration = (EngineConfiguration) configurations["app.config"];
-				engine.Configuration = configuration;
-				return engine;
-			}
+            {
+                Engine engine = new Engine("app.config");
+                EngineConfiguration configuration = (EngineConfiguration) configurations["app.config"];
+                engine.Configuration = configuration;
+                return engine;
+            }
 
-			lock (configurations.SyncRoot)
-			{
-				ConfigurationDeserializer deserializer = new ConfigurationDeserializer();
+            lock (configurations.SyncRoot)
+            {
+                ConfigurationDeserializer deserializer = new ConfigurationDeserializer();
 #if NET2
-				XmlElement xmlRoot = (XmlElement) ConfigurationManager.GetSection("naspect");
+                XmlElement xmlRoot = (XmlElement) ConfigurationManager.GetSection("naspect");
 #else
 				XmlElement xmlRoot = (XmlElement) ConfigurationSettings.GetConfig("naspect");
 #endif
 
-				IEngine res = deserializer.Configure(xmlRoot);
+                IEngine res = deserializer.Configure(xmlRoot);
 
-				configurations["app.config"] = res.Configuration;
-				return res;
-			}
-		}
-	}
+                configurations["app.config"] = res.Configuration;
+                return res;
+            }
+        }
+    }
 }

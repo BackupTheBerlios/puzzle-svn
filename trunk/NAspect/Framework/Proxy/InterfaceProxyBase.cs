@@ -8,8 +8,6 @@
 // *
 // *
 
-using System;
-
 namespace Puzzle.NAspect.Framework
 {
     /// <summary>
@@ -17,8 +15,7 @@ namespace Puzzle.NAspect.Framework
     /// Used incase we make something up that we need to do with interface proxies.
     /// This is really anti YAGNI..
     /// </summary>
-	public class InterfaceProxyBase
-	{
-
-	}
+    public class InterfaceProxyBase
+    {
+    }
 }

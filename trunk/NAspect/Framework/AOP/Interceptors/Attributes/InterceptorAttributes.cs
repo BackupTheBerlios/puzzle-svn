@@ -9,10 +9,6 @@
 // *
 
 using System;
-using System.Collections;
-using System.Reflection;
-using Puzzle.NAspect.Framework.Aop;
-using System.Diagnostics;
 
 namespace Puzzle.NAspect.Framework.Interception
 {
@@ -20,25 +16,22 @@ namespace Puzzle.NAspect.Framework.Interception
     /// This attribute can be applied to IInterceptors.
     /// It tells the debug visualizer that the interceptor may break the call flow.
     /// </summary>
-    [AttributeUsage (AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class MayBreakFlowAttribute : Attribute
     {
         #region Property Reason 
+
         private string reason;
+
         /// <summary>
         /// Reason why the interceptor may break the flow.
         /// </summary>
         public string Reason
         {
-            get
-            {
-                return this.reason;
-            }
-            set
-            {
-                this.reason = value;
-            }
-        }                        
+            get { return reason; }
+            set { reason = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -54,7 +47,7 @@ namespace Puzzle.NAspect.Framework.Interception
         /// <param name="reason">Reason why the interceptor may break the flow.</param>
         public MayBreakFlowAttribute(string reason)
         {
-            this.Reason = reason;
+            Reason = reason;
         }
     }
 
@@ -66,21 +59,18 @@ namespace Puzzle.NAspect.Framework.Interception
     public class IsRequiredAttribute : Attribute
     {
         #region Property required 
+
         private bool required;
+
         /// <summary>
         /// Gets or sets the required property.
         /// </summary>
         public bool Required
         {
-            get
-            {
-                return this.required;
-            }
-            set
-            {
-                this.required = value;
-            }
-        }                        
+            get { return required; }
+            set { required = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -96,7 +86,7 @@ namespace Puzzle.NAspect.Framework.Interception
         /// <param name="required">Set to true if the interceptor is required</param>
         public IsRequiredAttribute(bool required)
         {
-            this.Required = required;
+            Required = required;
         }
     }
 
@@ -104,25 +94,22 @@ namespace Puzzle.NAspect.Framework.Interception
     /// This attribute can be applied to IInterceptors.
     /// It tells the debug visualizer that the interceptor may throw an exception.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ThrowsAttribute : Attribute
     {
         #region Property ExceptionType 
+
         private Type exceptionType;
+
         /// <summary>
         /// Type of exception the interceptor may throw.
         /// </summary>
         public Type ExceptionType
         {
-            get
-            {
-                return this.exceptionType;
-            }
-            set
-            {
-                this.exceptionType = value;
-            }
-        }                        
+            get { return exceptionType; }
+            set { exceptionType = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -131,7 +118,7 @@ namespace Puzzle.NAspect.Framework.Interception
         /// <param name="exceptionType">Type of the exception the interceptor may throw</param>
         public ThrowsAttribute(Type exceptionType)
         {
-            this.ExceptionType = exceptionType;
+            ExceptionType = exceptionType;
         }
     }
 
@@ -144,21 +131,18 @@ namespace Puzzle.NAspect.Framework.Interception
     public class CatchesAttribute : Attribute
     {
         #region Property ExceptionType
+
         private Type exceptionType;
+
         /// <summary>
         /// The type of the exception that may be chaught
         /// </summary>
         public Type ExceptionType
         {
-            get
-            {
-                return this.exceptionType;
-            }
-            set
-            {
-                this.exceptionType = value;
-            }
+            get { return exceptionType; }
+            set { exceptionType = value; }
         }
+
         #endregion
 
         /// <summary>
@@ -167,7 +151,7 @@ namespace Puzzle.NAspect.Framework.Interception
         /// <param name="exceptionType">The type of the exception that may be chaught</param>
         public CatchesAttribute(Type exceptionType)
         {
-            this.ExceptionType = exceptionType;
+            ExceptionType = exceptionType;
         }
     }
 
@@ -180,39 +164,33 @@ namespace Puzzle.NAspect.Framework.Interception
     public class ReplaceException : Attribute
     {
         #region Property CatchType 
+
         private Type catchType;
+
         /// <summary>
         /// Exception type to catch
         /// </summary>
         public Type CatchType
         {
-            get
-            {
-                return this.catchType;
-            }
-            set
-            {
-                this.catchType = value;
-            }
-        }                        
+            get { return catchType; }
+            set { catchType = value; }
+        }
+
         #endregion
 
         #region Property ThrowType 
+
         private Type throwType;
+
         /// <summary>
         /// Exception type to replace with
         /// </summary>
         public Type ThrowType
         {
-            get
-            {
-                return this.throwType;
-            }
-            set
-            {
-                this.throwType = value;
-            }
-        }                        
+            get { return throwType; }
+            set { throwType = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -222,10 +200,8 @@ namespace Puzzle.NAspect.Framework.Interception
         /// <param name="throwType">Exception type to replace with</param>
         public ReplaceException(Type catchType, Type throwType)
         {
-            this.CatchType = catchType;
-            this.ThrowType = throwType;
+            CatchType = catchType;
+            ThrowType = throwType;
         }
     }
-
-
 }

@@ -15,15 +15,15 @@ using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	/// <summary>
-	/// Aspect that matches target types based on attributes applied to the target.
-	/// </summary>
-	public class AttributeAspect : GenericAspectBase
-	{
+    /// <summary>
+    /// Aspect that matches target types based on attributes applied to the target.
+    /// </summary>
+    public class AttributeAspect : GenericAspectBase
+    {
         /// <summary>
         /// Type of the attribute to match.
         /// </summary>
-		public Type AttributeType;
+        public Type AttributeType;
 
         /// <summary>
         /// Attribute aspect Ctor.
@@ -32,14 +32,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="attributeType">Type of the attribute to match.</param>
         /// <param name="mixins">IList of mixin types.</param>
         /// <param name="pointcuts">IList of IPointcut instances.</param>
-		public AttributeAspect(string Name, Type attributeType, IList mixins, IList pointcuts)
-		{
-			this.Name = Name;
-			this.AttributeType = attributeType;
-			this.Mixins = mixins;
-			this.Pointcuts = pointcuts;
-
-		}
+        public AttributeAspect(string Name, Type attributeType, IList mixins, IList pointcuts)
+        {
+            this.Name = Name;
+            AttributeType = attributeType;
+            Mixins = mixins;
+            Pointcuts = pointcuts;
+        }
 
         /// <summary>
         /// Attribute aspect Ctor.
@@ -48,13 +47,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="attributeType">Type of the attribute to match.</param>
         /// <param name="mixins">Type[] array of mixin types</param>
         /// <param name="pointcuts">IPointcut[] array of pointcut instances</param>
-		public AttributeAspect(string Name, Type attributeType, Type[] mixins, IPointcut[] pointcuts)
-		{
-			this.Name = Name;
-			this.AttributeType = attributeType;
-			this.Mixins = new ArrayList(mixins);
-			this.Pointcuts = new ArrayList(pointcuts);
-		}
+        public AttributeAspect(string Name, Type attributeType, Type[] mixins, IPointcut[] pointcuts)
+        {
+            this.Name = Name;
+            AttributeType = attributeType;
+            Mixins = new ArrayList(mixins);
+            Pointcuts = new ArrayList(pointcuts);
+        }
 
         /// <summary>
         /// Attribute aspect Ctor.
@@ -63,12 +62,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="attributeType">Type of the attribute to match</param>
         /// <param name="TargetMethodsignature">string Signature of methods to match.</param>
         /// <param name="Interceptor">Instance of an IInterceptor</param>
-		public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IInterceptor Interceptor)
-		{
-			this.Name = Name;
-			this.AttributeType = attributeType;
-			this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
-		}
+        public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IInterceptor Interceptor)
+        {
+            this.Name = Name;
+            AttributeType = attributeType;
+            Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
 
 
         /// <summary>
@@ -77,16 +76,16 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="type">Type to match</param>
         /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
-		public override bool IsMatch(Type type)
-		{
-			Type tmp = type;
-			while (tmp.Assembly is AssemblyBuilder)
-				tmp = tmp.BaseType;
+        public override bool IsMatch(Type type)
+        {
+            Type tmp = type;
+            while (tmp.Assembly is AssemblyBuilder)
+                tmp = tmp.BaseType;
 
-			if (tmp.GetCustomAttributes(AttributeType, true).Length > 0)
-				return true;
-			else
-				return false;
-		}
-	}
+            if (tmp.GetCustomAttributes(AttributeType, true).Length > 0)
+                return true;
+            else
+                return false;
+        }
+    }
 }

@@ -9,10 +9,6 @@
 // *
 
 using System;
-using System.Collections;
-using System.Reflection.Emit;
-using Puzzle.NAspect.Framework.Tools;
-using System.Reflection;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -24,29 +20,28 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    [AttributeUsage ( AttributeTargets.Method )]
-	public class InterceptorAttribute : Attribute
-	{
+    [AttributeUsage(AttributeTargets.Method)]
+    public class InterceptorAttribute : Attribute
+    {
         #region Property Index
+
         private int index;
+
         /// <summary>
         /// Call chain index of the interceptor, mark your first interceptor with index=1 , then next with index=2 etc.
         /// </summary>
         public virtual int Index
         {
-            get
-            {
-                return this.index;
-            }
-            set
-            {
-                this.index = value;
-            }
+            get { return index; }
+            set { index = value; }
         }
+
         #endregion
 
         #region Property TargetAttribute
+
         private Type targetAttribute;
+
         /// <summary>
         /// When a type is matched, every method decorated with an attribute of this type with get the current interceptor applied.        
         /// </summary>
@@ -70,19 +65,16 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public virtual Type TargetAttribute
         {
-            get
-            {
-                return this.targetAttribute;
-            }
-            set
-            {
-                this.targetAttribute = value;
-            }
+            get { return targetAttribute; }
+            set { targetAttribute = value; }
         }
+
         #endregion
 
         #region Property TargetSignature
+
         private string targetSignature;
+
         /// <summary>
         /// When a type is matched, every method with this signature will be matched.
         /// Valid wildcards are:
@@ -108,15 +100,10 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public virtual string TargetSignature
         {
-            get
-            {
-                return this.targetSignature;
-            }
-            set
-            {
-                this.targetSignature = value;
-            }
+            get { return targetSignature; }
+            set { targetSignature = value; }
         }
+
         #endregion
 
         /// <summary>
@@ -124,7 +111,6 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         public InterceptorAttribute()
         {
-            
         }
     }
 
@@ -152,7 +138,9 @@ namespace Puzzle.NAspect.Framework.Aop
     public class MixinAttribute : Attribute
     {
         #region Property MixinType
+
         private Type mixinType;
+
         /// <summary>
         /// Type of the mixin to be applied to this aspect.
         /// </summary>
@@ -166,15 +154,10 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public virtual Type MixinType
         {
-            get
-            {
-                return this.mixinType;
-            }
-            set
-            {
-                this.mixinType = value;
-            }
+            get { return mixinType; }
+            set { mixinType = value; }
         }
+
         #endregion
 
         /// <summary>
@@ -191,7 +174,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public MixinAttribute(Type mixinType)
         {
-            this.MixinType = mixinType;
+            MixinType = mixinType;
         }
     }
 
@@ -213,7 +196,9 @@ namespace Puzzle.NAspect.Framework.Aop
     public class AspectTargetAttribute : Attribute
     {
         #region Property TargetAttribute
+
         private Type targetAttribute;
+
         /// <summary>
         /// Every type decorated with an attribute of this type will get the current aspect applied.
         /// </summary>
@@ -225,19 +210,16 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public virtual Type TargetAttribute
         {
-            get
-            {
-                return this.targetAttribute;
-            }
-            set
-            {
-                this.targetAttribute = value;
-            }
+            get { return targetAttribute; }
+            set { targetAttribute = value; }
         }
+
         #endregion
 
         #region Property TargetSignature
+
         private string targetSignature;
+
         /// <summary>
         /// Every type with a signature that matches this pattern will get the current aspect applied.
         /// </summary>
@@ -249,19 +231,16 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example>
         public virtual string TargetSignature
         {
-            get
-            {
-                return this.targetSignature;
-            }
-            set
-            {
-                this.targetSignature = value;
-            }
+            get { return targetSignature; }
+            set { targetSignature = value; }
         }
+
         #endregion
 
         #region Property TargetType
+
         private Type targetType;
+
         /// <summary>
         /// Assigns a single type that should get this aspect applied to it.
         /// </summary>
@@ -274,15 +253,10 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </example> 
         public virtual Type TargetType
         {
-            get
-            {
-                return this.targetType;
-            }
-            set
-            {
-                this.targetType = value;
-            }
+            get { return targetType; }
+            set { targetType = value; }
         }
+
         #endregion
     }
 }

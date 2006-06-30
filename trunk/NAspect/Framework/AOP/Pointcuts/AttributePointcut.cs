@@ -18,43 +18,44 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// Pointcut that matches attributes on target methods.
     /// </summary>
-	public class AttributePointcut : PointcutBase
-	{
+    public class AttributePointcut : PointcutBase
+    {
         /// <summary>
         /// The attribute type that should be matched by this pointcut.
         /// </summary>
-		public Type AttributeType;
+        public Type AttributeType;
 
-		#region Pointcut
+        #region Pointcut
+
         /// <summary>
         /// AttributePointcut ctor.
         /// </summary>
         /// <param name="attributeType">Attribute type to match</param>
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>s to apply on matched methods</param>
-		public AttributePointcut(Type attributeType, IList interceptors)
-		{
-			this.AttributeType = attributeType;
-			this.Interceptors = interceptors;
-		}
+        public AttributePointcut(Type attributeType, IList interceptors)
+        {
+            AttributeType = attributeType;
+            Interceptors = interceptors;
+        }
 
-		#endregion
+        #endregion
 
-		#region Pointcut
+        #region Pointcut
 
         /// <summary>
         /// AttributePointcut ctor.
         /// </summary>
         /// <param name="attributeType">Attribute type to match</param>
         /// <param name="interceptors">Array of <c>IInterceptor</c>s to apply on matched methods</param>
-		public AttributePointcut(Type attributeType, IInterceptor[] interceptors)
-		{
-			this.AttributeType = attributeType;
-			this.Interceptors = new ArrayList(interceptors);
-		}
+        public AttributePointcut(Type attributeType, IInterceptor[] interceptors)
+        {
+            AttributeType = attributeType;
+            Interceptors = new ArrayList(interceptors);
+        }
 
-		#endregion
+        #endregion
 
-		#region Pointcut
+        #region Pointcut
 
         /// <summary>
         /// AttributePointcut ctor.
@@ -62,12 +63,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="attributeType">Attribute type to match</param>
         /// <param name="interceptor"><c>IInterceptor</c> instance to appy on matched methods.</param>
         public AttributePointcut(Type attributeType, IInterceptor interceptor)
-		{
-			this.AttributeType = attributeType;
-            this.Interceptors = new ArrayList(new IInterceptor[] { interceptor });
-		}
+        {
+            AttributeType = attributeType;
+            Interceptors = new ArrayList(new IInterceptor[] {interceptor});
+        }
 
-		#endregion
+        #endregion
 
         #region Pointcut
 
@@ -78,10 +79,10 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="interceptor">Interceptor delegate to apply on matched methods, valid delegates are <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c></param>
         public AttributePointcut(Type attributeType, Delegate interceptor)
         {
-            this.AttributeType = attributeType;
+            AttributeType = attributeType;
             ArrayList arr = new ArrayList();
             arr.Add(interceptor);
-            this.Interceptors = arr;
+            Interceptors = arr;
         }
 
         #endregion
@@ -91,14 +92,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-		public override bool IsMatch(MethodBase method)
-		{
-			if (method.GetCustomAttributes(AttributeType, true).Length > 0)
-				return true;
-			else
-				return false;
-		}
-
-
-	}
+        public override bool IsMatch(MethodBase method)
+        {
+            if (method.GetCustomAttributes(AttributeType, true).Length > 0)
+                return true;
+            else
+                return false;
+        }
+    }
 }

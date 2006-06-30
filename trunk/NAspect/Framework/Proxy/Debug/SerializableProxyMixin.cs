@@ -12,9 +12,9 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Debug.Serialization;
 using Puzzle.NAspect.Debug.Serialization.Elements;
+using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.Interception;
 
 namespace Puzzle.NAspect.Framework
@@ -23,9 +23,10 @@ namespace Puzzle.NAspect.Framework
     /// Mixin used by the VS.NET 2005 debugger visualizer.
     /// this is only mixed in if the debugger visualizer is available.
     /// </summary>
-	public class SerializableProxyMixin : ISerializableProxy , IProxyAware
-	{
+    public class SerializableProxyMixin : ISerializableProxy, IProxyAware
+    {
         private IAopProxy target;
+
         #region ISerializableProxy Members
 
         /// <summary>
@@ -41,12 +42,12 @@ namespace Puzzle.NAspect.Framework
             vizType.FullName = target.GetType().FullName;
 
             Type tmp = target.GetType();
-            while (typeof(IAopProxy).IsAssignableFrom(tmp))
+            while (typeof (IAopProxy).IsAssignableFrom(tmp))
                 tmp = tmp.BaseType;
 
             vizType.BaseName = tmp.Name;
 
-            IList mixins = (IList)MethodCache.mixinsLookup[target.GetType()];
+            IList mixins = (IList) MethodCache.mixinsLookup[target.GetType()];
             foreach (Type mixinType in mixins)
             {
                 VizMixin vizMixin = new VizMixin();
@@ -54,42 +55,41 @@ namespace Puzzle.NAspect.Framework
                 vizMixin.FullTypeName = mixinType.FullName;
                 vizType.Mixins.Add(vizMixin);
             }
-            IList aspects = (IList)MethodCache.aspectsLookup[target.GetType()];
+            IList aspects = (IList) MethodCache.aspectsLookup[target.GetType()];
             foreach (IAspect aspect in aspects)
             {
                 IGenericAspect tmpAspect;
                 if (aspect is IGenericAspect)
-                    tmpAspect = (IGenericAspect)aspect;
+                    tmpAspect = (IGenericAspect) aspect;
                 else
-                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect) aspect);
 
 
                 VizAspect vizAspect = new VizAspect();
                 vizAspect.Name = tmpAspect.Name;
             }
-            IList methods = (IList)MethodCache.methodsLookup[target.GetType()];
+            IList methods = (IList) MethodCache.methodsLookup[target.GetType()];
             foreach (string methodId in methods)
             {
-                MethodBase methodBase = (MethodBase)MethodCache.methodLookup[methodId];
+                MethodBase methodBase = (MethodBase) MethodCache.methodLookup[methodId];
                 if (methodBase is ConstructorInfo)
                 {
-                    ConstructorInfo constructor = (ConstructorInfo)methodBase;
+                    ConstructorInfo constructor = (ConstructorInfo) methodBase;
                     VizConstructor vizConstructor = new VizConstructor();
                     vizConstructor.Name = constructor.Name;
 
-                   
 
                     ParameterInfo[] paramInfos = constructor.GetParameters();
-                    SerializeParameters(vizConstructor ,paramInfos);
+                    SerializeParameters(vizConstructor, paramInfos);
 
-                    IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
+                    IList interceptors = (IList) MethodCache.methodInterceptorsLookup[methodId];
                     SerializeInterceptors(vizConstructor, interceptors);
                     vizConstructor.OwnerType = vizType;
                     vizType.Methods.Add(vizConstructor);
                 }
                 else if (methodBase is MethodInfo)
                 {
-                    MethodInfo method = (MethodInfo)methodBase;
+                    MethodInfo method = (MethodInfo) methodBase;
                     VizMethod vizMethod = new VizMethod();
                     vizMethod.Name = method.Name;
                     vizMethod.ReturnType = method.ReturnType.Name;
@@ -98,13 +98,12 @@ namespace Puzzle.NAspect.Framework
                     ParameterInfo[] paramInfos = method.GetParameters();
                     SerializeParameters(vizMethod, paramInfos);
 
-                    IList interceptors = (IList)MethodCache.methodInterceptorsLookup[methodId];
+                    IList interceptors = (IList) MethodCache.methodInterceptorsLookup[methodId];
                     SerializeInterceptors(vizMethod, interceptors);
                     vizMethod.OwnerType = vizType;
                     vizType.Methods.Add(vizMethod);
                 }
             }
-
 
 
             proxy.ProxyType = vizType;
@@ -122,7 +121,7 @@ namespace Puzzle.NAspect.Framework
             }
         }
 
-        private void SerializeInterceptors(VizMethodBase vizMethodBase,IList interceptors)
+        private void SerializeInterceptors(VizMethodBase vizMethodBase, IList interceptors)
         {
             foreach (object interceptor in interceptors)
             {
@@ -146,38 +145,38 @@ namespace Puzzle.NAspect.Framework
                 else if (interceptor is AroundDelegate)
                 {
                     interceptorType = VizInterceptorType.Around;
-                    Delegate ad = (Delegate)interceptor;
+                    Delegate ad = (Delegate) interceptor;
                     vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
                 }
                 else if (interceptor is AfterDelegate)
                 {
                     interceptorType = VizInterceptorType.After;
-                    Delegate ad = (Delegate)interceptor;
+                    Delegate ad = (Delegate) interceptor;
                     vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
                 }
                 else if (interceptor is BeforeDelegate)
                 {
                     interceptorType = VizInterceptorType.Before;
-                    Delegate ad = (Delegate)interceptor;
+                    Delegate ad = (Delegate) interceptor;
                     vizInterceptor.Name = ad.Method.DeclaringType.Name + "." + ad.Method.Name;
                 }
 
-                
+
                 vizInterceptor.TypeName = interceptor.GetType().Name;
 
                 vizInterceptor.InterceptorType = interceptorType;
 
-                if (interceptor.GetType().GetCustomAttributes(typeof(MayBreakFlowAttribute),false).Length > 0)
+                if (interceptor.GetType().GetCustomAttributes(typeof (MayBreakFlowAttribute), false).Length > 0)
                 {
                     vizInterceptor.MayBreakFlow = true;
                 }
 
-                if (interceptor.GetType().GetCustomAttributes(typeof(IsRequiredAttribute), false).Length > 0)
+                if (interceptor.GetType().GetCustomAttributes(typeof (IsRequiredAttribute), false).Length > 0)
                 {
                     vizInterceptor.IsRequired = true;
                 }
 
-                object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof(ThrowsAttribute), false);
+                object[] exceptionTypes = interceptor.GetType().GetCustomAttributes(typeof (ThrowsAttribute), false);
                 foreach (ThrowsAttribute throws in exceptionTypes)
                 {
                     vizInterceptor.ThrowsExceptionTypes.Add(throws.ExceptionType.Name);
@@ -185,7 +184,6 @@ namespace Puzzle.NAspect.Framework
 
                 vizMethodBase.Interceptors.Add(vizInterceptor);
             }
-
         }
 
         #endregion
@@ -204,4 +202,5 @@ namespace Puzzle.NAspect.Framework
         #endregion
     }
 }
+
 #endif

@@ -15,45 +15,45 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
     /// <summary>
     /// Configutration class that holds a set of aspects
     /// </summary>
-	public class EngineConfiguration
-	{
-		#region Public Property Aspects
+    public class EngineConfiguration
+    {
+        #region Public Property Aspects
 
-		private IList aspects;
+        private IList aspects;
 
 
         /// <summary>
         /// Untyped list of <c>IAspect</c>s
         /// </summary>
-		public IList Aspects
-		{
-			get { return this.aspects; }
-			set { this.aspects = value; }
-		}
+        public IList Aspects
+        {
+            get { return aspects; }
+            set { aspects = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property Name
+        #region Public Property Name
 
-		private string name;
+        private string name;
 
         /// <summary>
         /// Name of this configuration.
         /// </summary>
-		public string Name
-		{
-			get { return this.name; }
-			set { this.name = value; }
-		}
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
 
-		#endregion
+        #endregion
 
         /// <summary>
         /// EngineConfiguration ctor.
         /// </summary>
-		public EngineConfiguration()
-		{
-			aspects = new ArrayList();
-		}
-	}
+        public EngineConfiguration()
+        {
+            aspects = new ArrayList();
+        }
+    }
 }

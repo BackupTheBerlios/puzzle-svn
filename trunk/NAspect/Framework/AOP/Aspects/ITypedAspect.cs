@@ -8,9 +8,6 @@
 // *
 // *
 
-using System;
-using System.Collections;
-
 namespace Puzzle.NAspect.Framework.Aop
 {
     /// <summary>

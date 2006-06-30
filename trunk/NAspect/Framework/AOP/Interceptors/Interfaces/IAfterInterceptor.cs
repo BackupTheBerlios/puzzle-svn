@@ -14,11 +14,11 @@ namespace Puzzle.NAspect.Framework.Interception
     /// Represents an "after" interceptor that is triggered after the base implementation of a method call is invoked.
     /// </summary>
     public interface IAfterInterceptor : IInterceptor
-	{
+    {
         /// <summary>
         /// Method that is triggered after the base implementation of a method call is invoked.
         /// </summary>
         /// <param name="call">The method call</param>
-        void AfterCall(AfterMethodInvocation call);        
-	}
+        void AfterCall(AfterMethodInvocation call);
+    }
 }

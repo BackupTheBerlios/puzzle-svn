@@ -74,7 +74,8 @@ namespace Puzzle.NAspect.Framework
         /// <param name="returnType">The return type of the method (if available, ctors do not have a return type).</param>
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c></param>
         [DebuggerStepThrough()]
-        public MethodInvocation(IAopProxy target,object executionTarget, MethodBase method, MethodBase endMethod, IList parameters,
+        public MethodInvocation(IAopProxy target, object executionTarget, MethodBase method, MethodBase endMethod,
+                                IList parameters,
                                 Type returnType, IList interceptors)
         {
             Target = target;
@@ -94,8 +95,8 @@ namespace Puzzle.NAspect.Framework
         /// Executes the next step of the interception chain.
         /// </summary>
         /// <returns>The result of the next interceptor or base implementation</returns>
-  //      [DebuggerStepThrough()]
-  //      [DebuggerHidden()]
+        //      [DebuggerStepThrough()]
+        //      [DebuggerHidden()]
         public object Proceed()
         {
             if (Step < Interceptors.Count)
@@ -207,7 +208,6 @@ namespace Puzzle.NAspect.Framework
 
         #region CallEndMethod
 
-        
         [DebuggerStepThrough()]
         [DebuggerHidden()]
         private object CallEndMethod()
@@ -222,7 +222,7 @@ namespace Puzzle.NAspect.Framework
 
             //copy paramvalues into param list
             for (int i = start; i < Parameters.Count; i++)
-                parr[i - start] = ((InterceptedParameter)Parameters[i]).Value;
+                parr[i - start] = ((InterceptedParameter) Parameters[i]).Value;
 
             //call the end method
 #if NET2
@@ -235,7 +235,7 @@ namespace Puzzle.NAspect.Framework
 
             //copy back all param values (for out/ref params)
             for (int i = start; i < Parameters.Count; i++)
-                ((InterceptedParameter)Parameters[i]).Value = parr[i - start];
+                ((InterceptedParameter) Parameters[i]).Value = parr[i - start];
 
             return result;
         }

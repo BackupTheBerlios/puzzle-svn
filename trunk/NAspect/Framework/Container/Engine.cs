@@ -14,7 +14,6 @@ using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
 #if NET2
-using Puzzle.NAspect.Debug.Serialization;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -35,27 +34,27 @@ namespace Puzzle.NAspect.Framework
     /// Car myCar = engine.CreateProxy&lt;Car&gt;();
     /// </code>
     /// </example>
-	public class Engine : IEngine
-	{
+    public class Engine : IEngine
+    {
         /// <summary>
         /// Singleton engine instance configured from app.config.
         /// </summary>
         public static readonly IEngine Default = ApplicationContext.Configure();
 
-		private IDictionary proxyLookup;
-		private IDictionary wrapperLookup;
+        private IDictionary proxyLookup;
+        private IDictionary wrapperLookup;
 
         /// <summary>
         /// The aspect matcher to use when matching aspects.
         /// </summary>
-		public readonly AspectMatcher AspectMatcher = new AspectMatcher();
+        public readonly AspectMatcher AspectMatcher = new AspectMatcher();
 
         /// <summary>
         /// The pointcut matcher to use when matching pointcuts.
         /// </summary>
-		public readonly PointcutMatcher PointCutMatcher = new PointcutMatcher();        
+        public readonly PointcutMatcher PointCutMatcher = new PointcutMatcher();
 
-		#region Engine
+        #region Engine
 
         /// <summary>
         /// AOP Engine constructor
@@ -73,52 +72,52 @@ namespace Puzzle.NAspect.Framework
         /// 
         /// </code>
         /// </example>
-		public Engine(string configurationName)
-		{
-			configuration = new EngineConfiguration();
-			proxyLookup = ConfigurationCache.GetProxyLookup(configurationName);
-			wrapperLookup = ConfigurationCache.GetWrapperLookup(configurationName);
-			logManager = new LogManager();
-		}
+        public Engine(string configurationName)
+        {
+            configuration = new EngineConfiguration();
+            proxyLookup = ConfigurationCache.GetProxyLookup(configurationName);
+            wrapperLookup = ConfigurationCache.GetWrapperLookup(configurationName);
+            logManager = new LogManager();
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property Configuration
+        #region Public Property Configuration
 
-		private EngineConfiguration configuration;
+        private EngineConfiguration configuration;
 
         /// <summary>
         /// 
         /// </summary>
-		public EngineConfiguration Configuration
-		{
-			get { return this.configuration; }
-			set { this.configuration = value; }
-		}
+        public EngineConfiguration Configuration
+        {
+            get { return configuration; }
+            set { configuration = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Property LogManager
+        #region Public Property LogManager
 
-		private ILogManager logManager;
+        private ILogManager logManager;
 
         /// <summary>
         /// Log manager.
         /// </summary>
-		/// <example>
+        /// <example>
         /// <code lang="CS">
         /// aopEngine.LogManager.Loggers.Add(new ConsoleLogger());
         /// </code>
         /// </example>
         public ILogManager LogManager
-		{
-			get { return this.logManager; }
-			set { this.logManager = value; }
-		}
+        {
+            get { return logManager; }
+            set { logManager = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region CreateProxy
+        #region CreateProxy
 
         /// <summary>
         /// Creates a subclass proxy.
@@ -127,18 +126,18 @@ namespace Puzzle.NAspect.Framework
         /// <param name="type">Type to proxify</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
-		/// <example>
+        /// <example>
         /// <code lang="CS">
         /// Foo myFoo = (Foo)engine.CreateProxy(typeof(Foo));
         /// </code>
         /// </example>
         public object CreateProxy(Type type, params object[] args)
-		{
-			string message = string.Format("Creating proxy for type {0}", type.FullName);
-			LogManager.Info(this, message, "");
+        {
+            string message = string.Format("Creating proxy for type {0}", type.FullName);
+            LogManager.Info(this, message, "");
 
-			return CreateProxyWithState(null, type, args);
-		}
+            return CreateProxyWithState(null, type, args);
+        }
 
         /// <summary>
         /// Creates a interface wrapper proxy.
@@ -153,16 +152,16 @@ namespace Puzzle.NAspect.Framework
         /// IFoo myFoo = (IFoo)engine.CreateWrapper(someFooInstance);
         /// </code>
         /// </example>
-		public object CreateWrapper(object instance)
-		{
-			string message = string.Format("Creating wrapper for type {0}", instance.GetType().FullName);
-			LogManager.Info(this, message, "");
-			
-			Type wrapperType = CreateWrapperType(instance.GetType());
+        public object CreateWrapper(object instance)
+        {
+            string message = string.Format("Creating wrapper for type {0}", instance.GetType().FullName);
+            LogManager.Info(this, message, "");
 
-			object wrapperObject = Activator.CreateInstance(wrapperType, new object[]{instance} );
-			return wrapperObject;
-		}
+            Type wrapperType = CreateWrapperType(instance.GetType());
+
+            object wrapperObject = Activator.CreateInstance(wrapperType, new object[] {instance});
+            return wrapperObject;
+        }
 
         /// <summary>
         /// Util. method that inserts an object in the beginning of a parameter list
@@ -170,17 +169,17 @@ namespace Puzzle.NAspect.Framework
         /// <param name="state">State object to insert in parameter list. this object can be intercepted by ctor interceptors later on.</param>
         /// <param name="args">object array of boxed parameter values</param>
         /// <returns>A new array of parameters, including the state object</returns>
-		public object[] AddStateToCtorParams(object state, object[] args)
-		{
-			if (args == null)
-				args = new object[] {null};
+        public object[] AddStateToCtorParams(object state, object[] args)
+        {
+            if (args == null)
+                args = new object[] {null};
 
-			object[] proxyArgs = new object[args.Length + 1];
-			Array.Copy(args, 0, proxyArgs, 1, args.Length);
-			proxyArgs[0] = state;
+            object[] proxyArgs = new object[args.Length + 1];
+            Array.Copy(args, 0, proxyArgs, 1, args.Length);
+            proxyArgs[0] = state;
 
-			return proxyArgs;
-		}
+            return proxyArgs;
+        }
 
         /// <summary>
         /// Creates a subclass proxy.
@@ -196,44 +195,43 @@ namespace Puzzle.NAspect.Framework
         /// </code>
         /// </example>
         public object CreateProxyWithState(object state, Type type, params object[] args)
-		{
-			string message = string.Format("Creating context bound wrapper for type {0}", type.FullName);
-			LogManager.Info(this, message, "");
-			Type proxyType = CreateProxyType(type);
+        {
+            string message = string.Format("Creating context bound wrapper for type {0}", type.FullName);
+            LogManager.Info(this, message, "");
+            Type proxyType = CreateProxyType(type);
 
-			object[] proxyArgs;
-			if (proxyType == type)
-			{
-				proxyArgs = args;
-			}
-			else
-			{
-				proxyArgs = AddStateToCtorParams(state, args);
-			}
+            object[] proxyArgs;
+            if (proxyType == type)
+            {
+                proxyArgs = args;
+            }
+            else
+            {
+                proxyArgs = AddStateToCtorParams(state, args);
+            }
 
-			object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
-			return proxyObject;
-		}
+            object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
+            return proxyObject;
+        }
 
         /// <summary>
         /// Creates a subclass proxy type
         /// </summary>
         /// <param name="type">Type to proxify</param>
         /// <returns>The proxy type</returns>
-		public Type CreateProxyType(Type type)
-		{
-            
-			lock (proxyLookup.SyncRoot)
-			{
-				Type proxyType = null;
-				//incase a proxy for this type does not exist , generate it
-				if (proxyLookup[type] == null)
-				{
-					IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
+        public Type CreateProxyType(Type type)
+        {
+            lock (proxyLookup.SyncRoot)
+            {
+                Type proxyType = null;
+                //incase a proxy for this type does not exist , generate it
+                if (proxyLookup[type] == null)
+                {
+                    IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
-					IList typeMixins = GetMixinsForType(type,typeAspects);
+                    IList typeMixins = GetMixinsForType(type, typeAspects);
 
-					typeMixins.Add(typeof (AopProxyMixin));
+                    typeMixins.Add(typeof (AopProxyMixin));
 
 #if NET2
                     if (SerializerIsAvailable())
@@ -241,103 +239,102 @@ namespace Puzzle.NAspect.Framework
                         AddSerializerMixin(typeMixins);
                     }
 #endif
-                    
 
 
-					proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
-					if (proxyType == null)
-						throw new NullReferenceException(string.Format("Could not generate proxy for type '{0}'", type.FullName));
+                    proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
+                    if (proxyType == null)
+                        throw new NullReferenceException(
+                            string.Format("Could not generate proxy for type '{0}'", type.FullName));
 
-                    
 
-					proxyLookup[type] = proxyType;
-					string message = string.Format("Emitting new proxy type for type {0}", type.FullName);
-					LogManager.Info(this, message, "");
-				}
-				else
-				{
-					//fetch the proxy type from the lookup
-					proxyType = proxyLookup[type] as Type;
-					string message = string.Format("Fetching proxy type from cache for type {0}", type.FullName);
-					LogManager.Info(this, message, "");
-				}
-				return proxyType;
-			}
-		}
+                    proxyLookup[type] = proxyType;
+                    string message = string.Format("Emitting new proxy type for type {0}", type.FullName);
+                    LogManager.Info(this, message, "");
+                }
+                else
+                {
+                    //fetch the proxy type from the lookup
+                    proxyType = proxyLookup[type] as Type;
+                    string message = string.Format("Fetching proxy type from cache for type {0}", type.FullName);
+                    LogManager.Info(this, message, "");
+                }
+                return proxyType;
+            }
+        }
 
         /// <summary>
         /// Creates an interface wrapper proxy type
         /// </summary>
         /// <param name="type">Type to proxify</param>
         /// <returns>The proxy type</returns>
-		public Type CreateWrapperType(Type type)
-		{
-			lock (wrapperLookup.SyncRoot)
-			{
-				Type wrapperType = null;
-				//incase a proxy for this type does not exist , generate it
-				if (wrapperLookup[type] == null)
-				{
-					IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
+        public Type CreateWrapperType(Type type)
+        {
+            lock (wrapperLookup.SyncRoot)
+            {
+                Type wrapperType = null;
+                //incase a proxy for this type does not exist , generate it
+                if (wrapperLookup[type] == null)
+                {
+                    IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
-					IList typeMixins = GetMixinsForType(type,typeAspects);
+                    IList typeMixins = GetMixinsForType(type, typeAspects);
 
-					typeMixins.Add(typeof (AopProxyMixin));
+                    typeMixins.Add(typeof (AopProxyMixin));
 
-					wrapperType = InterfaceProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
-					if (wrapperType == null)
-						throw new NullReferenceException(string.Format("Could not generate wrapper for type '{0}'", type.FullName));
+                    wrapperType = InterfaceProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
+                    if (wrapperType == null)
+                        throw new NullReferenceException(
+                            string.Format("Could not generate wrapper for type '{0}'", type.FullName));
 
-					wrapperLookup[type] = wrapperType;
-					string message = string.Format("Emitting new wrapper type for type {0}", type.FullName);
-					LogManager.Info(this, message, "");
-				}
-				else
-				{
-					//fetch the proxy type from the lookup
-					wrapperType = wrapperLookup[type] as Type;
-					string message = string.Format("Fetching proxy wrapper from cache for type {0}", type.FullName);
-					LogManager.Info(this, message, "");
-				}
-				return wrapperType;
-			}
-		}
+                    wrapperLookup[type] = wrapperType;
+                    string message = string.Format("Emitting new wrapper type for type {0}", type.FullName);
+                    LogManager.Info(this, message, "");
+                }
+                else
+                {
+                    //fetch the proxy type from the lookup
+                    wrapperType = wrapperLookup[type] as Type;
+                    string message = string.Format("Fetching proxy wrapper from cache for type {0}", type.FullName);
+                    LogManager.Info(this, message, "");
+                }
+                return wrapperType;
+            }
+        }
 
-		private IList GetMixinsForType(Type type,IList typeAspects)
-		{
-		//	IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
-			Hashtable mixins = new Hashtable();
-			foreach (IAspect aspect in typeAspects)
-			{
+        private IList GetMixinsForType(Type type, IList typeAspects)
+        {
+            //	IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
+            Hashtable mixins = new Hashtable();
+            foreach (IAspect aspect in typeAspects)
+            {
                 IGenericAspect tmpAspect;
                 if (aspect is IGenericAspect)
-                    tmpAspect = (IGenericAspect)aspect;
+                    tmpAspect = (IGenericAspect) aspect;
                 else
-                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect) aspect);
 
                 foreach (Type mixinType in tmpAspect.Mixins)
                 {
                     //distinct add mixin..
                     mixins[mixinType] = mixinType;
                 }
-                
-			}
-			IList distinctMixins = new ArrayList(mixins.Values);
+            }
+            IList distinctMixins = new ArrayList(mixins.Values);
 
 
-			string message = string.Format("Getting mixins for type {0}", type.FullName);
-			string verbose = "";
-			foreach (Type mixinType in distinctMixins)
-			{
-				verbose += mixinType.Name;
-				if (mixinType != distinctMixins[distinctMixins.Count - 1])
-					verbose += ", ";
-			}
+            string message = string.Format("Getting mixins for type {0}", type.FullName);
+            string verbose = "";
+            foreach (Type mixinType in distinctMixins)
+            {
+                verbose += mixinType.Name;
+                if (mixinType != distinctMixins[distinctMixins.Count - 1])
+                    verbose += ", ";
+            }
 
-			LogManager.Info(this, message, verbose);
+            LogManager.Info(this, message, verbose);
 
-			return distinctMixins;
-		}
+            return distinctMixins;
+        }
 
 #if NET2
         /// <summary>
@@ -355,9 +352,9 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public T CreateProxy<T>(params object[] args)
         {
-            Type type = typeof(T);
+            Type type = typeof (T);
             object o = CreateProxy(type, args);
-            return (T)o;
+            return (T) o;
         }
 
         /// <summary>
@@ -367,11 +364,11 @@ namespace Puzzle.NAspect.Framework
         /// <param name="state">State object that should be used by ctor interceptors</param>
         /// <param name="args">Object array of boxed parameter values</param>
         /// <returns>The proxy instance</returns>
-        public T CreateProxyWithState<T>(object state,params object[] args)
+        public T CreateProxyWithState<T>(object state, params object[] args)
         {
-            Type type = typeof(T);
-            object o = CreateProxyWithState(state,type, args);
-            return (T)o;
+            Type type = typeof (T);
+            object o = CreateProxyWithState(state, type, args);
+            return (T) o;
         }
 
 
@@ -394,6 +391,6 @@ namespace Puzzle.NAspect.Framework
         }
 #endif
 
-		#endregion
-	}
+        #endregion
+    }
 }

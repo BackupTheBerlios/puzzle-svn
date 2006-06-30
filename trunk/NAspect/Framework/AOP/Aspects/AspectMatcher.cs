@@ -17,16 +17,16 @@ namespace Puzzle.NAspect.Framework.Aop
     /// For internal use only.
     /// This class loops through all aspects and tries to match them for a given type.
     /// </summary>
-	public class AspectMatcher
-	{
+    public class AspectMatcher
+    {
         /// <summary>
         /// Aspect matcher ctor
         /// </summary>
-		public AspectMatcher()
-		{
-		}
+        public AspectMatcher()
+        {
+        }
 
-		#region GetAspectsForType
+        #region GetAspectsForType
 
         /// <summary>
         /// Matches a list of IAspects for a given type
@@ -34,24 +34,24 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="type">The type to match</param>
         /// <param name="aspects">Untyped list of <c>IAspect</c></param>
         /// <returns></returns>
-		public IList MatchAspectsForType(Type type, IList aspects)
-		{
-			IList matches = new ArrayList();
-			foreach (IAspect aspect in aspects)
-			{
+        public IList MatchAspectsForType(Type type, IList aspects)
+        {
+            IList matches = new ArrayList();
+            foreach (IAspect aspect in aspects)
+            {
                 IGenericAspect tmpAspect;
                 if (aspect is IGenericAspect)
-                    tmpAspect = (IGenericAspect)aspect;
+                    tmpAspect = (IGenericAspect) aspect;
                 else
-                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect)aspect);
+                    tmpAspect = TypedToGenericConverter.Convert((ITypedAspect) aspect);
 
 
                 if (tmpAspect.IsMatch(type))
                     matches.Add(aspect);
-			}
-			return matches;
-		}
+            }
+            return matches;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -9,12 +9,9 @@
 // *
 
 using System;
-using System.Collections;
-using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
 #if NET2
-using Puzzle.NAspect.Debug.Serialization;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -35,8 +32,8 @@ namespace Puzzle.NAspect.Framework
         /// <summary>
         /// The active engine configuration.
         /// </summary>
-        Puzzle.NAspect.Framework.ConfigurationElements.EngineConfiguration Configuration { get; set; }
-        
+        EngineConfiguration Configuration { get; set; }
+
         /// <summary>
         /// Creates a subclass proxy.
         /// This is primary used by .NET 1.x users or where you need to create proxies of dynamic types in .NET 2.0.        
@@ -57,7 +54,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="type">Type to proxify</param>
         /// <returns>The proxy type</returns>
         Type CreateProxyType(Type type);
-        
+
 #if NET2
         /// <summary>
         /// Creates a subclass proxy of type <c>T</c>.
@@ -76,8 +73,6 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The proxy instance</returns>
         T CreateProxyWithState<T>(object state, params object[] args);
 #endif
-
-
 
 
         /// <summary>
@@ -117,6 +112,6 @@ namespace Puzzle.NAspect.Framework
         /// aopEngine.LogManager.Loggers.Add(new ConsoleLogger());
         /// </code>
         /// </example>
-        Puzzle.NCore.Framework.Logging.ILogManager LogManager { get; set; }
+        ILogManager LogManager { get; set; }
     }
 }

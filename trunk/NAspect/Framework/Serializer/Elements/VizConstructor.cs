@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
@@ -25,7 +23,9 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetCallSample()
         {
-            return string.Format("{0} My{2}Obj = engine.CreateProxy<{0}> ({1})", this.OwnerType.BaseName , this.GetParamTypes(),this.OwnerType.BaseName);
+            return
+                string.Format("{0} My{2}Obj = engine.CreateProxy<{0}> ({1})", OwnerType.BaseName, GetParamTypes(),
+                              OwnerType.BaseName);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetProxyText()
         {
-            return string.Format("Constructor {0} ({1})", this.OwnerType.Name, this.GetParamTypes());
+            return string.Format("Constructor {0} ({1})", OwnerType.Name, GetParamTypes());
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetRealText()
         {
-            return string.Format("Constructor {0} ({1})", this.OwnerType.BaseName, this.GetParamTypes());
+            return string.Format("Constructor {0} ({1})", OwnerType.BaseName, GetParamTypes());
         }
     }
 }

@@ -11,24 +11,24 @@
 using System;
 using System.Collections;
 using System.Reflection.Emit;
-using Puzzle.NAspect.Framework.Tools;
 using Puzzle.NAspect.Framework.Interception;
+using Puzzle.NAspect.Framework.Tools;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	/// <summary>
-	/// Aspect that matches target types based on wildcard signatures.
+    /// <summary>
+    /// Aspect that matches target types based on wildcard signatures.
     /// ? for ignoring single characters
     /// * for ignoring one or more characters
-	/// </summary>
-	public class SignatureAspect : GenericAspectBase
-	{
+    /// </summary>
+    public class SignatureAspect : GenericAspectBase
+    {
         /// <summary>
         /// Signature of the type to match.
         /// ? for ignoring single characters
         /// * for ignoring one or more characters
         /// </summary>
-		public string TargetTypeSignature;
+        public string TargetTypeSignature;
 
 
         /// <summary>
@@ -38,14 +38,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="targetName">Signature of the target type</param>
         /// <param name="mixins">Untyped list of <c>System.Type</c>s to mixin</param>
         /// <param name="pointcuts">Untyped list of IPointcut instances</param>
-		public SignatureAspect(string name, string targetName, IList mixins, IList pointcuts)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = targetName;
-			this.Mixins = mixins;
-			this.Pointcuts = pointcuts;
-
-		}
+        public SignatureAspect(string name, string targetName, IList mixins, IList pointcuts)
+        {
+            Name = name;
+            TargetTypeSignature = targetName;
+            Mixins = mixins;
+            Pointcuts = pointcuts;
+        }
 
         /// <summary>
         /// Signature aspect ctor.
@@ -54,13 +53,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="targetName">Signature of the target type</param>
         /// <param name="mixins">Array of <c>System.Type</c>s to mixin</param>
         /// <param name="pointcuts">Array of IPointcut instances</param>
-		public SignatureAspect(string name, string targetName, Type[] mixins, IPointcut[] pointcuts)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = targetName;
-			this.Mixins = new ArrayList(mixins);
-			this.Pointcuts = new ArrayList(pointcuts);
-		}
+        public SignatureAspect(string name, string targetName, Type[] mixins, IPointcut[] pointcuts)
+        {
+            Name = name;
+            TargetTypeSignature = targetName;
+            Mixins = new ArrayList(mixins);
+            Pointcuts = new ArrayList(pointcuts);
+        }
 
         /// <summary>
         /// Signature aspect ctor.
@@ -70,11 +69,11 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="TargetMethodsignature">Signature of the target methods.</param>
         /// <param name="Interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
         public SignatureAspect(string name, string targetName, string TargetMethodsignature, IInterceptor Interceptor)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = targetName;
-			this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
-		}
+        {
+            Name = name;
+            TargetTypeSignature = targetName;
+            Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
 
         /// <summary>
         /// Signature aspect ctor.
@@ -83,13 +82,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
         /// <param name="mixins">Untyped list of <c>System.Type</c>s to mixin</param>
         /// <param name="pointcuts">Untyped list of IPointcut instances</param>
-		public SignatureAspect(string name, Type TargetType, IList mixins, IList pointcuts)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = TargetType.FullName;
-			this.Mixins = mixins;
-			this.Pointcuts = pointcuts;
-		}
+        public SignatureAspect(string name, Type TargetType, IList mixins, IList pointcuts)
+        {
+            Name = name;
+            TargetTypeSignature = TargetType.FullName;
+            Mixins = mixins;
+            Pointcuts = pointcuts;
+        }
 
         /// <summary>
         /// Signature aspect ctor.
@@ -98,13 +97,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
         /// <param name="mixins">Array of <c>System.Type</c>s to mixin</param>
         /// <param name="pointcuts">Array of IPointcut instances</param>
-		public SignatureAspect(string name, Type TargetType, Type[] mixins, IPointcut[] pointcuts)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = TargetType.FullName;
-			this.Mixins = new ArrayList(mixins);
-			this.Pointcuts = new ArrayList(pointcuts);
-		}
+        public SignatureAspect(string name, Type TargetType, Type[] mixins, IPointcut[] pointcuts)
+        {
+            Name = name;
+            TargetTypeSignature = TargetType.FullName;
+            Mixins = new ArrayList(mixins);
+            Pointcuts = new ArrayList(pointcuts);
+        }
 
         /// <summary>
         /// Signature aspect ctor.
@@ -113,12 +112,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
         /// <param name="TargetMethodsignature">Signature of the target methods.</param>
         /// <param name="Interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
-		public SignatureAspect(string name, Type TargetType, string TargetMethodsignature, IInterceptor Interceptor)
-		{
-			this.Name = name;
-			this.TargetTypeSignature = TargetType.FullName;
-			this.Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
-		}
+        public SignatureAspect(string name, Type TargetType, string TargetMethodsignature, IInterceptor Interceptor)
+        {
+            Name = name;
+            TargetTypeSignature = TargetType.FullName;
+            Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+        }
 
         /// <summary>
         /// Implementation of AspectBase.IsMatch
@@ -126,18 +125,18 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="type">Type to match</param>
         /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
-		public override bool IsMatch(Type type)
-		{
-			Type tmp = type;
-			//traverse back in inheritance hierarchy to first non runtime emitted type 
-			while (tmp.Assembly is AssemblyBuilder)
-				tmp = tmp.BaseType;
+        public override bool IsMatch(Type type)
+        {
+            Type tmp = type;
+            //traverse back in inheritance hierarchy to first non runtime emitted type 
+            while (tmp.Assembly is AssemblyBuilder)
+                tmp = tmp.BaseType;
 
 
-			if (Text.IsMatch(tmp.FullName, TargetTypeSignature))
-				return true;
-			else
-				return false;
-		}
-	}
+            if (Text.IsMatch(tmp.FullName, TargetTypeSignature))
+                return true;
+            else
+                return false;
+        }
+    }
 }

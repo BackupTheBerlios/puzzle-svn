@@ -684,8 +684,7 @@ namespace Puzzle.NAspect.Framework
 
             MethodInfo handleCallMethod = typeof (IAopProxy).GetMethod("HandleCall");
 
-            
-            
+
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_0);

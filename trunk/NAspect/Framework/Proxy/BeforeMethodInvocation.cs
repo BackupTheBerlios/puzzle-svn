@@ -10,9 +10,8 @@
 
 using System;
 using System.Collections;
-using System.Reflection;
-using Puzzle.NAspect.Framework.Aop;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -20,8 +19,8 @@ namespace Puzzle.NAspect.Framework
     /// Representation of a "before" method call.
     /// Meaning this will fire before the base implementation is invoked.
     /// </summary>
-	public class BeforeMethodInvocation
-	{
+    public class BeforeMethodInvocation
+    {
         private MethodInvocation invocation;
 
 
@@ -33,7 +32,7 @@ namespace Puzzle.NAspect.Framework
         [DebuggerStepThrough]
         public BeforeMethodInvocation(MethodInvocation invocation)
         {
-            this.invocation = invocation;            
+            this.invocation = invocation;
         }
 
         /// <summary>
@@ -41,10 +40,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public IList Parameters
         {
-            get
-            {
-                return invocation.Parameters;
-            }
+            get { return invocation.Parameters; }
         }
 
         /// <summary>
@@ -52,10 +48,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public MethodBase Method
         {
-            get
-            {
-                return invocation.Method;
-            }
+            get { return invocation.Method; }
         }
 
         /// <summary>
@@ -63,10 +56,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public IAopProxy Target
         {
-            get
-            {
-                return invocation.Target;
-            }
+            get { return invocation.Target; }
         }
 
         /// <summary>
@@ -74,10 +64,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public Type ReturnType
         {
-            get
-            {
-                return invocation.ReturnType;
-            }
+            get { return invocation.ReturnType; }
         }
 
         /// <summary>
@@ -85,10 +72,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public string Signature
         {
-            get
-            {
-                return invocation.Signature;
-            }
+            get { return invocation.Signature; }
         }
 
         /// <summary>
@@ -97,10 +81,7 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         public string ValueSignature
         {
-            get
-            {
-                return invocation.ValueSignature;
-            }
+            get { return invocation.ValueSignature; }
         }
-	}
+    }
 }

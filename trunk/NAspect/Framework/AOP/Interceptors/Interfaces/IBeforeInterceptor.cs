@@ -14,11 +14,11 @@ namespace Puzzle.NAspect.Framework.Interception
     /// Represents an "before" interceptor that is triggered before the base implementation of a method call is invoked.
     /// </summary>
     public interface IBeforeInterceptor : IInterceptor
-	{
+    {
         /// <summary>
         /// Method that is triggered before the base implementation of a method call is invoked.
         /// </summary>
         /// <param name="call">The method call</param>
-        void BeforeCall(BeforeMethodInvocation call);        
-	}
+        void BeforeCall(BeforeMethodInvocation call);
+    }
 }

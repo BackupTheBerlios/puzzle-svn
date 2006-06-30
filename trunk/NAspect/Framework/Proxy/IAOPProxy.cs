@@ -20,12 +20,12 @@ namespace Puzzle.NAspect.Framework
     /// Interface implemented by all subclass and interface proxies.
     /// <seealso cref="AopProxyMixin"/>
     /// </summary>
-	public interface IAopProxy 
-	{
+    public interface IAopProxy
+    {
         /// <summary>
         /// Custom data associated with the proxy instance
         /// </summary>
-		IDictionary Data { get; }
+        IDictionary Data { get; }
 
         /// <summary>
         /// This is one of the key methods of the entire interception process.
@@ -36,8 +36,6 @@ namespace Puzzle.NAspect.Framework
         /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
         /// <param name="returnType">The return type of the invoked method</param>
         /// <returns>The result of the call chain</returns>
-		object HandleCall(IAopProxy target,object executionTarget, string methodId, IList parameters, Type returnType);
-
-        
-	}
+        object HandleCall(IAopProxy target, object executionTarget, string methodId, IList parameters, Type returnType);
+    }
 }

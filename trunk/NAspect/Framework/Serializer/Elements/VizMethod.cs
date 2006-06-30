@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Puzzle.NAspect.Debug.Serialization.Elements
 {
@@ -11,70 +10,62 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     public class VizMethodBase
     {
         #region Property Name
+
         private string name;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual string Name
         {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-            }
+            get { return name; }
+            set { name = value; }
         }
+
         #endregion
 
         #region Property Parameters
-        private List<VizParameter> parameters = new List<VizParameter> ();
+
+        private List<VizParameter> parameters = new List<VizParameter>();
+
         /// <summary>
         /// 
         /// </summary>
         public virtual List<VizParameter> Parameters
         {
-            get
-            {
-                return this.parameters;
-            }
+            get { return parameters; }
         }
+
         #endregion
-       
+
         #region Property Interceptors
-        private List<VizInterceptor> interceptors = new List<VizInterceptor> ();
+
+        private List<VizInterceptor> interceptors = new List<VizInterceptor>();
+
         /// <summary>
         /// 
         /// </summary>
         public virtual List<VizInterceptor> Interceptors
         {
-            get
-            {
-                return this.interceptors;
-            }
+            get { return interceptors; }
         }
+
         #endregion
 
         #region Property OwnerType
+
         private VizType ownerType;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual VizType OwnerType
         {
-            get
-            {
-                return this.ownerType;
-            }
-            set
-            {
-                this.ownerType = value;
-            }
+            get { return ownerType; }
+            set { ownerType = value; }
         }
+
         #endregion
-
-
 
         /// <summary>
         /// 
@@ -115,7 +106,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
                 paramString += parameter.ParameterTypeName + ",";
             }
             if (paramString.Length > 0)
-                paramString = paramString.Substring(0,paramString.Length - 1);
+                paramString = paramString.Substring(0, paramString.Length - 1);
 
             return paramString;
         }
@@ -137,40 +128,35 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
     public class VizMethod : VizMethodBase
     {
         #region Property ReturnType
+
         private string returnType;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual string ReturnType
         {
-            get
-            {
-                return this.returnType;
-            }
-            set
-            {
-                this.returnType = value;
-            }
+            get { return returnType; }
+            set { returnType = value; }
         }
+
         #endregion
 
         //owner mixin
+
         #region Property Mixin
+
         private VizMixin mixin;
+
         /// <summary>
         /// 
         /// </summary>
         public virtual VizMixin Mixin
         {
-            get
-            {
-                return this.mixin;
-            }
-            set
-            {
-                this.mixin = value;
-            }
+            get { return mixin; }
+            set { mixin = value; }
         }
+
         #endregion
 
         /// <summary>
@@ -179,7 +165,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetProxyText()
         {
-            return string.Format("{0}.{1} ({2})",this.OwnerType.Name,this.Name, this.GetParamTypes());
+            return string.Format("{0}.{1} ({2})", OwnerType.Name, Name, GetParamTypes());
         }
 
         /// <summary>
@@ -188,10 +174,10 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetRealText()
         {
-            if (this.Mixin == null)
-                return string.Format("{0}.{1} ({2})", this.OwnerType.BaseName, this.Name, this.GetParamTypes());
+            if (Mixin == null)
+                return string.Format("{0}.{1} ({2})", OwnerType.BaseName, Name, GetParamTypes());
             else
-                return string.Format("{0}.{1} ({2})", Mixin.TypeName, this.Name, this.GetParamTypes());
+                return string.Format("{0}.{1} ({2})", Mixin.TypeName, Name, GetParamTypes());
         }
 
         /// <summary>
@@ -200,7 +186,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{1} ({2}) : {0}", ReturnType, Name, GetParamTypes ());
+            return string.Format("{1} ({2}) : {0}", ReturnType, Name, GetParamTypes());
         }
 
         /// <summary>
@@ -209,8 +195,7 @@ namespace Puzzle.NAspect.Debug.Serialization.Elements
         /// <returns></returns>
         public override string GetCallSample()
         {
-            return string.Format("My{0}Obj.{1} ({2})",this.OwnerType.BaseName, this.Name, this.GetParamTypes());
+            return string.Format("My{0}Obj.{1} ({2})", OwnerType.BaseName, Name, GetParamTypes());
         }
-
     }
 }
