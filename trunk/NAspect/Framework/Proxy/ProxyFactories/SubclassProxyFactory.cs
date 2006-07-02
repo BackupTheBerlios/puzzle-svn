@@ -213,6 +213,7 @@ namespace Puzzle.NAspect.Framework
 
         private void BuildMethod(TypeBuilder typeBuilder, MethodInfo method)
         {
+            MethodInfo getTypeHandleMethod = typeof(Type).GetMethod("GetTypeFromHandle");
             string wrapperName = GetMethodId(method.Name);
             wrapperMethods.Add(wrapperName);
 
@@ -270,7 +271,6 @@ namespace Puzzle.NAspect.Framework
             int j = 0;
             ConstructorInfo interceptedParameterCtor = typeof (InterceptedParameter).GetConstructors()[0];
             MethodInfo arrayListAddMethod = typeof (ArrayList).GetMethod("Add");
-            MethodInfo getTypeMethod = typeof (Type).GetMethod("GetType", new Type[1] {typeof (string)});
 
             foreach (ParameterInfo parameter in parameterInfos)
             {
@@ -282,8 +282,11 @@ namespace Puzzle.NAspect.Framework
                 }
                 il.Emit(OpCodes.Ldstr, paramName);
                 il.Emit(OpCodes.Ldc_I4, j);
-                il.Emit(OpCodes.Ldstr, parameter.ParameterType.FullName.Replace("&", ""));
-                il.Emit(OpCodes.Call, getTypeMethod);
+                if (parameter.ParameterType.IsByRef)
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType.GetElementType());
+                else
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType);
+                il.Emit(OpCodes.Call, getTypeHandleMethod);
 
 
                 il.Emit(OpCodes.Ldarg, j + 1);
@@ -323,8 +326,14 @@ namespace Puzzle.NAspect.Framework
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldc_I4, methodNr);
             il.Emit(OpCodes.Ldloc, paramList);
-            il.Emit(OpCodes.Ldstr, method.ReturnType.FullName);
-            il.Emit(OpCodes.Call, getTypeMethod);
+            //il.Emit(OpCodes.Ldstr, method.ReturnType.FullName);
+            //il.Emit(OpCodes.Call, getTypeMethod);
+            il.Emit(OpCodes.Ldtoken, method.ReturnType); //<- why doesnt this work?         
+            il.Emit(OpCodes.Call, getTypeHandleMethod);
+            
+            
+            
+            
             il.Emit(OpCodes.Callvirt, handleCallMethod);
             if (method.ReturnType == typeof (void))
             {
@@ -600,6 +609,7 @@ namespace Puzzle.NAspect.Framework
                 return;
             }
 
+            MethodInfo getTypeHandleMethod = typeof(Type).GetMethod("GetTypeFromHandle");
 
             string wrapperName = GetMethodId(method.Name);
             wrapperMethods.Add(wrapperName);
@@ -635,7 +645,6 @@ namespace Puzzle.NAspect.Framework
             int j = 0;
             ConstructorInfo interceptedParameterCtor = typeof (InterceptedParameter).GetConstructors()[0];
             MethodInfo arrayListAddMethod = typeof (ArrayList).GetMethod("Add");
-            MethodInfo getTypeMethod = typeof (Type).GetMethod("GetType", new Type[1] {typeof (string)});
 
             foreach (ParameterInfo parameter in parameterInfos)
             {
@@ -647,8 +656,11 @@ namespace Puzzle.NAspect.Framework
                 }
                 il.Emit(OpCodes.Ldstr, paramName);
                 il.Emit(OpCodes.Ldc_I4, j);
-                il.Emit(OpCodes.Ldstr, parameter.ParameterType.FullName.Replace("&", ""));
-                il.Emit(OpCodes.Call, getTypeMethod);
+                if (parameter.ParameterType.IsByRef)
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType.GetElementType());
+                else
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType);                
+                il.Emit(OpCodes.Call, getTypeHandleMethod);
 
 
                 il.Emit(OpCodes.Ldarg, j + 1);
@@ -690,8 +702,9 @@ namespace Puzzle.NAspect.Framework
             il.Emit(OpCodes.Ldfld, field); // set the execution target to the mixin instance
             il.Emit(OpCodes.Ldc_I4 ,methodNr);
             il.Emit(OpCodes.Ldloc, paramList);
-            il.Emit(OpCodes.Ldstr, method.ReturnType.FullName);
-            il.Emit(OpCodes.Call, getTypeMethod);
+            il.Emit(OpCodes.Ldtoken, method.ReturnType);         
+            il.Emit(OpCodes.Call, getTypeHandleMethod);
+            
             il.Emit(OpCodes.Callvirt, handleCallMethod);
             if (method.ReturnType == typeof (void))
             {
@@ -901,15 +914,16 @@ namespace Puzzle.NAspect.Framework
 
             ConstructorInfo interceptedParameterCtor = typeof (InterceptedParameter).GetConstructors()[0];
             MethodInfo arrayListAddMethod = typeof (ArrayList).GetMethod("Add");
-            MethodInfo getTypeMethod = typeof (Type).GetMethod("GetType", new Type[1] {typeof (string)});
 
             il.Emit(OpCodes.Ldloc, paramList);
 
             il.Emit(OpCodes.Ldstr, "_state");
             il.Emit(OpCodes.Ldc_I4, 0);
-            il.Emit(OpCodes.Ldstr, typeof (object).FullName);
-            il.Emit(OpCodes.Call, getTypeMethod);
-
+            il.Emit(OpCodes.Ldtoken, typeof(object));
+            MethodInfo getTypeHandleMethod = typeof(Type).GetMethod("GetTypeFromHandle");
+            il.Emit(OpCodes.Call, getTypeHandleMethod);
+            
+            
             il.Emit(OpCodes.Ldarg, 0 + 1);
 
             il.Emit(OpCodes.Ldc_I4, (int) ParameterType.ByVal);
@@ -929,8 +943,13 @@ namespace Puzzle.NAspect.Framework
                 }
                 il.Emit(OpCodes.Ldstr, paramName);
                 il.Emit(OpCodes.Ldc_I4, j);
-                il.Emit(OpCodes.Ldstr, parameter.ParameterType.FullName.Replace("&", ""));
-                il.Emit(OpCodes.Call, getTypeMethod);
+
+                if (parameter.ParameterType.IsByRef)
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType.GetElementType());
+                else
+                    il.Emit(OpCodes.Ldtoken, parameter.ParameterType);
+                il.Emit(OpCodes.Call, getTypeHandleMethod);
+                
 
 
                 il.Emit(OpCodes.Ldarg, j + 1);
@@ -971,8 +990,10 @@ namespace Puzzle.NAspect.Framework
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldc_I4, methodNr);
             il.Emit(OpCodes.Ldloc, paramList);
-            il.Emit(OpCodes.Ldstr, typeof (void).FullName);
-            il.Emit(OpCodes.Call, getTypeMethod);
+
+            il.Emit(OpCodes.Ldtoken, typeof(void));
+            il.Emit(OpCodes.Call, getTypeHandleMethod);
+            
             il.Emit(OpCodes.Callvirt, handleCallMethod);
             il.Emit(OpCodes.Pop);
 
