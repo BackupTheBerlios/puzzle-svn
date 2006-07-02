@@ -217,7 +217,7 @@ namespace Puzzle.NAspect.Framework
         private object CallEndMethod()
         {
             int start = 0;
-            if (EndMethod.GetParameters().Length != Parameters.Count)
+            if (Method is ConstructorInfo)
             {
                 //ignore ctor state param
                 start = 1;

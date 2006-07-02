@@ -25,7 +25,7 @@ namespace CacheSample
 
         Hashtable cache = new Hashtable();
         public virtual double NonAopVersion(int loopCount)
-        {
+        {            
             string key = string.Format("PerfromSomeReallyHeavyCalculationWoAop ({0})", loopCount);
             if (cache.ContainsKey(key))
             {

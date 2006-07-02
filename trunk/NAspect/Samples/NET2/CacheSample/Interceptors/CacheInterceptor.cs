@@ -12,7 +12,7 @@ namespace CacheSample
 
         public object HandleCall(MethodInvocation call)
         {
-            
+       
 
             ICacheHolder cacheHolder = call.Target as ICacheHolder;
             if (cacheHolder != null)
