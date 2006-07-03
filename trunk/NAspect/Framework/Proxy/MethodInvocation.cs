@@ -19,7 +19,7 @@ namespace Puzzle.NAspect.Framework
     /// <summary>
     /// Representation of a method call.
     /// </summary>
-    [DebuggerStepThrough()]
+  //  [DebuggerStepThrough()]
     public class MethodInvocation
     {
         /// <summary>
@@ -41,6 +41,11 @@ namespace Puzzle.NAspect.Framework
         /// Untyped list of <c>InterceptedParameters</c>.
         /// </summary>
         public readonly IList Parameters;
+
+        /// <summary>
+        /// Object array of the raw parameter values.
+        /// </summary>
+        public readonly object[] RawParameters;
 
         /// <summary>
         /// The return type of the method (if available, ctors do not have a return type).
@@ -79,13 +84,14 @@ namespace Puzzle.NAspect.Framework
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c></param>
         [DebuggerStepThrough()]
         public MethodInvocation(IAopProxy target, object executionTarget, MethodBase method, MethodBase endMethod,
-                                IList parameters,Type returnType, IList interceptors)
+                                IList parameters,object[] rawParameters,Type returnType, IList interceptors)
         {
             Target = target;
             ExecutionTarget = executionTarget;
             Method = method;
             EndMethod = endMethod;
             Parameters = parameters;
+            RawParameters = rawParameters;
             ReturnType = returnType;
             Interceptors = interceptors;
         }
@@ -211,34 +217,32 @@ namespace Puzzle.NAspect.Framework
 
         #region CallEndMethod
 
-        [DebuggerStepThrough()]
-        [DebuggerHidden()]
+  //      [DebuggerStepThrough()]
+  //      [DebuggerHidden()]
         private object CallEndMethod()
         {
-            int start = 0;
+            object[] parr;
             if (Method is ConstructorInfo)
             {
-                //ignore ctor state param
-                start = 1;
+                parr = new object[RawParameters.Length - 1];
+                Array.Copy(RawParameters, 1, parr, 0, RawParameters.Length - 1);
             }
-            object[] parr = new object[Parameters.Count - start];
+            else
+            {
+                parr = RawParameters;
+            }
 
-            //copy paramvalues into param list
-            for (int i = start; i < Parameters.Count; i++)
-                parr[i - start] = ((InterceptedParameter) Parameters[i]).Value;
-
-            //call the end method
 #if NET2
             FastInvokeHandler fastCall = Handler;
             object result = fastCall(ExecutionTarget, parr);
 #else
             object result = EndMethod.Invoke(Target, parr);
 #endif
-
-
-            //copy back all param values (for out/ref params)
-            for (int i = start; i < Parameters.Count; i++)
-                ((InterceptedParameter) Parameters[i]).Value = parr[i - start];
+            if (Method is ConstructorInfo)
+            {
+                for (int i = 0; i < parr.Length; i++)
+                    RawParameters[i + 1] = parr[i];
+            }
 
             return result;
         }

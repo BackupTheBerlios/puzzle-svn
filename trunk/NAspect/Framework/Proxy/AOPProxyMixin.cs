@@ -65,13 +65,13 @@ namespace Puzzle.NAspect.Framework
             }
 
 #if NET2
-            MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method, parameters, returnType, interceptors);
+            MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method, parameters,rawParameters, returnType, interceptors);
 			invocation.Handler = info.Handler;
 #else            
 			MethodInfo wrapperMethod = (MethodInfo) MethodCache.wrapperMethodLookup[info.MethodId];
-			MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, wrapperMethod , parameters, returnType, interceptors);
+			MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, wrapperMethod , parameters,rawParameters, returnType, interceptors);
 #endif
-            
+
             return invocation.Proceed();
         }
 

@@ -579,10 +579,6 @@ namespace Puzzle.NAspect.Framework
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
 
-            for (int i = 0; i < parameterInfos.Length; i++)
-            {
-            }
-
             ILGenerator il = methodBuilder.GetILGenerator();
 
 
