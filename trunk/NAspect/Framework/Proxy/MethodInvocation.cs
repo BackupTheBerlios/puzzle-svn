@@ -79,8 +79,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c></param>
         [DebuggerStepThrough()]
         public MethodInvocation(IAopProxy target, object executionTarget, MethodBase method, MethodBase endMethod,
-                                IList parameters,
-                                Type returnType, IList interceptors)
+                                IList parameters,Type returnType, IList interceptors)
         {
             Target = target;
             ExecutionTarget = executionTarget;

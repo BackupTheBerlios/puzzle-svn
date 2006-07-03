@@ -43,22 +43,29 @@ namespace Puzzle.NAspect.Framework
         /// This method handles calls from the proxy and redirects them to the interceptors.
         /// </summary>
         /// <param name="target">The proxy instance on which the call was invoked</param>
-        /// <param name="methodId">Unique identifier of the method</param>
-        /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
+        /// <param name="methodIndex">Unique index of the method</param>
         /// <param name="returnType">The return type of the invoked method</param>
         /// <returns>The result of the call chain</returns>
         [DebuggerStepThrough()]
         [DebuggerHidden()]
-        public object HandleFastCall(IAopProxy target, object executionTarget, int methodIndex, IList parameters, Type returnType)
+        public object HandleFastCall(IAopProxy target, object executionTarget, int methodIndex, object[] rawParameters, Type returnType)
         {
             CallInfo info = MethodCache.GetCallInfo(methodIndex);
 
             MethodBase method = info.Method;
             IList interceptors = info.Interceptors;
 
-            
+            IList parameters = new ArrayList(rawParameters.Length);
+            int index = 0;
+            foreach (InvocationParameterInfo parameterInfo in info.InvocationParameterInfos)
+            {
+                InterceptedParameter parameter = new InterceptedParameter(parameterInfo, rawParameters, index);
+                parameters.Add(parameter);
+                index++;
+            }
+
 #if NET2
-			MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method , parameters, returnType, interceptors);
+            MethodInvocation invocation = new MethodInvocation(target, executionTarget, method, method, parameters, returnType, interceptors);
 			invocation.Handler = info.Handler;
 #else            
 			MethodInfo wrapperMethod = (MethodInfo) MethodCache.wrapperMethodLookup[info.MethodId];

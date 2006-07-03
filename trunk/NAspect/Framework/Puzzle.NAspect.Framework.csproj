@@ -309,6 +309,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\Parameters\InvocationParameter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\Parameters\InvocationParameterInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\ProxyFactories\InterfaceProxyFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

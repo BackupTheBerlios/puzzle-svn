@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -106,7 +107,7 @@ namespace Puzzle.NAspect.Framework
         
         internal static int AddCallInfo(CallInfo callInfo, string methodId)
         {
-            int res = 0;
+            int res;
             lock(callInfos.SyncRoot)
             {
                 res = callInfos.Add(callInfo);
@@ -114,5 +115,80 @@ namespace Puzzle.NAspect.Framework
             }
             return res;
         }
+
+        internal static CallInfo CreateCallInfo(MethodInfo method, ParameterInfo[] parameterInfos, string wrapperName)
+        {
+            IList parameters = new ArrayList(parameterInfos.Length);
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                ParameterInfo paramInfo = parameterInfos[i];
+                Type paramType = paramInfo.ParameterType;
+                if (paramType.IsByRef)
+                    paramType = paramType.GetElementType();
+
+                InvocationParameterInfo invocationParamInfo = new InvocationParameterInfo(paramInfo.Name, i, paramType, ParameterType.ByVal);
+                parameters.Add(invocationParamInfo);
+            }
+
+#if NET2
+            return new CallInfo(wrapperName, method, new ArrayList(), parameters, FastCall.GetMethodInvoker(method));
+#else
+			return new CallInfo(wrapperName,method, new ArrayList(),parameters);
+#endif
+        }
+
+        internal static CallInfo CreateCallInfoForCtor(ConstructorInfo method, ParameterInfo[] parameterInfos, string wrapperName)
+        {
+            IList parameters = new ArrayList(parameterInfos.Length);
+            parameters.Add(new InvocationParameterInfo("_state", 0, typeof (object), ParameterType.ByVal));
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                ParameterInfo paramInfo = parameterInfos[i];
+                Type paramType = paramInfo.ParameterType;
+                if (paramType.IsByRef)
+                    paramType = paramType.GetElementType();
+
+                InvocationParameterInfo invocationParamInfo = new InvocationParameterInfo(paramInfo.Name, i + 1, paramType, ParameterType.ByVal);
+                parameters.Add(invocationParamInfo);
+            }
+
+#if NET2
+            return new CallInfo(wrapperName, method, new ArrayList(), parameters, FastCall.GetMethodInvoker(method));
+#else
+			return new CallInfo(wrapperName,method, new ArrayList(),parameters);
+#endif
+        }
+
+
+        internal static void CopyBackRefParams(ILGenerator il, ParameterInfo[] parameterInfos, LocalBuilder paramList)
+        {
+            int j;
+            j = 0;
+            foreach (ParameterInfo parameter in parameterInfos)
+            {
+                if (parameter.ParameterType.IsByRef)
+                {
+                    il.Emit(OpCodes.Ldarg, j + 1);
+                    il.Emit(OpCodes.Ldloc, paramList);
+                    il.Emit(OpCodes.Ldc_I4, j);
+                    il.Emit(OpCodes.Ldelem_Ref);
+                    Type t = parameter.ParameterType.GetElementType();
+                    if (t.IsValueType)
+                    {
+                        il.Emit(OpCodes.Unbox, t);
+                        il.Emit(OpCodes.Ldobj, t);
+                        il.Emit(OpCodes.Stobj, t);
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Castclass, t);
+                        il.Emit(OpCodes.Stind_Ref);
+                    }
+                }
+                j++;
+            }
+        }
     }
+    
+    
 }

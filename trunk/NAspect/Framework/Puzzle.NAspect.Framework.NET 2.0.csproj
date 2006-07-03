@@ -173,12 +173,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\InterfaceProxyBase.cs" />
+    <Compile Include="Proxy\Parameters\InvocationParameterInfo.cs" />
     <Compile Include="Proxy\MethodCache.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\MethodInvocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\Parameters\InvocationParameter.cs" />
     <Compile Include="Proxy\ProxyFactories\InterfaceProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -214,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PuzzleKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

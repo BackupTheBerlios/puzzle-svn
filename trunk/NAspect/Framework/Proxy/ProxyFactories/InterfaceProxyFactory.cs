@@ -206,61 +206,42 @@ namespace Puzzle.NAspect.Framework
 
             ILGenerator il = methodBuilder.GetILGenerator();
 
-
-            LocalBuilder paramList = il.DeclareLocal(typeof (ArrayList));
-
-
-            //create param arraylist
-            ConstructorInfo arrayListCtor = typeof (ArrayList).GetConstructor(new Type[0]);
-            il.Emit(OpCodes.Newobj, arrayListCtor);
+            //--------------------------
+            LocalBuilder paramList = il.DeclareLocal(typeof(object[]));
+            //create param object[]
+            il.Emit(OpCodes.Ldc_I4_S, parameterInfos.Length + 1);
+            il.Emit(OpCodes.Newarr, typeof(object));
             il.Emit(OpCodes.Stloc, paramList);
-
-
+            //-----------------------------------
             int j = 0;
-            ConstructorInfo interceptedParameterCtor = typeof (InterceptedParameter).GetConstructors()[0];
-            MethodInfo arrayListAddMethod = typeof (ArrayList).GetMethod("Add");
-            MethodInfo getTypeMethod = typeof (Type).GetMethod("GetType", new Type[1] {typeof (string)});
 
-            foreach (ParameterInfo parameter in parameterInfos)
+            foreach (Type parameterType in parameterTypes)
             {
+                //load arr
                 il.Emit(OpCodes.Ldloc, paramList);
-                string paramName = parameter.Name;
-                if (paramName == null)
-                {
-                    paramName = "param" + j.ToString();
-                }
-                il.Emit(OpCodes.Ldstr, paramName);
+                //load index
                 il.Emit(OpCodes.Ldc_I4, j);
-                il.Emit(OpCodes.Ldstr, parameter.ParameterType.FullName.Replace("&", ""));
-                il.Emit(OpCodes.Call, getTypeMethod);
-
-
+                //load arg
                 il.Emit(OpCodes.Ldarg, j + 1);
-
-                if (parameter.ParameterType.FullName.IndexOf("&") >= 0)
+                //box if needed
+                if (parameterType.IsByRef)
                 {
                     il.Emit(OpCodes.Ldind_Ref);
-                    Type t = Type.GetType(parameter.ParameterType.FullName.Replace("&", ""));
+                    Type t = parameterType.GetElementType();
                     if (t.IsValueType)
                         il.Emit(OpCodes.Box, t);
                 }
-                if (parameter.ParameterType.IsValueType)
+                else if (parameterType.IsValueType)
                 {
-                    il.Emit(OpCodes.Box, parameter.ParameterType);
+                    il.Emit(OpCodes.Box, parameterType);
                 }
-                il.Emit(OpCodes.Ldc_I4, (int) ParameterType.ByVal);
-                il.Emit(OpCodes.Newobj, interceptedParameterCtor);
-                il.Emit(OpCodes.Callvirt, arrayListAddMethod);
-                il.Emit(OpCodes.Pop);
-
-
+                il.Emit(OpCodes.Stelem_Ref);
                 j++;
             }
-#if NET2
-            CallInfo callInfo = new CallInfo(wrapperName, method, new ArrayList(), FastCall.GetMethodInvoker(method));
-#else
-			CallInfo callInfo = new CallInfo(wrapperName,method, new ArrayList());
-#endif
+            //-----------------------------------
+
+            CallInfo callInfo = MethodCache.CreateCallInfo(method, parameterInfos, wrapperName);
+            
             MethodInfo handleCallMethod = typeof(IAopProxy).GetMethod("HandleFastCall");
             int methodNr = MethodCache.AddCallInfo(callInfo, wrapperName);
             //il.Emit(OpCodes.Ldc_I4 ,methodNr);
@@ -272,6 +253,7 @@ namespace Puzzle.NAspect.Framework
             il.Emit(OpCodes.Ldc_I4, methodNr);
             il.Emit(OpCodes.Ldloc, paramList);
             il.Emit(OpCodes.Ldstr, method.ReturnType.FullName);
+            MethodInfo getTypeMethod = typeof(Type).GetMethod("GetType", new Type[1] { typeof(string) });
             il.Emit(OpCodes.Call, getTypeMethod);
             il.Emit(OpCodes.Callvirt, handleCallMethod);
             if (method.ReturnType == typeof (void))
@@ -285,34 +267,7 @@ namespace Puzzle.NAspect.Framework
             }
 
 
-            j = 0;
-            MethodInfo get_ItemMethod = typeof (ArrayList).GetMethod("get_Item", new Type[1] {typeof (int)});
-            foreach (ParameterInfo parameter in parameterInfos)
-            {
-                if (parameter.ParameterType.FullName.IndexOf("&") >= 0)
-                {
-                    il.Emit(OpCodes.Ldarg, j + 1);
-                    il.Emit(OpCodes.Ldloc, paramList);
-                    il.Emit(OpCodes.Ldc_I4, j);
-                    il.Emit(OpCodes.Callvirt, get_ItemMethod);
-                    il.Emit(OpCodes.Castclass, typeof (InterceptedParameter));
-                    FieldInfo valueField = typeof (InterceptedParameter).GetField("Value");
-                    il.Emit(OpCodes.Ldfld, valueField);
-                    Type t = Type.GetType(parameter.ParameterType.FullName.Replace("&", ""));
-                    if (t.IsValueType)
-                    {
-                        il.Emit(OpCodes.Unbox, t);
-                        il.Emit(OpCodes.Ldobj, t);
-                        il.Emit(OpCodes.Stobj, t);
-                    }
-                    else
-                    {
-                        il.Emit(OpCodes.Castclass, t);
-                        il.Emit(OpCodes.Stind_Ref);
-                    }
-                }
-                j++;
-            }
+            MethodCache.CopyBackRefParams(il, parameterInfos, paramList);
 
 
             il.Emit(OpCodes.Ret);

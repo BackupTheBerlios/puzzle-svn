@@ -28,9 +28,8 @@ namespace Puzzle.NAspect.Framework
         /// </summary>
         /// <param name="target">The proxy instance on which the call was invoked</param>
         /// <param name="methodId">Unique identifier of the method</param>
-        /// <param name="parameters">Untyped list of <c>InterceptedParameter</c>s</param>
         /// <param name="returnType">The return type of the invoked method</param>
         /// <returns>The result of the call chain</returns>
-        object HandleFastCall(IAopProxy target, object executionTarget, int methodId, IList parameters, Type returnType);
+        object HandleFastCall(IAopProxy target, object executionTarget, int methodId, object[] rawParameters, Type returnType);
     }
 }
