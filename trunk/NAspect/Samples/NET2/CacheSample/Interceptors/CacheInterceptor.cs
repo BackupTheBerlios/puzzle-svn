@@ -12,6 +12,7 @@ namespace CacheSample
 
         public object HandleCall(MethodInvocation call)
         {
+            return call.Proceed();
        
 
             ICacheHolder cacheHolder = call.Target as ICacheHolder;

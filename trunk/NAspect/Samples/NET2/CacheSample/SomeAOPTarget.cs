@@ -13,37 +13,38 @@ namespace CacheSample
         //some function that takes ages to complete
         public virtual double PerfromSomeReallyHeavyCalculation(int loopCount)
         {
-            string result = "";
-            for (int i = 0; i < loopCount; i++)
-            {
-                result += i.ToString();
-                //simulate some work beeing done
-                Thread.Sleep(100);
-            }
+            //string result = "";
+            //for (int i = 0; i < loopCount; i++)
+            //{
+            //    result += i.ToString();
+            //    //simulate some work beeing done
+            //    Thread.Sleep(100);
+            //}
             return 12345.44;
         }
 
         Hashtable cache = new Hashtable();
         public virtual double NonAopVersion(int loopCount)
-        {            
-            string key = string.Format("PerfromSomeReallyHeavyCalculationWoAop ({0})", loopCount);
-            if (cache.ContainsKey(key))
-            {
-                return (double)cache[key];
-            }
-            else
-            {
-                string result = "";
-                for (int i = 0; i < loopCount; i++)
-                {
-                    result += i.ToString();
-                    //simulate some work beeing done
-                    Thread.Sleep(100);
-                }
-                double res = 12345.44;
-                cache[key] = res;
-                return res;
-            }
+        {
+            return 12345.44;
+            //string key = string.Format("PerfromSomeReallyHeavyCalculationWoAop ({0})", loopCount);
+            //if (cache.ContainsKey(key))
+            //{
+            //    return (double)cache[key];
+            //}
+            //else
+            //{
+            //    string result = "";
+            //    for (int i = 0; i < loopCount; i++)
+            //    {
+            //        result += i.ToString();
+            //        //simulate some work beeing done
+            //        Thread.Sleep(100);
+            //    }
+            //    double res = 12345.44;
+            //    cache[key] = res;
+            //    return res;
+            //}
         }
         
     }
