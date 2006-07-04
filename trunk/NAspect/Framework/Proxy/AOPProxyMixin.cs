@@ -55,12 +55,12 @@ namespace Puzzle.NAspect.Framework
             MethodBase method = info.Method;
             IList interceptors = info.Interceptors;
 
-            IList parameters = new ArrayList(rawParameters.Length);
+            InterceptedParameter[] parameters = new InterceptedParameter[rawParameters.Length];
             int index = 0;
             foreach (InvocationParameterInfo parameterInfo in info.InvocationParameterInfos)
             {
                 InterceptedParameter parameter = new InterceptedParameter(parameterInfo, rawParameters, index);
-                parameters.Add(parameter);
+                parameters[index] = parameter;
                 index++;
             }
 

@@ -7,13 +7,13 @@ namespace Puzzle.NAspect.Framework
 	{
 		public MethodBase Method;
 		public IList Interceptors;
-        public IList InvocationParameterInfos;
+        public InvocationParameterInfo[] InvocationParameterInfos;
 		public string MethodId;
 #if NET2
         public FastInvokeHandler Handler;
 
 
-        public CallInfo(string methodId,MethodBase method, IList interceptors,IList invocationParameterInfos, FastInvokeHandler handler)
+        public CallInfo(string methodId, MethodBase method, IList interceptors, InvocationParameterInfo[] invocationParameterInfos, FastInvokeHandler handler)
         {
 			MethodId = methodId;
             Method = method;
@@ -23,7 +23,7 @@ namespace Puzzle.NAspect.Framework
         }
     
 #else
-		public CallInfo(string methodId,MethodBase method, IList interceptors,IList invocationParameterInfos)
+		public CallInfo(string methodId,MethodBase method, IList interceptors,InvocationParameterInfo[] invocationParameterInfos)
 		{
 			MethodId = methodId;
 			Method = method;

@@ -118,7 +118,7 @@ namespace Puzzle.NAspect.Framework
 
         internal static CallInfo CreateCallInfo(MethodInfo method, ParameterInfo[] parameterInfos, string wrapperName)
         {
-            IList parameters = new ArrayList(parameterInfos.Length);
+            InvocationParameterInfo[] parameters = new InvocationParameterInfo[parameterInfos.Length];
             for (int i = 0; i < parameterInfos.Length; i++)
             {
                 ParameterInfo paramInfo = parameterInfos[i];
@@ -127,7 +127,7 @@ namespace Puzzle.NAspect.Framework
                     paramType = paramType.GetElementType();
 
                 InvocationParameterInfo invocationParamInfo = new InvocationParameterInfo(paramInfo.Name, i, paramType, ParameterType.ByVal);
-                parameters.Add(invocationParamInfo);
+                parameters[i]=invocationParamInfo;
             }
 
 #if NET2
@@ -139,8 +139,8 @@ namespace Puzzle.NAspect.Framework
 
         internal static CallInfo CreateCallInfoForCtor(ConstructorInfo method, ParameterInfo[] parameterInfos, string wrapperName)
         {
-            IList parameters = new ArrayList(parameterInfos.Length);
-            parameters.Add(new InvocationParameterInfo("_state", 0, typeof (object), ParameterType.ByVal));
+            InvocationParameterInfo[] parameters = new InvocationParameterInfo[parameterInfos.Length+1];
+            parameters[0] = new InvocationParameterInfo("_state", 0, typeof(object), ParameterType.ByVal);
             for (int i = 0; i < parameterInfos.Length; i++)
             {
                 ParameterInfo paramInfo = parameterInfos[i];
@@ -149,7 +149,7 @@ namespace Puzzle.NAspect.Framework
                     paramType = paramType.GetElementType();
 
                 InvocationParameterInfo invocationParamInfo = new InvocationParameterInfo(paramInfo.Name, i + 1, paramType, ParameterType.ByVal);
-                parameters.Add(invocationParamInfo);
+                parameters[i+1] = invocationParamInfo;
             }
 
 #if NET2

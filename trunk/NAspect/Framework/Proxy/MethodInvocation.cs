@@ -40,7 +40,7 @@ namespace Puzzle.NAspect.Framework
         /// <summary>
         /// Untyped list of <c>InterceptedParameters</c>.
         /// </summary>
-        public readonly IList Parameters;
+        public readonly InterceptedParameter[] Parameters;
 
         /// <summary>
         /// Object array of the raw parameter values.
@@ -84,7 +84,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>'s or <c>BeforeDelegate</c>, <c>AroundDelegate</c> or <c>AfterDelegate</c></param>
         [DebuggerStepThrough()]
         public MethodInvocation(IAopProxy target, object executionTarget, MethodBase method, MethodBase endMethod,
-                                IList parameters,object[] rawParameters,Type returnType, IList interceptors)
+                                InterceptedParameter[] parameters, object[] rawParameters, Type returnType, IList interceptors)
         {
             Target = target;
             ExecutionTarget = executionTarget;

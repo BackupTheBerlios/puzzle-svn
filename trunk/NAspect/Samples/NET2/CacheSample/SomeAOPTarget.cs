@@ -20,6 +20,7 @@ namespace CacheSample
             //    //simulate some work beeing done
             //    Thread.Sleep(100);
             //}
+            
             return 12345.44;
         }
 
@@ -47,5 +48,13 @@ namespace CacheSample
             //}
         }
         
+    }
+
+    public class MyProxy : SomeAopTarget
+    {
+        public override double NonAopVersion(int loopCount)
+        {            
+            return base.NonAopVersion(loopCount+1);
+        }        
     }
 }

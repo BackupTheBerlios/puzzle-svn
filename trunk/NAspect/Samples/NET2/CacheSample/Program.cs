@@ -30,7 +30,7 @@ namespace CacheSample
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
-            for (int i = 0; i < 100000;i++ )
+            for (int i = 0; i < 1000000;i++ )
             {
                 double res = myObj.PerfromSomeReallyHeavyCalculation(1); 
             }
@@ -38,10 +38,11 @@ namespace CacheSample
             Console.WriteLine("Time elapsed on non aop version {0}", timer.ElapsedMilliseconds);
 
             timer = new Stopwatch();
+            MyProxy prox = new MyProxy();
             timer.Start();
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 1000000; i++)
             {
-                double res = myObj.NonAopVersion(1);
+                double res = prox.NonAopVersion(1);
             }
             timer.Stop();
             Console.WriteLine("Time elapsed on non aop version {0}",timer.ElapsedMilliseconds);
