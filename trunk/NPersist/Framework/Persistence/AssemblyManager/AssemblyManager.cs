@@ -137,8 +137,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			object obj;
 
-			while(typeof(IInterceptable).IsAssignableFrom(type))
-				type = type.BaseType;
+            type = GetBaseType(type);
+//			while(typeof(IInterceptable).IsAssignableFrom(type))
+//				type = type.BaseType;
 
             
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
