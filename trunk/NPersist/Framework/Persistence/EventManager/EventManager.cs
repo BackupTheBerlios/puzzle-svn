@@ -1699,6 +1699,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		private IList GetTypeObservers(Type type)
 		{
+            while (typeof(IInterceptable).IsAssignableFrom(type))
+                type = type.BaseType;
+
 			ArrayList result = (ArrayList) m_TypeObservers[type];
 			if (result != null)
 			{
