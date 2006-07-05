@@ -1712,12 +1712,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//[DebuggerStepThrough()]
 		private IList GetTypeObservers(object obj)
 		{
-			ArrayList result = (ArrayList) m_TypeObservers[obj.GetType()];
-			if (result != null)
-			{
-				return result;
-			}		
-			return m_EmptyList ;
+            return GetTypeObservers(obj.GetType());
+            //ArrayList result = (ArrayList) m_TypeObservers[obj.GetType()];
+            //if (result != null)
+            //{
+            //    return result;
+            //}		
+            //return m_EmptyList ;
 		}
 
 		//[DebuggerStepThrough()]
