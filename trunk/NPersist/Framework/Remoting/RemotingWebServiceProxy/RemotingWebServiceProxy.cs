@@ -22,6 +22,7 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 	using System.Web.Services.Protocols;
 	using System.ComponentModel;
 	using System.Web.Services;
+    using Puzzle.NCore.Framework.Logging;
     
     
 	/// <remarks/>
@@ -68,7 +69,10 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 				this.Context.EventManager.OnCallingWebService(this, e);
 				if (e.Cancel)
 				{
-					this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                    LogMessage message = new LogMessage("Calling web service canceled by observer!");
+                    LogMessage verbose = new LogMessage( "Url: {0}" , this.Url);
+
+					this.Context.LogManager.Warn(this,message,verbose); // do not localize
 					return "";
 				}
 				domainKey = e.DomainKey;
@@ -119,7 +123,9 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 			this.Context.EventManager.OnCallingWebService(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                LogMessage message = new LogMessage("Calling web service canceled by observer!");
+                LogMessage verbose = new LogMessage("Url: {0}" , this.Url);
+				this.Context.LogManager.Warn(this,message,verbose); // do not localize
 				return "";
 			}
 			domainKey = e.DomainKey;
@@ -174,7 +180,9 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 			this.Context.EventManager.OnCallingWebService(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                LogMessage message = new LogMessage("Calling web service canceled by observer!");
+                LogMessage verbose = new LogMessage("Url: {0}" , this.Url);
+				this.Context.LogManager.Warn(this, message,verbose ); // do not localize
 				return "";
 			}
 			domainKey = e.DomainKey;
@@ -229,7 +237,9 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 			this.Context.EventManager.OnCallingWebService(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                LogMessage message = new LogMessage("Calling web service canceled by observer!");
+                LogMessage verbose = new LogMessage("Url: {0}", this.Url);
+                this.Context.LogManager.Warn(this, message, verbose); // do not localize
 				return "";
 			}
 			domainKey = e.DomainKey;
@@ -282,7 +292,9 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 			this.Context.EventManager.OnCallingWebService(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                LogMessage message = new LogMessage( "Calling web service canceled by observer!");
+                LogMessage verbose = new LogMessage( "Url: {0}" , this.Url);
+				this.Context.LogManager.Warn(this,message,verbose); // do not localize
 				return "";
 			}
 			domainKey = e.DomainKey;
@@ -335,7 +347,9 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client.RemotingWebServic
 			this.Context.EventManager.OnCallingWebService(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Calling web service canceled by observer!", "Url: " + this.Url); // do not localize
+                LogMessage message = new LogMessage("Calling web service canceled by observer!");
+                LogMessage verbose = new LogMessage("Url: {0}", this.Url);
+                this.Context.LogManager.Warn(this, message, verbose); // do not localize			
 				return "";
 			}
 			domainKey = e.DomainKey;

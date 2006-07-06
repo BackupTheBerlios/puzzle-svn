@@ -429,7 +429,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleSlaveManyManyPropertySet(object obj, IPropertyMap propertyMap, IList newList, IList oldList)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse many-many property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse many-many property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}", obj.GetType(), propertyMap.Name);
+
+			this.Context.LogManager.Info(this,message, verbose); // do not localize
 
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
 			if ( invPropertyMap == null) { return ;}
@@ -477,7 +480,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleSlaveManyOnePropertySet(object obj, IPropertyMap propertyMap, IList newList, IList oldList)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse many-one property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse many-one property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}", obj.GetType(), propertyMap.Name);
+			this.Context.LogManager.Info(this, message,verbose); // do not localize
 
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
 			if ( invPropertyMap == null) { return ;}
@@ -500,7 +505,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					om.SetPropertyValue(value, invPropertyMap.Name, obj);
 					om.SetNullValueStatus(value, invPropertyMap.Name, obj == null);
 					om.SetUpdatedStatus(value, invPropertyMap.Name, true);
-					this.Context.LogManager.Debug(this, "Wrote back-reference in inverse property", "Wrote to object of type: " + value.GetType().ToString() + ", Inverse Property: " + invPropertyMap.Name); // do not localize
+                    message = new LogMessage("Wrote back-reference in inverse property");
+                    verbose = new LogMessage("Wrote to object of type: {0}, Inverse Property: {1}", value.GetType(),invPropertyMap.Name);
+
+					this.Context.LogManager.Debug(this,message , verbose); // do not localize
 					uow.RegisterDirty(value);			
 					if (oldObj != null)
 					{
@@ -516,7 +524,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (mList != null) { mList.MuteNotify = stackMute; }
 						uow.RegisterDirty(oldObj);					
 						om.SetUpdatedStatus(oldObj, invPropertyMap.Name, true);
-						this.Context.LogManager.Debug(this, "Removed back-reference in inverse property", "Wrote to object of type: " + oldObj.GetType().ToString() + ", Inverse Property: " + propertyMap.Name); // do not localize
+                        message = new LogMessage("Removed back-reference in inverse property");
+                        verbose = new LogMessage("Wrote to object of type: {0}, Inverse Property: {1}" , oldObj.GetType(), propertyMap.Name);
+
+						this.Context.LogManager.Debug(this, message, verbose); // do not localize
 					}					
 				}
 			}			
@@ -549,7 +560,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleSlaveOneOnePropertySet(object obj, IPropertyMap propertyMap, object value, object oldValue)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse one-one property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse one-one property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}" , obj.GetType(),propertyMap.Name);
+
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
 			if ( invPropertyMap == null) { return ;}
@@ -561,8 +575,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 				om.SetPropertyValue(value, invPropertyMap.Name, obj);
 				om.SetNullValueStatus(value, invPropertyMap.Name, false);
 				om.SetUpdatedStatus(value, invPropertyMap.Name, true);
-				uow.RegisterDirty(value);							
-				this.Context.LogManager.Debug(this, "Wrote back-reference to inverse property", "Wrote to object of type: " + value.GetType().ToString() + ", Inverse Property: " + invPropertyMap.Name); // do not localize
+				uow.RegisterDirty(value);
+                message = new LogMessage("Wrote back-reference to inverse property");
+                verbose = new LogMessage( "Wrote to object of type: {0}, Inverse Property: {1}" , value.GetType(), invPropertyMap.Name);
+				this.Context.LogManager.Debug(this,message ,verbose); // do not localize
 			}
 
 			if (oldValue != null)
@@ -571,8 +587,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 				om.SetPropertyValue(oldValue, invPropertyMap.Name, null);
 				om.SetNullValueStatus(oldValue, invPropertyMap.Name, false);
 				om.SetUpdatedStatus(oldValue, invPropertyMap.Name, true);
-				uow.RegisterDirty(oldValue);					
-				this.Context.LogManager.Debug(this, "Wrote null to inverse property", "Wrote to object of type: " + oldValue.GetType().ToString() + ", Inverse Property: " + invPropertyMap.Name); // do not localize
+				uow.RegisterDirty(oldValue);
+                message = new LogMessage("Wrote null to inverse property");
+                verbose = new LogMessage("Wrote to object of type: {0}, Inverse Property: " , oldValue.GetType(),invPropertyMap.Name);
+				this.Context.LogManager.Debug(this, message,verbose); // do not localize
 			}
 		}	
 

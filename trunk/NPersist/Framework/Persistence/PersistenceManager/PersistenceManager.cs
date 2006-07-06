@@ -21,6 +21,7 @@ using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Utility;
 using System.Reflection;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -1132,7 +1133,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 								IList list = ((IList) om.GetPropertyValue(obj, propertyMap.Name));
 								foreach (object itemRefObj in list)
 								{
-									this.Context.LogManager.Info(this, "Attaching referenced object", "Type: " + obj.GetType().ToString() + ", Referenced by Type: " + itemRefObj.GetType().ToString() + ", Referencing Property: " + propertyMap.Name); // do not localize
+                                    LogMessage message = new LogMessage("Attaching referenced object");
+                                    LogMessage verbose = new LogMessage("Type: {0}, Referenced by Type: {1}, Referencing Property: {2}" , obj.GetType(), itemRefObj.GetType(), propertyMap.Name);
+
+									this.Context.LogManager.Info(this,message, verbose); // do not localize
 									AttachObject(itemRefObj, visited, merge);
 								}
 							}
@@ -1141,7 +1145,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 								refObj = om.GetPropertyValue(obj, propertyMap.Name);
 								if (refObj != null)
 								{
-									this.Context.LogManager.Info(this, "Attaching referenced object", "Type: " + obj.GetType().ToString() + ", Referenced by Type: " + refObj.GetType().ToString() + ", Referencing Property: " + propertyMap.Name); // do not localize
+                                    LogMessage message = new LogMessage("Attaching referenced object");
+                                    LogMessage verbose = new LogMessage("Type: {0}, Referenced by Type: {1}, Referencing Property: {2}" , obj.GetType(),refObj.GetType(), propertyMap.Name);
+
+                                    this.Context.LogManager.Info(this, message, verbose); // do not localize
+
 									AttachObject(refObj, visited, merge);
 								}
 
@@ -1202,7 +1210,9 @@ namespace Puzzle.NPersist.Framework.Persistence
                             {
                                 refType = obj.GetType().GetProperty(propertyMap.Name).PropertyType;
                             }
-                            this.Context.LogManager.Info(this, "Cascade creating and referencing object", "Type: " + obj.GetType().ToString() + ", Creating Type: " + refType.ToString() + ", Property: " + propertyMap.Name); // do not localize
+                            LogMessage message = new LogMessage("Cascade creating and referencing object");
+                            LogMessage verbose = new LogMessage("Type: {0}, Creating Type: {1}, Property: {2}" , obj.GetType(), refType, propertyMap.Name);
+                            this.Context.LogManager.Info(this, message , verbose); // do not localize
 
                             if (propertyMap.IsCollection)
                             {
@@ -1260,7 +1270,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 								IList list = ((IList) om.GetPropertyValue(obj, propertyMap.Name));
 								foreach (object itemRefObj in list)
 								{
-									this.Context.LogManager.Info(this, "Cascade deleting referenced object", "Type: " + obj.GetType().ToString() + ", Deleting Type: " + itemRefObj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+                                    LogMessage message = new LogMessage("Cascade deleting referenced object");
+                                    LogMessage verbose = new LogMessage("Type: {0}, Deleting Type: {1}, Property: {2}" , obj.GetType(), itemRefObj.GetType(), propertyMap.Name);
+									this.Context.LogManager.Info(this, message , verbose); // do not localize
 									this.Context.DeleteObject(itemRefObj);
 								}
 							}
@@ -1269,7 +1281,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 								refObj = om.GetPropertyValue(obj, propertyMap.Name);
 								if (refObj != null)
 								{
-									this.Context.LogManager.Info(this, "Cascade deleting referenced object", "Type: " + obj.GetType().ToString() + ", Deleting Type: " + refObj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+                                    LogMessage message = new LogMessage("Cascade deleting referenced object");
+                                    LogMessage verbose = new LogMessage("Type: {0}, Deleting Type: {1}, Property: {2}", obj.GetType(), refObj.GetType(), propertyMap.Name);
+                                    this.Context.LogManager.Info(this, message, verbose); // do not localize
 									this.Context.DeleteObject(refObj);
 								}
 							}

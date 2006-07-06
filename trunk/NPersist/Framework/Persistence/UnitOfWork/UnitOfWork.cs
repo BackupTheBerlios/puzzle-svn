@@ -15,6 +15,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -36,8 +37,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private TopologicalGraph m_topologicalDelete = new TopologicalGraph();
 
         public virtual void RegisterCreated(object obj)
-		{	
-			this.Context.LogManager.Info(this, "Registering object as up for creation", "Type: " + obj.GetType().ToString()); // do not localize
+		{
+            LogMessage message = new LogMessage("Registering object as up for creation");
+            LogMessage verbose = new LogMessage("Type: {0}" ,obj.GetType());
+			this.Context.LogManager.Info(this, message,verbose ); // do not localize
 			object result = m_objectStatusLookup[obj];
 			if (result != null)
 			{

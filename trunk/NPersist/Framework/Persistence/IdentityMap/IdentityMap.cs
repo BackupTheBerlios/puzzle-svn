@@ -18,6 +18,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Proxy;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -62,7 +63,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			//m_objectStatusLookup.Remove(key);
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotRegistered);
 
-			ctx.LogManager.Info(this, "Unregistered created object", "Type: " + obj.GetType().ToString() + ", Key: " + key ); // do not localize
+            LogMessage message = new LogMessage("Unregistered created object");
+            LogMessage verbose = new LogMessage("Type: {0}, Key: {1}" , obj.GetType(), key );
+
+			ctx.LogManager.Info(this,message ,verbose ); // do not localize
 		}
 
 		public virtual void RegisterCreatedObject(object obj)
@@ -93,7 +97,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			//m_objectStatusLookup[obj] = ObjectStatus.Clean;
 			//ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);
 
-			ctx.LogManager.Info(this, "Registered created object", "Type: " + obj.GetType().ToString() + ", Key: " + key ); // do not localize
+            LogMessage message = new LogMessage("Registered created object");
+            LogMessage verbose = new LogMessage( "Type: {0}, Key: {1}" , obj.GetType(), key );
+			ctx.LogManager.Info(this, message,verbose); // do not localize
 		}
 
 		public virtual void RegisterLoadedObject(object obj)
@@ -129,7 +135,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 				//m_objectStatusLookup[obj] = ObjectStatus.Clean;
 				ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);						
 			}
-			ctx.LogManager.Info(this, "Registered loaded object", "Type: " + obj.GetType().ToString() + ", Key: " + key ); // do not localize
+            LogMessage message = new LogMessage("Registered loaded object");
+            LogMessage verbose = new LogMessage("Type: {0}, Key: {1}" , obj.GetType(), key );
+
+            ctx.LogManager.Info(this, message, verbose); // do not localize
 		}
 
 		public virtual void RegisterLazyLoadedObject(object obj)
@@ -150,7 +159,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			cache.UnloadedObjects[key] = obj;
 			//m_objectStatusLookup[obj] = ObjectStatus.NotLoaded;
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotLoaded);
-			ctx.LogManager.Info(this, "Registered lazy loaded object", "Type: " + obj.GetType().ToString() + ", Key: " + key ); // do not localize
+
+            LogMessage message = new LogMessage("Registered lazy loaded object");
+            LogMessage verbose = new LogMessage("Type: {0}, Key: {1}" , obj.GetType(),key);
+
+            ctx.LogManager.Info(this, message, verbose); // do not localize
 		}
 
 		public virtual void UpdateIdentity(object obj, string previousIdentity)
@@ -179,7 +192,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					cache.UnloadedObjects[prevKey] = null;
 				}				
 			}
-			this.Context.LogManager.Debug(this, "Updated identity", "Type: " + obj.GetType().ToString() + ", New Key: " + key  + ", Previous Key: " + prevKey ); // do not localize
+            LogMessage message = new LogMessage("Updated identity");
+            LogMessage verbose = new LogMessage("Type: {0}, New Key: {1}, Previous Key: {2}" , obj.GetType(), key , prevKey);
+
+			this.Context.LogManager.Debug(this, message, verbose); // do not localize
 		}
 
 		public virtual void UpdateIdentity(object obj, string previousIdentity, string newIdentity)
@@ -208,7 +224,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					cache.UnloadedObjects[prevKey] = null;
 				}				
 			}
-			this.Context.LogManager.Debug(this, "Updated identity", "Type: " + obj.GetType().ToString() + ", New Key: " + key  + ", Previous Key: " + prevKey ); // do not localize
+
+            LogMessage message = new LogMessage("Updated identity");
+            LogMessage verbose = new LogMessage("Type: {0}, New Key: {1}, Previous Key: {2}", obj.GetType(), key , prevKey);
+			this.Context.LogManager.Debug(this,message , verbose); // do not localize
 		}
 
 		public virtual object GetObject(string identity, Type type)
