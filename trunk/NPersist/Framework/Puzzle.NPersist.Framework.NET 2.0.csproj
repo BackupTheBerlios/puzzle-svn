@@ -538,6 +538,8 @@
     <Compile Include="Mapping\Domain\IMethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mapping\Domain\Immutable\ImmutableDomainMap.cs" />
+    <Compile Include="Mapping\Domain\Immutable\ImmutablePropertyMap.cs" />
     <Compile Include="Mapping\Domain\IParameterMap.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -553,6 +555,7 @@
     <Compile Include="Mapping\Domain\PropertyMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mapping\Domain\Immutable\ImmutableClassMap.cs" />
     <Compile Include="Mapping\Exceptions\MappingException.cs">
       <SubType>Code</SubType>
     </Compile>
