@@ -31,164 +31,252 @@ namespace Puzzle.NCore.Framework.Logging
 
         #endregion
 
-        public virtual void Debug(object message, object verbose)
+        public virtual void Debug(LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Debug(message, verbose);
+                logger.Debug(message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Info(object message, object verbose)
+        public virtual void Info(LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Info(message, verbose);
+                logger.Info(message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Warn(object message, object verbose)
+        public virtual void Warn(LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Warn(message, verbose);
+                logger.Warn(message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Error(object message, object verbose)
+        public virtual void Error(LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Error(message, verbose);
+                logger.Error(message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Fatal(object message, object verbose)
+        public virtual void Fatal(LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Fatal(message, verbose);
+                logger.Fatal(message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Debug(object message, object verbose, Exception t)
+        public virtual void Debug(LogMessage message, LogMessage verbose, Exception t)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Debug(message, verbose, t);
+                logger.Debug(message.ToString(), verbose.ToString(), t);
             }
         }
 
-        public virtual void Info(object message, object verbose, Exception t)
+        public virtual void Info(LogMessage message, LogMessage verbose, Exception t)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Info(message, verbose, t);
+                logger.Info(message.ToString(), verbose.ToString(), t);
             }
         }
 
-        public virtual void Warn(object message, object verbose, Exception t)
+        public virtual void Warn(LogMessage message, LogMessage verbose, Exception t)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Warn(message, verbose, t);
+                logger.Warn(message.ToString(), verbose.ToString(), t);
             }
         }
 
-        public virtual void Error(object message, object verbose, Exception t)
+        public virtual void Error(LogMessage message, LogMessage verbose, Exception t)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Error(message, verbose, t);
+                logger.Error(message.ToString(), verbose.ToString(), t);
             }
         }
 
-        public virtual void Fatal(object message, object verbose, Exception t)
+        public virtual void Fatal(LogMessage message, LogMessage verbose, Exception t)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Fatal(message, verbose, t);
+                logger.Fatal(message.ToString(), verbose.ToString(), t);
             }
         }
 
-        public virtual void Debug(object sender, object message, object verbose)
+        public virtual void Debug(object sender, LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Debug(sender, message, verbose);
+                logger.Debug(sender, message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Info(object sender, object message, object verbose)
+        public virtual void Info(object sender, LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Info(sender, message, verbose);
+                logger.Info(sender, message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Warn(object sender, object message, object verbose)
+        public virtual void Warn(object sender, LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Warn(sender, message, verbose);
+                logger.Warn(sender, message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Error(object sender, object message, object verbose)
+        public virtual void Error(object sender, LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Error(sender, message, verbose);
+                logger.Error(sender, message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Fatal(object sender, object message, object verbose)
+        public virtual void Fatal(object sender, LogMessage message, LogMessage verbose)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Fatal(sender, message, verbose);
+                logger.Fatal(sender, message.ToString(), verbose.ToString());
             }
         }
 
-        public virtual void Debug(object sender, object message, object verbose, Exception t)
+
+
+        public virtual void Debug(object sender, LogMessage message)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Debug(sender, message, verbose, t);
+                logger.Debug(sender, message.ToString(), "");
             }
         }
 
-        public virtual void Info(object sender, object message, object verbose, Exception t)
+        public virtual void Info(object sender, LogMessage message)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Info(sender, message, verbose, t);
+                logger.Info(sender, message.ToString(), "");
             }
         }
 
-        public virtual void Warn(object sender, object message, object verbose, Exception t)
+        public virtual void Warn(object sender, LogMessage message)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Warn(sender, message, verbose, t);
+                logger.Warn(sender, message.ToString(), "");
             }
         }
 
-        public virtual void Error(object sender, object message, object verbose, Exception t)
+        public virtual void Error(object sender, LogMessage message)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Error(sender, message, verbose, t);
+                logger.Error(sender, message.ToString(), "");
             }
         }
 
-        public virtual void Fatal(object sender, object message, object verbose, Exception t)
+        public virtual void Fatal(object sender, LogMessage message)
         {
             foreach (ILogger logger in loggers)
             {
-                logger.Fatal(sender, message, verbose, t);
+                logger.Fatal(sender, message.ToString(), "");
             }
+        }
+
+
+        public virtual void Debug(object sender, string message)
+        {
+            foreach (ILogger logger in loggers)
+            {
+                logger.Debug(sender, message, "");
+            }
+        }
+
+        public virtual void Info(object sender, string message)
+        {
+            foreach (ILogger logger in loggers)
+            {
+                logger.Info(sender, message, "");
+            }
+        }
+
+        public virtual void Warn(object sender, string message)
+        {
+            foreach (ILogger logger in loggers)
+            {
+                logger.Warn(sender, message, "");
+            }
+        }
+
+        public virtual void Error(object sender, string message)
+        {
+            foreach (ILogger logger in loggers)
+            {
+                logger.Error(sender, message, "");
+            }
+        }
+
+        public virtual void Fatal(object sender, string message)
+        {
+            foreach (ILogger logger in loggers)
+            {
+                logger.Fatal(sender, message, "");
+            }
+        }
+
+
+    }
+
+    public class LogMessage
+    {
+        #region Property Data
+        private object data;
+        public object Data
+        {
+            get
+            {
+                return this.data;
+            }
+            set
+            {
+                this.data = value;
+            }
+        }
+        #endregion
+
+        #region Property values
+        private object[] values;
+        public object[] Values
+        {
+            get
+            {
+                return this.values;
+            }
+            set
+            {
+                this.values = value;
+            }
+        }
+        #endregion
+        public LogMessage(object data, params object[] values)
+        {
+            this.data = data;
+            this.values = values;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(data.ToString(), values);
         }
     }
 }

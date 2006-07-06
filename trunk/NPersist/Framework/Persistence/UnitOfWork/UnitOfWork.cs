@@ -344,7 +344,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void Commit(int exceptionLimit)
 		{
-			this.Context.LogManager.Info(this, "Committing Unit of Work", ""); // do not localize
+			this.Context.LogManager.Info(this, "Committing Unit of Work"); // do not localize
 
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
@@ -462,7 +462,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void InsertCreated(object forObj, int exceptionLimit)
 		{
-			this.Context.LogManager.Debug(this, "Inserting objects that are up for creation", "");	 // do not localize			
+            this.Context.LogManager.Debug(this, "Inserting objects that are up for creation");	 // do not localize			
 
 			try
 			{
@@ -594,7 +594,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void UpdateDirty(object forObj, int exceptionLimit)
 		{
-			this.Context.LogManager.Debug(this, "Updating dirty objects", ""); // do not localize				
+			this.Context.LogManager.Debug(this, "Updating dirty objects"); // do not localize				
 
 			try
 			{
@@ -700,7 +700,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void UpdateStillDirty(object forObj, int exceptionLimit)
 		{
-			this.Context.LogManager.Debug(this, "Updating still dirty objects", ""); // do not localize				
+			this.Context.LogManager.Debug(this, "Updating still dirty objects"); // do not localize				
 
 			try
 			{
@@ -806,7 +806,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void RemoveDeleted(object forObj, int exceptionLimit)
 		{
-			this.Context.LogManager.Debug(this, "Removing objects that are up for deletion", ""); // do not localize			
+			this.Context.LogManager.Debug(this, "Removing objects that are up for deletion"); // do not localize			
 	
 			try
 			{
@@ -880,7 +880,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 								m_listRemoved.Add(obj);
 								m_topologicalDelete.RemoveNode(obj);
 								pe.RemoveObject(obj);
-								this.Context.LogManager.Debug(this, "Removed object", "" ); // do not localize						
+								this.Context.LogManager.Debug(this, "Removed object" ); // do not localize						
 							}
 							catch (Exception ex)
 							{

@@ -11,6 +11,7 @@ using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NCore.Framework.Logging;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -48,7 +49,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//non-cached
 		protected virtual string LoadFile(object obj, IClassMap classMap, string fileName)
 		{
-			this.Context.LogManager.Debug(this, "Loading object from file", "File: " + fileName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Loading object from file");
+            LogMessage verbose = new LogMessage("File: {0}, Object Type: {1}" , fileName ,obj.GetType());
+			this.Context.LogManager.Debug(this, message , verbose); // do not localize
 
 			if (!(File.Exists(fileName)))
 				return "";
@@ -212,7 +215,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual XmlNode LoadObjectNodeFromDomainFile(object obj, IClassMap classMap)
 		{
 			string fileName = GetFileNamePerDomain(obj, classMap);
-			this.Context.LogManager.Debug(this, "Saving object to file", "File: " + fileName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Saving object to file", "File: {0}, Object Type: {1}" , fileName , obj.GetType());
+			this.Context.LogManager.Debug(this, message); // do not localize
 	
 			XmlDocument xmlDoc;
 			if (File.Exists(fileName))
@@ -233,7 +237,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual XmlNode LoadObjectNodeFromClassFile(object obj, IClassMap classMap)
 		{
 			string fileName = GetFileNamePerClass(obj, classMap);
-			this.Context.LogManager.Debug(this, "Removing object from file", "File: " + fileName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Removing object from file");
+            LogMessage verbose = new LogMessage("File: {0}, Object Type: {1}",fileName , obj.GetType());
+			this.Context.LogManager.Debug(this, message,verbose); // do not localize
 //			
 //			if (!(File.Exists(fileName)))
 //				throw new NPersistException("The file '" + fileName + "' could not be found!"); // do not localize
@@ -295,7 +301,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void LoadObject(ref object obj)
 		{
-			this.Context.LogManager.Info(this, "Loading object by id", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Loading object by id");
+            LogMessage verbose = new LogMessage ("Type: {0}" , obj.GetType());
+            this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 
@@ -324,7 +332,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void InsertObject(object obj, IList stillDirty)
 		{
-			this.Context.LogManager.Info(this, "Inserting object", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Inserting object");
+            LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
+            this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 
@@ -344,7 +354,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void RemoveObject(object obj)
 		{
-			this.Context.LogManager.Info(this, "Removing object", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Removing object");
+            LogMessage verbose = new LogMessage("Type: {0}", obj.GetType());
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 
@@ -364,7 +376,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void UpdateObject(object obj, IList stillDirty)
 		{
-			this.Context.LogManager.Info(this, "Updating object", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Updating object");
+            LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
+
+			this.Context.LogManager.Info(this,message ,verbose); // do not localize
 
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 
@@ -384,7 +399,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void LoadProperty(object obj, string propertyName)
 		{
-			this.Context.LogManager.Info(this, "Loading property", "Property: " + propertyName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Loading property");
+            LogMessage verbose = new LogMessage("Property: {0}, Object Type: {1}" , propertyName , obj.GetType());
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 			IPropertyMap propertyMap = classMap.MustGetPropertyMap(propertyName);
@@ -463,7 +480,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void SavePerObject(object obj, IClassMap classMap, bool creating)
 		{
 			string fileName = GetFileNamePerObject(obj, classMap);
-			this.Context.LogManager.Debug(this, "Saving object to file", "File: " + fileName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Saving object to file");
+            LogMessage verbose = new LogMessage("File: {0},, Object Type: {1}" , fileName , obj.GetType());
+			this.Context.LogManager.Debug(this, message, verbose); // do not localize
 
 			XmlDocument xmlDoc;
 

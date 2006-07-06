@@ -133,8 +133,8 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public object CreateProxy(Type type, params object[] args)
         {
-            string message = string.Format("Creating proxy for type {0}", type.FullName);
-            LogManager.Info(this, message, "");
+            LogMessage message = new LogMessage("Creating proxy for type {0}", type.FullName);
+            LogManager.Info(this, message);
 
             return CreateProxyWithState(null, type, args);
         }
@@ -154,8 +154,8 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public object CreateWrapper(object instance)
         {
-            string message = string.Format("Creating wrapper for type {0}", instance.GetType().FullName);
-            LogManager.Info(this, message, "");
+            LogMessage message = new LogMessage("Creating wrapper for type {0}", instance.GetType().FullName);
+            LogManager.Info(this, message);
 
             Type wrapperType = CreateWrapperType(instance.GetType());
 
@@ -196,8 +196,8 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public object CreateProxyWithState(object state, Type type, params object[] args)
         {
-            string message = string.Format("Creating context bound wrapper for type {0}", type.FullName);
-            LogManager.Info(this, message, "");
+            LogMessage message = new LogMessage("Creating context bound wrapper for type {0}", type.FullName);
+            LogManager.Info(this, message);
             Type proxyType = CreateProxyType(type);
 
             object[] proxyArgs;
@@ -248,15 +248,15 @@ namespace Puzzle.NAspect.Framework
 
 
                     proxyLookup[type] = proxyType;
-                    string message = string.Format("Emitting new proxy type for type {0}", type.FullName);
-                    LogManager.Info(this, message, "");
+                    LogMessage message = new LogMessage("Emitting new proxy type for type {0}", type.FullName);
+                    LogManager.Info(this, message);
                 }
                 else
                 {
                     //fetch the proxy type from the lookup
                     proxyType = proxyLookup[type] as Type;
-                    string message = string.Format("Fetching proxy type from cache for type {0}", type.FullName);
-                    LogManager.Info(this, message, "");
+                    LogMessage message = new LogMessage("Fetching proxy type from cache for type {0}", type.FullName);
+                    LogManager.Info(this, message);
                 }
                 return proxyType;
             }
@@ -287,15 +287,15 @@ namespace Puzzle.NAspect.Framework
                             string.Format("Could not generate wrapper for type '{0}'", type.FullName));
 
                     wrapperLookup[type] = wrapperType;
-                    string message = string.Format("Emitting new wrapper type for type {0}", type.FullName);
-                    LogManager.Info(this, message, "");
+                    LogMessage message = new LogMessage("Emitting new wrapper type for type {0}", type.FullName);
+                    LogManager.Info(this, message);
                 }
                 else
                 {
                     //fetch the proxy type from the lookup
                     wrapperType = wrapperLookup[type] as Type;
-                    string message = string.Format("Fetching proxy wrapper from cache for type {0}", type.FullName);
-                    LogManager.Info(this, message, "");
+                    LogMessage message = new LogMessage("Fetching proxy wrapper from cache for type {0}", type.FullName);
+                    LogManager.Info(this, message);
                 }
                 return wrapperType;
             }
@@ -322,7 +322,7 @@ namespace Puzzle.NAspect.Framework
             IList distinctMixins = new ArrayList(mixins.Values);
 
 
-            string message = string.Format("Getting mixins for type {0}", type.FullName);
+            LogMessage message = new LogMessage("Getting mixins for type {0}", type.FullName);
             string verbose = "";
             foreach (Type mixinType in distinctMixins)
             {
@@ -331,7 +331,9 @@ namespace Puzzle.NAspect.Framework
                     verbose += ", ";
             }
 
-            LogManager.Info(this, message, verbose);
+
+
+            LogManager.Info(this, message);
 
             return distinctMixins;
         }

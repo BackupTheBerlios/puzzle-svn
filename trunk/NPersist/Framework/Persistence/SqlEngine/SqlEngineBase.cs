@@ -24,6 +24,7 @@ using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Sql.Dom;
 using Puzzle.NPersist.Framework.Sql.Visitor;
 using Puzzle.NPersist.Framework.Utility;
+using Puzzle.NCore.Framework.Logging;
 
 //
 
@@ -108,19 +109,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void LoadObject(ref object obj)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Loading object by id", "Type: " + obj.GetType().ToString()); // do not localize
+			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Loading object by id"), new LogMessage ("Type: {0}" , obj.GetType())); // do not localize
 			LoadObjectByIdOrKey(ref obj, "", "");
 		}
 
 		public virtual void LoadObjectByKey(ref object obj, string keyPropertyName, object keyValue)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Loading object by key property", "Type: " + obj.GetType().ToString() + ", Property: " + keyPropertyName + ", Value: " + keyValue); // do not localize
+			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Loading object by key property"), new LogMessage("Type: {0} , Property: {1} , Value: {2} " , obj.GetType() , keyPropertyName ,keyValue)); // do not localize
 			LoadObjectByIdOrKey(ref obj, keyPropertyName, keyValue);
 		}
 
 		public virtual void InsertObject(object obj, IList stillDirty)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Inserting object", "Type: " + obj.GetType().ToString()); // do not localize
+			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Inserting object"), new LogMessage("Type: {0}" , obj.GetType())); // do not localize
 
 			ArrayList propertyNames = new ArrayList();
 			IList parameters = new ArrayList() ;
@@ -255,7 +256,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void UpdateObject(object obj, IList stillDirty)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Updating object", "Type: " + obj.GetType().ToString()); // do not localize
+			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Updating object"), new LogMessage("Type: {0}" , obj.GetType())); // do not localize
 			IList parameters = new ArrayList() ;
 			IContext ctx = m_SqlEngineManager.Context;
 			IObjectManager om = ctx.ObjectManager;
@@ -324,7 +325,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void RemoveObject(object obj)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Removing object", "Type: " + obj.GetType().ToString()); // do not localize
+			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Removing object"),  new LogMessage("Type: {0}" , obj.GetType())); // do not localize
 			IList parameters = new ArrayList() ;
 			IContext ctx = m_SqlEngineManager.Context;
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
@@ -497,7 +498,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void LoadProperty(object obj, string propertyName)
 		{
-			this.SqlEngineManager.Context.LogManager.Info(this, "Loading property", "Property: " + propertyName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Loading property");
+            LogMessage verbose = new LogMessage("Property: {0}, Object Type: {1}" ,propertyName , obj.GetType());
+			this.SqlEngineManager.Context.LogManager.Info(this, message , verbose); // do not localize
 			IList parameters;
 			object value;
 			object orgValue;
