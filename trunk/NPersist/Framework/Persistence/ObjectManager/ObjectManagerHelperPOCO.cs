@@ -17,6 +17,7 @@ using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Utility;
 using Puzzle.NCore.Framework.Collections;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -199,6 +200,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
        //     FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, propertyName);
 
+#if NET2
+            FastFieldGetter getter = GetFastGetter(obj, propertyName);
+            return getter(obj);
+#else
             FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType().Name +"."+ propertyName];
             if (fieldInfo == null)
             {
@@ -206,7 +211,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             }
 
             return fieldInfo.GetValue(obj);
-
+#endif
         }
 
         public virtual void SetPropertyValue(object obj, string propertyName, object value)
@@ -225,9 +230,39 @@ namespace Puzzle.NPersist.Framework.Persistence
             return fieldInfo;
         }
 
+#if NET2
+        private Hashtable fastFieldGetterLookup = new Hashtable();
+        private Hashtable fastFieldSetterLookup = new Hashtable();
+        private FastFieldGetter GetFastGetter(object obj, string propertyName)
+        {
+            string key = obj.GetType().Name + "." + propertyName;
+            FastFieldGetter res = (FastFieldGetter)fastFieldGetterLookup[key];
+            if (res == null)
+            {
+                FieldInfo fieldInfo = GetFieldInfo(obj, propertyName);
+                res = FastFieldAccess.GetFieldGetter(fieldInfo);
+                fastFieldGetterLookup[key] = res;
+            }
+
+            return res;
+        }
+#endif
+
         
         public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
         {
+#if NET2
+            string key = obj.GetType().Name + "." + propertyName;
+            FastFieldSetter setter = (FastFieldSetter)fastFieldSetterLookup[key];
+            if (setter == null)
+            {
+                FieldInfo fieldInfo = GetFieldInfo(obj, propertyName);
+                setter = FastFieldAccess.GetFieldSetter(fieldInfo);
+                fastFieldSetterLookup[key] = setter;
+            }
+
+            setter(obj, value);
+#else
             FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType().Name + "." + propertyName];
             if (fieldInfo == null)
             {
@@ -241,7 +276,8 @@ namespace Puzzle.NPersist.Framework.Persistence
                     return;
                 }
             }
-            fieldInfo.SetValue(obj, value);           
+            fieldInfo.SetValue(obj, value);    
+#endif
         }
 
         public virtual PropertyStatus GetPropertyStatus(object obj, string propertyName)
