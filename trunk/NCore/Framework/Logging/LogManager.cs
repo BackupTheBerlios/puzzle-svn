@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Puzzle.NCore.Framework.Logging
 {
