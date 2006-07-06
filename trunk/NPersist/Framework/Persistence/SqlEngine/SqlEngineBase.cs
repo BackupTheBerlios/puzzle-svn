@@ -571,6 +571,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string sql = GetSelectCollectionPropertyStatement(obj, propertyMap.Name, parameters);
 			IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
 			object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
+            if (result == null)
+            {
+                result = new object[1, 0];
+            }
 			if (Util.IsArray(result))
 			{
 				mList = propList as IInterceptableList;

@@ -186,9 +186,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 					catch
 					{
 					}
-					throw new IOException("Could not load file from path: " + path + "! " + ex.Message, ex); // do not localize
 				}
-			}
+                throw new IOException("Could not load file from path: " + path + "! " + ex.Message, ex); // do not localize
+            }
 			domainMap = LoadFromXml(xml, mapSerializer,useCache,validate);
 			domainMap.SetLoadedFromPath(path);
 
