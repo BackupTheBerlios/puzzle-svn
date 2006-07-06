@@ -237,7 +237,7 @@ namespace Puzzle.NCore.Framework.Logging
 
     }
 
-    public class LogMessage
+    public struct LogMessage
     {
         #region Property Data
         private object data;

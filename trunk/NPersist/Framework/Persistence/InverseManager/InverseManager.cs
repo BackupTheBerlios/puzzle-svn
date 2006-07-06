@@ -14,6 +14,7 @@ using System.Diagnostics;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -148,7 +149,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleManyManyPropertySet(object obj, IPropertyMap propertyMap, IList newList, IList oldList)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse many-many property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse many-many property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}", obj.GetType(),propertyMap.Name);
+
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			PropertyStatus propStatus;
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
@@ -214,7 +218,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleOneManyPropertySet(object obj, IPropertyMap propertyMap, object value, object oldValue)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse one-many property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse one-many property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}", obj.GetType(), propertyMap.Name);
+
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			PropertyStatus propStatus;
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
@@ -272,7 +279,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleOneOnePropertySet(object obj, IPropertyMap propertyMap, object value, object oldValue)
 		{
-			this.Context.LogManager.Info(this, "Managing inverse one-one property relationship synchronization", "Writing to object of type: " + obj.GetType().ToString() + ", Property: " + propertyMap.Name); // do not localize
+            LogMessage message = new LogMessage("Managing inverse one-one property relationship synchronization");
+            LogMessage verbose = new LogMessage("Writing to object of type: {0}, Property: {1}" , obj.GetType(), propertyMap.Name);
+
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			PropertyStatus propStatus;
 
@@ -314,10 +324,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void AddAction(InverseActionType actionType, object obj, string propertyName, object value, object master)
 		{
-			if (value == null)
-				this.Context.LogManager.Debug(this, "Caching inverse action", "Action type: " + actionType.ToString() + ", Object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value: null"); // do not localize
-			else
-				this.Context.LogManager.Debug(this, "Caching inverse action", "Action type: " + actionType.ToString() + ", Object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value type: " + value.GetType().ToString()  ); // do not localize
+            if (value == null)
+            {
+                LogMessage message = new LogMessage("Caching inverse action");
+                LogMessage verbose = new LogMessage("Action type: {0}, Object of type: {1}, Property: {2}, Value: null" , actionType, obj.GetType(),propertyName );
+                this.Context.LogManager.Debug(this, message,verbose ); // do not localize
+            }
+            else
+            {
+                LogMessage message = new LogMessage("Caching inverse action");
+                LogMessage verbose = new LogMessage("Action type: {0}, Object of type: {1}, Property: {2}, Value type: {3}" , actionType, obj.GetType(),propertyName,value.GetType()) ;
+                this.Context.LogManager.Debug(this, message,verbose ); // do not localize
+            
+            }
 
 			InverseAction action = new InverseAction() ;
 			action.ActionType = actionType ;
@@ -432,7 +451,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (mList != null) { mList.MuteNotify = stackMute; }
 			om.SetUpdatedStatus(obj, propertyName, true);
 
-			this.Context.LogManager.Debug(this, "Performed cached inverse action", "Action type: " + action.ActionType.ToString() + ", Wrote to object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value object type: " + value.GetType().ToString()  ); // do not localize
+            LogMessage message = new LogMessage("Performed cached inverse action");
+            LogMessage verbose = new LogMessage("Action type: {0}, Wrote to object of type: {1}, Property: {2}, Value object type: {3}" , action.ActionType,obj.GetType(), propertyName, value.GetType());
+
+			this.Context.LogManager.Debug(this,message ,verbose ); // do not localize
 		}
 
 		protected virtual void PerformRemoveAction(InverseAction action)
@@ -457,7 +479,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (mList != null) { mList.MuteNotify = stackMute; }
 			om.SetUpdatedStatus(obj, propertyName, true);
 
-			this.Context.LogManager.Debug(this, "Performed cached inverse action", "Action type: " + action.ActionType.ToString() + ", Wrote to object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value object type: " + value.GetType().ToString()  ); // do not localize
+            LogMessage message = new LogMessage("Performed cached inverse action");
+            LogMessage verbose = new LogMessage("Action type: {0}, Wrote to object of type: {1}, Property: {2}, Value object type: {3}" , action.ActionType,obj.GetType(),propertyName ,value.GetType());
+
+			this.Context.LogManager.Debug(this,message , verbose); // do not localize
 		}
 
 		protected virtual void PerformSetAction(InverseAction action)
@@ -472,10 +497,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 			om.SetNullValueStatus(obj, propertyName, false);
 			om.SetUpdatedStatus(obj, propertyName, true);
 
-			if (value == null)
-				this.Context.LogManager.Debug(this, "Performed cached inverse action", "Action type: " + action.ActionType.ToString() + ", Wrote to object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value: null"); // do not localize
-			else
-				this.Context.LogManager.Debug(this, "Performed cached inverse action", "Action type: " + action.ActionType.ToString() + ", Wrote to object of type: " + obj.GetType().ToString() + ", Property: " + propertyName + ", Value object type: " + value.GetType().ToString()  ); // do not localize
+            if (value == null)
+            {
+                LogMessage message = new LogMessage("Performed cached inverse action");
+                LogMessage verbose = new LogMessage("Action type: {0}, Wrote to object of type: {1}, Property: {2}, Value: null" , action.ActionType , obj.GetType(), propertyName);
+                this.Context.LogManager.Debug(this, message,verbose ); // do not localize
+            }
+            else
+            {
+                LogMessage message = new LogMessage("Performed cached inverse action");
+                LogMessage verbose = new LogMessage("Action type: {0}, Wrote to object of type: {1}, Property: {2}, Value object type: {3}" , action.ActionType, obj.GetType(), propertyName , value.GetType());
+
+                this.Context.LogManager.Debug(this,message ,verbose); // do not localize
+            }
 
 		}
 

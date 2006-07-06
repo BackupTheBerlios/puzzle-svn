@@ -67,7 +67,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void RegisterDirty(object obj)
 		{
-			this.Context.LogManager.Info(this, "Registering object as dirty", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Registering object as dirty");
+            LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
+
+            this.Context.LogManager.Info(this, message, verbose); // do not localize
 			object result = m_objectStatusLookup[obj];
 			if (result != null)
 			{
@@ -95,7 +98,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void RegisterDeleted(object obj)
 		{
-			this.Context.LogManager.Info(this, "Registering object as up for deletion", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Registering object as up for deletion");
+            LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
+
+			this.Context.LogManager.Info(this,message , verbose); // do not localize
 
 			object result = m_objectStatusLookup[obj];
             bool addToDeleted = true;
@@ -127,7 +133,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void RegisterClean(object obj)
 		{
-			this.Context.LogManager.Info(this, "Registering object as clean", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Registering object as clean");
+            LogMessage verbose = new LogMessage("Type: {0}", obj.GetType());
+
+			this.Context.LogManager.Info(this,message , verbose); // do not localize
 			m_objectStatusLookup.Remove(obj);
 			m_listCreated.Remove(obj);
 			m_listDirty.Remove(obj);
@@ -410,7 +419,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public void CommitObject(object obj, int exceptionLimit)
 		{
-			this.Context.LogManager.Info(this, "Committing object", "Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Committing object");
+            LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
+
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
@@ -533,7 +545,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 								stillDirty.Clear() ;
 								pe.InsertObject(obj, stillDirty);
 								om.SetObjectStatus(obj, ObjectStatus.Clean);
-								this.Context.LogManager.Debug(this, "Inserted object", "Type: " + obj.GetType().ToString() + " Still dirty: " + stillDirty.ToString() ); // do not localize
+
+                                LogMessage message = new LogMessage("Inserted object");
+                                LogMessage verbose = new LogMessage("Type: {0},  Still dirty: {1}" , obj.GetType(), stillDirty);
+								this.Context.LogManager.Debug(this,message , verbose); // do not localize
 								if (stillDirty.Count > 0)
 								{
 									IList cloneList = new ArrayList();
@@ -648,7 +663,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 								m_listUpdated.Add(obj);
 								stillDirty.Clear() ;
 								pe.UpdateObject(obj, stillDirty);
-								this.Context.LogManager.Debug(this, "Updated object", "Type: " + obj.GetType().ToString() + " Still dirty: " + stillDirty.Count.ToString() ); // do not localize
+                                LogMessage message = new LogMessage("Updated object");
+                                LogMessage verbose = new LogMessage("Type: {0}, Still dirty: {1}" , obj.GetType(),stillDirty.Count);
+
+								this.Context.LogManager.Debug(this, message, verbose ); // do not localize
 								if (stillDirty.Count > 0)
 								{
 									IList cloneList = new ArrayList();
@@ -753,7 +771,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 								stillDirty = (IList) m_hashStillDirty[obj] ;
 								m_hashStillDirty.Remove(obj);
 								pe.UpdateObject(obj, stillDirty);
-								this.Context.LogManager.Debug(this, "Updated still dirty object", "Type: " + obj.GetType().ToString() + " Still dirty: " + stillDirty.Count.ToString() ); // do not localize
+                                LogMessage message = new LogMessage("Updated still dirty object");
+                                LogMessage verbose = new LogMessage("Type: {0}, Still dirty: {1}" , obj.GetType(), stillDirty.Count);
+								this.Context.LogManager.Debug(this,message ,verbose); // do not localize
 								if (stillDirty.Count > 0)
 								{
 									IList cloneList = new ArrayList();
