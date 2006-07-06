@@ -524,7 +524,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void RemovePerObject(object obj, IClassMap classMap)
 		{
 			string fileName = GetFileNamePerObject(obj, classMap);
-			this.Context.LogManager.Debug(this, "Removing file for object", "File: " + fileName + ", Object Type: " + obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Removing file for object");
+            LogMessage verbose = new LogMessage("File: {0},, Object Type: {1}" , fileName , obj.GetType());
+			this.Context.LogManager.Debug(this, message,verbose); // do not localize
 			
 			if (!(File.Exists(fileName)))
 				throw new NPersistException("The file '" + fileName + "' could not be found!"); // do not localize

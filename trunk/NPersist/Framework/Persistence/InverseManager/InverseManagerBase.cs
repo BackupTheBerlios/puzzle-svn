@@ -15,6 +15,7 @@ using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -224,7 +225,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//object, setting the nullable, clean back references to null 
 		public virtual void RemoveInverseReferences(object obj)
 		{
-			this.Context.LogManager.Info(this, "Removing inverse references", obj.GetType().ToString()); // do not localize
+            LogMessage message = new LogMessage("Removing inverse references");
+            LogMessage verbose = new LogMessage(obj.GetType());
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 			IObjectManager om = this.Context.ObjectManager;
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
 			IPropertyMap invPropertyMap;

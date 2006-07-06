@@ -1852,7 +1852,9 @@ namespace Puzzle.NPersist.Framework
 			if (dataSource == null)
 				throw new ArgumentNullException("dataSource");
 
-			this.LogManager.Info(this, "Beginning local transaction", "Data source: " + dataSource.Name + ", Isolation level: " + iso.ToString() + "Auto persist: " + autoPersistAllOnCommmit.ToString()  );	
+            LogMessage message = new LogMessage("Beginning local transaction");
+            LogMessage verbose = new LogMessage("Data source: {0}, Isolation level: {1} Auto persist: {2} " , dataSource.Name , iso, autoPersistAllOnCommmit);
+            this.LogManager.Info(this, message, verbose); // do not localize	
 
 			TransactionCancelEventArgs e = new TransactionCancelEventArgs(dataSource, iso, autoPersistAllOnCommmit);
 			m_EventManager.OnBeginningTransaction(this, e);

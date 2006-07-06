@@ -13,6 +13,7 @@ using System.Data;
 using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -39,7 +40,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void Commit()
 		{
-			this.Context.LogManager.Info(this, "Committing local transaction", "Data source: " + m_DataSource.Name + ", " + "Auto persist: " + m_AutoPersistAllOnCommit.ToString()  ); // do not localize	
+            LogMessage message = new LogMessage("Committing local transaction");
+            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}" , m_DataSource.Name , m_AutoPersistAllOnCommit  );
+			this.Context.LogManager.Info(this, message , verbose); // do not localize	
 
 			TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, this.IsolationLevel, m_AutoPersistAllOnCommit);
 			this.Context.EventManager.OnCommittingTransaction(this, e);
@@ -75,9 +78,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void Rollback()
 		{
-			this.Context.LogManager.Info(this, "Rolling back local transaction", "Data source: " + m_DataSource.Name + ", " + "Auto persist: " + m_AutoPersistAllOnCommit.ToString()  ); // do not localize	
+            LogMessage message = new LogMessage("Rolling back local transaction");
+            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}", m_DataSource.Name, m_AutoPersistAllOnCommit);
+            this.Context.LogManager.Info(this, message, verbose); // do not localize	
 
-			TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, m_AutoPersistAllOnCommit);
+            TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, m_AutoPersistAllOnCommit);
 			this.Context.EventManager.OnRollingbackTransaction(this, e);
 			if (e.Cancel)
 			{

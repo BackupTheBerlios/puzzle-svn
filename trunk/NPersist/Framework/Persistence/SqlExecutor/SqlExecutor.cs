@@ -18,6 +18,7 @@ using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -81,7 +82,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual object ExecuteScalar(string sql, IDataSource dataSource, IList parameters)
 		{
-			this.Context.LogManager.Info(this, "Executing scalar sql query", "Sql: " + sql); // do not localize
+            LogMessage message = new LogMessage("Executing scalar sql query");
+            LogMessage verbose = new LogMessage ("Sql: {0}" , sql);
+			this.Context.LogManager.Info(this,message , verbose);// do not localize
 			IDbConnection connection;
 			IDbCommand cmd;
 			object result;
@@ -90,7 +93,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing scalar sql query canceled by observer!", "Sql: " + sql); // do not localize
+                message = new LogMessage("Executing scalar sql query canceled by observer!");
+                verbose = new LogMessage("Sql: {0}", sql);
+				this.Context.LogManager.Warn(this, message, verbose); // do not localize
 				return 0;
 			}
 			sql = e.Sql;
@@ -120,7 +125,9 @@ namespace Puzzle.NPersist.Framework.Persistence
             if (dataSource == null)
                 throw new ArgumentNullException("dataSource");
 
-			this.Context.LogManager.Info(this, "Executing non query", "Sql: " + sql); // do not localize
+            LogMessage message = new LogMessage("Executing non query");
+            LogMessage verbose = new LogMessage("Sql: {0}" , sql);
+			this.Context.LogManager.Info(this, message, verbose); // do not localize
 			IDbConnection connection;
 			IDbCommand cmd;
 			int result = 0;
@@ -133,7 +140,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing non query canceled by observer!", "Sql: " + sql); // do not localize
+                message = new LogMessage("Executing non query canceled by observer!");
+                verbose = new LogMessage("Sql: {0}", sql);
+                this.Context.LogManager.Info(this, message, verbose); // do not localize				
 				return 0;
 			}
 			sql = e.Sql;
@@ -173,7 +182,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//public virtual IDataReader ExecuteReader(string sql, IDataSource dataSource, IDbConnection connection, IList parameters)
 		public virtual IDataReader ExecuteReader(string sql, IDataSource dataSource, IList parameters)
 		{
-			this.Context.LogManager.Info(this, "Executing sql query and returning data reader", "Sql: " + sql); // do not localize
+            LogMessage message = new LogMessage("Executing sql query and returning data reader");
+            LogMessage verbose = new LogMessage("Sql: {0}", sql);
+            this.Context.LogManager.Info(this, message, verbose); // do not localize	
 			IDbConnection connection;
 			IDbCommand cmd;
 			IDataReader dr;
@@ -182,7 +193,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing sql query and returning data reader canceled by observer!", "Sql: " + sql); // do not localize
+                message = new LogMessage("Executing sql query and returning data reader canceled by observer!");
+                verbose = new LogMessage("Sql: {0}", sql);
+                this.Context.LogManager.Info(this, message, verbose); // do not localize	
 				return null;
 			}
 			sql = e.Sql;
@@ -216,7 +229,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual object ExecuteArray(string sql, IDataSource dataSource, IList parameters)
 		{
-			this.Context.LogManager.Info(this, "Executing sql query and returning array", "Sql: " + sql); // do not localize
+            LogMessage message = new LogMessage("Executing sql query and returning array");
+            LogMessage verbose = new LogMessage("Sql: {0}", sql);
+            this.Context.LogManager.Info(this, message, verbose); // do not localize	
+
 			IDbConnection connection;
 			IDbCommand cmd;
 			IDataReader dr;
@@ -226,7 +242,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing sql query and returning array canceled by observer!", "Sql: " + sql); // do not localize
+                message = new LogMessage("Executing sql query and returning array canceled by observer!");
+                verbose = new LogMessage("Sql: {0}", sql);
+                this.Context.LogManager.Info(this, message, verbose); // do not localize	
 				return null;
 			}
 			sql = e.Sql;
@@ -258,7 +276,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public DataTable ExecuteDataTable(string sql, IDataSource dataSource, IList parameters)
 		{
-			this.Context.LogManager.Info(this, "Executing sql query and returning data table", "Sql: " + sql); // do not localize
+            LogMessage message = new LogMessage("Executing sql query and returning data table");
+            LogMessage verbose = new LogMessage("Sql: {0}", sql);
+            this.Context.LogManager.Info(this, message, verbose); // do not localize	
 			IDbConnection connection;
 			IDbCommand cmd;
 			IDataReader dr;
@@ -268,7 +288,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing sql query and returning data table canceled by observer!", "Sql: " + sql); // do not localize
+                message = new LogMessage("Executing sql query and returning data table canceled by observer!");
+                verbose = new LogMessage("Sql: {0}", sql);
+                this.Context.LogManager.Info(this, message, verbose); // do not localize
 				return null;
 			}
 			sql = e.Sql;
@@ -409,7 +431,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.EventManager.OnExecutingSql(this, e);
 			if (e.Cancel)
 			{
-				this.Context.LogManager.Warn(this, "Executing batched statements canceled by observer!", "Sql: " + e.Sql); // do not localize
+                LogMessage message = new LogMessage("Executing batched statements canceled by observer!");
+                LogMessage verbose = new LogMessage("Sql: {0}" , e.Sql);
+
+				this.Context.LogManager.Warn(this, message,verbose); // do not localize
 			}
 			sqlBatch = e.Sql;
 			dataSource = e.DataSource;
