@@ -11,6 +11,44 @@ Public Class ClassesToCodeCs2
 
     Private m_DocCommentPrefix As String = "///"
 
+    Private Function GetPrimitiveType(ByVal propertyMap As PropertyMap, ByVal convDataType As String) As String
+
+
+        If convDataType = "System.Collections.IList" Then
+            convDataType = String.Format("IList<{0}>", propertyMap.ItemType)
+            Return convDataType
+        End If
+
+
+
+        If propertyMap.ReferenceType = ReferenceType.None Then
+
+            If convDataType.Replace(".", "").Length = convDataType.Length - 1 Then
+                convDataType = convDataType.Replace("System.", "")
+            End If
+
+            If convDataType = "String" Then
+                convDataType = "string"
+            End If
+
+            If convDataType = "Int32" Then
+                convDataType = "int"
+            End If
+
+            If convDataType = "Boolean" Then
+                convDataType = "bool"
+            End If
+
+            If propertyMap.IsNullable AndAlso convDataType <> "string" Then
+                convDataType = convDataType & "?"
+            End If
+
+        End If
+
+        Return convDataType
+    End Function
+
+
     Public Overrides Function DomainToCode(ByVal domainMap As Puzzle.NPersist.Framework.Mapping.IDomainMap, ByVal noRootNamespace As Boolean) As String
 
         Dim code As String
@@ -67,6 +105,9 @@ Public Class ClassesToCodeCs2
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
         codeBuilder.Append("using System;")
         codeBuilder.Append(vbCrLf)
+        codeBuilder.Append("using System.Collections.Generic;")
+        codeBuilder.Append(vbCrLf)
+
 
         'Namespace region
         AddRegion(codeBuilder, "Namespace '" & ns & "'")
@@ -192,6 +233,8 @@ Public Class ClassesToCodeCs2
             'using System;
             codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
             codeBuilder.Append("using System;")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("using System.Collections.Generic;")
             codeBuilder.Append(vbCrLf)
 
             'Namespace region
@@ -377,6 +420,7 @@ Public Class ClassesToCodeCs2
                                     'convDataType = "System.Collections.ArrayList"
                                     convDataType = "System.Collections.IList"
 
+
                                 End If
 
                             End If
@@ -403,6 +447,9 @@ Public Class ClassesToCodeCs2
 
                         End If
 
+                        'nullabel type support
+                        convDataType = GetPrimitiveType(propertyMap, convDataType)
+
                         'Field
                         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.MemberIndent))
                         Select Case propertyMap.FieldAccessibility
@@ -426,7 +473,7 @@ Public Class ClassesToCodeCs2
 
                         codeBuilder.Append(propertyMap.GetFieldName)
 
-                       
+
 
 
 
@@ -718,6 +765,7 @@ Public Class ClassesToCodeCs2
             codeBuilder.Append("using System;" & vbCrLf)
             codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
             codeBuilder.Append("using System.Collections;" & vbCrLf)
+            codeBuilder.Append(vbCrLf)
 
             codeBuilder.Append(vbCrLf)
 
@@ -1004,6 +1052,8 @@ Public Class ClassesToCodeCs2
 
             End If
         End If
+
+        convDataType = GetPrimitiveType(propertyMap, convDataType)
 
         If TargetPlatform = TargetPlatformEnum.NHibernate And propertyMap.IsCollection Then
 

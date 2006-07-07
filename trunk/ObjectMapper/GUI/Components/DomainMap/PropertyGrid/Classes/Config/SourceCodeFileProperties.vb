@@ -83,6 +83,15 @@ Public Class SourceCodeFileProperties
         DefaultValue("")> Public ReadOnly Property FileType() As String
         Get
             Select Case m_SourceCodeFile.FileType
+                Case SourceCodeFileTypeEnum.CSharp2
+                    Select Case m_SourceCodeFile.MapObjectType
+                        Case GetType(DomainMap).ToString
+                            Return "C#2 Project"
+                        Case GetType(ClassMap).ToString
+                            Return "C#2 Class"
+                        Case Else
+                            Return "C#2 Class"
+                    End Select
                 Case SourceCodeFileTypeEnum.CSharp
                     Select Case m_SourceCodeFile.MapObjectType
                         Case GetType(DomainMap).ToString
