@@ -10650,7 +10650,7 @@ Public Class frmDomainMapBrowser
 
                                                 End Select
 
-                                                fileWriter = File.CreateText(fileName)
+                                                fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                                 fileWriter.Write(code)
 
@@ -10808,7 +10808,7 @@ Public Class frmDomainMapBrowser
 
                                             End Select
 
-                                            fileWriter = File.CreateText(fileName)
+                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                             fileWriter.Write(code)
 
@@ -10928,7 +10928,7 @@ Public Class frmDomainMapBrowser
 
                                     If Not noWrite Then
 
-                                        fileWriter = File.CreateText(fileName)
+                                        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                         fileWriter.Write(code)
 
@@ -11019,7 +11019,7 @@ Public Class frmDomainMapBrowser
 
                                                     If Not noWrite Then
 
-                                                        fileWriter = File.CreateText(fileName)
+                                                        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                                         fileWriter.Write(code)
 
@@ -11108,7 +11108,7 @@ Public Class frmDomainMapBrowser
 
                                         If Not noWrite Then
 
-                                            fileWriter = File.CreateText(fileName)
+                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                             fileWriter.Write(code)
 
@@ -11247,7 +11247,7 @@ Public Class frmDomainMapBrowser
 
                                         End Select
 
-                                        fileWriter = File.CreateText(fileName)
+                                        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
                                         fileWriter.Write(code)
 
@@ -11711,7 +11711,7 @@ Public Class frmDomainMapBrowser
 
         '                        End Select
 
-        '                        fileWriter = File.CreateText(fileName)
+        '                        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         '                        fileWriter.Write(code)
 
@@ -11819,7 +11819,7 @@ Public Class frmDomainMapBrowser
 
         '                    End Select
 
-        '                    fileWriter = File.CreateText(fileName)
+        '                    fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         '                    fileWriter.Write(code)
 
@@ -11892,7 +11892,7 @@ Public Class frmDomainMapBrowser
 
         '                If Not noWrite Then
 
-        '                    fileWriter = File.CreateText(fileName)
+        '                    fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         '                    fileWriter.Write(code)
 
@@ -12546,7 +12546,7 @@ Public Class frmDomainMapBrowser
     End Sub
 
 
-    Private Sub mapPropertyGrid_AfterPropertySet(ByVal mapObject As Object, ByVal propertyName As String) Handles MapPropertyGrid.AfterPropertySet
+    Private Sub mapPropertyGrid_AfterPropertySet(ByVal mapObject As Object, ByVal propertyName As String) Handles mapPropertyGrid.AfterPropertySet
 
         HandleUpdate(mapObject, propertyName)
 
@@ -12589,7 +12589,7 @@ Public Class frmDomainMapBrowser
 
     End Sub
 
-    Private Sub mapPropertyGrid_BeforePropertySet(ByVal mapObject As Object, ByVal propertyName As String, ByVal value As Object, ByVal oldValue As Object) Handles MapPropertyGrid.BeforePropertySet
+    Private Sub mapPropertyGrid_BeforePropertySet(ByVal mapObject As Object, ByVal propertyName As String, ByVal value As Object, ByVal oldValue As Object) Handles mapPropertyGrid.BeforePropertySet
 
         If Not (mapObject.GetType.GetInterface(GetType(IDomainMap).ToString) Is Nothing _
             AndAlso mapObject.GetType.GetInterface(GetType(IClassMap).ToString) Is Nothing _
@@ -17308,7 +17308,7 @@ Public Class frmDomainMapBrowser
     Private Shared Function ReplaceVars(ByVal text As String) As String
 
         Dim dict As IDictionary = Environment.GetEnvironmentVariables()
-		for each variable as string in dict.Keys
+        For Each variable As String In dict.Keys
 
             Dim pattern As String = "%" + variable.ToLower() + "%"
             Dim patternIndex As Integer = text.ToLower().IndexOf(pattern)
@@ -17327,7 +17327,7 @@ Public Class frmDomainMapBrowser
 
     Private Function GetCustomCode(ByVal src As SourceCodeFile, ByVal classMap As IClassMap) As String
 
-        Return GetCustomCode(src, ClassMap, True)
+        Return GetCustomCode(src, classMap, True)
 
     End Function
 
@@ -18278,7 +18278,7 @@ Public Class frmDomainMapBrowser
 
         '            fileName = domainMap.Name & ".xml"
 
-        '            fileWriter = File.CreateText(folderPath & "\" & fileName)
+        '            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(folderPath & "\" & fileName)
 
         '            fileWriter.Write(xml)
 
@@ -18288,7 +18288,7 @@ Public Class frmDomainMapBrowser
 
         '            fileName = domainMap.Name & ".cs"
 
-        '            fileWriter = File.CreateText(folderPath & "\" & fileName)
+        '            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(folderPath & "\" & fileName)
 
         '            fileWriter.Write(code)
 

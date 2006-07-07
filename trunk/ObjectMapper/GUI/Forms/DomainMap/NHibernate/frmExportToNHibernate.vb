@@ -348,7 +348,7 @@ Public Class frmExportToNHibernate
 
         Dim fileWriter As StreamWriter
 
-        fileWriter = File.CreateText(textTargetDir.Text & "\" & fileName)
+        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(textTargetDir.Text & "\" & fileName)
 
         fileWriter.Write(body)
 

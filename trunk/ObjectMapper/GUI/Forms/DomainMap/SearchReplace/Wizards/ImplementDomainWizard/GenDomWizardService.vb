@@ -568,7 +568,7 @@ Public Class GenDomWizardService
 
             code = classesToCode.ClassToCode(classMap, False, True, customCode)
 
-            fileWriter = File.CreateText(fileName)
+            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
             fileWriter.Write(code)
 
@@ -618,7 +618,7 @@ Public Class GenDomWizardService
 
         code = classesToCode.DomainToProject(domainMap, targetDirectory, classMapsAndFiles, New ArrayList)
 
-        fileWriter = File.CreateText(fileName)
+        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         fileWriter.Write(code)
 
@@ -666,7 +666,7 @@ Public Class GenDomWizardService
         End If
 
 
-        fileWriter = File.CreateText(fileName)
+        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         fileWriter.Write(code)
 

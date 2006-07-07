@@ -661,7 +661,7 @@ Public Class WrapDbWizardService
 
             code = classesToCode.ClassToCode(classMap, False, True, customCode)
 
-            fileWriter = File.CreateText(fileName)
+            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
             fileWriter.Write(code)
 
@@ -711,7 +711,7 @@ Public Class WrapDbWizardService
 
         code = classesToCode.DomainToProject(domainMap, targetDirectory, classMapsAndFiles, New ArrayList)
 
-        fileWriter = File.CreateText(fileName)
+        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         fileWriter.Write(code)
 
@@ -759,7 +759,7 @@ Public Class WrapDbWizardService
         End If
 
 
-        fileWriter = File.CreateText(fileName)
+        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
 
         fileWriter.Write(code)
 

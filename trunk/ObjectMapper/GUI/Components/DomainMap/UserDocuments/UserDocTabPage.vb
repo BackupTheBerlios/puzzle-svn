@@ -581,7 +581,7 @@ Public Class UserDocTabPage
 
             End If
 
-            fileOut = File.CreateText(path)
+            fileOut = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(path)
 
             fileOut.Write(m_DocumentText)
             fileOut.Close()

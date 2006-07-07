@@ -164,6 +164,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IO\FileTools.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Logging\ConsoleLogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
