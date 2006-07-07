@@ -88,6 +88,7 @@ Public Class frmDomainMapBrowser
 
     Private m_ClassesToCodeVb As IClassesToCode = New ClassesToCodeVb
     Private m_ClassesToCodeCs As IClassesToCode = New ClassesToCodeCs
+    Private m_ClassesToCodeCs2 As IClassesToCode = New ClassesToCodeCs2
     Private m_ClassesToCodeDelphi As IClassesToCode = New ClassesToCodeDelphi
 
     Private m_TablesToSourceSql As ITablesToSource = New TablesToSourceMSSqlServer
@@ -7786,82 +7787,102 @@ Public Class frmDomainMapBrowser
 
                     With cfg.ClassesToCodeConfig
 
+                        m_ClassesToCodeCs2.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeCs.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeVb.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeDelphi.ImplementIInterceptable = .ImplementIInterceptable
 
+                        m_ClassesToCodeCs2.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeCs.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeVb.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeDelphi.ImplementIObjectHelper = .ImplementIObjectHelper
 
+                        m_ClassesToCodeCs2.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeCs.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeVb.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeDelphi.ImplementIObservable = .ImplementIObservable
 
+                        m_ClassesToCodeCs2.IncludeComments = .IncludeComments
                         m_ClassesToCodeCs.IncludeComments = .IncludeComments
                         m_ClassesToCodeVb.IncludeComments = .IncludeComments
                         m_ClassesToCodeDelphi.IncludeComments = .IncludeComments
 
+                        m_ClassesToCodeCs2.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeCs.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeVb.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeDelphi.IncludeDocComments = .IncludeDocComments
 
+                        m_ClassesToCodeCs2.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeCs.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeVb.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeDelphi.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
 
+                        m_ClassesToCodeCs2.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeCs.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeVb.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeDelphi.IncludeRegions = .IncludeRegions
 
+                        m_ClassesToCodeCs2.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeCs.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeVb.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeDelphi.NotifyAfterGet = .NotifyAfterGet
 
+                        m_ClassesToCodeCs2.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeCs.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeVb.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeDelphi.NotifyAfterSet = .NotifyAfterSet
 
+                        m_ClassesToCodeCs2.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeCs.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeVb.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeDelphi.NotifyLightWeight = .NotifyLightWeight
 
+                        m_ClassesToCodeCs2.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeCs.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeVb.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeDelphi.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
 
+                        m_ClassesToCodeCs2.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeCs.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeVb.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeDelphi.ImplementShadows = .ImplementShadows
 
+                        m_ClassesToCodeCs2.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeCs.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeVb.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeDelphi.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
 
+                        m_ClassesToCodeCs2.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeCs.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeVb.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeDelphi.GeneratePOCO = .GeneratePOCO
 
+                        m_ClassesToCodeCs2.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeCs.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeVb.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeDelphi.ReallyNoRegions = .ReallyNoRegions
 
+                        m_ClassesToCodeCs2.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeCs.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeVb.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeDelphi.UseTypedCollections = .UseTypedCollections
 
+                        m_ClassesToCodeCs2.WrapCollections = .WrapCollections
                         m_ClassesToCodeCs.WrapCollections = .WrapCollections
                         m_ClassesToCodeVb.WrapCollections = .WrapCollections
                         m_ClassesToCodeDelphi.WrapCollections = .WrapCollections
 
+                        m_ClassesToCodeCs2.XmlFilePerClass = .XmlFilePerClass
                         m_ClassesToCodeCs.XmlFilePerClass = .XmlFilePerClass
                         m_ClassesToCodeVb.XmlFilePerClass = .XmlFilePerClass
                         m_ClassesToCodeDelphi.XmlFilePerClass = .XmlFilePerClass
 
+                        m_ClassesToCodeCs2.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeCs.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeVb.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeDelphi.UseGenericCollections = .UseGenericCollections
 
+                        m_ClassesToCodeCs2.EmbedXml = .EmbedXml
                         m_ClassesToCodeCs.EmbedXml = .EmbedXml
                         m_ClassesToCodeVb.EmbedXml = .EmbedXml
                         m_ClassesToCodeDelphi.EmbedXml = .EmbedXml
@@ -7870,18 +7891,21 @@ Public Class frmDomainMapBrowser
 
                             Case TargetMapperEnum.POCO
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.POCO
 
                             Case TargetMapperEnum.NPersist
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.NPersist
 
                             Case TargetMapperEnum.NHibernate
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.NHibernate
@@ -7927,78 +7951,97 @@ Public Class frmDomainMapBrowser
 
                     With cfg.ClassesToCodeConfig
 
+                        m_ClassesToCodeCs2.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeCs.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeVb.ImplementIInterceptable = .ImplementIInterceptable
                         m_ClassesToCodeDelphi.ImplementIInterceptable = .ImplementIInterceptable
 
+                        m_ClassesToCodeCs2.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeCs.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeVb.ImplementIObjectHelper = .ImplementIObjectHelper
                         m_ClassesToCodeDelphi.ImplementIObjectHelper = .ImplementIObjectHelper
 
+                        m_ClassesToCodeCs2.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeCs.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeVb.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeDelphi.ImplementIObservable = .ImplementIObservable
 
+                        m_ClassesToCodeCs2.IncludeComments = .IncludeComments
                         m_ClassesToCodeCs.IncludeComments = .IncludeComments
                         m_ClassesToCodeVb.IncludeComments = .IncludeComments
                         m_ClassesToCodeDelphi.IncludeComments = .IncludeComments
 
+                        m_ClassesToCodeCs2.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeCs.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeVb.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeDelphi.IncludeDocComments = .IncludeDocComments
 
+                        m_ClassesToCodeCs2.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeCs.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeVb.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
                         m_ClassesToCodeDelphi.IncludeModelInfoInDocComments = .IncludeModelInfoInDocComments
 
+                        m_ClassesToCodeCs2.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeCs.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeVb.IncludeRegions = .IncludeRegions
                         m_ClassesToCodeDelphi.IncludeRegions = .IncludeRegions
 
+                        m_ClassesToCodeCs2.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeCs.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeVb.NotifyAfterGet = .NotifyAfterGet
                         m_ClassesToCodeDelphi.NotifyAfterGet = .NotifyAfterGet
 
+                        m_ClassesToCodeCs2.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeCs.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeVb.NotifyAfterSet = .NotifyAfterSet
                         m_ClassesToCodeDelphi.NotifyAfterSet = .NotifyAfterSet
 
+                        m_ClassesToCodeCs2.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeCs.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeVb.NotifyLightWeight = .NotifyLightWeight
                         m_ClassesToCodeDelphi.NotifyLightWeight = .NotifyLightWeight
 
+                        m_ClassesToCodeCs2.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeCs.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeVb.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
                         m_ClassesToCodeDelphi.NotifyOnlyWhenRequired = .NotifyOnlyWhenRequired
 
+                        m_ClassesToCodeCs2.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeCs.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeVb.ImplementShadows = .ImplementShadows
                         m_ClassesToCodeDelphi.ImplementShadows = .ImplementShadows
 
+                        m_ClassesToCodeCs2.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeCs.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeVb.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
                         m_ClassesToCodeDelphi.AddPropertyNotifyMethods = .AddPropertyNotifyMethods
 
+                        m_ClassesToCodeCs2.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeCs.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeVb.GeneratePOCO = .GeneratePOCO
                         m_ClassesToCodeDelphi.GeneratePOCO = .GeneratePOCO
 
+                        m_ClassesToCodeCs2.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeCs.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeVb.ReallyNoRegions = .ReallyNoRegions
                         m_ClassesToCodeDelphi.ReallyNoRegions = .ReallyNoRegions
 
+                        m_ClassesToCodeCs2.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeCs.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeVb.UseTypedCollections = .UseTypedCollections
                         m_ClassesToCodeDelphi.UseTypedCollections = .UseTypedCollections
 
+                        m_ClassesToCodeCs2.WrapCollections = .WrapCollections
                         m_ClassesToCodeCs.WrapCollections = .WrapCollections
                         m_ClassesToCodeVb.WrapCollections = .WrapCollections
                         m_ClassesToCodeDelphi.WrapCollections = .WrapCollections
 
+                        m_ClassesToCodeCs2.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeCs.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeVb.UseGenericCollections = .UseGenericCollections
                         m_ClassesToCodeDelphi.UseGenericCollections = .UseGenericCollections
 
+                        m_ClassesToCodeCs2.EmbedXml = .EmbedXml
                         m_ClassesToCodeCs.EmbedXml = .EmbedXml
                         m_ClassesToCodeVb.EmbedXml = .EmbedXml
                         m_ClassesToCodeDelphi.EmbedXml = .EmbedXml
@@ -8007,18 +8050,21 @@ Public Class frmDomainMapBrowser
 
                             Case TargetMapperEnum.POCO
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.POCO
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.POCO
 
                             Case TargetMapperEnum.NPersist
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.NPersist
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.NPersist
 
                             Case TargetMapperEnum.NHibernate
 
+                                m_ClassesToCodeCs2.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeCs.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeVb.TargetPlatform = TargetPlatformEnum.NHibernate
                                 m_ClassesToCodeDelphi.TargetPlatform = TargetPlatformEnum.NHibernate
@@ -8154,10 +8200,12 @@ Public Class frmDomainMapBrowser
 
     Private Sub SetupPreviewDTD()
 
+        m_ClassesToCodeCs2.IncludeRegions = False
         m_ClassesToCodeCs.IncludeRegions = False
         m_ClassesToCodeVb.IncludeRegions = False
         m_ClassesToCodeDelphi.IncludeRegions = False
 
+        m_ClassesToCodeCs2.IncludeComments = True
         m_ClassesToCodeCs.IncludeComments = True
         m_ClassesToCodeVb.IncludeComments = True
         m_ClassesToCodeDelphi.IncludeComments = True
@@ -8317,6 +8365,11 @@ Public Class frmDomainMapBrowser
 
         Select Case codeLanguage
 
+            Case Tools.IClassesToCode.CodeLanguageEnum.CSharp2
+
+                code = m_ClassesToCodeCs2.DomainToCode(domainMap, False)
+                AddNewPreviewDocument(code, domainMap.Name & ".cs", "C#2 source code for domain '" & domainMap.Name & "'", MainDocumentType.CodeCSharp)
+
             Case Tools.IClassesToCode.CodeLanguageEnum.CSharp
 
                 code = m_ClassesToCodeCs.DomainToCode(domainMap, False)
@@ -8345,6 +8398,11 @@ Public Class frmDomainMapBrowser
         SetupPreviewCode(domainMap)
 
         Select Case codeLanguage
+
+            Case Tools.IClassesToCode.CodeLanguageEnum.CSharp2
+
+                code = m_ClassesToCodeCs2.NamespaceToCode(domainMap, name, False)
+                AddNewPreviewDocument(code, name & ".cs", "C#2 source code for namespace '" & name & "'", MainDocumentType.CodeCSharp)
 
             Case Tools.IClassesToCode.CodeLanguageEnum.CSharp
 
@@ -8375,6 +8433,11 @@ Public Class frmDomainMapBrowser
 
         Select Case codeLanguage
 
+            Case Tools.IClassesToCode.CodeLanguageEnum.CSharp2
+
+                code = m_ClassesToCodeCs2.ClassToCode(classMap)
+                AddNewPreviewDocument(code, classMap.Name & ".cs", "C#2 source code for class '" & classMap.Name & "'", MainDocumentType.CodeCSharp)
+
             Case Tools.IClassesToCode.CodeLanguageEnum.CSharp
 
                 code = m_ClassesToCodeCs.ClassToCode(classMap)
@@ -8401,6 +8464,11 @@ Public Class frmDomainMapBrowser
         SetupPreviewCode(propertyMap.ClassMap.DomainMap)
 
         Select Case codeLanguage
+
+            Case Tools.IClassesToCode.CodeLanguageEnum.CSharp2
+
+                code = m_ClassesToCodeCs2.PropertyToCode(propertyMap)
+                AddNewPreviewDocument(code, propertyMap.Name & ".cs", "C#2 source code for property '" & propertyMap.Name & "'", MainDocumentType.CodeCSharp)
 
             Case Tools.IClassesToCode.CodeLanguageEnum.CSharp
 
@@ -9494,6 +9562,12 @@ Public Class frmDomainMapBrowser
 
                 Select Case useCfg.TargetLanguage
 
+                    Case TargetLanguageEnum.CSharp2
+
+                        fileType = SourceCodeFileTypeEnum.CSharp
+                        clsExt = "cs"
+                        projExt = "csproj"
+
                     Case TargetLanguageEnum.CSharp
 
                         fileType = SourceCodeFileTypeEnum.CSharp
@@ -10546,6 +10620,10 @@ Public Class frmDomainMapBrowser
 
                                 Select Case useCfg.TargetLanguage
 
+                                    Case TargetLanguageEnum.CSharp2
+
+                                        fileName += ".cs"
+
                                     Case TargetLanguageEnum.CSharp
 
                                         fileName += ".cs"
@@ -10636,6 +10714,10 @@ Public Class frmDomainMapBrowser
 
                                                 Select Case useCfg.TargetLanguage
 
+                                                    Case TargetLanguageEnum.CSharp2
+
+                                                        code = m_ClassesToCodeCs2.ClassToTypedCollection(classMap, False, False)
+
                                                     Case TargetLanguageEnum.CSharp
 
                                                         code = m_ClassesToCodeCs.ClassToTypedCollection(classMap, False, False)
@@ -10702,6 +10784,10 @@ Public Class frmDomainMapBrowser
 
                             Select Case useCfg.TargetLanguage
 
+                                Case TargetLanguageEnum.CSharp2
+
+                                    fileName += ".cs"
+
                                 Case TargetLanguageEnum.CSharp
 
                                     fileName += ".cs"
@@ -10729,6 +10815,10 @@ Public Class frmDomainMapBrowser
                                             src = useCfg.SetSourceCodeFile(classMap, fileName)
 
                                             Select Case useCfg.TargetLanguage
+
+                                                Case TargetLanguageEnum.CSharp2
+
+                                                    src.FileType = SourceCodeFileTypeEnum.CSharp2
 
                                                 Case TargetLanguageEnum.CSharp
 
@@ -10794,6 +10884,10 @@ Public Class frmDomainMapBrowser
 
                                             Select Case useCfg.TargetLanguage
 
+                                                Case TargetLanguageEnum.CSharp2
+
+                                                    code = m_ClassesToCodeCs2.ClassToCode(classMap, False, False, customCode)
+
                                                 Case TargetLanguageEnum.CSharp
 
                                                     code = m_ClassesToCodeCs.ClassToCode(classMap, False, False, customCode)
@@ -10842,6 +10936,11 @@ Public Class frmDomainMapBrowser
 
                         Select Case useCfg.TargetLanguage
 
+                            Case TargetLanguageEnum.CSharp2
+
+                                code = m_ClassesToCodeCs2.DomainToAssemblyInfo(domainMap)
+                                ext = ".cs"
+
                             Case TargetLanguageEnum.CSharp
 
                                 code = m_ClassesToCodeCs.DomainToAssemblyInfo(domainMap)
@@ -10885,6 +10984,10 @@ Public Class frmDomainMapBrowser
                                         src = useCfg.SetSourceCodeFile("AssemblyInfo", fileName)
 
                                         Select Case useCfg.TargetLanguage
+
+                                            Case TargetLanguageEnum.CSharp2
+
+                                                src.FileType = SourceCodeFileTypeEnum.CSharp2
 
                                             Case TargetLanguageEnum.CSharp
 
@@ -11153,6 +11256,10 @@ Public Class frmDomainMapBrowser
 
                         Select Case useCfg.TargetLanguage
 
+                            Case TargetLanguageEnum.CSharp2
+
+                                fileName += ".csproj"
+
                             Case TargetLanguageEnum.CSharp
 
                                 fileName += ".csproj"
@@ -11227,8 +11334,14 @@ Public Class frmDomainMapBrowser
                                     End If
 
                                     If Not noWrite Then
-
+                                        'bla
                                         Select Case useCfg.TargetLanguage
+
+                                            Case TargetLanguageEnum.CSharp2
+
+                                                'code = m_ClassesToCodeCs.DomainToProject(domainMap, projectFolderPath, classMapsAndFiles)
+                                                code = m_ClassesToCodeCs2.DomainToProject(domainMap, folderPath, classMapsAndFiles, embeddedFiles)
+
 
                                             Case TargetLanguageEnum.CSharp
 
@@ -11247,7 +11360,15 @@ Public Class frmDomainMapBrowser
 
                                         End Select
 
-                                        fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
+                                        If useCfg.TargetLanguage() = TargetLanguageEnum.CSharp2 Then
+                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName, System.Text.Encoding.UTF8)
+                                        Else
+                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
+                                        End If
+
+
+
+
 
                                         fileWriter.Write(code)
 
@@ -11261,132 +11382,134 @@ Public Class frmDomainMapBrowser
 
                                     End If
 
+                                    End If
+
                                 End If
 
                             End If
 
-                        End If
 
 
 
 
+                            If useCfg.TargetMapper = TargetMapperEnum.NPersist Then
 
-                        If useCfg.TargetMapper = TargetMapperEnum.NPersist Then
-
-                            If Not useCfg.GeneratePOCO Then
+                                If Not useCfg.GeneratePOCO Then
 
 
-                                'Framework dll
+                                    'Framework dll
 
-                                'If Not Directory.Exists(projectFolderPath & "\bin") Then
+                                    'If Not Directory.Exists(projectFolderPath & "\bin") Then
 
-                                '    Directory.CreateDirectory(projectFolderPath & "\bin")
+                                    '    Directory.CreateDirectory(projectFolderPath & "\bin")
 
-                                'End If
+                                    'End If
 
-                                If Not Directory.Exists(folderPath & "\bin") Then
+                                    If Not Directory.Exists(folderPath & "\bin") Then
 
-                                    Directory.CreateDirectory(folderPath & "\bin")
+                                        Directory.CreateDirectory(folderPath & "\bin")
 
-                                End If
+                                    End If
 
-                                noWrite = False
+                                    noWrite = False
 
-                                src = useCfg.GetSourceCodeFile("Puzzle.NPersist.Framework.dll")
+                                    src = useCfg.GetSourceCodeFile("Puzzle.NPersist.Framework.dll")
 
-                                'If src Is Nothing Then
+                                    'If src Is Nothing Then
 
-                                fileName = folderPath & "\bin\Puzzle.NPersist.framework.dll"
+                                    fileName = folderPath & "\bin\Puzzle.NPersist.framework.dll"
 
-                                'Else
+                                    'Else
 
-                                '    fileName = New fileInfo(src.FilePath).DirectoryName & "\Puzzle.NPersist.framework.dll"
+                                    '    fileName = New fileInfo(src.FilePath).DirectoryName & "\Puzzle.NPersist.framework.dll"
 
-                                'End If
+                                    'End If
 
-                                preFileNode = treePreviewClassesToCode.GetPreviewFileNode(fileName)
+                                    preFileNode = treePreviewClassesToCode.GetPreviewFileNode(fileName)
 
-                                If Not preFileNode Is Nothing Then
+                                    If Not preFileNode Is Nothing Then
 
-                                    If preFileNode.Checked Then
+                                        If preFileNode.Checked Then
 
-                                        If preFileNode.Parent.Checked Then
+                                            If preFileNode.Parent.Checked Then
 
-                                            isUnSynched = False
+                                                isUnSynched = False
 
-                                            If Not src Is Nothing Then
+                                                If Not src Is Nothing Then
 
-                                                If Not src.IsSynched Then
+                                                    If Not src.IsSynched Then
+
+                                                        isUnSynched = True
+
+                                                    End If
+
+                                                Else
 
                                                     isUnSynched = True
 
                                                 End If
 
-                                            Else
 
-                                                isUnSynched = True
+                                                'If Not File.Exists(fileName) Or isUnSynched Then
 
-                                            End If
+                                                If File.Exists(Application.StartupPath & "\Puzzle.NPersist.Framework.dll") Then
 
+                                                    Try
 
-                                            'If Not File.Exists(fileName) Or isUnSynched Then
+                                                        File.Copy(Application.StartupPath & "\Puzzle.NPersist.Framework.dll", fileName, True)
 
-                                            If File.Exists(Application.StartupPath & "\Puzzle.NPersist.Framework.dll") Then
+                                                    Catch ex As Exception
 
-                                                Try
-
-                                                    File.Copy(Application.StartupPath & "\Puzzle.NPersist.Framework.dll", fileName, True)
-
-                                                Catch ex As Exception
-
-                                                    MsgBox("Could not copy Puzzle.NPersist.Framework Assembly to target location! Reason: " & ex.Message)
-
-                                                    noWrite = True
-
-                                                End Try
-
-                                            Else
-
-                                                MsgBox("Could not find file 'Puzzle.NPersist.Framework.dll' in the startup folder of this application and could therefor not make a copy of that file to the target folder! Please copy the file manually to the bin folder under the target folder for your output project file. You should probably want to put a copy of the dll in the startup folder of this application for your next synchronization!")
-
-                                                noWrite = True
-
-                                            End If
-
-                                            'End If
-
-                                            If Not noWrite Then
-
-                                                If src Is Nothing Then
-
-                                                    src = useCfg.SetSourceCodeFile("Puzzle.NPersist.Framework.dll", fileName)
-
-                                                    src.FileType = SourceCodeFileTypeEnum.Other
-
-                                                Else
-
-                                                    If Not src.FileType = SourceCodeFileTypeEnum.Other Then
-
-                                                        MsgBox("Incorrect file type for NPersist framework assembly! Will not write to file " & src.FilePath)
+                                                        MsgBox("Could not copy Puzzle.NPersist.Framework Assembly to target location! Reason: " & ex.Message)
 
                                                         noWrite = True
 
-                                                    Else
+                                                    End Try
 
-                                                        src.FilePath = fileName
+                                                Else
 
-                                                    End If
+                                                    MsgBox("Could not find file 'Puzzle.NPersist.Framework.dll' in the startup folder of this application and could therefor not make a copy of that file to the target folder! Please copy the file manually to the bin folder under the target folder for your output project file. You should probably want to put a copy of the dll in the startup folder of this application for your next synchronization!")
 
+                                                    noWrite = True
 
                                                 End If
 
+                                                'End If
+
                                                 If Not noWrite Then
 
-                                                    logFile = New fileInfo(fileName)
+                                                    If src Is Nothing Then
 
-                                                    LogMsg("File '" & logFile.Name & "' created in folder '" & logFile.Directory.FullName & "'.", TraceLevel.Info)
+                                                        src = useCfg.SetSourceCodeFile("Puzzle.NPersist.Framework.dll", fileName)
 
-                                                    src.LastWrittenTo = File.GetLastWriteTime(fileName)
+                                                        src.FileType = SourceCodeFileTypeEnum.Other
+
+                                                    Else
+
+                                                        If Not src.FileType = SourceCodeFileTypeEnum.Other Then
+
+                                                            MsgBox("Incorrect file type for NPersist framework assembly! Will not write to file " & src.FilePath)
+
+                                                            noWrite = True
+
+                                                        Else
+
+                                                            src.FilePath = fileName
+
+                                                        End If
+
+
+                                                    End If
+
+                                                    If Not noWrite Then
+
+                                                        logFile = New fileInfo(fileName)
+
+                                                        LogMsg("File '" & logFile.Name & "' created in folder '" & logFile.Directory.FullName & "'.", TraceLevel.Info)
+
+                                                        src.LastWrittenTo = File.GetLastWriteTime(fileName)
+
+                                                    End If
 
                                                 End If
 
@@ -11400,17 +11523,15 @@ Public Class frmDomainMapBrowser
 
                             End If
 
+
+
+
                         End If
-
-
-
 
                     End If
 
+
                 End If
-
-
-            End If
 
         Next
 
@@ -11435,6 +11556,10 @@ Public Class frmDomainMapBrowser
     Private Function CmpSourceCodeAndTargetLanguageEnums(ByVal sourceCodeFileType As SourceCodeFileTypeEnum, ByVal targetLanguage As TargetLanguageEnum) As Boolean
 
         Select Case targetLanguage
+
+            Case TargetLanguageEnum.CSharp2
+
+                If sourceCodeFileType = SourceCodeFileTypeEnum.CSharp2 Then Return True
 
             Case TargetLanguageEnum.CSharp
 

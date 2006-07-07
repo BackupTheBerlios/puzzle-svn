@@ -540,6 +540,10 @@ Public Class GenDomWizardService
 
                 Select Case useCfg.TargetLanguage
 
+                    Case SourceCodeFileTypeEnum.CSharp2
+
+                        fileName += ".cs"
+
                     Case SourceCodeFileTypeEnum.CSharp
 
                         fileName += ".cs"
@@ -634,6 +638,10 @@ Public Class GenDomWizardService
         code = classesToCode.DomainToAssemblyInfo(domainMap)
 
         Select Case useCfg.TargetLanguage
+
+            Case SourceCodeFileTypeEnum.CSharp2
+
+                ext = ".cs"
 
             Case SourceCodeFileTypeEnum.CSharp
 

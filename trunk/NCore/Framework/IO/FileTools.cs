@@ -12,5 +12,11 @@ namespace Puzzle.NCore.Framework.IO
 			StreamWriter sw = new StreamWriter(path,false,Encoding.Default) ;
 			return sw;
 		}
+
+		public static StreamWriter GetFileWriter(string path,Encoding encoding)
+		{			
+			StreamWriter sw = new StreamWriter(path,false,encoding) ;
+			return sw;
+		}
 	}
 }

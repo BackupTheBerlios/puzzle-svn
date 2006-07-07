@@ -111,6 +111,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClassesToCode\ClassesToCodeCs2.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassesToCode\ClassesToCodeDelphi.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
