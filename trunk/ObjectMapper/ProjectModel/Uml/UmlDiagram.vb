@@ -38,10 +38,10 @@ Namespace Uml
         Private m_UseGrid As Boolean = True
         Private m_GridSize As Double = 50
 
-        Private m_GridColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 208, 208, 208))
-        Private m_GridColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 240, 240, 240))
+        Private m_GridColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 238, 238, 238))
+        Private m_GridColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 248, 248, 248))
 
-        Private m_DrawShadows As Boolean = True
+        Private m_DrawShadows As Boolean = False
         Private m_DrawShadowsPass2 As Boolean = True
 
         Private m_ShadowColor1 As UmlColor = New UmlColor(Color.FromArgb(128, 196, 196, 196))
@@ -51,7 +51,7 @@ Namespace Uml
         Private m_BgGradientMode As LinearGradientMode = LinearGradientMode.ForwardDiagonal
 
         Private m_ColorSynchError As UmlColor = New UmlColor(Color.DarkRed)
-        Private m_ColorError As UmlColor = New UmlColor(Color.Red)
+        Private m_ColorError As UmlColor = New UmlColor(Color.DarkRed)
 
         Private m_ForeColor As UmlColor = New UmlColor(Color.Black)
         Private m_BackColor1 As UmlColor = New UmlColor(Color.White)
@@ -68,10 +68,10 @@ Namespace Uml
 
 
         Private m_ClassBgBrushStyle As BrushEnum = BrushEnum.GradientBrush
-        Private m_ClassBgGradientMode As LinearGradientMode = LinearGradientMode.ForwardDiagonal
+        Private m_ClassBgGradientMode As LinearGradientMode = LinearGradientMode.Vertical
 
-        Private m_ClassBackColor1 As UmlColor = New UmlColor(Color.White)
-        Private m_ClassBackColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 224, 224, 224))
+        Private m_ClassBackColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 255, 251, 223))
+        Private m_ClassBackColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 255, 241, 213))
 
         Private m_ArrowBaseLength As Double = 20
 
