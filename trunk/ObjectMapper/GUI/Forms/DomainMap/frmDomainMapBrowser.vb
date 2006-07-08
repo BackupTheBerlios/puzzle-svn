@@ -1448,9 +1448,9 @@ Public Class frmDomainMapBrowser
         '
         Me.panelStatus.Controls.Add(Me.StatusBar1)
         Me.panelStatus.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.panelStatus.Location = New System.Drawing.Point(0, 419)
+        Me.panelStatus.Location = New System.Drawing.Point(0, 529)
         Me.panelStatus.Name = "panelStatus"
-        Me.panelStatus.Size = New System.Drawing.Size(679, 24)
+        Me.panelStatus.Size = New System.Drawing.Size(856, 24)
         Me.panelStatus.TabIndex = 0
         '
         'StatusBar1
@@ -1459,7 +1459,7 @@ Public Class frmDomainMapBrowser
         Me.StatusBar1.Name = "StatusBar1"
         Me.StatusBar1.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.statusMain, Me.statusMessage})
         Me.StatusBar1.ShowPanels = True
-        Me.StatusBar1.Size = New System.Drawing.Size(679, 22)
+        Me.StatusBar1.Size = New System.Drawing.Size(856, 22)
         Me.StatusBar1.TabIndex = 0
         Me.StatusBar1.Text = "StatusBar1"
         '
@@ -1471,7 +1471,7 @@ Public Class frmDomainMapBrowser
         'statusMessage
         '
         Me.statusMessage.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
-        Me.statusMessage.Width = 413
+        Me.statusMessage.Width = 590
         '
         'menuNew
         '
@@ -1715,9 +1715,9 @@ Public Class frmDomainMapBrowser
         '
         Me.panelLeft.Controls.Add(Me.panelPropGridMap)
         Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelLeft.Location = New System.Drawing.Point(0, 72)
+        Me.panelLeft.Location = New System.Drawing.Point(0, 28)
         Me.panelLeft.Name = "panelLeft"
-        Me.panelLeft.Size = New System.Drawing.Size(160, 347)
+        Me.panelLeft.Size = New System.Drawing.Size(160, 501)
         Me.panelLeft.TabIndex = 2
         '
         'panelPropGridMap
@@ -1727,7 +1727,7 @@ Public Class frmDomainMapBrowser
         Me.panelPropGridMap.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelPropGridMap.Location = New System.Drawing.Point(0, 0)
         Me.panelPropGridMap.Name = "panelPropGridMap"
-        Me.panelPropGridMap.Size = New System.Drawing.Size(160, 347)
+        Me.panelPropGridMap.Size = New System.Drawing.Size(160, 501)
         Me.panelPropGridMap.TabIndex = 2
         '
         'mapTreeView
@@ -1744,7 +1744,7 @@ Public Class frmDomainMapBrowser
         Me.mapTreeView.Location = New System.Drawing.Point(0, 16)
         Me.mapTreeView.Name = "mapTreeView"
         Me.mapTreeView.ShowRootLines = False
-        Me.mapTreeView.Size = New System.Drawing.Size(160, 331)
+        Me.mapTreeView.Size = New System.Drawing.Size(160, 485)
         Me.mapTreeView.TabIndex = 1
         '
         'panelProjectTitle
@@ -1806,9 +1806,9 @@ Public Class frmDomainMapBrowser
         Me.panelBottom.Controls.Add(Me.tabControlMessages)
         Me.panelBottom.Controls.Add(Me.panelListTitle)
         Me.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.panelBottom.Location = New System.Drawing.Point(163, 243)
+        Me.panelBottom.Location = New System.Drawing.Point(163, 353)
         Me.panelBottom.Name = "panelBottom"
-        Me.panelBottom.Size = New System.Drawing.Size(516, 176)
+        Me.panelBottom.Size = New System.Drawing.Size(693, 176)
         Me.panelBottom.TabIndex = 3
         '
         'tabControlMessages
@@ -1821,7 +1821,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlMessages.Location = New System.Drawing.Point(0, 16)
         Me.tabControlMessages.Name = "tabControlMessages"
         Me.tabControlMessages.SelectedIndex = 0
-        Me.tabControlMessages.Size = New System.Drawing.Size(516, 160)
+        Me.tabControlMessages.Size = New System.Drawing.Size(693, 160)
         Me.tabControlMessages.TabIndex = 4
         '
         'tabPageListView
@@ -1829,7 +1829,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageListView.Controls.Add(Me.mapListView)
         Me.tabPageListView.Location = New System.Drawing.Point(4, 22)
         Me.tabPageListView.Name = "tabPageListView"
-        Me.tabPageListView.Size = New System.Drawing.Size(508, 134)
+        Me.tabPageListView.Size = New System.Drawing.Size(685, 134)
         Me.tabPageListView.TabIndex = 3
         Me.tabPageListView.Text = "List View"
         '
@@ -1842,7 +1842,7 @@ Public Class frmDomainMapBrowser
         Me.mapListView.Location = New System.Drawing.Point(0, 0)
         Me.mapListView.Name = "mapListView"
         Me.mapListView.ParentNode = Nothing
-        Me.mapListView.Size = New System.Drawing.Size(508, 134)
+        Me.mapListView.Size = New System.Drawing.Size(685, 134)
         Me.mapListView.SmallImageList = Me.imageListSmall
         Me.mapListView.TabIndex = 0
         Me.mapListView.View = System.Windows.Forms.View.Details
@@ -1916,7 +1916,7 @@ Public Class frmDomainMapBrowser
         Me.panelListTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelListTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelListTitle.Name = "panelListTitle"
-        Me.panelListTitle.Size = New System.Drawing.Size(516, 16)
+        Me.panelListTitle.Size = New System.Drawing.Size(693, 16)
         Me.panelListTitle.TabIndex = 5
         '
         'labelListTitle
@@ -1924,7 +1924,7 @@ Public Class frmDomainMapBrowser
         Me.labelListTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelListTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelListTitle.Name = "labelListTitle"
-        Me.labelListTitle.Size = New System.Drawing.Size(482, 14)
+        Me.labelListTitle.Size = New System.Drawing.Size(659, 14)
         Me.labelListTitle.TabIndex = 6
         Me.labelListTitle.Text = "List Pane"
         '
@@ -1936,7 +1936,7 @@ Public Class frmDomainMapBrowser
         Me.buttonSwapPosList.ForeColor = System.Drawing.SystemColors.Control
         Me.buttonSwapPosList.ImageIndex = 10
         Me.buttonSwapPosList.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosList.Location = New System.Drawing.Point(482, 0)
+        Me.buttonSwapPosList.Location = New System.Drawing.Point(659, 0)
         Me.buttonSwapPosList.Name = "buttonSwapPosList"
         Me.buttonSwapPosList.Size = New System.Drawing.Size(16, 14)
         Me.buttonSwapPosList.TabIndex = 7
@@ -1949,16 +1949,16 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseList.ForeColor = System.Drawing.SystemColors.Control
         Me.buttonCloseList.ImageIndex = 0
         Me.buttonCloseList.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseList.Location = New System.Drawing.Point(498, 0)
+        Me.buttonCloseList.Location = New System.Drawing.Point(675, 0)
         Me.buttonCloseList.Name = "buttonCloseList"
         Me.buttonCloseList.Size = New System.Drawing.Size(16, 14)
         Me.buttonCloseList.TabIndex = 5
         '
         'Splitter1
         '
-        Me.Splitter1.Location = New System.Drawing.Point(160, 72)
+        Me.Splitter1.Location = New System.Drawing.Point(160, 28)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(3, 347)
+        Me.Splitter1.Size = New System.Drawing.Size(3, 501)
         Me.Splitter1.TabIndex = 4
         Me.Splitter1.TabStop = False
         '
@@ -1966,9 +1966,9 @@ Public Class frmDomainMapBrowser
         '
         Me.panelRight.Controls.Add(Me.panelSecondTree)
         Me.panelRight.Dock = System.Windows.Forms.DockStyle.Right
-        Me.panelRight.Location = New System.Drawing.Point(535, 72)
+        Me.panelRight.Location = New System.Drawing.Point(712, 28)
         Me.panelRight.Name = "panelRight"
-        Me.panelRight.Size = New System.Drawing.Size(144, 168)
+        Me.panelRight.Size = New System.Drawing.Size(144, 322)
         Me.panelRight.TabIndex = 6
         '
         'panelSecondTree
@@ -1978,7 +1978,7 @@ Public Class frmDomainMapBrowser
         Me.panelSecondTree.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelSecondTree.Location = New System.Drawing.Point(0, 0)
         Me.panelSecondTree.Name = "panelSecondTree"
-        Me.panelSecondTree.Size = New System.Drawing.Size(144, 168)
+        Me.panelSecondTree.Size = New System.Drawing.Size(144, 322)
         Me.panelSecondTree.TabIndex = 2
         '
         'tabControlTools
@@ -1989,7 +1989,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlTools.Location = New System.Drawing.Point(0, 16)
         Me.tabControlTools.Name = "tabControlTools"
         Me.tabControlTools.SelectedIndex = 0
-        Me.tabControlTools.Size = New System.Drawing.Size(144, 152)
+        Me.tabControlTools.Size = New System.Drawing.Size(144, 306)
         Me.tabControlTools.TabIndex = 2
         '
         'tabToolsPreview
@@ -1998,7 +1998,7 @@ Public Class frmDomainMapBrowser
         Me.tabToolsPreview.Controls.Add(Me.mapTreeViewPreview)
         Me.tabToolsPreview.Location = New System.Drawing.Point(4, 22)
         Me.tabToolsPreview.Name = "tabToolsPreview"
-        Me.tabToolsPreview.Size = New System.Drawing.Size(136, 126)
+        Me.tabToolsPreview.Size = New System.Drawing.Size(136, 280)
         Me.tabToolsPreview.TabIndex = 1
         Me.tabToolsPreview.Text = "Preview"
         '
@@ -2013,7 +2013,7 @@ Public Class frmDomainMapBrowser
         Me.treePreviewClassesToCode.IsVerifyTree = False
         Me.treePreviewClassesToCode.Location = New System.Drawing.Point(0, 0)
         Me.treePreviewClassesToCode.Name = "treePreviewClassesToCode"
-        Me.treePreviewClassesToCode.Size = New System.Drawing.Size(136, 126)
+        Me.treePreviewClassesToCode.Size = New System.Drawing.Size(136, 280)
         Me.treePreviewClassesToCode.TabIndex = 1
         Me.treePreviewClassesToCode.Visible = False
         '
@@ -2028,7 +2028,7 @@ Public Class frmDomainMapBrowser
         Me.mapTreeViewPreview.IsVerifyTree = False
         Me.mapTreeViewPreview.Location = New System.Drawing.Point(0, 0)
         Me.mapTreeViewPreview.Name = "mapTreeViewPreview"
-        Me.mapTreeViewPreview.Size = New System.Drawing.Size(136, 126)
+        Me.mapTreeViewPreview.Size = New System.Drawing.Size(136, 280)
         Me.mapTreeViewPreview.TabIndex = 0
         '
         'panelToolsTitle
@@ -2612,9 +2612,9 @@ Public Class frmDomainMapBrowser
         '
         Me.panelMain.Controls.Add(Me.panelDocuments)
         Me.panelMain.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelMain.Location = New System.Drawing.Point(322, 72)
+        Me.panelMain.Location = New System.Drawing.Point(322, 28)
         Me.panelMain.Name = "panelMain"
-        Me.panelMain.Size = New System.Drawing.Size(210, 168)
+        Me.panelMain.Size = New System.Drawing.Size(387, 322)
         Me.panelMain.TabIndex = 7
         '
         'panelDocuments
@@ -2624,7 +2624,7 @@ Public Class frmDomainMapBrowser
         Me.panelDocuments.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelDocuments.Location = New System.Drawing.Point(0, 0)
         Me.panelDocuments.Name = "panelDocuments"
-        Me.panelDocuments.Size = New System.Drawing.Size(210, 168)
+        Me.panelDocuments.Size = New System.Drawing.Size(387, 322)
         Me.panelDocuments.TabIndex = 2
         '
         'tabControlDocuments
@@ -2640,7 +2640,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlDocuments.Multiline = True
         Me.tabControlDocuments.Name = "tabControlDocuments"
         Me.tabControlDocuments.SelectedIndex = 0
-        Me.tabControlDocuments.Size = New System.Drawing.Size(210, 152)
+        Me.tabControlDocuments.Size = New System.Drawing.Size(387, 306)
         Me.tabControlDocuments.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.tabControlDocuments, "When you have generated source code documents with ObjectMapper, you can find the" & _
         "m under the Files node under your Synch Config in the tree view, and edit them h" & _
@@ -2649,9 +2649,9 @@ Public Class frmDomainMapBrowser
         'tabPageMainUml
         '
         Me.tabPageMainUml.Controls.Add(Me.panelTreeMap)
-        Me.tabPageMainUml.Location = New System.Drawing.Point(4, 40)
+        Me.tabPageMainUml.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainUml.Name = "tabPageMainUml"
-        Me.tabPageMainUml.Size = New System.Drawing.Size(202, 108)
+        Me.tabPageMainUml.Size = New System.Drawing.Size(379, 280)
         Me.tabPageMainUml.TabIndex = 0
         Me.tabPageMainUml.Text = "Uml"
         '
@@ -2662,7 +2662,7 @@ Public Class frmDomainMapBrowser
         Me.panelTreeMap.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelTreeMap.Location = New System.Drawing.Point(0, 0)
         Me.panelTreeMap.Name = "panelTreeMap"
-        Me.panelTreeMap.Size = New System.Drawing.Size(202, 108)
+        Me.panelTreeMap.Size = New System.Drawing.Size(379, 280)
         Me.panelTreeMap.TabIndex = 1
         '
         'tabControlUmlDoc
@@ -2672,7 +2672,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUmlDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlUmlDoc.Name = "tabControlUmlDoc"
         Me.tabControlUmlDoc.SelectedIndex = 0
-        Me.tabControlUmlDoc.Size = New System.Drawing.Size(202, 92)
+        Me.tabControlUmlDoc.Size = New System.Drawing.Size(379, 264)
         Me.tabControlUmlDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUmlDoc.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.tabControlUmlDoc, "To create a UML document, mark your domain in the tree view and then press the re" & _
@@ -2688,7 +2688,7 @@ Public Class frmDomainMapBrowser
         Me.panelUmlTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelUmlTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelUmlTitle.Name = "panelUmlTitle"
-        Me.panelUmlTitle.Size = New System.Drawing.Size(202, 16)
+        Me.panelUmlTitle.Size = New System.Drawing.Size(379, 16)
         Me.panelUmlTitle.TabIndex = 9
         '
         'labelUmlTitle
@@ -2697,7 +2697,7 @@ Public Class frmDomainMapBrowser
         Me.labelUmlTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelUmlTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelUmlTitle.Name = "labelUmlTitle"
-        Me.labelUmlTitle.Size = New System.Drawing.Size(152, 14)
+        Me.labelUmlTitle.Size = New System.Drawing.Size(329, 14)
         Me.labelUmlTitle.TabIndex = 0
         '
         'buttonPrevUmlDoc
@@ -2708,7 +2708,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevUmlDoc.ImageIndex = 2
         Me.buttonPrevUmlDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevUmlDoc.Location = New System.Drawing.Point(152, 0)
+        Me.buttonPrevUmlDoc.Location = New System.Drawing.Point(329, 0)
         Me.buttonPrevUmlDoc.Name = "buttonPrevUmlDoc"
         Me.buttonPrevUmlDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevUmlDoc.TabIndex = 3
@@ -2721,7 +2721,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextUmlDoc.ImageIndex = 4
         Me.buttonNextUmlDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonNextUmlDoc.Location = New System.Drawing.Point(168, 0)
+        Me.buttonNextUmlDoc.Location = New System.Drawing.Point(345, 0)
         Me.buttonNextUmlDoc.Name = "buttonNextUmlDoc"
         Me.buttonNextUmlDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextUmlDoc.TabIndex = 2
@@ -2733,7 +2733,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseUmlDoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCloseUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonCloseUmlDoc.Image = CType(resources.GetObject("buttonCloseUmlDoc.Image"), System.Drawing.Image)
-        Me.buttonCloseUmlDoc.Location = New System.Drawing.Point(185, 0)
+        Me.buttonCloseUmlDoc.Location = New System.Drawing.Point(362, 0)
         Me.buttonCloseUmlDoc.Name = "buttonCloseUmlDoc"
         Me.buttonCloseUmlDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseUmlDoc.TabIndex = 1
@@ -2744,7 +2744,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMainCustom.Controls.Add(Me.panelDocTitle)
         Me.tabPageMainCustom.Location = New System.Drawing.Point(4, 40)
         Me.tabPageMainCustom.Name = "tabPageMainCustom"
-        Me.tabPageMainCustom.Size = New System.Drawing.Size(202, 108)
+        Me.tabPageMainCustom.Size = New System.Drawing.Size(202, 138)
         Me.tabPageMainCustom.TabIndex = 1
         Me.tabPageMainCustom.Text = "Custom"
         '
@@ -2755,7 +2755,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUserDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlUserDoc.Name = "tabControlUserDoc"
         Me.tabControlUserDoc.SelectedIndex = 0
-        Me.tabControlUserDoc.Size = New System.Drawing.Size(202, 92)
+        Me.tabControlUserDoc.Size = New System.Drawing.Size(202, 122)
         Me.tabControlUserDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUserDoc.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.tabControlUserDoc, "When you have generated source code documents with ObjectMapper, you can find the" & _
@@ -2828,7 +2828,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMainPreview.Controls.Add(Me.panelPreviewDocTitle)
         Me.tabPageMainPreview.Location = New System.Drawing.Point(4, 40)
         Me.tabPageMainPreview.Name = "tabPageMainPreview"
-        Me.tabPageMainPreview.Size = New System.Drawing.Size(202, 108)
+        Me.tabPageMainPreview.Size = New System.Drawing.Size(202, 138)
         Me.tabPageMainPreview.TabIndex = 2
         Me.tabPageMainPreview.Text = "Preview"
         '
@@ -2839,7 +2839,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlPreviewDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlPreviewDoc.Name = "tabControlPreviewDoc"
         Me.tabControlPreviewDoc.SelectedIndex = 0
-        Me.tabControlPreviewDoc.Size = New System.Drawing.Size(202, 92)
+        Me.tabControlPreviewDoc.Size = New System.Drawing.Size(202, 122)
         Me.tabControlPreviewDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlPreviewDoc.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.tabControlPreviewDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
@@ -2912,7 +2912,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMainXmlBehind.Controls.Add(Me.panelXmlBehindTitle)
         Me.tabPageMainXmlBehind.Location = New System.Drawing.Point(4, 40)
         Me.tabPageMainXmlBehind.Name = "tabPageMainXmlBehind"
-        Me.tabPageMainXmlBehind.Size = New System.Drawing.Size(202, 108)
+        Me.tabPageMainXmlBehind.Size = New System.Drawing.Size(202, 138)
         Me.tabPageMainXmlBehind.TabIndex = 3
         Me.tabPageMainXmlBehind.Text = "Xml Behind"
         '
@@ -2923,7 +2923,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlXmlBehind.Location = New System.Drawing.Point(0, 16)
         Me.tabControlXmlBehind.Name = "tabControlXmlBehind"
         Me.tabControlXmlBehind.SelectedIndex = 0
-        Me.tabControlXmlBehind.Size = New System.Drawing.Size(202, 92)
+        Me.tabControlXmlBehind.Size = New System.Drawing.Size(202, 122)
         Me.tabControlXmlBehind.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlXmlBehind.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.tabControlXmlBehind, "To edit the XML behind for a domain model, mark your domain in the tree view and " & _
@@ -3021,7 +3021,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMainCodeMap.Controls.Add(Me.Panel1)
         Me.tabPageMainCodeMap.Location = New System.Drawing.Point(4, 40)
         Me.tabPageMainCodeMap.Name = "tabPageMainCodeMap"
-        Me.tabPageMainCodeMap.Size = New System.Drawing.Size(202, 108)
+        Me.tabPageMainCodeMap.Size = New System.Drawing.Size(202, 138)
         Me.tabPageMainCodeMap.TabIndex = 4
         Me.tabPageMainCodeMap.Text = "Code"
         '
@@ -3032,7 +3032,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlCodeMapDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlCodeMapDoc.Name = "tabControlCodeMapDoc"
         Me.tabControlCodeMapDoc.SelectedIndex = 0
-        Me.tabControlCodeMapDoc.Size = New System.Drawing.Size(202, 92)
+        Me.tabControlCodeMapDoc.Size = New System.Drawing.Size(202, 122)
         Me.tabControlCodeMapDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlCodeMapDoc.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.tabControlCodeMapDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
@@ -3108,7 +3108,7 @@ Public Class frmDomainMapBrowser
         Me.panelMainTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelMainTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelMainTitle.Name = "panelMainTitle"
-        Me.panelMainTitle.Size = New System.Drawing.Size(210, 16)
+        Me.panelMainTitle.Size = New System.Drawing.Size(387, 16)
         Me.panelMainTitle.TabIndex = 2
         '
         'Label5
@@ -3116,7 +3116,7 @@ Public Class frmDomainMapBrowser
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label5.Location = New System.Drawing.Point(0, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(176, 14)
+        Me.Label5.Size = New System.Drawing.Size(353, 14)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "Documents"
         '
@@ -3128,7 +3128,7 @@ Public Class frmDomainMapBrowser
         Me.buttonSwapPosMain.ForeColor = System.Drawing.SystemColors.Control
         Me.buttonSwapPosMain.ImageIndex = 4
         Me.buttonSwapPosMain.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosMain.Location = New System.Drawing.Point(176, 0)
+        Me.buttonSwapPosMain.Location = New System.Drawing.Point(353, 0)
         Me.buttonSwapPosMain.Name = "buttonSwapPosMain"
         Me.buttonSwapPosMain.Size = New System.Drawing.Size(16, 14)
         Me.buttonSwapPosMain.TabIndex = 4
@@ -3141,7 +3141,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseMain.ForeColor = System.Drawing.SystemColors.Control
         Me.buttonCloseMain.ImageIndex = 0
         Me.buttonCloseMain.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseMain.Location = New System.Drawing.Point(192, 0)
+        Me.buttonCloseMain.Location = New System.Drawing.Point(369, 0)
         Me.buttonCloseMain.Name = "buttonCloseMain"
         Me.buttonCloseMain.Size = New System.Drawing.Size(16, 14)
         Me.buttonCloseMain.TabIndex = 3
@@ -3151,24 +3151,24 @@ Public Class frmDomainMapBrowser
         Me.mapPropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.mapPropertyGrid.Location = New System.Drawing.Point(0, 16)
         Me.mapPropertyGrid.Name = "mapPropertyGrid"
-        Me.mapPropertyGrid.Size = New System.Drawing.Size(157, 152)
+        Me.mapPropertyGrid.Size = New System.Drawing.Size(157, 306)
         Me.mapPropertyGrid.TabIndex = 1
         '
         'Splitter4
         '
         Me.Splitter4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter4.Location = New System.Drawing.Point(163, 240)
+        Me.Splitter4.Location = New System.Drawing.Point(163, 350)
         Me.Splitter4.Name = "Splitter4"
-        Me.Splitter4.Size = New System.Drawing.Size(516, 3)
+        Me.Splitter4.Size = New System.Drawing.Size(693, 3)
         Me.Splitter4.TabIndex = 8
         Me.Splitter4.TabStop = False
         '
         'Splitter5
         '
         Me.Splitter5.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter5.Location = New System.Drawing.Point(532, 72)
+        Me.Splitter5.Location = New System.Drawing.Point(709, 28)
         Me.Splitter5.Name = "Splitter5"
-        Me.Splitter5.Size = New System.Drawing.Size(3, 168)
+        Me.Splitter5.Size = New System.Drawing.Size(3, 322)
         Me.Splitter5.TabIndex = 9
         Me.Splitter5.TabStop = False
         '
@@ -4582,7 +4582,7 @@ Public Class frmDomainMapBrowser
         Me.ToolBar1.Location = New System.Drawing.Point(0, 0)
         Me.ToolBar1.Name = "ToolBar1"
         Me.ToolBar1.ShowToolTips = True
-        Me.ToolBar1.Size = New System.Drawing.Size(679, 72)
+        Me.ToolBar1.Size = New System.Drawing.Size(856, 28)
         Me.ToolBar1.TabIndex = 10
         '
         'toolBarButtonBack
@@ -5146,9 +5146,9 @@ Public Class frmDomainMapBrowser
         Me.panelProperties.Controls.Add(Me.mapPropertyGrid)
         Me.panelProperties.Controls.Add(Me.panelPropertiesTitle)
         Me.panelProperties.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelProperties.Location = New System.Drawing.Point(163, 72)
+        Me.panelProperties.Location = New System.Drawing.Point(163, 28)
         Me.panelProperties.Name = "panelProperties"
-        Me.panelProperties.Size = New System.Drawing.Size(157, 168)
+        Me.panelProperties.Size = New System.Drawing.Size(157, 322)
         Me.panelProperties.TabIndex = 11
         '
         'panelPropertiesTitle
@@ -5200,9 +5200,9 @@ Public Class frmDomainMapBrowser
         '
         'Splitter2
         '
-        Me.Splitter2.Location = New System.Drawing.Point(320, 72)
+        Me.Splitter2.Location = New System.Drawing.Point(320, 28)
         Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(2, 168)
+        Me.Splitter2.Size = New System.Drawing.Size(2, 322)
         Me.Splitter2.TabIndex = 12
         Me.Splitter2.TabStop = False
         '
@@ -5217,7 +5217,7 @@ Public Class frmDomainMapBrowser
         Me.PrintPreviewDialog1.ClientSize = New System.Drawing.Size(400, 300)
         Me.PrintPreviewDialog1.Enabled = True
         Me.PrintPreviewDialog1.Icon = CType(resources.GetObject("PrintPreviewDialog1.Icon"), System.Drawing.Icon)
-        Me.PrintPreviewDialog1.Location = New System.Drawing.Point(488, 17)
+        Me.PrintPreviewDialog1.Location = New System.Drawing.Point(118, 17)
         Me.PrintPreviewDialog1.MinimumSize = New System.Drawing.Size(375, 250)
         Me.PrintPreviewDialog1.Name = "PrintPreviewDialog1"
         Me.PrintPreviewDialog1.TransparencyKey = System.Drawing.Color.Empty
@@ -5235,7 +5235,7 @@ Public Class frmDomainMapBrowser
         'frmDomainMapBrowser
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.ClientSize = New System.Drawing.Size(679, 443)
+        Me.ClientSize = New System.Drawing.Size(856, 553)
         Me.Controls.Add(Me.panelMain)
         Me.Controls.Add(Me.Splitter5)
         Me.Controls.Add(Me.panelRight)
