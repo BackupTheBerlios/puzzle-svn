@@ -11365,8 +11365,8 @@ Public Class frmDomainMapBrowser
 
                                         End Select
 
-                                        If useCfg.TargetLanguage() = TargetLanguageEnum.CSharp2 Then
-                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName, System.Text.Encoding.UTF8)
+                                        If useCfg.TargetLanguage() = TargetLanguageEnum.CSharp Then
+                                            fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName, System.Text.Encoding.Default)
                                         Else
                                             fileWriter = Puzzle.NCore.Framework.IO.FileTools.GetFileWriter(fileName)
                                         End If

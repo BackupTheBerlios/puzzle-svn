@@ -9,7 +9,7 @@ namespace Puzzle.NCore.Framework.IO
 	{
 		public static StreamWriter GetFileWriter(string path)
 		{
-			StreamWriter sw = new StreamWriter(path,false,Encoding.Default) ;
+			StreamWriter sw = new StreamWriter(path,false,Encoding.UTF8) ;
 			return sw;
 		}
 
