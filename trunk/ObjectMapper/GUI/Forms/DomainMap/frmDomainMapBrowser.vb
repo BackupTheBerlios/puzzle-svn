@@ -9459,6 +9459,7 @@ Public Class frmDomainMapBrowser
 
     End Sub
 
+    'code gen
     Private Overloads Sub ClassesToCode(ByVal domainMaps As ArrayList)
 
         Dim domainMap As IDomainMap
@@ -11289,6 +11290,10 @@ Public Class frmDomainMapBrowser
                                         src = useCfg.SetSourceCodeFile(domainMap, fileName)
 
                                         Select Case useCfg.TargetLanguage
+
+                                            Case TargetLanguageEnum.CSharp2
+
+                                                src.FileType = SourceCodeFileTypeEnum.CSharp2
 
                                             Case TargetLanguageEnum.CSharp
 
