@@ -152,6 +152,11 @@
                     Project = "{F2D0D973-95A3-47EE-AF0C-2336192CB264}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "WeifenLuo.WinFormsUI.Docking"
+                    AssemblyName = "WeifenLuo.WinFormsUI.Docking"
+                    HintPath = "Dependencies\WeifenLuo.WinFormsUI.Docking.dll"
+                />
             </References>
             <Imports>
                 <Import Namespace = "Microsoft.VisualBasic" />
@@ -316,6 +321,41 @@
                 <File
                     RelPath = "Classes\Settings\XmlBehindSettings.vb"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\DockingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\DockingForm.resx"
+                    DependentUpon = "DockingForm.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Components\Docking\MainDockingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\OutputDockingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\ProjectExplorerDockingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\PropertiesDockingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Docking\ToolsDockingForm.vb"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -678,6 +718,10 @@
                     RelPath = "Components\Printing\TextPrintDocument.resx"
                     DependentUpon = "TextPrintDocument.vb"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dependencies\WeifenLuo.WinFormsUI.Docking.dll"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Forms\DomainMap\frmDomainMapBrowser.vb"

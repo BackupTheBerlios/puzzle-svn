@@ -167,7 +167,6 @@ Public Class frmDomainMapBrowser
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents panelLeft As System.Windows.Forms.Panel
-    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents StatusBar1 As System.Windows.Forms.StatusBar
     Friend WithEvents imageListSmall As System.Windows.Forms.ImageList
     Friend WithEvents panelStatus As System.Windows.Forms.Panel
@@ -175,10 +174,7 @@ Public Class frmDomainMapBrowser
     Friend WithEvents panelRight As System.Windows.Forms.Panel
     Friend WithEvents MainMenu1 As System.Windows.Forms.MainMenu
     Friend WithEvents panelMain As System.Windows.Forms.Panel
-    Friend WithEvents Splitter4 As System.Windows.Forms.Splitter
-    Friend WithEvents Splitter5 As System.Windows.Forms.Splitter
     Friend WithEvents panelSecondTree As System.Windows.Forms.Panel
-    Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents MenuItem3 As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem5 As System.Windows.Forms.MenuItem
@@ -551,12 +547,6 @@ Public Class frmDomainMapBrowser
     Friend WithEvents menuProjectProperties As System.Windows.Forms.MenuItem
     Friend WithEvents treePreviewClassesToCode As Puzzle.ObjectMapper.GUI.MapTreeView
     Friend WithEvents panelMainTitle As System.Windows.Forms.Panel
-    Friend WithEvents buttonCloseMain As System.Windows.Forms.Button
-    Friend WithEvents panelToolsTitle As System.Windows.Forms.Panel
-    Friend WithEvents buttonCloseTools As System.Windows.Forms.Button
-    Friend WithEvents panelListTitle As System.Windows.Forms.Panel
-    Friend WithEvents labelListTitle As System.Windows.Forms.Label
-    Friend WithEvents buttonCloseList As System.Windows.Forms.Button
     Friend WithEvents imageListSmallButtons As System.Windows.Forms.ImageList
     Friend WithEvents mapListView As Puzzle.ObjectMapper.GUI.MapListView
     Friend WithEvents buttonNextPreviewDoc As System.Windows.Forms.Button
@@ -592,9 +582,6 @@ Public Class frmDomainMapBrowser
     Friend WithEvents toolBarButtonTools As System.Windows.Forms.ToolBarButton
     Friend WithEvents menuFileRecentProjects As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem114 As System.Windows.Forms.MenuItem
-    Friend WithEvents buttonSwapPosMain As System.Windows.Forms.Button
-    Friend WithEvents buttonSwapPosTools As System.Windows.Forms.Button
-    Friend WithEvents buttonSwapPosList As System.Windows.Forms.Button
     Friend WithEvents menuUserDoc As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItem115 As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem119 As System.Windows.Forms.MenuItem
@@ -692,23 +679,14 @@ Public Class frmDomainMapBrowser
     Friend WithEvents tabPageMainCustom As System.Windows.Forms.TabPage
     Friend WithEvents tabPageMainPreview As System.Windows.Forms.TabPage
     Friend WithEvents tabPageMainXmlBehind As System.Windows.Forms.TabPage
-    Friend WithEvents panelProjectTitle As System.Windows.Forms.Panel
-    Friend WithEvents labelExplorer As System.Windows.Forms.Label
-    Friend WithEvents buttonSwapPosExplorer As System.Windows.Forms.Button
-    Friend WithEvents buttonCloseExplorer As System.Windows.Forms.Button
     Friend WithEvents tabPageMainUml As System.Windows.Forms.TabPage
     Friend WithEvents panelProperties As System.Windows.Forms.Panel
-    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents panelUmlTitle As System.Windows.Forms.Panel
     Friend WithEvents labelUmlTitle As System.Windows.Forms.Label
     Friend WithEvents buttonPrevUmlDoc As System.Windows.Forms.Button
     Friend WithEvents buttonNextUmlDoc As System.Windows.Forms.Button
     Friend WithEvents buttonCloseUmlDoc As System.Windows.Forms.Button
     Friend WithEvents tabControlUmlDoc As System.Windows.Forms.TabControl
-    Friend WithEvents panelPropertiesTitle As System.Windows.Forms.Panel
-    Friend WithEvents buttonSwapPosProperties As System.Windows.Forms.Button
-    Friend WithEvents buttonCloseProperties As System.Windows.Forms.Button
     Friend WithEvents menuViewProperties As System.Windows.Forms.MenuItem
     Friend WithEvents menuFilePrint As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem139 As System.Windows.Forms.MenuItem
@@ -785,6 +763,8 @@ Public Class frmDomainMapBrowser
     Friend WithEvents menuClassListAddEnum As System.Windows.Forms.MenuItem
     Friend WithEvents enumValueMenu As System.Windows.Forms.ContextMenu
     Friend WithEvents deleteEnumValueMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DockPanelContainer As System.Windows.Forms.Panel
+    Friend WithEvents dockPanel As WeifenLuo.WinFormsUI.DockPanel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmDomainMapBrowser))
@@ -840,11 +820,7 @@ Public Class frmDomainMapBrowser
         Me.panelLeft = New System.Windows.Forms.Panel
         Me.panelPropGridMap = New System.Windows.Forms.Panel
         Me.mapTreeView = New Puzzle.ObjectMapper.GUI.MapTreeView
-        Me.panelProjectTitle = New System.Windows.Forms.Panel
-        Me.labelExplorer = New System.Windows.Forms.Label
-        Me.buttonSwapPosExplorer = New System.Windows.Forms.Button
         Me.imageListSmallButtons = New System.Windows.Forms.ImageList(Me.components)
-        Me.buttonCloseExplorer = New System.Windows.Forms.Button
         Me.panelBottom = New System.Windows.Forms.Panel
         Me.tabControlMessages = New System.Windows.Forms.TabControl
         Me.tabPageListView = New System.Windows.Forms.TabPage
@@ -855,21 +831,12 @@ Public Class frmDomainMapBrowser
         Me.listViewPreviewMsgs = New System.Windows.Forms.ListView
         Me.tabPageMessageList = New System.Windows.Forms.TabPage
         Me.listViewMsgs = New System.Windows.Forms.ListView
-        Me.panelListTitle = New System.Windows.Forms.Panel
-        Me.labelListTitle = New System.Windows.Forms.Label
-        Me.buttonSwapPosList = New System.Windows.Forms.Button
-        Me.buttonCloseList = New System.Windows.Forms.Button
-        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.panelRight = New System.Windows.Forms.Panel
         Me.panelSecondTree = New System.Windows.Forms.Panel
         Me.tabControlTools = New System.Windows.Forms.TabControl
         Me.tabToolsPreview = New System.Windows.Forms.TabPage
         Me.treePreviewClassesToCode = New Puzzle.ObjectMapper.GUI.MapTreeView
         Me.mapTreeViewPreview = New Puzzle.ObjectMapper.GUI.MapTreeView
-        Me.panelToolsTitle = New System.Windows.Forms.Panel
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.buttonSwapPosTools = New System.Windows.Forms.Button
-        Me.buttonCloseTools = New System.Windows.Forms.Button
         Me.MainMenu1 = New System.Windows.Forms.MainMenu
         Me.menuFile = New System.Windows.Forms.MenuItem
         Me.MenuItem6 = New System.Windows.Forms.MenuItem
@@ -1013,11 +980,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseCodeMapDoc = New System.Windows.Forms.Button
         Me.panelMainTitle = New System.Windows.Forms.Panel
         Me.Label5 = New System.Windows.Forms.Label
-        Me.buttonSwapPosMain = New System.Windows.Forms.Button
-        Me.buttonCloseMain = New System.Windows.Forms.Button
         Me.mapPropertyGrid = New Puzzle.ObjectMapper.GUI.MapPropertyGrid
-        Me.Splitter4 = New System.Windows.Forms.Splitter
-        Me.Splitter5 = New System.Windows.Forms.Splitter
         Me.menuDomain = New System.Windows.Forms.ContextMenu
         Me.menuDomainAdd = New System.Windows.Forms.MenuItem
         Me.menuDomainAddClass = New System.Windows.Forms.MenuItem
@@ -1395,36 +1358,29 @@ Public Class frmDomainMapBrowser
         Me.MenuItem130 = New System.Windows.Forms.MenuItem
         Me.menuUmlLinePointProperties = New System.Windows.Forms.MenuItem
         Me.panelProperties = New System.Windows.Forms.Panel
-        Me.panelPropertiesTitle = New System.Windows.Forms.Panel
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.buttonSwapPosProperties = New System.Windows.Forms.Button
-        Me.buttonCloseProperties = New System.Windows.Forms.Button
-        Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog
-        Me.SourceCodePrintDocument1 = New Puzzle.SourceCode.SourceCodePrintDocument
         Me.PrintPreviewDialog1 = New System.Windows.Forms.PrintPreviewDialog
         Me.PageSetupDialog1 = New System.Windows.Forms.PageSetupDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.enumValueMenu = New System.Windows.Forms.ContextMenu
         Me.deleteEnumValueMenuItem = New System.Windows.Forms.MenuItem
+        Me.DockPanelContainer = New System.Windows.Forms.Panel
+        Me.dockPanel = New WeifenLuo.WinFormsUI.DockPanel
         Me.panelStatus.SuspendLayout()
         CType(Me.statusMain, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.statusMessage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panelLeft.SuspendLayout()
         Me.panelPropGridMap.SuspendLayout()
-        Me.panelProjectTitle.SuspendLayout()
         Me.panelBottom.SuspendLayout()
         Me.tabControlMessages.SuspendLayout()
         Me.tabPageListView.SuspendLayout()
         Me.tabPageErrors.SuspendLayout()
         Me.tabPagePreviewList.SuspendLayout()
         Me.tabPageMessageList.SuspendLayout()
-        Me.panelListTitle.SuspendLayout()
         Me.panelRight.SuspendLayout()
         Me.panelSecondTree.SuspendLayout()
         Me.tabControlTools.SuspendLayout()
         Me.tabToolsPreview.SuspendLayout()
-        Me.panelToolsTitle.SuspendLayout()
         Me.panelMain.SuspendLayout()
         Me.panelDocuments.SuspendLayout()
         Me.tabControlDocuments.SuspendLayout()
@@ -1439,18 +1395,17 @@ Public Class frmDomainMapBrowser
         Me.panelXmlBehindTitle.SuspendLayout()
         Me.tabPageMainCodeMap.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.panelMainTitle.SuspendLayout()
         Me.panelProperties.SuspendLayout()
-        Me.panelPropertiesTitle.SuspendLayout()
+        Me.DockPanelContainer.SuspendLayout()
         Me.SuspendLayout()
         '
         'panelStatus
         '
         Me.panelStatus.Controls.Add(Me.StatusBar1)
         Me.panelStatus.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.panelStatus.Location = New System.Drawing.Point(0, 529)
+        Me.panelStatus.Location = New System.Drawing.Point(0, 657)
         Me.panelStatus.Name = "panelStatus"
-        Me.panelStatus.Size = New System.Drawing.Size(856, 24)
+        Me.panelStatus.Size = New System.Drawing.Size(848, 24)
         Me.panelStatus.TabIndex = 0
         '
         'StatusBar1
@@ -1459,7 +1414,7 @@ Public Class frmDomainMapBrowser
         Me.StatusBar1.Name = "StatusBar1"
         Me.StatusBar1.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.statusMain, Me.statusMessage})
         Me.StatusBar1.ShowPanels = True
-        Me.StatusBar1.Size = New System.Drawing.Size(856, 22)
+        Me.StatusBar1.Size = New System.Drawing.Size(848, 22)
         Me.StatusBar1.TabIndex = 0
         Me.StatusBar1.Text = "StatusBar1"
         '
@@ -1471,7 +1426,7 @@ Public Class frmDomainMapBrowser
         'statusMessage
         '
         Me.statusMessage.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
-        Me.statusMessage.Width = 590
+        Me.statusMessage.Width = 582
         '
         'menuNew
         '
@@ -1714,20 +1669,19 @@ Public Class frmDomainMapBrowser
         'panelLeft
         '
         Me.panelLeft.Controls.Add(Me.panelPropGridMap)
-        Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelLeft.Location = New System.Drawing.Point(0, 28)
+        Me.panelLeft.DockPadding.All = 6
+        Me.panelLeft.Location = New System.Drawing.Point(176, 8)
         Me.panelLeft.Name = "panelLeft"
-        Me.panelLeft.Size = New System.Drawing.Size(160, 501)
+        Me.panelLeft.Size = New System.Drawing.Size(160, 160)
         Me.panelLeft.TabIndex = 2
         '
         'panelPropGridMap
         '
         Me.panelPropGridMap.Controls.Add(Me.mapTreeView)
-        Me.panelPropGridMap.Controls.Add(Me.panelProjectTitle)
         Me.panelPropGridMap.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelPropGridMap.Location = New System.Drawing.Point(0, 0)
+        Me.panelPropGridMap.Location = New System.Drawing.Point(6, 6)
         Me.panelPropGridMap.Name = "panelPropGridMap"
-        Me.panelPropGridMap.Size = New System.Drawing.Size(160, 501)
+        Me.panelPropGridMap.Size = New System.Drawing.Size(148, 148)
         Me.panelPropGridMap.TabIndex = 2
         '
         'mapTreeView
@@ -1741,46 +1695,11 @@ Public Class frmDomainMapBrowser
         Me.mapTreeView.IsPreviewTree = False
         Me.mapTreeView.IsVerifyTree = False
         Me.mapTreeView.LabelEdit = True
-        Me.mapTreeView.Location = New System.Drawing.Point(0, 16)
+        Me.mapTreeView.Location = New System.Drawing.Point(0, 0)
         Me.mapTreeView.Name = "mapTreeView"
         Me.mapTreeView.ShowRootLines = False
-        Me.mapTreeView.Size = New System.Drawing.Size(160, 485)
+        Me.mapTreeView.Size = New System.Drawing.Size(148, 148)
         Me.mapTreeView.TabIndex = 1
-        '
-        'panelProjectTitle
-        '
-        Me.panelProjectTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panelProjectTitle.Controls.Add(Me.labelExplorer)
-        Me.panelProjectTitle.Controls.Add(Me.buttonSwapPosExplorer)
-        Me.panelProjectTitle.Controls.Add(Me.buttonCloseExplorer)
-        Me.panelProjectTitle.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelProjectTitle.Location = New System.Drawing.Point(0, 0)
-        Me.panelProjectTitle.Name = "panelProjectTitle"
-        Me.panelProjectTitle.Size = New System.Drawing.Size(160, 16)
-        Me.panelProjectTitle.TabIndex = 4
-        '
-        'labelExplorer
-        '
-        Me.labelExplorer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.labelExplorer.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.labelExplorer.Location = New System.Drawing.Point(0, 0)
-        Me.labelExplorer.Name = "labelExplorer"
-        Me.labelExplorer.Size = New System.Drawing.Size(126, 14)
-        Me.labelExplorer.TabIndex = 0
-        Me.labelExplorer.Text = "Project Explorer"
-        '
-        'buttonSwapPosExplorer
-        '
-        Me.buttonSwapPosExplorer.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosExplorer.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonSwapPosExplorer.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonSwapPosExplorer.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosExplorer.ImageIndex = 4
-        Me.buttonSwapPosExplorer.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosExplorer.Location = New System.Drawing.Point(126, 0)
-        Me.buttonSwapPosExplorer.Name = "buttonSwapPosExplorer"
-        Me.buttonSwapPosExplorer.Size = New System.Drawing.Size(16, 14)
-        Me.buttonSwapPosExplorer.TabIndex = 3
         '
         'imageListSmallButtons
         '
@@ -1788,27 +1707,13 @@ Public Class frmDomainMapBrowser
         Me.imageListSmallButtons.ImageStream = CType(resources.GetObject("imageListSmallButtons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.imageListSmallButtons.TransparentColor = System.Drawing.Color.Transparent
         '
-        'buttonCloseExplorer
-        '
-        Me.buttonCloseExplorer.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseExplorer.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonCloseExplorer.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCloseExplorer.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseExplorer.ImageIndex = 0
-        Me.buttonCloseExplorer.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseExplorer.Location = New System.Drawing.Point(142, 0)
-        Me.buttonCloseExplorer.Name = "buttonCloseExplorer"
-        Me.buttonCloseExplorer.Size = New System.Drawing.Size(16, 14)
-        Me.buttonCloseExplorer.TabIndex = 2
-        '
         'panelBottom
         '
         Me.panelBottom.Controls.Add(Me.tabControlMessages)
-        Me.panelBottom.Controls.Add(Me.panelListTitle)
-        Me.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.panelBottom.Location = New System.Drawing.Point(163, 353)
+        Me.panelBottom.DockPadding.All = 6
+        Me.panelBottom.Location = New System.Drawing.Point(8, 176)
         Me.panelBottom.Name = "panelBottom"
-        Me.panelBottom.Size = New System.Drawing.Size(693, 176)
+        Me.panelBottom.Size = New System.Drawing.Size(480, 88)
         Me.panelBottom.TabIndex = 3
         '
         'tabControlMessages
@@ -1818,10 +1723,10 @@ Public Class frmDomainMapBrowser
         Me.tabControlMessages.Controls.Add(Me.tabPagePreviewList)
         Me.tabControlMessages.Controls.Add(Me.tabPageMessageList)
         Me.tabControlMessages.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tabControlMessages.Location = New System.Drawing.Point(0, 16)
+        Me.tabControlMessages.Location = New System.Drawing.Point(6, 6)
         Me.tabControlMessages.Name = "tabControlMessages"
         Me.tabControlMessages.SelectedIndex = 0
-        Me.tabControlMessages.Size = New System.Drawing.Size(693, 160)
+        Me.tabControlMessages.Size = New System.Drawing.Size(468, 76)
         Me.tabControlMessages.TabIndex = 4
         '
         'tabPageListView
@@ -1829,7 +1734,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageListView.Controls.Add(Me.mapListView)
         Me.tabPageListView.Location = New System.Drawing.Point(4, 22)
         Me.tabPageListView.Name = "tabPageListView"
-        Me.tabPageListView.Size = New System.Drawing.Size(685, 134)
+        Me.tabPageListView.Size = New System.Drawing.Size(460, 50)
         Me.tabPageListView.TabIndex = 3
         Me.tabPageListView.Text = "List View"
         '
@@ -1842,7 +1747,7 @@ Public Class frmDomainMapBrowser
         Me.mapListView.Location = New System.Drawing.Point(0, 0)
         Me.mapListView.Name = "mapListView"
         Me.mapListView.ParentNode = Nothing
-        Me.mapListView.Size = New System.Drawing.Size(685, 134)
+        Me.mapListView.Size = New System.Drawing.Size(460, 50)
         Me.mapListView.SmallImageList = Me.imageListSmall
         Me.mapListView.TabIndex = 0
         Me.mapListView.View = System.Windows.Forms.View.Details
@@ -1852,7 +1757,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageErrors.Controls.Add(Me.listViewExceptions)
         Me.tabPageErrors.Location = New System.Drawing.Point(4, 22)
         Me.tabPageErrors.Name = "tabPageErrors"
-        Me.tabPageErrors.Size = New System.Drawing.Size(508, 134)
+        Me.tabPageErrors.Size = New System.Drawing.Size(460, 50)
         Me.tabPageErrors.TabIndex = 0
         Me.tabPageErrors.Text = "Errors"
         '
@@ -1862,7 +1767,7 @@ Public Class frmDomainMapBrowser
         Me.listViewExceptions.HideSelection = False
         Me.listViewExceptions.Location = New System.Drawing.Point(0, 0)
         Me.listViewExceptions.Name = "listViewExceptions"
-        Me.listViewExceptions.Size = New System.Drawing.Size(508, 134)
+        Me.listViewExceptions.Size = New System.Drawing.Size(460, 50)
         Me.listViewExceptions.SmallImageList = Me.imageListSmall
         Me.listViewExceptions.TabIndex = 4
         Me.listViewExceptions.View = System.Windows.Forms.View.Details
@@ -1872,7 +1777,7 @@ Public Class frmDomainMapBrowser
         Me.tabPagePreviewList.Controls.Add(Me.listViewPreviewMsgs)
         Me.tabPagePreviewList.Location = New System.Drawing.Point(4, 22)
         Me.tabPagePreviewList.Name = "tabPagePreviewList"
-        Me.tabPagePreviewList.Size = New System.Drawing.Size(508, 134)
+        Me.tabPagePreviewList.Size = New System.Drawing.Size(460, 50)
         Me.tabPagePreviewList.TabIndex = 1
         Me.tabPagePreviewList.Text = "Preview"
         '
@@ -1882,7 +1787,7 @@ Public Class frmDomainMapBrowser
         Me.listViewPreviewMsgs.HideSelection = False
         Me.listViewPreviewMsgs.Location = New System.Drawing.Point(0, 0)
         Me.listViewPreviewMsgs.Name = "listViewPreviewMsgs"
-        Me.listViewPreviewMsgs.Size = New System.Drawing.Size(508, 134)
+        Me.listViewPreviewMsgs.Size = New System.Drawing.Size(460, 50)
         Me.listViewPreviewMsgs.SmallImageList = Me.imageListSmall
         Me.listViewPreviewMsgs.TabIndex = 6
         Me.listViewPreviewMsgs.View = System.Windows.Forms.View.Details
@@ -1892,7 +1797,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMessageList.Controls.Add(Me.listViewMsgs)
         Me.tabPageMessageList.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMessageList.Name = "tabPageMessageList"
-        Me.tabPageMessageList.Size = New System.Drawing.Size(508, 134)
+        Me.tabPageMessageList.Size = New System.Drawing.Size(460, 50)
         Me.tabPageMessageList.TabIndex = 2
         Me.tabPageMessageList.Text = "Messages"
         '
@@ -1903,82 +1808,26 @@ Public Class frmDomainMapBrowser
         Me.listViewMsgs.HideSelection = False
         Me.listViewMsgs.Location = New System.Drawing.Point(0, 0)
         Me.listViewMsgs.Name = "listViewMsgs"
-        Me.listViewMsgs.Size = New System.Drawing.Size(508, 134)
+        Me.listViewMsgs.Size = New System.Drawing.Size(460, 50)
         Me.listViewMsgs.TabIndex = 6
         Me.listViewMsgs.View = System.Windows.Forms.View.Details
-        '
-        'panelListTitle
-        '
-        Me.panelListTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panelListTitle.Controls.Add(Me.labelListTitle)
-        Me.panelListTitle.Controls.Add(Me.buttonSwapPosList)
-        Me.panelListTitle.Controls.Add(Me.buttonCloseList)
-        Me.panelListTitle.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelListTitle.Location = New System.Drawing.Point(0, 0)
-        Me.panelListTitle.Name = "panelListTitle"
-        Me.panelListTitle.Size = New System.Drawing.Size(693, 16)
-        Me.panelListTitle.TabIndex = 5
-        '
-        'labelListTitle
-        '
-        Me.labelListTitle.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.labelListTitle.Location = New System.Drawing.Point(0, 0)
-        Me.labelListTitle.Name = "labelListTitle"
-        Me.labelListTitle.Size = New System.Drawing.Size(659, 14)
-        Me.labelListTitle.TabIndex = 6
-        Me.labelListTitle.Text = "List Pane"
-        '
-        'buttonSwapPosList
-        '
-        Me.buttonSwapPosList.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosList.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonSwapPosList.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonSwapPosList.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosList.ImageIndex = 10
-        Me.buttonSwapPosList.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosList.Location = New System.Drawing.Point(659, 0)
-        Me.buttonSwapPosList.Name = "buttonSwapPosList"
-        Me.buttonSwapPosList.Size = New System.Drawing.Size(16, 14)
-        Me.buttonSwapPosList.TabIndex = 7
-        '
-        'buttonCloseList
-        '
-        Me.buttonCloseList.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseList.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonCloseList.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCloseList.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseList.ImageIndex = 0
-        Me.buttonCloseList.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseList.Location = New System.Drawing.Point(675, 0)
-        Me.buttonCloseList.Name = "buttonCloseList"
-        Me.buttonCloseList.Size = New System.Drawing.Size(16, 14)
-        Me.buttonCloseList.TabIndex = 5
-        '
-        'Splitter1
-        '
-        Me.Splitter1.Location = New System.Drawing.Point(160, 28)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(3, 501)
-        Me.Splitter1.TabIndex = 4
-        Me.Splitter1.TabStop = False
         '
         'panelRight
         '
         Me.panelRight.Controls.Add(Me.panelSecondTree)
-        Me.panelRight.Dock = System.Windows.Forms.DockStyle.Right
-        Me.panelRight.Location = New System.Drawing.Point(712, 28)
+        Me.panelRight.DockPadding.All = 6
+        Me.panelRight.Location = New System.Drawing.Point(344, 8)
         Me.panelRight.Name = "panelRight"
-        Me.panelRight.Size = New System.Drawing.Size(144, 322)
+        Me.panelRight.Size = New System.Drawing.Size(144, 160)
         Me.panelRight.TabIndex = 6
         '
         'panelSecondTree
         '
         Me.panelSecondTree.Controls.Add(Me.tabControlTools)
-        Me.panelSecondTree.Controls.Add(Me.panelToolsTitle)
         Me.panelSecondTree.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelSecondTree.Location = New System.Drawing.Point(0, 0)
+        Me.panelSecondTree.Location = New System.Drawing.Point(6, 6)
         Me.panelSecondTree.Name = "panelSecondTree"
-        Me.panelSecondTree.Size = New System.Drawing.Size(144, 322)
+        Me.panelSecondTree.Size = New System.Drawing.Size(132, 148)
         Me.panelSecondTree.TabIndex = 2
         '
         'tabControlTools
@@ -1986,10 +1835,10 @@ Public Class frmDomainMapBrowser
         Me.tabControlTools.AllowDrop = True
         Me.tabControlTools.Controls.Add(Me.tabToolsPreview)
         Me.tabControlTools.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tabControlTools.Location = New System.Drawing.Point(0, 16)
+        Me.tabControlTools.Location = New System.Drawing.Point(0, 0)
         Me.tabControlTools.Name = "tabControlTools"
         Me.tabControlTools.SelectedIndex = 0
-        Me.tabControlTools.Size = New System.Drawing.Size(144, 306)
+        Me.tabControlTools.Size = New System.Drawing.Size(132, 148)
         Me.tabControlTools.TabIndex = 2
         '
         'tabToolsPreview
@@ -1998,7 +1847,7 @@ Public Class frmDomainMapBrowser
         Me.tabToolsPreview.Controls.Add(Me.mapTreeViewPreview)
         Me.tabToolsPreview.Location = New System.Drawing.Point(4, 22)
         Me.tabToolsPreview.Name = "tabToolsPreview"
-        Me.tabToolsPreview.Size = New System.Drawing.Size(136, 280)
+        Me.tabToolsPreview.Size = New System.Drawing.Size(124, 122)
         Me.tabToolsPreview.TabIndex = 1
         Me.tabToolsPreview.Text = "Preview"
         '
@@ -2013,7 +1862,7 @@ Public Class frmDomainMapBrowser
         Me.treePreviewClassesToCode.IsVerifyTree = False
         Me.treePreviewClassesToCode.Location = New System.Drawing.Point(0, 0)
         Me.treePreviewClassesToCode.Name = "treePreviewClassesToCode"
-        Me.treePreviewClassesToCode.Size = New System.Drawing.Size(136, 280)
+        Me.treePreviewClassesToCode.Size = New System.Drawing.Size(124, 122)
         Me.treePreviewClassesToCode.TabIndex = 1
         Me.treePreviewClassesToCode.Visible = False
         '
@@ -2028,55 +1877,8 @@ Public Class frmDomainMapBrowser
         Me.mapTreeViewPreview.IsVerifyTree = False
         Me.mapTreeViewPreview.Location = New System.Drawing.Point(0, 0)
         Me.mapTreeViewPreview.Name = "mapTreeViewPreview"
-        Me.mapTreeViewPreview.Size = New System.Drawing.Size(136, 280)
+        Me.mapTreeViewPreview.Size = New System.Drawing.Size(124, 122)
         Me.mapTreeViewPreview.TabIndex = 0
-        '
-        'panelToolsTitle
-        '
-        Me.panelToolsTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panelToolsTitle.Controls.Add(Me.Label3)
-        Me.panelToolsTitle.Controls.Add(Me.buttonSwapPosTools)
-        Me.panelToolsTitle.Controls.Add(Me.buttonCloseTools)
-        Me.panelToolsTitle.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelToolsTitle.Location = New System.Drawing.Point(0, 0)
-        Me.panelToolsTitle.Name = "panelToolsTitle"
-        Me.panelToolsTitle.Size = New System.Drawing.Size(144, 16)
-        Me.panelToolsTitle.TabIndex = 3
-        '
-        'Label3
-        '
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(0, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(111, 14)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Tools"
-        '
-        'buttonSwapPosTools
-        '
-        Me.buttonSwapPosTools.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosTools.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonSwapPosTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonSwapPosTools.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosTools.ImageIndex = 2
-        Me.buttonSwapPosTools.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosTools.Location = New System.Drawing.Point(111, 0)
-        Me.buttonSwapPosTools.Name = "buttonSwapPosTools"
-        Me.buttonSwapPosTools.Size = New System.Drawing.Size(16, 14)
-        Me.buttonSwapPosTools.TabIndex = 5
-        '
-        'buttonCloseTools
-        '
-        Me.buttonCloseTools.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseTools.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonCloseTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCloseTools.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseTools.ImageIndex = 0
-        Me.buttonCloseTools.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseTools.Location = New System.Drawing.Point(127, 0)
-        Me.buttonCloseTools.Name = "buttonCloseTools"
-        Me.buttonCloseTools.Size = New System.Drawing.Size(15, 14)
-        Me.buttonCloseTools.TabIndex = 4
         '
         'MainMenu1
         '
@@ -2611,10 +2413,10 @@ Public Class frmDomainMapBrowser
         'panelMain
         '
         Me.panelMain.Controls.Add(Me.panelDocuments)
-        Me.panelMain.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelMain.Location = New System.Drawing.Point(322, 28)
+        Me.panelMain.DockPadding.All = 6
+        Me.panelMain.Location = New System.Drawing.Point(496, 8)
         Me.panelMain.Name = "panelMain"
-        Me.panelMain.Size = New System.Drawing.Size(387, 322)
+        Me.panelMain.Size = New System.Drawing.Size(264, 240)
         Me.panelMain.TabIndex = 7
         '
         'panelDocuments
@@ -2622,9 +2424,9 @@ Public Class frmDomainMapBrowser
         Me.panelDocuments.Controls.Add(Me.tabControlDocuments)
         Me.panelDocuments.Controls.Add(Me.panelMainTitle)
         Me.panelDocuments.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelDocuments.Location = New System.Drawing.Point(0, 0)
+        Me.panelDocuments.Location = New System.Drawing.Point(6, 6)
         Me.panelDocuments.Name = "panelDocuments"
-        Me.panelDocuments.Size = New System.Drawing.Size(387, 322)
+        Me.panelDocuments.Size = New System.Drawing.Size(252, 228)
         Me.panelDocuments.TabIndex = 2
         '
         'tabControlDocuments
@@ -2640,7 +2442,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlDocuments.Multiline = True
         Me.tabControlDocuments.Name = "tabControlDocuments"
         Me.tabControlDocuments.SelectedIndex = 0
-        Me.tabControlDocuments.Size = New System.Drawing.Size(387, 306)
+        Me.tabControlDocuments.Size = New System.Drawing.Size(252, 212)
         Me.tabControlDocuments.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.tabControlDocuments, "When you have generated source code documents with ObjectMapper, you can find the" & _
         "m under the Files node under your Synch Config in the tree view, and edit them h" & _
@@ -2651,7 +2453,7 @@ Public Class frmDomainMapBrowser
         Me.tabPageMainUml.Controls.Add(Me.panelTreeMap)
         Me.tabPageMainUml.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainUml.Name = "tabPageMainUml"
-        Me.tabPageMainUml.Size = New System.Drawing.Size(379, 280)
+        Me.tabPageMainUml.Size = New System.Drawing.Size(244, 186)
         Me.tabPageMainUml.TabIndex = 0
         Me.tabPageMainUml.Text = "Uml"
         '
@@ -2662,7 +2464,7 @@ Public Class frmDomainMapBrowser
         Me.panelTreeMap.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelTreeMap.Location = New System.Drawing.Point(0, 0)
         Me.panelTreeMap.Name = "panelTreeMap"
-        Me.panelTreeMap.Size = New System.Drawing.Size(379, 280)
+        Me.panelTreeMap.Size = New System.Drawing.Size(244, 186)
         Me.panelTreeMap.TabIndex = 1
         '
         'tabControlUmlDoc
@@ -2672,7 +2474,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUmlDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlUmlDoc.Name = "tabControlUmlDoc"
         Me.tabControlUmlDoc.SelectedIndex = 0
-        Me.tabControlUmlDoc.Size = New System.Drawing.Size(379, 264)
+        Me.tabControlUmlDoc.Size = New System.Drawing.Size(244, 170)
         Me.tabControlUmlDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUmlDoc.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.tabControlUmlDoc, "To create a UML document, mark your domain in the tree view and then press the re" & _
@@ -2688,7 +2490,7 @@ Public Class frmDomainMapBrowser
         Me.panelUmlTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelUmlTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelUmlTitle.Name = "panelUmlTitle"
-        Me.panelUmlTitle.Size = New System.Drawing.Size(379, 16)
+        Me.panelUmlTitle.Size = New System.Drawing.Size(244, 16)
         Me.panelUmlTitle.TabIndex = 9
         '
         'labelUmlTitle
@@ -2697,7 +2499,7 @@ Public Class frmDomainMapBrowser
         Me.labelUmlTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelUmlTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelUmlTitle.Name = "labelUmlTitle"
-        Me.labelUmlTitle.Size = New System.Drawing.Size(329, 14)
+        Me.labelUmlTitle.Size = New System.Drawing.Size(194, 14)
         Me.labelUmlTitle.TabIndex = 0
         '
         'buttonPrevUmlDoc
@@ -2708,7 +2510,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevUmlDoc.ImageIndex = 2
         Me.buttonPrevUmlDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevUmlDoc.Location = New System.Drawing.Point(329, 0)
+        Me.buttonPrevUmlDoc.Location = New System.Drawing.Point(194, 0)
         Me.buttonPrevUmlDoc.Name = "buttonPrevUmlDoc"
         Me.buttonPrevUmlDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevUmlDoc.TabIndex = 3
@@ -2721,7 +2523,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextUmlDoc.ImageIndex = 4
         Me.buttonNextUmlDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonNextUmlDoc.Location = New System.Drawing.Point(345, 0)
+        Me.buttonNextUmlDoc.Location = New System.Drawing.Point(210, 0)
         Me.buttonNextUmlDoc.Name = "buttonNextUmlDoc"
         Me.buttonNextUmlDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextUmlDoc.TabIndex = 2
@@ -2733,7 +2535,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseUmlDoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCloseUmlDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonCloseUmlDoc.Image = CType(resources.GetObject("buttonCloseUmlDoc.Image"), System.Drawing.Image)
-        Me.buttonCloseUmlDoc.Location = New System.Drawing.Point(362, 0)
+        Me.buttonCloseUmlDoc.Location = New System.Drawing.Point(227, 0)
         Me.buttonCloseUmlDoc.Name = "buttonCloseUmlDoc"
         Me.buttonCloseUmlDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseUmlDoc.TabIndex = 1
@@ -2742,9 +2544,9 @@ Public Class frmDomainMapBrowser
         '
         Me.tabPageMainCustom.Controls.Add(Me.tabControlUserDoc)
         Me.tabPageMainCustom.Controls.Add(Me.panelDocTitle)
-        Me.tabPageMainCustom.Location = New System.Drawing.Point(4, 40)
+        Me.tabPageMainCustom.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainCustom.Name = "tabPageMainCustom"
-        Me.tabPageMainCustom.Size = New System.Drawing.Size(202, 138)
+        Me.tabPageMainCustom.Size = New System.Drawing.Size(244, 186)
         Me.tabPageMainCustom.TabIndex = 1
         Me.tabPageMainCustom.Text = "Custom"
         '
@@ -2755,7 +2557,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUserDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlUserDoc.Name = "tabControlUserDoc"
         Me.tabControlUserDoc.SelectedIndex = 0
-        Me.tabControlUserDoc.Size = New System.Drawing.Size(202, 122)
+        Me.tabControlUserDoc.Size = New System.Drawing.Size(244, 170)
         Me.tabControlUserDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUserDoc.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.tabControlUserDoc, "When you have generated source code documents with ObjectMapper, you can find the" & _
@@ -2772,7 +2574,7 @@ Public Class frmDomainMapBrowser
         Me.panelDocTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelDocTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelDocTitle.Name = "panelDocTitle"
-        Me.panelDocTitle.Size = New System.Drawing.Size(202, 16)
+        Me.panelDocTitle.Size = New System.Drawing.Size(244, 16)
         Me.panelDocTitle.TabIndex = 2
         '
         'labelUserDocTitle
@@ -2781,7 +2583,7 @@ Public Class frmDomainMapBrowser
         Me.labelUserDocTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelUserDocTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelUserDocTitle.Name = "labelUserDocTitle"
-        Me.labelUserDocTitle.Size = New System.Drawing.Size(152, 14)
+        Me.labelUserDocTitle.Size = New System.Drawing.Size(194, 14)
         Me.labelUserDocTitle.TabIndex = 0
         '
         'buttonPrevUserDoc
@@ -2792,7 +2594,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevUserDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevUserDoc.ImageIndex = 2
         Me.buttonPrevUserDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevUserDoc.Location = New System.Drawing.Point(152, 0)
+        Me.buttonPrevUserDoc.Location = New System.Drawing.Point(194, 0)
         Me.buttonPrevUserDoc.Name = "buttonPrevUserDoc"
         Me.buttonPrevUserDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevUserDoc.TabIndex = 5
@@ -2805,7 +2607,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextUserDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextUserDoc.ImageIndex = 4
         Me.buttonNextUserDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonNextUserDoc.Location = New System.Drawing.Point(168, 0)
+        Me.buttonNextUserDoc.Location = New System.Drawing.Point(210, 0)
         Me.buttonNextUserDoc.Name = "buttonNextUserDoc"
         Me.buttonNextUserDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextUserDoc.TabIndex = 4
@@ -2817,7 +2619,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseUserDoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCloseUserDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonCloseUserDoc.Image = CType(resources.GetObject("buttonCloseUserDoc.Image"), System.Drawing.Image)
-        Me.buttonCloseUserDoc.Location = New System.Drawing.Point(185, 0)
+        Me.buttonCloseUserDoc.Location = New System.Drawing.Point(227, 0)
         Me.buttonCloseUserDoc.Name = "buttonCloseUserDoc"
         Me.buttonCloseUserDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseUserDoc.TabIndex = 1
@@ -2826,9 +2628,9 @@ Public Class frmDomainMapBrowser
         '
         Me.tabPageMainPreview.Controls.Add(Me.tabControlPreviewDoc)
         Me.tabPageMainPreview.Controls.Add(Me.panelPreviewDocTitle)
-        Me.tabPageMainPreview.Location = New System.Drawing.Point(4, 40)
+        Me.tabPageMainPreview.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainPreview.Name = "tabPageMainPreview"
-        Me.tabPageMainPreview.Size = New System.Drawing.Size(202, 138)
+        Me.tabPageMainPreview.Size = New System.Drawing.Size(244, 186)
         Me.tabPageMainPreview.TabIndex = 2
         Me.tabPageMainPreview.Text = "Preview"
         '
@@ -2839,7 +2641,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlPreviewDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlPreviewDoc.Name = "tabControlPreviewDoc"
         Me.tabControlPreviewDoc.SelectedIndex = 0
-        Me.tabControlPreviewDoc.Size = New System.Drawing.Size(202, 122)
+        Me.tabControlPreviewDoc.Size = New System.Drawing.Size(244, 170)
         Me.tabControlPreviewDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlPreviewDoc.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.tabControlPreviewDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
@@ -2856,7 +2658,7 @@ Public Class frmDomainMapBrowser
         Me.panelPreviewDocTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelPreviewDocTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelPreviewDocTitle.Name = "panelPreviewDocTitle"
-        Me.panelPreviewDocTitle.Size = New System.Drawing.Size(202, 16)
+        Me.panelPreviewDocTitle.Size = New System.Drawing.Size(244, 16)
         Me.panelPreviewDocTitle.TabIndex = 4
         '
         'labelPreviewDocTitle
@@ -2865,7 +2667,7 @@ Public Class frmDomainMapBrowser
         Me.labelPreviewDocTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelPreviewDocTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelPreviewDocTitle.Name = "labelPreviewDocTitle"
-        Me.labelPreviewDocTitle.Size = New System.Drawing.Size(152, 14)
+        Me.labelPreviewDocTitle.Size = New System.Drawing.Size(194, 14)
         Me.labelPreviewDocTitle.TabIndex = 0
         '
         'buttonPrevPreviewDoc
@@ -2876,7 +2678,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevPreviewDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevPreviewDoc.ImageIndex = 2
         Me.buttonPrevPreviewDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevPreviewDoc.Location = New System.Drawing.Point(152, 0)
+        Me.buttonPrevPreviewDoc.Location = New System.Drawing.Point(194, 0)
         Me.buttonPrevPreviewDoc.Name = "buttonPrevPreviewDoc"
         Me.buttonPrevPreviewDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevPreviewDoc.TabIndex = 3
@@ -2889,7 +2691,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextPreviewDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextPreviewDoc.ImageIndex = 4
         Me.buttonNextPreviewDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonNextPreviewDoc.Location = New System.Drawing.Point(168, 0)
+        Me.buttonNextPreviewDoc.Location = New System.Drawing.Point(210, 0)
         Me.buttonNextPreviewDoc.Name = "buttonNextPreviewDoc"
         Me.buttonNextPreviewDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextPreviewDoc.TabIndex = 2
@@ -2901,7 +2703,7 @@ Public Class frmDomainMapBrowser
         Me.buttonClosePreviewDoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonClosePreviewDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonClosePreviewDoc.Image = CType(resources.GetObject("buttonClosePreviewDoc.Image"), System.Drawing.Image)
-        Me.buttonClosePreviewDoc.Location = New System.Drawing.Point(185, 0)
+        Me.buttonClosePreviewDoc.Location = New System.Drawing.Point(227, 0)
         Me.buttonClosePreviewDoc.Name = "buttonClosePreviewDoc"
         Me.buttonClosePreviewDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonClosePreviewDoc.TabIndex = 1
@@ -2910,9 +2712,9 @@ Public Class frmDomainMapBrowser
         '
         Me.tabPageMainXmlBehind.Controls.Add(Me.tabControlXmlBehind)
         Me.tabPageMainXmlBehind.Controls.Add(Me.panelXmlBehindTitle)
-        Me.tabPageMainXmlBehind.Location = New System.Drawing.Point(4, 40)
+        Me.tabPageMainXmlBehind.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainXmlBehind.Name = "tabPageMainXmlBehind"
-        Me.tabPageMainXmlBehind.Size = New System.Drawing.Size(202, 138)
+        Me.tabPageMainXmlBehind.Size = New System.Drawing.Size(244, 186)
         Me.tabPageMainXmlBehind.TabIndex = 3
         Me.tabPageMainXmlBehind.Text = "Xml Behind"
         '
@@ -2923,7 +2725,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlXmlBehind.Location = New System.Drawing.Point(0, 16)
         Me.tabControlXmlBehind.Name = "tabControlXmlBehind"
         Me.tabControlXmlBehind.SelectedIndex = 0
-        Me.tabControlXmlBehind.Size = New System.Drawing.Size(202, 122)
+        Me.tabControlXmlBehind.Size = New System.Drawing.Size(244, 170)
         Me.tabControlXmlBehind.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlXmlBehind.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.tabControlXmlBehind, "To edit the XML behind for a domain model, mark your domain in the tree view and " & _
@@ -2941,7 +2743,7 @@ Public Class frmDomainMapBrowser
         Me.panelXmlBehindTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelXmlBehindTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelXmlBehindTitle.Name = "panelXmlBehindTitle"
-        Me.panelXmlBehindTitle.Size = New System.Drawing.Size(202, 16)
+        Me.panelXmlBehindTitle.Size = New System.Drawing.Size(244, 16)
         Me.panelXmlBehindTitle.TabIndex = 3
         '
         'labelXmlBehindTitle
@@ -2950,7 +2752,7 @@ Public Class frmDomainMapBrowser
         Me.labelXmlBehindTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelXmlBehindTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelXmlBehindTitle.Name = "labelXmlBehindTitle"
-        Me.labelXmlBehindTitle.Size = New System.Drawing.Size(120, 14)
+        Me.labelXmlBehindTitle.Size = New System.Drawing.Size(162, 14)
         Me.labelXmlBehindTitle.TabIndex = 0
         '
         'buttonApplyXmlBehind
@@ -2960,7 +2762,7 @@ Public Class frmDomainMapBrowser
         Me.buttonApplyXmlBehind.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonApplyXmlBehind.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonApplyXmlBehind.Image = CType(resources.GetObject("buttonApplyXmlBehind.Image"), System.Drawing.Image)
-        Me.buttonApplyXmlBehind.Location = New System.Drawing.Point(120, 0)
+        Me.buttonApplyXmlBehind.Location = New System.Drawing.Point(162, 0)
         Me.buttonApplyXmlBehind.Name = "buttonApplyXmlBehind"
         Me.buttonApplyXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonApplyXmlBehind.TabIndex = 3
@@ -2972,7 +2774,7 @@ Public Class frmDomainMapBrowser
         Me.buttonDiscardXmlBehind.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonDiscardXmlBehind.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonDiscardXmlBehind.Image = CType(resources.GetObject("buttonDiscardXmlBehind.Image"), System.Drawing.Image)
-        Me.buttonDiscardXmlBehind.Location = New System.Drawing.Point(136, 0)
+        Me.buttonDiscardXmlBehind.Location = New System.Drawing.Point(178, 0)
         Me.buttonDiscardXmlBehind.Name = "buttonDiscardXmlBehind"
         Me.buttonDiscardXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonDiscardXmlBehind.TabIndex = 2
@@ -2985,7 +2787,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevXmlBehind.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevXmlBehind.ImageIndex = 2
         Me.buttonPrevXmlBehind.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevXmlBehind.Location = New System.Drawing.Point(152, 0)
+        Me.buttonPrevXmlBehind.Location = New System.Drawing.Point(194, 0)
         Me.buttonPrevXmlBehind.Name = "buttonPrevXmlBehind"
         Me.buttonPrevXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevXmlBehind.TabIndex = 5
@@ -2998,7 +2800,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextXmlBehind.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextXmlBehind.ImageIndex = 4
         Me.buttonNextXmlBehind.ImageList = Me.imageListSmallButtons
-        Me.buttonNextXmlBehind.Location = New System.Drawing.Point(168, 0)
+        Me.buttonNextXmlBehind.Location = New System.Drawing.Point(210, 0)
         Me.buttonNextXmlBehind.Name = "buttonNextXmlBehind"
         Me.buttonNextXmlBehind.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextXmlBehind.TabIndex = 4
@@ -3010,7 +2812,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseXmlBehind.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCloseXmlBehind.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonCloseXmlBehind.Image = CType(resources.GetObject("buttonCloseXmlBehind.Image"), System.Drawing.Image)
-        Me.buttonCloseXmlBehind.Location = New System.Drawing.Point(185, 0)
+        Me.buttonCloseXmlBehind.Location = New System.Drawing.Point(227, 0)
         Me.buttonCloseXmlBehind.Name = "buttonCloseXmlBehind"
         Me.buttonCloseXmlBehind.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseXmlBehind.TabIndex = 1
@@ -3019,9 +2821,9 @@ Public Class frmDomainMapBrowser
         '
         Me.tabPageMainCodeMap.Controls.Add(Me.tabControlCodeMapDoc)
         Me.tabPageMainCodeMap.Controls.Add(Me.Panel1)
-        Me.tabPageMainCodeMap.Location = New System.Drawing.Point(4, 40)
+        Me.tabPageMainCodeMap.Location = New System.Drawing.Point(4, 22)
         Me.tabPageMainCodeMap.Name = "tabPageMainCodeMap"
-        Me.tabPageMainCodeMap.Size = New System.Drawing.Size(202, 138)
+        Me.tabPageMainCodeMap.Size = New System.Drawing.Size(244, 186)
         Me.tabPageMainCodeMap.TabIndex = 4
         Me.tabPageMainCodeMap.Text = "Code"
         '
@@ -3032,7 +2834,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlCodeMapDoc.Location = New System.Drawing.Point(0, 16)
         Me.tabControlCodeMapDoc.Name = "tabControlCodeMapDoc"
         Me.tabControlCodeMapDoc.SelectedIndex = 0
-        Me.tabControlCodeMapDoc.Size = New System.Drawing.Size(202, 122)
+        Me.tabControlCodeMapDoc.Size = New System.Drawing.Size(244, 170)
         Me.tabControlCodeMapDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlCodeMapDoc.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.tabControlCodeMapDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
@@ -3049,7 +2851,7 @@ Public Class frmDomainMapBrowser
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(202, 16)
+        Me.Panel1.Size = New System.Drawing.Size(244, 16)
         Me.Panel1.TabIndex = 6
         '
         'labelCodeMapDocTitle
@@ -3058,7 +2860,7 @@ Public Class frmDomainMapBrowser
         Me.labelCodeMapDocTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.labelCodeMapDocTitle.Location = New System.Drawing.Point(0, 0)
         Me.labelCodeMapDocTitle.Name = "labelCodeMapDocTitle"
-        Me.labelCodeMapDocTitle.Size = New System.Drawing.Size(152, 14)
+        Me.labelCodeMapDocTitle.Size = New System.Drawing.Size(194, 14)
         Me.labelCodeMapDocTitle.TabIndex = 0
         '
         'buttonPrevCodeMapDoc
@@ -3069,7 +2871,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevCodeMapDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonPrevCodeMapDoc.ImageIndex = 2
         Me.buttonPrevCodeMapDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonPrevCodeMapDoc.Location = New System.Drawing.Point(152, 0)
+        Me.buttonPrevCodeMapDoc.Location = New System.Drawing.Point(194, 0)
         Me.buttonPrevCodeMapDoc.Name = "buttonPrevCodeMapDoc"
         Me.buttonPrevCodeMapDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevCodeMapDoc.TabIndex = 3
@@ -3082,7 +2884,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextCodeMapDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonNextCodeMapDoc.ImageIndex = 4
         Me.buttonNextCodeMapDoc.ImageList = Me.imageListSmallButtons
-        Me.buttonNextCodeMapDoc.Location = New System.Drawing.Point(168, 0)
+        Me.buttonNextCodeMapDoc.Location = New System.Drawing.Point(210, 0)
         Me.buttonNextCodeMapDoc.Name = "buttonNextCodeMapDoc"
         Me.buttonNextCodeMapDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextCodeMapDoc.TabIndex = 2
@@ -3094,7 +2896,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseCodeMapDoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCloseCodeMapDoc.ForeColor = System.Drawing.SystemColors.Info
         Me.buttonCloseCodeMapDoc.Image = CType(resources.GetObject("buttonCloseCodeMapDoc.Image"), System.Drawing.Image)
-        Me.buttonCloseCodeMapDoc.Location = New System.Drawing.Point(185, 0)
+        Me.buttonCloseCodeMapDoc.Location = New System.Drawing.Point(227, 0)
         Me.buttonCloseCodeMapDoc.Name = "buttonCloseCodeMapDoc"
         Me.buttonCloseCodeMapDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseCodeMapDoc.TabIndex = 1
@@ -3102,13 +2904,10 @@ Public Class frmDomainMapBrowser
         'panelMainTitle
         '
         Me.panelMainTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panelMainTitle.Controls.Add(Me.Label5)
-        Me.panelMainTitle.Controls.Add(Me.buttonSwapPosMain)
-        Me.panelMainTitle.Controls.Add(Me.buttonCloseMain)
         Me.panelMainTitle.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelMainTitle.Location = New System.Drawing.Point(0, 0)
         Me.panelMainTitle.Name = "panelMainTitle"
-        Me.panelMainTitle.Size = New System.Drawing.Size(387, 16)
+        Me.panelMainTitle.Size = New System.Drawing.Size(252, 16)
         Me.panelMainTitle.TabIndex = 2
         '
         'Label5
@@ -3116,61 +2915,17 @@ Public Class frmDomainMapBrowser
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label5.Location = New System.Drawing.Point(0, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(353, 14)
+        Me.Label5.Size = New System.Drawing.Size(848, 961)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "Documents"
-        '
-        'buttonSwapPosMain
-        '
-        Me.buttonSwapPosMain.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosMain.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonSwapPosMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonSwapPosMain.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosMain.ImageIndex = 4
-        Me.buttonSwapPosMain.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosMain.Location = New System.Drawing.Point(353, 0)
-        Me.buttonSwapPosMain.Name = "buttonSwapPosMain"
-        Me.buttonSwapPosMain.Size = New System.Drawing.Size(16, 14)
-        Me.buttonSwapPosMain.TabIndex = 4
-        '
-        'buttonCloseMain
-        '
-        Me.buttonCloseMain.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseMain.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonCloseMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCloseMain.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseMain.ImageIndex = 0
-        Me.buttonCloseMain.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseMain.Location = New System.Drawing.Point(369, 0)
-        Me.buttonCloseMain.Name = "buttonCloseMain"
-        Me.buttonCloseMain.Size = New System.Drawing.Size(16, 14)
-        Me.buttonCloseMain.TabIndex = 3
         '
         'mapPropertyGrid
         '
         Me.mapPropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.mapPropertyGrid.Location = New System.Drawing.Point(0, 16)
+        Me.mapPropertyGrid.Location = New System.Drawing.Point(6, 6)
         Me.mapPropertyGrid.Name = "mapPropertyGrid"
-        Me.mapPropertyGrid.Size = New System.Drawing.Size(157, 306)
+        Me.mapPropertyGrid.Size = New System.Drawing.Size(145, 148)
         Me.mapPropertyGrid.TabIndex = 1
-        '
-        'Splitter4
-        '
-        Me.Splitter4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter4.Location = New System.Drawing.Point(163, 350)
-        Me.Splitter4.Name = "Splitter4"
-        Me.Splitter4.Size = New System.Drawing.Size(693, 3)
-        Me.Splitter4.TabIndex = 8
-        Me.Splitter4.TabStop = False
-        '
-        'Splitter5
-        '
-        Me.Splitter5.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter5.Location = New System.Drawing.Point(709, 28)
-        Me.Splitter5.Name = "Splitter5"
-        Me.Splitter5.Size = New System.Drawing.Size(3, 322)
-        Me.Splitter5.TabIndex = 9
-        Me.Splitter5.TabStop = False
         '
         'menuDomain
         '
@@ -4582,7 +4337,7 @@ Public Class frmDomainMapBrowser
         Me.ToolBar1.Location = New System.Drawing.Point(0, 0)
         Me.ToolBar1.Name = "ToolBar1"
         Me.ToolBar1.ShowToolTips = True
-        Me.ToolBar1.Size = New System.Drawing.Size(856, 28)
+        Me.ToolBar1.Size = New System.Drawing.Size(848, 28)
         Me.ToolBar1.TabIndex = 10
         '
         'toolBarButtonBack
@@ -5144,71 +4899,11 @@ Public Class frmDomainMapBrowser
         'panelProperties
         '
         Me.panelProperties.Controls.Add(Me.mapPropertyGrid)
-        Me.panelProperties.Controls.Add(Me.panelPropertiesTitle)
-        Me.panelProperties.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelProperties.Location = New System.Drawing.Point(163, 28)
+        Me.panelProperties.DockPadding.All = 6
+        Me.panelProperties.Location = New System.Drawing.Point(8, 8)
         Me.panelProperties.Name = "panelProperties"
-        Me.panelProperties.Size = New System.Drawing.Size(157, 322)
+        Me.panelProperties.Size = New System.Drawing.Size(157, 160)
         Me.panelProperties.TabIndex = 11
-        '
-        'panelPropertiesTitle
-        '
-        Me.panelPropertiesTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panelPropertiesTitle.Controls.Add(Me.Label1)
-        Me.panelPropertiesTitle.Controls.Add(Me.buttonSwapPosProperties)
-        Me.panelPropertiesTitle.Controls.Add(Me.buttonCloseProperties)
-        Me.panelPropertiesTitle.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelPropertiesTitle.Location = New System.Drawing.Point(0, 0)
-        Me.panelPropertiesTitle.Name = "panelPropertiesTitle"
-        Me.panelPropertiesTitle.Size = New System.Drawing.Size(157, 16)
-        Me.panelPropertiesTitle.TabIndex = 3
-        '
-        'Label1
-        '
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Location = New System.Drawing.Point(0, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(123, 14)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Properties"
-        '
-        'buttonSwapPosProperties
-        '
-        Me.buttonSwapPosProperties.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosProperties.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonSwapPosProperties.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonSwapPosProperties.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonSwapPosProperties.ImageIndex = 4
-        Me.buttonSwapPosProperties.ImageList = Me.imageListSmallButtons
-        Me.buttonSwapPosProperties.Location = New System.Drawing.Point(123, 0)
-        Me.buttonSwapPosProperties.Name = "buttonSwapPosProperties"
-        Me.buttonSwapPosProperties.Size = New System.Drawing.Size(16, 14)
-        Me.buttonSwapPosProperties.TabIndex = 4
-        '
-        'buttonCloseProperties
-        '
-        Me.buttonCloseProperties.BackColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseProperties.Dock = System.Windows.Forms.DockStyle.Right
-        Me.buttonCloseProperties.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCloseProperties.ForeColor = System.Drawing.SystemColors.Control
-        Me.buttonCloseProperties.ImageIndex = 0
-        Me.buttonCloseProperties.ImageList = Me.imageListSmallButtons
-        Me.buttonCloseProperties.Location = New System.Drawing.Point(139, 0)
-        Me.buttonCloseProperties.Name = "buttonCloseProperties"
-        Me.buttonCloseProperties.Size = New System.Drawing.Size(16, 14)
-        Me.buttonCloseProperties.TabIndex = 3
-        '
-        'Splitter2
-        '
-        Me.Splitter2.Location = New System.Drawing.Point(320, 28)
-        Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(2, 322)
-        Me.Splitter2.TabIndex = 12
-        Me.Splitter2.TabStop = False
-        '
-        'SourceCodePrintDocument1
-        '
-        Me.SourceCodePrintDocument1.Document = Nothing
         '
         'PrintPreviewDialog1
         '
@@ -5232,22 +4927,41 @@ Public Class frmDomainMapBrowser
         Me.deleteEnumValueMenuItem.Index = 0
         Me.deleteEnumValueMenuItem.Text = "Delete"
         '
+        'DockPanelContainer
+        '
+        Me.DockPanelContainer.Controls.Add(Me.panelProperties)
+        Me.DockPanelContainer.Controls.Add(Me.panelLeft)
+        Me.DockPanelContainer.Controls.Add(Me.panelRight)
+        Me.DockPanelContainer.Controls.Add(Me.panelBottom)
+        Me.DockPanelContainer.Controls.Add(Me.panelMain)
+        Me.DockPanelContainer.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.DockPanelContainer.Location = New System.Drawing.Point(0, 681)
+        Me.DockPanelContainer.Name = "DockPanelContainer"
+        Me.DockPanelContainer.Size = New System.Drawing.Size(848, 280)
+        Me.DockPanelContainer.TabIndex = 13
+        '
+        'dockPanel
+        '
+        Me.dockPanel.ActiveAutoHideContent = Nothing
+        Me.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dockPanel.DocumentStyle = WeifenLuo.WinFormsUI.DocumentStyles.DockingWindow
+        Me.dockPanel.Font = New System.Drawing.Font("Tahoma", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World, CType(0, Byte))
+        Me.dockPanel.Location = New System.Drawing.Point(0, 28)
+        Me.dockPanel.Name = "dockPanel"
+        Me.dockPanel.Size = New System.Drawing.Size(848, 629)
+        Me.dockPanel.TabIndex = 15
+        '
         'frmDomainMapBrowser
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.ClientSize = New System.Drawing.Size(856, 553)
-        Me.Controls.Add(Me.panelMain)
-        Me.Controls.Add(Me.Splitter5)
-        Me.Controls.Add(Me.panelRight)
-        Me.Controls.Add(Me.Splitter2)
-        Me.Controls.Add(Me.panelProperties)
-        Me.Controls.Add(Me.Splitter4)
-        Me.Controls.Add(Me.panelBottom)
-        Me.Controls.Add(Me.Splitter1)
-        Me.Controls.Add(Me.panelLeft)
+        Me.ClientSize = New System.Drawing.Size(848, 961)
+        Me.Controls.Add(Me.dockPanel)
         Me.Controls.Add(Me.panelStatus)
         Me.Controls.Add(Me.ToolBar1)
+        Me.Controls.Add(Me.DockPanelContainer)
+        Me.Controls.Add(Me.Label5)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.IsMdiContainer = True
         Me.Menu = Me.MainMenu1
         Me.Name = "frmDomainMapBrowser"
         Me.Text = "  Puzzle ObjectMapper"
@@ -5256,19 +4970,16 @@ Public Class frmDomainMapBrowser
         CType(Me.statusMessage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panelLeft.ResumeLayout(False)
         Me.panelPropGridMap.ResumeLayout(False)
-        Me.panelProjectTitle.ResumeLayout(False)
         Me.panelBottom.ResumeLayout(False)
         Me.tabControlMessages.ResumeLayout(False)
         Me.tabPageListView.ResumeLayout(False)
         Me.tabPageErrors.ResumeLayout(False)
         Me.tabPagePreviewList.ResumeLayout(False)
         Me.tabPageMessageList.ResumeLayout(False)
-        Me.panelListTitle.ResumeLayout(False)
         Me.panelRight.ResumeLayout(False)
         Me.panelSecondTree.ResumeLayout(False)
         Me.tabControlTools.ResumeLayout(False)
         Me.tabToolsPreview.ResumeLayout(False)
-        Me.panelToolsTitle.ResumeLayout(False)
         Me.panelMain.ResumeLayout(False)
         Me.panelDocuments.ResumeLayout(False)
         Me.tabControlDocuments.ResumeLayout(False)
@@ -5283,9 +4994,8 @@ Public Class frmDomainMapBrowser
         Me.panelXmlBehindTitle.ResumeLayout(False)
         Me.tabPageMainCodeMap.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.panelMainTitle.ResumeLayout(False)
         Me.panelProperties.ResumeLayout(False)
-        Me.panelPropertiesTitle.ResumeLayout(False)
+        Me.DockPanelContainer.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -6012,7 +5722,7 @@ Public Class frmDomainMapBrowser
 
                 Next
 
-                labelExplorer.Text = m_Project.Name
+                '      labelExplorer.Text = m_Project.Name
                 Me.Text = "  " & m_Project.Name
 
                 EnableToolbar(True)
@@ -6060,7 +5770,7 @@ Public Class frmDomainMapBrowser
 
         mapTreeView.LoadProject(m_Project)
 
-        labelExplorer.Text = m_Project.Name
+        '   labelExplorer.Text = m_Project.Name
         Me.Text = "  " & m_Project.Name
 
         m_ProjectDirty = True
@@ -7192,7 +6902,7 @@ Public Class frmDomainMapBrowser
 
     Public Sub ShowMain()
 
-        If Not panelMain.Visible Then
+        If Not dfMain.Visible Then
 
             ToggleMainVisibility()
 
@@ -15499,11 +15209,15 @@ Public Class frmDomainMapBrowser
 
     Private Sub frmDomainMapBrowser_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
 
+        dockPanel.SaveAsXml("layout.xml")
+
         If Not Quit() Then
 
             e.Cancel = True
 
         End If
+
+
 
     End Sub
 
@@ -15731,6 +15445,8 @@ Public Class frmDomainMapBrowser
 
     Private Sub frmDomainMapBrowser_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
+        Me.Show()
+
         mapListView.frmDomainMapBrowser = Me
 
         LogServices.mainForm = Me
@@ -15770,7 +15486,8 @@ Public Class frmDomainMapBrowser
             AddPropGridToTreeView()
 
         End If
-
+                
+        SetupDockingWindows()
     End Sub
 
 
@@ -20694,13 +20411,14 @@ Public Class frmDomainMapBrowser
 
     Private Sub ToggleProjectExplorerVisibility()
 
-        If panelLeft.Visible Then
+        If dfLeft.Visible Then
 
-            panelLeft.Visible = False
+
+            dfLeft.Hide()
 
         Else
 
-            panelLeft.Visible = True
+            dfLeft.Show(dockPanel)
 
         End If
 
@@ -20708,23 +20426,13 @@ Public Class frmDomainMapBrowser
 
     Private Sub TogglePropertiesVisibility()
 
-        If panelProperties.Visible Then
+        If dfProperties.Visible Then
 
-            panelProperties.Visible = False
-
-            If panelRight.Visible Or panelMain.Visible Then
-                If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
-                buttonSwapPosList.Visible = True
-            Else
-                panelBottom.Dock = DockStyle.Fill
-                buttonSwapPosList.Visible = False
-            End If
+            dfProperties.Hide()
 
         Else
 
-            panelProperties.Visible = True
-
-            If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
+            dfProperties.Show(dockPanel)
 
         End If
 
@@ -20733,38 +20441,13 @@ Public Class frmDomainMapBrowser
 
     Private Sub ToggleMainVisibility()
 
-        If panelMain.Visible Then
+        If dfMain.Visible Then
 
-            panelMain.Visible = False
-            panelRight.Dock = DockStyle.Fill
-            buttonSwapPosTools.Visible = False
-
-            If panelRight.Visible Then
-                If panelProperties.Dock = DockStyle.Fill Then panelProperties.Dock = DockStyle.Left
-                buttonSwapPosProperties.Visible = True
-            Else
-                panelProperties.Dock = DockStyle.Fill
-                buttonSwapPosProperties.Visible = False
-            End If
-
-            If panelRight.Visible Or panelProperties.Visible Then
-                If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
-                buttonSwapPosList.Visible = True
-            Else
-                panelBottom.Dock = DockStyle.Fill
-                buttonSwapPosList.Visible = False
-            End If
+            dfMain.Hide()
 
         Else
 
-            panelMain.Visible = True
-            buttonSwapPosList.Visible = True
-            buttonSwapPosTools.Visible = True
-            buttonSwapPosProperties.Visible = True
-
-            If panelProperties.Dock = DockStyle.Fill Then panelProperties.Dock = DockStyle.Left
-            If panelRight.Dock = DockStyle.Fill Then panelRight.Dock = DockStyle.Right
-            If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
+            dfMain.Show(dockPanel)
 
         End If
 
@@ -20772,37 +20455,15 @@ Public Class frmDomainMapBrowser
 
     Private Sub ToggleToolsVisibility()
 
-        If panelRight.Visible Then
+        If dfRight.Visible Then
 
-            panelRight.Visible = False
-            Splitter5.Enabled = False
-            buttonSwapPosMain.Visible = True
+            dfRight.Hide()
 
-            If panelMain.Visible Then
-                If panelProperties.Dock = DockStyle.Fill Then panelProperties.Dock = DockStyle.Left
-                buttonSwapPosProperties.Visible = True
-            Else
-                panelProperties.Dock = DockStyle.Fill
-                buttonSwapPosProperties.Visible = False
-            End If
-
-            If panelMain.Visible Or panelProperties.Visible Then
-                If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
-                buttonSwapPosList.Visible = True
-            Else
-                panelBottom.Dock = DockStyle.Fill
-                buttonSwapPosList.Visible = False
-            End If
 
         Else
 
-            Splitter5.Enabled = True
-            panelRight.Visible = True
-            buttonSwapPosList.Visible = True
-            buttonSwapPosMain.Visible = True
-            buttonSwapPosProperties.Visible = True
-            If panelProperties.Dock = DockStyle.Fill Then panelProperties.Dock = DockStyle.Left
-            If panelBottom.Dock = DockStyle.Fill Then panelBottom.Dock = DockStyle.Bottom
+
+            dfRight.Show(dockPanel)
 
         End If
 
@@ -20811,13 +20472,13 @@ Public Class frmDomainMapBrowser
 
     Private Sub ToggleMsgListVisibility()
 
-        If panelBottom.Visible Then
+        If dfBottom.Visible Then
 
-            panelBottom.Visible = False
+            dfBottom.Hide()
 
         Else
 
-            panelBottom.Visible = True
+            dfBottom.Show(dockPanel)
 
         End If
 
@@ -20860,51 +20521,13 @@ Public Class frmDomainMapBrowser
 
     Private Sub SetMainVisibility()
 
-        If Not panelMain.Visible Then
-
-            panelRight.Dock = DockStyle.Fill
-            buttonSwapPosTools.Visible = False
-
-            If panelRight.Visible Then
-                panelBottom.Dock = DockStyle.Bottom
-                buttonSwapPosList.Visible = True
-            Else
-                panelBottom.Dock = DockStyle.Fill
-                buttonSwapPosList.Visible = False
-            End If
-
-        Else
-
-            panelRight.Dock = DockStyle.Right
-            panelBottom.Dock = DockStyle.Bottom
-            buttonSwapPosList.Visible = True
-            buttonSwapPosTools.Visible = True
-
-        End If
+        
 
     End Sub
 
     Private Sub SetToolsVisibility()
 
-        If Not panelRight.Visible Then
-
-            buttonSwapPosMain.Visible = False
-
-            If panelMain.Visible Then
-                panelBottom.Dock = DockStyle.Bottom
-                buttonSwapPosList.Visible = True
-            Else
-                panelBottom.Dock = DockStyle.Fill
-                buttonSwapPosList.Visible = False
-            End If
-
-        Else
-
-            panelBottom.Dock = DockStyle.Bottom
-            buttonSwapPosList.Visible = True
-            buttonSwapPosMain.Visible = True
-
-        End If
+        
 
 
     End Sub
@@ -21385,217 +21008,33 @@ Public Class frmDomainMapBrowser
 #Region " Panels "
 
 
-    Private Sub panelProperties_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelProperties.Enter
 
-        Label1.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        Label1.ForeColor = Color.FromKnownColor(KnownColor.HighlightText)
-
-        buttonCloseProperties.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseProperties.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseProperties.ImageIndex = 1
-
-        buttonSwapPosProperties.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonSwapPosProperties.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        If buttonSwapPosProperties.ImageIndex = 2 Then
-            buttonSwapPosProperties.ImageIndex = 6
-        Else
-            buttonSwapPosProperties.ImageIndex = 7
-        End If
-
-    End Sub
-
-    Private Sub panelProperties_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelProperties.Leave
-
-        Label1.BackColor = Color.FromKnownColor(KnownColor.Control)
-        Label1.ForeColor = Color.FromKnownColor(KnownColor.ControlText)
-
-        buttonCloseProperties.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseProperties.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseProperties.ImageIndex = 0
-
-        buttonSwapPosProperties.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonSwapPosProperties.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        If buttonSwapPosProperties.ImageIndex = 6 Then
-            buttonSwapPosProperties.ImageIndex = 2
-        Else
-            buttonSwapPosProperties.ImageIndex = 4
-        End If
-
-    End Sub
-
-    Private Sub panelMain_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelMain.Enter
-
-        Label5.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        Label5.ForeColor = Color.FromKnownColor(KnownColor.HighlightText)
-
-        buttonCloseMain.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseMain.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseMain.ImageIndex = 1
-
-        buttonSwapPosMain.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonSwapPosMain.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        If buttonSwapPosMain.ImageIndex = 2 Then
-            buttonSwapPosMain.ImageIndex = 6
-        Else
-            buttonSwapPosMain.ImageIndex = 7
-        End If
-
-    End Sub
-
-    Private Sub panelMain_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelMain.Leave
-
-        Label5.BackColor = Color.FromKnownColor(KnownColor.Control)
-        Label5.ForeColor = Color.FromKnownColor(KnownColor.ControlText)
-
-        buttonCloseMain.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseMain.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseMain.ImageIndex = 0
-
-        buttonSwapPosMain.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonSwapPosMain.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        If buttonSwapPosMain.ImageIndex = 6 Then
-            buttonSwapPosMain.ImageIndex = 2
-        Else
-            buttonSwapPosMain.ImageIndex = 4
-        End If
-
-    End Sub
-
-    Private Sub panelLeft_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelLeft.Enter
-
-        labelExplorer.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        labelExplorer.ForeColor = Color.FromKnownColor(KnownColor.HighlightText)
-
-        buttonCloseExplorer.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseExplorer.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseExplorer.ImageIndex = 1
-
-        buttonSwapPosExplorer.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonSwapPosExplorer.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        If buttonSwapPosExplorer.ImageIndex = 2 Then
-            buttonSwapPosExplorer.ImageIndex = 6
-        Else
-            buttonSwapPosExplorer.ImageIndex = 7
-        End If
-
-    End Sub
-
-    Private Sub panelLeft_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelLeft.Leave
-
-        labelExplorer.BackColor = Color.FromKnownColor(KnownColor.Control)
-        labelExplorer.ForeColor = Color.FromKnownColor(KnownColor.ControlText)
-
-        buttonCloseExplorer.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseExplorer.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseExplorer.ImageIndex = 0
-
-        buttonSwapPosExplorer.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonSwapPosExplorer.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        If buttonSwapPosExplorer.ImageIndex = 6 Then
-            buttonSwapPosExplorer.ImageIndex = 2
-        Else
-            buttonSwapPosExplorer.ImageIndex = 4
-        End If
-    End Sub
-
-    Private Sub panelBottom_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelBottom.Enter
-
-        labelListTitle.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        labelListTitle.ForeColor = Color.FromKnownColor(KnownColor.HighlightText)
-
-        buttonCloseList.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseList.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseList.ImageIndex = 1
-
-        buttonSwapPosList.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonSwapPosList.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        If buttonSwapPosList.ImageIndex = 8 Then
-            buttonSwapPosList.ImageIndex = 9
-        Else
-            buttonSwapPosList.ImageIndex = 11
-        End If
-    End Sub
-
-    Private Sub panelBottom_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelBottom.Leave
-
-        labelListTitle.BackColor = Color.FromKnownColor(KnownColor.Control)
-        labelListTitle.ForeColor = Color.FromKnownColor(KnownColor.ControlText)
-
-        buttonCloseList.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseList.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseList.ImageIndex = 0
-
-        buttonSwapPosList.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonSwapPosList.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        If buttonSwapPosList.ImageIndex = 9 Then
-            buttonSwapPosList.ImageIndex = 8
-        Else
-            buttonSwapPosList.ImageIndex = 10
-        End If
-    End Sub
-
-    Private Sub panelRight_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelRight.Enter
-
-        Label3.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        Label3.ForeColor = Color.FromKnownColor(KnownColor.HighlightText)
-
-        buttonCloseTools.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseTools.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonCloseTools.ImageIndex = 1
-
-        buttonSwapPosTools.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        buttonSwapPosTools.ForeColor = Color.FromKnownColor(KnownColor.Highlight)
-        If buttonSwapPosTools.ImageIndex = 2 Then
-            buttonSwapPosTools.ImageIndex = 6
-        Else
-            buttonSwapPosTools.ImageIndex = 7
-        End If
-    End Sub
-
-    Private Sub panelRight_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles panelRight.Leave
-
-        Label3.BackColor = Color.FromKnownColor(KnownColor.Control)
-        Label3.ForeColor = Color.FromKnownColor(KnownColor.ControlText)
-
-        buttonCloseTools.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseTools.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        buttonCloseTools.ImageIndex = 0
-
-        buttonSwapPosTools.BackColor = Color.FromKnownColor(KnownColor.Control)
-        buttonSwapPosTools.ForeColor = Color.FromKnownColor(KnownColor.Control)
-        If buttonSwapPosTools.ImageIndex = 6 Then
-            buttonSwapPosTools.ImageIndex = 2
-        Else
-            buttonSwapPosTools.ImageIndex = 4
-        End If
-    End Sub
-
-    Private Sub buttonCloseExplorer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonCloseExplorer.Click
+    Private Sub buttonCloseExplorer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         ToggleProjectExplorerVisibility()
 
     End Sub
 
-    Private Sub buttonCloseMain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonCloseMain.Click
+    Private Sub buttonCloseMain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         ToggleMainVisibility()
 
     End Sub
 
-    Private Sub buttonCloseTools_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonCloseTools.Click
+    Private Sub buttonCloseTools_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         ToggleToolsVisibility()
 
     End Sub
 
-    Private Sub buttonCloseList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonCloseList.Click
+    Private Sub buttonCloseList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         ToggleMsgListVisibility()
 
     End Sub
 
 
-    Private Sub buttonCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonCloseProperties.Click
+    Private Sub buttonCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         TogglePropertiesVisibility()
 
@@ -21892,174 +21331,17 @@ Public Class frmDomainMapBrowser
 
     End Sub
 
-    Private Sub buttonSwapPosProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonSwapPosProperties.Click
-
-        TogglePropertiesPos()
-
-        mapPropertyGrid.Focus()
-
-    End Sub
-
-
-    Private Sub buttonSwapPosExplorer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonSwapPosExplorer.Click
-
-        ToggleExplorerPos()
-
-        mapTreeView.Focus()
-
-    End Sub
-
-    Private Sub buttonSwapPosMain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonSwapPosMain.Click
-
-        ToggleMainToolsPos()
-
-        tabControlDocuments.Focus()
-
-    End Sub
-
-    Private Sub buttonSwapPosTools_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonSwapPosTools.Click
-
-        ToggleMainToolsPos()
-
-        tabControlTools.Focus()
-
-    End Sub
-
-    Private Sub buttonSwapPosList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonSwapPosList.Click
-
-        ToggleListPos()
-
-        tabControlMessages.Focus()
-
-    End Sub
 
     Private Sub ToggleExplorerPos()
-
-        If panelLeft.Dock = DockStyle.Left Then
-
-            panelLeft.Dock = DockStyle.Right
-            Splitter1.Dock = DockStyle.Right
-
-            If buttonSwapPosExplorer.ImageIndex = 7 Then
-                buttonSwapPosExplorer.ImageIndex = 6
-            Else
-                buttonSwapPosExplorer.ImageIndex = 2
-            End If
-        Else
-
-            panelLeft.Dock = DockStyle.Left
-            Splitter1.Dock = DockStyle.Left
-
-            If buttonSwapPosExplorer.ImageIndex = 6 Then
-                buttonSwapPosExplorer.ImageIndex = 7
-            Else
-                buttonSwapPosExplorer.ImageIndex = 4
-            End If
-
-        End If
-
-        SaveVisibilitySettings()
-
-    End Sub
-
-
-    Private Sub TogglePropertiesPos()
-
-        If panelProperties.Dock = DockStyle.Left Then
-
-            panelProperties.Dock = DockStyle.Right
-            Splitter2.Dock = DockStyle.Right
-
-            If buttonSwapPosProperties.ImageIndex = 7 Then
-                buttonSwapPosProperties.ImageIndex = 6
-            Else
-                buttonSwapPosProperties.ImageIndex = 2
-            End If
-        Else
-
-            panelProperties.Dock = DockStyle.Left
-            Splitter2.Dock = DockStyle.Left
-
-            If buttonSwapPosProperties.ImageIndex = 6 Then
-                buttonSwapPosProperties.ImageIndex = 7
-            Else
-                buttonSwapPosProperties.ImageIndex = 4
-            End If
-
-        End If
-
-        SaveVisibilitySettings()
 
     End Sub
 
     Private Sub ToggleMainToolsPos()
 
-        If panelRight.Dock = DockStyle.Left Then
-
-            panelRight.Dock = DockStyle.Right
-            Splitter5.Dock = DockStyle.Right
-
-            If buttonSwapPosTools.ImageIndex = 7 Then
-                buttonSwapPosTools.ImageIndex = 6
-            Else
-                buttonSwapPosTools.ImageIndex = 2
-            End If
-
-            If buttonSwapPosMain.ImageIndex = 6 Then
-                buttonSwapPosMain.ImageIndex = 7
-            Else
-                buttonSwapPosMain.ImageIndex = 4
-            End If
-        Else
-
-            panelRight.Dock = DockStyle.Left
-            Splitter5.Dock = DockStyle.Left
-
-            If buttonSwapPosTools.ImageIndex = 6 Then
-                buttonSwapPosTools.ImageIndex = 7
-            Else
-                buttonSwapPosTools.ImageIndex = 4
-            End If
-
-            If buttonSwapPosMain.ImageIndex = 7 Then
-                buttonSwapPosMain.ImageIndex = 6
-            Else
-                buttonSwapPosMain.ImageIndex = 2
-            End If
-        End If
-
-        SaveVisibilitySettings()
-
     End Sub
 
 
     Private Sub ToggleListPos()
-
-        If panelBottom.Dock = DockStyle.Bottom Then
-
-            panelBottom.Dock = DockStyle.Top
-            Splitter4.Dock = DockStyle.Top
-
-            If buttonSwapPosList.ImageIndex = 11 Then
-                buttonSwapPosList.ImageIndex = 9
-            Else
-                buttonSwapPosList.ImageIndex = 8
-            End If
-
-        Else
-
-            panelBottom.Dock = DockStyle.Bottom
-            Splitter4.Dock = DockStyle.Bottom
-
-            If buttonSwapPosList.ImageIndex = 9 Then
-                buttonSwapPosList.ImageIndex = 11
-            Else
-                buttonSwapPosList.ImageIndex = 10
-            End If
-
-        End If
-
-        SaveVisibilitySettings()
 
     End Sub
 
@@ -24484,7 +23766,71 @@ Public Class frmDomainMapBrowser
 #End Region
 
 
+    Dim dfProperties As New PropertiesDockingForm
+    Dim dfLeft As New ProjectExplorerDockingForm
+    Dim dfRight As New ToolsDockingForm
+    Dim dfBottom As New OutputDockingForm
+    Dim dfMain As New MainDockingForm
 
+    Private Sub SetupDockingWindows()
+
+        DockPanelContainer.Height = 0
+
+
+        dockPanel.SuspendLayout(True)
+
+        dfRight.SetContent(panelRight, "Tools")
+        dfBottom.SetContent(panelBottom, "Output")
+        dfMain.SetContent(panelMain, "Main")
+        dfLeft.SetContent(panelLeft, "Project Explorer")
+        dfProperties.SetContent(panelProperties, "Properties")
+
+        If File.Exists("layout.xml") Then
+            Dim content As New WeifenLuo.WinFormsUI.DeserializeDockContent(AddressOf DeserializeLayout)
+            dockPanel.LoadFromXml("layout.xml", content)
+        Else
+            dfRight.Show(dockPanel, WeifenLuo.WinFormsUI.DockState.DockRightAutoHide)
+            dfBottom.Show(dockPanel, WeifenLuo.WinFormsUI.DockState.DockBottomAutoHide)
+            dfMain.Show(dockPanel)
+            dfLeft.Show(dockPanel, WeifenLuo.WinFormsUI.DockState.DockLeft)
+            dfProperties.Show(dockPanel, WeifenLuo.WinFormsUI.DockState.DockLeft)
+        End If
+
+
+        dockPanel.ResumeLayout(True, True)
+
+
+
+        
+
+
+
+    End Sub
+
+    Private Function DeserializeLayout(ByVal persistString As String) As WeifenLuo.WinFormsUI.IDockContent
+
+        If persistString = "Puzzle.ObjectMapper.GUI.PropertiesDockingForm" Then
+            Return dfProperties
+        End If
+
+        If persistString = "Puzzle.ObjectMapper.GUI.ProjectExplorerDockingForm" Then
+            Return dfLeft
+        End If
+
+        If persistString = "Puzzle.ObjectMapper.GUI.ToolsDockingForm" Then
+            Return dfRight
+        End If
+
+        If persistString = "Puzzle.ObjectMapper.GUI.OutputDockingForm" Then
+            Return dfBottom
+        End If
+
+        If persistString = "Puzzle.ObjectMapper.GUI.MainDockingForm" Then
+            Return dfMain
+        End If
+
+        Return Nothing
+    End Function
 
 End Class
 
