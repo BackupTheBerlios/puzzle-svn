@@ -357,6 +357,122 @@ Public Class UmlDiagramProperties
     '    End Set
     'End Property
 
+
+    '---------
+
+    <Category("Appearance"), _
+    Description("The brush used when drawing enum shapes on this diagram."), _
+    DisplayName("Enum brush"), _
+    DefaultValue("")> Public Property EnumBgBrushStyle() As BrushEnum
+        Get
+            Return m_UmlDiagram.EnumBgBrushStyle
+        End Get
+        Set(ByVal Value As BrushEnum)
+            m_UmlDiagram.EnumBgBrushStyle = Value
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "EnumBgBrushStyle")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The gradient mode used when drawing enum shapes on this diagram. Applies only if the GradientBrush enum brush has been selected."), _
+        DisplayName("Enum gradient mode"), _
+        DefaultValue("")> Public Property EnumBgGradientMode() As LinearGradientMode
+        Get
+            Return m_UmlDiagram.EnumBgGradientMode
+        End Get
+        Set(ByVal Value As LinearGradientMode)
+            m_UmlDiagram.EnumBgGradientMode = Value
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "EnumBgGradientMode")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The first color used when drawing enum shapes on this diagram."), _
+        DisplayName("Enum back color 1"), _
+        DefaultValue("")> Public Property EnumBackColor1() As Color
+        Get
+            Return m_UmlDiagram.EnumBackColor1.ToColor
+        End Get
+        Set(ByVal Value As Color)
+            m_UmlDiagram.EnumBackColor1.FromColor(Value)
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "EnumBackColor1")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The second color used when drawing enum shapes on this diagram."), _
+        DisplayName("Enum back color 2"), _
+        DefaultValue("")> Public Property EnumBackColor2() As Color
+        Get
+            Return m_UmlDiagram.EnumBackColor2.ToColor
+        End Get
+        Set(ByVal Value As Color)
+            m_UmlDiagram.EnumBackColor2.FromColor(Value)
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "EnumBackColor2")
+        End Set
+    End Property
+
+
+    '---------
+
+    '---------
+
+    <Category("Appearance"), _
+    Description("The brush used when drawing interface shapes on this diagram."), _
+    DisplayName("Interface brush"), _
+    DefaultValue("")> Public Property InterfaceBgBrushStyle() As BrushEnum
+        Get
+            Return m_UmlDiagram.InterfaceBgBrushStyle
+        End Get
+        Set(ByVal Value As BrushEnum)
+            m_UmlDiagram.InterfaceBgBrushStyle = Value
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "InterfaceBgBrushStyle")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The gradient mode used when drawing interface shapes on this diagram. Applies only if the GradientBrush interface brush has been selected."), _
+        DisplayName("Interface gradient mode"), _
+        DefaultValue("")> Public Property InterfaceBgGradientMode() As LinearGradientMode
+        Get
+            Return m_UmlDiagram.InterfaceBgGradientMode
+        End Get
+        Set(ByVal Value As LinearGradientMode)
+            m_UmlDiagram.InterfaceBgGradientMode = Value
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "InterfaceBgGradientMode")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The first color used when drawing interface shapes on this diagram."), _
+        DisplayName("Interface back color 1"), _
+        DefaultValue("")> Public Property InterfaceBackColor1() As Color
+        Get
+            Return m_UmlDiagram.InterfaceBackColor1.ToColor
+        End Get
+        Set(ByVal Value As Color)
+            m_UmlDiagram.InterfaceBackColor1.FromColor(Value)
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "InterfaceBackColor1")
+        End Set
+    End Property
+
+    <Category("Appearance"), _
+        Description("The second color used when drawing interface shapes on this diagram."), _
+        DisplayName("Interface back color 2"), _
+        DefaultValue("")> Public Property InterfaceBackColor2() As Color
+        Get
+            Return m_UmlDiagram.InterfaceBackColor2.ToColor
+        End Get
+        Set(ByVal Value As Color)
+            m_UmlDiagram.InterfaceBackColor2.FromColor(Value)
+            RaiseEvent AfterPropertySet(m_UmlDiagram, "InterfaceBackColor2")
+        End Set
+    End Property
+
+
+    '---------
+
+
     <Category("Appearance"), _
         Description("The brush used when drawing class shapes on this diagram."), _
         DisplayName("Class brush"), _

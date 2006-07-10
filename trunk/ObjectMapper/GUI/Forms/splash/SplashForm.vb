@@ -11,6 +11,7 @@ Public Class SplashForm
 
 #Region " Windows Form Designer generated code "
 
+    Dim t As Thread
     Public Sub New()
         MyBase.New()
 
@@ -27,7 +28,7 @@ Public Class SplashForm
         'Me.Region = New Region(gp)
 
         Dim ts As ThreadStart = New ThreadStart(AddressOf myThread)
-        Dim t As Thread = New Thread(ts)
+        t = New Thread(ts)
         'Dim t As Thread = New Thread(AddressOf myThread)
         t.Start()
 
@@ -99,8 +100,13 @@ Public Class SplashForm
 
         End Try
 
-        Me.Close()
 
+        Me.Invoke(New EventHandler(AddressOf CloseThis))
+
+    End Sub
+
+    Private Sub CloseThis(ByVal sender As Object, ByVal args As EventArgs)
+        me.Close 
     End Sub
 
     Private Sub SetRightSize()
@@ -113,7 +119,7 @@ Public Class SplashForm
     Protected Overrides Sub OnMouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
 
         MyBase.OnMouseDown(e)
-
+        t.Abort()
         Me.Close()
 
     End Sub

@@ -21737,6 +21737,14 @@ Public Class frmDomainMapBrowser
             diagram.DeselectAll()
 
             umlClass = New umlClass
+            umlClass.IsAbstract = classMap.IsAbstract
+            umlClass.ClassType = classMap.ClassType
+            If classMap.ClassType = ClassType.Default Then
+                umlClass.ClassType = ClassType.Class
+            End If
+
+
+
 
             If pos.Equals(Point.Empty) Then
 

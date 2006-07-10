@@ -73,6 +73,20 @@ Namespace Uml
         Private m_ClassBackColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 255, 251, 223))
         Private m_ClassBackColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 255, 241, 213))
 
+
+        Private m_InterfaceBgBrushStyle As BrushEnum = BrushEnum.GradientBrush
+        Private m_InterfaceBgGradientMode As LinearGradientMode = LinearGradientMode.Vertical
+
+        Private m_InterfaceBackColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 251, 255, 223))
+        Private m_InterfaceBackColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 241, 255, 213))
+
+        Private m_EnumBgBrushStyle As BrushEnum = BrushEnum.GradientBrush
+        Private m_EnumBgGradientMode As LinearGradientMode = LinearGradientMode.Vertical
+
+        Private m_EnumBackColor1 As UmlColor = New UmlColor(Color.FromArgb(255, 255, 244, 255))
+        Private m_EnumBackColor2 As UmlColor = New UmlColor(Color.FromArgb(255, 251, 223, 255))
+
+
         Private m_ArrowBaseLength As Double = 20
 
         Private m_RadarSize As Integer = 100
@@ -478,6 +492,80 @@ Namespace Uml
             End Get
             Set(ByVal Value As UmlColor)
                 m_ClassBackColor2 = Value
+            End Set
+        End Property
+
+
+        Public Property InterfaceBgBrushStyle() As BrushEnum
+            Get
+                Return m_InterfaceBgBrushStyle
+            End Get
+            Set(ByVal Value As BrushEnum)
+                m_InterfaceBgBrushStyle = Value
+            End Set
+        End Property
+
+        Public Property InterfaceBgGradientMode() As LinearGradientMode
+            Get
+                Return m_InterfaceBgGradientMode
+            End Get
+            Set(ByVal Value As LinearGradientMode)
+                m_InterfaceBgGradientMode = Value
+            End Set
+        End Property
+
+        Public Property InterfaceBackColor1() As UmlColor
+            Get
+                Return m_InterfaceBackColor1
+            End Get
+            Set(ByVal Value As UmlColor)
+                m_InterfaceBackColor1 = Value
+            End Set
+        End Property
+
+        Public Property InterfaceBackColor2() As UmlColor
+            Get
+                Return m_InterfaceBackColor2
+            End Get
+            Set(ByVal Value As UmlColor)
+                m_InterfaceBackColor2 = Value
+            End Set
+        End Property
+
+
+        Public Property EnumBgBrushStyle() As BrushEnum
+            Get
+                Return m_EnumBgBrushStyle
+            End Get
+            Set(ByVal Value As BrushEnum)
+                m_EnumBgBrushStyle = Value
+            End Set
+        End Property
+
+        Public Property EnumBgGradientMode() As LinearGradientMode
+            Get
+                Return m_EnumBgGradientMode
+            End Get
+            Set(ByVal Value As LinearGradientMode)
+                m_EnumBgGradientMode = Value
+            End Set
+        End Property
+
+        Public Property EnumBackColor1() As UmlColor
+            Get
+                Return m_EnumBackColor1
+            End Get
+            Set(ByVal Value As UmlColor)
+                m_EnumBackColor1 = Value
+            End Set
+        End Property
+
+        Public Property EnumBackColor2() As UmlColor
+            Get
+                Return m_EnumBackColor2
+            End Get
+            Set(ByVal Value As UmlColor)
+                m_EnumBackColor2 = Value
             End Set
         End Property
 

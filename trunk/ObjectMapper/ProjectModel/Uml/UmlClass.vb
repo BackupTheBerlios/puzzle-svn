@@ -63,6 +63,32 @@ Namespace Uml
         Private m_listExceptions As ArrayList
         Private m_propertyExceptions As New Hashtable
 
+        Private m_ClassType As ClassType
+        Private m_IsAbstract As Boolean
+
+
+        Public Property IsAbstract() As Boolean
+            Get
+                Return m_IsAbstract
+            End Get
+            Set(ByVal Value As Boolean)
+                m_IsAbstract = Value
+            End Set
+        End Property
+
+        Public Property ClassType() As ClassType
+            Get
+                If m_ClassType <> ClassType.Class AndAlso m_ClassType <> ClassType.Enum AndAlso m_ClassType <> ClassType.Interface AndAlso m_ClassType <> ClassType.Struct Then
+                    m_ClassType = ClassType.Class
+                End If
+
+                Return m_ClassType
+            End Get
+            Set(ByVal Value As ClassType)
+                m_ClassType = Value
+            End Set
+        End Property
+
         <XmlIgnore()> Public Property UmlDiagram() As UmlDiagram
             Get
                 Return m_UmlDiagram
@@ -358,15 +384,33 @@ Namespace Uml
 
         Public Function GetBackColor1() As Color
             If m_InheritSettings Then
-                Return m_UmlDiagram.ClassBackColor1.ToColor
+
+                If ClassType = ClassType.Class Then
+                    Return m_UmlDiagram.ClassBackColor1.ToColor
+                ElseIf ClassType = ClassType.Interface Then
+                    Return m_UmlDiagram.InterfaceBackColor1.ToColor
+                ElseIf ClassType = ClassType.Struct Then
+                    Return m_UmlDiagram.InterfaceBackColor1.ToColor
+                ElseIf ClassType = ClassType.Enum Then
+                    Return m_UmlDiagram.EnumBackColor1.ToColor
+                End If
+
             Else
-                Return BackColor1.ToColor
+            Return BackColor1.ToColor
             End If
         End Function
 
         Public Function GetBackColor2() As Color
             If m_InheritSettings Then
-                Return m_UmlDiagram.ClassBackColor2.ToColor
+                If ClassType = ClassType.Class Then
+                    Return m_UmlDiagram.ClassBackColor2.ToColor
+                ElseIf ClassType = ClassType.Interface Then
+                    Return m_UmlDiagram.InterfaceBackColor2.ToColor
+                ElseIf ClassType = ClassType.Struct Then
+                    Return m_UmlDiagram.InterfaceBackColor2.ToColor
+                ElseIf ClassType = ClassType.Enum Then
+                    Return m_UmlDiagram.EnumBackColor2.ToColor
+                End If
             Else
                 Return BackColor2.ToColor
             End If
@@ -374,7 +418,15 @@ Namespace Uml
 
         Public Function GetBgBrushStyle() As BrushEnum
             If m_InheritSettings Then
-                Return m_UmlDiagram.ClassBgBrushStyle
+                If ClassType = ClassType.Class Then
+                    Return m_UmlDiagram.ClassBgBrushStyle
+                ElseIf ClassType = ClassType.Interface Then
+                    Return m_UmlDiagram.InterfaceBgBrushStyle
+                ElseIf ClassType = ClassType.Struct Then
+                    Return m_UmlDiagram.ClassBgBrushStyle
+                ElseIf ClassType = ClassType.Enum Then
+                    Return m_UmlDiagram.EnumBgBrushStyle
+                End If
             Else
                 Return m_BgBrushStyle
             End If
@@ -382,7 +434,15 @@ Namespace Uml
 
         Public Function GetBgGradientMode() As LinearGradientMode
             If m_InheritSettings Then
-                Return m_UmlDiagram.ClassBgGradientMode
+                If ClassType = ClassType.Class Then
+                    Return m_UmlDiagram.ClassBgGradientMode
+                ElseIf ClassType = ClassType.Interface Then
+                    Return m_UmlDiagram.InterfaceBgGradientMode
+                ElseIf ClassType = ClassType.Struct Then
+                    Return m_UmlDiagram.ClassBgGradientMode
+                ElseIf ClassType = ClassType.Enum Then
+                    Return m_UmlDiagram.EnumBgGradientMode
+                End If
             Else
                 Return m_BgGradientMode
             End If
@@ -609,6 +669,12 @@ Namespace Uml
 
             If Not classMap Is Nothing Then
 
+                IsAbstract = classMap.IsAbstract
+                ClassType = classMap.ClassType
+                If classMap.ClassType = ClassType.Default Then
+                    ClassType = ClassType.Class
+                End If
+
                 sorted = classMap.GetNonInheritedIdentityPropertyMaps
 
                 sorted.Sort()
@@ -816,6 +882,37 @@ Namespace Uml
         End Sub
 
 
+        Public Function GetAbstractPen() As Pen
+
+            Dim aPen As Pen
+
+            If m_HasSynchError Then
+
+                aPen = New Pen(GetColorSynchError, 2)
+                aPen.DashStyle = DashStyle.Dash
+
+
+                Return aPen
+
+            End If
+
+            If m_HasError Then
+
+                aPen = New Pen(GetColorError, 2)
+                aPen.DashStyle = DashStyle.Dash
+
+
+                Return aPen
+
+            End If
+
+            aPen = New Pen(GetForeColor, 2)
+            aPen.DashStyle = DashStyle.Dash
+
+            Return aPen
+
+
+        End Function
 
         Public Function GetPen() As Pen
 
@@ -961,7 +1058,16 @@ Namespace Uml
 
                     g.FillRectangle(bgBrush, rect)
 
-                    g.DrawRectangle(pen, rect)
+
+                    Dim borderPen As pen
+                    If IsAbstract Then
+                        borderPen = GetAbstractPen()
+                    Else
+                        borderPen = pen
+                    End If
+
+                    g.DrawRectangle(borderPen, rect)
+
 
                     rect = New Rectangle(location.X, location.Y, sizeX + 1, sizeY + 1)
 
