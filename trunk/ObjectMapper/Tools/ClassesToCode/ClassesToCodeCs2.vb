@@ -272,7 +272,7 @@ Public Class ClassesToCodeCs2
 
             Case ClassType.Class, ClassType.Default
 
-                codeBuilder.Append("class ")
+                codeBuilder.Append("partial class ")
 
             Case ClassType.Interface
 
