@@ -62,6 +62,8 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             ((IList)this).Clear ();
         }
 
+        
+
         public virtual bool Contains(T item)
         {
             return list.Contains (item);
@@ -101,6 +103,15 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         }
 
         #region IList Members
+
+        void IList.Clear()
+        {
+            interceptor.BeforeCall();
+            list.Clear();
+            interceptor.AfterCall();
+
+            this.OnListChanged( ListChangedType.Reset,-1);
+        }
 
         int IList.Add(object value)
         {
