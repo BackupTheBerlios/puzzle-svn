@@ -93,8 +93,8 @@ namespace Puzzle.NFactory.Framework
                 //clear the graph cache
                 PrepareNewGraph();
 
-                string message = string.Format("Getting object '{0}'", name);
-                string verbose = string.Format("Force new instance {0}", forceNewInstance);
+                LogMessage message = new LogMessage("Getting object '{0}'", name);
+                LogMessage verbose = new LogMessage("Force new instance {0}", forceNewInstance);
                 LogManager.Info(this, message, verbose);
                 return GetObjectInternal(name, forceNewInstance ? InstanceMode.PerReference : InstanceMode.Default);
             }
@@ -203,9 +203,8 @@ namespace Puzzle.NFactory.Framework
 			ArrayList sortedPropertyConfigurations = new ArrayList(objectConfig.PropertyConfigurations);
 			sortedPropertyConfigurations.Sort(new PropertyPathSorter());
 
-			string message = string.Format("Configuring object '{0}' as '{1}'", target, objectConfig.Name);
-			string verbose = null;
-			LogManager.Info(this, message, verbose);
+			LogMessage message = new LogMessage("Configuring object '{0}' as '{1}'", target, objectConfig.Name);			
+			LogManager.Info(this, message);
 
 			foreach (PropertyConfiguration propertyConfig in sortedPropertyConfigurations)
 			{

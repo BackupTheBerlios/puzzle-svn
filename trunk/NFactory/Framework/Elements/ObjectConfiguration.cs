@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Puzzle.NCore.Framework.Logging;
 
 namespace Puzzle.NFactory.Framework.ConfigurationElements
 {
@@ -110,14 +111,13 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 			try
 			{
 				instance = owner.ObjectFactory.CreateInstance(this.Type, ctorParams);
-				string message = string.Format("Creating instance of type '{0}' from config '{1}'", this.Type, this.Name);
-				owner.LogManager.Info(this, message, "");
+				LogMessage message = new LogMessage("Creating instance of type '{0}' from config '{1}'", this.Type, this.Name);
+				owner.LogManager.Info(this, message);
 			}
 			catch 
 			{
-				string message = string.Format("Failed to create instance of type '{0}' from config '{1}'", this.Type, this.Name);
-				string verbose = "";
-				owner.LogManager.Fatal(this, message, verbose);
+				LogMessage message = new LogMessage("Failed to create instance of type '{0}' from config '{1}'", this.Type, this.Name);
+				owner.LogManager.Fatal(this, message);
 
 				throw;
 			}
