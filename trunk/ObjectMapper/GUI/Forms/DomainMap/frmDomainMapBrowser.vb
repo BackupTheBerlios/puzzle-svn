@@ -9246,7 +9246,7 @@ Public Class frmDomainMapBrowser
 
                 OpenProperties()
 
-                If Len(useCfg.TargetFolder) < 1 Then
+                If Len(ReplaceVars(useCfg.TargetFolder)) < 1 Then
 
                     ''src = useCfg.GetSourceCodeFile(domainMap)
 
@@ -9260,7 +9260,7 @@ Public Class frmDomainMapBrowser
 
                     ''End If
 
-                    If Len(useCfg.TargetFolder) < 1 Then
+                    If Len(ReplaceVars(useCfg.TargetFolder)) < 1 Then
 
                         useCfg.TargetFolder = New DirectoryInfo(Application.UserAppDataPath & "\..").FullName & "\Projects\" & m_Project.Name & "\" & domainMap.Name
 
@@ -9307,7 +9307,7 @@ Public Class frmDomainMapBrowser
                 folderNode.ImageIndex = 54
                 folderNode.SelectedImageIndex = 55
 
-                path = useCfg.TargetFolder
+                path = ReplaceVars(useCfg.TargetFolder)
 
                 folderNode.Text = path
 
@@ -10231,7 +10231,7 @@ Public Class frmDomainMapBrowser
                 Else
 
 
-                    folderPath = useCfg.TargetFolder
+                    folderPath = ReplaceVars(useCfg.TargetFolder)
 
                     'Make sure target folder exists
 
