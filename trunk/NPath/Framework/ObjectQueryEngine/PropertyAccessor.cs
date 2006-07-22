@@ -35,7 +35,7 @@ namespace Puzzle.NPath.Framework
 			this.mProperty = property;
 
 			PropertyInfo propertyInfo =
-				targetType.GetProperty(property);
+				targetType.GetProperty(property,BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
 
 			//
 			// Make sure the property exists

@@ -1063,7 +1063,15 @@ namespace Puzzle.NPersist.Framework
 			if (query == null)
 				throw new ArgumentNullException("query");
 			IList objects = m_IdentityMap.GetObjects();
-			return FilterObjects(objects, query);
+            
+            IList filterObjects = new ArrayList ();
+            foreach (object item in objects)
+            {
+                if (query.PrimaryType.IsAssignableFrom(item.GetType()))
+                    filterObjects.Add(item);
+            }
+
+            return FilterObjects(filterObjects, query);
 		}
 
 		public IList FilterObjects(string npath, Type type)
