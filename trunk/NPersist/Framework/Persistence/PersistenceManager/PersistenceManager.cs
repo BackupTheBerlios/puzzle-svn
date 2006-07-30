@@ -177,7 +177,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (refClassMap == null)
 							throw new NPersistException("Could not find class map with type value '" + (string) discriminator + "'");
 					}
-					mapToId = refClassMap.MustGetPropertyMapForColumnMap(propertyMap.GetColumnMap().MustGetPrimaryKeyColumnMap());
+                    //TODO: bug if one slave prop in a subclass references another subclass in sungle table inheritance
+                    IColumnMap propertyColumnMap = propertyMap.GetColumnMap();
+                    IColumnMap inverseColumnMap = propertyColumnMap.MustGetPrimaryKeyColumnMap();
+                    mapToId = refClassMap.MustGetPropertyMapForColumnMap(inverseColumnMap);
 					if (mapToId.IsIdentity)
 					{
 						isIdentity = true;
