@@ -399,22 +399,30 @@ namespace Puzzle.NPersist.Framework.Validation
 							ISourceMap sourceMap = propertyMap.GetSourceMap();
 							if (sourceMap != null)
 							{
-								DateTime value = (DateTime) om.GetPropertyValue(obj, propertyMap.Name);
-								if (sourceMap.SourceType == SourceType.MSSqlServer)
-								{
-									DateTime minDate = new DateTime(1753, 1, 1, 0, 0, 0);
-									if (value < minDate)
-									{
-										string template = "Validation error in object {0}.{1} , property {2}: " + Environment.NewLine + "Sql server can not handle date/time values lower than 1753-01-01 00:00:00";
-										string result = String.Format(
-											template, 
-											propertyMap.ClassMap.Name, 
-											this.Context.ObjectManager.GetObjectKeyOrIdentity(obj),
-											propertyMap.Name );
+                                object rawValue = om.GetPropertyValue(obj, propertyMap.Name);
+                                if (rawValue == null )
+                                {
+                                    //all ok                                    
+                                }
+                                else
+                                {
+                                    DateTime value = (DateTime)rawValue;
+                                    if (sourceMap.SourceType == SourceType.MSSqlServer)
+                                    {
+                                        DateTime minDate = new DateTime(1753, 1, 1, 0, 0, 0);
+                                        if (value < minDate)
+                                        {
+                                            string template = "Validation error in object {0}.{1} , property {2}: " + Environment.NewLine + "Sql server can not handle date/time values lower than 1753-01-01 00:00:00";
+                                            string result = String.Format(
+                                                template,
+                                                propertyMap.ClassMap.Name,
+                                                this.Context.ObjectManager.GetObjectKeyOrIdentity(obj),
+                                                propertyMap.Name);
 
-										HandleException(obj, propertyMap.Name, exceptions, new ValidationException(result), minDate, value, value) ;					
-									}
-								}								
+                                            HandleException(obj, propertyMap.Name, exceptions, new ValidationException(result), minDate, value, value);
+                                        }
+                                    }
+                                }
 							}
 						}
 					}

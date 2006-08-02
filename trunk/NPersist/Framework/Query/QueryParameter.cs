@@ -97,7 +97,7 @@ namespace Puzzle.NPersist.Framework.Querying
 			{
 				if (this.dbType == DbType.DateTime)
 				{
-					oleDbParam.OleDbType = OleDbType.DBDate ;
+					oleDbParam.OleDbType = OleDbType.Date ;
 				}
 			}
 			//			if (this.dbType == DbType.AnsiString || 

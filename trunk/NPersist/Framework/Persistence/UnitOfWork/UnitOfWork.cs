@@ -400,6 +400,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					Complete();					
 				}
 			}
+
 			catch (Exception ex)
 			{
 				Abort();	
