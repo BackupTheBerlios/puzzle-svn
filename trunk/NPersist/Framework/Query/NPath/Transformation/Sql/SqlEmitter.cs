@@ -76,6 +76,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		#region Private Member Variables
 
+        private int orExpressionCount;
 		private int subQueryLevel;
 		private SqlSelectStatement parentQuery;
 		private IPropertyMap backReference;
@@ -1091,6 +1092,11 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		
 		private SqlSearchCondition EvalBooleanExpression(NPathBooleanExpression booleanExpression)
 		{
+            bool orNext = String.Compare(booleanExpression.Operator, "or", true, CultureInfo.InvariantCulture) == 0;
+
+            if (orNext)
+                orExpressionCount++;
+
 			SqlExpression leftExpression = EvalExpression(booleanExpression.LeftOperand);
 			SqlSearchCondition search; 
 
@@ -1104,14 +1110,19 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 					search = conditionChainOwner.GetCurrentSqlSearchCondition();
 			}
 
-			bool orNext = String.Compare(booleanExpression.Operator, "or", true, CultureInfo.InvariantCulture) == 0 ;
+			
 
 			if (orNext)
 				search.OrNext = orNext;
 
 			EvalExpression(booleanExpression.RightOperand);
 
-			return conditionChainOwner.GetCurrentSqlSearchCondition();
+            SqlSearchCondition cond = conditionChainOwner.GetCurrentSqlSearchCondition();
+
+            if (orNext)
+                orExpressionCount--;
+
+            return cond;
 		}
 
 		private SqlExpression EvalCompareExpression(NPathCompareExpression compareExpression)
