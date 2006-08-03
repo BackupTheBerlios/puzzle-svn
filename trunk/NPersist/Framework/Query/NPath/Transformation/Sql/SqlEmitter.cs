@@ -786,7 +786,6 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		#region Emit Select
 
-
 		private void EmitSelect()
 		{
 			//IColumnMap typeColumnMap = null;
@@ -878,9 +877,14 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		private void EmitWhere() 
 		{
 			conditionChainOwner = select.SqlWhereClause;
-			if (query.Where != null)
+
+            if (query.Where != null)
 			{
-				EvalExpression (query.Where.Expression);						
+                //EvalExpression (query.Where.Expression);					
+                NPathParenthesisGroup parens = new NPathParenthesisGroup();
+                parens.Expression = query.Where.Expression;
+
+                EvalParenthesisGroup ( parens );					
 			}
 		}
 

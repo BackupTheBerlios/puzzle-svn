@@ -75,6 +75,12 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 			if (this.sqlSearchCondition == null)
 			{
 				this.sqlSearchCondition = new SqlSearchCondition(this) ;
+
+                //fix parens
+                //SqlSearchCondition search = this.sqlSearchCondition.GetNextSqlSearchCondition();
+                //search = search.GetSubSqlSearchCondition();
+                //return search;							
+	
 				return this.sqlSearchCondition;								
 			}
 			SqlSearchCondition sqlSearchCondition = this.sqlSearchCondition;
@@ -91,6 +97,12 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 			if (this.sqlSearchCondition == null)
 			{
 				this.sqlSearchCondition = new SqlSearchCondition(this) ;
+
+                //fix parens
+                //SqlSearchCondition search = this.sqlSearchCondition.GetNextSqlSearchCondition();
+                //search = search.GetSubSqlSearchCondition();
+                //return search;							
+	
 				return this.sqlSearchCondition;								
 			}
 			SqlSearchCondition sqlSearchCondition = this.sqlSearchCondition;
