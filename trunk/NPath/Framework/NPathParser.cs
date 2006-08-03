@@ -154,7 +154,10 @@ namespace Puzzle.NPath.Framework
 		private void ParseWhereClause(NPathWhereClause whereClause)
 		{
 			tokenizer.MoveNext();
-			whereClause.Expression = ParseBooleanExpression();
+            IValue whereExpression = ParseBooleanExpression();
+            NPathParenthesisGroup paren = new NPathParenthesisGroup ();
+            paren.Expression = whereExpression;
+            whereClause.Expression = paren;
 		}
 
 //		private IValue ParseBooleanExpression()
