@@ -21,5 +21,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		Hashtable LoadedObjects { get; }
 		Hashtable UnloadedObjects { get; }
 		IList AllObjects { get; }
-	}
+        void Clear();
+    }
 }

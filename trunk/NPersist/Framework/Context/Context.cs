@@ -2098,6 +2098,53 @@ namespace Puzzle.NPersist.Framework
 			GetObjectByNPath(npathQuery);
 		}
 
+
+        public virtual void Invalidate()
+        {
+            this.ObjectManager.InvalidateObjectsInCache(false);
+        }
+
+        public virtual void Invalidate(bool invalidateDirty)
+        {
+            this.ObjectManager.InvalidateObjectsInCache(invalidateDirty);
+        }
+
+		public virtual void Invalidate(IList objects)
+        {
+            this.ObjectManager.InvalidateObjects(objects, false);
+        }
+
+        public virtual void Invalidate(IList objects, bool invalidateDirty)
+        {
+            this.ObjectManager.InvalidateObjects(objects, invalidateDirty);
+        }
+
+		public virtual void Invalidate(object obj)
+        {
+            this.ObjectManager.InvalidateObject(obj, false);
+        }
+
+        public virtual void Invalidate(object obj, bool invalidateDirty)
+        {
+            this.ObjectManager.InvalidateObject(obj, invalidateDirty);
+        }
+
+		public virtual void Invalidate(object obj, string propertyName)
+        {
+            this.ObjectManager.InvalidateProperty(obj, propertyName, false);
+        }
+
+        public virtual void Invalidate(object obj, string propertyName, bool invalidateDirty)
+        {
+            this.ObjectManager.InvalidateProperty(obj, propertyName, invalidateDirty);
+        }
+
+        public virtual void Clear()
+        {
+            this.IdentityMap.Clear();
+        }
+
+
 		public virtual NPathQuery GetLoadObjectNPathQuery(object obj, RefreshBehaviorType refreshBehavior)
 		{
 			return GetLoadObjectNPathQuery(obj, "*", refreshBehavior);
@@ -2128,16 +2175,6 @@ namespace Puzzle.NPersist.Framework
 			return npathQuery;
 		}
 
-
-		public virtual void UnloadObject(object obj)
-		{
-			
-		}
-
-		public virtual void UnloadObjects(IList objects)
-		{
-			
-		}
 
 		private bool isEditing = false;
 

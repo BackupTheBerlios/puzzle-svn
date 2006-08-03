@@ -176,9 +176,23 @@ namespace Puzzle.NPersist.Framework
 
 		void RefreshProperty(object obj, string propertyName, RefreshBehaviorType refreshBehavior);
 
-		void UnloadObject(object obj);
+        void Invalidate();
 
-		void UnloadObjects(IList objects);
+        void Invalidate(bool invalidateDirty);
+
+		void Invalidate(IList objects);
+
+        void Invalidate(IList objects, bool invalidateDirty);
+
+		void Invalidate(object obj);
+
+        void Invalidate(object obj, bool invalidateDirty);
+
+		void Invalidate(object obj, string propertyName);
+
+        void Invalidate(object obj, string propertyName, bool invalidateDirty);
+
+        void Clear();
 
 		void AddObserver(IObserver observer);
 
@@ -442,7 +456,6 @@ namespace Puzzle.NPersist.Framework
         DataTable GetDataTable(string npath, Type type);
 
         DataTable GetDataTable(string npath, Type type, IList parameters);
-
        
 
 

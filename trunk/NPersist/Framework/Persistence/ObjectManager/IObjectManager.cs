@@ -12,6 +12,7 @@ using System;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using System.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -70,9 +71,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void EnsurePropertyIsLoaded(object obj, IPropertyMap propertyMap);
 
-		void InvalidateObject(object obj);
+		void InvalidateObjectsInCache(bool invalidateDirty);
 
-		void InvalidateProperty(object obj, string propertyName);
+		void InvalidateObjects(IList objects, bool invalidateDirty);
+
+		void InvalidateObject(object obj, bool invalidateDirty);
+
+		void InvalidateProperty(object obj, string propertyName, bool invalidateDirty);
 
 		long GetTimeToLive(object obj);
 

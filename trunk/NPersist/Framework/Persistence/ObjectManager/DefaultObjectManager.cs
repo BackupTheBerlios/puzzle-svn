@@ -219,30 +219,54 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}			
 
 
-		public virtual void InvalidateObject(object obj)
-		{
-		}
 
+		public virtual void InvalidateObjectsInCache(bool invalidateDirty) 
+        {
+            IList objects = this.Context.IdentityMap.GetObjects(); 
+            InvalidateObjects(objects, invalidateDirty);
+        }
 
-		public virtual void InvalidateProperty(object obj, string propertyName)
-		{
-			IPropertyMap propertyMap = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
-			InvalidateProperty(obj, propertyMap);
-		}
+		public virtual void InvalidateObjects(IList objects, bool invalidateDirty)
+        {
+            foreach (object obj in objects)
+                InvalidateObject(obj, invalidateDirty);
+        }
 
-		public virtual void InvalidateProperty(object obj, IPropertyMap propertyMap)
+		public virtual void InvalidateObject(object obj, bool invalidateDirty)
 		{
 			IObjectManager om = this.Context.ObjectManager;
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+			//ObjectStatus objStatus = om.GetObjectStatus(obj) ;
+            foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+            {
+                if (!propertyMap.IsIdentity)
+                    InvalidateProperty(obj, propertyMap, invalidateDirty );
+            }
+            //if (!(objStatus == ObjectStatus.Dirty && invalidateDirty == false))
+            //{
+            //    RemoveOriginalValues(obj, propertyMap.Name);
+            //}
+		}
+
+
+		public virtual void InvalidateProperty(object obj, string propertyName, bool invalidateDirty)
+		{
+			IPropertyMap propertyMap = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
+			InvalidateProperty(obj, propertyMap, invalidateDirty);
+		}
+
+		public virtual void InvalidateProperty(object obj, IPropertyMap propertyMap, bool invalidateDirty)
+		{
+            if (propertyMap.IsIdentity)
+                throw new NPersistException("Identity properties can not be invalidated! Property: " + AssemblyManager.GetBaseType(obj).Name + "." + propertyMap.Name, obj, propertyMap.Name);
+
+			IObjectManager om = this.Context.ObjectManager;
 			IPersistenceEngine pe = this.Context.PersistenceEngine ;
-			ObjectStatus objStatus;
 			PropertyStatus propStatus;
-			objStatus = om.GetObjectStatus(obj) ;
 			propStatus = om.GetPropertyStatus(obj, propertyMap.Name) ;
-			if (propStatus == PropertyStatus.NotLoaded )
+			if (!(propStatus == PropertyStatus.Dirty && invalidateDirty == false))
 			{
 				RemoveOriginalValues(obj, propertyMap.Name);
-
-				//pe.LoadProperty(obj, propertyMap.Name);
 			}
 		}			
 

@@ -561,6 +561,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
+        public virtual void Clear()
+        {
+			IObjectCache cache = GetObjectCache() ;
+            cache.Clear();
+        }
 
 		public virtual object TryGetObject(string identity, Type type)
 		{

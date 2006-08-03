@@ -58,5 +58,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 		
 		#endregion
-	}
+
+        public void Clear()
+        {
+            this.loadedObjects.Clear();
+            this.unLoadedObjects.Clear();
+            this.allObjects.Clear();
+        }
+    }
 }

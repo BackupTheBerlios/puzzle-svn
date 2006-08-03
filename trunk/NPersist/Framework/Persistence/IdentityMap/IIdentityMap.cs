@@ -52,6 +52,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void RemoveObject(object obj);
 
+        void Clear();
 		
 		object TryGetObject(string identity, Type type);
 	}
