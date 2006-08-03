@@ -514,5 +514,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
+        public override void Clear()
+        {
+            base.Clear();
+            this.inverseActions.Clear();
+            this.inverseMasters.Clear();
+        }
+
 	}
 }

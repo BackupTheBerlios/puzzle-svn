@@ -483,5 +483,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.m_BatchStatements.Clear() ;
 		}
 
+        public virtual void Clear()
+        {
+		    m_BatchStatements.Clear();
+        }
+
 	}
 }

@@ -598,5 +598,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 		}
 
+        public virtual void Clear()
+        {
+
+        }
+
 	}
 }

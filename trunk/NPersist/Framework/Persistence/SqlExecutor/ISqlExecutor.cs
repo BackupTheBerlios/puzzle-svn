@@ -65,5 +65,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		DataTable ReaderToDataTable(IDataReader dr);
 
 		void CleatBatchedStatements();
-	}
+
+        void Clear();
+    }
 }

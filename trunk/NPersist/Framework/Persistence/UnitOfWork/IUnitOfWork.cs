@@ -36,5 +36,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		ArrayList GetDeletedObjects();
 
 		ArrayList GetDirtyObjects();
-	}
+
+        void Clear();
+    }
 }

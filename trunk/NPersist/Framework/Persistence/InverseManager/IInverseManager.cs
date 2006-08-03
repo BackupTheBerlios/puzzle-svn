@@ -38,5 +38,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		void RemoveInverseReferences(object obj);
 
 		void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value);
-	}
+
+        void Clear();
+    }
 }

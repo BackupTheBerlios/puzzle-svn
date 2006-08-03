@@ -2143,6 +2143,8 @@ namespace Puzzle.NPersist.Framework
         {
             this.IdentityMap.Clear();
             this.UnitOfWork.Clear();
+            this.InverseManager.Clear();
+            this.SqlExecutor.Clear();
         }
 
 
