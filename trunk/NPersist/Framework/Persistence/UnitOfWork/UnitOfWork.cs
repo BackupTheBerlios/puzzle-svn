@@ -1203,5 +1203,19 @@ namespace Puzzle.NPersist.Framework.Persistence
             return true;
         }
 
+        public virtual void Clear()
+        {
+            this.m_hashSpeciallyUpdated.Clear();
+            this.m_hashStillDirty.Clear();
+            this.m_listCreated.Clear();
+            this.m_listDeleted.Clear();
+            this.m_listDirty.Clear();
+            this.m_listInserted.Clear();
+            this.m_listRemoved.Clear();
+            this.m_listUpdated.Clear();
+            this.m_objectStatusLookup.Clear();
+            this.m_topologicalDelete.Clear();
+        }
+
     }
 }

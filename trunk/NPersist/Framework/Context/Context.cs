@@ -2142,6 +2142,7 @@ namespace Puzzle.NPersist.Framework
         public virtual void Clear()
         {
             this.IdentityMap.Clear();
+            this.UnitOfWork.Clear();
         }
 
 
