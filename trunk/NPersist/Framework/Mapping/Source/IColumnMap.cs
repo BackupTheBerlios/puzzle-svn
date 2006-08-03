@@ -8,6 +8,7 @@
 // *
 // *
 
+using System;
 using System.Data;
 using System.Xml.Serialization;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
@@ -66,5 +67,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		string SpecificDataType { get; set; }
 
 		void UpdateName(string newName);
+
+		Type GetSystemType();
 	}
 }

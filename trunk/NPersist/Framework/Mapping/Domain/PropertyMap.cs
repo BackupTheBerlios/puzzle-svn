@@ -323,54 +323,68 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return (string) GetFixedValue("GetFieldName");
 			}
 			string fn;
+			fn = GenerateFieldName();
+			if (IsFixed())
+			{
+				SetFixedValue("GetFieldName", fn);
+			}
+			return fn;
+		}
+
+		public string GenerateFieldName()
+		{
+			string fn;
 			if (m_FieldName == "")
 			{
-				IDomainMap dm = ClassMap.DomainMap;
-				string pre = dm.FieldPrefix;
-				string strategyName = "";
-				if (dm.FieldNameStrategy == FieldNameStrategyType.None)
-				{
-					strategyName = m_Name;
-				}
-				else if (dm.FieldNameStrategy == FieldNameStrategyType.CamelCase)
-				{
-					strategyName = m_Name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + m_Name.Substring(1);
-				}
-				else if (dm.FieldNameStrategy == FieldNameStrategyType.PascalCase)
-				{
-					strategyName = m_Name.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture) + m_Name.Substring(1);
-				}
-				if (pre.Length > 0)
-				{
-					fn = pre + strategyName;
-
-				}
-				else
-				{
-					if (!(strategyName == m_Name))
-					{
-						fn = strategyName;
-					}
-					else
-					{
-						if (!(m_Name.Substring(0, 1) == m_Name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture)))
-						{
-							fn = m_Name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + m_Name.Substring(1);
-						}
-						else
-						{
-							fn = "m_" + m_Name;
-						}
-					}
-				}
+				fn = GenerateMemberName(m_Name);
 			}
 			else
 			{
 				fn = m_FieldName;
 			}
-            if (IsFixed())
+			return fn;
+		}
+
+		public string GenerateMemberName(string name)
+		{
+			string fn;
+			IDomainMap dm = ClassMap.DomainMap;
+			string pre = dm.FieldPrefix;
+			string strategyName = "";
+			if (dm.FieldNameStrategy == FieldNameStrategyType.None)
 			{
-				SetFixedValue("GetFieldName", fn);
+				strategyName = name;
+			}
+			else if (dm.FieldNameStrategy == FieldNameStrategyType.CamelCase)
+			{
+				strategyName = name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + name.Substring(1);
+			}
+			else if (dm.FieldNameStrategy == FieldNameStrategyType.PascalCase)
+			{
+				strategyName = name.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture) + name.Substring(1);
+			}
+			if (pre.Length > 0)
+			{
+				fn = pre + strategyName;
+
+			}
+			else
+			{
+				if (!(strategyName == name))
+				{
+					fn = strategyName;
+				}
+				else
+				{
+					if (!(name.Substring(0, 1) == name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture)))
+					{
+						fn = name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + name.Substring(1);
+					}
+					else
+					{
+						fn = "m_" + name;
+					}
+				}
 			}
 			return fn;
 		}

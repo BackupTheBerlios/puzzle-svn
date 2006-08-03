@@ -28,9 +28,11 @@ Public Interface ITablesToClasses
 
     Property CheckReservedNamesVb() As Boolean
 
-    Property CheckReservedNamesDelphi() As Boolean
+    Property PreventManyManyProperties() As Boolean
 
     Function GetClassNameForTable(ByVal tableMap As ITableMap) As String
+
+    Property CheckReservedNamesDelphi() As Boolean
 
     Overloads Function GetPropertyNameForColumn(ByVal columnMap As IColumnMap) As String
 

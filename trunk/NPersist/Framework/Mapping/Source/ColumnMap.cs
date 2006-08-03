@@ -8,6 +8,7 @@
 // *
 // *
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Xml.Serialization;
@@ -335,6 +336,88 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			m_name = newName;
 		}
+
+		public virtual Type GetSystemType()
+		{
+			Type result = typeof(string);
+			switch (this.m_DataType)
+			{
+				case DbType.AnsiString :
+					result = typeof(string);
+					break;
+				case DbType.AnsiStringFixedLength  :
+					result = typeof(string);
+					break;
+				case DbType.Binary  :
+					result = typeof(byte[]);
+					break;
+				case DbType.Boolean  :
+					result = typeof(bool);
+					break;
+				case DbType.Byte  :
+					result = typeof(byte);
+					break;
+				case DbType.Currency  :
+					result = typeof(decimal);
+					break;
+				case DbType.Date  :
+					result = typeof(DateTime);
+					break;
+				case DbType.DateTime :
+					result = typeof(DateTime);
+					break;
+				case DbType.Decimal  :
+					result = typeof(decimal);
+					break;
+				case DbType.Double  :
+					result = typeof(double);
+					break;
+				case DbType.Guid :
+					result = typeof(Guid);
+					break;
+				case DbType.Int16  :
+					result = typeof(Int16);
+					break;
+				case DbType.Int32  :
+					result = typeof(Int32);
+					break;
+				case DbType.Int64  :
+					result = typeof(Int64);
+					break;
+				case DbType.Object :
+					result = typeof(byte[]);
+					break;
+				case DbType.SByte  :
+					result = typeof(byte);
+					break;
+				case DbType.Single  :
+					result = typeof(Single);
+					break;
+				case DbType.String   :
+					result = typeof(string);
+					break;
+				case DbType.StringFixedLength   :
+					result = typeof(string);
+					break;
+				case DbType.Time   :
+					result = typeof(DateTime);
+					break;
+				case DbType.UInt16 :
+					result = typeof(UInt16);
+					break;
+				case DbType.UInt32 :
+					result = typeof(UInt32);
+					break;
+				case DbType.UInt64  :
+					result = typeof(Int64);
+					break;
+				case DbType.VarNumeric  :
+					result = typeof(byte[]);
+					break;
+			}
+			return result;
+		}
+
 
 		public override IMap Clone()
 		{

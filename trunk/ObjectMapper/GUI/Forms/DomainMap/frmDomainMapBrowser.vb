@@ -7867,6 +7867,8 @@ Public Class frmDomainMapBrowser
                         m_TablesToClasses.GetInverseNameForPropertyConverter = convObj
                         m_TablesToClasses.GetInverseNameForPropertyConverterMethod = convMeth
 
+                        m_TablesToClasses.PreventManyManyProperties = .PreventManyManyProperties
+
                     End With
 
                     Exit For

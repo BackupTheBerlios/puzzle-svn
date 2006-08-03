@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml.Serialization;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
+using System.Globalization;
 
 namespace Puzzle.NPersist.Framework.Mapping.Immutable
 {
@@ -1201,5 +1202,49 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
             throw new Exception("The method or operation is not implemented.");
         }
         #endregion
+
+		public string GenerateMemberName(string name)
+		{
+			string fn;
+			IDomainMap dm = ClassMap.DomainMap;
+			string pre = dm.FieldPrefix;
+			string strategyName = "";
+			if (dm.FieldNameStrategy == FieldNameStrategyType.None)
+			{
+				strategyName = name;
+			}
+			else if (dm.FieldNameStrategy == FieldNameStrategyType.CamelCase)
+			{
+				strategyName = name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + name.Substring(1);
+			}
+			else if (dm.FieldNameStrategy == FieldNameStrategyType.PascalCase)
+			{
+				strategyName = name.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture) + name.Substring(1);
+			}
+			if (pre.Length > 0)
+			{
+				fn = pre + strategyName;
+
+			}
+			else
+			{
+				if (!(strategyName == name))
+				{
+					fn = strategyName;
+				}
+				else
+				{
+					if (!(name.Substring(0, 1) == name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture)))
+					{
+						fn = name.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + name.Substring(1);
+					}
+					else
+					{
+						fn = "m_" + name;
+					}
+				}
+			}
+			return fn;
+		}
     }
 }

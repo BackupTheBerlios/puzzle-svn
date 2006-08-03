@@ -92,5 +92,20 @@ Public Class TablesToClassesConfigProperties
         End Set
     End Property
 
+    <Category("Relationships"), _
+        Description("If true, no many-many relationships will be generated. You may want to use this feature if your target mapper does not support many-many properties."), _
+        DisplayName("Prevent many-many properties"), _
+        DefaultValue(False)> Public Property PreventManyManyProperties() As Boolean
+        Get
+            Return m_TablesToClassesConfig.PreventManyManyProperties
+        End Get
+        Set(ByVal Value As Boolean)
+            If Value <> m_TablesToClassesConfig.PreventManyManyProperties Then
+                m_TablesToClassesConfig.PreventManyManyProperties = Value
+                RaiseEvent AfterPropertySet(m_TablesToClassesConfig, "PreventManyManyProperties")
+            End If
+        End Set
+    End Property
+
 End Class
 

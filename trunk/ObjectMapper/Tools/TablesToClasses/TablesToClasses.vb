@@ -29,6 +29,8 @@ Public Class TablesToClasses
     Private m_GetInverseNameForPropertyConverter As Object
     Private m_GetInverseNameForPropertyConverterMethod As MethodInfo
 
+    Private m_PreventManyManyProperties As Boolean = False
+
     Public Property GetClassNameForTableConverter() As Object Implements ITablesToClasses.GetClassNameForTableConverter
         Get
             Return m_GetClassNameForTableConverter
@@ -80,6 +82,15 @@ Public Class TablesToClasses
         End Get
         Set(ByVal Value As MethodInfo)
             m_GetInverseNameForPropertyConverterMethod = Value
+        End Set
+    End Property
+
+    Public Property PreventManyManyProperties() As Boolean Implements ITablesToClasses.PreventManyManyProperties
+        Get
+            Return m_PreventManyManyProperties
+        End Get
+        Set(ByVal Value As Boolean)
+            m_PreventManyManyProperties = Value
         End Set
     End Property
 
@@ -1703,6 +1714,8 @@ Public Class TablesToClasses
     End Property
 
     Protected Overridable Function IsManyManyTable(ByVal tableMap As ITableMap) As Boolean
+
+        If m_PreventManyManyProperties Then Return False
 
         Dim primaryTableName As String
         Dim hashPrimaryTables As New Hashtable

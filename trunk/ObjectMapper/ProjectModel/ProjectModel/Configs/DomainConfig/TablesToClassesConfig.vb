@@ -12,6 +12,7 @@ Namespace ProjectModel
         Private m_PropertyToInverseNameConverter As String = ""
 
         Private m_GenerateInverseProperties As Boolean = True
+        Private m_PreventManyManyProperties As Boolean = False
 
         Public Property TableToClassNameConverter() As String
             Get
@@ -49,6 +50,14 @@ Namespace ProjectModel
             End Set
         End Property
 
+        Public Overridable Property PreventManyManyProperties() As Boolean
+            Get
+                Return m_PreventManyManyProperties
+            End Get
+            Set(ByVal Value As Boolean)
+                m_PreventManyManyProperties = Value
+            End Set
+        End Property
 
         Public Overrides Function Clone() As IMap
 

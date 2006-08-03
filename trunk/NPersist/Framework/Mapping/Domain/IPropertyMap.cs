@@ -182,6 +182,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		TimeToLiveBehavior GetTimeToLiveBehavior();
 
+		string GenerateMemberName(string name);
+
 		//O/D Mapping
 
 		string DocSource { get; set; }
