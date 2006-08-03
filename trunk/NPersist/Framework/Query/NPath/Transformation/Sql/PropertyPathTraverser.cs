@@ -420,6 +420,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			IPropertyMap parentMap = null;
 			ArrayList propertyMaps = GetPathPropertyMaps(propertyPath);
 			string path = "";
+            bool outerJoin = false;
 			foreach (IPropertyMap pathMap in propertyMaps)
 			{
 				propertyMap = pathMap;
@@ -427,7 +428,14 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				{
 					if (path.Length > 0) { path += "." ;}
 					path += propertyMap.Name;
-					joinTree.SetupJoin(propertyMap, parentMap, path);
+                    JoinType joinType = JoinType.InnerJoin;
+                    if (pathMap.GetIsNullable() && sqlEmitter.HasOrExpression)
+                        outerJoin = true;
+
+                    if (outerJoin)
+                        joinType = JoinType.OuterJoin;
+
+					joinTree.SetupJoin(propertyMap, parentMap, path,joinType);
 				}
 				else
 				{

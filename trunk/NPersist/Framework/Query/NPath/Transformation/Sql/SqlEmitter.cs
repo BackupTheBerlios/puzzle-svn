@@ -114,6 +114,13 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		#region Public Properties
 
+        public bool HasOrExpression
+        {
+            get
+            {
+                return orExpressionCount > 0;
+            }
+        }
 		
 		public string Sql
 		{
