@@ -65,7 +65,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectByNPath(NPathQuery npathQuery);
 
 		/// <summary>
-		/// Tries to retrieve an object by an <c>NPathQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// Tries to retrieve an object by an NPath query. Returns null if the object was not found or if more than one object matched the query.
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -82,7 +82,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectByNPath(string npathQuery, Type type, IList parameters);
 
 		/// <summary>
-		/// Retrieves an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query.
 		/// </summary>
 		/// <param name="npathQuery">An <c>NPathQuery</c> object specifying which object you want to retrieve.</param>
 		/// <returns>An object matching the NPath query.</returns>
@@ -91,7 +91,7 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectByNPath(NPathQuery npathQuery);
 
 		/// <summary>
-		/// Retrieves an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query.
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -101,7 +101,7 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectByNPath(string npathQuery, Type type);
 
 		/// <summary>
-		/// Retrieves an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query.
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -132,7 +132,7 @@ namespace Puzzle.NPersist.Framework
 		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
-		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <param name="type">The type of the objects you want to retrieve.</param>
 		/// <returns>A list of objects matching the query</returns>
 		IList GetObjectsByNPath(string npathQuery, Type type);
 
@@ -140,7 +140,7 @@ namespace Puzzle.NPersist.Framework
 		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
-		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <param name="type">The type of the objects you want to retrieve.</param>
 		/// <param name="parameters">A list of <c>QueryParameter</c> objects for the NPath query</param>
 		/// <returns>A list of objects matching the query</returns>
 		IList GetObjectsByNPath(string npathQuery, Type type, IList parameters);
@@ -149,7 +149,7 @@ namespace Puzzle.NPersist.Framework
 		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
-		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <param name="type">The type of the objects you want to retrieve.</param>
 		/// <param name="parameters">A list of <c>QueryParameter</c> objects for the NPath query</param>
 		/// <param name="refreshBehavior">Specifies how cached objects become refreshed with fresh values from the data source.</param>
 		/// <returns>A list of objects matching the query</returns>
@@ -173,7 +173,7 @@ namespace Puzzle.NPersist.Framework
         /// </remarks>
 		/// <param name="type">The type of the new object</param>
 		/// <param name="ctorParams">Contructor parameters for the new object</param>
-		/// <returns>A new object with the specified type and a generated identity (in the case of a data source generated identity, the object will have a temporary identity until it has been persisted)</returns>
+		/// <returns>A new object with the specified type.</returns>
 		object CreateObject(Type type, params object[] ctorParams);
 
 

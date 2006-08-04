@@ -316,22 +316,22 @@ namespace Puzzle.NPersist.Framework
         /// <summary>
         /// Executes a scalar sql query.
         /// </summary>
-        /// <param name="npath">The sql query string.</param>
+        /// <param name="sql">The sql query string.</param>
         /// <returns>A scalar result</returns>
 		object ExecuteScalarBySql(string sql);
 
         /// <summary>
-        /// Executes the scalar by SQL.
+        /// Executes a scalar sql query.
         /// </summary>
-        /// <param name="sql">The SQL.</param>
+        /// <param name="sql">The sql query string.</param>
         /// <param name="parameters">The query parameters.</param>
         /// <returns></returns>
 		object ExecuteScalarBySql(string sql, IList parameters);
 
         /// <summary>
-        /// Executes the scalar by SQL.
+        /// Executes a scalar sql query.
         /// </summary>
-        /// <param name="sql">The SQL.</param>
+        /// <param name="sql">The sql query string.</param>
         /// <param name="parameters">The query parameters.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns></returns>
@@ -432,14 +432,14 @@ namespace Puzzle.NPersist.Framework
         /// <summary>
         /// Refreshes a property of an object, reloading it with the current value form the data source.
         /// </summary>
-        /// <param name="objects">The object with the property to be refreshed.</param>
+        /// <param name="obj">The object with the property to be refreshed.</param>
         /// <param name="propertyName">The name of the property to be refreshed.</param>
 		void RefreshProperty(object obj, string propertyName);
 
         /// <summary>
         /// Refreshes a property of an object, reloading it with the current value form the data source.
         /// </summary>
-        /// <param name="objects">The object with the property to be refreshed.</param>
+        /// <param name="obj">The object with the property to be refreshed.</param>
         /// <param name="propertyName">The name of the property to be refreshed.</param>
         /// <param name="refreshBehavior">The refresh behavior to be used.</param>
 		void RefreshProperty(object obj, string propertyName, RefreshBehaviorType refreshBehavior);
@@ -1132,30 +1132,33 @@ namespace Puzzle.NPersist.Framework
         object GetObject(object identity, Type type);
 
 		/// <summary>
-		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// Retrieves an object by query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="query">The query specifying the object you want to retrieve.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObject(IQuery query);
 
 		/// <summary>
-		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// Retrieves an object by query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="query">The query specifying the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObject(IQuery query, Type type);
 
 		/// <summary>
-		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// Retrieves an object by query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="query">The query specifying the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
         /// <param name="parameters">The query parameters.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObject(IQuery query, Type type, IList parameters);
 
 
@@ -1174,22 +1177,22 @@ namespace Puzzle.NPersist.Framework
 		/// </summary>
 		/// <param name="identity">The identity of the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
-        /// <param name="lazy">Indicates if the object should be lazily or eagerly loaded.</param>
         /// <param name="refreshBehavior">The refresh behavior.</param>
 		/// <returns>An object with the specified type and identity.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object with the specified identity and type could be found</exception>
         object GetObjectById(object identity, Type type, RefreshBehaviorType refreshBehavior); //Note, special handling - needs to be converted into a query!
 
 		/// <summary>
-		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// Retrieves an object by query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="query">The query specifying the object you want to retrieve.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObjectByQuery(IQuery query);
 
 		/// <summary>
-		/// Retrieves an object by an NPath query. Throws an exception if the object was not found.
+		/// Retrieves an object by an NPath query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="npathQuery">The query specifying the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -1197,87 +1200,345 @@ namespace Puzzle.NPersist.Framework
         /// <param name="refreshBehavior">The refresh behavior.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
 
 		/// <summary>
-		/// Retrieves an object by sql query. Throws an exception if the object was not found.
+		/// Retrieves an object by sql query. Throws an exception if the object was not found or more than one object matches the query.
 		/// </summary>
         /// <param name="sqlQuery">The sql query specifying the object you want to retrieve.</param>
 		/// <returns>An object matching the query.</returns>
 		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query.</exception>
         object GetObjectBySql(SqlQuery sqlQuery);
 
+		/// <summary>
+		/// Retrieves an object by sql query. Throws an exception if the object was not found or more than one object matches the query.
+		/// </summary>
+        /// <param name="sqlQuery">The sql query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObjectBySql(string sqlQuery, Type type);
 
+		/// <summary>
+		/// Retrieves an object by sql query. Throws an exception if the object was not found or more than one object matches the query.
+		/// </summary>
+        /// <param name="sqlQuery">The sql query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObjectBySql(string sqlQuery, Type type, IList parameters);
 
+		/// <summary>
+		/// Retrieves an object by sql query. Throws an exception if the object was not found or more than one object matches the query.
+		/// </summary>
+        /// <param name="sqlQuery">The sql query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         object GetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an <c>SqlQuery</c> query
+		/// </summary>
+		/// <param name="sqlQuery">An <c>SqlQuery</c> object specifying which objects you want to retrieve.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(SqlQuery sqlQuery);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an <c>SqlQuery</c> query
+		/// </summary>
+		/// <param name="sqlQuery">An <c>SqlQuery</c> object specifying which objects you want to retrieve.</param>
+		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results of the query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(SqlQuery sqlQuery, IList listToFill);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList parameters);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="idColumns">The names of the primary key columns.</param>
+        /// <param name="typeColumns">The names of the type dicriminator columns (if any).</param>
+        /// <param name="propertyColumnMap">Table with property names as keys and column names as values.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="idColumns">The names of the primary key columns.</param>
+        /// <param name="typeColumns">The names of the type dicriminator columns (if any).</param>
+        /// <param name="propertyColumnMap">Table with property names as keys and column names as values.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters);
 
+
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="idColumns">The names of the primary key columns.</param>
+        /// <param name="typeColumns">The names of the type dicriminator columns (if any).</param>
+        /// <param name="propertyColumnMap">Table with property names as keys and column names as values.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Retrieves a list of objects matching an sql query
+		/// </summary>
+        /// <param name="sqlQuery">The sql query string.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="idColumns">The names of the primary key columns.</param>
+        /// <param name="typeColumns">The names of the type dicriminator columns (if any).</param>
+        /// <param name="propertyColumnMap">Table with property names as keys and column names as values.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results of the query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
 
+        /// <summary>
+        /// Retrieves all objects of the specified type.
+        /// </summary>
+        /// <param name="type">The type for which you want to retrieve all objects.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(Type type);
 
+        /// <summary>
+        /// Retrieves all objects of the specified type.
+        /// </summary>
+        /// <param name="type">The type for which you want to retrieve all objects.</param>
+		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(Type type, IList listToFill);
 
+        /// <summary>
+        /// Retrieves all objects of the specified type.
+        /// </summary>
+        /// <param name="type">The type for which you want to retrieve all objects.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(Type type, RefreshBehaviorType refreshBehavior);
 
+        /// <summary>
+        /// Retrieves all objects of the specified type.
+        /// </summary>
+        /// <param name="type">The type for which you want to retrieve all objects.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill);
 
+		/// <summary>
+		/// Retrieves a list of objects matching a query.
+		/// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(IQuery query, Type type);
 
+		/// <summary>
+		/// Retrieves a list of objects matching a query.
+		/// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(IQuery query, Type type, IList parameters);
 
+		/// <summary>
+		/// Retrieves a list of objects matching a query.
+		/// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="type">The type of the objects to be retrieved.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjects(IQuery query, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Retrieves a list of objects matching a query.
+		/// </summary>
+        /// <param name="query">The query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsByQuery(IQuery query);
 
+		/// <summary>
+		/// Retrieves a list of objects matching a query.
+		/// </summary>
+        /// <param name="query">The query.</param>
+		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results of the query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList GetObjectsByQuery(IQuery query, IList listToFill);
 
+        /// <summary>
+        /// Filters a list of objects, returning only those matching the supplied query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="query">The query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(IList objects, NPathQuery query);
 
+        /// <summary>
+        /// Filters a list of objects, returning only those matching the supplied query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(IList objects, string npath, Type type);
 
+        /// <summary>
+        /// Filters a list of objects, returning only those matching the supplied query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(IList objects, string npath, Type type, IList parameters);
 
+        /// <summary>
+        /// Filters the objects in the cache, returning only those matching the supplied query.
+        /// </summary>
+        /// <param name="query">The npath query.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(NPathQuery query);
 
+        /// <summary>
+        /// Filters the objects in the cache, returning those matching the supplied query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(string npath, Type type);
 
+        /// <summary>
+        /// Filters the objects in the cache, returning those matching the supplied query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList FilterObjects(string npath, Type type, IList parameters);
 
+        /// <summary>
+        /// Filters a list of objects, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="query">The <c>NPathQuery</c> query.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(IList objects, NPathQuery query);
 
+        /// <summary>
+        /// Filters a list of objects, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(IList objects, string npath, Type type);
 
+
+        /// <summary>
+        /// Filters a list of objects, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="objects">The list of objects that you want to filter.</param>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(IList objects, string npath, Type type, IList parameters);
 
+        /// <summary>
+        /// Filters the objects in the cahce, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="query">The <c>NPathQuery</c> query.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(NPathQuery query);
 
+
+        /// <summary>
+        /// Filters the objects in the cahce, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(string npath, Type type);
 
+        /// <summary>
+        /// Filters the objects in the cahce, returning a <c>DataTable</c> with values from the objects matching the NPath query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable FilterIntoDataTable(string npath, Type type, IList parameters);
 
+        /// <summary>
+        /// Retrieves the result of an NPath query in the form of a DataTable.
+        /// </summary>
+        /// <param name="query">The <c>NPathQuery</c> query.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable GetDataTable(NPathQuery query);
 
+        /// <summary>
+        /// Retrieves the result of an NPath query in the form of a DataTable.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable GetDataTable(string npath, Type type);
 
+        /// <summary>
+        /// Retrieves the result of an NPath query in the form of a DataTable.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type of the objects you want to filter.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable GetDataTable(string npath, Type type, IList parameters);
        
 
@@ -1285,22 +1546,115 @@ namespace Puzzle.NPersist.Framework
         #region .NET 2.0 Specific Code
 #if NET2
 
+		/// <summary>
+		/// Tries to retrieve an object by its identity. Returns null if the object was not found.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="identity">The identity of the object you want to retrieve.</param>
+		/// <returns>An object with the specified type and identity or null if no such object exists.</returns>
         T TryGetObjectById<T> (object identity);
+
+		/// <summary>
+		/// Retrieves an object by its identity. Throws an exception if the object was not found.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="identity">The identity of the object you want to retrieve.</param>
+		/// <returns>An object with the specified type and identity.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object with the specified identity and type could be found</exception>
         T GetObjectById<T>(object identity);
 
+		/// <summary>
+		/// Tries to retrieve an object by an NPath query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+		/// <returns>An object matching the NPath query or null if no such object or multiple such objects were found.</returns>
         T TryGetObjectByNPath<T>(string npathQuery);
+
+		/// <summary>
+		/// Retrieves an object by an NPath query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+		/// <returns>An object matching the NPath query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         T GetObjectByNPath<T>(string npathQuery);
 
+		/// <summary>
+		/// Tries to retrieve an object by an NPath query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the NPath query or null if no such object or multiple such objects were found.</returns>
         T TryGetObjectByNPath<T>(string npathQuery,params QueryParameter[] parameters);
+
+		/// <summary>
+		/// Retrieves an object by an NPath query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the NPath query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         T GetObjectByNPath<T>(string npathQuery, params QueryParameter[] parameters);
 
+		/// <summary>
+		/// Tries to retrieve an object by an NPath query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the NPath query or null if no such object or multiple such objects were found.</returns>
         T TryGetObjectByNPath<T>(string npathQuery, IList parameters);
+
+		/// <summary>
+		/// Retrieves an object by an NPath query.
+		/// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the NPath query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.MultipleObjectsFoundException">Thrown when more than one object matched the query</exception>
         T GetObjectByNPath<T>(string npathQuery, IList parameters);
         
+		/// <summary>
+		/// Creates a new object with the specified type, registering it as up for creation. It will be inserted into the data source in the next call to <c>Commit</c>(). 
+		/// </summary>
+        /// <remarks>
+        /// Note that you must set the values of all the identity properties on the object before calling the Commit() method.
+        /// </remarks>
+        /// <typeparam name="T">The type of the new object.</typeparam>
+		/// <param name="ctorArgs">Contructor arguments for the new object</param>
+		/// <returns>A new object with the specified type.</returns>
         T CreateObject<T>(params object[] ctorArgs);
 
+        /// <summary>
+        /// Retrieves all the objects of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type for which you want to retrieve all objects.</typeparam>
+        /// <returns>All objects of the specified type.</returns>
         IList<T> GetObjects<T>();
+
+		/// <summary>
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
+		/// </summary>
+        /// <typeparam name="T">The type of the objects you want to retrieve.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+		/// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList<T> GetObjectsByNPath<T>(string npathQuery, params QueryParameter[] parameters);
+
+		/// <summary>
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
+		/// </summary>
+        /// <typeparam name="T">The type of the objects you want to retrieve.</typeparam>
+		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
+		/// <param name="parameters">The query parameters.</param>
+		/// <returns>A list of objects matching the query</returns>
         IList<T> GetObjectsByNPath<T>(string npathQuery, IList parameters);
 
         T[] GetArrayByNPath<T>(string npathQuery);
