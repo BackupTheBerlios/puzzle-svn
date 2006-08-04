@@ -22,7 +22,7 @@ namespace Puzzle.NPersist.Framework
 	{
 
 		/// <summary>
-		/// Try to retrieve an object by its identity (returns null if the object was not found)
+		/// Tries to retrieve an object by its identity. Returns null if the object was not found.
 		/// </summary>
 		/// <param name="identity">The identity of the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -30,7 +30,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectById(object identity, Type type);
 
 		/// <summary>
-		/// Retrieve an object by its identity (throws an exception if the object was not found)
+		/// Retrieves an object by its identity. Throws an exception if the object was not found.
 		/// </summary>
 		/// <param name="identity">The identity of the object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -39,7 +39,7 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectById(object identity, Type type);
 
 		/// <summary>
-		/// Retrieve an object by a secondary, unique key (returns null if the object was not found).
+		/// Retrieves an object by a secondary, unique key. Returns null if the object was not found.
 		/// </summary>
 		/// <param name="keyPropertyName">The name of the key property.</param>
 		/// <param name="keyValue">The unique key value</param>
@@ -48,7 +48,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectByKey(string keyPropertyName, object keyValue, Type type);
 
 		/// <summary>
-		/// Retrieve an object by a secondary, unique key (throws an exception if the object was not found).
+		/// Retrieves an object by a secondary, unique key. Throws an exception if the object was not found.
 		/// </summary>
 		/// <param name="keyPropertyName">The name of the key property.</param>
 		/// <param name="keyValue">The unique key value</param>
@@ -58,14 +58,14 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectByKey(string keyPropertyName, object keyValue, Type type);
 
 		/// <summary>
-		/// Try to retrieve an object by an <c>NPathQuery</c> query (returns null if the object was not found or if more than one object matched the query)
+		/// Tries to retrieve an object by an <c>NPathQuery</c> query. Rreturns null if the object was not found or if more than one object matched the query.
 		/// </summary>
 		/// <param name="npathQuery">An <c>NPathQuery</c> object specifying which object you want to retrieve.</param>
 		/// <returns>An object matching the NPath query or null if no such object or multiple such objects were found.</returns>
 		object TryGetObjectByNPath(NPathQuery npathQuery);
 
 		/// <summary>
-		/// Try to retrieve an object by an <c>NPathQuery</c> query (returns null if the object was not found or if more than one object matched the query)
+		/// Tries to retrieve an object by an <c>NPathQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -73,7 +73,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectByNPath(string npathQuery, Type type);
 
 		/// <summary>
-		/// Try to retrieve an object by an <c>NPathQuery</c> query (returns null if the object was not found or if more than one object matched the query)
+		/// Tries to retrieve an object by an <c>NPathQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -82,7 +82,7 @@ namespace Puzzle.NPersist.Framework
 		object TryGetObjectByNPath(string npathQuery, Type type, IList parameters);
 
 		/// <summary>
-		/// Retrieve an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">An <c>NPathQuery</c> object specifying which object you want to retrieve.</param>
 		/// <returns>An object matching the NPath query.</returns>
@@ -91,7 +91,7 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectByNPath(NPathQuery npathQuery);
 
 		/// <summary>
-		/// Retrieve an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -101,7 +101,7 @@ namespace Puzzle.NPersist.Framework
 		object GetObjectByNPath(string npathQuery, Type type);
 
 		/// <summary>
-		/// Retrieve an object by an <c>NPathQuery</c> query
+		/// Retrieves an object by an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -113,7 +113,7 @@ namespace Puzzle.NPersist.Framework
 
 
 		/// <summary>
-		/// Retrieve a list of objects matching an <c>NPathQuery</c> query
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">An <c>NPathQuery</c> object specifying which objects you want to retrieve.</param>
 		/// <returns>A list of objects matching the query</returns>
@@ -121,7 +121,7 @@ namespace Puzzle.NPersist.Framework
 
 		
 		/// <summary>
-		/// Retrieve a list of objects matching an <c>NPathQuery</c> query
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">An <c>NPathQuery</c> object specifying which objects you want to retrieve.</param>
 		/// <param name="listToFill">An <c>IList</c> that you want to fill with the results of the query.</param>
@@ -129,7 +129,7 @@ namespace Puzzle.NPersist.Framework
 		IList GetObjectsByNPath(NPathQuery npathQuery, IList listToFill);
 
 		/// <summary>
-		/// Retrieve a list of objects matching an <c>NPathQuery</c> query
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -137,7 +137,7 @@ namespace Puzzle.NPersist.Framework
 		IList GetObjectsByNPath(string npathQuery, Type type);
 
 		/// <summary>
-		/// Retrieve a list of objects matching an <c>NPathQuery</c> query
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -146,7 +146,7 @@ namespace Puzzle.NPersist.Framework
 		IList GetObjectsByNPath(string npathQuery, Type type, IList parameters);
 
 		/// <summary>
-		/// Retrieve a list of objects matching an <c>NPathQuery</c> query
+		/// Retrieves a list of objects matching an <c>NPathQuery</c> query
 		/// </summary>
 		/// <param name="npathQuery">The NPath query string specifying which object you want to retrieve.</param>
 		/// <param name="type">The type of the object you want to retrieve.</param>
@@ -157,7 +157,7 @@ namespace Puzzle.NPersist.Framework
 
 
 		/// <summary>
-		/// Create a new object with the specified identity and type, registering it as up for creation. It will be inserted into the data source on the next call to <c>Commit</c>().
+		/// Creates a new object with the specified identity and type, registering it as up for creation. It will be inserted into the data source on the next call to <c>Commit</c>().
 		/// </summary>
 		/// <param name="identity">The identity for the new object</param>
 		/// <param name="type">The type of the new object</param>
@@ -166,7 +166,7 @@ namespace Puzzle.NPersist.Framework
 		object CreateObject(object identity, Type type, params object[] ctorParams);
 
 		/// <summary>
-		/// Create a new object with the specified type, registering it as up for creation. It will be inserted into the data source in the next call to <c>Commit</c>(). 
+		/// Creates a new object with the specified type, registering it as up for creation. It will be inserted into the data source in the next call to <c>Commit</c>(). 
 		/// </summary>
         /// <remarks>
         /// Note that you must set the values of all the identity properties on the object before calling the Commit() method.

@@ -965,13 +965,34 @@ namespace Puzzle.NPersist.Framework
         /// <summary>
         /// Constructs an NPathQuery object representing an npath query for loading the passed in object with values from the database.
         /// </summary>
+        /// <remarks>
+        /// This is really just a utility method used by some of the NPersist methods, but it has been exposed since it might be useful sometimes when creating new framework functionality on top of NPersist.
+        /// </remarks>
         /// <param name="obj">The object that should be loaded with values from the database.</param>
         /// <param name="refreshBehavior">The refresh behavior determining what happens if a fresh value from the database conflicts with a value in the cache.</param>
         /// <returns></returns>
 		NPathQuery GetLoadObjectNPathQuery(object obj, RefreshBehaviorType refreshBehavior);
 
+        /// <summary>
+        /// Constructs an NPathQuery object representing an npath query for loading the passed in object with values from the database.
+        /// </summary>
+        /// <remarks>
+        /// This is really just a utility method used by some of the NPersist methods, but it has been exposed since it might be useful sometimes when creating new framework functionality on top of NPersist.
+        /// </remarks>
+        /// <param name="obj">The object that should be loaded with values from the database.</param>
+        /// <param name="span">The load span indicating related objects that should be loaded together with the main object.</param>
+        /// <returns></returns>
 		NPathQuery GetLoadObjectNPathQuery(object obj, string span);
 
+        /// <summary>
+        /// Constructs an NPathQuery object representing an npath query for loading the passed in object with values from the database.
+        /// </summary>
+        /// <remarks>
+        /// This is really just a utility method used by some of the NPersist methods, but it has been exposed since it might be useful sometimes when creating new framework functionality on top of NPersist.
+        /// </remarks>
+        /// <param name="obj">The object that should be loaded with values from the database.</param>
+        /// <param name="span">The load span indicating related objects that should be loaded together with the main object.</param>
+        /// <param name="refreshBehavior">The refresh behavior determining what happens if a fresh value from the database conflicts with a value in the cache.</param>
 		NPathQuery GetLoadObjectNPathQuery(object obj, string span, RefreshBehaviorType refreshBehavior);
 
 		/// <summary>
@@ -979,52 +1000,212 @@ namespace Puzzle.NPersist.Framework
 		/// </summary>
 		int Timeout { get; set; }
 
+
+        /// <summary>
+        /// Gets the object cache.
+        /// </summary>
+        /// <returns></returns>
 		IObjectCache GetObjectCache();
 
+        /// <summary>
+        /// Gets or sets the time to live for objects in the cache. Note: Not implemented yet!
+        /// </summary>
+        /// <value>The time to live.</value>
 		long TimeToLive { get; set; }
 
+        /// <summary>
+        /// Gets or sets the time to live behavior for objects in the cache. Note: Not implemented yet!
+        /// </summary>
+        /// <value>The time to live behavior.</value>
 		TimeToLiveBehavior TimeToLiveBehavior { get; set; }
 
+        /// <summary>
+        /// Gets or sets the default load behavior.
+        /// </summary>
+        /// <remarks>The load behavior specifies if objects that are requested by identity (the GetObjectById() method) 
+        /// will be loaded lazily or eagerly. With lazy loading (the default) the object (unless it is already in the cache) will
+        /// be instantiated and its identity properties will be filled but no call to the database to load the rest of the
+        /// values or verify that the identity exists will be made. Only as any of the (non-identity) properties of the object
+        /// is accessed will the call be made to the database and the rest of the object will become loaded.</remarks>
+        /// <value>The load behavior.</value>
 		LoadBehavior LoadBehavior { get; set; }
 
 
-
+		/// <summary>
+		/// Tries to retrieve an object by its primary identity. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="identity">The identity of the object.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns></returns>
         object TryGetObject(object identity, Type type);
 
+		/// <summary>
+		/// Tries to retrieve an object by a query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <remarks>
+        /// This overload assumes that the query object is already fully set up with a query string, 
+        /// a Type indicating the type of the object to be returned and any parameters needed by the query.
+        /// </remarks>
+        /// <param name="query">The query specifying the object to be returned.</param>
+        /// <returns></returns>
         object TryGetObject(IQuery query);
 
+		/// <summary>
+		/// Tries to retrieve an object by a query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="query">The query specifying the object to be returned.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns></returns>
         object TryGetObject(IQuery query, Type type);
 
+		/// <summary>
+		/// Tries to retrieve an object by a query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="query">The query specifying the object to be returned.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <returns></returns>
         object TryGetObject(IQuery query, Type type, IList parameters);
 
+		/// <summary>
+		/// Tries to retrieve an object by an <c>NPathQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="npathQuery">The NPath query string.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+        /// <returns></returns>
         object TryGetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Tries to retrieve an object by an <c>SqlQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="sqlQuery">The <c>SqlQuery</c> specifying the object to be retrieved.</param>
+        /// <returns></returns>
         object TryGetObjectBySql(SqlQuery sqlQuery);
 
+		/// <summary>
+		/// Tries to retrieve an object by an <c>SqlQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="sqlQuery">The <c>SqlQuery</c> specifying the object to be retrieved.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns></returns>
         object TryGetObjectBySql(string sqlQuery, Type type);
 
+		/// <summary>
+		/// Tries to retrieve an object by an <c>SqlQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="sqlQuery">The <c>SqlQuery</c> specifying the object to be retrieved.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <returns></returns>
         object TryGetObjectBySql(string sqlQuery, Type type, IList parameters);
 
+		/// <summary>
+		/// Tries to retrieve an object by an <c>SqlQuery</c> query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <param name="sqlQuery">The <c>SqlQuery</c> specifying the object to be retrieved.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+        /// <returns></returns>
         object TryGetObjectBySql(string sqlQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+		/// <summary>
+		/// Tries to retrieve an object by a query. Returns null if the object was not found or if more than one object matched the query.
+		/// </summary>
+        /// <remarks>
+        /// This overload assumes that the query object is already fully set up with a query string, 
+        /// a Type indicating the type of the object to be returned and any parameters needed by the query.
+        /// </remarks>
+        /// <param name="query">The query specifying the object to be returned.</param>
+        /// <returns></returns>
         object TryGetObjectByQuery(IQuery query);
 
+		/// <summary>
+		/// Retrieves an object by its identity. Throws an exception if the object was not found.
+		/// </summary>
+		/// <param name="identity">The identity of the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <returns>An object with the specified type and identity.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object with the specified identity and type could be found</exception>
         object GetObject(object identity, Type type);
 
+		/// <summary>
+		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="query">The query specifying the object you want to retrieve.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObject(IQuery query);
 
+		/// <summary>
+		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="query">The query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObject(IQuery query, Type type);
 
+		/// <summary>
+		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="query">The query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObject(IQuery query, Type type, IList parameters);
 
+
+		/// <summary>
+		/// Retrieves an object by its identity. Throws an exception if the object was not found.
+		/// </summary>
+		/// <param name="identity">The identity of the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="lazy">Indicates if the object should be lazily or eagerly loaded.</param>
+		/// <returns>An object with the specified type and identity.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object with the specified identity and type could be found</exception>
         object GetObjectById(object identity, Type type, bool lazy);
 
-        object GetObjectById(object identity, Type type, RefreshBehaviorType refreshBehavior); //Obs, special handling - needs to be converted into a query!
+		/// <summary>
+		/// Retrieves an object by its identity. Throws an exception if the object was not found.
+		/// </summary>
+		/// <param name="identity">The identity of the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="lazy">Indicates if the object should be lazily or eagerly loaded.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>An object with the specified type and identity.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object with the specified identity and type could be found</exception>
+        object GetObjectById(object identity, Type type, RefreshBehaviorType refreshBehavior); //Note, special handling - needs to be converted into a query!
 
+		/// <summary>
+		/// Retrieves an object by query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="query">The query specifying the object you want to retrieve.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObjectByQuery(IQuery query);
 
+		/// <summary>
+		/// Retrieves an object by an NPath query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="npathQuery">The query specifying the object you want to retrieve.</param>
+		/// <param name="type">The type of the object you want to retrieve.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="refreshBehavior">The refresh behavior.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObjectByNPath(string npathQuery, Type type, IList parameters, RefreshBehaviorType refreshBehavior);
 
+
+		/// <summary>
+		/// Retrieves an object by sql query. Throws an exception if the object was not found.
+		/// </summary>
+        /// <param name="sqlQuery">The sql query specifying the object you want to retrieve.</param>
+		/// <returns>An object matching the query.</returns>
+		/// <exception cref="Puzzle.NPersist.Framework.Exceptions.ObjectNotFoundException">Thrown when no object matching the query could be found</exception>
         object GetObjectBySql(SqlQuery sqlQuery);
 
         object GetObjectBySql(string sqlQuery, Type type);

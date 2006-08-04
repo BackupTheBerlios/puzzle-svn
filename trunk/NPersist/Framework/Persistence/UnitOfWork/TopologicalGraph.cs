@@ -64,5 +64,10 @@ namespace Puzzle.NPersist.Framework.Persistence
             }
             return false;
         }
+
+        public virtual void Clear()
+        {
+            this.graph.Clear();
+        }
     }
 }
