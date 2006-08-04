@@ -10,15 +10,34 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
-	/// <summary>
-	/// Summary description for ValidatinMode.
-	/// </summary>
+    /// <summary>
+    /// The mode of validation.
+    /// </summary>
 	public enum ValidationMode
 	{
-		Default = 0, // Inherits ValidationMode from the ValidationMode holder above. A propertyMap inherits from its classMap, that inherits from its DomainMap, which inherits from the Context. If the Context has ValidationMode.Default, this translates to ValidationMode.ValidateDirty
-		ValidateDirty = 1, // Validates all (and only) Dirty properties
-		ValidateLoaded = 2, //Validates all Loaded properties (including all Dirty properties)
-		ValidateAll = 3, //Validates all Loaded, Dirty and NotLoaded properties (forces loading of NotLoaded properties for validation)
-		Off = 4 //No validation 
+        /// <summary>
+        /// Inherits ValidationMode from the ValidationMode holder above. 
+        /// </summary>
+        /// <remarks>
+        /// A propertyMap inherits from its classMap, that inherits from its DomainMap, which inherits from the Context. 
+        /// If the Context has ValidationMode.Default, this translates to ValidationMode.ValidateDirty.
+        /// </remarks>
+		Default = 0, 
+        /// <summary>
+        /// Validates only Dirty properties.
+        /// </summary>
+		ValidateDirty = 1, 
+        /// <summary>
+        /// Validates all Loaded properties (including all Dirty properties).
+        /// </summary>
+		ValidateLoaded = 2,
+        /// <summary>
+        /// Validates all Loaded, Dirty and NotLoaded properties (forces loading of NotLoaded properties for validation)
+        /// </summary>
+		ValidateAll = 3, 
+        /// <summary>
+        /// No validation
+        /// </summary>
+		Off = 4 
 	}
 }

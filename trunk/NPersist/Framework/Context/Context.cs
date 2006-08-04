@@ -1819,19 +1819,19 @@ namespace Puzzle.NPersist.Framework
 //			return BeginTransaction(dataSource, iso, true);
 		}
 
-		public virtual ITransaction BeginTransaction(bool autoPersistAllOnCommmit)
+		public virtual ITransaction BeginTransaction(bool commitTransactionOnCommittingContext)
 		{
-			return BeginTransaction(IsolationLevel.ReadCommitted, autoPersistAllOnCommmit);
+			return BeginTransaction(IsolationLevel.ReadCommitted, commitTransactionOnCommittingContext);
 
 //			IDataSource dataSource = GetDataSource();
-//			return BeginTransaction(dataSource, IsolationLevel.ReadCommitted, autoPersistAllOnCommmit);
+//			return BeginTransaction(dataSource, IsolationLevel.ReadCommitted, commitTransactionOnCommittingContext);
 		}
 
-		public virtual ITransaction BeginTransaction(IsolationLevel iso, bool autoPersistAllOnCommmit)
+		public virtual ITransaction BeginTransaction(IsolationLevel iso, bool commitTransactionOnCommittingContext)
 		{
-			return new CompositeTransaction(this, iso, autoPersistAllOnCommmit);
+			return new CompositeTransaction(this, iso, commitTransactionOnCommittingContext);
 //			IDataSource dataSource = GetDataSource();
-//			return BeginTransaction(dataSource, iso, autoPersistAllOnCommmit);
+//			return BeginTransaction(dataSource, iso, commitTransactionOnCommittingContext);
 		}
 
 		public virtual ITransaction BeginTransaction(IDataSource dataSource)
@@ -1848,23 +1848,23 @@ namespace Puzzle.NPersist.Framework
 			return BeginTransaction(dataSource, iso, true);
 		}
 
-		public virtual ITransaction BeginTransaction(IDataSource dataSource, bool autoPersistAllOnCommmit)
+		public virtual ITransaction BeginTransaction(IDataSource dataSource, bool commitTransactionOnCommittingContext)
 		{
 			if (dataSource == null)
 				throw new ArgumentNullException("dataSource");
-			return BeginTransaction(dataSource, IsolationLevel.ReadCommitted, autoPersistAllOnCommmit);
+			return BeginTransaction(dataSource, IsolationLevel.ReadCommitted, commitTransactionOnCommittingContext);
 		}
 
-		public virtual ITransaction BeginTransaction(IDataSource dataSource, IsolationLevel iso, bool autoPersistAllOnCommmit)
+		public virtual ITransaction BeginTransaction(IDataSource dataSource, IsolationLevel iso, bool commitTransactionOnCommittingContext)
 		{
 			if (dataSource == null)
 				throw new ArgumentNullException("dataSource");
 
             LogMessage message = new LogMessage("Beginning local transaction");
-            LogMessage verbose = new LogMessage("Data source: {0}, Isolation level: {1} Auto persist: {2} " , dataSource.Name , iso, autoPersistAllOnCommmit);
+            LogMessage verbose = new LogMessage("Data source: {0}, Isolation level: {1} Auto persist: {2} " , dataSource.Name , iso, commitTransactionOnCommittingContext);
             this.LogManager.Info(this, message, verbose); // do not localize	
 
-			TransactionCancelEventArgs e = new TransactionCancelEventArgs(dataSource, iso, autoPersistAllOnCommmit);
+			TransactionCancelEventArgs e = new TransactionCancelEventArgs(dataSource, iso, commitTransactionOnCommittingContext);
 			m_EventManager.OnBeginningTransaction(this, e);
 			if (e.Cancel)
 			{
@@ -1872,7 +1872,7 @@ namespace Puzzle.NPersist.Framework
 			}
 			iso = e.IsolationLevel;
 			dataSource = e.DataSource;
-			autoPersistAllOnCommmit = e.AutoPersistAllOnCommit;
+			commitTransactionOnCommittingContext = e.AutoPersistAllOnCommit;
 
 			IDbConnection connection = dataSource.GetConnection();
 
@@ -1882,10 +1882,10 @@ namespace Puzzle.NPersist.Framework
 			}
 			IDbTransaction dbTransaction = connection.BeginTransaction(iso);
 			ITransaction transaction = new Transaction(dbTransaction, dataSource, this);
-			transaction.AutoPersistAllOnCommit = autoPersistAllOnCommmit;
+			transaction.AutoPersistAllOnCommit = commitTransactionOnCommittingContext;
 			m_Transactions[connection] = transaction;
 
-			TransactionEventArgs e2 = new TransactionEventArgs(transaction, dataSource, iso, autoPersistAllOnCommmit);
+			TransactionEventArgs e2 = new TransactionEventArgs(transaction, dataSource, iso, commitTransactionOnCommittingContext);
 			m_EventManager.OnBegunTransaction(this, e2);
 
 			return transaction;

@@ -20,6 +20,7 @@ using Puzzle.NPath.Framework;
 using Puzzle.NPersist.Framework.NPath;
 using Puzzle.NPersist.Framework.Persistence;
 using Puzzle.NPersist.Framework.Querying;
+
 using Puzzle.NPersist.Framework.Validation;
 #if NET2
 using System.Collections.Generic;
@@ -67,265 +68,906 @@ namespace Puzzle.NPersist.Framework
 		event LoadingPropertyEventHandler LoadingProperty;
 		event LoadedPropertyEventHandler LoadedProperty;
 
+        /// <summary>
+        /// Gets or sets the interceptor.
+        /// </summary>
+        /// <value>The interceptor.</value>
 		IInterceptor Interceptor { get; set; }
 
+        /// <summary>
+        /// Gets or sets the persistence manager.
+        /// </summary>
+        /// <value>The persistence manager.</value>
 		IPersistenceManager PersistenceManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object manager.
+        /// </summary>
+        /// <value>The object manager.</value>
 		IObjectManager ObjectManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the list manager.
+        /// </summary>
+        /// <value>The list manager.</value>
 		IListManager ListManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the domain map.
+        /// </summary>
+        /// <value>The domain map.</value>
 		IDomainMap DomainMap { get; set; }
 
+        /// <summary>
+        /// Gets or sets the identity map.
+        /// </summary>
+        /// <value>The identity map.</value>
 		IIdentityMap IdentityMap { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object cache manager.
+        /// </summary>
+        /// <value>The object cache manager.</value>
 		IObjectCacheManager ObjectCacheManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the read only object cache manager.
+        /// </summary>
+        /// <value>The read only object cache manager.</value>
 		IReadOnlyObjectCacheManager ReadOnlyObjectCacheManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the unit of work.
+        /// </summary>
+        /// <value>The unit of work.</value>
 		IUnitOfWork UnitOfWork { get; set; }
 
+        /// <summary>
+        /// Gets or sets the inverse manager.
+        /// </summary>
+        /// <value>The inverse manager.</value>
 		IInverseManager InverseManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the event manager.
+        /// </summary>
+        /// <value>The event manager.</value>
 		IEventManager EventManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the data source manager.
+        /// </summary>
+        /// <value>The data source manager.</value>
 		IDataSourceManager DataSourceManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the SQL executor.
+        /// </summary>
+        /// <value>The SQL executor.</value>
 		ISqlExecutor SqlExecutor { get; set; }
 
+        /// <summary>
+        /// Gets or sets the log manager.
+        /// </summary>
+        /// <value>The log manager.</value>
 		ILogManager LogManager {get;set;}
 
+        /// <summary>
+        /// Gets or sets the persistence engine.
+        /// </summary>
+        /// <value>The persistence engine.</value>
 		IPersistenceEngine PersistenceEngine { get; set; }
 
+        /// <summary>
+        /// Gets or sets the persistence engine manager.
+        /// </summary>
+        /// <value>The persistence engine manager.</value>
 		IPersistenceEngineManager PersistenceEngineManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the proxy factory.
+        /// </summary>
+        /// <value>The proxy factory.</value>
 		IProxyFactory ProxyFactory {get;set;}
 
 		//ISqlEngineManager SqlEngineManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the N path engine.
+        /// </summary>
+        /// <value>The N path engine.</value>
 		INPathEngine NPathEngine { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object query engine.
+        /// </summary>
+        /// <value>The object query engine.</value>
 		IObjectQueryEngine ObjectQueryEngine { get; set; }
 
+        /// <summary>
+        /// Gets or sets the assembly manager.
+        /// </summary>
+        /// <value>The assembly manager.</value>
 		IAssemblyManager AssemblyManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object factory.
+        /// </summary>
+        /// <value>The object factory.</value>
 		IObjectFactory ObjectFactory { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object cloner.
+        /// </summary>
+        /// <value>The object cloner.</value>
 		IObjectCloner ObjectCloner { get; set; }
 
+        /// <summary>
+        /// Gets or sets the object validator.
+        /// </summary>
+        /// <value>The object validator.</value>
 		IObjectValidator ObjectValidator { get; set; }
 
+        /// <summary>
+        /// Gets or sets the notification mode.
+        /// </summary>
+        /// <value>The notification mode.</value>
 		Notification Notification { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether auto transactions are used.
+        /// </summary>
+        /// <value><c>true</c> if auto transactions should be used; otherwise, <c>false</c>.</value>
 		bool AutoTransactions { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the domain key.
+        /// </summary>
+        /// <value>The domain key.</value>
 		string DomainKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets the parameter counter.
+        /// </summary>
+        /// <value>The parameter counter.</value>
         long ParamCounter { get; set; }
 
+        /// <summary>
+        /// Gets the next parameter number.
+        /// </summary>
+        /// <returns></returns>
         long GetNextParamNr();
 
 
+        /// <summary>
+        /// Gets the object status.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
 		ObjectStatus GetObjectStatus(object obj);
 
+        /// <summary>
+        /// Gets the property status for an object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <returns></returns>
 		PropertyStatus GetPropertyStatus(object obj, string propertyName);
 
+        /// <summary>
+        /// Loads a property of an object with a value from the database.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="propertyName">The name of the property.</param>
 		void LoadProperty(object obj, string propertyName);
 
+        /// <summary>
+        /// Executes a scalar query.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalar(IQuery query);
 
+        /// <summary>
+        /// Executes a scalar query on a specified data source.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalar(IQuery query, IDataSource dataSource);
 
+        /// <summary>
+        /// Executes a scalar npath query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type that the npath query is primarily formulated against.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalar(string npath, Type type);
 
+        /// <summary>
+        /// Executes a scalar npath query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type that the npath query is primarily formulated against.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalarByNPath(string npath, Type type);
 
+        /// <summary>
+        /// Executes a scalar npath query.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type that the npath query is primarily formulated against.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalarByNPath(string npath, Type type, IList parameters);
 
+        /// <summary>
+        /// Executes a scalar npath query on a specified data source.
+        /// </summary>
+        /// <param name="npath">The npath query string.</param>
+        /// <param name="type">The type that the npath query is primarily formulated against.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <returns>A scalar result</returns>
         object ExecuteScalarByNPath(string npath, Type type, IList parameters, IDataSource dataSource);
 
+        /// <summary>
+        /// Executes a scalar sql query.
+        /// </summary>
+        /// <param name="npath">The sql query string.</param>
+        /// <returns>A scalar result</returns>
 		object ExecuteScalarBySql(string sql);
 
+        /// <summary>
+        /// Executes the scalar by SQL.
+        /// </summary>
+        /// <param name="sql">The SQL.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <returns></returns>
 		object ExecuteScalarBySql(string sql, IList parameters);
 
+        /// <summary>
+        /// Executes the scalar by SQL.
+        /// </summary>
+        /// <param name="sql">The SQL.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <returns></returns>
 		object ExecuteScalarBySql(string sql, IList parameters, IDataSource dataSource);
 
+        /// <summary>
+        /// Registers an object with the context using a specified object status
+        /// </summary>
+        /// <remarks>
+        /// This method can be useful for framework developers building on top of NPersist but should usually not be called by the normal NPersist user.
+        /// </remarks>
+        /// <param name="obj">The object to be registered.</param>
+        /// <param name="objectStatus">The object status for the object.</param>
 		void RegisterObject(object obj, ObjectStatus objectStatus);
 
+        /// <summary>
+        /// Registers an object with the context giving it the object status UpForCreation.
+        /// </summary>
+        /// <remarks>
+        /// This method can be useful for framework developers building on top of NPersist but should usually not be called by the normal NPersist user.
+        /// </remarks>
+        /// <param name="obj">The object to be registered.</param>
 		void RegisterObject(object obj);
 
+
+        /// <summary>
+        /// Commits a single object to the data source.
+        /// </summary>
+        /// <remarks>
+        /// This method is exposed in order to provide a route for manual workarounds if the order in which the Commit() method 
+        /// tries to commit the objects in the unit of work should fail due to some error in the topological sort. 
+        /// <br></br><br></br>
+        /// Normally the developer should not call this method which may produce strange results unless you are very sure what you are doing.
+        /// Please use the Commit() method instead.
+        /// </remarks>
+        /// <param name="obj">The object to be committed.</param>
 		void CommitObject(object obj);
 
+        /// <summary>
+        /// Commits a single object to the data source.
+        /// </summary>
+        /// <remarks>
+        /// This method is exposed in order to provide a route for manual workarounds if the order in which the Commit() method 
+        /// tries to commit the objects in the unit of work should fail due to some error in the topological sort. 
+        /// <br></br><br></br>
+        /// Normally the developer should not call this method which may produce strange results unless you are very sure what you are doing.
+        /// Please use the Commit() method instead.
+        /// </remarks>
+        /// <param name="obj">The object to be committed.</param>
+        /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
 		void CommitObject(object obj, int exceptionLimit);
 
+        /// <summary>
+        /// Deletes the objects in the supplied list.
+        /// </summary>
+        /// <remarks>
+        /// The objects will only be marked as UpForCreation and will not be removed from the data source until you call the Commit() method.
+        /// </remarks>
+        /// <param name="objects">The objects to be deleted.</param>
 		void DeleteObjects(IList objects);
 
+        /// <summary>
+        /// Commits all changes to the database. This method has been renamed to Commit().
+        /// </summary>
+        [Obsolete("This method has been renamed to Commit()", false)]
 		void PersistAll();
 
+		/// Commits all changes to the data source, inserting all new objects, removing all deleted object and saving all modified objects.
+        /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
 		void Commit(int exceptionLimit);
 
+        /// <summary>
+        /// Refreshes an object, reloading it with the current values form the data source.
+        /// </summary>
+        /// <param name="obj">The object to be refreshed.</param>
 		void RefreshObject(object obj);
 
+        /// <summary>
+        /// Refreshes an object, reloading it with the current values form the data source.
+        /// </summary>
+        /// <param name="obj">The object to be refreshed.</param>
+        /// <param name="refreshBehavior">The refresh behavior to be used.</param>
 		void RefreshObject(object obj, RefreshBehaviorType refreshBehavior);
 
+        /// <summary>
+        /// Refreshes a list of objects, reloading them with the current values form the data source.
+        /// </summary>
+        /// <param name="objects">The objects to be refreshed.</param>
 		void RefreshObjects(IList objects);
 
+        /// <summary>
+        /// Refreshes a list of objects, reloading them with the current values form the data source.
+        /// </summary>
+        /// <param name="objects">The objects to be refreshed.</param>
+        /// <param name="refreshBehavior">The refresh behavior to be used.</param>
 		void RefreshObjects(IList objects, RefreshBehaviorType refreshBehavior);
 
+        /// <summary>
+        /// Refreshes a property of an object, reloading it with the current value form the data source.
+        /// </summary>
+        /// <param name="objects">The object with the property to be refreshed.</param>
+        /// <param name="propertyName">The name of the property to be refreshed.</param>
 		void RefreshProperty(object obj, string propertyName);
 
+        /// <summary>
+        /// Refreshes a property of an object, reloading it with the current value form the data source.
+        /// </summary>
+        /// <param name="objects">The object with the property to be refreshed.</param>
+        /// <param name="propertyName">The name of the property to be refreshed.</param>
+        /// <param name="refreshBehavior">The refresh behavior to be used.</param>
 		void RefreshProperty(object obj, string propertyName, RefreshBehaviorType refreshBehavior);
 
+        /// <summary>
+        /// Invalidates all objects in the cache, marking their Clean properties as NotLoaded and discarding the original property values.
+        /// </summary>
         void Invalidate();
 
+        /// <summary>
+        /// Invalidates all objects in the cache, marking their properties as NotLoaded and discarding the original property values.
+        /// </summary>
+        /// <param name="invalidateDirty">Set to true if you want to invalidate Dirty properties in addition to Clean ones.</param>
         void Invalidate(bool invalidateDirty);
 
+        /// <summary>
+        /// Invalidates a list of objects, marking their Clean properties as NotLoaded and discarding the original property values.
+        /// </summary>
+        /// <param name="objects">The list of objects to invalidate</param>
 		void Invalidate(IList objects);
 
+        /// <summary>
+        /// Invalidates a list of objects, marking their properties as NotLoaded and discarding the original property values.
+        /// </summary>
+        /// <param name="objects">The list of objects to invalidate</param>
+        /// <param name="invalidateDirty">Set to true if you want to invalidate Dirty properties in addition to Clean ones.</param>
         void Invalidate(IList objects, bool invalidateDirty);
 
+        /// <summary>
+        /// Invalidates an object, marking its Clean properties as NotLoaded and discarding the original property values.
+        /// </summary>
+        /// <param name="obj">The object to invalidate</param>
 		void Invalidate(object obj);
 
+        /// <summary>
+        /// Invalidates an object, marking its properties as NotLoaded and discarding the original property values.
+        /// </summary>
+        /// <param name="obj">The object to invalidate</param>
+        /// <param name="invalidateDirty">Set to true if you want to invalidate Dirty properties in addition to Clean ones.</param>
         void Invalidate(object obj, bool invalidateDirty);
 
+        /// <summary>
+        /// Invalidates a property of an object, marking it as NotLoaded and discarding the original property value.
+        /// </summary>
+        /// <remarks>
+        /// Identity properties can not be invalidated.
+        /// </remarks>
+        /// <param name="obj">The object with the property to invalidate</param>
+        /// <param name="propertyName">The name of the property to invalidate</param>
 		void Invalidate(object obj, string propertyName);
 
+        /// <summary>
+        /// Invalidates a property of an object, marking it as NotLoaded and discarding the original property value.
+        /// </summary>
+        /// <remarks>
+        /// Identity properties can not be invalidated.
+        /// </remarks>
+        /// <param name="obj">The object with the property to invalidate</param>
+        /// <param name="propertyName">The name of the property to invalidate</param>
+        /// <param name="invalidateDirty">Set to true if you want to invalidate Dirty properties in addition to Clean ones.</param>
         void Invalidate(object obj, string propertyName, bool invalidateDirty);
 
+        /// <summary>
+        /// Clears all objects from the cache. 
+        /// </summary>
+        /// <remarks>
+        /// This method clears the object cache and empties the unit of work. It also clears 
+        /// cached actions from the inverse manager and any batched sql statements from the sql executor.<br></br><br></br>
+        /// Please note that after calling Clear() on a context, all objects from that context must be regarded
+        /// as dettached and will not be able to lazy load, dirty track and so on until you attach them to another 
+        /// context. Normally you only use clear if you have released all references to the objects that were brought up by the
+        /// context and you want to start fresh without having to create a new context.
+        /// </remarks> 
         void Clear();
 
+        /// <summary>
+        /// Adds a general observer that will observe both context events and object events on all objects of all types in the context.
+        /// </summary>
+        /// <param name="observer">The observer</param>
 		void AddObserver(IObserver observer);
 
+        /// <summary>
+        /// Adds an observer that will observe either context events or object events on all objects of all types in the context.
+        /// </summary>
+        /// <param name="observer">The observer.</param>
+        /// <param name="observerTarget">The observer target.</param>
 		void AddObserver(IObserver observer, ObserverTarget observerTarget);
 
+        /// <summary>
+        /// Adds an observer that will observe object events on all objects of the specified type in the context.
+        /// </summary>
+        /// <param name="observer">The observer.</param>
+        /// <param name="type">The type to be observed.</param>
 		void AddObserver(IObserver observer, Type type);
 
+        /// <summary>
+        /// Adds an observer that will observe object events on the specified object.
+        /// </summary>
+        /// <param name="observer">The observer.</param>
+        /// <param name="obj">The object to be observed.</param>
 		void AddObserver(IObserver observer, object obj);
 
+        /// <summary>
+        /// Adds an observer that will observe object events on the specified targets (types and/or objects).
+        /// </summary>
+        /// <param name="observer">The observer.</param>
+        /// <param name="targets">The targets to be observed.</param>
 		void AddObserver(IObserver observer, params object[] targets);
 
+        /// <summary>
+        /// Gets all observers registered with the context.
+        /// </summary>
+        /// <returns></returns>
 		IList GetAllObservers();
 
+        /// <summary>
+        /// Gets the general observers.
+        /// </summary>
+        /// <returns></returns>
 		IList GetObservers();
 
+        /// <summary>
+        /// Gets the observers that are observing either context or object events on all objects of all types.
+        /// </summary>
+        /// <returns></returns>
 		IList GetObservers(ObserverTarget observerTarget);
 
+        /// <summary>
+        /// Gets the observers observing object events on all objects of the specified type.
+        /// </summary>
 		IList GetObservers(Type type);
 
+        /// <summary>
+        /// Gets the observers observing object events on the specified object.
+        /// </summary>
 		IList GetObservers(object obj);
 
+        /// <summary>
+        /// Gets the connection to the default data source.
+        /// </summary>
+        /// <returns></returns>
 		IDbConnection GetConnection();
 
+        /// <summary>
+        /// Gets the connection to the specified data source.
+        /// </summary>
+        /// <param name="sourceName">The name of the data source</param>
+        /// <returns></returns>
 		IDbConnection GetConnection(string sourceName);
 
+        /// <summary>
+        /// Gets the connection to the specified data source.
+        /// </summary>
+        /// <param name="sourceMap">The source map representing the data source.</param>
+        /// <returns></returns>
 		IDbConnection GetConnection(ISourceMap sourceMap);
 
+        /// <summary>
+        /// Sets the connection to the default data source.
+        /// </summary>
+        /// <param name="value">The connection.</param>
 		void SetConnection(IDbConnection value);
 
+        /// <summary>
+        /// Sets the connection to the specified data source.
+        /// </summary>
+        /// <param name="value">The connection.</param>
+        /// <param name="sourceName">The name of the data source</param>
 		void SetConnection(IDbConnection value, string sourceName);
 
+        /// <summary>
+        /// Sets the connection to the specified data source.
+        /// </summary>
+        /// <param name="value">The connection.</param>
+        /// <param name="sourceMap">The source map representing the data source.</param>
 		void SetConnection(IDbConnection value, ISourceMap sourceMap);
 
+        /// <summary>
+        /// Gets the connection string to the default data source.
+        /// </summary>
 		string GetConnectionString();
 
+        /// <summary>
+        /// Gets the connection string to the specified data source.
+        /// </summary>
+        /// <param name="sourceName">The name of the data source</param>
+        /// <returns></returns>
 		string GetConnectionString(string sourceName);
 
+        /// <summary>
+        /// Gets the connection string to the specified data source.
+        /// </summary>
+        /// <param name="sourceMap">The source map representing the data source.</param>
+        /// <returns></returns>
 		string GetConnectionString(ISourceMap sourceMap);
 
+
+        /// <summary>
+        /// Sets the connection string to the default data source.
+        /// </summary>
+        /// <param name="value">The connection string.</param>
 		void SetConnectionString(string value);
 
+        /// <summary>
+        /// Sets the connection string to the specified data source.
+        /// </summary>
+        /// <param name="value">The connection string.</param>
+        /// <param name="sourceName">The name of the data source</param>
 		void SetConnectionString(string value, string sourceName);
 
+        /// <summary>
+        /// Sets the connection string to the specified data source.
+        /// </summary>
+        /// <param name="value">The connection string.</param>
+        /// <param name="sourceMap">The source map representing the data source.</param>
 		void SetConnectionString(string value, ISourceMap sourceMap);
 
+        /// <summary>
+        /// Gets the default data source.
+        /// </summary>
+        /// <returns></returns>
 		IDataSource GetDataSource();
 
+        /// <summary>
+        /// Gets the data source with the specified name.
+        /// </summary>
+        /// <param name="sourceName">The name of the data source.</param>
+        /// <returns></returns>
 		IDataSource GetDataSource(string sourceName);
 
+        /// <summary>
+        /// Gets the data source represented by the source map.
+        /// </summary>
+        /// <param name="sourceMap">The source map representing the data source.</param>
+        /// <returns></returns>
 		IDataSource GetDataSource(ISourceMap sourceMap);
 
+        /// <summary>
+        /// Gets the source map representing the default data source.
+        /// </summary>
 		ISourceMap GetSourceMap();
 
+        /// <summary>
+        /// Gets the source map representing the data source with the specified name.
+        /// </summary>
+        /// <param name="sourceName">The name of the data source.</param>
 		ISourceMap GetSourceMap(string sourceName);
 
+        /// <summary>
+        /// Begins a transaction using the specified iolation level. 
+        /// </summary>
+        /// <param name="iso">The transaction isolation level.</param>
+        /// <returns></returns>
 		ITransaction BeginTransaction(IsolationLevel iso);
 
-		ITransaction BeginTransaction(bool autoPersistAllOnCommmit);
+        /// <summary>
+        /// Begins a transaction.
+        /// </summary>
+        /// <param name="commitTransactionOnCommittingContext">if set to <c>true</c> (default) the transaction will be automatically committed if the Commit() method on the context is called.</param>
+        /// <returns></returns>
+		ITransaction BeginTransaction(bool commitTransactionOnCommittingContext);
 
-		ITransaction BeginTransaction(IsolationLevel iso, bool autoPersistAllOnCommmit);
+        /// <summary>
+        /// Begins a transaction using the specified iolation level. 
+        /// </summary>
+        /// <param name="iso">The transaction isolation level.</param>
+        /// <param name="commitTransactionOnCommittingContext">if set to <c>true</c> (default) the transaction will be automatically committed if the Commit() method on the context is called.</param>
+		ITransaction BeginTransaction(IsolationLevel iso, bool commitTransactionOnCommittingContext);
 
+        /// <summary>
+        /// Begins a transaction on the specified data source.
+        /// </summary>
+        /// <param name="dataSource">The data source to start a transaction on.</param>
+        /// <returns></returns>
 		ITransaction BeginTransaction(IDataSource dataSource);
 
+        /// <summary>
+        /// Begins a transaction on the specified data source using the specified iolation level. 
+        /// </summary>
+        /// <param name="dataSource">The data source to start a transaction on.</param>
+        /// <param name="iso">The transaction isolation level.</param>
+        /// <returns></returns>
 		ITransaction BeginTransaction(IDataSource dataSource, IsolationLevel iso);
 
-		ITransaction BeginTransaction(IDataSource dataSource, bool autoPersistAllOnCommmit);
+        /// <summary>
+        /// Begins a transaction on the specified data source. 
+        /// </summary>
+        /// <param name="dataSource">The data source to start a transaction on.</param>
+        /// <param name="commitTransactionOnCommittingContext">if set to <c>true</c> (default) the transaction will be automatically committed if the Commit() method on the context is called.</param>
+        /// <returns></returns>
+		ITransaction BeginTransaction(IDataSource dataSource, bool commitTransactionOnCommittingContext);
 
-		ITransaction BeginTransaction(IDataSource dataSource, IsolationLevel iso, bool autoPersistAllOnCommmit);
+        /// <summary>
+        /// Begins a transaction on the specified data source using the specified iolation level. 
+        /// </summary>
+        /// <param name="dataSource">The data source to start a transaction on.</param>
+        /// <param name="iso">The transaction isolation level.</param>
+        /// <param name="commitTransactionOnCommittingContext">if set to <c>true</c> (default) the transaction will be automatically committed if the Commit() method on the context is called.</param>
+		ITransaction BeginTransaction(IDataSource dataSource, IsolationLevel iso, bool commitTransactionOnCommittingContext);
 
+        /// <summary>
+        /// Determines whether the specified data source has a transaction pending.
+        /// </summary>
+        /// <param name="dataSource">The data source.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified data source has a pending transaction; otherwise, <c>false</c>.
+        /// </returns>
 		bool HasTransactionPending(IDataSource dataSource);
 
+        /// <summary>
+        /// Determines whether the context has a transaction pending.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if the context has pending transaction; otherwise, <c>false</c>.
+        /// </returns>
 		bool HasTransactionPending();
 
+        /// <summary>
+        /// This method is always called by the transaction when it has completed. The developer should normally not make any calls to this method.
+        /// </summary>
+        /// <param name="transaction">The transaction that has completed.</param>
 		void OnTransactionComplete(ITransaction transaction);
 
+        /// <summary>
+        /// Gets the transaction for the specified connection.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        /// <returns></returns>
 		ITransaction GetTransaction(IDbConnection connection);
 
+        /// <summary>
+        /// Sets the transaction for the specified connection.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        /// <param name="transaction">The transaction.</param>
 		void SetTransaction(IDbConnection connection, ITransaction transaction);
 
+        /// <summary>
+        /// Attaches an object to this context.
+        /// </summary>
+        /// <param name="obj">The object to be attached.</param>
+        /// <returns>The attached object. If the object already existed in the context that existing reference will be returned.</returns>
 		object AttachObject(object obj);
 
+        /// <summary>
+        /// Attaches an object to this context.
+        /// </summary>
+        /// <param name="obj">The object to be attached.</param>
+        /// <param name="mergeBehavior">The merge behavior to be used if the object already exists in the cache and has different values.</param>
+        /// <returns>The attached object. If the object already existed in the context that existing reference will be returned.</returns>
 		object AttachObject(object obj, MergeBehaviorType mergeBehavior);
 
+        /// <summary>
+        /// Attaches a list of objects to this context.
+        /// </summary>
+        /// <param name="objects">The objects to be attached.</param>
+        /// <returns>The attached objects. If an object already existed in the context that existing reference will be returned in the list.</returns>
 		IList AttachObjects(IList objects);
 
+        /// <summary>
+        /// Attaches a list of objects to this context.
+        /// </summary>
+        /// <param name="objects">The objects to be attached.</param>
+        /// <param name="mergeBehavior">The merge behavior to be used if an object already exists in the cache and has different values.</param>
+        /// <returns>The attached objects. If an object already existed in the context that existing reference will be returned in the list.</returns>
 		IList AttachObjects(IList objects, MergeBehaviorType mergeBehavior);
 
+        /// <summary>
+        /// Gets the identity generator with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the identity generator.</param>
+        /// <returns></returns>
 		IIdentityGenerator GetIdentityGenerator(string name);
 
-		OptimisticConcurrencyMode OptimisticConcurrencyMode { get; set; } 
+        /// <summary>
+        /// Gets or sets the default optimistic concurrency mode.
+        /// </summary>
+        /// <value>The optimistic concurrency mode.</value>
+		OptimisticConcurrencyMode OptimisticConcurrencyMode { get; set; }
 
+        /// <summary>
+        /// Gets the identity generators.
+        /// </summary>
+        /// <value>The identity generators.</value>
 		Hashtable IdentityGenerators { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is disposed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is disposed; otherwise, <c>false</c>.
+        /// </value>
 		bool IsDisposed { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this context is dirty (contains unsaved changes).
+        /// </summary>
+        /// <value><c>true</c> if this context is dirty; otherwise, <c>false</c>.</value>
 		bool IsDirty { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this context is in editing mode.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this context is in editing mode; otherwise, <c>false</c>.
+        /// </value>
 		bool IsEditing { get; }
 
+        /// <summary>
+        /// Begins the editing mode. Changes made during editing mode can be cancled or accepted wholesale when the editing session is done.
+        /// </summary>
 		void BeginEdit();
 
+        /// <summary>
+        /// Cancels the editing mode, discarding all changes that were made during the editing session.
+        /// </summary>
 		void CancelEdit();
 
+        /// <summary>
+        /// Ends the editing mode, accepting all changes that were made during the editing session.
+        /// </summary>
 		void EndEdit();
 
+        /// <summary>
+        /// Gets or sets the default validation mode.
+        /// </summary>
+        /// <value>The validation mode.</value>
 		ValidationMode ValidationMode { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether validation should occur before a commit operation is carried out.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if validation should be carried out before commit; otherwise, <c>false</c>.
+        /// </value>
 		bool ValidateBeforeCommit { get; set; }
 
+        /// <summary>
+        /// Determines whether the cache is currently valid (all the objects in the cache pass validation).
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if the cache is valid; otherwise, <c>false</c>.
+        /// </returns>
 		bool IsValidCache();
 
+        /// <summary>
+        /// Validates all the objects in the cache, breaking (and rethrowing) on the first exception.
+        /// </summary>
 		void ValidateCache();
 
+        /// <summary>
+        /// Validates all the objects in the cache, collecting all validation exceptions in the passed in list.
+        /// </summary>
+        /// <param name="exceptions">A list that will become filled with any validation exceptions that occur during validation.</param>
 		void ValidateCache(IList exceptions);
 
+        /// <summary>
+        /// Determines whether the unit of work is currently valid (all the objects in the unit of work pass validation).
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if the unit of work is valid; otherwise, <c>false</c>.
+        /// </returns>
 		bool IsValidUnitOfWork();
 
+        /// <summary>
+        /// Validates all the objects in the unit of work, breaking (and rethrowing) on the first exception.
+        /// </summary>
 		void ValidateUnitOfWork();
 
+        /// <summary>
+        /// Validates all the objects in the unit of work, collecting all validation exceptions in the passed in list.
+        /// </summary>
+        /// <param name="exceptions">A list that will become filled with any validation exceptions that occur during validation.</param>
 		void ValidateUnitOfWork(IList exceptions);
 
+        /// <summary>
+        /// Determines whether the object is currently valid (the object passes validation).
+        /// </summary>
+        /// <param name="obj">The object to be validated</param>
+        /// <returns>
+        /// 	<c>true</c> if the object is valid; otherwise, <c>false</c>.
+        /// </returns>
 		bool IsValid(object obj);
 
+        /// <summary>
+        /// Determines whether the property of an object is currently valid (the property passes validation).
+        /// </summary>
+        /// <param name="obj">The object with the property to be validated.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <returns>
+        /// 	<c>true</c> if the object is valid; otherwise, <c>false</c>.
+        /// </returns>
 		bool IsValid(object obj, string propertyName);
 
+        /// <summary>
+        /// Validates an object, breaking (and rethrowing) on the first exception.
+        /// </summary>
+        /// <param name="obj">The object to be validated</param>
 		void ValidateObject(object obj);
 
+        /// <summary>
+        /// Validates an object, collecting all validation exceptions in the passed in list.
+        /// </summary>
+        /// <param name="obj">The object to be validated</param>
+        /// <param name="exceptions">A list that will become filled with any validation exceptions that occur during validation.</param>
 		void ValidateObject(object obj, IList exceptions);
 		
+        /// <summary>
+        /// Validates the property of an object, breaking (and rethrowing) on the first exception.
+        /// </summary>
+        /// <param name="obj">The object to be validated</param>
+        /// <param name="propertyName">The name of the property.</param>
 		void ValidateProperty(object obj, string propertyName);
 
+        /// <summary>
+        /// Validates the property of an object, collecting all validation exceptions in the passed in list.
+        /// </summary>
+        /// <param name="obj">The object to be validated</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <param name="exceptions">A list that will become filled with any validation exceptions that occur during validation.</param>
 		void ValidateProperty(object obj, string propertyName, IList exceptions);
 
+        /// <summary>
+        /// Constructs an NPathQuery object representing an npath query for loading the passed in object with values from the database.
+        /// </summary>
+        /// <param name="obj">The object that should be loaded with values from the database.</param>
+        /// <param name="refreshBehavior">The refresh behavior determining what happens if a fresh value from the database conflicts with a value in the cache.</param>
+        /// <returns></returns>
 		NPathQuery GetLoadObjectNPathQuery(object obj, RefreshBehaviorType refreshBehavior);
 
 		NPathQuery GetLoadObjectNPathQuery(object obj, string span);
