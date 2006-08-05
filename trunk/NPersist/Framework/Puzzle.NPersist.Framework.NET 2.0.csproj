@@ -363,6 +363,7 @@
     <Compile Include="Exceptions\IdentityNotConvertibleToStringException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\LoadException.cs" />
     <Compile Include="Exceptions\MergeException.cs">
       <SubType>Code</SubType>
     </Compile>

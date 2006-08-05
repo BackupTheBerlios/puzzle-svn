@@ -132,10 +132,18 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual object ManageLoadedValue(object obj, IPropertyMap propertyMap, object value, object discriminator)
 		{
-			object managedValue;
-			managedValue = ManageNullValue(obj, propertyMap, value);
-			managedValue = ManageReferenceValue(obj, propertyMap, managedValue, discriminator);
-			return managedValue;
+            try
+            {
+                object managedValue;
+                managedValue = ManageNullValue(obj, propertyMap, value);
+                managedValue = ManageReferenceValue(obj, propertyMap, managedValue, discriminator);
+                return managedValue;
+            }
+            catch (Exception x)
+            {
+                string message = string.Format("Could not load value for property '{0}' on object {1}.{2}", propertyMap.Name, AssemblyManager.GetBaseType(obj).Name, this.Context.ObjectManager.GetObjectKeyOrIdentity(obj));
+                throw new LoadException(message, x, obj);
+            }
 		}
 
 		public virtual object ManageReferenceValue(object obj, string propertyName, object value)

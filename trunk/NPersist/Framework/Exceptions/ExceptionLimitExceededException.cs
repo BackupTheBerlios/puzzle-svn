@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace Puzzle.NPersist.Framework.Exceptions
 {
@@ -32,13 +33,26 @@ namespace Puzzle.NPersist.Framework.Exceptions
 		{
 		}
 
-		public ExceptionLimitExceededException(IList innerExceptions) : base("Maximum number of allowed exceptions during an atomic operation was exceeded. Please inspect the InnerExceptions property of this exception to see the exceptions that were encountered.", innerExceptions)
+		public ExceptionLimitExceededException(IList innerExceptions) : base("Maximum number of allowed exceptions during an atomic operation was exceeded." + GetVerbose (innerExceptions), innerExceptions)
 		{
+        
 		}
 
-		public ExceptionLimitExceededException(string message, IList innerExceptions) : base(message, innerExceptions)
-		{
-		}
+        private static string GetVerbose(IList innerExceptions)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("\r\n");
+            foreach (Exception x in innerExceptions)
+            {
+                sb.AppendFormat("{0}\r\n", x);                
+            }
+            string res = sb.ToString();
+            return res;
+        }
+
+        //public ExceptionLimitExceededException(string message, IList innerExceptions) : base(message, innerExceptions)
+        //{
+        //}
 
 	}
 }

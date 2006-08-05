@@ -770,64 +770,72 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void LoadObjectByIdOrKey(ref object obj, string keyPropertyName, object keyValue)
 		{
-			IList parameters = new ArrayList() ;
-			string propName;
-			object orgValue;
-			object value;
-			ArrayList propertyNames = new ArrayList();
-			IContext ctx = m_SqlEngineManager.Context;
-			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
-			ctx.EventManager.OnLoadingObject(this, e);
-			if (e.Cancel)
-			{
-				return;
-			}
-			IObjectManager om = ctx.ObjectManager;
-			IPersistenceManager pm = ctx.PersistenceManager;
-			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
-			IPropertyMap propertyMap;
-			string sql = GetSelectStatement(obj, propertyNames, keyPropertyName, keyValue, parameters);
-			IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
-			object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
-			parameters.Clear();
-			if (Util.IsArray(result))
-			{
-				
-				for (int row = 0; row <= result.GetUpperBound(1); row++)
-				{
-					for (int col = 0; col <= result.GetUpperBound(0); col++)
-					{
-						propName = (string) propertyNames[col];
-						propertyMap = classMap.MustGetPropertyMap(propName);
-						if (propertyMap.GetAllColumnMaps().Count < 2)
-						{
-							orgValue = result[col, row];
-							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
-							om.SetPropertyValue(obj, propName, value);
-							if (propertyMap.ReferenceType == ReferenceType.None)
-								om.SetOriginalPropertyValue(obj, propName, orgValue);
-							else
-								om.SetOriginalPropertyValue(obj, propName, value);
-							om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
-						}
-						else
-						{
-//							orgValue = result[col, row];
-//							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
-//							om.SetPropertyValue(obj, propName, value);
-//							om.SetOriginalPropertyValue(obj, propName, orgValue);							
-						}
-					}
-				}
-                ctx.IdentityMap.RegisterLoadedObject(obj);
-			}
-			else
-			{
-				//throw new ObjectNotFoundException("Object not found!"); // do not localize
-				obj = null;
-			}
-			ObjectEventArgs e2 = new ObjectEventArgs(obj);
-			ctx.EventManager.OnLoadedObject(this, e2);
+            try
+            {
+                IList parameters = new ArrayList();
+                string propName;
+                object orgValue;
+                object value;
+                ArrayList propertyNames = new ArrayList();
+                IContext ctx = m_SqlEngineManager.Context;
+                ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
+                ctx.EventManager.OnLoadingObject(this, e);
+                if (e.Cancel)
+                {
+                    return;
+                }
+                IObjectManager om = ctx.ObjectManager;
+                IPersistenceManager pm = ctx.PersistenceManager;
+                IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
+                IPropertyMap propertyMap;
+                string sql = GetSelectStatement(obj, propertyNames, keyPropertyName, keyValue, parameters);
+                IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
+                object[,] result = (object[,])ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
+                parameters.Clear();
+                if (Util.IsArray(result))
+                {
+
+                    for (int row = 0; row <= result.GetUpperBound(1); row++)
+                    {
+                        for (int col = 0; col <= result.GetUpperBound(0); col++)
+                        {
+                            propName = (string)propertyNames[col];
+                            propertyMap = classMap.MustGetPropertyMap(propName);
+                            if (propertyMap.GetAllColumnMaps().Count < 2)
+                            {
+                                orgValue = result[col, row];
+                                value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
+                                om.SetPropertyValue(obj, propName, value);
+                                if (propertyMap.ReferenceType == ReferenceType.None)
+                                    om.SetOriginalPropertyValue(obj, propName, orgValue);
+                                else
+                                    om.SetOriginalPropertyValue(obj, propName, value);
+                                om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
+                            }
+                            else
+                            {
+                                //							orgValue = result[col, row];
+                                //							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
+                                //							om.SetPropertyValue(obj, propName, value);
+                                //							om.SetOriginalPropertyValue(obj, propName, orgValue);							
+                            }
+                        }
+                    }
+                    ctx.IdentityMap.RegisterLoadedObject(obj);
+                }
+                else
+                {
+                    //throw new ObjectNotFoundException("Object not found!"); // do not localize
+                    obj = null;
+                }
+                ObjectEventArgs e2 = new ObjectEventArgs(obj);
+                ctx.EventManager.OnLoadedObject(this, e2);
+            }
+            catch(Exception x)
+            {
+                string message = string.Format("Failed to load object {0}.{1}\r\nMake sure mappings and actual data are intact", AssemblyManager.GetBaseType(obj).Name, this.Context.ObjectManager.GetObjectKeyOrIdentity(obj));
+                throw new LoadException (message,x,obj);
+            }
 		}
 
 		protected virtual void InsertNonPrimaryProperties(object obj, ArrayList nonPrimaryPropertyMaps, IList stillDirty)
@@ -3366,11 +3374,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					FetchObjectsFromDataReader(dr, ref colRet, type, idColumns, typeColumns, propertyColumnMap, refreshBehavior);
 				}
-				catch (Exception ex)
+				catch 
 				{
 					dr.Close();
 					ds.ReturnConnection();
-					throw ex; // do not localize
+					throw; // do not localize
 				}
 				dr.Close();
 			}

@@ -18,6 +18,7 @@ using Puzzle.NPersist.Framework.Utility;
 using Puzzle.NCore.Framework.Collections;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NAspect.Framework;
+using Puzzle.NPersist.Framework.Exceptions;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -216,7 +217,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public virtual void SetPropertyValue(object obj, string propertyName, object value)
         {
-            SetPropertyValue(obj, obj.GetType(), propertyName, value);
+            try
+            {
+                SetPropertyValue(obj, obj.GetType(), propertyName, value);
+            }
+            catch(Exception x)
+            {
+                string message = string.Format("Failed to set property {0} to value {1} on object {2}.{3}", propertyName, value == null ? "null" : value,AssemblyManager.GetBaseType (obj).Name, this.ObjectManager.GetObjectKeyOrIdentity(obj));
+                throw new LoadException(message, x,obj);
+            }
         }
 
         private Hashtable propertyLookup = new Hashtable();
