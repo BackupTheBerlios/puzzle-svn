@@ -31,12 +31,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{		
 		}
 
-
-		public override InverseManagerType InverseManagerType
-		{
-			get { return InverseManagerType.OnWrite; }
-			set { if (value != InverseManagerType.OnWrite ) { throw new Exception("Can't set inverse manager type of OnWrite inverse manager to anything else than OnWrite"); } } // do not localize
-		}
 		
 		public override void NotifyPropertyGet(object obj, string propertyName)
 		{

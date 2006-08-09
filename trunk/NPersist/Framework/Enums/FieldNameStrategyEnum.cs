@@ -10,10 +10,22 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents the standard strategies that can be used in order to convert property names into the names of the fields holding the property's value.
+    /// </summary>
 	public enum FieldNameStrategyType
 	{
+        /// <summary>
+        /// The name of the field is the same as the name of the property (but presumably prefixed)
+        /// </summary>
 		None = 0,
+        /// <summary>
+        /// The name of the field is the same as the name of the property converted to camelCase. 
+        /// </summary>
 		CamelCase = 1,
+        /// <summary>
+        /// The name of the field is the same as the name of the property converted to PascalCase. 
+        /// </summary>
 		PascalCase = 2
 	}
 }

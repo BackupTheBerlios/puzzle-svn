@@ -509,18 +509,22 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" doc-mode=\"Inline\"");
 			}
-			else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.PerProperty)
+			else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.ByReference)
 			{
-				xml.Append(" doc-mode=\"PerProperty\"");
+				xml.Append(" doc-mode=\"ByReference\"");
 			}
-			else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.PerValue )
-			{
-				xml.Append(" doc-mode=\"PerValue\"");
-			}
-			else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.None)
-			{
-				xml.Append(" doc-mode=\"None\"");
-			}
+            //else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.PerProperty)
+            //{
+            //    xml.Append(" doc-mode=\"PerProperty\"");
+            //}
+            //else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.PerValue )
+            //{
+            //    xml.Append(" doc-mode=\"PerValue\"");
+            //}
+            //else if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.None)
+            //{
+            //    xml.Append(" doc-mode=\"None\"");
+            //}
 			if (propertyMap.Column.Length > 0)
 			{
 				xml.Append(" columns=\"" + propertyMap.Column + ", "); // do not localize

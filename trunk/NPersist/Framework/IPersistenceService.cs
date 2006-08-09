@@ -16,7 +16,7 @@ using Puzzle.NPersist.Framework.Querying;
 namespace Puzzle.NPersist.Framework 
 {
 	/// <summary>
-	/// The main runtime interface to NPersist. This interface contains a subset of the methods available in the IContext interface.
+	/// The main runtime interface for NPersist users.
 	/// </summary>
 	public interface IPersistenceService : IDisposable
 	{

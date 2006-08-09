@@ -11,12 +11,23 @@
 namespace Puzzle.NPersist.Framework.Enumerations
 {
 	/// <summary>
-	/// Summary description for LoadingBehavior.
+	/// Represents the behavior to be used when objects are loaded by identity.
 	/// </summary>
 	public enum LoadBehavior
 	{
+        /// <summary>
+        /// the value is inherited. Finally resolves to Lazy.
+        /// </summary>
 		Default = 0,
+        /// <summary>
+        /// Objects that are not already in the cache will become lazy loaded (so called "ghost objects") 
+        /// with only their identity properties filled. As soon as any other property is accessed, 
+        /// the rest of the object is loaded from the database.
+        /// </summary>
 		Lazy = 1,
+        /// <summary>
+        /// Objects that are not already in the cache will become loaded right away with values from the database.
+        /// </summary>
 		Eager = 2
 	}
 }

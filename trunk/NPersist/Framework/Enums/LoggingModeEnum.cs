@@ -10,6 +10,9 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents the logging mode.
+    /// </summary>
 	public enum LoggingMode
 	{
 		NoLogging = 0,

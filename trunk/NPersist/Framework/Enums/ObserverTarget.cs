@@ -10,10 +10,22 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents the types of targets an observer can be set up to observe
+    /// </summary>
 	public enum ObserverTarget
 	{
+        /// <summary>
+        /// Observes both context and object events
+        /// </summary>
 		All = 0,
+        /// <summary>
+        /// Observes only context events.
+        /// </summary>
 		Context = 1,
+        /// <summary>
+        /// Observes only object events.
+        /// </summary>
 		Objects = 2
 	}
 }

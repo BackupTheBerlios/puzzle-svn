@@ -10,10 +10,22 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents special behaviors applicable to properties and executed during inserts and/or updates.
+    /// </summary>
 	public enum PropertySpecialBehaviorType
 	{
+        /// <summary>
+        /// No special behavior is applied.
+        /// </summary>
 		None = 0,
+        /// <summary>
+        /// The property value is increased by one (applies only to numeric properties).
+        /// </summary>
 		Increase = 1,
+        /// <summary>
+        /// The property value is set to the current date and time (applies only to DateTime properties).
+        /// </summary>
 		SetDateTime = 2
 	}
 }

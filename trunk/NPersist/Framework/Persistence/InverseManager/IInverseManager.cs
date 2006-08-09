@@ -15,8 +15,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 {
 	public interface IInverseManager : IContextChild
 	{
-		InverseManagerType InverseManagerType { get; set; }
-
 		void NotifyPropertyGet(object obj, string propertyName);
 
 		void NotifyPropertySet(object obj, string propertyName, object value);

@@ -10,11 +10,26 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents the strategy used for mapping a class inheritance hierarchy to tables in the database.
+    /// </summary>
 	public enum InheritanceType
 	{
+        /// <summary>
+        /// Inheritance is not in use
+        /// </summary>
 		None = 0,
+        /// <summary>
+        /// All classes in the hierarchy are mapped to the same table.
+        /// </summary>
 		SingleTableInheritance = 1,
+        /// <summary>
+        /// Each class in the hierarchy gets its own table.
+        /// </summary>
 		ClassTableInheritance = 2,
+        /// <summary>
+        /// Only the concrete classes (and the root class) in the hierarchy get tables.
+        /// </summary>
 		ConcreteTableInheritance = 3
 	}
 }

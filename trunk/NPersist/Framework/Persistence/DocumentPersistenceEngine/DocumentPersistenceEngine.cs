@@ -761,7 +761,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 				else
 				{
-					if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+					if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
 					{
 						if (propertyMap.IsCollection)
 						{
@@ -1074,7 +1074,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					else
 					{
-						if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+						if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
 						{
 							if (propertyMap.IsCollection)
 							{

@@ -11,7 +11,7 @@
 namespace Puzzle.NPersist.Framework.Enumerations
 {
 	/// <summary>
-	/// Summary description for AutoIncreaserStrategy.
+	/// The strategy to be used for columns marked as auto increasers.
 	/// </summary>
 	public enum AutoIncreaserStrategy
 	{

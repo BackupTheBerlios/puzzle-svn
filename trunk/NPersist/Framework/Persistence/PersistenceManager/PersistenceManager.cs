@@ -899,7 +899,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			//First try: Dirty wins..
 			if (propStatus == PropertyStatus.Dirty && extPropStatus == PropertyStatus.Dirty)
 			{
-				if (useMergeBehavior == MergeBehaviorType.DefaultBehavior)
+				if (useMergeBehavior == MergeBehaviorType.DefaultBehavior || useMergeBehavior == MergeBehaviorType.TryResolveConflicts)
 					throw new BothDirtyMergeException("Unresovable Merge Conflict! Both values are dirty!", extValue, value, existing, obj, propertyMap.Name, forOrgValue);
 				else if (useMergeBehavior == MergeBehaviorType.IgnoreConflictsUsingMergeValue)
 					keepExisting = false;
@@ -917,7 +917,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				//Second try: Clean wins
 				if (propStatus == PropertyStatus.Clean && extPropStatus == PropertyStatus.Clean)
 				{
-					if (useMergeBehavior == MergeBehaviorType.DefaultBehavior)
+					if (useMergeBehavior == MergeBehaviorType.DefaultBehavior || useMergeBehavior == MergeBehaviorType.TryResolveConflicts)
 						throw new BothCleanMergeException("Unresovable Merge Conflict! Both values are clean!", extValue, value, existing, obj, propertyMap.Name, forOrgValue);
 					else if (useMergeBehavior == MergeBehaviorType.IgnoreConflictsUsingMergeValue)
 						keepExisting = false;

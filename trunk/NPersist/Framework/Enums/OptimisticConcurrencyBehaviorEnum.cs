@@ -8,13 +8,32 @@
 // *
 // *
 
+//Note: Perhaps we should add IncludeAlways for forcing the load of unloaded properties. On the other hand, they would be loaded just before
+//the update takes place, probably within a transaction, and it wouldn't help much. Maybe even giving false sense of security.
+//...Maybe a MustBeLoaded setting that throws an exception if an important property wasan't loaded during commit ?
+
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// Represents the different strategies for determining if a property should be considered part of the optimistic concurrency check.
+    /// </summary>
 	public enum OptimisticConcurrencyBehaviorType
 	{
+        /// <summary>
+        /// Inherits the value, finally resolves to IncludeWhenDirty for update operations and IncludeWhenLoaded for delete operations.
+        /// </summary>
 		DefaultBehavior = 0,
+        /// <summary>
+        /// The property is only part of the optimistic concurrency check if it is dirty (modified but not saved).
+        /// </summary>
 		IncludeWhenDirty = 1,
+        /// <summary>
+        /// The property is always part of the optimistic concurrency check as long as it has been loaded. 
+        /// </summary>
 		IncludeWhenLoaded = 2,
+        /// <summary>
+        /// The property is not part of the optimistic concurrency check.
+        /// </summary>
 		Disabled = 3
 	}
 }

@@ -10,6 +10,9 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// This enumeration is used to represent accessibility of properties and fields in the domain map.
+    /// </summary>
 	public enum AccessibilityType
 	{
 		PublicAccess = 0,

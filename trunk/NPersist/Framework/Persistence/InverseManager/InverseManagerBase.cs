@@ -24,23 +24,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// </summary>
 	public abstract class InverseManagerBase : ContextChild, IInverseManager
 	{
-		private InverseManagerType inverseManagerType = InverseManagerType.Default;
-
 		protected InverseManagerBase()
 		{
 		}
 
-		public virtual InverseManagerType InverseManagerType
-		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
-			get { return this.inverseManagerType; }
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
-			set { this.inverseManagerType = value; }
-		}
-
-		public abstract void NotifyPropertyGet(object obj, string propertyName);
+        public abstract void NotifyPropertyGet(object obj, string propertyName);
 
 		public abstract void NotifyPropertySet(object obj, string propertyName, object value);
 

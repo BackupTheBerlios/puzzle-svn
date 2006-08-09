@@ -10,12 +10,25 @@
 
 namespace Puzzle.NPersist.Framework.Enumerations
 {
+    /// <summary>
+    /// This enumeration is used in xml persistence and determines the document partitioning strategy when reference properties of an object are stored to disk.
+    /// </summary>
 	public enum DocPropertyMapMode
 	{
+        /// <summary>
+        /// The value is inherited. Finally Inline.
+        /// </summary>
 		Default = 0,
+        /// <summary>
+        /// The referenced object is saved in the same document as the referring object, nested inside the referring object's xml.
+        /// </summary>
 		Inline = 1,
-		PerProperty = 2,
-		PerValue = 3,
-		None = 4
+        /// <summary>
+        /// The referenced object will not be stored as a nested part of the referring object's xml, only a reference will be. 
+        /// </summary>
+		ByReference = 2 /*,
+		PerProperty = 3,
+		PerValue = 4,
+		None = 5*/
 	}
 }

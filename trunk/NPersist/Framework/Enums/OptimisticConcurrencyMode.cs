@@ -11,13 +11,27 @@
 namespace Puzzle.NPersist.Framework.Enumerations
 {
 	/// <summary>
-	/// Summary description for OptimisticConcurrencyMode.
+	/// Represents the available modes for optimistic concurrency to work in.
 	/// </summary>
 	public enum OptimisticConcurrencyMode
 	{
+        /// <summary>
+        /// The value is inherited, finally resolves to Late
+        /// </summary>
 		Default = 0,
+        /// <summary>
+        /// Optimistic concurrency checks are performed as late as possible, meaning that they only take place during commit operations.
+        /// </summary>
 		Late = 1,
+        /// <summary>
+        /// Optimistic concurrency checks are performed as early as possible, meaning that when an object is refreshed any conflicts
+        /// that are detected between a cached value and a fresh value from the database will result in an exception being thrown.
+        /// Checks are also performed during commit, as with the Late setting.
+        /// </summary>
 		Early = 2,
+        /// <summary>
+        /// Optimistic concurrency checks are not performed. 
+        /// </summary>
 		Disabled = 3
 	}
 }
