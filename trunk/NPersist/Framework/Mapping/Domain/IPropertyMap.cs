@@ -184,6 +184,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		string GenerateMemberName(string name);
 
+
+
+
+
 		//O/D Mapping
 
 		string DocSource { get; set; }

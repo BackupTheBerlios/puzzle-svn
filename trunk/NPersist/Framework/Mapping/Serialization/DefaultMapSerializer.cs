@@ -680,6 +680,7 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 				xml.Append(" ttl-behavior=\"" + propertyMap.TimeToLiveBehavior.ToString() + "\""); // do not localize
 			}
 
+
 			if (!(BareBones))
 			{
 				if (propertyMap.DataType.Length > 0)

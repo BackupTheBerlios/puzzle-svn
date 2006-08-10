@@ -281,10 +281,13 @@ namespace Puzzle.NPersist.Framework.Mapping
                 foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
                 {
                     PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-					if (propertyInfo == null)
+				    if (propertyInfo == null)
                         throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
                     MethodInfo getMethod = propertyInfo.GetGetMethod();
+
+                    if (getMethod == null)
+                        throw new NPersistException(string.Format("Could not find getter method for property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
                     if (!getMethod.IsVirtual)
                         throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'", propertyInfo.Name, classMap.GetFullName()));
