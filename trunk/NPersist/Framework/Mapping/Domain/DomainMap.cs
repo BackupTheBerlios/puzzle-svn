@@ -284,7 +284,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 				    if (propertyInfo == null)
                         throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
-                    MethodInfo getMethod = propertyInfo.GetGetMethod();
+                    MethodInfo getMethod = propertyInfo.GetGetMethod(true);
 
                     if (getMethod == null)
                         throw new NPersistException(string.Format("Could not find getter method for property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
