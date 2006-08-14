@@ -384,6 +384,9 @@ namespace Puzzle.NPersist.Framework
         /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
 		void CommitObject(object obj, int exceptionLimit);
 
+
+		void DeleteObject(object identity, Type type);
+
         /// <summary>
         /// Deletes the objects in the supplied list.
         /// </summary>
@@ -392,6 +395,7 @@ namespace Puzzle.NPersist.Framework
         /// </remarks>
         /// <param name="objects">The objects to be deleted.</param>
 		void DeleteObjects(IList objects);
+
 
         /// <summary>
         /// Commits all changes to the database. This method has been renamed to Commit().
@@ -1638,6 +1642,9 @@ namespace Puzzle.NPersist.Framework
         /// <typeparam name="T">The type for which you want to retrieve all objects.</typeparam>
         /// <returns>All objects of the specified type.</returns>
         IList<T> GetObjects<T>();
+
+
+        void DeleteObject<T>(object identity);
 
 		/// <summary>
 		/// Retrieves a list of objects matching an <c>NPathQuery</c> query

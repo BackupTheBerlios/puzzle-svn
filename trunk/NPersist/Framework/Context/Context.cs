@@ -1287,6 +1287,12 @@ namespace Puzzle.NPersist.Framework
 			} 			
 		}
 
+		public virtual void DeleteObject(object identity, Type type)
+        {
+            object obj = this.GetObjectById(identity, type);
+            DeleteObject(obj);
+        }
+
 		public virtual void DeleteObject(object obj)
 		{
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
@@ -2721,6 +2727,12 @@ namespace Puzzle.NPersist.Framework
             List<T> list = new List<T>();
             this.GetObjects (typeof(T), list);
             return list;
+        }
+
+        public virtual void DeleteObject<T>(object identity)
+        {
+            object obj = GetObjectById<T>(identity);
+            this.DeleteObject(obj);
         }
 
         #region GetObjectsByNPath
