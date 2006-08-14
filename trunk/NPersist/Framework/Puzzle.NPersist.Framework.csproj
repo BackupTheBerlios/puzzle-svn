@@ -529,6 +529,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Exceptions\LoadException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\MergeException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
