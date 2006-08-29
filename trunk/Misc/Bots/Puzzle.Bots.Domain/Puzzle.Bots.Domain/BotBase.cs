@@ -15,9 +15,11 @@ namespace Puzzle.Bots.Domain
 
         #region Constructors
 
-        public BotBase(World world) : this(world, new Point(0, 0)) {}
+        public BotBase(World world) : this(world, new Point(0, 0), new Point(0, 0)) {}
 
-        public BotBase(World world, Point location)
+        public BotBase(World world, Point location) : this(world, location, new Point(0, 0)) {}
+
+        public BotBase(World world, Point location, Point vector)
         {
             if (world == null)
                 throw new ArgumentNullException("world");
@@ -25,6 +27,7 @@ namespace Puzzle.Bots.Domain
             world.Bots.Add(this);
 
             this.location = location;
+            this.vector = vector;
 
             ValidateLocation();
         }
@@ -56,6 +59,28 @@ namespace Puzzle.Bots.Domain
 
         #endregion
 
+        #region Vector Property
+
+        private Point vector = new Point(0,0);
+        public Point Vector
+        {
+            get { return vector; }
+            set { vector = value; }
+        }
+
+        #endregion
+
+        #region Energy Property
+
+        private double energy = 0;
+        public double Energy
+        {
+            get { return energy; }
+            set { energy = value; }
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -66,36 +91,33 @@ namespace Puzzle.Bots.Domain
 
         #region Final Methods
 
-        public void Move(Direction direction)
+        #region Move Method
+
+        public void Move()
         {
-            Move(direction, 1);
+            Move(this.Vector);
         }
 
-        public void Move(Direction direction, int length)
+        public void Move(Point vector)
         {
-            Point location;
+            Point location = FindNextLocation(this.Location, vector);
 
-            switch (direction)
+            BounceOnWalls(location);
+
+            if (IsValidLocation(location))
             {
-                case Direction.Up:
-                    location = new Point(this.Location.X, this.Location.Y - length);
-                    break;
-                case Direction.Down:
-                    location = new Point(this.Location.X, this.Location.Y + length);
-                    break;
-                case Direction.Left:
-                    location = new Point(this.Location.X - length, this.Location.Y);
-                    break;
-                case Direction.Right:
-                    location = new Point(this.Location.X + length, this.Location.Y);
-                    break;
-                default:
-                    throw new Exception("Unknown direction: " + direction.ToString());
+                this.Location = location;
+                this.Energy -= CalculateEnergyConsumptionForMove(vector);
             }
-            ValidateLocation(location);
-
-            this.Location = location;
         }
+
+        #endregion
+
+        #region Scan Method
+
+
+
+        #endregion
 
         #endregion
 
@@ -113,6 +135,8 @@ namespace Puzzle.Bots.Domain
 
         #region Protected Methods
 
+        #region ValidateLocation Method
+
         protected virtual void ValidateLocation()
         {
             ValidateLocation(this.Location);
@@ -120,31 +144,67 @@ namespace Puzzle.Bots.Domain
 
         protected virtual void ValidateLocation(Point location)
         {
-            if (location.Y < 0)
+            if (!IsValidLocation(location))
                 throw new Exception(BORDER_COLLISION_MSG);
+        }
+
+        protected virtual bool IsValidLocation()
+        {
+            return IsValidLocation(this.Location);
+        }
+
+        protected virtual bool IsValidLocation(Point location)
+        {
+            if (location.Y < 0)
+                return false;
 
             if (location.Y > this.World.Size.Height)
-                throw new Exception(BORDER_COLLISION_MSG);
+                return false;
 
             if (location.X < 0)
-                throw new Exception(BORDER_COLLISION_MSG);
+                return false;
 
             if (location.X > this.World.Size.Width)
-                throw new Exception(BORDER_COLLISION_MSG);
+                return false;
+
+            return true;
         }
 
         #endregion
 
+        #region BounceOnWalls Method
+
+        protected void BounceOnWalls(Point location)
+        {
+            if (location.Y < 0 || location.Y > this.World.Size.Height)
+                this.Vector = new Point(this.Vector.X, -this.Vector.Y);
+
+            if (location.X < 0 || location.X > this.World.Size.Width)
+                this.Vector = new Point(-this.Vector.X, this.Vector.Y);
+        }
+
+        #endregion
+
+        #region FindNextLocation Method
+
+        protected Point FindNextLocation(Point location, Point vector)
+        {
+            return new Point(location.X + vector.X, location.Y + vector.Y);
+        }
+
+        #endregion
+
+        protected double CalculateEnergyConsumptionForMove(Point vector)
+        {
+            //Pythagoras
+            return Math.Sqrt((vector.X * vector.X) + (vector.Y * vector.Y));
+        }
+
+
+        #endregion
+
         #endregion
 
 
-    }
-
-    public enum Direction
-    {
-        Up = 0,
-        Right = 1,
-        Down = 2,
-        Left = 3
     }
 }

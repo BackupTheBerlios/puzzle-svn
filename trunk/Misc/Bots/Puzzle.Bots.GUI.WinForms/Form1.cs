@@ -27,10 +27,11 @@ namespace Puzzle.Bots.GUI.WinForms
         private void Test()
         {
             world = new World(new Size(300, 300));
-            TestBot bot = new TestBot(world, new Point(150, 150));
-            TestBot bot2 = new TestBot(world, new Point(250, 150));
-            TestBot bot3 = new TestBot(world, new Point(150, 250));
-            for (int i = 0; i < 200; i++)
+            TestBot bot = new TestBot(world, new Point(150, 150), new Point(2, 5));
+            TestBot bot2 = new TestBot(world, new Point(250, 150), new Point(3, 1));
+            TestBot bot3 = new TestBot(world, new Point(150, 250), new Point(-2, -3));
+            //for (int i = 0; i < 200; i++)
+            while (true)
             {
                 world.Tick();
                 this.Refresh();
@@ -44,13 +45,19 @@ namespace Puzzle.Bots.GUI.WinForms
          
             if (world != null)
             {
+                g.DrawRectangle(new Pen(Color.Black), 
+                    0,
+                    0,
+                    world.Size.Width,
+                    world.Size.Height);
+
                 foreach (BotBase bot in world.Bots)
                 {
                     g.FillEllipse(new SolidBrush(Color.Black), 
                         bot.Location.X,
                         bot.Location.Y,
-                        3,
-                        3);
+                        10,
+                        10);
 
                 }
             }
