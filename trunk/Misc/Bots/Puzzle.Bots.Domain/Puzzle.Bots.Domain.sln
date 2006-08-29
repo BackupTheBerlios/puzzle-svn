@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Bots.Domain", "Puzzle.Bots.Domain\Puzzle.Bots.Domain.csproj", "{771A0F63-6FAA-4987-AE56-97AC14D4DBDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Bots.GUI.WinForms", "..\Puzzle.Bots.GUI.WinForms\Puzzle.Bots.GUI.WinForms.csproj", "{CE866C74-7F64-4EB3-A0E6-FB4F954060CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Bots.Test", "..\Puzzle.Bots.Test\Puzzle.Bots.Test.csproj", "{5E397D90-44B5-46C6-8C49-4213A8EED6F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{771A0F63-6FAA-4987-AE56-97AC14D4DBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771A0F63-6FAA-4987-AE56-97AC14D4DBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771A0F63-6FAA-4987-AE56-97AC14D4DBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771A0F63-6FAA-4987-AE56-97AC14D4DBDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE866C74-7F64-4EB3-A0E6-FB4F954060CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE866C74-7F64-4EB3-A0E6-FB4F954060CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE866C74-7F64-4EB3-A0E6-FB4F954060CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE866C74-7F64-4EB3-A0E6-FB4F954060CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E397D90-44B5-46C6-8C49-4213A8EED6F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E397D90-44B5-46C6-8C49-4213A8EED6F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E397D90-44B5-46C6-8C49-4213A8EED6F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E397D90-44B5-46C6-8C49-4213A8EED6F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
