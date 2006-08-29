@@ -7,10 +7,14 @@ namespace Puzzle.Bots.Domain
 {
     public class World
     {
+        #region Constructors
+
         public World(Size size)
         {
             this.size = size;
         }
+
+        #endregion
 
         #region Properties
 
