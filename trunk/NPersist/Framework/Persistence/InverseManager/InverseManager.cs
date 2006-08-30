@@ -301,10 +301,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			if (oldValue != null)
 			{
-				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
+				propStatus = om.GetPropertyStatus(oldValue, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
 				{
-					AddAction(InverseActionType.Set, value, invPropertyMap.Name, null, obj);					
+					AddAction(InverseActionType.Set, oldValue, invPropertyMap.Name, null, obj);					
 				}
 				else
 				{
