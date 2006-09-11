@@ -194,17 +194,18 @@ namespace Puzzle.Bots.Domain
 
         #endregion
 
+        #region CalculateEnergyConsumptionForMove
+
         protected double CalculateEnergyConsumptionForMove(Point vector)
         {
             //Pythagoras
             return Math.Sqrt((vector.X * vector.X) + (vector.Y * vector.Y));
         }
 
-
         #endregion
 
         #endregion
 
-
+        #endregion
     }
 }

@@ -384,7 +384,11 @@ namespace Puzzle.NPersist.Framework
         /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
 		void CommitObject(object obj, int exceptionLimit);
 
-
+        /// <summary>
+		/// Registers an object as up for deletion. The object will be removed from the data source on the next call to <c>Commit</c>().
+        /// </summary>
+        /// <param name="identity">The identity of the object that you want to remove.</param>
+        /// <param name="type">The type of the object that you want to remove.f</param>
 		void DeleteObject(object identity, Type type);
 
         /// <summary>
@@ -1643,7 +1647,11 @@ namespace Puzzle.NPersist.Framework
         /// <returns>All objects of the specified type.</returns>
         IList<T> GetObjects<T>();
 
-
+        /// <summary>
+		/// Registers an object as up for deletion. The object will be removed from the data source on the next call to <c>Commit</c>().
+        /// </summary>
+        /// <typeparam name="T">The type of the object you want to delete</typeparam>
+        /// <param name="identity">The identity of the object you want to delete</param>
         void DeleteObject<T>(object identity);
 
 		/// <summary>

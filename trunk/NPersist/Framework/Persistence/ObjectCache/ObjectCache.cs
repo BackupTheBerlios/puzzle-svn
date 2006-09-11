@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using Puzzle.NPersist.Framework.BaseClasses;
+using Puzzle.NPersist.Framework.Interfaces;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -61,9 +62,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public void Clear()
         {
+            ClearContextChildren();
             this.loadedObjects.Clear();
             this.unLoadedObjects.Clear();
             this.allObjects.Clear();
+        }
+
+        private void ClearContextChildren()
+        {
+            foreach (IInterceptable interceptable in allObjects)
+            {
+                IInterceptor interceptor = interceptable.GetInterceptor();
+                if (interceptor != null)
+                {
+                    interceptor.Context = null;
+                }
+            }
         }
     }
 }
