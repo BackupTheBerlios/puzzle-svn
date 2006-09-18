@@ -391,6 +391,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				//Bug in following line fixed by Vlad Ivanov
 				if (exceptions!=null && exceptions.Count > 0)
 				{
+    				this.Context.PersistenceEngine.Abort();
 					Abort();	
 
 					throw new ExceptionLimitExceededException(exceptions);					
@@ -403,6 +404,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			catch (Exception ex)
 			{
+				this.Context.PersistenceEngine.Abort();
 				Abort();	
 
 				if (exceptionLimit == 1)
