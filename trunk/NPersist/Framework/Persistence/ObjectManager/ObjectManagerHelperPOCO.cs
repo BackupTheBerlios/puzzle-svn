@@ -261,17 +261,31 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
         {
 #if NET2
-            string key = obj.GetType().Name + "." + propertyName;
-            FastFieldSetter setter = (FastFieldSetter)fastFieldSetterLookup[key];
-            if (setter == null)
+            
+            if (value == null)
             {
-                FieldInfo fieldInfo = GetFieldInfo(obj, propertyName);
-                setter = FastFieldAccess.GetFieldSetter(fieldInfo);
-                fastFieldSetterLookup[key] = setter;
+                SetPropertyValueReflection(obj, propertyName, value); 
             }
+            else
+            {
+                string key = obj.GetType().Name + "." + propertyName;
+                FastFieldSetter setter = (FastFieldSetter)fastFieldSetterLookup[key];
+                if (setter == null)
+                {
+                    FieldInfo fieldInfo = GetFieldInfo(obj, propertyName);
+                    setter = FastFieldAccess.GetFieldSetter(fieldInfo);
+                    fastFieldSetterLookup[key] = setter;
+                }
 
-            setter(obj, value);
+                setter(obj, value);
+            }
 #else
+            SetPropertyValueReflection(obj, propertyName, value);  
+#endif
+        }
+
+        private void SetPropertyValueReflection(object obj, string propertyName, object value)
+        {
             FieldInfo fieldInfo = (FieldInfo)propertyLookup[obj.GetType().Name + "." + propertyName];
             if (fieldInfo == null)
             {
@@ -285,8 +299,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                     return;
                 }
             }
-            fieldInfo.SetValue(obj, value);    
-#endif
+            fieldInfo.SetValue(obj, value);
         }
 
         public virtual PropertyStatus GetPropertyStatus(object obj, string propertyName)
