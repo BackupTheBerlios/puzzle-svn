@@ -1118,6 +1118,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			visited[obj] = obj;
 
+            ((IInterceptable) obj).SetInterceptor(this.Context.Interceptor);
+
 			string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
 			object existing = this.Context.IdentityMap.TryGetObject(identity, obj.GetType() );
 

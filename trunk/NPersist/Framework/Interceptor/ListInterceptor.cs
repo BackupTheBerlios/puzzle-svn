@@ -21,7 +21,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 		
 		public Notification Notification
 		{
-			get { return this.interceptable.GetInterceptor().Notification; }
+			get 
+            {
+                IInterceptor interceptor = this.interceptable.GetInterceptor();
+                if (interceptor == null)
+                    return Notification.Disabled;
+                return interceptor.Notification; 
+            }
 		}
 
 
@@ -114,9 +120,14 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 				{				
 					bool cancel=false;
 					object newList = List;
-					Interceptable.GetInterceptor().NotifyPropertySet(Interceptable, PropertyName, ref newList,OldList,ref cancel);
-					if (cancel)
-						RollBack();
+
+                    IInterceptor interceptor = Interceptable.GetInterceptor();
+                    if (interceptor != null)
+                    {
+					    interceptor.NotifyPropertySet(Interceptable, PropertyName, ref newList,OldList,ref cancel);
+					    if (cancel)
+						    RollBack();
+                    }
 				}
 				else
 				{
@@ -142,7 +153,9 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			{
 				if (PropertyName.Length > 0)
 				{
-					Interceptable.GetInterceptor().NotifyWroteProperty(Interceptable, PropertyName, List, OldList);
+                    IInterceptor interceptor = this.interceptable.GetInterceptor();
+                    if (interceptor != null)
+    					interceptor.NotifyWroteProperty(Interceptable, PropertyName, List, OldList);
 				}
 				else
 				{

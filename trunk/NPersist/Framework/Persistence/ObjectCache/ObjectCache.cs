@@ -71,13 +71,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         private void ClearContextChildren()
         {
             foreach (IInterceptable interceptable in allObjects)
-            {
-                IInterceptor interceptor = interceptable.GetInterceptor();
-                if (interceptor != null)
-                {
-                    interceptor.Context = null;
-                }
-            }
+                interceptable.SetInterceptor(null);
         }
     }
 }
