@@ -49,6 +49,9 @@ namespace Puzzle.NAspect.Framework.Aop
                         return true;
                 }
             }
+            foreach (ApplyInterceptorAttribute applyInterceptorAttribute in method.GetCustomAttributes(typeof(ApplyInterceptorAttribute), true))
+                return true;
+
             return false;
         }
     }

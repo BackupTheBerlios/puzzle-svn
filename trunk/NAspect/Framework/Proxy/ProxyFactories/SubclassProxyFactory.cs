@@ -176,6 +176,9 @@ namespace Puzzle.NAspect.Framework
                         }
                     }
                 }
+                foreach (ApplyInterceptorAttribute applyInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(ApplyInterceptorAttribute), true))
+                    methodinterceptors.Add(Activator.CreateInstance(applyInterceptorAttribute.Type));
+
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;                
                 CallInfo callInfo = MethodCache.GetCallInfo(methodId);
                 callInfo.Interceptors = methodinterceptors;

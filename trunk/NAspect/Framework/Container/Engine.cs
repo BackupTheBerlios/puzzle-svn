@@ -319,8 +319,11 @@ namespace Puzzle.NAspect.Framework
                     mixins[mixinType] = mixinType;
                 }
             }
-            IList distinctMixins = new ArrayList(mixins.Values);
 
+            foreach (ApplyMixinAttribute applyMixinAttribute in type.GetCustomAttributes(typeof(ApplyMixinAttribute), true))
+                mixins[applyMixinAttribute.Type] = applyMixinAttribute.Type;
+
+            IList distinctMixins = new ArrayList(mixins.Values);
 
             LogMessage message = new LogMessage("Getting mixins for type {0}", type.FullName);
             string verbose = "";

@@ -142,6 +142,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\ApplyInterceptorAttribute.cs" />
+    <Compile Include="Attributes\ApplyMixinAttribute.cs" />
     <Compile Include="Configuration\NAspectConfigurationHandler.cs">
       <SubType>Code</SubType>
     </Compile>
