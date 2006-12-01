@@ -162,7 +162,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 		public virtual void Visiting(SqlIntoClause intoClause)
 		{
 			if (intoClause.NewTableName.Length > 0)
-				sqlBuilder.Append(" Into " + Encapsulate(intoClause.NewTableName));
+				sqlBuilder.Append(" Into " + EncapsulateTable(intoClause.NewTableName));
 		}
 
 		public virtual void Visiting(SqlFromClause fromClause)
@@ -214,7 +214,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		public virtual void Visiting(SqlColumn column)
 		{
-			sqlBuilder.Append(Encapsulate(column.SqlTable.Name) + ".");
+			sqlBuilder.Append(EncapsulateTable(column.SqlTable.Name) + ".");
 			string columnName = column.Name;
 			sqlBuilder.Append(Encapsulate(columnName));
 		}
@@ -223,14 +223,14 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 		{
 			string tableName = tableAlias.SqlTable.Name;
 			string alias = tableAlias.Alias;
-			sqlBuilder.Append(Encapsulate(tableName));
+			sqlBuilder.Append(EncapsulateTable(tableName));
 			if (tableName != alias)
-				sqlBuilder.Append(" " + this.TableAliasKeyword + Encapsulate(alias));
+				sqlBuilder.Append(" " + this.TableAliasKeyword + EncapsulateTable(alias));
 		}
 
 		public virtual void Visiting(SqlColumnAlias columnAlias)
 		{
-			sqlBuilder.Append(Encapsulate(columnAlias.SqlTableAlias.Alias) + ".");
+			sqlBuilder.Append(EncapsulateTable(columnAlias.SqlTableAlias.Alias) + ".");
 			string columnName = columnAlias.SqlColumn.Name;
 			string alias = columnAlias.Alias;
 			sqlBuilder.Append(Encapsulate(columnName));
@@ -273,14 +273,14 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 			//string alias = columnAlias.Alias;
 			string alias = columnAlias.SqlColumn.Name ; // weird, but that's how Sql Server likes it...(possibly this should be moved to Sql Server subclass, dunno what is standard...)
 			string tblAlias = tableAlias.Alias;
-			sqlBuilder.Append(Encapsulate(tblAlias));
+			sqlBuilder.Append(EncapsulateTable(tblAlias));
 			sqlBuilder.Append(".");
 			sqlBuilder.Append(Encapsulate(alias));
 		}
 
 		public virtual void Visiting(SqlTableAliasReference tableAliasReference)
 		{
-			sqlBuilder.Append(Encapsulate(tableAliasReference.SqlTableAlias.Alias));
+			sqlBuilder.Append(EncapsulateTable(tableAliasReference.SqlTableAlias.Alias));
 		}
 
 		public virtual void Visiting(SqlExpressionAliasReference expressionAliasReference)
@@ -629,7 +629,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		public virtual void Visiting(SqlInsertClause insertClause)
 		{
-			sqlBuilder.Append("Insert Into " + Encapsulate(insertClause.SqlTable.Name));
+			sqlBuilder.Append("Insert Into " + EncapsulateTable(insertClause.SqlTable.Name));
 		}
 
 		public virtual void Visiting(SqlNullValue nullValue)
@@ -664,7 +664,7 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		public virtual void Visiting(SqlUpdateClause updateClause)
 		{
-			sqlBuilder.Append("Update " + Encapsulate(updateClause.SqlTable.Name));
+			sqlBuilder.Append("Update " + EncapsulateTable(updateClause.SqlTable.Name));
 			
 		}
 
@@ -1020,6 +1020,17 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 		{
 			return this.LeftEncapsulator + content + this.RightEncapsulator;		
 		}
+
+
+        protected virtual string EncapsulateTable(string content)
+        {
+            string[] parts = content.Split(".".ToCharArray());
+            StringBuilder result = new StringBuilder();
+            foreach (string part in parts)
+                result.Append(this.LeftEncapsulator + part + this.RightEncapsulator + ".");
+            result.Length--;
+            return result.ToString();
+        }
 
 		protected virtual string EncapsulateString(string content)
 		{
