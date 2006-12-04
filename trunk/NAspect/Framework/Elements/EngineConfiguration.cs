@@ -9,6 +9,7 @@
 // *
 
 using System.Collections;
+using Puzzle.NAspect.Framework.Aop;
 
 namespace Puzzle.NAspect.Framework.ConfigurationElements
 {
@@ -54,6 +55,8 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
         public EngineConfiguration()
         {
             aspects = new ArrayList();
+            FixedAspect autoAspect = new FixedAspect ();
+            aspects.Add(autoAspect);
         }
     }
 }
