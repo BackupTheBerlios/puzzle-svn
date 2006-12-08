@@ -9,6 +9,7 @@
 // *
 
 using System.Reflection;
+using System;
 
 namespace Puzzle.NAspect.Framework.Utils
 {
@@ -30,5 +31,30 @@ namespace Puzzle.NAspect.Framework.Utils
         }
 
         #endregion
+
+        #region HasFixedAttributes
+
+
+        public static bool HasFixedAttributes(Type baseType)
+        {
+            foreach (FixedMixinAttribute fixedMixinAttribute in baseType.GetCustomAttributes(typeof(FixedMixinAttribute), true))
+                return true;
+
+            foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseType.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                return true;
+
+            foreach (MethodBase method in baseType.GetMethods())
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in method.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    return true;
+
+            foreach (MethodBase method in baseType.GetConstructors())
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in method.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    return true;
+
+            return false;
+        }
+
+        #endregion
+
     }
 }

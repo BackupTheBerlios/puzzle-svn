@@ -36,6 +36,7 @@ namespace Puzzle.NAspect.Framework.Aop
     {
         private string name;
         private IList mixins = new ArrayList();
+        private Hashtable mixinsForTypes = new Hashtable();
         private IList pointcuts = new ArrayList();
 
         /// <summary>

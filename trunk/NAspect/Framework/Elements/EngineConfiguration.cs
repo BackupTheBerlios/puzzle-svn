@@ -55,8 +55,6 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
         public EngineConfiguration()
         {
             aspects = new ArrayList();
-            FixedAspect autoAspect = new FixedAspect ();
-            aspects.Add(autoAspect);
         }
     }
 }

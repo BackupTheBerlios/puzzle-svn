@@ -32,7 +32,7 @@ namespace Puzzle.NAspect.Framework
         /// <returns></returns>
         public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
         {
-            if (aspects.Count == 0 && mixins.Count == 1)
+            if (aspects.Count == 0 && mixins.Count == 1 && !AopTools.HasFixedAttributes(baseType))
                 return baseType;
 
             InterfaceProxyFactory factory = new InterfaceProxyFactory(engine);
@@ -149,8 +149,10 @@ namespace Puzzle.NAspect.Framework
                         }
                     }
                 }
-                foreach (ApplyInterceptorAttribute applyInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(ApplyInterceptorAttribute), true))
-                    methodinterceptors.Add(Activator.CreateInstance(applyInterceptorAttribute.Type));
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.DeclaringType.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
 
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;
                 CallInfo callInfo = MethodCache.GetCallInfo(methodId);

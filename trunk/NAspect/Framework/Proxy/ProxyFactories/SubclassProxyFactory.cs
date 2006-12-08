@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Utils;
 #if NET2
 #endif
 
@@ -40,16 +41,16 @@ namespace Puzzle.NAspect.Framework
 
             if (Engine.SerializerIsAvailable())
             {
-                if (aspects.Count == 0 && mixins.Count == 2)
+                if (aspects.Count == 0 && mixins.Count == 2 && !AopTools.HasFixedAttributes(baseType))
                     return baseType;
             }
             else
             {
-                if (aspects.Count == 0 && mixins.Count == 1)
+                if (aspects.Count == 0 && mixins.Count == 1 && !AopTools.HasFixedAttributes(baseType))
                     return baseType;
             }
 #else
-            if (aspects.Count == 0 && mixins.Count == 1)
+            if (aspects.Count == 0 && mixins.Count == 1 && !AopTools.HasFixedAttributes(baseType))
 				return baseType;
 #endif
 
@@ -98,7 +99,7 @@ namespace Puzzle.NAspect.Framework
         private Type CreateType(Type baseType, IList aspects, IList mixins)
         {
             string typeName = baseType.Name + "AopProxy";
-            string moduleName = "MatsSoft.NPersist.Runtime.Proxy";
+            string moduleName = "Puzzle.NAspect.Runtime.Proxy";
 
             AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();
 
@@ -176,8 +177,10 @@ namespace Puzzle.NAspect.Framework
                         }
                     }
                 }
-                foreach (ApplyInterceptorAttribute applyInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(ApplyInterceptorAttribute), true))
-                    methodinterceptors.Add(Activator.CreateInstance(applyInterceptorAttribute.Type));
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.DeclaringType.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
 
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;                
                 CallInfo callInfo = MethodCache.GetCallInfo(methodId);
@@ -194,7 +197,7 @@ namespace Puzzle.NAspect.Framework
             {
                 if (method.IsVirtual && !method.IsFinal)
                 {
-                    if (engine.PointCutMatcher.MethodShouldBeProxied(method, aspects))
+                    if (engine.PointCutMatcher.MethodShouldBeProxied(method, aspects, baseType))
                     {
                         BuildMethod(typeBuilder, method);
                     }
@@ -204,7 +207,7 @@ namespace Puzzle.NAspect.Framework
                     if (method.Name.IndexOf(".") >= 0)
                     {
                         //explicit iface method
-                        if (engine.PointCutMatcher.MethodShouldBeProxied(method, aspects))
+                        if (engine.PointCutMatcher.MethodShouldBeProxied(method, aspects, baseType))
                         {
                             BuildMethod(typeBuilder, method);
                         }

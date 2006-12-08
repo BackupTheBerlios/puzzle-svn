@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Puzzle.NAspect.Framework
 {
-	public class ApplyInterceptorAttribute : Attribute 
+	public class FixedMixinAttribute : Attribute 
 	{
-        public ApplyInterceptorAttribute(Type type) 
+        public FixedMixinAttribute(Type type) 
         {
             this.type = type;
         }
@@ -18,5 +18,6 @@ namespace Puzzle.NAspect.Framework
             set { type = value; }
         }
 
+	
 	}
 }

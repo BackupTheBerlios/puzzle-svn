@@ -10,6 +10,7 @@
 
 using System.Collections;
 using System.Reflection;
+using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -35,6 +36,11 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <returns></returns>
         public bool MethodShouldBeProxied(MethodBase method, IList aspects)
         {
+            return MethodShouldBeProxied(method, aspects, null);
+        }
+
+        public bool MethodShouldBeProxied(MethodBase method, IList aspects, Type baseType)
+        {
             foreach (IAspect aspect in aspects)
             {
                 IGenericAspect tmpAspect;
@@ -49,8 +55,14 @@ namespace Puzzle.NAspect.Framework.Aop
                         return true;
                 }
             }
-            foreach (ApplyInterceptorAttribute applyInterceptorAttribute in method.GetCustomAttributes(typeof(ApplyInterceptorAttribute), true))
+            foreach (FixedInterceptorAttribute fixedInterceptorAttribute in method.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
                 return true;
+
+            if (baseType != null)
+            {
+                foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseType.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
+                    return true;
+            }
 
             return false;
         }

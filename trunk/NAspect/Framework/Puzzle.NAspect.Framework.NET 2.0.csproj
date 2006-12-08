@@ -93,7 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AOP\Aspects\Attributes\TypedAspectAttributes.cs" />
-    <Compile Include="AOP\Aspects\FixedAspect.cs" />
     <Compile Include="AOP\Aspects\IAspect.cs" />
     <Compile Include="AOP\Aspects\ITypedAspect.cs" />
     <Compile Include="AOP\Aspects\TypedToGenericConverter.cs" />
@@ -128,7 +127,6 @@
     <Compile Include="AOP\Pointcuts\AttributePointcut.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AOP\Pointcuts\FixedPointcut.cs" />
     <Compile Include="AOP\Pointcuts\IPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -144,8 +142,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\ApplyInterceptorAttribute.cs" />
-    <Compile Include="Attributes\ApplyMixinAttribute.cs" />
+    <Compile Include="Attributes\FixedInterceptorAttribute.cs" />
+    <Compile Include="Attributes\FixedMixinAttribute.cs" />
     <Compile Include="Configuration\NAspectConfigurationHandler.cs">
       <SubType>Code</SubType>
     </Compile>
