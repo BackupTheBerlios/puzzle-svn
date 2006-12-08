@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NAspect.Framework.Utils;
 
 namespace Puzzle.NAspect.Framework
 {
