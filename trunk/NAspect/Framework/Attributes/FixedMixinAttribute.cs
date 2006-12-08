@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -8,14 +9,24 @@ namespace Puzzle.NAspect.Framework
 	{
         public FixedMixinAttribute(Type type) 
         {
-            this.type = type;
+            this.types.Add(type);
         }
 
-        private Type type;
-        public virtual Type Type
+        public FixedMixinAttribute(IList types)
         {
-            get { return type; }
-            set { type = value; }
+            this.types = types;
+        }
+
+        public FixedMixinAttribute(params Type[] types)
+        {
+            foreach (Type type in types)
+            this.types.Add(type);
+        }
+
+        private IList types = new ArrayList();
+        public virtual IList Types
+        {
+            get { return types; }
         }
 
 	

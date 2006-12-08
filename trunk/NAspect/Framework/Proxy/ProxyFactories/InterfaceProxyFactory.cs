@@ -151,9 +151,11 @@ namespace Puzzle.NAspect.Framework
                     }
                 }
                 foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
-                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
+                    foreach (Type type in fixedInterceptorAttribute.Types)
+                        methodinterceptors.Add(Activator.CreateInstance(type));
                 foreach (FixedInterceptorAttribute fixedInterceptorAttribute in baseMethod.DeclaringType.GetCustomAttributes(typeof(FixedInterceptorAttribute), true))
-                    methodinterceptors.Add(Activator.CreateInstance(fixedInterceptorAttribute.Type));
+                    foreach (Type type in fixedInterceptorAttribute.Types)
+                        methodinterceptors.Add(Activator.CreateInstance(type));
 
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;
                 CallInfo callInfo = MethodCache.GetCallInfo(methodId);

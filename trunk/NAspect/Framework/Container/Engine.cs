@@ -321,7 +321,8 @@ namespace Puzzle.NAspect.Framework
             }
 
             foreach (FixedMixinAttribute fixedMixinAttribute in type.GetCustomAttributes(typeof(FixedMixinAttribute), true))
-                mixins[fixedMixinAttribute.Type] = fixedMixinAttribute.Type;
+                foreach (Type mixinType in fixedMixinAttribute.Types)
+                    mixins[mixinType] = mixinType;
 
             IList distinctMixins = new ArrayList(mixins.Values);
 
