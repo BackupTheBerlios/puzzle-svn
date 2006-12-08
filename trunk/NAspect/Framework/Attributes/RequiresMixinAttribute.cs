@@ -16,25 +16,25 @@ using System.Collections;
 namespace Puzzle.NAspect.Framework
 {
     /// <summary>
-    /// Decorate a class with this attribute to ensure that the mixin or mixins you specify will always be applied to the class regardless of the configuration file.
+    /// Decorate your interceptors with this attribute in order to indicate the types of mixins that are required for your interceptors to function properly.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple=true, Inherited=true)]
-    public class FixedMixinAttribute : Attribute 
-	{
-        public FixedMixinAttribute(Type type) 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true, Inherited = true)]
+    public class RequiresMixinAttribute : Attribute
+    {
+        public RequiresMixinAttribute(Type type)
         {
             this.types.Add(type);
         }
 
-        public FixedMixinAttribute(IList types)
+        public RequiresMixinAttribute(IList types)
         {
             this.types = types;
         }
 
-        public FixedMixinAttribute(params Type[] types)
+        public RequiresMixinAttribute(params Type[] types)
         {
             foreach (Type type in types)
-            this.types.Add(type);
+                this.types.Add(type);
         }
 
         private IList types = new ArrayList();
@@ -43,6 +43,6 @@ namespace Puzzle.NAspect.Framework
             get { return types; }
         }
 
-	
-	}
+
+    }
 }

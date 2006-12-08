@@ -119,6 +119,10 @@ namespace Puzzle.NAspect.Framework.Aop
                     newAspect =
                         new AttributeAspect(aspect.GetType().Name, aspectTargetAttribute.TargetAttribute, mixins,
                                             pointcuts);
+                else if (aspectTargetAttribute.TargetInterface != null)
+                    newAspect =
+                        new InterfaceAspect(aspect.GetType().Name, aspectTargetAttribute.TargetInterface, mixins,
+                                            pointcuts);
                 else if (aspectTargetAttribute.TargetSignature != null)
                     newAspect =
                         new SignatureAspect(aspect.GetType().Name, aspectTargetAttribute.TargetSignature, mixins,

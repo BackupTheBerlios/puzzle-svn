@@ -83,7 +83,6 @@ namespace Puzzle.NAspect.Framework
                                 pointcut = new AttributePointcut(attributeType, interceptors);
                             }
 
-
                             pointcuts.Add(pointcut);
                         }
 
@@ -111,6 +110,14 @@ namespace Puzzle.NAspect.Framework
                         Type attributeType = Type.GetType(attributeTypeString);
 
                         aspect = new AttributeAspect(aspectName, attributeType, mixins, pointcuts);
+                    }
+
+                    if (settingsNode.Attributes["target-interface"] != null)
+                    {
+                        string interfaceTypeString = settingsNode.Attributes["target-interface"].Value;
+                        Type interfaceType = Type.GetType(interfaceTypeString);
+
+                        aspect = new InterfaceAspect(aspectName, interfaceType, mixins, pointcuts);
                     }
 
                     engine.Configuration.Aspects.Add(aspect);

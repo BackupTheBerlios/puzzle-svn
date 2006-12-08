@@ -13,6 +13,7 @@ using System.Collections;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
+using Puzzle.NAspect.Framework.Interception;
 #if NET2
 #endif
 
@@ -43,6 +44,8 @@ namespace Puzzle.NAspect.Framework
 
         private IDictionary proxyLookup;
         private IDictionary wrapperLookup;
+
+        private readonly Hashtable FixedInterceptorLookup = new Hashtable();
 
         /// <summary>
         /// The aspect matcher to use when matching aspects.
@@ -380,6 +383,22 @@ namespace Puzzle.NAspect.Framework
 
         //private static bool serializerIsAvailable=true;
         //private static bool serializerDoOnce=false;
+
+        #region GetFixedInterceptor
+        
+        internal IInterceptor GetFixedInterceptor(Type interceptorType)
+        {
+            IInterceptor interceptor = (IInterceptor)FixedInterceptorLookup[interceptorType];
+            if (interceptor == null)
+            {
+                interceptor = (IInterceptor) Activator.CreateInstance(interceptorType);
+                FixedInterceptorLookup[interceptorType] = interceptor;
+            }
+            return interceptor;
+        }
+
+        #endregion
+
 
         internal static bool SerializerIsAvailable()
         {

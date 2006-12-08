@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="AOP\Aspects\Attributes\TypedAspectAttributes.cs" />
     <Compile Include="AOP\Aspects\IAspect.cs" />
+    <Compile Include="AOP\Aspects\InterfaceAspect.cs" />
     <Compile Include="AOP\Aspects\ITypedAspect.cs" />
     <Compile Include="AOP\Aspects\TypedToGenericConverter.cs" />
     <Compile Include="AOP\Interceptors\Attributes\InterceptorAttributes.cs" />
@@ -144,6 +145,7 @@
     </Compile>
     <Compile Include="Attributes\FixedInterceptorAttribute.cs" />
     <Compile Include="Attributes\FixedMixinAttribute.cs" />
+    <Compile Include="Attributes\RequiresMixinAttribute.cs" />
     <Compile Include="Configuration\NAspectConfigurationHandler.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -134,7 +134,7 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <seealso cref="MixinAttribute"/>
     /// <seealso cref="AspectTargetAttribute"/>
     /// <seealso cref="MixinAttribute"/>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
     public class MixinAttribute : Attribute
     {
         #region Property MixinType
@@ -215,6 +215,28 @@ namespace Puzzle.NAspect.Framework.Aop
         }
 
         #endregion
+
+        #region Property TargetInterface
+
+        private Type targetInterface;
+
+        /// <summary>
+        /// Every type implementing the interface of this type will get the current aspect applied.
+        /// </summary>
+        /// <example>
+        /// <code lang="CS">
+        /// [AspectTarget(TargetInterface=typeof(SomeInterface)] //every type implementing the SomeInterface interface will get this aspect applied to it
+        /// public class MyAspect : ITypedAspect ...
+        /// </code>
+        /// </example>
+        public virtual Type TargetInterface
+        {
+            get { return targetInterface; }
+            set { targetInterface = value; }
+        }
+
+        #endregion
+
 
         #region Property TargetSignature
 
