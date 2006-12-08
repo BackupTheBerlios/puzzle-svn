@@ -16,6 +16,7 @@ using System.Reflection.Emit;
 using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.Utils;
+using Puzzle.NAspect.Framework.Interception;
 #if NET2
 #endif
 
@@ -72,13 +73,14 @@ namespace Puzzle.NAspect.Framework
                 guid = long.MinValue;
 
             if (guid == 0)
-                throw new Exception("tough luch , youve proxied long.max methods");
+                throw new Exception("tough luck , youve proxied long.max methods. This is probably a good time to break for lunch.");
 
             return methodId;
         }
 
         private Engine engine;
         private ArrayList wrapperMethods = new ArrayList();
+        private Hashtable mixinsForType = new Hashtable();
 
         private SubclassProxyFactory(Engine engine)
         {
@@ -98,6 +100,8 @@ namespace Puzzle.NAspect.Framework
 
         private Type CreateType(Type baseType, IList aspects, IList mixins)
         {
+            mixinsForType[baseType] = mixins;
+
             string typeName = baseType.Name + "AopProxy";
             string moduleName = "Puzzle.NAspect.Runtime.Proxy";
 
@@ -184,10 +188,35 @@ namespace Puzzle.NAspect.Framework
                     foreach (Type type in fixedInterceptorAttribute.Types)
                         methodinterceptors.Add(engine.GetFixedInterceptor(type));
 
+                CheckRequiredMixins(baseMethod, methodinterceptors);
+
                 MethodCache.methodInterceptorsLookup[methodId] = methodinterceptors;                
                 CallInfo callInfo = MethodCache.GetCallInfo(methodId);
                 callInfo.Interceptors = methodinterceptors;
             }
+        }
+
+        private void CheckRequiredMixins(MethodBase baseMethod, IList methodinterceptors)
+        {
+            foreach (IInterceptor interceptor in methodinterceptors)
+                foreach (RequiresMixinAttribute requiresMixinAttribute in interceptor.GetType().GetCustomAttributes(typeof(RequiresMixinAttribute), true))
+                    foreach (Type requiredMixinType in requiresMixinAttribute.Types)
+                    {
+                        bool hasMixin = false;
+                        IList mixins = (IList) mixinsForType[baseMethod.DeclaringType];
+                        if (mixins != null)
+                        {
+                            foreach (Type mixinType in mixins)
+                                if (requiredMixinType.IsAssignableFrom(mixinType))
+                                {
+                                    hasMixin = true;
+                                    break;
+                                }
+                        }
+                        if (!hasMixin)
+                            throw new Exception(String.Format("The interceptor {0} is applied to the method {1} in the type {2} which does not have the mixin {3} that is required for the interceptor.",
+                                interceptor.GetType().Name, baseMethod.Name, baseMethod.DeclaringType.Name, requiredMixinType.Name));
+                    }
         }
 
         private void BuildMethods(Type baseType, TypeBuilder typeBuilder, IList aspects)
