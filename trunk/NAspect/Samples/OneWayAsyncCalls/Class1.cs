@@ -8,7 +8,7 @@ namespace OneWayAsyncCalls
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Engine c = ApplicationContext.Configure();
+			IEngine c = ApplicationContext.Configure();
 
 			//create an instance of "SomeAopTarget" through the aop container
 			SomeAopTarget myObj = c.CreateProxy(typeof (SomeAopTarget)) as SomeAopTarget;

@@ -14,7 +14,7 @@ namespace DesignByContract1
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Engine c = ApplicationContext.Configure();
+			IEngine c = ApplicationContext.Configure();
 			SomeAopTarget target = (SomeAopTarget)c.CreateProxy(typeof(SomeAopTarget));
 			target.ReturnAString(0) ; 
 			target.ReturnAString(1) ; //fails since method tries to return null

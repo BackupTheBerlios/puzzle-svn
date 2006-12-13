@@ -134,6 +134,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AOP\Aspects\InterfaceAspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AOP\Aspects\ITypedAspect.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,6 +220,21 @@
                 />
                 <File
                     RelPath = "AOP\Pointcuts\SignaturePointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\FixedInterceptorAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\FixedMixinAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\RequiresMixinAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

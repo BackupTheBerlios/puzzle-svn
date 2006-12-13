@@ -345,6 +345,22 @@ namespace Puzzle.NAspect.Framework
             return distinctMixins;
         }
 
+		#region GetFixedInterceptor
+        
+		internal IInterceptor GetFixedInterceptor(Type interceptorType)
+		{
+			IInterceptor interceptor = (IInterceptor)FixedInterceptorLookup[interceptorType];
+			if (interceptor == null)
+			{
+				interceptor = (IInterceptor) Activator.CreateInstance(interceptorType);
+				FixedInterceptorLookup[interceptorType] = interceptor;
+			}
+			return interceptor;
+		}
+
+		#endregion
+
+
 #if NET2
         /// <summary>
         /// Creates a subclass proxy of type <c>T</c>.
@@ -384,20 +400,7 @@ namespace Puzzle.NAspect.Framework
         //private static bool serializerIsAvailable=true;
         //private static bool serializerDoOnce=false;
 
-        #region GetFixedInterceptor
         
-        internal IInterceptor GetFixedInterceptor(Type interceptorType)
-        {
-            IInterceptor interceptor = (IInterceptor)FixedInterceptorLookup[interceptorType];
-            if (interceptor == null)
-            {
-                interceptor = (IInterceptor) Activator.CreateInstance(interceptorType);
-                FixedInterceptorLookup[interceptorType] = interceptor;
-            }
-            return interceptor;
-        }
-
-        #endregion
 
 
         internal static bool SerializerIsAvailable()
