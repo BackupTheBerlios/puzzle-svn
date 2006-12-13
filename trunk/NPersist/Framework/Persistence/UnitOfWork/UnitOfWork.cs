@@ -287,7 +287,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			foreach (object obj in m_listInserted)
 			{
-				CommitPersisted(obj);
+				CommitPersisted(obj, true);
 			}
 			m_listInserted.Clear() ;
 		}
@@ -296,7 +296,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			foreach (object obj in m_listUpdated)
 			{
-				CommitPersisted(obj);
+				CommitPersisted(obj, false);
 			}			
 			m_listUpdated.Clear() ;
 		}
@@ -317,14 +317,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 			m_hashSpeciallyUpdated.Clear() ;
 		}
 
-		protected virtual void CommitPersisted(object obj)
+		protected virtual void CommitPersisted(object obj, bool isInserted)
 		{
 			IObjectManager om = this.Context.ObjectManager;
 			IListManager lm = this.Context.ListManager;
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
 			{
-				CopyValuesToOriginals(propertyMap, lm, obj, om);
+				if (isInserted || om.GetPropertyStatus(obj, propertyMap.Name) != PropertyStatus.NotLoaded)
+					CopyValuesToOriginals(propertyMap, lm, obj, om);
+				else
+					Console.WriteLine(propertyMap.Name);
 			}
 			m_objectStatusLookup.Remove(obj);
 			this.Context.ObjectManager.ClearUpdatedStatuses(obj);

@@ -11,6 +11,7 @@ namespace Puzzle.NPersist.Tests.Northwind
 	public class ContextFactory
 	{
 		public static string ConnectionString = "SERVER=(local);DATABASE=NpNWind;integrated security=true";
+		public static string NormalNWConnectionString = "SERVER=(local);DATABASE=Northwind;integrated security=true";
 
 		//The npersist xml mapping file has been compiled into the Northwind.Domain dll
 		//as an embedded resource with the following name (the namespace appears twice

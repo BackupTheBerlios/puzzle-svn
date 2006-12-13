@@ -12,6 +12,7 @@ namespace Puzzle.NPersist.Tests.Northwind
 	public abstract class TestBase
 	{
 
+
 		public virtual IContext GetContext()
 		{
 			return ContextFactory.CreateContext() ;
