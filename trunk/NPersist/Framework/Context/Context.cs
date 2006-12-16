@@ -76,6 +76,8 @@ namespace Puzzle.NPersist.Framework
 		private Hashtable m_Transactions = new Hashtable();
 		private bool m_AutoTransactions = true;
 
+		private IList conflicts = new ArrayList();
+
 		#endregion
 
 		#region Events
@@ -2100,7 +2102,16 @@ namespace Puzzle.NPersist.Framework
 
 		protected virtual void RefreshObjectProperty(object obj, RefreshBehaviorType refreshBehavior, string propertyName)
 		{
-			NPathQuery npathQuery = GetLoadObjectNPathQuery(obj, propertyName, refreshBehavior);
+			string span = propertyName;
+			if (span != "*")
+			{
+				IPropertyMap propertyMap = this.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
+				if (propertyMap.IsCollection)
+				{
+					span += ".*";
+				}				
+			}
+			NPathQuery npathQuery = GetLoadObjectNPathQuery(obj, span, refreshBehavior);
 			GetObjectByNPath(npathQuery);
 		}
 
@@ -2151,6 +2162,7 @@ namespace Puzzle.NPersist.Framework
             this.UnitOfWork.Clear();
             this.InverseManager.Clear();
             this.SqlExecutor.Clear();
+			this.conflicts.Clear();
         }
 
 
@@ -2666,6 +2678,11 @@ namespace Puzzle.NPersist.Framework
 		}
 
 		#endregion
+
+        public virtual IList Conflicts
+        {
+            get { return conflicts; }
+        }
 
         #region .NET 2.0 Specific Code
 #if NET2

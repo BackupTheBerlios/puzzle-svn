@@ -144,16 +144,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);
 		}
 
-//		public virtual ObjectStatus GetObjectStatus(object obj)
-//		{
-//			object result = m_objectStatusLookup[obj];
-//			if (result != null)
-//			{
-//				return (ObjectStatus) result;
-//			}
-//			return this.Context.IdentityMap.GetObjectStatus(obj);
-//		}
-
 		public virtual void Complete()
 		{
             NotifyCommitted();
@@ -361,12 +351,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			this.Context.LogManager.Info(this, "Committing Unit of Work"); // do not localize
 
+            if (this.Context.Conflicts.Count > 0)
+                throw new UnitOfWorkException("There are unresolved conflicts. Please resolve all conflicts before committing.");
+
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
 
 			try
 			{
-
 				if (this.Context.ValidateBeforeCommit)
 				{
 					this.Context.ValidateUnitOfWork(exceptions);

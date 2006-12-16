@@ -57,7 +57,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return this.Context.IdentityMap.GetObjectByKey(keyPropertyName, keyValue, type, ignoreObjectNotFound);
 		}
 
-		public void LoadProperty(object obj, string propertyName)
+        public void LoadProperty(object obj, string propertyName)
 		{
 			ObjectStatus objStatus = this.Context.ObjectManager.GetObjectStatus(obj);
 			IPropertyMap propertyMap;

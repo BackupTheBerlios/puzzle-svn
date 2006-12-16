@@ -1548,8 +1548,11 @@ namespace Puzzle.NPersist.Framework
         /// <param name="parameters">The query parameters.</param>
 		/// <returns>A DataTable holding the values specified in the select clause of the NPath query.</returns>
         DataTable GetDataTable(string npath, Type type, IList parameters);
-       
 
+        /// <summary>
+        /// Returns a list with any unresolved conflict that have resulted from a merge between cached values and fresh values from the data source.
+        /// </summary>
+        IList Conflicts { get; }
 
         #region .NET 2.0 Specific Code
 #if NET2

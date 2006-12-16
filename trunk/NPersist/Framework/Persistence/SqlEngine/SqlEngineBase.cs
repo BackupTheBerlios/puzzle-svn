@@ -3431,6 +3431,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			Type useType;
 			IPersistenceManager pm = this.Context.PersistenceManager;
 			Hashtable registerLoaded = new Hashtable() ;
+			Hashtable clearedLists = new Hashtable() ;
+			Hashtable doWriteLists = new Hashtable() ;
+			Hashtable doWriteOrgLists = new Hashtable() ;
+			Hashtable cachedListUpdates = new Hashtable() ;
 			
 			RefreshBehaviorType useRefreshBehavior;
 
@@ -3651,34 +3655,146 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 													bool stackMute = false;
 													IInterceptableList mList = listObject as IInterceptableList;
-													if (mList != null)
-													{
-														stackMute = mList.MuteNotify;
-														mList.MuteNotify = true;
-													}
-													listObject.Add(refObj);
-													if (mList != null)
-													{
-														mList.MuteNotify = stackMute ;
-													}
 													IList orgList = (IList) om.GetOriginalPropertyValue(refObj, arr[i]);
-													if (orgList == null)
-													{				
-														orgList = lm.CreateList(obj, arr[i]) ;
-														om.SetOriginalPropertyValue(obj, arr[i], orgList);
-													}
-													mList = orgList as IInterceptableList;
-													if (mList != null)
+                                                    if (orgList == null)
+                                                    {
+                                                        orgList = lm.CreateList(obj, arr[i]);
+                                                        om.SetOriginalPropertyValue(obj, arr[i], orgList);
+                                                    }
+
+													doWrite = false;
+													doWriteOrg = false;
+
+													object testDoWrite = doWriteLists[listObject];
+													if (testDoWrite != null)
 													{
-														stackMute = mList.MuteNotify;
-														mList.MuteNotify = true;
+														doWrite = (bool) testDoWrite;
+														doWriteOrg = (bool) doWriteLists[listObject];
 													}
-													orgList.Add(refObj);
-													if (mList != null)
+													else
 													{
-														mList.MuteNotify = stackMute ;
+														if (mList != null)
+														{
+															object owner = mList.Interceptable;
+															PropertyStatus listStatus = om.GetPropertyStatus(owner, mList.PropertyName);
+															IClassMap ownerMap = dm.MustGetClassMap(owner.GetType());
+															IPropertyMap listMap = ownerMap.MustGetPropertyMap(mList.PropertyName);
+
+															useRefreshBehavior = pm.GetRefreshBehavior(refreshBehavior, ownerMap, listMap);
+
+															if (useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded || useRefreshBehavior == RefreshBehaviorType.DefaultBehavior)
+															{
+																//Overwrite both value and original for all unloaded properties
+																if (listStatus == PropertyStatus.NotLoaded)
+																{
+																	doWrite = true;
+																	doWriteOrg = true;
+																}
+															}
+															else if (useRefreshBehavior == RefreshBehaviorType.OverwriteLoaded)
+															{
+																//Overwrite value and original for all clean or unloaded properties (but not for dirty or deleted properties)
+																if (listStatus == PropertyStatus.Clean || listStatus == PropertyStatus.NotLoaded)
+																{
+																	doWriteOrg = true;
+																	doWrite = true;												
+																}
+															}
+															else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+															{
+																//Overwrite original for all properties unless the old originial value and the fresh value from the
+																//database mismatch, in that case raise an exception
+																//Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
+
+																//If property is not loaded there is no room for conflicts
+																if (listStatus == PropertyStatus.NotLoaded)
+																{
+																	doWrite = true;
+																	doWriteOrg = true;
+																}
+																else if (listStatus == PropertyStatus.Deleted)
+																{
+																	doWrite = false;
+																	doWriteOrg = false;
+																}
+																else
+																{
+																	CachedListUpdate cachedListUpdate = (CachedListUpdate) cachedListUpdates[listObject];
+																	if (cachedListUpdate == null)
+																	{
+																		cachedListUpdate = new CachedListUpdate(listObject, orgList, owner, listMap.Name, listStatus, useRefreshBehavior);
+																		cachedListUpdates[listObject] = cachedListUpdate;
+																	}
+
+																	doWrite = false;
+																	doWriteOrg = false;
+
+																	cachedListUpdate.FreshList.Add(refObj);
+
+																}
+															}
+															else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
+															{
+																//Overwrite original for all properties
+																//Overwrite value for all clean, unloaded or dirty properties (but not for deleted properties)
+																doWriteOrg = true;
+																if (!(listStatus == PropertyStatus.Deleted))
+																	doWrite = true;
+															}
+															else
+															{
+																throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
+															}
+
+
+															doWriteLists[listObject] = doWrite;
+															doWriteOrgLists[listObject] = doWriteOrg;
+														}														
 													}
 
+													if (doWrite)
+													{														
+														if (mList != null)
+														{
+															stackMute = mList.MuteNotify;
+															mList.MuteNotify = true;
+														}
+
+														object clearedList = clearedLists[listObject];
+														if (clearedList == null)
+														{
+															clearedLists[listObject] = listObject;
+															listObject.Clear();
+														}
+
+														listObject.Add(refObj);
+														if (mList != null)
+														{
+															mList.MuteNotify = stackMute ;
+														}
+													}
+													if (doWriteOrg)
+													{
+														mList = orgList as IInterceptableList;
+														if (mList != null)
+														{
+															stackMute = mList.MuteNotify;
+															mList.MuteNotify = true;
+														}
+
+														object clearedList = clearedLists[orgList];
+														if (clearedList == null)
+														{
+															clearedLists[orgList] = orgList;
+															orgList.Clear();
+														}
+
+														orgList.Add(refObj);
+														if (mList != null)
+														{
+															mList.MuteNotify = stackMute ;
+														}
+													}
 												}
 											}
 											prevObj = refObj;
@@ -3794,13 +3910,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 													doWrite = true;												
 												}
 											}
-											else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException)
+                                            else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
 											{
 												//Overwrite original for all properties unless the old originial value and the fresh value from the
 												//database mismatch, in that case raise an exception
 												//Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
 												if (propStatus == PropertyStatus.Clean || propStatus == PropertyStatus.NotLoaded || propStatus == PropertyStatus.Dirty)
 												{
+                                                    bool skip = false;
 													if (!(propStatus == PropertyStatus.NotLoaded))
 													{
 														object testValue = om.GetOriginalPropertyValue(refObj, strPropertyName);
@@ -3823,12 +3940,29 @@ namespace Puzzle.NPersist.Framework.Persistence
 																	freshValue = value.ToString() ;
 															} 
 															catch { ; }
-															if (!cachedValue.Equals(freshValue))
-																throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + refObj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + strPropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected). Cashed value: " + cachedValue + ", Fresh value: " + freshValue, cachedValue, freshValue, refObj, strPropertyName); // do not localize
+                                                            if (!cachedValue.Equals(freshValue))
+                                                            {
+                                                                if (useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                                                                {
+                                                                    this.Context.Conflicts.Add(new RefreshConflict(
+                                                                        this.Context,
+                                                                        refObj, 
+                                                                        strPropertyName,
+                                                                        om.GetPropertyValue(obj, propertyMap.Name),
+                                                                        testValue,
+                                                                        testValue2));
+                                                                    doWrite = false;
+                                                                    doWriteOrg = false;
+                                                                    skip = true;
+                                                                }
+                                                                else
+                                                                    throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + refObj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + strPropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected). Cashed value: " + cachedValue + ", Fresh value: " + freshValue, cachedValue, freshValue, refObj, strPropertyName); // do not localize
+                                                            }
 														}
 													}
-													if (!(propStatus == PropertyStatus.Dirty))
-														doWrite = true;
+                                                    if (!skip)
+    													if (!(propStatus == PropertyStatus.Dirty))
+	    													doWrite = true;
 												}
 											}
 											else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
@@ -3891,6 +4025,26 @@ namespace Puzzle.NPersist.Framework.Persistence
 			foreach (object register in registerLoaded.Keys)
 			{
 				this.Context.IdentityMap.RegisterLoadedObject(register);				
+			}
+
+			foreach (CachedListUpdate cachedListUpdate in cachedListUpdates.Values)
+			{				
+				if (!lm.CompareLists(cachedListUpdate.FreshList, cachedListUpdate.OriginalList))
+				{
+					if (cachedListUpdate.RefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+					{
+						this.Context.Conflicts.Add(new RefreshConflict(
+							this.Context,
+							cachedListUpdate.Obj, 
+							cachedListUpdate.PropertyName,
+							cachedListUpdate.CachedList,
+							cachedListUpdate.OriginalList,
+							cachedListUpdate.FreshList));
+					}
+					else
+						throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + cachedListUpdate.Obj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + cachedListUpdate.PropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected).", cachedListUpdate.OriginalList, cachedListUpdate.FreshList, cachedListUpdate.Obj, cachedListUpdate.PropertyName); // do not localize
+					
+				}
 			}
 		}
 

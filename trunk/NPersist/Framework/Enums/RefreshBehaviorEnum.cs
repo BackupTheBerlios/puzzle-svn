@@ -45,6 +45,10 @@ namespace Puzzle.NPersist.Framework.Enumerations
         /// <summary>
         /// Throw an exception whenever a fresh value from the database differs from a loaded value in the cache.
         /// </summary>
-		ThrowConcurrencyException = 5
+		ThrowConcurrencyException = 5,
+        /// <summary>
+        /// Logs a concurrency conflict whenever a fresh value from the database differs from a loaded value in the cache.
+        /// </summary>
+        LogConcurrencyConflict = 6
 	}
 }

@@ -269,6 +269,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Enums\ConflictResolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Enums\DocClassMapMode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1174,6 +1179,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Persistence\SqlEngine\CachedListUpdate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Persistence\SqlEngine\ISQLEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1239,7 +1249,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Persistence\UnitOfWork\IRefreshConflict.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Persistence\UnitOfWork\IUnitOfWork.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Persistence\UnitOfWork\RefreshConflict.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

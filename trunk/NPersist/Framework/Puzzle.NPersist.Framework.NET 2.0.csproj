@@ -209,6 +209,7 @@
     <Compile Include="Enums\CodeLanguage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\ConflictResolution.cs" />
     <Compile Include="Enums\DocClassMapMode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -753,6 +754,7 @@
     <Compile Include="Persistence\SqlEngineManager\SqlEngineManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\SqlEngine\CachedListUpdate.cs" />
     <Compile Include="Persistence\SqlEngine\ISQLEngine.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -784,9 +786,11 @@
     <Compile Include="Persistence\Transaction\Transaction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\UnitOfWork\IRefreshConflict.cs" />
     <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\UnitOfWork\RefreshConflict.cs" />
     <Compile Include="Persistence\UnitOfWork\TopologicalGraph.cs" />
     <Compile Include="Persistence\UnitOfWork\TopologicalNode.cs" />
     <Compile Include="Persistence\UnitOfWork\UnitOfWork.cs">
