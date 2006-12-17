@@ -1,7 +1,9 @@
 using System;
 using NUnit.Framework;
 using Puzzle.NPersist.Framework;
+using Puzzle.NPersist.Framework.Delegates;
 using Puzzle.NPersist.Framework.Enumerations;
+using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Samples.Northwind.Domain;
 
 namespace Puzzle.NPersist.Tests.Northwind.Basic
@@ -149,20 +151,16 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				Assert.AreEqual("John", employee2.FirstName);
 			}
 		}
+
 		
 		[Test()]
 		public void TestRefreshListPropertyOverwriteLoaded()
 		{
 			using (IContext context = GetContext() )
 			{
-				Customer deleteCustomer = (Customer) context.TryGetObjectById("APEYO", typeof(Customer));
-				if (deleteCustomer != null)
-				{
-					foreach (Order order in deleteCustomer.Orders)
-						context.DeleteObject(order);
-					context.DeleteObject(deleteCustomer);
-					context.Commit();
-				}
+				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Customers");
 
 				Customer customer = (Customer) context.CreateObject(typeof(Customer));
 
@@ -201,6 +199,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				}
 
 				Assert.AreEqual(3, cnt, "List property was not refreshed!");
+
+				context2.Dispose();
 			}
 		}
 
@@ -211,6 +211,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			using (IContext context = GetContext() )
 			{
+				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
+
 				//first we create some employees
 				Employee employee = CreateEmployee(context, "Mats", "Helander");
 
@@ -225,6 +227,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 				//then we load up the employee in a different context
 				IContext context2 = GetContext();
+
+				context2.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -278,6 +282,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			context.Commit();			
 
 			return employee;
+		}
+
+
+		private void Context_ExecutingSql(object sender, SqlExecutorCancelEventArgs e)
+		{
+			Console.Out.WriteLine(e.Sql);
 		}
 
 	}

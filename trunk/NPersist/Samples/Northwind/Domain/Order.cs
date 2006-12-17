@@ -220,9 +220,16 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
         }
 
 
+		public void Validate()
+		{
+			EnsureMaxTotalNotExceeded();
+		}
 
-
-
-
+		public void EnsureMaxTotalNotExceeded()
+		{
+			decimal total = this.GetTotal();
+			if (total > 500)
+				throw new OrderMaxTotalExceededException("Maximum order total value exceeded! Maximum total value for an order is 500, this order has a total value of " + total.ToString());
+		}
     }
 }

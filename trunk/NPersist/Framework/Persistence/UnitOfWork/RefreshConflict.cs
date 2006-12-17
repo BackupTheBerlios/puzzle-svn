@@ -92,7 +92,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.Conflicts.Remove(this);
 		}
 
-		private void ResolveList(ConflictResolution resolution)
+		protected void ResolveList(ConflictResolution resolution)
 		{
 			switch (resolution)
 			{
@@ -106,31 +106,30 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
-        private void UseCachedValue()
+        protected void UseCachedValue()
         {
             this.Context.ObjectManager.SetOriginalPropertyValue(obj, propertyName, freshValue);
         }
 
-        private void UseFreshValue()
+        protected void UseFreshValue()
         {
             this.Context.ObjectManager.SetPropertyValue(obj, propertyName, freshValue);
             this.Context.ObjectManager.SetOriginalPropertyValue(obj, propertyName, freshValue);
         }
 
 
-		private void UseCachedValueList()
+		protected void UseCachedValueList()
 		{
-
-			this.Context.ObjectManager.SetOriginalPropertyValue(obj, propertyName, freshValue);
+			OverwriteOriginalList();
 		}
 
-		private void UseFreshValueList()
+		protected void UseFreshValueList()
 		{
-			this.Context.ObjectManager.SetPropertyValue(obj, propertyName, freshValue);
-			this.Context.ObjectManager.SetOriginalPropertyValue(obj, propertyName, freshValue);
+			OverwriteList();
+			OverwriteOriginalList();
 		}
 
-        private void OverwriteList()
+        protected void OverwriteList()
         {
             bool stackMute = false;
             IList list = this.cachedValue as IList;
@@ -153,7 +152,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             }
         }
 
-        private void OverwriteOriginalList()
+        protected void OverwriteOriginalList()
         {
             bool stackMute = false;
             IList orgList = this.cachedOriginalValue as IList;

@@ -19,9 +19,9 @@ namespace Puzzle.NPersist.Framework.Exceptions
 		{
 		}
 
-//		public OptimisticConcurrencyException(string message) : base(message)
-//		{
-//		}
+		public OptimisticConcurrencyException(string message) : base(message)
+		{
+		}
 
 		public OptimisticConcurrencyException(string message, object obj) : base(message, obj, "")
 		{

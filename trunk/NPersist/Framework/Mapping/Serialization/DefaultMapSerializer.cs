@@ -356,6 +356,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" load=\"" + classMap.LoadBehavior.ToString() + "\""); // do not localize
 			}
+			if (classMap.CommitRegions.Length > 0)
+			{
+				xml.Append(" commit-regions=\"" + classMap.CommitRegions + "\""); // do not localize
+			}
 
 			if (!(BareBones))
 			{
@@ -678,6 +682,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(propertyMap.TimeToLiveBehavior == TimeToLiveBehavior.Default))
 			{
 				xml.Append(" ttl-behavior=\"" + propertyMap.TimeToLiveBehavior.ToString() + "\""); // do not localize
+			}
+			if (propertyMap.CommitRegions.Length > 0)
+			{
+				xml.Append(" commit-regions=\"" + propertyMap.CommitRegions + "\""); // do not localize
 			}
 
 
@@ -1237,6 +1245,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				classMap.LoadBehavior = (LoadBehavior) Enum.Parse(typeof (LoadBehavior), xmlClass.Attributes["load"].Value);
 			}
+			if (!(xmlClass.Attributes["commit-regions"] == null))
+			{
+				classMap.CommitRegions = xmlClass.Attributes["commit-regions"].Value;
+			}
 
 			if (!(xmlClass.Attributes["implements"] == null))
 			{
@@ -1605,6 +1617,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlProp.Attributes["ttl-behavior"] == null))
 			{
 				propertyMap.TimeToLiveBehavior = (TimeToLiveBehavior) Enum.Parse(typeof (TimeToLiveBehavior), xmlProp.Attributes["ttl-behavior"].Value);
+			}
+			if (!(xmlProp.Attributes["commit-regions"] == null))
+			{
+				propertyMap.CommitRegions = xmlProp.Attributes["commit-regions"].Value;
 			}
 
 			ArrayList metaData = propertyMap.MetaData;

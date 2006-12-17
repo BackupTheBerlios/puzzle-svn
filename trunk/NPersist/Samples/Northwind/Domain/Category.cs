@@ -13,6 +13,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 
 		public override string ToString()
 		{
+
 			return this.CategoryName;
 		}
 

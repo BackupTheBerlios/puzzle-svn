@@ -185,6 +185,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 		string GenerateMemberName(string name);
 
 
+		string CommitRegions { get; set; }
+
+		IList GetCommitRegions();
 
 
 

@@ -101,6 +101,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DifferentShipAddressException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Employee.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -112,6 +117,11 @@
                 />
                 <File
                     RelPath = "OrderDetail.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OrderMaxTotalExceededException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

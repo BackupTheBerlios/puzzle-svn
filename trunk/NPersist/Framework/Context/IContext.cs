@@ -942,6 +942,19 @@ namespace Puzzle.NPersist.Framework
         /// </returns>
 		bool IsValid(object obj, string propertyName);
 
+		/// <summary>
+		/// Validates a list of objects, breaking (and rethrowing) on the first exception.
+		/// </summary>
+		/// <param name="objects">The list of objects to be validated.</param>
+		void ValidateObjects(IList objects);
+
+		/// <summary>
+		/// Validates a list of objects, collecting all validation exceptions in the passed in list.
+		/// </summary>
+		/// <param name="objects">The list of objects to be validated.</param>
+		/// <param name="exceptions">A list that will become filled with any validation exceptions that occur during validation.</param>
+		void ValidateObjects(IList objects, IList exceptions);
+
         /// <summary>
         /// Validates an object, breaking (and rethrowing) on the first exception.
         /// </summary>
@@ -1553,6 +1566,11 @@ namespace Puzzle.NPersist.Framework
         /// Returns a list with any unresolved conflict that have resulted from a merge between cached values and fresh values from the data source.
         /// </summary>
         IList Conflicts { get; }
+
+		/// <summary>
+		/// Contains all objects (as both keys and values) that were loaded during the latest query fetch operation (for both npath and sql queries)
+		/// </summary>
+		Hashtable LoadedInLatestQuery { get; set; }
 
         #region .NET 2.0 Specific Code
 #if NET2

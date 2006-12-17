@@ -7,7 +7,7 @@
     <property name="Picture" columns="Picture" type="System.Byte[]" />
     <property name="Products" table="Products" id-columns="CategoryID" list="true" item-type="Product" read-only="true" slave="true" ref="ManyToOne" inverse="Category" inherits-inverse="true" />
   </class>
-  <class name="Customer" table="Customers">
+  <class name="Customer" table="Customers" validate="Validate">
     <property name="Id" id="true" columns="CustomerID" type="System.String" />
     <property name="Address" columns="Address" type="System.String" />
     <property name="City" columns="City" type="System.String" />
@@ -50,7 +50,7 @@
     <property name="Title" columns="Title" type="System.String" />
     <property name="TitleOfCourtesy" columns="TitleOfCourtesy" type="System.String" />
   </class>
-  <class name="Order" table="Orders">
+  <class name="Order" table="Orders" validate="Validate" commit-regions="Customer.*, Customer.Orders.*">
     <property name="Id" id="true" columns="OrderID" type="System.Int32" />
     <property name="Customer" columns="CustomerID" ref="OneToMany" inverse="Orders" type="Customer" />
     <property name="Employee" columns="EmployeeID" ref="OneToMany" inverse="Orders" type="Employee" />
@@ -67,7 +67,7 @@
     <property name="ShipRegion" columns="ShipRegion" type="System.String" />
     <property name="ShipVia" columns="ShipVia" ref="OneToMany" inverse="Orders" type="Shipper" />
   </class>
-  <class name="OrderDetail" table="Order Details">
+  <class name="OrderDetail" table="Order Details" commit-regions="Order.*, Order.OrderDetails.*">
     <property name="Order" id="true" id-index="0" columns="OrderID" ref="OneToMany" inverse="OrderDetails" type="Order" />
     <property name="Product" id="true" id-index="1" columns="ProductID" ref="OneToMany" inverse="OrderDetails" type="Product" />
     <property name="Discount" columns="Discount" type="System.Single" />

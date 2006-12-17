@@ -119,6 +119,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Basic\CommitRegionTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Basic\CompositeReferenceIdentityTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

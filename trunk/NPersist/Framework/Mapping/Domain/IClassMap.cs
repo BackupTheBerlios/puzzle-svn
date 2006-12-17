@@ -201,6 +201,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		LoadBehavior GetLoadBehavior();
 
+		string CommitRegions { get; set; }
+
+		IList GetCommitRegions();
+
 		//O/O Mapping
 
 		string SourceClass { get; set; }

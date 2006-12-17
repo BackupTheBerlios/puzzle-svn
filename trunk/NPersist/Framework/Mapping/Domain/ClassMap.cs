@@ -25,7 +25,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			visitor.Visit(this);
 		}
-
 		
 		public override IMap GetParent()
 		{
@@ -64,6 +63,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default;
 		private LoadBehavior m_LoadBehavior = LoadBehavior.Default;
+		private string commitRegions = "";
 
 		//O/O Mapping
 		private string m_SourceClass = "";
@@ -1355,6 +1355,24 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return returnList;
 		}
 
+		public virtual string CommitRegions
+		{
+			get { return commitRegions; }
+			set { commitRegions = value; }
+		}
+
+		public IList GetCommitRegions()
+		{
+			string[] regions = commitRegions.Split(";".ToCharArray());
+			IList result = new ArrayList();
+			foreach (string region in regions)
+			{
+				if (region != "")
+					result.Add(region);
+			}
+			return result;
+		}
+
 		#endregion
 
 		#region Object/Object Mapping
@@ -1704,6 +1722,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			classMap.ValidationMode = this.ValidationMode;
 			classMap.TimeToLive = this.TimeToLive;
 			classMap.TimeToLiveBehavior = this.TimeToLiveBehavior;
+			classMap.CommitRegions = this.CommitRegions;
 			classMap.LoadBehavior = this.LoadBehavior;
 			classMap.SourceClass = this.SourceClass;
 			classMap.DocSource = this.DocSource;
@@ -1801,6 +1820,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return false;
 			}
 			if (!(classMap.TimeToLiveBehavior == this.TimeToLiveBehavior))
+			{
+				return false;
+			}
+			if (!(classMap.CommitRegions == this.commitRegions))
 			{
 				return false;
 			}

@@ -16,6 +16,7 @@ using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NCore.Framework.Logging;
+using Puzzle.NPersist.Framework.Querying;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -370,10 +371,27 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 						throw new ExceptionLimitExceededException(exceptions);					
 					}
-
 				}
 
 				this.Context.PersistenceEngine.Begin();
+
+				RefreshCommitRegions();
+
+				if (this.Context.Conflicts.Count > 0)
+				{
+					this.Context.PersistenceEngine.Abort();
+					Abort();	
+
+					throw new OptimisticConcurrencyException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.");
+				}
+
+				if (exceptions!=null && exceptions.Count > 0)
+				{
+					this.Context.PersistenceEngine.Abort();
+					Abort();	
+
+					throw new ExceptionLimitExceededException(exceptions);					
+				}
 
 				InsertCreated(exceptionLimit); 
 				UpdateDirty(exceptionLimit);
@@ -422,12 +440,33 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
+			if (this.Context.Conflicts.Count > 0)
+				throw new UnitOfWorkException("There are unresolved conflicts. Please resolve all conflicts before committing.");
+
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
 			
 			try
 			{
 				this.Context.PersistenceEngine.Begin();
+
+				RefreshCommitRegions(obj);
+
+				if (this.Context.Conflicts.Count > 0)
+				{
+					this.Context.PersistenceEngine.Abort();
+					Abort();	
+
+					throw new OptimisticConcurrencyException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.");
+				}
+
+				if (exceptions!=null && exceptions.Count > 0)
+				{
+					this.Context.PersistenceEngine.Abort();
+					Abort();	
+
+					throw new ExceptionLimitExceededException(exceptions);					
+				}
 
 				InsertCreated(obj, exceptionLimit);
 				UpdateDirty(obj, exceptionLimit);
@@ -466,6 +505,64 @@ namespace Puzzle.NPersist.Framework.Persistence
 				throw new ExceptionLimitExceededException(exceptions);
 			}
 
+		}
+
+		protected virtual void RefreshCommitRegions()
+		{
+			Hashtable commitRegionObjects = new Hashtable();
+
+			foreach (object obj in m_listDirty)
+				RefreshCommitRegions(commitRegionObjects, obj);
+			foreach (object obj in m_listDeleted)
+				RefreshCommitRegions(commitRegionObjects, obj);
+
+			ValidateCommitRegions(commitRegionObjects);
+
+		}
+
+		protected virtual void RefreshCommitRegions(object obj)
+		{
+			Hashtable commitRegionObjects = new Hashtable();
+			RefreshCommitRegions(commitRegionObjects, obj);
+
+			if (this.Context.Conflicts.Count < 1)
+				ValidateCommitRegions(commitRegionObjects);
+		}
+
+		protected virtual void RefreshCommitRegions(Hashtable commitRegionObjects, object obj)
+		{
+			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+			IList commitRegions = classMap.GetCommitRegions();
+			RefreshCommitRegions(commitRegions, commitRegionObjects, obj);
+
+			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+			{
+				if (this.Context.GetPropertyStatus(obj, propertyMap.Name) == PropertyStatus.Dirty)
+				{
+					commitRegions = propertyMap.GetCommitRegions();
+					RefreshCommitRegions(commitRegions, commitRegionObjects, obj);					
+				}
+			}
+		}
+
+		protected virtual void RefreshCommitRegions(IList commitRegions, Hashtable commitRegionObjects, object obj)
+		{
+			foreach (string commitRegion in commitRegions)
+			{
+				NPathQuery npathQuery = this.Context.GetLoadObjectNPathQuery(obj, "*, " + commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
+				this.Context.GetObjectsByNPath(npathQuery);
+				foreach (object regionObject in this.Context.LoadedInLatestQuery.Values)
+					commitRegionObjects[regionObject] = regionObject;
+			}
+		}
+
+		protected virtual void ValidateCommitRegions(Hashtable commitRegionObjects)
+		{
+			if (this.Context.Conflicts.Count < 1)
+			{
+				foreach (object obj in commitRegionObjects.Values)
+					this.Context.ValidateObject(obj, this.exceptions);
+			}			
 		}
 
 		protected virtual void InsertCreated(int exceptionLimit)

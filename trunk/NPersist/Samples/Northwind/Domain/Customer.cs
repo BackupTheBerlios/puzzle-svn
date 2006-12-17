@@ -1,4 +1,5 @@
 using System;
+
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
@@ -182,7 +183,33 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
+		public void Validate()
+		{
+			Console.WriteLine("Validate was called");
+			MayNotHaveDifferentShippingAddresses();
+		}
 
+		/// <summary>
+		/// This is a stupid, non-realistic rule that is only here for the commit regions test
+		/// </summary>
+		private void MayNotHaveDifferentShippingAddresses()
+		{
+			string address = "";
+			foreach (Order order in this.Orders)
+			{
+				Console.WriteLine("Validating order " + order.Id.ToString() );
+				if (order.ShipAddress != null)
+				{
+					Console.WriteLine(order.ShipAddress);
+					if (address != "")
+					{
+						if (address != order.ShipAddress)
+							throw new DifferentShipAddressException("You have orders with two different shipping addresses for the same customer!");
+					}
+					address = order.ShipAddress;
+				}
+			}
+		}
 
 
 

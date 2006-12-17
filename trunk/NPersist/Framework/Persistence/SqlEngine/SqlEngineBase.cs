@@ -3434,6 +3434,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			Hashtable clearedLists = new Hashtable() ;
 			Hashtable doWriteLists = new Hashtable() ;
 			Hashtable doWriteOrgLists = new Hashtable() ;
+			Hashtable writeCachedUpdates = new Hashtable() ;
 			Hashtable cachedListUpdates = new Hashtable() ;
 			
 			RefreshBehaviorType useRefreshBehavior;
@@ -3644,7 +3645,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 												refObj = this.Context.GetObjectById(refId, refType, true);
 
-												if (registerLoaded[refObj] == null)
+												//if (registerLoaded[refObj] == null)
 													registerLoaded[refObj] = refObj;
 
 												string key = path + rowNr.ToString();
@@ -3655,21 +3656,18 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 													bool stackMute = false;
 													IInterceptableList mList = listObject as IInterceptableList;
-													IList orgList = (IList) om.GetOriginalPropertyValue(refObj, arr[i]);
-                                                    if (orgList == null)
-                                                    {
-                                                        orgList = lm.CreateList(obj, arr[i]);
-                                                        om.SetOriginalPropertyValue(obj, arr[i], orgList);
-                                                    }
+													IList orgList = (IList) om.GetOriginalPropertyValue(prevObj, arr[i]);
 
 													doWrite = false;
 													doWriteOrg = false;
+													bool writeCachedUpdate = false;
 
 													object testDoWrite = doWriteLists[listObject];
 													if (testDoWrite != null)
 													{
 														doWrite = (bool) testDoWrite;
 														doWriteOrg = (bool) doWriteLists[listObject];
+														writeCachedUpdate = (bool) writeCachedUpdates[listObject];
 													}
 													else
 													{
@@ -3722,14 +3720,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 																	CachedListUpdate cachedListUpdate = (CachedListUpdate) cachedListUpdates[listObject];
 																	if (cachedListUpdate == null)
 																	{
+																		if (orgList == null)
+																		{
+																			orgList = lm.CreateList(prevObj, arr[i]);
+																			om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
+																		}
+
 																		cachedListUpdate = new CachedListUpdate(listObject, orgList, owner, listMap.Name, listStatus, useRefreshBehavior);
 																		cachedListUpdates[listObject] = cachedListUpdate;
 																	}
 
 																	doWrite = false;
 																	doWriteOrg = false;
-
-																	cachedListUpdate.FreshList.Add(refObj);
+																	writeCachedUpdate = true;
 
 																}
 															}
@@ -3746,12 +3749,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 																throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
 															}
 
-
 															doWriteLists[listObject] = doWrite;
-															doWriteOrgLists[listObject] = doWriteOrg;
+															doWriteOrgLists[listObject] = doWriteOrg;																
+															writeCachedUpdates[listObject] = writeCachedUpdate;																
 														}														
 													}
 
+													if (writeCachedUpdate)
+													{
+														CachedListUpdate cachedListUpdate = (CachedListUpdate) cachedListUpdates[listObject];
+														cachedListUpdate.FreshList.Add(refObj);														
+													}
 													if (doWrite)
 													{														
 														if (mList != null)
@@ -3775,6 +3783,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 													}
 													if (doWriteOrg)
 													{
+														if (orgList == null)
+														{
+															orgList = lm.CreateList(prevObj, arr[i]);
+															om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
+														}
 														mList = orgList as IInterceptableList;
 														if (mList != null)
 														{
@@ -3924,6 +3937,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 														object testValue2 = value;
 														if (DBNull.Value.Equals(testValue)) { testValue = null; }
 														if (DBNull.Value.Equals(testValue2)) { testValue2 = null; }
+														if (DBNull.Value.Equals(orgValue)) { testValue2 = null; }
 														if (testValue2 != testValue)
 														{
 															string cachedValue = "null";
@@ -3948,7 +3962,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                                                                         this.Context,
                                                                         refObj, 
                                                                         strPropertyName,
-                                                                        om.GetPropertyValue(obj, propertyMap.Name),
+                                                                        om.GetPropertyValue(refObj, strPropertyName),
                                                                         testValue,
                                                                         testValue2));
                                                                     doWrite = false;
@@ -4003,7 +4017,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 												{
 													if (value != null)
 													{
-														if (registerLoaded[value] == null)
+														//if (registerLoaded[value] == null)
 															registerLoaded[value] = value;
 
 														//Inverse management
@@ -4019,7 +4033,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						}
 					}
 				}
-				if (registerLoaded[obj] == null)
+				//if (registerLoaded[obj] == null)
 					registerLoaded[obj] = obj;
 			}
 			foreach (object register in registerLoaded.Keys)
@@ -4046,6 +4060,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					
 				}
 			}
+
+			this.Context.LoadedInLatestQuery = registerLoaded; 
 		}
 
 

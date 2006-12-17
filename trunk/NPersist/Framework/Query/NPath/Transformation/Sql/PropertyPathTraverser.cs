@@ -268,6 +268,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		{
 			IPropertyMap parentMap = null;
 			string path = "";
+			string prevPath = "";
 			foreach (IPropertyMap pathMap in propertyMaps)
 			{
 				IPropertyMap propertyMap = pathMap;
@@ -286,6 +287,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 							GetPropertyColumnNamesAndAliases(propertyMap, path, selectedColumns, columnOrder, path, path + "." + propertyMap.Name, "");
 						}
 					}
+					prevPath = path;
 					if (path.Length > 0) { path += "." ;}
 					path += propertyMap.Name;
 					JoinType joinType;
@@ -297,7 +299,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 					{
 						joinType = JoinType.InnerJoin;						
 					}
-					joinTree.SetupJoin(propertyMap, parentMap, path, joinType);
+					joinTree.SetupJoin(propertyMap, parentMap, path, joinType);						
 				}
 				else
 				{
@@ -341,15 +343,20 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 										    }
 										    if (!isInverse)
 										    {
-											    if (path == "")
-											    {
+												if (path == "")
+												{
 												    GetPropertyColumnNamesAndAliases(iPropertyMap, iPropertyMap, selectedColumns, columnOrder, iPropertyMap.Name, iPropertyMap.Name, "");
 											    }
 											    else
 											    {
-												    //GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path, path + "." + iPropertyMap.Name, "");
-												    GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
-											    }
+													// here
+													if (parentMap != null && parentMap.ReferenceType == ReferenceType.ManyToOne && prevPath != "")
+														GetPropertyColumnNamesAndAliases(iPropertyMap, prevPath, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
+													else
+														GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
+
+													//GetPropertyColumnNamesAndAliases(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, path + "." + iPropertyMap.Name, suggestion);                                                
+												}
 											    if (iPropertyMap.MustGetTableMap() != iPropertyMap.ClassMap.MustGetTableMap())
 											    {
 												    JoinNonPrimary(iPropertyMap);

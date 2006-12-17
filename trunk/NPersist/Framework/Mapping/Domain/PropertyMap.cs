@@ -83,6 +83,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private ValidationMode m_ValidationMode = ValidationMode.Default;
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default ;
+		private string commitRegions = "";
 
 		//O/O Mapping
 		private string m_SourceProperty = "";
@@ -1437,6 +1438,24 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return this.m_TimeToLiveBehavior;
 		}
 
+		public virtual string CommitRegions
+		{
+			get { return commitRegions; }
+			set { commitRegions = value; }
+		}
+
+		public IList GetCommitRegions()
+		{
+			string[] regions = commitRegions.Split(";".ToCharArray());
+			IList result = new ArrayList();
+			foreach (string region in regions)
+			{
+				if (region != "")
+					result.Add(region);
+			}
+			return result;
+		}
+
 		#endregion
 
 		#region Object/Object Mapping
@@ -1641,6 +1660,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			propertyMap.CascadingDelete = this.CascadingDelete;
 			propertyMap.TimeToLive = this.TimeToLive;
 			propertyMap.TimeToLiveBehavior = this.TimeToLiveBehavior;
+			propertyMap.CommitRegions = this.CommitRegions;
 			propertyMap.DocSource = this.DocSource;
 			propertyMap.DocAttribute = this.DocAttribute;
 			propertyMap.DocElement= this.DocElement;
@@ -1835,6 +1855,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return false;
 			}
 			if (!(propertyMap.TimeToLiveBehavior == this.TimeToLiveBehavior))
+			{
+				return false;
+			}
+			if (!(propertyMap.CommitRegions == this.CommitRegions))
 			{
 				return false;
 			}

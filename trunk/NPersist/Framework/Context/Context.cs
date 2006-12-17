@@ -77,6 +77,7 @@ namespace Puzzle.NPersist.Framework
 		private bool m_AutoTransactions = true;
 
 		private IList conflicts = new ArrayList();
+		private Hashtable loadedInLatestQuery = new Hashtable();
 
 		#endregion
 
@@ -2188,7 +2189,10 @@ namespace Puzzle.NPersist.Framework
 			{
 				object value = m_ObjectManager.GetPropertyValue(obj, propertyMap.Name);
 				npathBuilder.Append(propertyMap.Name + " = ?");
-				npathQuery.Parameters.Add(new QueryParameter(value));
+				if (propertyMap.ReferenceType != ReferenceType.None)
+					npathQuery.Parameters.Add(new QueryParameter(DbType.Object, value));
+				else
+					npathQuery.Parameters.Add(new QueryParameter(value));
 				npathBuilder.Append(" And ");
 			}
 			npathBuilder.Length -= 5;
@@ -2274,6 +2278,16 @@ namespace Puzzle.NPersist.Framework
 			set { this.loadBehavior = value; }
 		}
 		
+		#endregion
+
+		#region LoadedInLatestQuery
+
+		public Hashtable LoadedInLatestQuery
+		{
+			get { return loadedInLatestQuery; }
+			set { loadedInLatestQuery = value; }
+		}
+
 		#endregion
 
 		#endregion
@@ -2362,6 +2376,18 @@ namespace Puzzle.NPersist.Framework
 		public virtual bool IsValid(object obj, string propertyName)
 		{
 			return this.m_ObjectValidator.IsValid(obj, propertyName);			
+		}
+
+		public virtual void ValidateObjects(IList objects)
+		{
+			foreach (object obj in objects)
+				this.m_ObjectValidator.ValidateObject(obj);						
+		}
+
+		public virtual void ValidateObjects(IList objects, IList exceptions)
+		{
+			foreach (object obj in objects)
+				this.m_ObjectValidator.ValidateObject(obj, exceptions);				
 		}
 
 		public virtual void ValidateObject(object obj)

@@ -91,7 +91,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				else
 				{
 					//make sure the table has an alias
-					tableJoin.Parent = GetTableJoinForPropertyPath(propertyPath.Substring(0, propertyPath.Length - propertyMap.Name.Length - 1));
+					tableJoin.Parent = GetTableJoinForPropertyPath(propertyPath.Substring(0, propertyPath.Length - propertyMap.Name.Length - 1));					
 					this.propertyPathTraverser.SqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), tableJoin.Parent);
 				}
 			}
