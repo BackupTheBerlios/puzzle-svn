@@ -1572,6 +1572,11 @@ namespace Puzzle.NPersist.Framework
 		/// </summary>
 		Hashtable LoadedInLatestQuery { get; set; }
 
+		/// <summary>
+		/// Contains all the exceptions that were thrown during the latest commit operation
+		/// </summary>
+		IList Exceptions { get; }
+
         #region .NET 2.0 Specific Code
 #if NET2
 

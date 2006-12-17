@@ -2290,6 +2290,15 @@ namespace Puzzle.NPersist.Framework
 
 		#endregion
 
+		#region Exceptions
+
+		public IList Exceptions
+		{
+			get { return this.UnitOfWork.Exceptions; }	
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Validation

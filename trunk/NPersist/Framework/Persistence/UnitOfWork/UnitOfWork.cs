@@ -37,6 +37,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		private TopologicalGraph m_topologicalDelete = new TopologicalGraph();
 
+		private IList exceptions = new ArrayList();
+
+		public IList Exceptions
+		{
+			get { return exceptions; }
+		}
+
         public virtual void RegisterCreated(object obj)
 		{
             LogMessage message = new LogMessage("Registering object as up for creation");
@@ -346,8 +353,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
-		private IList exceptions = null;
-
 		public virtual void Commit(int exceptionLimit)
 		{
 			this.Context.LogManager.Info(this, "Committing Unit of Work"); // do not localize
@@ -356,6 +361,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                 throw new UnitOfWorkException("There are unresolved conflicts. Please resolve all conflicts before committing.");
 
 			exceptions = new ArrayList(); 
+
 			m_hashSpeciallyUpdated.Clear() ;
 
 			try

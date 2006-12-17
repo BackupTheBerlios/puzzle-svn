@@ -38,5 +38,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		ArrayList GetDirtyObjects();
 
         void Clear();
+
+		IList Exceptions { get; }
     }
 }
