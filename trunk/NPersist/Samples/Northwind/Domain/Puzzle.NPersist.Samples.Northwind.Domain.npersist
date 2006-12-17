@@ -50,7 +50,7 @@
     <property name="Title" columns="Title" type="System.String" />
     <property name="TitleOfCourtesy" columns="TitleOfCourtesy" type="System.String" />
   </class>
-  <class name="Order" table="Orders" validate="Validate" commit-regions="Customer.*, Customer.Orders.*">
+  <class name="Order" table="Orders" validate="Validate" commit-regions="*, Customer.*, Customer.Orders.*">
     <property name="Id" id="true" columns="OrderID" type="System.Int32" />
     <property name="Customer" columns="CustomerID" ref="OneToMany" inverse="Orders" type="Customer" />
     <property name="Employee" columns="EmployeeID" ref="OneToMany" inverse="Orders" type="Employee" />

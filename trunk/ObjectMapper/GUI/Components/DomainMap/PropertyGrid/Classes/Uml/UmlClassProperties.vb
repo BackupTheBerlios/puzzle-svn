@@ -616,6 +616,25 @@ Public Class UmlClassProperties
         End Set
     End Property
 
+    <Category("Optimistic Concurrency"), _
+        Description("Commit regions determine how related objects should be loaded as part of a commit operation, checked for optimistic concurrency conflicts and validated. Specify a commit region as you would specify the select clause of an NPath query. Example for an OrderDetail class: *, Order.*, Order.OrderDetails.* Please note that you can only have one list property traversal per commit region but that you can specify multiple commit regions for a class, using semi-colon as the separator."), _
+        DisplayName("Commit regions"), _
+        DefaultValue("")> Public Property CommitRegions() As String
+        Get
+            Dim classMap As IClassMap = m_UmlClass.GetClassMap
+            If Not classMap Is Nothing Then
+                Return classMap.CommitRegions
+            End If
+        End Get
+        Set(ByVal Value As String)
+            Dim classMap As IClassMap = m_UmlClass.GetClassMap
+            If Not classMap Is Nothing Then
+                classMap.CommitRegions = Value
+                RaiseEvent AfterPropertySet(classMap, "CommitRegions")
+            End If
+        End Set
+    End Property
+
     '------------------------------------
     'NHibernate
     '------------------------------------

@@ -555,7 +555,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			foreach (string commitRegion in commitRegions)
 			{
-				NPathQuery npathQuery = this.Context.GetLoadObjectNPathQuery(obj, "*, " + commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
+				NPathQuery npathQuery = this.Context.GetLoadObjectNPathQuery(obj, commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
 				this.Context.GetObjectsByNPath(npathQuery);
 				foreach (object regionObject in this.Context.LoadedInLatestQuery.Values)
 					commitRegionObjects[regionObject] = regionObject;

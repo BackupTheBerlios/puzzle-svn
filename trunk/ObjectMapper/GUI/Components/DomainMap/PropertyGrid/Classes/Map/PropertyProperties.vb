@@ -765,6 +765,21 @@ Public Class PropertyProperties
         End Set
     End Property
 
+
+    <Category("Optimistic Concurrency"), _
+        Description("Commit regions determine how related objects should be loaded as part of a commit operation, checked for optimistic concurrency conflicts and validated. Specify a commit region as you would specify the select clause of an NPath query. Example for an OrderDetail class: *, Order.*, Order.OrderDetails.* Please note that you can only have one list property traversal per commit region but that you can specify multiple commit regions for a property, using semi-colon as the separator. When specifying commit regions for a property they will only be used if the property is dirty during commit."), _
+        DisplayName("Commit regions"), _
+        DefaultValue("")> Public Property CommitRegions() As String
+        Get
+            Return m_PropertyMap.CommitRegions
+        End Get
+        Set(ByVal Value As String)
+            m_PropertyMap.CommitRegions = Value
+            RaiseEvent AfterPropertySet(m_PropertyMap, "CommitRegions")
+        End Set
+    End Property
+
+
     <Category("Special property behavior"), _
         Description("Select a special behavior that is applied to your property when the object is created. For example, 'SetDateTime' could be used for a 'CreatedAt' property. 'Increase' applies only to properties mapping to numeric columns. 'SetDateTime' applies only to properties mapping to DateTime columns."), _
         DisplayName("Create behavior"), _
