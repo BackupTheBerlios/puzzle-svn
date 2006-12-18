@@ -10,7 +10,7 @@ namespace KumoUnitTests
     {
         #region Property SomeProp 
         private string someProp;
-        public string SomeProp
+        public virtual string SomeProp
         {
             get
             {
@@ -26,7 +26,7 @@ namespace KumoUnitTests
 
         #region Property SomeIntProp 
         private int someIntProp;
-        public int SomeIntProp
+        public virtual int SomeIntProp
         {
             get
             {
@@ -41,7 +41,7 @@ namespace KumoUnitTests
         #endregion
 
         [ClearDirty]
-        public void Save()
+        public virtual void Save()
         { 
         }
     }

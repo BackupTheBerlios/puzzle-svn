@@ -10,7 +10,6 @@ namespace Puzzle.NAspect.Standard
     [AspectTarget(TargetAttribute=typeof(DirtyTrackedAttribute))]
     public class DirtyTrackedAspect : ITypedAspect
     {
-
         [Interceptor(Index = 1, TargetAttribute = typeof(MakeDirtyAttribute))]
         public void MakeDirty(BeforeMethodInvocation call)
         {
