@@ -198,25 +198,37 @@ namespace Puzzle.NAspect.Framework
 
         private void CheckRequiredMixins(MethodBase baseMethod, IList methodinterceptors)
         {
-            foreach (IInterceptor interceptor in methodinterceptors)
-                foreach (RequiresMixinAttribute requiresMixinAttribute in interceptor.GetType().GetCustomAttributes(typeof(RequiresMixinAttribute), true))
-                    foreach (Type requiredMixinType in requiresMixinAttribute.Types)
+            foreach (object unknownInterceptor in methodinterceptors)
+            {
+                if (unknownInterceptor is IInterceptor)
+                {
+                    IInterceptor interceptor = unknownInterceptor as IInterceptor;
+                    foreach (RequiresMixinAttribute requiresMixinAttribute in interceptor.GetType().GetCustomAttributes(typeof(RequiresMixinAttribute), true))
                     {
-                        bool hasMixin = false;
-                        IList mixins = (IList) mixinsForType[baseMethod.DeclaringType];
-                        if (mixins != null)
+                        foreach (Type requiredMixinType in requiresMixinAttribute.Types)
                         {
-                            foreach (Type mixinType in mixins)
-                                if (requiredMixinType.IsAssignableFrom(mixinType))
-                                {
-                                    hasMixin = true;
-                                    break;
-                                }
+                            bool hasMixin = false;
+                            IList mixins = (IList)mixinsForType[baseMethod.DeclaringType];
+                            if (mixins != null)
+                            {
+                                foreach (Type mixinType in mixins)
+                                    if (requiredMixinType.IsAssignableFrom(mixinType))
+                                    {
+                                        hasMixin = true;
+                                        break;
+                                    }
+                            }
+                            if (!hasMixin)
+                                throw new Exception(String.Format("The interceptor {0} is applied to the method {1} in the type {2} which does not have the mixin {3} that is required for the interceptor.",
+                                    interceptor.GetType().Name, baseMethod.Name, baseMethod.DeclaringType.Name, requiredMixinType.Name));
                         }
-                        if (!hasMixin)
-                            throw new Exception(String.Format("The interceptor {0} is applied to the method {1} in the type {2} which does not have the mixin {3} that is required for the interceptor.",
-                                interceptor.GetType().Name, baseMethod.Name, baseMethod.DeclaringType.Name, requiredMixinType.Name));
                     }
+                }
+                else
+                {
+
+                }
+            }
         }
 
         private void BuildMethods(Type baseType, TypeBuilder typeBuilder, IList aspects)
