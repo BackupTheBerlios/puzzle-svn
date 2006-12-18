@@ -9,7 +9,10 @@ namespace Puzzle.NAspect.Standard
         bool IsDirty
         {
             get;
-            set;
         }
+
+        void ClearDirty();
+        void SetPropertyDirtyStatus(string propertyName,bool dirty);
+        bool GetPropertyDirtyStatus(string propertyName);
     }
 }

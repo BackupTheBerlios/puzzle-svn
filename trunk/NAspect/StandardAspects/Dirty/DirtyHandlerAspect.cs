@@ -14,14 +14,16 @@ namespace Puzzle.NAspect.Standard
         public void MakeDirty(BeforeMethodInvocation call)
         {
             IDirtyTracked target = call.Target as IDirtyTracked;
-            target.IsDirty = true;            
+            string method = call.Method.Name;
+            method = method.Replace("set_", "");
+            target.SetPropertyDirtyStatus(method, true);          
         }
 
         [Interceptor(Index = 1, TargetAttribute = typeof(ClearDirtyAttribute))]
         public void ClearDirty(BeforeMethodInvocation call)
         {
             IDirtyTracked target = call.Target as IDirtyTracked;
-            target.IsDirty = false;    
+            target.ClearDirty();
         }
     }
 }

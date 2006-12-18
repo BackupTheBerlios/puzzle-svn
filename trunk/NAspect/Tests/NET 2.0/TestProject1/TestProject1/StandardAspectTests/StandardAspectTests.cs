@@ -23,6 +23,11 @@ namespace KumoUnitTests
             Assert.IsFalse(dt.IsDirty, "object was dirty");
             d.SomeProp = "Hello";
             Assert.IsTrue(dt.IsDirty, "object not was dirty");
+
+            Assert.IsTrue(dt.GetPropertyDirtyStatus("SomeProp"),"SomeProp was not dirty");
+            dt.ClearDirty();
+
+            Assert.IsFalse(dt.GetPropertyDirtyStatus("SomeProp"), "SomeProp was dirty");
         }
     }
 }
