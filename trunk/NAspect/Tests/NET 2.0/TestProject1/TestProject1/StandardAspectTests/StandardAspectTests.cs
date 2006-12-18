@@ -18,7 +18,10 @@ namespace KumoUnitTests
         {
             Engine c = new Engine("ProxyExplicitIFace");
             c.Configuration.Aspects.Add(new DirtyTrackedAspect());
+
             DirtyTrackedClass d = c.CreateProxy<DirtyTrackedClass>();
+
+
             IDirtyTracked dt = d as IDirtyTracked;
             Assert.IsFalse(dt.IsDirty, "object was dirty");
             d.SomeProp = "Hello";

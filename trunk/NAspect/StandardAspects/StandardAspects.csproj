@@ -33,6 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\ICache.cs" />
     <Compile Include="Dirty\ClearDirtyAttribute.cs" />
     <Compile Include="Dirty\DirtyHandlerAspect.cs" />
     <Compile Include="Dirty\DirtyTracked.cs" />
