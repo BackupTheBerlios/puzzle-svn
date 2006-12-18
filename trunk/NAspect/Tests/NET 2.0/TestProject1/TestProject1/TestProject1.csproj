@@ -53,6 +53,8 @@
     <Compile Include="SomeClass.cs" />
     <Compile Include="SomeClassWithExplicitIFace.cs" />
     <Compile Include="SomeGenericClass.cs" />
+    <Compile Include="StandardAspectTests\DirtyTrackedClass.cs" />
+    <Compile Include="StandardAspectTests\StandardAspectTests.cs" />
     <Compile Include="Tests\Tests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\..\..\..\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
       <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
       <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StandardAspects\StandardAspects.csproj">
+      <Project>{7D005BEB-DAFD-4299-A092-46938977B145}</Project>
+      <Name>StandardAspects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

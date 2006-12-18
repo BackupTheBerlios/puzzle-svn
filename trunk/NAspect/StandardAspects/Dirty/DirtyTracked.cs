@@ -5,7 +5,7 @@ using System.Text;
 namespace Puzzle.NAspect.Standard
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class DirtyTracked : Attribute
+    public class DirtyTrackedAttribute : Attribute
     {
     }
 }

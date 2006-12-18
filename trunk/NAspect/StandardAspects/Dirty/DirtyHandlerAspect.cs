@@ -7,6 +7,7 @@ using Puzzle.NAspect.Framework;
 namespace Puzzle.NAspect.Standard
 {
     [Mixin(typeof(DirtyTrackedMixin))]
+    [AspectTarget(TargetAttribute=typeof(DirtyTrackedAttribute))]
     public class DirtyTrackedAspect : ITypedAspect
     {
 
