@@ -44,7 +44,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-		[PropertyMap(Columns="Address", IsNullable=true)]
+		[PropertyMap(IsNullable=true)]
         public virtual System.String Address
         {
             get
