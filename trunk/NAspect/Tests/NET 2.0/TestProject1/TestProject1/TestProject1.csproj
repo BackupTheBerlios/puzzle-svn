@@ -54,6 +54,7 @@
     <Compile Include="SomeClassWithExplicitIFace.cs" />
     <Compile Include="SomeGenericClass.cs" />
     <Compile Include="StandardAspectTests\DirtyTrackedClass.cs" />
+    <Compile Include="StandardAspectTests\LogTarget.cs" />
     <Compile Include="StandardAspectTests\StandardAspectTests.cs" />
     <Compile Include="Tests\Tests.cs" />
   </ItemGroup>

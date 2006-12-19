@@ -95,11 +95,15 @@ namespace Puzzle.NAspect.Framework
 
         private static Hashtable callInfoMapper = new Hashtable();
         private static ArrayList callInfos = new ArrayList();
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
         internal static CallInfo GetCallInfo(int methodIndex)
         {
             return (CallInfo)callInfos[methodIndex];
         }
 
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
         internal static CallInfo GetCallInfo(string methodId)
         {
             return (CallInfo)callInfoMapper[methodId];

@@ -16,7 +16,7 @@ namespace KumoUnitTests
         [TestMethod()]
         public void DirtyTrackingTest()
         {
-            Engine c = new Engine("ProxyExplicitIFace");
+            Engine c = new Engine("DirtyTrackingTest");
             c.Configuration.Aspects.Add(new DirtyTrackedAspect());
 
             DirtyTrackedClass d = c.CreateProxy<DirtyTrackedClass>();
@@ -31,6 +31,14 @@ namespace KumoUnitTests
             dt.ClearDirty();
 
             Assert.IsFalse(dt.GetPropertyDirtyStatus("SomeProp"), "SomeProp was dirty");
+        }
+
+        public void LogTest()
+        {
+            Engine c = new Engine("LogTest");
+            LogTarget t = c.CreateProxy<LogTarget>();
+            t.MyLoggedMethod(123, "abc", 456.678);
+            
         }
     }
 }

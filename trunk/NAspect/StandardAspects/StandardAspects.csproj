@@ -40,6 +40,8 @@
     <Compile Include="Dirty\DirtyTrackedMixin.cs" />
     <Compile Include="Dirty\IDirtyTracked.cs" />
     <Compile Include="Dirty\MakeDirtyAttribute.cs" />
+    <Compile Include="Log\LogAttribute.cs" />
+    <Compile Include="Log\LogInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InverseManager\" />
-    <Folder Include="Log\" />
     <Folder Include="UndoRedo\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

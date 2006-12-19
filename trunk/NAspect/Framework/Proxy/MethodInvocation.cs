@@ -104,8 +104,8 @@ namespace Puzzle.NAspect.Framework
         /// Executes the next step of the interception chain.
         /// </summary>
         /// <returns>The result of the next interceptor or base implementation</returns>
-        //      [DebuggerStepThrough()]
-        //      [DebuggerHidden()]
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
         public object Proceed()
         {
             if (Step < Interceptors.Count)
@@ -217,8 +217,8 @@ namespace Puzzle.NAspect.Framework
 
         #region CallEndMethod
 
-  //      [DebuggerStepThrough()]
-  //      [DebuggerHidden()]
+        [DebuggerStepThrough()]
+        [DebuggerHidden()]
         private object CallEndMethod()
         {
             object[] parr;
