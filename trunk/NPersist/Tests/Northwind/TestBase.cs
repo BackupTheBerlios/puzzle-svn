@@ -11,8 +11,6 @@ namespace Puzzle.NPersist.Tests.Northwind
 	/// </summary>
 	public abstract class TestBase
 	{
-
-
 		public virtual IContext GetContext()
 		{
 			return ContextFactory.CreateContext() ;
@@ -21,6 +19,11 @@ namespace Puzzle.NPersist.Tests.Northwind
 		public virtual IContext GetContextWithPureMap()
 		{
 			return ContextFactory.CreateContextWithPureMap() ;
+		}
+
+		public virtual IContext GetContextWithAttributes()
+		{
+			return ContextFactory.CreateContextWithAttributes() ;
 		}
 
 		protected int EnsureNancy(int bossId)

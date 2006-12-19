@@ -1,10 +1,13 @@
 using System;
+using Puzzle.NPersist.Framework.Attributes;
+using Puzzle.NPersist.Framework.Enumerations;
+
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
+	[ClassMap(Table="Employees")]
     public class Employee
     {
-
         private System.Int32 m_Id;
         private System.String m_Address;
         private System.DateTime m_BirthDate;
@@ -32,7 +35,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 			return this.FirstName + " " + this.LastName;
 		}
 
-
+		[PropertyMap(IsIdentity=true, Columns="EmployeeID", IsAssignedBySource=true)]
         public virtual System.Int32 Id
         {
             get
@@ -41,6 +44,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
+		[PropertyMap(Columns="Address", IsNullable=true)]
         public virtual System.String Address
         {
             get
@@ -53,7 +57,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.DateTime BirthDate
+		[PropertyMap(Columns="BirthDate", IsNullable=true)]
+		public virtual System.DateTime BirthDate
         {
             get
             {
@@ -65,7 +70,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String City
+		[PropertyMap(Columns="City", IsNullable=true)]
+		public virtual System.String City
         {
             get
             {
@@ -77,7 +83,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String Country
+		[PropertyMap(Columns="Country", IsNullable=true)]
+		public virtual System.String Country
         {
             get
             {
@@ -89,7 +96,9 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Employees
+		[PropertyMap(Table="Employees", IdColumns="ReportsTo", IsCollection=true, ItemType="Employee", 
+			 IsSlave=true, ReferenceType=ReferenceType.ManyToOne, Inverse="ReportsTo", InheritInverseMappings=true)]
+		public virtual System.Collections.IList Employees
         {
             get
             {
@@ -101,7 +110,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String Extension
+		[PropertyMap(Columns="Extension", IsNullable=true)]
+		public virtual System.String Extension
         {
             get
             {
@@ -113,7 +123,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String FirstName
+		[PropertyMap(Columns="FirstName")]
+		public virtual System.String FirstName
         {
             get
             {
@@ -125,7 +136,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.DateTime HireDate
+		[PropertyMap(Columns="HireDate", IsNullable=true)]
+		public virtual System.DateTime HireDate
         {
             get
             {
@@ -137,7 +149,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String HomePhone
+		[PropertyMap(Columns="HomePhone", IsNullable=true)]
+		public virtual System.String HomePhone
         {
             get
             {
@@ -149,7 +162,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String LastName
+		[PropertyMap(Columns="LastName")]
+		public virtual System.String LastName
         {
             get
             {
@@ -161,7 +175,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String Notes
+		[PropertyMap(Columns="Notes", IsNullable=true)]
+		public virtual System.String Notes
         {
             get
             {
@@ -173,7 +188,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Orders
+		public virtual System.Collections.IList Orders
         {
             get
             {
@@ -197,7 +212,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String PhotoPath
+		[PropertyMap(Columns="PhotoPath", IsNullable=true)]
+		public virtual System.String PhotoPath
         {
             get
             {
@@ -209,7 +225,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String PostalCode
+		[PropertyMap(Columns="PostalCode", IsNullable=true)]
+		public virtual System.String PostalCode
         {
             get
             {
@@ -221,7 +238,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String Region
+		[PropertyMap(Columns="Region", IsNullable=true)]
+		public virtual System.String Region
         {
             get
             {
@@ -233,7 +251,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual Employee ReportsTo
+		[PropertyMap(Columns="ReportsTo", IsNullable=true, ReferenceType=ReferenceType.OneToMany, Inverse="Employees")]
+		public virtual Employee ReportsTo
         {
             get
             {
@@ -245,7 +264,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Territories
+		public virtual System.Collections.IList Territories
         {
             get
             {
@@ -257,7 +276,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String Title
+		[PropertyMap(Columns="Title", IsNullable=true)]
+		public virtual System.String Title
         {
             get
             {
@@ -269,7 +289,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.String TitleOfCourtesy
+		[PropertyMap(Columns="TitleOfCourtesy", IsNullable=true)]
+		public virtual System.String TitleOfCourtesy
         {
             get
             {

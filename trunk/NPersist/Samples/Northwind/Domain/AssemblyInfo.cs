@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Puzzle.NPersist.Framework.Attributes;
 
 //
 // General Information about an assembly is controlled through the following 
@@ -28,7 +29,6 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 
-//
 // In order to sign your assembly you must specify a key to use. Refer to the 
 // Microsoft .NET Framework documentation for more information on assembly signing.
 //
@@ -56,3 +56,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile(@"..\..\..\..\..\..\PuzzleKey.snk")]
 [assembly: AssemblyKeyName("")]
+
+[assembly: DomainMap(Source="DefaultSource")]
+[assembly: SourceMap(Name = "DefaultSource", Compute=true)]

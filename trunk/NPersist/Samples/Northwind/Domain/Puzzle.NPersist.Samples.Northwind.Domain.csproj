@@ -76,6 +76,11 @@
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                 />
+                <Reference
+                    Name = "Puzzle.NPersist.Framework"
+                    Project = "{E6C03D2A-D150-4473-9439-D300746A1390}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

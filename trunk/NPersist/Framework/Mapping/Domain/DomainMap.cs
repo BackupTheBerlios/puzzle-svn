@@ -1568,8 +1568,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public static void FromDomainMapAttribute(DomainMapAttribute attrib, Assembly asm, IDomainMap domainMap)
 		{
-			domainMap.Name = asm.FullName;
-			domainMap.AssemblyName = asm.FullName;
+			string name = asm.GetName().Name;
+
+			domainMap.Name = name;
+			domainMap.AssemblyName = name;
+			domainMap.RootNamespace = name;
 
 			domainMap.DeleteOptimisticConcurrencyBehavior = attrib.DeleteOptimisticConcurrencyBehavior;
 			domainMap.DocSource = attrib.DocSource;
@@ -1579,7 +1582,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			domainMap.LoadBehavior = attrib.LoadBehavior;
 			domainMap.MergeBehavior = attrib.MergeBehavior;
 			domainMap.RefreshBehavior = attrib.RefreshBehavior;
-			domainMap.RootNamespace = attrib.RootNamespace ;
+			if (attrib.RootNamespace != "")
+				domainMap.RootNamespace = attrib.RootNamespace ;
 			domainMap.Source = attrib.Source ;
 			domainMap.TimeToLive = attrib.TimeToLive;
 			domainMap.TimeToLiveBehavior = attrib.TimeToLiveBehavior;
