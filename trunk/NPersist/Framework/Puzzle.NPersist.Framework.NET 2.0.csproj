@@ -164,6 +164,10 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\ClassMapAttribute.cs" />
+    <Compile Include="Attributes\DomainMapAttribute.cs" />
+    <Compile Include="Attributes\PropertyMapAttribute.cs" />
+    <Compile Include="Attributes\SourceMapAttribute.cs" />
     <Compile Include="Base Classes\EntityBindingList.cs" />
     <Compile Include="Base Classes\Interceptable.cs">
       <SubType>Code</SubType>
@@ -597,6 +601,7 @@
     <Compile Include="Mapping\Source\TableMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mapping\Transformation\ClassesToTablesTransformer.cs" />
     <Compile Include="Mapping\Transformation\ModelToCodeTransformer.cs">
       <SubType>Code</SubType>
     </Compile>

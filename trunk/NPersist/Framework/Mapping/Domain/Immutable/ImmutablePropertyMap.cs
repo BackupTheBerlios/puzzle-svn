@@ -124,6 +124,26 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
         }                        
         #endregion
 
+        public IList GetCommitRegions()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        #region Property CommitRegions
+        private bool commitRegions;
+        public bool CommitRegions
+        {
+            get
+            {
+                return this.CommitRegions;
+            }
+            set
+            {
+                this.CommitRegions = value;
+            }
+        }
+        #endregion
+
         public bool GetIsNullable()
         {
             return this.IsNullable;

@@ -463,6 +463,23 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
             }
         }
 
+        public IList GetCommitRegions()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public string CommitRegions
+        {
+            get
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+            set
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+        }
+
         public string InheritsTransientClass
         {
             get
