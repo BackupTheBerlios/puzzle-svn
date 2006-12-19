@@ -357,8 +357,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			this.Context.LogManager.Info(this, "Committing Unit of Work"); // do not localize
 
-            if (this.Context.Conflicts.Count > 0)
-                throw new UnitOfWorkException("There are unresolved conflicts. Please resolve all conflicts before committing.");
+            if (this.Context.UnclonedConflicts.Count > 0)
+                throw new UnresolvedConflictsException("There are unresolved conflicts. Please resolve all conflicts before committing.", this.Context.Conflicts);
 
 			exceptions = new ArrayList(); 
 
@@ -383,12 +383,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 				RefreshCommitRegions();
 
-				if (this.Context.Conflicts.Count > 0)
+				if (this.Context.UnclonedConflicts.Count > 0)
 				{
 					this.Context.PersistenceEngine.Abort();
 					Abort();	
 
-					throw new OptimisticConcurrencyException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.");
+					throw new UnresolvedConflictsException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.", this.Context.Conflicts);
 				}
 
 				if (exceptions!=null && exceptions.Count > 0)
@@ -427,7 +427,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 				Abort();	
 
 				if (exceptionLimit == 1)
+				{
+					if (ex is ExceptionLimitExceededException)
+						foreach (Exception inner in ((ExceptionLimitExceededException) ex).InnerExceptions )
+							throw inner;
 					throw ex;
+				}
 
 				if (ex != null && ex.GetType() != typeof(ExceptionLimitExceededException))
 					exceptions.Add(ex);
@@ -447,7 +452,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.LogManager.Info(this, message, verbose); // do not localize
 
 			if (this.Context.Conflicts.Count > 0)
-				throw new UnitOfWorkException("There are unresolved conflicts. Please resolve all conflicts before committing.");
+				throw new UnresolvedConflictsException("There are unresolved conflicts. Please resolve all conflicts before committing.", this.Context.Conflicts);
 
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
@@ -463,7 +468,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					this.Context.PersistenceEngine.Abort();
 					Abort();	
 
-					throw new OptimisticConcurrencyException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.");
+					throw new UnresolvedConflictsException("Refreshing the commit regions yielded optimistic concurrency conflicts. Please resolve these conflicts before committing.", this.Context.Conflicts);
 				}
 
 				if (exceptions!=null && exceptions.Count > 0)
@@ -500,7 +505,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 				Abort();				
 
 				if (exceptionLimit == 1)
+				{
+					if (ex is ExceptionLimitExceededException)
+						foreach (Exception inner in ((ExceptionLimitExceededException) ex).InnerExceptions )
+							throw inner;
 					throw ex;
+				}
 
 				if (ex != null && ex.GetType() != typeof(ExceptionLimitExceededException) )
 					exceptions.Add(ex);

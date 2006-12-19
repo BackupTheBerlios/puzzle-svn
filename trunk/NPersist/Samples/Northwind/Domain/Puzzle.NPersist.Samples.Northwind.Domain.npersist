@@ -239,5 +239,5 @@
       <column name="TerritoryDescription" type="StringFixedLength" prec="50" length="100" scale="0" />
       <column name="TerritoryID" primary="true" type="String" prec="20" length="40" scale="0" />
     </table>
-  </source>
+  </source>  
 </domain>

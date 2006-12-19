@@ -17,9 +17,11 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Mapping.Transformation;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
 using Puzzle.NPersist.Framework.Mapping.Serialization;
 using Puzzle.NPersist.Framework.Persistence;
@@ -87,7 +89,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		#endregion
 
 		#region Serialization
-//
+
 //		public static DomainMap Load(string path)
 //		{
 //			return (DomainMap) Load(path, null);
@@ -198,6 +200,92 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return domainMap;
 		}
 
+		public static IDomainMap Load(Assembly asm)
+		{
+			IDomainMap domainMap;
+
+			string key = string.Format("assembly://{0}:{1}",asm.GetName().FullName, "[AttributeBasedConfiguration]");
+
+			if (DomainMapCache.ContainsKey(key))
+				return DomainMapCache.GetMap(key);
+						
+			domainMap = LoadFromAttributes(asm);
+			
+			DomainMapCache.AddMap(key,domainMap) ;
+			return domainMap;
+		}
+
+		public static IDomainMap LoadFromAttributes(Assembly asm)
+		{
+			return LoadFromAttributes(asm, true, true);
+		}
+
+		public static IDomainMap LoadFromAttributes(Assembly asm, bool useCache,bool validate)
+		{
+			IDomainMap domainMap = new DomainMap();
+
+			foreach (DomainMapAttribute domainMapAttribute in asm.GetCustomAttributes(typeof(DomainMapAttribute), false))
+			{
+				DomainMap.FromDomainMapAttribute(domainMapAttribute, asm, domainMap);
+				break;
+			}
+
+			foreach (SourceMapAttribute sourceMapAttribute in asm.GetCustomAttributes(typeof(SourceMapAttribute), false))
+			{
+				ISourceMap sourceMap = new SourceMap();
+				sourceMap.DomainMap = domainMap;
+
+				SourceMap.FromSourceMapAttribute(sourceMapAttribute, sourceMap);
+				break;
+			}
+
+			//Make this 2-pass so that mapped inheritance hierarchies can be found.
+
+			foreach (Type type in asm.GetTypes())
+			{
+				foreach (ClassMapAttribute classMapAttribute in type.GetCustomAttributes(typeof(ClassMapAttribute), false))
+				{
+					IClassMap classMap = new ClassMap();
+					classMap.DomainMap = domainMap;
+					classMap.Name = type.Name;
+					string waste = classMapAttribute.DocElement ; // The idiot compiler won't compile unless I use the stinkin' classMapAttribute somehow...
+					break;
+				}				
+			}
+
+			foreach (Type type in asm.GetTypes())
+			{
+				foreach (ClassMapAttribute classMapAttribute in type.GetCustomAttributes(typeof(ClassMapAttribute), false))
+				{					
+					IClassMap classMap = domainMap.MustGetClassMap(type);
+					ClassMap.FromClassMapAttribute(classMapAttribute, type, classMap);
+
+					foreach (PropertyInfo propInfo in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+					{
+						foreach (PropertyMapAttribute propertyMapAttribute in propInfo.GetCustomAttributes(typeof(PropertyMapAttribute), false))
+						{
+							IPropertyMap propertyMap = new PropertyMap();
+							propertyMap.ClassMap = classMap;
+							PropertyMap.FromPropertyMapAttribute(propertyMapAttribute, propInfo, propertyMap);
+							
+							break;
+						}
+					}
+
+					break;
+				}
+			}
+
+			CalculateTableModel(domainMap);
+
+			domainMap.Dirty = false;
+
+			if (validate)
+				((DomainMap)domainMap).Validate();
+
+			return domainMap;
+		}
+
 		public static IDomainMap LoadFromXml(string xml, IMapSerializer mapSerializer,bool useCache,bool validate)
 		{
 			IDomainMap domainMap;
@@ -232,6 +320,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 					throw new MappingException("Failed loading NPersist XML mapping file! " + ex.Message, ex); // do not localize
 				}
 			}
+
+			CalculateTableModel(domainMap);
+
 			domainMap.Dirty = false;
 
 			if (validate)
@@ -243,6 +334,12 @@ namespace Puzzle.NPersist.Framework.Mapping
 		public static IDomainMap LoadFromXml(string xml, IMapSerializer mapSerializer)
 		{
 			return DomainMap.LoadFromXml(xml,mapSerializer,true,true);
+		}
+
+		public static void CalculateTableModel(IDomainMap domainMap)
+		{
+			ClassesToTablesTransformer classesToTablesTransformer = new ClassesToTablesTransformer();
+			classesToTablesTransformer.GenerateTablesForClasses(domainMap, domainMap, true, true);					
 		}
 
 		protected virtual void Validate()
@@ -1463,6 +1560,31 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				sourceMap.UnFixate();
 			}
+		}
+
+		#endregion
+
+		#region FromDomainMapAttribute
+
+		public static void FromDomainMapAttribute(DomainMapAttribute attrib, Assembly asm, IDomainMap domainMap)
+		{
+			domainMap.Name = asm.FullName;
+			domainMap.AssemblyName = asm.FullName;
+
+			domainMap.DeleteOptimisticConcurrencyBehavior = attrib.DeleteOptimisticConcurrencyBehavior;
+			domainMap.DocSource = attrib.DocSource;
+			domainMap.FieldNameStrategy = attrib.FieldNameStrategy;
+			domainMap.FieldPrefix = attrib.FieldPrefix;
+			domainMap.IsReadOnly = attrib.IsReadOnly;
+			domainMap.LoadBehavior = attrib.LoadBehavior;
+			domainMap.MergeBehavior = attrib.MergeBehavior;
+			domainMap.RefreshBehavior = attrib.RefreshBehavior;
+			domainMap.RootNamespace = attrib.RootNamespace ;
+			domainMap.Source = attrib.Source ;
+			domainMap.TimeToLive = attrib.TimeToLive;
+			domainMap.TimeToLiveBehavior = attrib.TimeToLiveBehavior;
+			domainMap.UpdateOptimisticConcurrencyBehavior = attrib.UpdateOptimisticConcurrencyBehavior;
+			domainMap.ValidationMode = attrib.ValidationMode;
 		}
 
 		#endregion

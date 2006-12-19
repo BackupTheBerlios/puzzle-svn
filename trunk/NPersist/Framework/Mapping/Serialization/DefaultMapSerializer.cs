@@ -811,6 +811,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" persistence-type=\"" + sourceMap.PersistenceType.ToString() + "\""); // do not localize				
 			}
+			if (sourceMap.Compute == true)
+			{
+				xml.Append(" compute=\"true\""); // do not localize
+			}
 			xml.Append(" type=\"" + sourceMap.SourceType.ToString() + "\""); // do not localize
 			xml.Append(" provider=\"" + sourceMap.ProviderType.ToString() + "\""); // do not localize
 			if (sourceMap.Schema.Length > 0)
@@ -1636,6 +1640,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlSource.Attributes["persistence-type"] == null))
 			{
 				sourceMap.PersistenceType = (PersistenceType) Enum.Parse(typeof (PersistenceType), xmlSource.Attributes["persistence-type"].Value);
+			}
+			if (!(xmlSource.Attributes["compute"] == null))
+			{
+				sourceMap.Compute = ParseBool(xmlSource.Attributes["compute"].Value);
 			}
 			if (!(xmlSource.Attributes["name"] == null))
 			{

@@ -89,7 +89,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 						break;
 				}				
 			}
-			this.Context.Conflicts.Remove(this);
+			this.Context.UnclonedConflicts.Remove(this);
 		}
 
 		protected void ResolveList(ConflictResolution resolution)

@@ -5,6 +5,7 @@ using Puzzle.NPersist.Framework.Delegates;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Exceptions;
+using Puzzle.NPersist.Framework.Persistence;
 using Puzzle.NPersist.Samples.Northwind.Domain;
 
 namespace Puzzle.NPersist.Tests.Northwind.Basic
@@ -90,17 +91,9 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				{
 					context.Commit();										
 				}
-				catch (ExceptionLimitExceededException ex)
+				catch (NPersistValidationException ex)
 				{
-					foreach (Exception inner in ex.InnerExceptions)
-					{
-						if (inner is NPersistValidationException)
-						{
-							NPersistValidationException invalid = inner as NPersistValidationException;
-							throw invalid.InnerException ;
-						}
-						throw inner;						
-					}
+					throw ex.InnerException ;
 				}
 			}			
 		}
@@ -213,7 +206,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 
 		[Test()]
-		public void TestCommitRegions()
+		public void TestCommitRegionsShouldPass()
 		{
 			int order1Id = 0;
 			int order3Id = 0;
@@ -241,7 +234,6 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			using (IContext context = GetContext())
 			{
 				Order order1 = (Order) context.GetObjectById(order1Id, typeof(Order));
-				//Order order1 = (Order) context.GetObjectById(order3Id, typeof(Order));
 
 				IContext context2 = GetContext();
 
@@ -259,6 +251,171 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				context.Commit();
 			}
 		}
+
+
+		[Test(), ExpectedException(typeof(UnresolvedConflictsException))]
+		public void TestCommitRegionsShouldFail()
+		{
+			int order1Id = 0;
+			int order3Id = 0;
+			using (IContext context = GetContext() )
+			{
+				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Customers");
+
+				Customer customer = (Customer) context.CreateObject(typeof(Customer));
+
+				customer.Id = "APEYO";
+				customer.CompanyName = "Puzzle";
+
+				Order order1 = CreateOrder(context, customer);
+				Order order2 = CreateOrder(context, customer);
+				Order order3 = CreateOrder(context, customer);
+
+				context.Commit();
+
+				order1Id = order1.Id;
+				order3Id = order3.Id;
+			}			
+
+			using (IContext context = GetContext())
+			{
+				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
+
+				IContext context2 = GetContext();
+
+				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
+
+				order3.ShipAddress = "Address3";
+
+				context2.Commit();
+				context2.Dispose();
+
+				order1.ShipCity = "City1";
+
+				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
+
+				context.Commit();
+			}
+		}
+
+		[Test()]
+		public void TestCommitRegionsShouldFailThenResolveUseCachedValue()
+		{
+			int order1Id = 0;
+			int order3Id = 0;
+			using (IContext context = GetContext() )
+			{
+				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Customers");
+
+				Customer customer = (Customer) context.CreateObject(typeof(Customer));
+
+				customer.Id = "APEYO";
+				customer.CompanyName = "Puzzle";
+
+				Order order1 = CreateOrder(context, customer);
+				Order order2 = CreateOrder(context, customer);
+				Order order3 = CreateOrder(context, customer);
+
+				context.Commit();
+
+				order1Id = order1.Id;
+				order3Id = order3.Id;
+			}			
+
+			using (IContext context = GetContext())
+			{
+				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
+
+				IContext context2 = GetContext();
+
+				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
+
+				order3.ShipAddress = "Address3";
+
+				context2.Commit();
+				context2.Dispose();
+
+				order1.ShipCity = "City1";
+
+				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
+
+				try
+				{
+					context.Commit();					
+				}
+				catch (UnresolvedConflictsException ex)
+				{
+					foreach (IRefreshConflict conflict in ex.Conflicts)
+					{
+						conflict.Resolve(ConflictResolution.UseCachedValue);
+					}
+				}
+				context.Commit();
+			}
+		}
+
+		[Test()]
+		public void TestCommitRegionsShouldFailThenResolveUseFreshValue()
+		{
+			int order1Id = 0;
+			int order3Id = 0;
+			using (IContext context = GetContext() )
+			{
+				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
+				context.SqlExecutor.ExecuteNonQuery("Delete From Customers");
+
+				Customer customer = (Customer) context.CreateObject(typeof(Customer));
+
+				customer.Id = "APEYO";
+				customer.CompanyName = "Puzzle";
+
+				Order order1 = CreateOrder(context, customer);
+				Order order2 = CreateOrder(context, customer);
+				Order order3 = CreateOrder(context, customer);
+
+				context.Commit();
+
+				order1Id = order1.Id;
+				order3Id = order3.Id;
+			}			
+
+			using (IContext context = GetContext())
+			{
+				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
+
+				IContext context2 = GetContext();
+
+				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
+
+				order3.ShipAddress = "Address3";
+
+				context2.Commit();
+				context2.Dispose();
+
+				order1.ShipCity = "City1";
+
+				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
+
+				try
+				{
+					context.Commit();					
+				}
+				catch (UnresolvedConflictsException ex)
+				{
+					foreach (IRefreshConflict conflict in ex.Conflicts)
+					{
+						conflict.Resolve(ConflictResolution.UseFreshValue);
+					}
+				}
+				context.Commit();
+			}
+		}
+
 
 
 		[Test(), ExpectedException(typeof(DifferentShipAddressException))]
@@ -309,17 +466,9 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				{
 					context.Commit();										
 				}
-				catch (ExceptionLimitExceededException ex)
+				catch (NPersistValidationException ex)
 				{
-					foreach (Exception inner in ex.InnerExceptions)
-					{
-						if (inner is NPersistValidationException)
-						{
-							NPersistValidationException invalid = inner as NPersistValidationException;
-							throw invalid.InnerException ;
-						}
-						throw inner;						
-					}
+					throw ex.InnerException ;
 				}
 			}
 		}

@@ -135,6 +135,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Puzzle.NPersist.Samples.Northwind.PureDomain.npersist"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Region.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

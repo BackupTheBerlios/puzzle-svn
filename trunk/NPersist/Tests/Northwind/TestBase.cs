@@ -18,6 +18,11 @@ namespace Puzzle.NPersist.Tests.Northwind
 			return ContextFactory.CreateContext() ;
 		}
 
+		public virtual IContext GetContextWithPureMap()
+		{
+			return ContextFactory.CreateContextWithPureMap() ;
+		}
+
 		protected int EnsureNancy(int bossId)
 		{
 			int id = 0;

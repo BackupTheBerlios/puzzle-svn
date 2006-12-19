@@ -1,10 +1,8 @@
 using System;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
-
     public class Category
     {
-
         private System.Int32 m_Id;
         private System.String m_CategoryName;
         private System.String m_Description;
@@ -13,10 +11,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 
 		public override string ToString()
 		{
-
 			return this.CategoryName;
 		}
-
 
         public virtual System.Int32 Id
         {

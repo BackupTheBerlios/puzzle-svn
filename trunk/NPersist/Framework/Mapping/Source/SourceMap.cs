@@ -11,19 +11,18 @@
 using System.Collections;
 using System.Globalization;
 using System.Xml.Serialization;
+using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
 
 namespace Puzzle.NPersist.Framework.Mapping
 {
 	public class SourceMap : MapBase, ISourceMap
-	{
-				
+	{				
 		public override void Accept(IMapVisitor visitor)
 		{
 			visitor.Visit(this);
 		}
-
 		
 		public override IMap GetParent()
 		{
@@ -33,6 +32,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		#region Private Member Variables
 
 		private PersistenceType m_PersistenceType = PersistenceType.Default;
+		private bool m_Compute = false;
 
 		//O/R Mapping
 		private ArrayList m_TableMaps = new ArrayList();
@@ -78,6 +78,16 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			get { return this.m_PersistenceType; }
 			set { this.m_PersistenceType = value; }
+		}
+		
+		#endregion
+
+		#region Property  Compute
+				
+		public bool Compute
+		{
+			get { return this.m_Compute; }
+			set { this.m_Compute = value; }
 		}
 		
 		#endregion
@@ -387,6 +397,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			ISourceMap sourceMap = (ISourceMap) mapObject;
 			sourceMap.PersistenceType = this.PersistenceType;
+			sourceMap.Compute = this.Compute;
 			sourceMap.ConnectionString = this.ConnectionString;
 			sourceMap.Name = this.Name;
 			sourceMap.ProviderType = this.ProviderType;
@@ -410,6 +421,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			ISourceMap sourceMap = (ISourceMap) compareTo;
 			if (!(sourceMap.PersistenceType == this.PersistenceType))
+			{
+				return false;
+			}
+			if (!(sourceMap.Compute == this.Compute))
 			{
 				return false;
 			}
@@ -500,5 +515,30 @@ namespace Puzzle.NPersist.Framework.Mapping
 		}
 
 		#endregion
+
+		#region FromSourceMapAttribute
+
+		public static void FromSourceMapAttribute(SourceMapAttribute attrib, ISourceMap sourceMap)
+		{
+			sourceMap.Name = attrib.Name;
+
+			sourceMap.Catalog = attrib.Catalog ;
+			sourceMap.Compute = attrib.Compute;
+			sourceMap.ConnectionString = attrib.ConnectionString ;
+			sourceMap.DocEncoding = attrib.DocEncoding ;
+			sourceMap.DocPath = attrib.DocPath ;
+			sourceMap.DocRoot = attrib.DocRoot ;
+			sourceMap.DomainKey = attrib.DomainKey  ;
+			sourceMap.PersistenceType = attrib.PersistenceType  ;
+			sourceMap.ProviderAssemblyPath = attrib.ProviderAssemblyPath ;
+			sourceMap.ProviderConnectionTypeName = attrib.ProviderConnectionTypeName ;
+			sourceMap.ProviderType = attrib.ProviderType  ;
+			sourceMap.Schema = attrib.Schema ;
+			sourceMap.SourceType = attrib.SourceType ;
+			sourceMap.Url = attrib.Url ;
+		}
+
+		#endregion
+	
 	}
 }

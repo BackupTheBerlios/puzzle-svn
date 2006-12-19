@@ -25,14 +25,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		void SetDomainMap(IDomainMap value);
 
+		bool Compute { get; set; }
+
 		//O/R Mapping
 
 		[XmlArrayItem(typeof (ITableMap))]
 		ArrayList TableMaps { get; set; }
 
 		ITableMap GetTableMap(string findName);
-
-
 
 		SourceType SourceType { get; set; }
 

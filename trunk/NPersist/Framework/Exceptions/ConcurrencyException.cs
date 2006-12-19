@@ -23,6 +23,10 @@ namespace Puzzle.NPersist.Framework.Exceptions
 		{
 		}
 
+		public ConcurrencyException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
 		public ConcurrencyException(string message, object obj, string propertyName) : base(message, obj, propertyName)
 		{
 		}

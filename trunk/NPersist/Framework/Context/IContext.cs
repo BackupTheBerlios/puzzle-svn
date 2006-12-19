@@ -1563,9 +1563,14 @@ namespace Puzzle.NPersist.Framework
         DataTable GetDataTable(string npath, Type type, IList parameters);
 
         /// <summary>
-        /// Returns a list with any unresolved conflict that have resulted from a merge between cached values and fresh values from the data source.
+        /// Returns a clone of the list with any unresolved conflict that have resulted from a merge between cached values and fresh values from the data source.
         /// </summary>
         IList Conflicts { get; }
+
+		/// <summary>
+		/// Returns a list with any unresolved conflict that have resulted from a merge between cached values and fresh values from the data source. This list can't be iterated over resolving the conflicts since resolving a conflict tries to remove it from the list. For this please use the Conflicts property instead.
+		/// </summary>
+		IList UnclonedConflicts { get; }
 
 		/// <summary>
 		/// Contains all objects (as both keys and values) that were loaded during the latest query fetch operation (for both npath and sql queries)

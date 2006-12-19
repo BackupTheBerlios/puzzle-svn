@@ -8,11 +8,13 @@
 // *
 // *
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Xml.Serialization;
+using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
 
@@ -273,8 +275,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			return arrVals;
 		}
-
-
 
 		public override string Name
 		{
@@ -1907,6 +1907,56 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		#endregion
 		
+		#region FromClassMapAttribute
+
+		public static void FromClassMapAttribute(ClassMapAttribute attrib, Type type, IClassMap classMap)
+		{
+			classMap.Name = type.Name;
+
+			if (type.IsInterface)
+				classMap.ClassType = ClassType.Interface;
+			else if (type.IsEnum)
+				classMap.ClassType = ClassType.Enum;
+			else
+				classMap.ClassType = ClassType.Class;
+
+			classMap.IsAbstract = type.IsAbstract;
+			
+			Type baseType = type.BaseType;
+
+			IClassMap baseClassMap = (classMap.DomainMap.GetClassMap(baseType.GetType()));
+			if (baseClassMap != null)
+				classMap.InheritsClass = baseClassMap.Name;
+
+			classMap.CommitRegions = attrib.CommitRegions ;
+			classMap.DeleteOptimisticConcurrencyBehavior = attrib.DeleteOptimisticConcurrencyBehavior ;
+			classMap.DocClassMapMode = attrib.DocClassMapMode ;
+			classMap.DocElement = attrib.DocElement  ;
+			classMap.DocParentProperty = attrib.DocParentProperty ;
+			classMap.DocRoot = attrib.DocRoot ;
+			classMap.DocSource = attrib.DocSource ;
+			classMap.IdentitySeparator = attrib.IdentitySeparator ;
+			classMap.InheritanceType = attrib.InheritanceType ;
+			classMap.IsReadOnly = attrib.IsReadOnly ;
+			classMap.KeySeparator = attrib.KeySeparator ;
+			classMap.LoadBehavior = attrib.LoadBehavior ;
+			classMap.LoadSpan = attrib.LoadSpan ;
+			classMap.MergeBehavior = attrib.MergeBehavior ;
+			classMap.RefreshBehavior = attrib.RefreshBehavior ;
+			classMap.Source = attrib.Source ;
+			classMap.SourceClass = attrib.SourceClass ;
+			classMap.Table = attrib.Table ;
+			classMap.TimeToLive = attrib.TimeToLive ;
+			classMap.TimeToLiveBehavior = attrib.TimeToLiveBehavior ;
+			classMap.TypeColumn = attrib.TypeColumn ;
+			classMap.TypeValue = attrib.TypeValue ;
+			classMap.UpdateOptimisticConcurrencyBehavior = attrib.UpdateOptimisticConcurrencyBehavior  ;
+			classMap.ValidateMethod = attrib.ValidateMethod ;
+			classMap.ValidationMode = attrib.ValidationMode ;
+		}
+
+		#endregion
+
 		public virtual bool IsLegalAsSuperClass(IClassMap classMap)
 		{
 			IClassMap superClassMap = null;

@@ -8,11 +8,14 @@
 // *
 // *
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Xml.Serialization;
+using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Mapping.Visitor;
 
@@ -1901,6 +1904,70 @@ namespace Puzzle.NPersist.Framework.Mapping
 		#endregion
 
 		#region IFixate
+
+		#endregion
+
+		#region FromPropertyMapAttribute
+
+		public static void FromPropertyMapAttribute(PropertyMapAttribute attrib, PropertyInfo propInfo, IPropertyMap propertyMap)
+		{
+			propertyMap.Name = propInfo.Name;
+			propertyMap.DataType = propInfo.PropertyType.ToString();
+
+			propertyMap.CascadingCreate = attrib.CascadingCreate ;
+			propertyMap.CascadingDelete = attrib.CascadingDelete ;
+
+			propertyMap.Column = attrib.GetColumn() ;
+			foreach (string column in attrib.GetAdditionalColumns())
+				propertyMap.AdditionalColumns.Add(column);
+
+			propertyMap.IdColumn = attrib.GetIdColumn() ;
+			foreach (string column in attrib.GetAdditionalIdColumns())
+				propertyMap.AdditionalIdColumns.Add(column);
+
+			propertyMap.CommitRegions = attrib.CommitRegions ;
+			propertyMap.DeleteOptimisticConcurrencyBehavior = attrib.DeleteOptimisticConcurrencyBehavior  ;
+			propertyMap.DocAttribute = attrib.DocAttribute ;
+			propertyMap.DocElement = attrib.DocElement ;
+			propertyMap.DocPropertyMapMode = attrib.DocPropertyMapMode ;
+			propertyMap.DocSource = attrib.DocSource ;
+			propertyMap.FieldName = attrib.FieldName ;
+			propertyMap.IdentityGenerator = attrib.IdentityGenerator ;
+			propertyMap.IdentityIndex = attrib.IdentityIndex ;
+			propertyMap.InheritInverseMappings = attrib.InheritInverseMappings  ;
+			propertyMap.Inverse = attrib.Inverse ;
+			propertyMap.IsAssignedBySource = attrib.IsAssignedBySource ;
+			propertyMap.IsCollection = attrib.IsCollection ;
+			propertyMap.IsIdentity = attrib.IsIdentity ;
+			propertyMap.IsKey = attrib.IsKey ;
+			propertyMap.IsNullable = attrib.IsNullable ;
+			propertyMap.IsReadOnly = attrib.IsReadOnly ;
+			propertyMap.IsSlave = attrib.IsSlave ;
+			propertyMap.ItemType = attrib.ItemType ;
+			propertyMap.KeyIndex = attrib.KeyIndex ;
+			propertyMap.LazyLoad = attrib.LazyLoad ;
+			propertyMap.MaxLength = attrib.MaxLength ;
+			propertyMap.MaxValue = attrib.MaxValue ;
+			propertyMap.MergeBehavior = attrib.MergeBehavior ;
+			propertyMap.MinLength = attrib.MinLength ;
+			propertyMap.MinValue = attrib.MinValue ;
+			propertyMap.NoInverseManagement = attrib.NoInverseManagement ;
+			propertyMap.NullSubstitute = attrib.NullSubstitute ;
+			propertyMap.OnCreateBehavior = attrib.OnCreateBehavior ;
+			propertyMap.OnPersistBehavior = attrib.OnPersistBehavior ;
+			propertyMap.OrderBy = attrib.OrderBy ;
+			propertyMap.ReferenceQualifier = attrib.ReferenceQualifier ;
+			propertyMap.ReferenceType = attrib.ReferenceType ;
+			propertyMap.RefreshBehavior = attrib.RefreshBehavior ;
+			propertyMap.Source = attrib.Source ;
+			propertyMap.SourceProperty = attrib.SourceProperty ;
+			propertyMap.Table = attrib.Table ;
+			propertyMap.TimeToLive = attrib.TimeToLive ;
+			propertyMap.TimeToLiveBehavior = attrib.TimeToLiveBehavior ;
+			propertyMap.UpdateOptimisticConcurrencyBehavior = attrib.UpdateOptimisticConcurrencyBehavior ;
+			propertyMap.ValidateMethod = attrib.ValidateMethod ;
+			propertyMap.ValidationMode = attrib.ValidationMode ;
+		}
 
 		#endregion
 

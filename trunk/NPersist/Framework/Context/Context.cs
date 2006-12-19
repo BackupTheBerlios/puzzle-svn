@@ -135,6 +135,11 @@ namespace Puzzle.NPersist.Framework
 			InitManagers(mapFilePath);
 		}
 
+		public Context(Assembly asm) : base()
+		{
+			InitManagers(asm);
+		}
+
 		public Context(Assembly asm, string mapFileResourceName) : base()
 		{
 			InitManagers(asm, mapFileResourceName);
@@ -162,6 +167,14 @@ namespace Puzzle.NPersist.Framework
 		}
 
 		#region InitManagers Method
+
+		protected virtual void InitManagers(Assembly asm)
+		{
+			m_DomainMap = Mapping.DomainMap.Load(asm);
+			m_DomainMap.Fixate();
+
+			InitManagers();
+		}
 
 		protected virtual void InitManagers(Assembly asm, string name)
 		{
@@ -2716,8 +2729,13 @@ namespace Puzzle.NPersist.Framework
 
         public virtual IList Conflicts
         {
-            get { return conflicts; }
-        }
+			get { return (IList) ((ArrayList) conflicts).Clone(); }
+		}
+
+		public virtual IList UnclonedConflicts
+		{
+			get { return conflicts; }
+		}
 
         #region .NET 2.0 Specific Code
 #if NET2

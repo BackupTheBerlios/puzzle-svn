@@ -27,6 +27,20 @@ Public Class SourceProperties
 
     End Function
 
+    <Category("Mapping"), _
+    Description("Specifies if this source should have its tables and columns computed from the class model during runtime. Only valid for database sources."), _
+    DisplayName("Compute model"), _
+    DefaultValue(False)> Public Property Compute() As Boolean
+        Get
+            Return m_SourceMap.Compute
+        End Get
+        Set(ByVal Value As Boolean)
+            m_SourceMap.Compute = Value
+            RaiseEvent AfterPropertySet(m_SourceMap, "Compute")
+        End Set
+    End Property
+
+
     <Category("Design"), _
     Description("The name of this data source."), _
     DisplayName("Name"), _

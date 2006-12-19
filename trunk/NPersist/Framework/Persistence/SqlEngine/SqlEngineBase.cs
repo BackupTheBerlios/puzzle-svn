@@ -3958,7 +3958,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                                                             {
                                                                 if (useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
                                                                 {
-                                                                    this.Context.Conflicts.Add(new RefreshConflict(
+                                                                    this.Context.UnclonedConflicts.Add(new RefreshConflict(
                                                                         this.Context,
                                                                         refObj, 
                                                                         strPropertyName,
@@ -4047,7 +4047,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					if (cachedListUpdate.RefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
 					{
-						this.Context.Conflicts.Add(new RefreshConflict(
+						this.Context.UnclonedConflicts.Add(new RefreshConflict(
 							this.Context,
 							cachedListUpdate.Obj, 
 							cachedListUpdate.PropertyName,

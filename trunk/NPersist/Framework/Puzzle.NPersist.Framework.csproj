@@ -194,6 +194,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ClassMapAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\DomainMapAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\PropertyMapAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\SourceMapAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Base Classes\Interceptable.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -609,6 +629,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Exceptions\UnresolvedConflictsException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\ValidationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -915,6 +940,11 @@
                 />
                 <File
                     RelPath = "Mapping\Source\TableMap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Mapping\Transformation\ClassesToTablesTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

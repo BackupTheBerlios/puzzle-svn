@@ -19,10 +19,6 @@ namespace Puzzle.NPersist.Framework.Exceptions
 		{
 		}
 
-		public RefreshException(string message) : base(message)
-		{
-		}
-
 		public RefreshException(string message, object obj, string propertyName) : base(message, obj, propertyName)
 		{
 		}

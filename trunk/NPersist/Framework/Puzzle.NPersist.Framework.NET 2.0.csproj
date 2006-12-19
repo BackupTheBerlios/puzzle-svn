@@ -405,6 +405,7 @@
     <Compile Include="Exceptions\UnitOfWorkException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\UnresolvedConflictsException.cs" />
     <Compile Include="Exceptions\ValidationException.cs">
       <SubType>Code</SubType>
     </Compile>
