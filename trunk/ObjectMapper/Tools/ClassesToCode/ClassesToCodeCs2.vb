@@ -208,6 +208,22 @@ Public Class ClassesToCodeCs2
 
         If found Then codeBuilder.Append(vbCrLf)
 
+        If UseAttributes Then
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("using ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Attributes")
+            codeBuilder.Append(";")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("using ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Enumerations")
+            codeBuilder.Append(";")
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
         If Not noNamespace Then
 
             ns = classMap.GetNamespace
@@ -262,6 +278,9 @@ Public Class ClassesToCodeCs2
 
         'Class doc comments
         codeBuilder.Append(GetDocComment(classMap, DocCommentPrefix))
+
+        'ClassMap Attribute
+        codeBuilder.Append(GetClassMapAttribute(classMap))
 
         'Class Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.ClassIndent))
@@ -1072,6 +1091,9 @@ Public Class ClassesToCodeCs2
 
         'Property doc comments
         codeBuilder.Append(GetDocComment(propertyMap, DocCommentPrefix))
+
+        'PropertyMap Attribute
+        codeBuilder.Append(GetPropertyMapAttribute(propertyMap))
 
         'Property Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.MemberIndent))
@@ -2393,15 +2415,33 @@ Public Class ClassesToCodeCs2
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("        </Reference>")
         codeBuilder.Append(vbCrLf)
+
+
+        If TargetPlatform = TargetPlatformEnum.NPersist Then
+
+            If GeneratePOCO = False Or UseAttributes = True Then
+
+                codeBuilder.Append("                <Reference Include=""Puzzle.NPersist.Framework"">")
+                codeBuilder.Append(vbCrLf)
+                codeBuilder.Append("                    <SpecificVersion>False</SpecificVersion>")
+                codeBuilder.Append(vbCrLf)
+                codeBuilder.Append("                    <HintPath>bin\Puzzle.NPersist.framework.dll</HintPath>")
+                codeBuilder.Append(vbCrLf)
+                codeBuilder.Append("                </Reference>")
+                codeBuilder.Append(vbCrLf)
+
+            End If
+
+        End If
+
+
         codeBuilder.Append("    </ItemGroup>")
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("    <ItemGroup>")
         codeBuilder.Append(vbCrLf)
 
-
-
-
-
+        codeBuilder.Append("        <Compile Include=""AssemblyInfo.cs"" />")
+        codeBuilder.Append(vbCrLf)
 
         Dim filePath As String
         For Each filePath In classMapsAndFiles.Values
@@ -2730,6 +2770,31 @@ Public Class ClassesToCodeCs2
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("using System.Runtime.CompilerServices;")
         codeBuilder.Append(vbCrLf)
+
+
+        If UseAttributes Then
+            codeBuilder.Append("using Puzzle.NPersist.Framework.Attributes;")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("using Puzzle.NPersist.Framework.Enumerations;")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("//")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("// Domain wide mapping information is controlled through the following ")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("// set of attributes. Change these attribute values to modify the information")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("//")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetDomainMapAttribute(domainMap))
+            For Each srcMap As ISourceMap In domainMap.SourceMaps
+                codeBuilder.Append(GetSourceMapAttribute(srcMap))
+            Next
+
+        End If
+
         codeBuilder.Append("")
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("//")
