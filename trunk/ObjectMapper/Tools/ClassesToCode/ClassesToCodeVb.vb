@@ -10,6 +10,8 @@ Public Class ClassesToCodeVb
     Inherits ClassesToCodeBase
 
     Private m_DocCommentPrefix As String = "'''"
+    Private m_AttributeStart As String = "<"
+    Private m_AttributeEnd As String = ">"
 
     Public Overrides Function DomainToCode(ByVal domainMap As Puzzle.NPersist.Framework.Mapping.IDomainMap, ByVal noRootNamespace As Boolean) As String
 
@@ -159,6 +161,20 @@ Public Class ClassesToCodeVb
 
         If found Then codeBuilder.Append(vbCrLf)
 
+        If UseAttributes Then
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("Imports ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Attributes")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("Imports ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Enumerations")
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
         If Not noNamespace Then
 
             ns = classMap.GetNamespace
@@ -208,6 +224,9 @@ Public Class ClassesToCodeVb
 
         'Class doc comments
         codeBuilder.Append(GetDocComment(classMap, DocCommentPrefix))
+
+        'ClassMap Attribute
+        codeBuilder.Append(GetClassMapAttribute(classMap))
 
         'Class Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.ClassIndent))
@@ -787,6 +806,9 @@ Public Class ClassesToCodeVb
 
         'Property doc comments
         codeBuilder.Append(GetDocComment(propertyMap, DocCommentPrefix))
+
+        'PropertyMap Attribute
+        codeBuilder.Append(GetPropertyMapAttribute(propertyMap))
 
         'Property Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.MemberIndent))
@@ -1884,7 +1906,7 @@ Public Class ClassesToCodeVb
 
         If TargetPlatform = TargetPlatformEnum.NPersist Then
 
-            If Not GeneratePOCO Then
+            If GeneratePOCO = False Or UseAttributes = True Then
 
                 codeBuilder.Append("                <Reference")
                 codeBuilder.Append(vbCrLf)
@@ -1994,6 +2016,31 @@ Public Class ClassesToCodeVb
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("Imports System.Runtime.InteropServices")
         codeBuilder.Append(vbCrLf)
+
+        If UseAttributes Then
+
+            codeBuilder.Append("Imports Puzzle.NPersist.Framework.Attributes")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("Imports Puzzle.NPersist.Framework.Enumerations")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("'")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("' Domain wide mapping information is controlled through the following ")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("' set of attributes. Change these attribute values to modify the information")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("'")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetDomainMapAttribute(domainMap))
+            For Each srcMap As ISourceMap In domainMap.SourceMaps
+                codeBuilder.Append(GetSourceMapAttribute(srcMap))
+            Next
+
+        End If
+
         codeBuilder.Append("")
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("' General Information about an assembly is controlled through the following ")
@@ -2131,5 +2178,25 @@ Public Class ClassesToCodeVb
         Return defaultName
 
     End Function
+
+
+    Public Overrides Property AttributeStart() As String
+        Get
+            Return m_AttributeStart
+        End Get
+        Set(ByVal Value As String)
+            m_AttributeStart = Value
+        End Set
+    End Property
+
+    Public Overrides Property AttributeEnd() As String
+        Get
+            Return m_AttributeEnd
+        End Get
+        Set(ByVal Value As String)
+            m_AttributeEnd = Value
+        End Set
+    End Property
+
 
 End Class

@@ -44,12 +44,23 @@ Namespace ProjectModel
 
         Private m_SourceCodeFiles As New ArrayList
 
+        Private m_UseAttributes As Boolean = False
+
         Public Property TargetFolder() As String
             Get
                 Return m_TargetFolder
             End Get
             Set(ByVal Value As String)
                 m_TargetFolder = Value
+            End Set
+        End Property
+
+        Public Property UseAttributes() As Boolean
+            Get
+                Return m_UseAttributes
+            End Get
+            Set(ByVal Value As Boolean)
+                m_UseAttributes = Value
             End Set
         End Property
 

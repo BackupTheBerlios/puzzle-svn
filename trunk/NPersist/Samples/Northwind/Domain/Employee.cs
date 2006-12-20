@@ -96,8 +96,9 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-		[PropertyMap(Table="Employees", IdColumns="ReportsTo", IsCollection=true, ItemType="Employee", 
-			 IsSlave=true, ReferenceType=ReferenceType.ManyToOne, Inverse="ReportsTo", InheritInverseMappings=true)]
+//		[PropertyMap(Table="Employees", IdColumns="ReportsTo", IsCollection=true, ItemType="Employee", 
+//			 IsSlave=true, ReferenceType=ReferenceType.ManyToOne, Inverse="ReportsTo", InheritInverseMappings=true)]
+		[PropertyMap(IsCollection=true, ReferenceType=ReferenceType.ManyToOne, ItemType="Employee", Inverse="ReportsTo", InheritInverseMappings=true)]
 		public virtual System.Collections.IList Employees
         {
             get

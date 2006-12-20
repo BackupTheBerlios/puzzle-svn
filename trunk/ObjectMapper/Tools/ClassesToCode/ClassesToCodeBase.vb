@@ -16,6 +16,9 @@ End Enum
 Public Class ClassesToCodeBase
     Implements IClassesToCode
 
+    Private m_UseAttributes As Boolean = True
+    Private m_AttributeStart As String = "["
+    Private m_AttributeEnd As String = "]"
     Private m_ImplementIInterceptable As Boolean = True
     Private m_ImplementIObjectHelper As Boolean = True
     Private m_ImplementIObservable As Boolean = True
@@ -126,6 +129,33 @@ Public Class ClassesToCodeBase
         Return identBuilder.ToString
 
     End Function
+
+    Public Overridable Property UseAttributes() As Boolean Implements Puzzle.ObjectMapper.Tools.IClassesToCode.UseAttributes
+        Get
+            Return m_UseAttributes
+        End Get
+        Set(ByVal Value As Boolean)
+            m_UseAttributes = Value
+        End Set
+    End Property
+
+    Public Overridable Property AttributeStart() As String Implements Puzzle.ObjectMapper.Tools.IClassesToCode.AttributeStart
+        Get
+            Return m_AttributeStart
+        End Get
+        Set(ByVal Value As String)
+            m_AttributeStart = Value
+        End Set
+    End Property
+
+    Public Overridable Property AttributeEnd() As String Implements Puzzle.ObjectMapper.Tools.IClassesToCode.AttributeEnd
+        Get
+            Return m_AttributeEnd
+        End Get
+        Set(ByVal Value As String)
+            m_AttributeEnd = Value
+        End Set
+    End Property
 
 
     Public Overridable Property ImplementIInterceptable() As Boolean Implements Puzzle.ObjectMapper.Tools.IClassesToCode.ImplementIInterceptable
@@ -1156,5 +1186,529 @@ Public Class ClassesToCodeBase
         Return defaultName
 
     End Function
+
+    Protected Overridable Function GetClassMapAttribute(ByVal classMap As IClassMap) As String
+
+        Dim codeBuilder As StringBuilder = New StringBuilder
+
+        If UseAttributes Then
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.ClassIndent))
+            codeBuilder.Append(AttributeStart + "ClassMap(")
+
+            If classMap.Source.Length > 0 Then
+                codeBuilder.Append("Source = """ + classMap.Source + """, ")
+            End If
+
+            If classMap.Table.Length > 0 Then
+                codeBuilder.Append("Table = """ + classMap.Table + """, ")
+            End If
+
+            If classMap.TypeColumn.Length > 0 Then
+                codeBuilder.Append("TypeColumn = """ + classMap.TypeColumn + """, ")
+            End If
+
+            If classMap.TypeValue.Length > 0 Then
+                codeBuilder.Append("TypeValue = """ + classMap.TypeValue + """, ")
+            End If
+
+
+            If classMap.SourceClass.Length > 0 Then
+                codeBuilder.Append("SourceClass = """ + classMap.SourceClass + """, ")
+            End If
+
+
+            If classMap.DocSource.Length > 0 Then
+                codeBuilder.Append("DocSource = """ + classMap.DocSource + """, ")
+            End If
+
+            If classMap.DocElement.Length > 0 Then
+                codeBuilder.Append("DocElement = """ + classMap.DocElement + """, ")
+            End If
+
+            If classMap.DocRoot.Length > 0 Then
+                codeBuilder.Append("DocRoot = """ + classMap.DocRoot + """, ")
+            End If
+
+            If classMap.DocParentProperty.Length > 0 Then
+                codeBuilder.Append("DocParentProperty = """ + classMap.DocParentProperty + """, ")
+            End If
+
+            If Not classMap.DocClassMapMode = DocClassMapMode.Default Then
+                codeBuilder.Append("DocClassMapMode = DocClassMapMode." + classMap.DocClassMapMode.ToString() + ", ")
+            End If
+
+
+            If Not classMap.InheritanceType = InheritanceType.None Then
+                codeBuilder.Append("InheritanceType = InheritanceType." + classMap.InheritanceType.ToString() + ", ")
+            End If
+
+            If classMap.IsReadOnly = True Then
+                codeBuilder.Append("IsReadOnly = true, ")
+            End If
+
+            If classMap.IdentitySeparator.Length > 0 Then
+                codeBuilder.Append("IdentitySeparator = """ + classMap.IdentitySeparator + """, ")
+            End If
+
+            If classMap.KeySeparator.Length > 0 Then
+                codeBuilder.Append("KeySeparator = """ + classMap.KeySeparator + """, ")
+            End If
+
+            If classMap.CommitRegions.Length > 0 Then
+                codeBuilder.Append("CommitRegions = """ + classMap.CommitRegions + """, ")
+            End If
+
+            If classMap.LoadSpan.Length > 0 Then
+                codeBuilder.Append("LoadSpan = """ + classMap.LoadSpan + """, ")
+            End If
+
+            If classMap.ValidateMethod.Length > 0 Then
+                codeBuilder.Append("ValidateMethod = """ + classMap.ValidateMethod + """, ")
+            End If
+
+            If Not classMap.ValidationMode = ValidationMode.Default Then
+                codeBuilder.Append("ValidationMode = ValidationMode." + classMap.ValidationMode.ToString() + ", ")
+            End If
+
+            If Not classMap.UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + classMap.UpdateOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not classMap.DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + classMap.DeleteOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not classMap.MergeBehavior = MergeBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("MergeBehavior = MergeBehaviorType." + classMap.MergeBehavior.ToString() + ", ")
+            End If
+
+            If Not classMap.RefreshBehavior = RefreshBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("RefreshBehavior = RefreshBehaviorType." + classMap.RefreshBehavior.ToString() + ", ")
+            End If
+
+            If Not classMap.LoadBehavior = LoadBehavior.Default Then
+                codeBuilder.Append("LoadBehavior = LoadBehavior." + classMap.LoadBehavior.ToString() + ", ")
+            End If
+
+            If Not classMap.TimeToLiveBehavior = TimeToLiveBehavior.Default Then
+                codeBuilder.Append("TimeToLiveBehavior = TimeToLiveBehavior." + classMap.TimeToLiveBehavior.ToString() + ", ")
+            End If
+
+            If classMap.TimeToLive > -1 Then
+                codeBuilder.Append("TimeToLive = " + classMap.TimeToLive.ToString() + ", ")
+            End If
+
+
+            Dim result As String = codeBuilder.ToString()
+            If Right(result, 2) = ", " Then
+                codeBuilder.Length = codeBuilder.Length - 2
+            End If
+
+            codeBuilder.Append(")" + AttributeEnd)
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
+        Return codeBuilder.ToString()
+
+    End Function
+
+
+    Protected Overridable Function GetPropertyMapAttribute(ByVal propertyMap As IPropertyMap) As String
+
+        Dim codeBuilder As StringBuilder = New StringBuilder
+
+        If UseAttributes Then
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.MemberIndent))
+            codeBuilder.Append(AttributeStart + "PropertyMap(")
+
+            If propertyMap.Source.Length > 0 Then
+                codeBuilder.Append("Source = """ + propertyMap.Source + """, ")
+            End If
+
+            If propertyMap.Table.Length > 0 Then
+                codeBuilder.Append("Table = """ + propertyMap.Table + """, ")
+            End If
+
+            Dim columns As String = ""
+            For Each column As IColumnMap In propertyMap.GetAllColumnMaps
+                columns = columns + column.Name + ", "
+            Next
+
+            If Right(columns, 2) = ", " Then
+                columns = Left(columns, Len(columns) - 2)
+            End If
+
+            If columns.Length > 0 Then
+                codeBuilder.Append("Columns = """ + columns + """, ")
+            End If
+
+            columns = ""
+            For Each column As IColumnMap In propertyMap.GetAllIdColumnMaps
+                columns = columns + column.Name + ", "
+            Next
+
+            If Right(columns, 2) = ", " Then
+                columns = Left(columns, Len(columns) - 2)
+            End If
+
+            If columns.Length > 0 Then
+                codeBuilder.Append("IdColumns = """ + columns + """, ")
+            End If
+
+
+            If propertyMap.SourceProperty.Length > 0 Then
+                codeBuilder.Append("SourceProperty = """ + propertyMap.SourceProperty + """, ")
+            End If
+
+
+            If propertyMap.DocSource.Length > 0 Then
+                codeBuilder.Append("DocSource = """ + propertyMap.DocSource + """, ")
+            End If
+
+            If propertyMap.DocAttribute.Length > 0 Then
+                codeBuilder.Append("DocAttribute = """ + propertyMap.DocAttribute + """, ")
+            End If
+
+            If propertyMap.DocElement.Length > 0 Then
+                codeBuilder.Append("DocElement = """ + propertyMap.DocElement + """, ")
+            End If
+
+            If Not propertyMap.DocPropertyMapMode = DocPropertyMapMode.Default Then
+                codeBuilder.Append("DocPropertyMapMode = DocPropertyMapMode." + propertyMap.DocPropertyMapMode.ToString() + ", ")
+            End If
+
+
+            If propertyMap.IsIdentity Then
+                codeBuilder.Append("IsIdentity = true, ")
+            End If
+
+            If propertyMap.IdentityIndex > 0 Then
+                codeBuilder.Append("IdentityIndex = " + propertyMap.IdentityIndex.ToString() + ", ")
+            End If
+
+            If propertyMap.IdentityGenerator.Length > 0 Then
+                codeBuilder.Append("IdentityGenerator = """ + propertyMap.IdentityGenerator + """, ")
+            End If
+
+            If propertyMap.IsKey Then
+                codeBuilder.Append("IsKey = true, ")
+            End If
+
+            If propertyMap.KeyIndex > 0 Then
+                codeBuilder.Append("KeyIndex = " + propertyMap.KeyIndex.ToString() + ", ")
+            End If
+
+            If propertyMap.GetIsAssignedBySource Then
+                codeBuilder.Append("IsAssignedBySource = true, ")
+            End If
+
+            If propertyMap.GetIsNullable Then
+                codeBuilder.Append("IsNullable = true, ")
+            End If
+
+            If propertyMap.NullSubstitute.Length > 0 Then
+                codeBuilder.Append("NullSubstitute = """ + propertyMap.NullSubstitute + """, ")
+            End If
+
+            If propertyMap.ItemType.Length > 0 Then
+                codeBuilder.Append("ItemType = """ + propertyMap.ItemType + """, ")
+            End If
+
+            If propertyMap.FieldName.Length > 0 Then
+                codeBuilder.Append("FieldName = """ + propertyMap.FieldName + """, ")
+            End If
+
+            If propertyMap.IsCollection Then
+                codeBuilder.Append("IsCollection = true, ")
+            End If
+
+            If propertyMap.Inverse.Length > 0 Then
+                codeBuilder.Append("Inverse = """ + propertyMap.Inverse + """, ")
+            End If
+
+            If propertyMap.InheritInverseMappings Then
+                codeBuilder.Append("InheritInverseMappings = true, ")
+            End If
+
+            If propertyMap.NoInverseManagement Then
+                codeBuilder.Append("NoInverseManagement = true, ")
+            End If
+
+            If propertyMap.IsReadOnly Then
+                codeBuilder.Append("IsReadOnly = true, ")
+            End If
+
+            If propertyMap.IsSlave Then
+                codeBuilder.Append("IsSlave = true, ")
+            End If
+
+            If propertyMap.LazyLoad Then
+                codeBuilder.Append("LazyLoad = true, ")
+            End If
+
+            If Not propertyMap.ReferenceType = ReferenceType.None Then
+                codeBuilder.Append("ReferenceType = ReferenceType." + propertyMap.ReferenceType.ToString() + ", ")
+            End If
+
+            If Not propertyMap.ReferenceQualifier = ReferenceQualifier.Default Then
+                codeBuilder.Append("ReferenceQualifier = ReferenceQualifier." + propertyMap.ReferenceQualifier.ToString() + ", ")
+            End If
+
+            If propertyMap.CascadingCreate Then
+                codeBuilder.Append("CascadingCreate = true, ")
+            End If
+
+            If propertyMap.CascadingDelete Then
+                codeBuilder.Append("CascadingDelete = true, ")
+            End If
+
+            If propertyMap.OrderBy.Length > 0 Then
+                codeBuilder.Append("OrderBy = """ + propertyMap.OrderBy + """, ")
+            End If
+
+            If propertyMap.CommitRegions.Length > 0 Then
+                codeBuilder.Append("CommitRegions = """ + propertyMap.CommitRegions + """, ")
+            End If
+
+            If propertyMap.ValidateMethod.Length > 0 Then
+                codeBuilder.Append("ValidateMethod = """ + propertyMap.ValidateMethod + """, ")
+            End If
+
+            If Not propertyMap.ValidationMode = ValidationMode.Default Then
+                codeBuilder.Append("ValidationMode = ValidationMode." + propertyMap.ValidationMode.ToString() + ", ")
+            End If
+
+            If Not propertyMap.UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + propertyMap.UpdateOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not propertyMap.DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + propertyMap.DeleteOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not propertyMap.MergeBehavior = MergeBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("MergeBehavior = MergeBehaviorType." + propertyMap.MergeBehavior.ToString() + ", ")
+            End If
+
+            If Not propertyMap.RefreshBehavior = RefreshBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("RefreshBehavior = RefreshBehaviorType." + propertyMap.RefreshBehavior.ToString() + ", ")
+            End If
+
+            If Not propertyMap.OnCreateBehavior = PropertySpecialBehaviorType.None Then
+                codeBuilder.Append("OnCreateBehavior = PropertySpecialBehaviorType." + propertyMap.OnCreateBehavior.ToString() + ", ")
+            End If
+
+            If Not propertyMap.OnPersistBehavior = PropertySpecialBehaviorType.None Then
+                codeBuilder.Append("OnPersistBehavior = PropertySpecialBehaviorType." + propertyMap.OnPersistBehavior.ToString() + ", ")
+            End If
+
+            If propertyMap.GetMaxLength > -1 Then
+                codeBuilder.Append("MaxLength = " + propertyMap.GetMaxLength().ToString() + ", ")
+            End If
+
+            If propertyMap.MinLength > -1 Then
+                codeBuilder.Append("MinLength = " + propertyMap.MinLength.ToString() + ", ")
+            End If
+
+            If propertyMap.MaxValue.Length > 0 Then
+                codeBuilder.Append("MaxValue = """ + propertyMap.MaxValue + """, ")
+            End If
+
+            If propertyMap.MinValue.Length > 0 Then
+                codeBuilder.Append("MinValue = """ + propertyMap.MinValue + """, ")
+            End If
+
+            If Not propertyMap.TimeToLiveBehavior = TimeToLiveBehavior.Default Then
+                codeBuilder.Append("TimeToLiveBehavior = TimeToLiveBehavior." + propertyMap.TimeToLiveBehavior.ToString() + ", ")
+            End If
+
+            If propertyMap.TimeToLive > -1 Then
+                codeBuilder.Append("TimeToLive = " + propertyMap.TimeToLive.ToString() + ", ")
+            End If
+
+
+
+            Dim result As String = codeBuilder.ToString()
+            If Right(result, 2) = ", " Then
+                codeBuilder.Length = codeBuilder.Length - 2
+            End If
+
+            codeBuilder.Append(")" + AttributeEnd)
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
+        Return codeBuilder.ToString()
+
+    End Function
+
+
+    Protected Overridable Function GetDomainMapAttribute(ByVal domainMap As IDomainMap) As String
+
+        Dim codeBuilder As StringBuilder = New StringBuilder
+
+        If UseAttributes Then
+
+            codeBuilder.Append(AttributeStart + "assembly: DomainMap(")
+
+            If domainMap.Source.Length > 0 Then
+                codeBuilder.Append("Source = """ + domainMap.Source + """, ")
+            End If
+
+            If domainMap.DocSource.Length > 0 Then
+                codeBuilder.Append("DocSource = """ + domainMap.DocSource + """, ")
+            End If
+
+            If domainMap.IsReadOnly Then
+                codeBuilder.Append("IsReadOnly = true, ")
+            End If
+
+            If domainMap.RootNamespace.Length > 0 Then
+                codeBuilder.Append("RootNamespace = """ + domainMap.RootNamespace + """, ")
+            End If
+
+            If domainMap.FieldPrefix.Length > 0 And domainMap.FieldPrefix <> "_m" Then
+                codeBuilder.Append("FieldPrefix = """ + domainMap.FieldPrefix + """, ")
+            End If
+
+            If Not domainMap.FieldNameStrategy = FieldNameStrategyType.None Then
+                codeBuilder.Append("FieldNameStrategy = FieldNameStrategyType." + domainMap.FieldNameStrategy.ToString() + ", ")
+            End If
+
+            If Not domainMap.ValidationMode = ValidationMode.Default Then
+                codeBuilder.Append("ValidationMode = ValidationMode." + domainMap.ValidationMode.ToString() + ", ")
+            End If
+
+            If Not domainMap.UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + domainMap.UpdateOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not domainMap.DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType." + domainMap.DeleteOptimisticConcurrencyBehavior.ToString() + ", ")
+            End If
+
+            If Not domainMap.MergeBehavior = MergeBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("MergeBehavior = MergeBehaviorType." + domainMap.MergeBehavior.ToString() + ", ")
+            End If
+
+            If Not domainMap.RefreshBehavior = RefreshBehaviorType.DefaultBehavior Then
+                codeBuilder.Append("RefreshBehavior = RefreshBehaviorType." + domainMap.RefreshBehavior.ToString() + ", ")
+            End If
+
+            If Not domainMap.LoadBehavior = LoadBehavior.Default Then
+                codeBuilder.Append("LoadBehavior = LoadBehavior." + domainMap.LoadBehavior.ToString() + ", ")
+            End If
+
+            If Not domainMap.TimeToLiveBehavior = TimeToLiveBehavior.Default Then
+                codeBuilder.Append("TimeToLiveBehavior = TimeToLiveBehavior." + domainMap.TimeToLiveBehavior.ToString() + ", ")
+            End If
+
+            If domainMap.TimeToLive > -1 Then
+                codeBuilder.Append("TimeToLive = " + domainMap.TimeToLive.ToString() + ", ")
+            End If
+
+            Dim result As String = codeBuilder.ToString()
+            If Right(result, 2) = ", " Then
+                codeBuilder.Length = codeBuilder.Length - 2
+            End If
+
+            codeBuilder.Append(")" + AttributeEnd)
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
+        Return codeBuilder.ToString()
+
+    End Function
+
+    Protected Overridable Function GetSourceMapAttribute(ByVal sourceMap As ISourceMap) As String
+
+        Dim codeBuilder As StringBuilder = New StringBuilder
+
+        If UseAttributes Then
+
+            codeBuilder.Append(AttributeStart + "assembly: SourceMap(")
+
+            If sourceMap.Name.Length > 0 Then
+                codeBuilder.Append("Name = """ + sourceMap.Name + """, ")
+            End If
+
+            If Not sourceMap.PersistenceType = PersistenceType.Default Then
+                codeBuilder.Append("PersistenceType = PersistenceType." + sourceMap.PersistenceType.ToString() + ", ")
+            End If
+
+            If sourceMap.Compute Then
+                codeBuilder.Append("Compute = true, ")
+            End If
+
+
+            If sourceMap.DocPath.Length > 0 Then
+                codeBuilder.Append("DocPath = """ + sourceMap.DocPath + """, ")
+            End If
+
+            If sourceMap.DocRoot.Length > 0 Then
+                codeBuilder.Append("DocRoot = """ + sourceMap.DocRoot + """, ")
+            End If
+
+            If sourceMap.DocEncoding.Length > 0 Then
+                codeBuilder.Append("DocEncoding = """ + sourceMap.DocEncoding + """, ")
+            End If
+
+
+            If sourceMap.Url.Length > 0 Then
+                codeBuilder.Append("Url = """ + sourceMap.Url + """, ")
+            End If
+
+            If sourceMap.DomainKey.Length > 0 Then
+                codeBuilder.Append("DomainKey = """ + sourceMap.DomainKey + """, ")
+            End If
+
+
+            If (sourceMap.PersistenceType = PersistenceType.Default Or sourceMap.PersistenceType = PersistenceType.ObjectRelational) Then
+
+                codeBuilder.Append("SourceType = SourceType." + sourceMap.SourceType.ToString() + ", ")
+                codeBuilder.Append("ProviderType = ProviderType." + sourceMap.ProviderType.ToString() + ", ")
+
+            End If
+
+            If sourceMap.Schema.Length > 0 Then
+                codeBuilder.Append("Schema = """ + sourceMap.Schema + """, ")
+            End If
+
+            If sourceMap.Catalog.Length > 0 Then
+                codeBuilder.Append("Catalog = """ + sourceMap.Catalog + """, ")
+            End If
+
+            If sourceMap.ProviderAssemblyPath.Length > 0 Then
+                codeBuilder.Append("ProviderAssemblyPath = """ + sourceMap.ProviderAssemblyPath + """, ")
+            End If
+
+            If sourceMap.ProviderConnectionTypeName.Length > 0 Then
+                codeBuilder.Append("ProviderConnectionTypeName = """ + sourceMap.ProviderConnectionTypeName + """, ")
+            End If
+
+            If sourceMap.ConnectionString.Length > 0 Then
+                codeBuilder.Append("ConnectionString = """ + sourceMap.ConnectionString + """, ")
+            End If
+
+
+            Dim result As String = codeBuilder.ToString()
+            If Right(result, 2) = ", " Then
+                codeBuilder.Length = codeBuilder.Length - 2
+            End If
+
+            codeBuilder.Append(")" + AttributeEnd)
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
+        Return codeBuilder.ToString()
+
+    End Function
+
+
 
 End Class

@@ -43,6 +43,12 @@ Public Interface IClassesToCode
 
     Function GetIndentation(ByVal IndentationLevel As IndentationLevelEnum, ByVal additionalLevel As Integer) As String
 
+    Property AttributeStart() As String
+
+    Property AttributeEnd() As String
+
+    Property UseAttributes() As Boolean
+
     Property ImplementIInterceptable() As Boolean
 
     Property ImplementIObjectHelper() As Boolean

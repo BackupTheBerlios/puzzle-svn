@@ -7517,6 +7517,11 @@ Public Class frmDomainMapBrowser
                         m_ClassesToCodeVb.IncludeComments = .IncludeComments
                         m_ClassesToCodeDelphi.IncludeComments = .IncludeComments
 
+                        m_ClassesToCodeCs2.UseAttributes = .UseAttributes
+                        m_ClassesToCodeCs.UseAttributes = .UseAttributes
+                        m_ClassesToCodeVb.UseAttributes = .UseAttributes
+                        m_ClassesToCodeDelphi.UseAttributes = .UseAttributes
+
                         m_ClassesToCodeCs2.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeCs.IncludeDocComments = .IncludeDocComments
                         m_ClassesToCodeVb.IncludeDocComments = .IncludeDocComments
@@ -7675,6 +7680,11 @@ Public Class frmDomainMapBrowser
                         m_ClassesToCodeCs.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeVb.ImplementIObservable = .ImplementIObservable
                         m_ClassesToCodeDelphi.ImplementIObservable = .ImplementIObservable
+
+                        m_ClassesToCodeCs2.UseAttributes = .UseAttributes
+                        m_ClassesToCodeCs.UseAttributes = .UseAttributes
+                        m_ClassesToCodeVb.UseAttributes = .UseAttributes
+                        m_ClassesToCodeDelphi.UseAttributes = .UseAttributes
 
                         m_ClassesToCodeCs2.IncludeComments = .IncludeComments
                         m_ClassesToCodeCs.IncludeComments = .IncludeComments
@@ -9546,7 +9556,7 @@ Public Class frmDomainMapBrowser
 
                 If useCfg.TargetMapper = TargetMapperEnum.NPersist Then
 
-                    If Not useCfg.GeneratePOCO Then
+                    If useCfg.GeneratePOCO = False Or useCfg.UseAttributes Then
 
                         'NPersist framework dll
                         fileName = path & "\bin\Puzzle.NPersist.Framework.dll"
@@ -11111,7 +11121,7 @@ Public Class frmDomainMapBrowser
 
                             If useCfg.TargetMapper = TargetMapperEnum.NPersist Then
 
-                                If Not useCfg.GeneratePOCO Then
+                                If useCfg.GeneratePOCO = False or useCfg.UseAttributes Then
 
 
                                     'Framework dll

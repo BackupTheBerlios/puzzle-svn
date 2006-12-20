@@ -167,6 +167,23 @@ Public Class ClassesToCodeCs
 
         If found Then codeBuilder.Append(vbCrLf)
 
+
+        If UseAttributes Then
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("using ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Attributes")
+            codeBuilder.Append(";")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.NamespaceIndent))
+            codeBuilder.Append("using ")
+            codeBuilder.Append("Puzzle.NPersist.Framework.Enumerations")
+            codeBuilder.Append(";")
+            codeBuilder.Append(vbCrLf)
+
+        End If
+
         If Not noNamespace Then
 
             ns = classMap.GetNamespace
@@ -219,6 +236,9 @@ Public Class ClassesToCodeCs
 
         'Class doc comments
         codeBuilder.Append(GetDocComment(classMap, DocCommentPrefix))
+
+        'ClassMap Attribute
+        codeBuilder.Append(GetClassMapAttribute(classMap))
 
         'Class Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.ClassIndent))
@@ -1009,6 +1029,9 @@ Public Class ClassesToCodeCs
 
         'Property doc comments
         codeBuilder.Append(GetDocComment(propertyMap, DocCommentPrefix))
+
+        'PropertyMap Attribute
+        codeBuilder.Append(GetPropertyMapAttribute(propertyMap))
 
         'Property Declaration
         codeBuilder.Append(GetIndentation(IClassesToCode.IndentationLevelEnum.MemberIndent))
@@ -2325,7 +2348,7 @@ Public Class ClassesToCodeCs
 
         If TargetPlatform = TargetPlatformEnum.NPersist Then
 
-            If Not GeneratePOCO Then
+            If GeneratePOCO = False Or UseAttributes = True Then
 
                 codeBuilder.Append("                <Reference")
                 codeBuilder.Append(vbCrLf)
@@ -2445,6 +2468,30 @@ Public Class ClassesToCodeCs
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("using System.Runtime.CompilerServices;")
         codeBuilder.Append(vbCrLf)
+
+        If UseAttributes Then
+            codeBuilder.Append("using Puzzle.NPersist.Framework.Attributes;")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("using Puzzle.NPersist.Framework.Enumerations;")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("//")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("// Domain wide mapping information is controlled through the following ")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("// set of attributes. Change these attribute values to modify the information")
+            codeBuilder.Append(vbCrLf)
+            codeBuilder.Append("//")
+            codeBuilder.Append(vbCrLf)
+
+            codeBuilder.Append(GetDomainMapAttribute(domainMap))
+            For Each srcMap As ISourceMap In domainMap.SourceMaps
+                codeBuilder.Append(GetSourceMapAttribute(srcMap))
+            Next
+
+        End If
+
         codeBuilder.Append("")
         codeBuilder.Append(vbCrLf)
         codeBuilder.Append("//")

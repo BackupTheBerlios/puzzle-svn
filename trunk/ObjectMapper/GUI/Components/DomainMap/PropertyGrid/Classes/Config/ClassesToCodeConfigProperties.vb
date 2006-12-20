@@ -384,6 +384,20 @@ Public Class ClassesToCodeConfigProperties
         End Set
     End Property
 
+    <Category("Attributes"), _
+    Description("Set to true if you want to decorate your classes with attributes containing the mapping information."), _
+    DisplayName("Use mapping attributes"), _
+    DefaultValue(False)> Public Property UseAttributes() As Boolean
+        Get
+            Return m_ClassesToCodeConfig.UseAttributes
+        End Get
+        Set(ByVal Value As Boolean)
+            If Value <> m_ClassesToCodeConfig.UseAttributes Then
+                m_ClassesToCodeConfig.UseAttributes = Value
+                RaiseEvent AfterPropertySet(m_ClassesToCodeConfig, "UseAttributes")
+            End If
+        End Set
+    End Property
 
 
     Public Overrides Function CustomizeProperty(ByVal propDesc As PropertyDescriptorBase) As PropertyDescriptorBase
