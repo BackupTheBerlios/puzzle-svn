@@ -10,6 +10,8 @@
 
 using System;
 using System.Collections;
+using System.Data;
+using System.Text;
 using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
@@ -565,12 +567,30 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			foreach (string commitRegion in commitRegions)
 			{
-				NPathQuery npathQuery = this.Context.GetLoadObjectNPathQuery(obj, commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
+				NPathQuery npathQuery = null;
+				if (commitRegion.ToLower().TrimStart().Substring(0, "select".Length) == "select")
+					npathQuery = GetLoadObjectNPathQueryWithSelect(obj, commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
+				else
+					npathQuery = this.Context.GetLoadObjectNPathQuery(obj, commitRegion, RefreshBehaviorType.LogConcurrencyConflict);
 				this.Context.GetObjectsByNPath(npathQuery);
 				foreach (object regionObject in this.Context.LoadedInLatestQuery.Values)
 					commitRegionObjects[regionObject] = regionObject;
 			}
 		}
+
+		public virtual NPathQuery GetLoadObjectNPathQueryWithSelect(object obj, string npathQueryString, RefreshBehaviorType refreshBehavior)
+		{
+			IClassMap classMap = this.Context.NPathEngine.GetRootClassMap(npathQueryString, this.Context.DomainMap);
+			Type type = this.Context.AssemblyManager.MustGetTypeFromClassMap(classMap);
+
+			NPathQuery npathQuery = new NPathQuery(npathQueryString, type);
+			npathQuery.RefreshBehavior = refreshBehavior;
+
+			npathQuery.Parameters.Add(new QueryParameter(DbType.Object, obj));
+
+			return npathQuery;
+		}
+
 
 		protected virtual void ValidateCommitRegions(Hashtable commitRegionObjects)
 		{
