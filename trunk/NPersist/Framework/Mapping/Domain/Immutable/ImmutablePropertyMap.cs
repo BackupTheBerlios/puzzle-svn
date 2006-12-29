@@ -1266,5 +1266,22 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
 			}
 			return fn;
 		}
+
+        #region IPropertyMap Members
+
+
+        string IPropertyMap.CommitRegions
+        {
+            get
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+            set
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+        }
+
+        #endregion
     }
 }
