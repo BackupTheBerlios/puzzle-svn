@@ -37,7 +37,13 @@ namespace Puzzle.NAspect.Framework.Aop
         private string signature;
         public virtual string Signature
         {
-            get { return signature; }
+            get 
+            {
+                if (signature == "")
+                    if (signatureType != null)
+                        return signatureType.FullName;
+                return signature;
+            }
             set { signature = value; }
         }
 
