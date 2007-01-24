@@ -88,6 +88,7 @@ namespace Puzzle.NAspect.Framework
         {
             IList pointcuts = new ArrayList();
             IList mixins = new ArrayList();
+            IList targets = new ArrayList();
 
             string aspectName = settingsNode.Attributes["name"].Value;
 
@@ -96,6 +97,7 @@ namespace Puzzle.NAspect.Framework
                 if (aspectNode.Name == "pointcut")
                 {
                     IList interceptors = new ArrayList();
+                    IList pointcutTargets = new ArrayList();
 
                     foreach (XmlNode pointcutNode in aspectNode)
                     {
@@ -118,6 +120,48 @@ namespace Puzzle.NAspect.Framework
                                 object interceptor = Activator.CreateInstance(interceptorType);
                                 interceptors.Add(interceptor);
                             }
+                        }
+
+                        if (pointcutNode.Name == "target")
+                        {
+                            string signature = aspectNode.Attributes["signature"].Value;
+                            string targetTypeString = aspectNode.Attributes["type"].Value;
+                            PointcutTargetType targetType = PointcutTargetType.Signature;
+                            switch (targetTypeString.ToLower())
+                            {
+                                case "signature":
+                                    targetType = PointcutTargetType.Signature;
+                                    break;
+                                case "attribute":
+                                    targetType = PointcutTargetType.Attribute;
+                                    break;
+                                default:
+                                    throw new Exception(String.Format("Unknown pointcut target type {0}", targetTypeString));
+                            }
+
+                            PointcutTarget target = null;
+                            if (targetType == PointcutTargetType.Signature)
+                            {
+                                target = new PointcutTarget(signature, targetType);
+                            }
+                            else
+                            {
+                                Type signatureType = Type.GetType(signature);
+                                if (signatureType == null)
+                                {
+                                    if (useTypePlaceHolders)
+                                        target = new PointcutTarget(signature, targetType);
+                                    else
+                                    {
+                                        throw new Exception(
+                                            string.Format("Type '{0}' was not found!", signatureType));
+                                    }
+                                }
+                                else
+                                    target = new PointcutTarget(signatureType, targetType);
+                            }
+
+                            pointcutTargets.Add(target);
                         }
                     }
 
@@ -150,6 +194,9 @@ namespace Puzzle.NAspect.Framework
                             pointcut.Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
                     }
 
+                    foreach (PointcutTarget target in pointcutTargets)
+                        pointcut.Targets.Add(target);
+
                     pointcuts.Add(pointcut);
                 }
 
@@ -168,6 +215,52 @@ namespace Puzzle.NAspect.Framework
                     else
                         mixins.Add(mixinType);
                 }
+
+                if (aspectNode.Name == "target")
+                {
+                    string signature = aspectNode.Attributes["signature"].Value;
+                    string targetTypeString = aspectNode.Attributes["type"].Value;
+                    AspectTargetType targetType = AspectTargetType.Signature;
+                    switch (targetTypeString.ToLower())
+                    {
+                        case "signature":
+                            targetType = AspectTargetType.Signature;
+                            break;
+                        case "attribute":
+                            targetType = AspectTargetType.Attribute;
+                            break;
+                        case "interface":
+                            targetType = AspectTargetType.Interface;
+                            break;
+                        default:
+                            throw new Exception(String.Format("Unknown aspect target type {0}", targetTypeString));
+                    }
+
+                    AspectTarget target = null;
+                    if (targetType == AspectTargetType.Signature)
+                    {
+                        target = new AspectTarget(signature, targetType);
+                    }
+                    else
+                    {
+                        Type signatureType = Type.GetType(signature);
+                        if (signatureType == null)
+                        {
+                            if (useTypePlaceHolders)
+                                target = new AspectTarget(signature, targetType);
+                            else
+                            {
+                                throw new Exception(
+                                    string.Format("Type '{0}' was not found!", signatureType));
+                            }
+                        }
+                        else
+                            target = new AspectTarget(signatureType, targetType);
+                    }
+
+                    targets.Add(target);
+                }
+
             }
 
             IGenericAspect aspect = null;
@@ -221,6 +314,9 @@ namespace Puzzle.NAspect.Framework
                 else
                     aspect.Targets.Add(new AspectTarget(interfaceType, AspectTargetType.Interface));
             }
+
+            foreach (AspectTarget target in targets)
+                aspect.Targets.Add(target);
 
             return aspect;
         }
