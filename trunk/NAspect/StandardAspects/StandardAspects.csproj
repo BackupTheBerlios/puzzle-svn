@@ -42,7 +42,6 @@
     <Compile Include="Dirty\MakeDirtyAttribute.cs" />
     <Compile Include="Log\LogAttribute.cs" />
     <Compile Include="Log\LogInterceptor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
@@ -51,7 +50,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="InverseManager\" />
+    <Folder Include="Properties\" />
     <Folder Include="UndoRedo\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

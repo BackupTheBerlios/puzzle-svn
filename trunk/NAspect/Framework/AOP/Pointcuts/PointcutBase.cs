@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Reflection;
+using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -9,6 +10,7 @@ namespace Puzzle.NAspect.Framework.Aop
     public abstract class PointcutBase : IPointcut
     {
         private IList interceptors = new ArrayList();
+        private IList targets = new ArrayList();
 
         /// <summary>
         /// Untyped list of <c>IInterceptor</c>s and <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c>
@@ -24,6 +26,22 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        public abstract bool IsMatch(MethodBase method);
+        public virtual bool IsMatch(MethodBase method)
+        {
+            foreach (PointcutTarget target in this.Targets)
+            {
+                if (target.IsMatch(method))
+                    return true;
+            }
+            return false;
+        }
+
+        public IList Targets 
+        {
+            get { return targets; }
+            set { targets = value; }
+        }
+
+
     }
 }

@@ -21,11 +21,6 @@ namespace Puzzle.NAspect.Framework.Aop
     public class AttributeAspect : GenericAspectBase
     {
         /// <summary>
-        /// Type of the attribute to match.
-        /// </summary>
-        public Type AttributeType;
-
-        /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>
         /// <param name="Name">Name of the aspect.</param>
@@ -35,9 +30,9 @@ namespace Puzzle.NAspect.Framework.Aop
         public AttributeAspect(string Name, Type attributeType, IList mixins, IList pointcuts)
         {
             this.Name = Name;
-            AttributeType = attributeType;
             Mixins = mixins;
             Pointcuts = pointcuts;
+            Targets.Add(new AspectTarget(attributeType, AspectTargetType.Attribute));
         }
 
         /// <summary>
@@ -50,9 +45,9 @@ namespace Puzzle.NAspect.Framework.Aop
         public AttributeAspect(string Name, Type attributeType, Type[] mixins, IPointcut[] pointcuts)
         {
             this.Name = Name;
-            AttributeType = attributeType;
             Mixins = new ArrayList(mixins);
             Pointcuts = new ArrayList(pointcuts);
+            Targets.Add(new AspectTarget(attributeType, AspectTargetType.Attribute));
         }
 
         /// <summary>
@@ -65,27 +60,53 @@ namespace Puzzle.NAspect.Framework.Aop
         public AttributeAspect(string Name, Type attributeType, string TargetMethodsignature, IInterceptor Interceptor)
         {
             this.Name = Name;
-            AttributeType = attributeType;
             Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+            Targets.Add(new AspectTarget(attributeType, AspectTargetType.Attribute));
         }
-
 
         /// <summary>
-        /// Implementation of IGenericAspect.IsMatch
-        /// <seealso cref="IGenericAspect.IsMatch"/>
+        /// Attribute aspect Ctor.
         /// </summary>
-        /// <param name="type">Type to match</param>
-        /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
-        public override bool IsMatch(Type type)
+        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="attributeTypeName">Full name of the type of the attribute to match.</param>
+        /// <param name="mixins">IList of mixin types.</param>
+        /// <param name="pointcuts">IList of IPointcut instances.</param>
+        public AttributeAspect(string Name, string attributeTypeName, IList mixins, IList pointcuts)
         {
-            Type tmp = type;
-            while (tmp.Assembly is AssemblyBuilder)
-                tmp = tmp.BaseType;
-
-            if (tmp.GetCustomAttributes(AttributeType, true).Length > 0)
-                return true;
-            else
-                return false;
+            this.Name = Name;
+            Mixins = mixins;
+            Pointcuts = pointcuts;
+            Targets.Add(new AspectTarget(attributeTypeName, AspectTargetType.Attribute));
         }
+
+        /// <summary>
+        /// Attribute aspect Ctor.
+        /// </summary>
+        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="attributeTypeName">Full name of the type of the attribute to match.</param>
+        /// <param name="mixins">Type[] array of mixin types</param>
+        /// <param name="pointcuts">IPointcut[] array of pointcut instances</param>
+        public AttributeAspect(string Name, string attributeTypeName, Type[] mixins, IPointcut[] pointcuts)
+        {
+            this.Name = Name;
+            Mixins = new ArrayList(mixins);
+            Pointcuts = new ArrayList(pointcuts);
+            Targets.Add(new AspectTarget(attributeTypeName, AspectTargetType.Attribute));
+        }
+
+        /// <summary>
+        /// Attribute aspect Ctor.
+        /// </summary>
+        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="attributeTypeName">Full name of the type of the attribute to match</param>
+        /// <param name="TargetMethodsignature">string Signature of methods to match.</param>
+        /// <param name="Interceptor">Instance of an IInterceptor</param>
+        public AttributeAspect(string Name, string attributeTypeName, string TargetMethodsignature, IInterceptor Interceptor)
+        {
+            this.Name = Name;
+            Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+            Targets.Add(new AspectTarget(attributeTypeName, AspectTargetType.Attribute));
+        }
+
     }
 }

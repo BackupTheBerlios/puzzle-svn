@@ -20,6 +20,13 @@ namespace Puzzle.NAspect.Framework
     /// </summary>
     public class ConfigurationDeserializer
     {
+        private bool useTypePlaceHolders;
+        public bool UseTypePlaceHolders
+        {
+            get { return useTypePlaceHolders; }
+            set { useTypePlaceHolders = value; }
+        }
+	
         /// <summary>
         /// return a configured <c>IEngine</c> from an xml element.
         /// </summary>
@@ -27,7 +34,12 @@ namespace Puzzle.NAspect.Framework
         /// <returns>a configured <c>IEngine</c></returns>
         public IEngine Configure(XmlElement xmlRoot)
         {
-            Engine engine = new Engine("App.Config");
+            return Configure(xmlRoot, "App.config");
+        }
+
+        public IEngine Configure(XmlElement xmlRoot, string configName)
+        {
+            Engine engine = new Engine(configName);
 
             XmlElement o = xmlRoot;
 
@@ -39,86 +51,7 @@ namespace Puzzle.NAspect.Framework
             {
                 if (settingsNode.Name == "aspect")
                 {
-                    IList pointcuts = new ArrayList();
-                    IList mixins = new ArrayList();
-
-                    string aspectName = settingsNode.Attributes["name"].Value;
-
-
-                    foreach (XmlNode aspectNode in settingsNode)
-                    {
-                        if (aspectNode.Name == "pointcut")
-                        {
-                            IList interceptors = new ArrayList();
-
-                            foreach (XmlNode pointcutNode in aspectNode)
-                            {
-                                if (pointcutNode.Name == "interceptor")
-                                {
-                                    string typeString = pointcutNode.Attributes["type"].Value;
-                                    Type interceptorType = Type.GetType(typeString);
-                                    if (interceptorType == null)
-                                        throw new Exception(
-                                            string.Format("Interceptor type '{0}' was not found!", typeString));
-                                    object interceptor = Activator.CreateInstance(interceptorType);
-                                    interceptors.Add(interceptor);
-                                }
-                            }
-
-                            IPointcut pointcut = null;
-                            if (aspectNode.Attributes["target-signature"] != null)
-                            {
-                                string targetMethodSignature = aspectNode.Attributes["target-signature"].Value;
-                                pointcut = new SignaturePointcut(targetMethodSignature, interceptors);
-                            }
-
-                            if (aspectNode.Attributes["target-attribute"] != null)
-                            {
-                                string attributeTypeString = aspectNode.Attributes["target-attribute"].Value;
-                                Type attributeType = Type.GetType(attributeTypeString);
-                                if (attributeType == null)
-                                    throw new Exception(
-                                        string.Format("Attribute type '{0}' was not found!", attributeTypeString));
-
-                                pointcut = new AttributePointcut(attributeType, interceptors);
-                            }
-
-                            pointcuts.Add(pointcut);
-                        }
-
-                        if (aspectNode.Name == "mixin")
-                        {
-                            string typeString = aspectNode.Attributes["type"].Value;
-                            Type mixinType = Type.GetType(typeString);
-                            if (mixinType == null)
-                                throw new Exception(string.Format("Mixin type '{0}' was not found!", typeString));
-                            mixins.Add(mixinType);
-                        }
-                    }
-
-                    IGenericAspect aspect = null;
-
-                    if (settingsNode.Attributes["target-signature"] != null)
-                    {
-                        string targetTypeSignature = settingsNode.Attributes["target-signature"].Value;
-                        aspect = new SignatureAspect(aspectName, targetTypeSignature, mixins, pointcuts);
-                    }
-
-                    if (settingsNode.Attributes["target-attribute"] != null)
-                    {
-                        string attributeTypeString = settingsNode.Attributes["target-attribute"].Value;
-                        Type attributeType = Type.GetType(attributeTypeString);
-
-                        aspect = new AttributeAspect(aspectName, attributeType, mixins, pointcuts);
-                    }
-
-                    if (settingsNode.Attributes["target-interface"] != null)
-                    {
-                        string interfaceTypeString = settingsNode.Attributes["target-interface"].Value;
-                        Type interfaceType = Type.GetType(interfaceTypeString);
-
-                        aspect = new InterfaceAspect(aspectName, interfaceType, mixins, pointcuts);
-                    }
+                    IGenericAspect aspect = Configure(settingsNode, useTypePlaceHolders);
 
                     engine.Configuration.Aspects.Add(aspect);
                 }
@@ -126,6 +59,170 @@ namespace Puzzle.NAspect.Framework
 
 
             return engine;
+        }
+
+        public IEngine Configure(XmlNode xmlRoot, string configName)
+        {
+            return Configure(xmlRoot, configName, false);
+        }
+
+        public IEngine Configure(XmlNode xmlRoot, string configName, bool useTypePlaceHolders)
+        {
+            Engine engine = new Engine(configName);
+
+            if (xmlRoot == null)
+                return engine;
+
+
+            foreach (XmlNode settingsNode in xmlRoot.SelectNodes("aspect"))
+            {
+                IGenericAspect aspect = Configure(settingsNode, useTypePlaceHolders);
+
+                engine.Configuration.Aspects.Add(aspect);
+            }
+
+            return engine;
+        }
+
+        private static IGenericAspect Configure(XmlNode settingsNode, bool useTypePlaceHolders)
+        {
+            IList pointcuts = new ArrayList();
+            IList mixins = new ArrayList();
+
+            string aspectName = settingsNode.Attributes["name"].Value;
+
+            foreach (XmlNode aspectNode in settingsNode)
+            {
+                if (aspectNode.Name == "pointcut")
+                {
+                    IList interceptors = new ArrayList();
+
+                    foreach (XmlNode pointcutNode in aspectNode)
+                    {
+                        if (pointcutNode.Name == "interceptor")
+                        {
+                            string typeString = pointcutNode.Attributes["type"].Value;
+                            Type interceptorType = Type.GetType(typeString);
+                            if (interceptorType == null)
+                            {
+                                if (useTypePlaceHolders)
+                                    interceptors.Add(typeString);
+                                else
+                                {
+                                    throw new Exception(
+                                        string.Format("Interceptor type '{0}' was not found!", typeString));
+                                }
+                            }
+                            else
+                            {
+                                object interceptor = Activator.CreateInstance(interceptorType);
+                                interceptors.Add(interceptor);
+                            }
+                        }
+                    }
+
+                    IPointcut pointcut = null;
+                    if (aspectNode.Attributes["target-signature"] != null)
+                    {
+                        string targetMethodSignature = aspectNode.Attributes["target-signature"].Value;
+                        pointcut = new Pointcut(interceptors);
+                        pointcut.Targets.Add(new PointcutTarget(targetMethodSignature, PointcutTargetType.Signature));
+
+                    }
+
+                    if (aspectNode.Attributes["target-attribute"] != null)
+                    {
+                        string attributeTypeString = aspectNode.Attributes["target-attribute"].Value;
+                        pointcut = new Pointcut(interceptors);
+
+                        Type attributeType = Type.GetType(attributeTypeString);
+                        if (attributeType == null)
+                        {
+                            if (useTypePlaceHolders)
+                                pointcut.Targets.Add(new PointcutTarget(attributeTypeString, PointcutTargetType.Attribute));
+                            else
+                            {
+                                throw new Exception(
+                                    string.Format("Attribute type '{0}' was not found!", attributeTypeString));
+                            }
+                        }
+                        else
+                            pointcut.Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
+                    }
+
+                    pointcuts.Add(pointcut);
+                }
+
+                if (aspectNode.Name == "mixin")
+                {
+                    string typeString = aspectNode.Attributes["type"].Value;
+                    Type mixinType = Type.GetType(typeString);
+                    if (mixinType == null)
+                    {
+                        if (useTypePlaceHolders)
+                            mixins.Add(typeString);
+                        else
+                            throw new Exception(string.Format("Mixin type '{0}' was not found!", typeString));
+
+                    }
+                    else
+                        mixins.Add(mixinType);
+                }
+            }
+
+            IGenericAspect aspect = null;
+
+            if (settingsNode.Attributes["target-signature"] != null)
+            {
+                string targetTypeSignature = settingsNode.Attributes["target-signature"].Value;
+                //aspect = new SignatureAspect(aspectName, targetTypeSignature, mixins, pointcuts);
+                aspect = new GenericAspect(aspectName, mixins, pointcuts);
+                aspect.Targets.Add(new AspectTarget(targetTypeSignature, AspectTargetType.Signature));
+            }
+
+            if (settingsNode.Attributes["target-attribute"] != null)
+            {
+                string attributeTypeString = settingsNode.Attributes["target-attribute"].Value;
+                aspect = new GenericAspect(aspectName, mixins, pointcuts);
+
+                Type attributeType = Type.GetType(attributeTypeString);
+                if (attributeType == null)
+                {
+                    if (useTypePlaceHolders)
+                        aspect.Targets.Add(new AspectTarget(attributeTypeString, AspectTargetType.Attribute));
+                    else
+                    {
+                        throw new Exception(
+                            string.Format("Attribute type '{0}' was not found!", attributeTypeString));
+
+                    }
+                }
+                else
+                    aspect.Targets.Add(new AspectTarget(attributeType, AspectTargetType.Attribute));
+            }
+
+            if (settingsNode.Attributes["target-interface"] != null)
+            {
+                string interfaceTypeString = settingsNode.Attributes["target-interface"].Value;
+                aspect = new GenericAspect(aspectName, mixins, pointcuts);
+
+                Type interfaceType = Type.GetType(interfaceTypeString);
+                if (interfaceType == null)
+                {
+                    if (useTypePlaceHolders)
+                        aspect.Targets.Add(new AspectTarget(interfaceTypeString, AspectTargetType.Interface));
+                    else
+                    {
+                        throw new Exception(
+                            string.Format("Type '{0}' was not found!", interfaceTypeString));
+
+                    }
+                }
+                else
+                    aspect.Targets.Add(new AspectTarget(interfaceType, AspectTargetType.Interface));
+            }
+
+            return aspect;
         }
     }
 }

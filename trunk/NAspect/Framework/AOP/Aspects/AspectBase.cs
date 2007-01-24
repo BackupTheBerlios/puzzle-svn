@@ -38,6 +38,7 @@ namespace Puzzle.NAspect.Framework.Aop
         private IList mixins = new ArrayList();
         private Hashtable mixinsForTypes = new Hashtable();
         private IList pointcuts = new ArrayList();
+        private IList targets = new ArrayList();
 
         /// <summary>
         /// Just a name of the aspect, has no real purpose today.
@@ -48,14 +49,6 @@ namespace Puzzle.NAspect.Framework.Aop
             get { return name; }
             set { name = value; }
         }
-
-        /// <summary>
-        /// Override this method in a subclasses to match specific types.
-        /// </summary>
-        /// <param name="type">Target that might get this aspect applied to it</param>
-        /// <returns>return true if the given type should get this aspect applied, otherwise false</returns>
-        public abstract bool IsMatch(Type type);
-
 
         /// <summary>
         /// List of mixin types.
@@ -84,5 +77,31 @@ namespace Puzzle.NAspect.Framework.Aop
             get { return pointcuts; }
             set { pointcuts = value; }
         }
+
+        /// <summary>
+        /// List of targets
+        /// </summary>
+        public IList Targets 
+        {
+            get { return targets; }
+            set { targets = value; }
+        }
+
+        /// <summary>
+        /// Implementation of AspectBase.IsMatch
+        /// <seealso cref="IGenericAspect.IsMatch"/>
+        /// </summary>
+        /// <param name="type">Type to match</param>
+        /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
+        public virtual bool IsMatch(Type type)
+        {
+            foreach (AspectTarget target in this.Targets)
+            {
+                if (target.IsMatch(type))
+                    return true;
+            }
+            return false;
+        }
+
     }
 }

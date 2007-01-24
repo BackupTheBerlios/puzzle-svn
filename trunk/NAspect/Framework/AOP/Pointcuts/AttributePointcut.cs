@@ -20,11 +20,6 @@ namespace Puzzle.NAspect.Framework.Aop
     /// </summary>
     public class AttributePointcut : PointcutBase
     {
-        /// <summary>
-        /// The attribute type that should be matched by this pointcut.
-        /// </summary>
-        public Type AttributeType;
-
         #region Pointcut
 
         /// <summary>
@@ -34,8 +29,8 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="interceptors">Untyped list of <c>IInterceptor</c>s to apply on matched methods</param>
         public AttributePointcut(Type attributeType, IList interceptors)
         {
-            AttributeType = attributeType;
             Interceptors = interceptors;
+            Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
         }
 
         #endregion
@@ -49,8 +44,8 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="interceptors">Array of <c>IInterceptor</c>s to apply on matched methods</param>
         public AttributePointcut(Type attributeType, IInterceptor[] interceptors)
         {
-            AttributeType = attributeType;
             Interceptors = new ArrayList(interceptors);
+            Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
         }
 
         #endregion
@@ -64,8 +59,8 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="interceptor"><c>IInterceptor</c> instance to appy on matched methods.</param>
         public AttributePointcut(Type attributeType, IInterceptor interceptor)
         {
-            AttributeType = attributeType;
             Interceptors = new ArrayList(new IInterceptor[] {interceptor});
+            Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
         }
 
         #endregion
@@ -79,25 +74,75 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="interceptor">Interceptor delegate to apply on matched methods, valid delegates are <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c></param>
         public AttributePointcut(Type attributeType, Delegate interceptor)
         {
-            AttributeType = attributeType;
             ArrayList arr = new ArrayList();
             arr.Add(interceptor);
             Interceptors = arr;
+            Targets.Add(new PointcutTarget(attributeType, PointcutTargetType.Attribute));
         }
 
         #endregion
 
+        #region Pointcut
+
         /// <summary>
-        /// Matches a method with the pointuct
+        /// AttributePointcut ctor.
         /// </summary>
-        /// <param name="method">The method to match</param>
-        /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        public override bool IsMatch(MethodBase method)
+        /// <param name="attributeTypeName">Name of the attribute type to match</param>
+        /// <param name="interceptors">Untyped list of <c>IInterceptor</c>s to apply on matched methods</param>
+        public AttributePointcut(string attributeTypeName, IList interceptors)
         {
-            if (method.GetCustomAttributes(AttributeType, true).Length > 0)
-                return true;
-            else
-                return false;
+            Interceptors = interceptors;
+            Targets.Add(new PointcutTarget(attributeTypeName, PointcutTargetType.Attribute));
         }
+
+        #endregion
+
+        #region Pointcut
+
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeTypeName">Name of the attribute type to match</param>
+        /// <param name="interceptors">Array of <c>IInterceptor</c>s to apply on matched methods</param>
+        public AttributePointcut(string attributeTypeName, IInterceptor[] interceptors)
+        {
+            Interceptors = new ArrayList(interceptors);
+            Targets.Add(new PointcutTarget(attributeTypeName, PointcutTargetType.Attribute));
+        }
+
+        #endregion
+
+        #region Pointcut
+
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeTypeName">Name of the attribute type to match</param>
+        /// <param name="interceptor"><c>IInterceptor</c> instance to appy on matched methods.</param>
+        public AttributePointcut(string attributeTypeName, IInterceptor interceptor)
+        {
+            Interceptors = new ArrayList(new IInterceptor[] { interceptor });
+            Targets.Add(new PointcutTarget(attributeTypeName, PointcutTargetType.Attribute));
+        }
+
+        #endregion
+
+        #region Pointcut
+
+        /// <summary>
+        /// AttributePointcut ctor.
+        /// </summary>
+        /// <param name="attributeTypeName">Name of the attribute type to match</param>
+        /// <param name="interceptor">Interceptor delegate to apply on matched methods, valid delegates are <c>BeforeDelegate</c>, <c>AroundDelegate</c> and <c>AfterDelegate</c></param>
+        public AttributePointcut(string attributeTypeName, Delegate interceptor)
+        {
+            ArrayList arr = new ArrayList();
+            arr.Add(interceptor);
+            Interceptors = arr;
+            Targets.Add(new PointcutTarget(attributeTypeName, PointcutTargetType.Attribute));
+        }
+
+        #endregion
+
     }
 }

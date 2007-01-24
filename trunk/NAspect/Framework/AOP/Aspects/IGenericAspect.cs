@@ -51,5 +51,10 @@ namespace Puzzle.NAspect.Framework.Aop
         /// The element type of this list should be <c>IPointcut</c>.
         /// </summary>
         IList Pointcuts { get; }
+
+        /// <summary>
+        /// List of targets
+        /// </summary>
+        IList Targets { get; }
     }
 }

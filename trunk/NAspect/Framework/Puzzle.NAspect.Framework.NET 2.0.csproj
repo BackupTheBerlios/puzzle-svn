@@ -92,7 +92,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOP\Aspects\AspectTarget.cs" />
     <Compile Include="AOP\Aspects\Attributes\TypedAspectAttributes.cs" />
+    <Compile Include="AOP\Aspects\GenericAspect.cs" />
     <Compile Include="AOP\Aspects\IAspect.cs" />
     <Compile Include="AOP\Aspects\InterfaceAspect.cs" />
     <Compile Include="AOP\Aspects\ITypedAspect.cs" />
@@ -131,12 +133,14 @@
     <Compile Include="AOP\Pointcuts\IPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AOP\Pointcuts\Pointcut.cs" />
     <Compile Include="AOP\Pointcuts\PointcutBase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AOP\Pointcuts\PointcutMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AOP\Pointcuts\PointcutTarget.cs" />
     <Compile Include="AOP\Pointcuts\SignaturePointcut.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -166,6 +170,8 @@
     <Compile Include="Elements\EngineConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enumerations\AspectTargetType.cs" />
+    <Compile Include="Enumerations\PointcutTargetType.cs" />
     <Compile Include="Proxy\AfterMethodInvocation.cs" />
     <Compile Include="Proxy\AOPProxyMixin.cs">
       <SubType>Code</SubType>

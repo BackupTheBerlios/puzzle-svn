@@ -29,5 +29,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
         bool IsMatch(MethodBase method);
+
+        IList Targets { get; set; }
     }
 }

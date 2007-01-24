@@ -12,6 +12,7 @@ using System.Collections;
 using System.Configuration;
 using System.Xml;
 using Puzzle.NAspect.Framework.ConfigurationElements;
+using System;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -33,14 +34,17 @@ namespace Puzzle.NAspect.Framework
 #else
             XmlElement o = (XmlElement) ConfigurationSettings.GetConfig("naspect");
 #endif
-
-            if (configurations.ContainsKey("app.config"))
-            {
-                Engine engine = new Engine("app.config");
-                EngineConfiguration configuration = (EngineConfiguration) configurations["app.config"];
-                engine.Configuration = configuration;
+            IEngine engine = FindCachedConfiguration("app.config");
+            if (engine != null)
                 return engine;
-            }
+
+            //if (configurations.ContainsKey("app.config"))
+            //{
+            //    Engine engine = new Engine("app.config");
+            //    EngineConfiguration configuration = (EngineConfiguration) configurations["app.config"];
+            //    engine.Configuration = configuration;
+            //    return engine;
+            //}
 
             lock (configurations.SyncRoot)
             {
@@ -56,6 +60,64 @@ namespace Puzzle.NAspect.Framework
                 configurations["app.config"] = res.Configuration;
                 return res;
             }
+        }
+
+        public static IEngine Configure(string fileName)
+        {
+            return Configure(fileName, false);
+        }
+
+        public static IEngine Configure(string fileName, bool useTypePlaceHolders)
+        {
+
+            IEngine engine = FindCachedConfiguration(fileName);
+            if (engine != null)
+                return engine;
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(fileName);
+
+            XmlNode xmlNode = xmlDoc.SelectSingleNode("naspect");
+            if (xmlNode == null)
+            {
+                xmlNode = xmlDoc.SelectSingleNode("configuration");
+                if (xmlNode != null)
+                {
+                    xmlNode = xmlNode.SelectSingleNode("naspect");
+                }
+            }
+
+            if (xmlNode != null)
+            {
+                xmlNode = xmlNode.SelectSingleNode("configuration");
+            }
+
+            if (xmlNode != null)
+            {
+                lock (configurations.SyncRoot)
+                {
+                    ConfigurationDeserializer deserializer = new ConfigurationDeserializer();
+
+                    IEngine res = deserializer.Configure(xmlNode, fileName, useTypePlaceHolders);
+
+                    configurations[fileName] = res.Configuration;
+                    return res;
+                }
+            }
+
+            throw new Exception(String.Format("Could not read xml conig file {0}", fileName));
+        }
+
+        private static IEngine FindCachedConfiguration(string name)
+        {
+            if (configurations.ContainsKey(name))
+            {
+                Engine engine = new Engine(name);
+                EngineConfiguration configuration = (EngineConfiguration)configurations[name];
+                engine.Configuration = configuration;
+                return engine;
+            }
+            return null;
         }
     }
 }

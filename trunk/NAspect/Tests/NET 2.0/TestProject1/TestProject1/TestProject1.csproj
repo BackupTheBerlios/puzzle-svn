@@ -62,6 +62,9 @@
     <Content Include="AuthoringTests.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
       <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
       <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
@@ -70,9 +73,6 @@
       <Project>{7D005BEB-DAFD-4299-A092-46938977B145}</Project>
       <Name>StandardAspects</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pointcuts\" />
