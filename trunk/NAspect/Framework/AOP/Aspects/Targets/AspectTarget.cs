@@ -16,7 +16,7 @@ using Puzzle.NAspect.Framework.Tools;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-	public class AspectTarget
+	public class AspectTarget : IAspectTarget
 	{
         public AspectTarget()
         {

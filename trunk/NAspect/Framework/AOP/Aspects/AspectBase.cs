@@ -95,7 +95,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <returns>true if the aspect should be applied to the type, otherwise false.</returns>
         public virtual bool IsMatch(Type type)
         {
-            foreach (AspectTarget target in this.Targets)
+            foreach (IAspectTarget target in this.Targets)
             {
                 if (target.IsMatch(type))
                     return true;

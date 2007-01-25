@@ -28,7 +28,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
         public virtual bool IsMatch(MethodBase method)
         {
-            foreach (PointcutTarget target in this.Targets)
+            foreach (IPointcutTarget target in this.Targets)
             {
                 if (target.IsMatch(method))
                     return true;

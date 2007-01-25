@@ -20,7 +20,7 @@ namespace Puzzle.NAspect.Framework.Aop
     /// <summary>
     /// The target description for a pointcut
     /// </summary>
-	public class PointcutTarget
+	public class PointcutTarget : IPointcutTarget
 	{
         public PointcutTarget()
         {
