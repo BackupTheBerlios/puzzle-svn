@@ -13,12 +13,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>
-        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="name">Name of the aspect.</param>
         /// <param name="mixins">IList of mixin types.</param>
         /// <param name="pointcuts">IList of IPointcut instances.</param>
-        public GenericAspect(string Name, IList mixins, IList pointcuts)
+        public GenericAspect(string name, IList mixins, IList pointcuts)
         {
-            this.Name = Name;
+            Name = name;
             Mixins = mixins;
             Pointcuts = pointcuts;
         }
@@ -26,12 +26,12 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>
-        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="name">Name of the aspect.</param>
         /// <param name="mixins">Type[] array of mixin types</param>
         /// <param name="pointcuts">IPointcut[] array of pointcut instances</param>
-        public GenericAspect(string Name, Type[] mixins, IPointcut[] pointcuts)
+        public GenericAspect(string name, Type[] mixins, IPointcut[] pointcuts)
         {
-            this.Name = Name;
+            Name = name;
             Mixins = new ArrayList(mixins);
             Pointcuts = new ArrayList(pointcuts);
         }
@@ -39,13 +39,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>
-        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="name">Name of the aspect.</param>
         /// <param name="targets">IList of aspect targets.</param>
         /// <param name="mixins">IList of mixin types.</param>
         /// <param name="pointcuts">IList of IPointcut instances.</param>
-        public GenericAspect(string Name, IList targets, IList mixins, IList pointcuts)
+        public GenericAspect(string name, IList targets, IList mixins, IList pointcuts)
         {
-            this.Name = Name;
+            Name = name;
             Targets = targets;
             Mixins = mixins;
             Pointcuts = pointcuts;
@@ -54,13 +54,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>
-        /// <param name="Name">Name of the aspect.</param>
+        /// <param name="name">Name of the aspect.</param>
         /// <param name="targets">Type[] array of aspect targets</param>
         /// <param name="mixins">Type[] array of mixin types</param>
         /// <param name="pointcuts">IPointcut[] array of pointcut instances</param>
-        public GenericAspect(string Name, AspectTarget[] targets, Type[] mixins, IPointcut[] pointcuts)
+        public GenericAspect(string name, AspectTarget[] targets, Type[] mixins, IPointcut[] pointcuts)
         {
-            this.Name = Name;
+            Name = name;
             Targets = new ArrayList(targets);
             Mixins = new ArrayList(mixins);
             Pointcuts = new ArrayList(pointcuts);
