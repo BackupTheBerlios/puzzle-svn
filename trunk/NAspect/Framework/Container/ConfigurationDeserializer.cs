@@ -124,25 +124,44 @@ namespace Puzzle.NAspect.Framework
 
                         if (pointcutNode.Name == "target")
                         {
-                            string signature = aspectNode.Attributes["signature"].Value;
-                            string targetTypeString = aspectNode.Attributes["type"].Value;
+                            string signature = null;
+                            if (pointcutNode.Attributes["signature"] != null)
+                                signature = pointcutNode.Attributes["signature"].Value;
+
+                            string targetTypeString = null;
+                            if (pointcutNode.Attributes["type"] != null)
+                                targetTypeString = pointcutNode.Attributes["type"].Value;
+
+                            if (signature == null)
+                                signature = "";
+
+                            string excludeString = null;
+                            if (pointcutNode.Attributes["exclude"] != null)
+                                excludeString = pointcutNode.Attributes["exclude"].Value;
+                            bool exclude = false;
+                            if (excludeString != null)
+                                exclude = FromBool(excludeString);
+
                             PointcutTargetType targetType = PointcutTargetType.Signature;
-                            switch (targetTypeString.ToLower())
+                            if (targetTypeString != null)
                             {
-                                case "signature":
-                                    targetType = PointcutTargetType.Signature;
-                                    break;
-                                case "attribute":
-                                    targetType = PointcutTargetType.Attribute;
-                                    break;
-                                default:
-                                    throw new Exception(String.Format("Unknown pointcut target type {0}", targetTypeString));
+                                switch (targetTypeString.ToLower())
+                                {
+                                    case "signature":
+                                        targetType = PointcutTargetType.Signature;
+                                        break;
+                                    case "attribute":
+                                        targetType = PointcutTargetType.Attribute;
+                                        break;
+                                    default:
+                                        throw new Exception(String.Format("Unknown pointcut target type {0}", targetTypeString));
+                                }
                             }
 
                             PointcutTarget target = null;
                             if (targetType == PointcutTargetType.Signature)
                             {
-                                target = new PointcutTarget(signature, targetType);
+                                target = new PointcutTarget(signature, targetType, exclude);
                             }
                             else
                             {
@@ -150,7 +169,7 @@ namespace Puzzle.NAspect.Framework
                                 if (signatureType == null)
                                 {
                                     if (useTypePlaceHolders)
-                                        target = new PointcutTarget(signature, targetType);
+                                        target = new PointcutTarget(signature, targetType, exclude);
                                     else
                                     {
                                         throw new Exception(
@@ -158,7 +177,7 @@ namespace Puzzle.NAspect.Framework
                                     }
                                 }
                                 else
-                                    target = new PointcutTarget(signatureType, targetType);
+                                    target = new PointcutTarget(signatureType, targetType, exclude);
                             }
 
                             pointcutTargets.Add(target);
@@ -218,28 +237,46 @@ namespace Puzzle.NAspect.Framework
 
                 if (aspectNode.Name == "target")
                 {
-                    string signature = aspectNode.Attributes["signature"].Value;
-                    string targetTypeString = aspectNode.Attributes["type"].Value;
-                    AspectTargetType targetType = AspectTargetType.Signature;
-                    switch (targetTypeString.ToLower())
-                    {
-                        case "signature":
-                            targetType = AspectTargetType.Signature;
-                            break;
-                        case "attribute":
-                            targetType = AspectTargetType.Attribute;
-                            break;
-                        case "interface":
-                            targetType = AspectTargetType.Interface;
-                            break;
-                        default:
-                            throw new Exception(String.Format("Unknown aspect target type {0}", targetTypeString));
-                    }
+                    string signature = null;
+                    if (aspectNode.Attributes["signature"] != null)
+                        signature = aspectNode.Attributes["signature"].Value;
 
+                    string targetTypeString = null;
+                    if (aspectNode.Attributes["type"] != null)
+                        targetTypeString = aspectNode.Attributes["type"].Value;
+
+                    if (signature == null)
+                        signature = "";
+
+                    string excludeString = null;
+                    if (aspectNode.Attributes["exclude"] != null)
+                        excludeString = aspectNode.Attributes["exclude"].Value;
+                    bool exclude = false;
+                    if (excludeString != null)
+                        exclude = FromBool(excludeString);
+
+                    AspectTargetType targetType = AspectTargetType.Signature;
+                    if (targetTypeString != null)
+                    {
+                        switch (targetTypeString.ToLower())
+                        {
+                            case "signature":
+                                targetType = AspectTargetType.Signature;
+                                break;
+                            case "attribute":
+                                targetType = AspectTargetType.Attribute;
+                                break;
+                            case "interface":
+                                targetType = AspectTargetType.Interface;
+                                break;
+                            default:
+                                throw new Exception(String.Format("Unknown aspect target type {0}", targetTypeString));
+                        }
+                    }
                     AspectTarget target = null;
                     if (targetType == AspectTargetType.Signature)
                     {
-                        target = new AspectTarget(signature, targetType);
+                        target = new AspectTarget(signature, targetType, exclude);
                     }
                     else
                     {
@@ -247,7 +284,7 @@ namespace Puzzle.NAspect.Framework
                         if (signatureType == null)
                         {
                             if (useTypePlaceHolders)
-                                target = new AspectTarget(signature, targetType);
+                                target = new AspectTarget(signature, targetType, exclude);
                             else
                             {
                                 throw new Exception(
@@ -255,7 +292,7 @@ namespace Puzzle.NAspect.Framework
                             }
                         }
                         else
-                            target = new AspectTarget(signatureType, targetType);
+                            target = new AspectTarget(signatureType, targetType, exclude);
                     }
 
                     targets.Add(target);
@@ -319,6 +356,14 @@ namespace Puzzle.NAspect.Framework
                 aspect.Targets.Add(target);
 
             return aspect;
+        }
+
+        private static bool FromBool(string boolString)
+        {
+            boolString = boolString.ToLower();
+            if (boolString == "true" || boolString == "yes" || boolString == "1")
+                return true;
+            return false;
         }
     }
 }

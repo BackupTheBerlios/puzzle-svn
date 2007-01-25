@@ -33,6 +33,28 @@ namespace Puzzle.NAspect.Framework.Aop
             this.targetType = targetType;
         }
 
+        public AspectTarget(string signature, AspectTargetType targetType, bool exclude)
+        {
+            this.signature = signature;
+            this.targetType = targetType;
+            this.exclude = exclude;
+        }
+
+        public AspectTarget(Type signatureType, AspectTargetType targetType, bool exclude)
+        {
+            this.signatureType = signatureType;
+            this.targetType = targetType;
+            this.exclude = exclude;
+        }
+
+        private bool exclude;
+        public virtual bool Exclude
+        {
+            get { return exclude; }
+            set { exclude = value; }
+        }
+	
+
         private string signature;
         public virtual string Signature
         {

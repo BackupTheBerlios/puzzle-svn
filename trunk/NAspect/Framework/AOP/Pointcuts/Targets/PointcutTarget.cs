@@ -37,6 +37,27 @@ namespace Puzzle.NAspect.Framework.Aop
             this.targetType = targetType;
         }
 
+        public PointcutTarget(string signature, PointcutTargetType targetType, bool exclude)
+        {
+            this.signature = signature;
+            this.targetType = targetType;
+            this.exclude = exclude;
+        }
+
+        public PointcutTarget(Type signatureType, PointcutTargetType targetType, bool exclude)
+        {
+            this.signatureType = signatureType;
+            this.targetType = targetType;
+            this.exclude = exclude;
+        }
+
+        private bool exclude;
+        public virtual bool Exclude
+        {
+            get { return exclude; }
+            set { exclude = value; }
+        }
+
         private string signature = "";
         public virtual string Signature
         {

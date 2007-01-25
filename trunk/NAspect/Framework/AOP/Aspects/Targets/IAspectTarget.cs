@@ -17,6 +17,8 @@ namespace Puzzle.NAspect.Framework.Aop
 {
     interface IAspectTarget
     {
+        bool Exclude { get; set; }
+
         bool IsMatch(Type type);
     }
 }

@@ -30,8 +30,16 @@ namespace Puzzle.NAspect.Framework.Aop
         {
             foreach (IPointcutTarget target in this.Targets)
             {
-                if (target.IsMatch(method))
-                    return true;
+                if (target.Exclude)
+                    if (target.IsMatch(method))
+                        return false;
+            }
+
+            foreach (PointcutTarget target in this.Targets)
+            {
+                if (!target.Exclude)
+                    if (target.IsMatch(method))
+                        return true;
             }
             return false;
         }

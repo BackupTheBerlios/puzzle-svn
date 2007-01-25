@@ -97,11 +97,18 @@ namespace Puzzle.NAspect.Framework.Aop
         {
             foreach (IAspectTarget target in this.Targets)
             {
-                if (target.IsMatch(type))
-                    return true;
+                if (target.Exclude)
+                    if (target.IsMatch(type))
+                        return false;
+            }
+
+            foreach (IAspectTarget target in this.Targets)
+            {
+                if (!target.Exclude)
+                    if (target.IsMatch(type))
+                        return true;
             }
             return false;
         }
-
     }
 }
