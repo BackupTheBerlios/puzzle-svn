@@ -17,6 +17,11 @@ namespace Puzzle.NAspect.Framework.Aop
 {
 	public class Pointcut : PointcutBase
 	{
+        public Pointcut()
+        {
+            ;
+        }
+
         /// <summary>
         /// SignaturePointcut ctor. 
         /// </summary>

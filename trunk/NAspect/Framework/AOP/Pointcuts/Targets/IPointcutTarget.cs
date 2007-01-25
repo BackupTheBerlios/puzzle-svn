@@ -11,7 +11,7 @@
 using System;
 namespace Puzzle.NAspect.Framework.Aop
 {
-    interface IPointcutTarget
+    public interface IPointcutTarget
     {
         bool Exclude { get; set; }
 

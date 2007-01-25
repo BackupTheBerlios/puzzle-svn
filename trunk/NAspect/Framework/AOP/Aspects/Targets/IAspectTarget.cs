@@ -15,7 +15,7 @@ using Puzzle.NAspect.Framework.Tools;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
-    interface IAspectTarget
+    public interface IAspectTarget
     {
         bool Exclude { get; set; }
 

@@ -50,6 +50,11 @@ namespace Puzzle.NAspect.Framework.Aop
             set { targets = value; }
         }
 
-
+        private string name = "Pointcut";
+        public virtual string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
     }
 }

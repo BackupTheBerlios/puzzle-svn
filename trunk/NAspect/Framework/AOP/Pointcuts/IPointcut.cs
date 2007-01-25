@@ -31,5 +31,7 @@ namespace Puzzle.NAspect.Framework.Aop
         bool IsMatch(MethodBase method);
 
         IList Targets { get; set; }
+
+        string Name { get; set; }
     }
 }

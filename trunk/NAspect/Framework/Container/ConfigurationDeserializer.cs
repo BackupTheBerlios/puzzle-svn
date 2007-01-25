@@ -96,6 +96,10 @@ namespace Puzzle.NAspect.Framework
             {
                 if (aspectNode.Name == "pointcut")
                 {
+                    string name = "Pointcut";
+                    if (aspectNode.Attributes["name"] != null)
+                        name = aspectNode.Attributes["name"].Value;
+
                     IList interceptors = new ArrayList();
                     IList pointcutTargets = new ArrayList();
 
@@ -215,6 +219,8 @@ namespace Puzzle.NAspect.Framework
 
                     foreach (PointcutTarget target in pointcutTargets)
                         pointcut.Targets.Add(target);
+
+                    pointcut.Name = name;
 
                     pointcuts.Add(pointcut);
                 }
