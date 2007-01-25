@@ -124,6 +124,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AOP\Aspects\GenericAspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AOP\Aspects\IAspect.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -155,6 +160,16 @@
                 />
                 <File
                     RelPath = "AOP\Aspects\Attributes\TypedAspectAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Aspects\Targets\AspectTarget.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Aspects\Targets\IAspectTarget.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -209,6 +224,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AOP\Pointcuts\Pointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AOP\Pointcuts\PointcutBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -220,6 +240,16 @@
                 />
                 <File
                     RelPath = "AOP\Pointcuts\SignaturePointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Pointcuts\Targets\IPointcutTarget.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AOP\Pointcuts\Targets\PointcutTarget.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -275,6 +305,16 @@
                 />
                 <File
                     RelPath = "Elements\EngineConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Enumerations\AspectTargetType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Enumerations\PointcutTargetType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

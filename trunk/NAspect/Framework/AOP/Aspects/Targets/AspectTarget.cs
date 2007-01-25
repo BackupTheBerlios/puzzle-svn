@@ -9,7 +9,6 @@
 // *
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Reflection.Emit;
 using Puzzle.NAspect.Framework.Tools;
