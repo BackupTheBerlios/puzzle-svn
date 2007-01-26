@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
+using System.Collections;
 
 namespace Puzzle.NAspect.Visualization.Presentation
 {
@@ -44,5 +45,12 @@ namespace Puzzle.NAspect.Visualization.Presentation
             get { return aspect; }
             set { aspect = value; }
         }
+
+        private IList appliedOnMethods = new ArrayList();
+        public virtual IList AppliedOnMethods
+        {
+            get { return appliedOnMethods; }
+        }	
+
     }
 }

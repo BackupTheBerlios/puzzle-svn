@@ -19,18 +19,15 @@ namespace Puzzle.NAspect.Visualization
         {
             treeView.Nodes.Clear();
 
-            ArrayList sortedAssemblies = new ArrayList(assemblies);
-            sortedAssemblies.Sort(new AssemblyComparer());
-            foreach (Assembly asm in sortedAssemblies)
-                treeView.Nodes.Add(new AssemblyNode(asm, model, aspectMatcher, pointcutMatcher));
+            AssemblyListNode node = new AssemblyListNode(assemblies, model, aspectMatcher, pointcutMatcher);
+            treeView.Nodes.Add(node);
         }
 
         public static void SetupAspectTreeView(TreeView treeView, IList assemblies, PresentationModel model, AspectMatcher aspectMatcher, PointcutMatcher pointcutMatcher)
         {
             treeView.Nodes.Clear();
 
-            foreach (IGenericAspect aspect in model.Aspects)
-                treeView.Nodes.Add(new AspectNode(aspect));
+            treeView.Nodes.Add(new ConfigurationNode(model));
         }
 
         public static void RefreshTreeView(TreeView treeView)

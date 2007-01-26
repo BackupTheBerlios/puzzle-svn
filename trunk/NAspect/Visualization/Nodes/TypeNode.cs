@@ -21,23 +21,31 @@ namespace Puzzle.NAspect.Visualization.Nodes
             this.aspectMatcher = aspectMatcher;
             this.pointcutMatcher = pointcutMatcher;
 
-            ArrayList aspects = (ArrayList) aspectMatcher.MatchAspectsForType(type, model.Aspects);
-
             this.ImageIndex = 1;
             this.SelectedImageIndex = 1;
 
-            if (aspects.Count > 0)
-            {
-                this.ImageIndex = 9;
-                this.SelectedImageIndex = 9;
-            }
+            ArrayList aspects = null;
 
-            //Order is important....
-            //aspects.Sort(new AspectComparer());
-            foreach (IGenericAspect aspect in aspects)
+            if (model != null)
             {
-                TreeNode aspectNode = new AspectNode(aspect);
-                this.Nodes.Add(aspectNode);
+                aspects = (ArrayList)aspectMatcher.MatchAspectsForType(type, model.Aspects);
+
+                foreach (PresentationAspect aspect in aspects)
+                    aspect.AppliedOnTypes.Add(type);
+
+                if (aspects.Count > 0)
+                {
+                    this.ImageIndex = 9;
+                    this.SelectedImageIndex = 9;
+                }
+
+                //Order is important....
+                //aspects.Sort(new AspectComparer());
+                foreach (IGenericAspect aspect in aspects)
+                {
+                    TreeNode aspectNode = new AspectNode(aspect);
+                    this.Nodes.Add(aspectNode);
+                }
             }
 
             ArrayList ctors = new ArrayList(type.GetConstructors());
@@ -94,10 +102,16 @@ namespace Puzzle.NAspect.Visualization.Nodes
 
         public override void Refresh()
         {
+            if (model == null)
+                return;
+
             ArrayList aspects = (ArrayList)aspectMatcher.MatchAspectsForType(type, model.Aspects);
 
             this.ImageIndex = 1;
             this.SelectedImageIndex = 1;
+
+            foreach (PresentationAspect aspect in aspects)
+                aspect.AppliedOnTypes.Add(type);
 
             if (aspects.Count > 0)
             {

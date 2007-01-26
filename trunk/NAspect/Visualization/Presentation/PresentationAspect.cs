@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
+using System.Collections;
 
 namespace Puzzle.NAspect.Visualization.Presentation
 {
@@ -37,5 +38,12 @@ namespace Puzzle.NAspect.Visualization.Presentation
                 this.Mixins.Add(presMixin);
             }
         }
+
+        private IList appliedOnTypes = new ArrayList();
+        public virtual IList AppliedOnTypes
+        {
+            get { return appliedOnTypes; }
+            set { appliedOnTypes = value; }
+        }	
     }
 }

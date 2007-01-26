@@ -38,7 +38,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
             }
 
         }
-
+	
         private IGenericAspect aspect;
         public virtual IGenericAspect Aspect
         {

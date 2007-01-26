@@ -13,6 +13,8 @@ using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NAspect.Visualization.Nodes;
 using Puzzle.NAspect.Visualization.PropertyHolders;
 using Puzzle.NAspect.Visualization.Presentation;
+using Puzzle.NAspect.Visualization.Items;
+using System.IO;
 
 namespace Puzzle.NAspect.Visualization
 {
@@ -25,6 +27,9 @@ namespace Puzzle.NAspect.Visualization
 
         #region Private fields
 
+        private string projectFileName = "";
+        private string configFileName = "";
+
         private PresentationModel model = null;
 
         private AspectMatcher aspectMatcher = new AspectMatcher();
@@ -33,44 +38,7 @@ namespace Puzzle.NAspect.Visualization
         private IList assemblies = new ArrayList();
 
         private object selected = null;
-        private object selectedParent = null;
-
-        #endregion
-
-        #region Setup
-
-        private void SetupProject()
-        {            
-            IEngine engine = EngineFactory.FromFile(configPathTextBox.Text, true);
-            model = PresentationModelManager.CreatePresentationModel(engine);
-        }
-
-        private void SetupProjectTreeView()
-        {
-            try
-            {
-                Assembly asm = Assembly.LoadFile(assemblyPathTextBox.Text);                
-                assemblies.Add(asm);
-
-                SetupProject();
-
-                TreeViewManager.SetupProjectTreeView(treeView1, assemblies, model, aspectMatcher, pointcutMatcher);
-                TreeViewManager.SetupAspectTreeView(treeView2, assemblies, model, aspectMatcher, pointcutMatcher);
-            }
-            catch (Exception ex)
-            {
-                ;
-            }
-        }
-
-        #endregion
-
-        #region Misc
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            SetupProjectTreeView();
-        }
+        private object listViewMaster = null;
 
         #endregion
 
@@ -78,48 +46,108 @@ namespace Puzzle.NAspect.Visualization
 
         private void RefreshAll()
         {
+            ClearApplicationCache();
             RefreshTreeViews();
+            RefreshListView();
+            RefreshXml();
+        }
+
+        private void ClearApplicationCache()
+        {
+            if (model == null)
+                return;
+
+            foreach (PresentationAspect aspect in model.Aspects)
+            {
+                aspect.AppliedOnTypes.Clear();
+                foreach (PresentationPointcut pointcut in aspect.Pointcuts)
+                {
+                    pointcut.AppliedOnMethods.Clear();
+                }
+            }
         }
 
         private void RefreshTreeViews()
         {
-            TreeViewManager.RefreshTreeView(treeView1);
-            TreeViewManager.RefreshTreeView(treeView2);
+            if (assemblyTreeView.Nodes.Count < 1)
+            {
+                TreeViewManager.SetupProjectTreeView(assemblyTreeView, assemblies, model, aspectMatcher, pointcutMatcher);
+            }
+            else
+                TreeViewManager.RefreshTreeView(assemblyTreeView);
+
+            if (configTreeView.Nodes.Count < 1)
+            {
+                if (model != null)
+                    TreeViewManager.SetupAspectTreeView(configTreeView, assemblies, model, aspectMatcher, pointcutMatcher);
+            }
+            else
+                TreeViewManager.RefreshTreeView(configTreeView);
+
+        }
+
+        private void RefreshListView()
+        {
+            if (listViewMaster == null)
+                return;
+
+            if (listViewMaster is PresentationAspect)
+                ShowAspectTypes((PresentationAspect)listViewMaster);
+            if (listViewMaster is PresentationPointcut)
+                ShowPointcutMethods((PresentationPointcut)listViewMaster);
+            if (listViewMaster is PresentationInterceptor)
+                ShowInterceptorMethods((PresentationInterceptor)listViewMaster);
+        }
+
+        private void RefreshXml()
+        {
+            if (model == null)
+                return;
+
+            xmlTextBox.Text = Serialization.SerializeConfiguration(model);
         }
 
         #endregion
 
         #region Selecting
 
-        private void SelectNode(TreeViewEventArgs e)
+        private void SelectObject(object obj)
         {
-            AspectNode aspectNode = e.Node as AspectNode;
-            if (aspectNode != null)
-                propertyGrid1.SelectedObject = new AspectProperties(aspectNode.Aspect);
+            PresentationAspect aspect = obj as PresentationAspect;
+            if (aspect != null)
+            {
+                propertyGrid.SelectedObject = new AspectProperties(aspect);
+                ShowAspectTypes(aspect);
+            }
 
-            AspectTargetNode aspectTargetNode = e.Node as AspectTargetNode;
-            if (aspectTargetNode != null)
-                propertyGrid1.SelectedObject = new AspectTargetProperties(aspectTargetNode.Target);
+            PresentationAspectTarget aspectTarget = obj as PresentationAspectTarget;
+            if (aspectTarget != null)
+                propertyGrid.SelectedObject = new AspectTargetProperties(aspectTarget);
 
-            MixinNode mixinNode = e.Node as MixinNode;
-            if (mixinNode != null)
-                propertyGrid1.SelectedObject = new MixinProperties(mixinNode.Mixin);
+            PresentationMixin mixin = obj as PresentationMixin;
+            if (mixin != null)
+                propertyGrid.SelectedObject = new MixinProperties(mixin);
 
-            PointcutNode pointcutNode = e.Node as PointcutNode;
-            if (pointcutNode != null)
-                propertyGrid1.SelectedObject = new PointcutProperties(pointcutNode.Pointcut);
+            PresentationPointcut pointcut = obj as PresentationPointcut;
+            if (pointcut != null)
+            {
+                propertyGrid.SelectedObject = new PointcutProperties(pointcut);
+                ShowPointcutMethods(pointcut);
+            }
+            PresentationPointcutTarget pointcutTarget = obj as PresentationPointcutTarget;
+            if (pointcutTarget != null)
+                propertyGrid.SelectedObject = new PointcutTargetProperties(pointcutTarget);
 
-            PointcutTargetNode pointcutTargetNode = e.Node as PointcutTargetNode;
-            if (pointcutTargetNode != null)
-                propertyGrid1.SelectedObject = new PointcutTargetProperties(pointcutTargetNode.Target);
+            PresentationInterceptor interceptor = obj as PresentationInterceptor;
+            if (interceptor != null)
+            {
+                propertyGrid.SelectedObject = new InterceptorProperties(interceptor);
+                ShowInterceptorMethods(interceptor); 
+            }
 
-            InterceptorNode interceptorNode = e.Node as InterceptorNode;
-            if (interceptorNode != null)
-                propertyGrid1.SelectedObject = new InterceptorProperties(interceptorNode.Interceptor);
-
-            TypeNode typeNode = e.Node as TypeNode;
-            if (typeNode != null)
-                propertyGrid1.SelectedObject = new TypeProperties(typeNode.Type);
+            Type type = obj as Type;
+            if (type != null)
+                propertyGrid.SelectedObject = new TypeProperties(type);
 
         }
 
@@ -127,17 +155,331 @@ namespace Puzzle.NAspect.Visualization
 
         #region Actions
 
+        #region I/O
+
+        #region Assembly
+
+        private void AddAssembly()
+        {
+            openFileDialog1.Filter = "Assembly files|*.dll|Executable files|*.exe";
+            if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                if (openFileDialog1.FileName != "")
+                {
+                    try
+                    {
+                        Assembly asm = Assembly.LoadFile(openFileDialog1.FileName);
+                        foreach (Assembly exists in assemblies)
+                        {
+                            if (exists.FullName == asm.FullName)
+                            {
+                                MessageBox.Show("The assembly is already included in the project!");
+                                return;
+                            }
+                        }
+                        assemblies.Add(asm);
+                        RefreshAll();
+                    } 
+                    catch (Exception ex) 
+                    {
+                        HandleException(ex);
+                    }                   
+                }
+            }
+        }
+
+        #endregion
+
+        #region Configuration
+
+        private void OpenConfiguration()
+        {
+            openFileDialog1.Filter = "Configuration files|*.config|Xml files|*.xml|All files|*.*";
+            if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                if (openFileDialog1.FileName != "")
+                {
+                    try
+                    {
+                        ClearControls();
+
+                        IEngine engine = EngineFactory.FromFile(openFileDialog1.FileName, true);
+                        model = PresentationModelManager.CreatePresentationModel(engine);
+
+                        configFileName = openFileDialog1.FileName;
+                        
+                        RefreshAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex);
+                    }
+                }
+            }
+        }
+
+        private void SaveConfig()
+        {
+            SaveConfig(false);
+        }
+
+        private void SaveConfig(bool saveAs)
+        {
+            SaveConfig(false);
+        }
+
+        #endregion
+
+        #region Project
+
+        private void OpenProject()
+        {
+            openFileDialog1.Filter = "Xml files|*.xml|All files|*.*";
+            if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                if (openFileDialog1.FileName != "")
+                {
+                    try
+                    {
+                        CloseProject();
+
+                        FileInfo file = new FileInfo(openFileDialog1.FileName);
+                        string xml = "";
+                        using (StreamReader sr = file.OpenText())
+                        {
+                            xml = sr.ReadToEnd();
+                        }
+
+                        if (xml != "")
+                        {
+                            Serialization.DeserializeProject(xml, assemblies, ref configFileName);
+
+                            if (configFileName != "")
+                            {
+                                IEngine engine = EngineFactory.FromFile(configFileName, true);
+                                model = PresentationModelManager.CreatePresentationModel(engine);
+                            }
+
+                            RefreshAll();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex);
+                    }
+                }
+            }
+        }
+
+        private void CloseProject()
+        {
+            ClearControls();
+            assemblies.Clear();
+            projectFileName = "";
+            configFileName = "";
+            model = null;
+            selected = null;
+            listViewMaster = null;
+        }
+
+        private void SaveProject()
+        {
+            SaveProject(false);
+        }
+
+        private void SaveProject(bool saveAs)
+        {
+            string fileName = projectFileName;
+            if (fileName == "")
+                saveAs = true;
+
+            if (fileName == "")
+                fileName = "New project.xml";
+
+            if (saveAs)
+            {
+                saveFileDialog1.FileName = fileName;
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
+                    return;
+
+                fileName = saveFileDialog1.FileName;
+            }
+
+            if (fileName == "")
+                return;
+
+            string xml = Serialization.SerializeProject(assemblies, configFileName);
+
+            FileInfo file = new FileInfo(fileName);
+            using (StreamWriter sw = file.CreateText())
+            {
+                sw.Write(xml);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Clearing
+
+        private void ClearControls()
+        {
+            assemblyTreeView.Nodes.Clear();
+            configTreeView.Nodes.Clear();
+            applicationListView.Clear();
+            propertyGrid.SelectedObject = null;
+            xmlTextBox.Text = "";
+        }
+
+        #endregion
+
+        #region Removal
+
+        private void RemoveAssembly(Assembly asm)
+        {
+            assemblies.Remove(asm);
+            RefreshAll();
+        }
+
+        private void RemoveAspect(PresentationAspect aspect)
+        {
+            model.Aspects.Remove(aspect);
+            RefreshAll();
+        }
+
         private void RemoveAspectTarget(PresentationAspectTarget aspectTarget)
         {
             aspectTarget.Aspect.Targets.Remove(aspectTarget);
             RefreshAll();
         }
 
+        private void RemovePointcut(PresentationPointcut pointcut)
+        {
+            pointcut.Aspect.Pointcuts.Remove(pointcut);
+            RefreshAll();
+        }
+
+        private void RemoveMixin(PresentationMixin mixin)
+        {
+            mixin.Aspect.Mixins.Remove(mixin);
+            RefreshAll();
+        }
+
+        private void RemovePointcutTarget(PresentationPointcutTarget pointcutTarget)
+        {
+            pointcutTarget.Pointcut.Targets.Remove(pointcutTarget);
+            RefreshAll();
+        }
+
+        private void RemoveInterceptor(PresentationInterceptor interceptor)
+        {
+            interceptor.Pointcut.Interceptors.Remove(interceptor);
+            RefreshAll();
+        }
+
+        #endregion
+
+        #region Addition
+
         private void AddAspectTarget(PresentationAspect aspect)
         {
-            AspectTarget aspectTarget = new AspectTarget("", AspectTargetType.Signature);
+            PresentationAspectTarget aspectTarget = new PresentationAspectTarget(aspect);
+            aspectTarget.Signature = "[New Aspect Target]";
+            aspectTarget.TargetType = AspectTargetType.Signature;
             aspect.Targets.Add(aspectTarget);
             RefreshAll();
+        }
+
+        private void AddPointcut(PresentationAspect aspect)
+        {
+            PresentationPointcut pointcut = new PresentationPointcut(aspect);
+            pointcut.Name = "New Pointcut";
+            aspect.Pointcuts.Add(pointcut);
+            RefreshAll();
+        }
+
+        private void AddMixin(PresentationAspect aspect)
+        {
+            PresentationMixin mixin = new PresentationMixin(aspect);
+            mixin.TypeName = "[New Mixin]";
+            aspect.Mixins.Add(mixin);
+            RefreshAll();
+        }
+
+        private void AddPointcutTarget(PresentationPointcut pointcut)
+        {
+            PresentationPointcutTarget pointcutTarget = new PresentationPointcutTarget(pointcut);
+            pointcutTarget.Signature = "[New Pointcut Target]";
+            pointcutTarget.TargetType = PointcutTargetType.Signature;
+            pointcut.Targets.Add(pointcutTarget);
+            RefreshAll();
+        }
+
+        private void AddInterceptor(PresentationPointcut pointcut)
+        {
+            PresentationInterceptor interceptor = new PresentationInterceptor(pointcut);
+            interceptor.TypeName = "[New Interceptor]";
+            pointcut.Interceptors.Add(interceptor);
+            RefreshAll();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region ListView
+
+        private void ShowAspectTypes(PresentationAspect aspect)
+        {
+            listViewMaster = aspect;
+
+            applicationListView.BeginUpdate();
+            applicationListView.Clear();
+
+            applicationListView.Columns.Add("Name", 250);
+            applicationListView.Columns.Add("Assembly", 250);
+
+            foreach (Type type in aspect.AppliedOnTypes)
+            {
+                TypeItem item = new TypeItem(type);
+                applicationListView.Items.Add(item);
+            }
+
+            applicationListView.EndUpdate();
+        }
+
+        private void ShowPointcutMethods(PresentationPointcut pointcut)
+        {
+            listViewMaster = pointcut;
+
+            ShowAppliedMethods(pointcut.AppliedOnMethods);
+        }
+
+        private void ShowInterceptorMethods(PresentationInterceptor interceptor)
+        {
+            listViewMaster = interceptor;
+
+            ShowAppliedMethods(interceptor.AppliedOnMethods);
+        }
+
+        private void ShowAppliedMethods(IList methods)
+        {
+            applicationListView.BeginUpdate();
+            applicationListView.Clear();
+
+            applicationListView.Columns.Add("Name", 250);
+            applicationListView.Columns.Add("Type", 250);
+            applicationListView.Columns.Add("Assembly", 250);
+
+            foreach (MethodBase method in methods)
+            {
+                MethodItem item = new MethodItem(method);
+                applicationListView.Items.Add(item);
+            }
+
+            applicationListView.EndUpdate();
         }
 
         #endregion
@@ -157,44 +499,151 @@ namespace Puzzle.NAspect.Visualization
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            SelectNode(e);
+            SelectObject(((NodeBase) e.Node).Object);
         }
 
         private void treeView2_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            SelectNode(e);
+            SelectObject(((NodeBase)e.Node).Object);
         }
 
         private void treeView1_MouseUp(object sender, MouseEventArgs e)
         {
-            TreeViewMouseUp(treeView1, e);
+            TreeViewMouseUp(assemblyTreeView, e);
         }
 
         private void treeView2_MouseUp(object sender, MouseEventArgs e)
         {
-            TreeViewMouseUp(treeView1, e);
+            TreeViewMouseUp(configTreeView, e);
         }
+
+        #endregion
+
+        #region MenuStrip
+
+        private void addAssemblyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddAssembly();
+        }
+
+        private void openProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenProject();
+        }
+
+        private void openConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenConfiguration();
+        }
+
+        private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveProject();
+        }
+
+        private void saveProjectAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveProject(true);
+        }
+
+        private void saveConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveConfig();
+        }
+
+        private void saveConfigAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveConfig(true);
+        }
+
 
         #endregion
 
         #region Context Menus
 
+
+        private void removeAssemblyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Assembly asm = selected as Assembly;
+            if (asm != null)
+                RemoveAssembly(asm);
+        }
+
+        private void removeAspectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationAspect aspect = selected as PresentationAspect;
+            if (aspect != null)
+                RemoveAspect(aspect);
+        }
+
         private void removeAspectTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PresentationAspectTarget aspectTarget = selected as PresentationAspectTarget;
             if (aspectTarget != null)
-            {
                 RemoveAspectTarget(aspectTarget);
-            }
+        }
+
+        private void removeMixinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationMixin mixin = selected as PresentationMixin;
+            if (mixin != null)
+                RemoveMixin(mixin);
+        }
+
+        private void removePointcutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationPointcut pointcut = selected as PresentationPointcut;
+            if (pointcut != null)
+                RemovePointcut(pointcut);
+        }
+
+        private void removePointcutTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationPointcutTarget pointcutTarget = selected as PresentationPointcutTarget;
+            if (pointcutTarget != null)
+                RemovePointcutTarget(pointcutTarget);
+        }
+
+        private void removeInterceptorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationInterceptor interceptor = selected as PresentationInterceptor;
+            if (interceptor != null)
+                RemoveInterceptor(interceptor);
         }
 
         private void addTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PresentationAspect aspect = selected as PresentationAspect;
             if (aspect != null)
-            {
                 AddAspectTarget(aspect);
-            }
+        }
+
+        private void addPointcutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationAspect aspect = selected as PresentationAspect;
+            if (aspect != null)
+                AddPointcut(aspect);        
+        }
+
+        private void addMixinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationAspect aspect = selected as PresentationAspect;
+            if (aspect != null)
+                AddMixin(aspect);
+        }
+
+        private void addPointcutTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationPointcut pointcut = selected as PresentationPointcut;
+            if (pointcut != null)
+                AddPointcutTarget(pointcut);
+        }
+
+        private void addInterceptorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresentationPointcut pointcut = selected as PresentationPointcut;
+            if (pointcut != null)
+                AddInterceptor(pointcut);
         }
 
         #endregion
@@ -219,17 +668,26 @@ namespace Puzzle.NAspect.Visualization
                     NodeBase nodeBase = onNode as NodeBase;
                     selected = nodeBase.Object;
 
-                    if (onNode.Parent != null)
-                    {
-                        NodeBase nodeBaseParent = onNode.Parent as NodeBase;
-                        selectedParent = nodeBaseParent.Object;
-                    }
+                    if (onNode is AspectNode)
+                        aspectContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
 
                     if (onNode is AspectTargetNode)
                         aspectTargetContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
 
-                    if (onNode is AspectNode)
-                        aspectContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
+                    if (onNode is MixinNode)
+                        mixinContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
+
+                    if (onNode is PointcutNode)
+                        pointcutContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
+
+                    if (onNode is PointcutTargetNode)
+                        pointcutTargetContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
+
+                    if (onNode is InterceptorNode)
+                        interceptorContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
+
+                    if (onNode is AssemblyNode)
+                        assemblyContextMenuStrip.Show(treeView, new Point(e.X, e.Y));
 
                 }
             }
@@ -242,6 +700,14 @@ namespace Puzzle.NAspect.Visualization
 
         #endregion
 
+        #endregion
+
+        #region Exception Handling
+
+        private void HandleException(Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
 
         #endregion
     }

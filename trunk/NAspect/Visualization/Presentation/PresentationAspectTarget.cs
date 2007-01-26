@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
+using System.Collections;
 
 namespace Puzzle.NAspect.Visualization.Presentation
 {

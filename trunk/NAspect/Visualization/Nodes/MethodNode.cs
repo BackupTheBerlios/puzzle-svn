@@ -24,8 +24,9 @@ namespace Puzzle.NAspect.Visualization.Nodes
             this.ImageIndex = 2;
             this.SelectedImageIndex = 2;
 
-            if (ShouldProxy())
-                AddInterceptorNodes();
+            if (aspects != null)
+                if (ShouldProxy())
+                    AddInterceptorNodes();
         }
 
         private IList aspects;
@@ -82,6 +83,9 @@ namespace Puzzle.NAspect.Visualization.Nodes
 
         public override void Refresh()
         {
+            if (aspects == null)
+                return;
+
             if (ShouldProxy())
                 RefreshInterceptorNodes();
             else
@@ -100,10 +104,12 @@ namespace Puzzle.NAspect.Visualization.Nodes
 
             foreach (IGenericAspect aspect in aspects)
             {
-                foreach (IPointcut pointcut in aspect.Pointcuts)
+                foreach (PresentationPointcut pointcut in aspect.Pointcuts)
                 {
                     if (pointcut.IsMatch(method))
                     {
+                        pointcut.AppliedOnMethods.Add(this.method);
+
                         foreach (PresentationInterceptor interceptor in pointcut.Interceptors)
                         {
                             InterceptorNode interceptorNode = new InterceptorNode(interceptor);
@@ -122,10 +128,12 @@ namespace Puzzle.NAspect.Visualization.Nodes
             IList interceptors = new ArrayList();
             foreach (IGenericAspect aspect in aspects)
             {
-                foreach (IPointcut pointcut in aspect.Pointcuts)
+                foreach (PresentationPointcut pointcut in aspect.Pointcuts)
                 {
                     if (pointcut.IsMatch(method))
                     {
+                        pointcut.AppliedOnMethods.Add(this.method);
+
                         foreach (PresentationInterceptor interceptor in pointcut.Interceptors)
                         {
                             interceptors.Add(interceptor);

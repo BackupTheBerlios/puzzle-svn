@@ -36,8 +36,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\ItemBase.cs" />
+    <Compile Include="Items\MethodItem.cs" />
+    <Compile Include="Items\TypeItem.cs" />
     <Compile Include="Nodes\AspectNode.cs" />
+    <Compile Include="Nodes\AssemblyListNode.cs" />
     <Compile Include="Nodes\AssemblyNode.cs" />
+    <Compile Include="Nodes\ConfigurationNode.cs" />
     <Compile Include="Nodes\InterceptorNode.cs" />
     <Compile Include="Nodes\MethodNode.cs" />
     <Compile Include="Nodes\MixinNode.cs" />
@@ -61,6 +66,7 @@
     <Compile Include="PropertyHolders\PointcutProperties.cs" />
     <Compile Include="PropertyHolders\PointcutTargetProperties.cs" />
     <Compile Include="PropertyHolders\TypeProperties.cs" />
+    <Compile Include="Serialization.cs" />
     <Compile Include="Sorting\AspectComparer.cs" />
     <Compile Include="Sorting\AssemblyComparer.cs" />
     <Compile Include="Sorting\MethodComparer.cs" />
