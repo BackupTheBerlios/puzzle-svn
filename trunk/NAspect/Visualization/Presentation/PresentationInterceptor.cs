@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
 using System.Collections;
+using System.Reflection;
 
 namespace Puzzle.NAspect.Visualization.Presentation
 {
@@ -36,7 +37,17 @@ namespace Puzzle.NAspect.Visualization.Presentation
         public virtual IList AppliedOnMethods
         {
             get { return pointcut.AppliedOnMethods; }
-        }	
+        }
 
+
+        public PresentationPointcutTarget AddTypeTarget(Type type)
+        {
+            return this.Pointcut.AddTypeTarget(type);
+        }
+
+        public PresentationPointcutTarget AddMethodTarget(MethodBase method, Type type)
+        {
+            return this.Pointcut.AddMethodTarget(method, type);
+        }
     }
 }

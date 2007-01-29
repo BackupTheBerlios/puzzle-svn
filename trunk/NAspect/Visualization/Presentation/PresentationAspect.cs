@@ -44,6 +44,48 @@ namespace Puzzle.NAspect.Visualization.Presentation
         {
             get { return appliedOnTypes; }
             set { appliedOnTypes = value; }
-        }	
+        }
+
+        public PresentationAspectTarget AddTypeTarget(Type type)
+        {
+            string typeName = type.FullName;
+            foreach (PresentationAspectTarget target in Targets)
+            {
+                if (target.TargetType == AspectTargetType.Signature)
+                    if (target.Signature == typeName)
+                        return target;
+            }
+            PresentationAspectTarget newTarget = new PresentationAspectTarget(this);
+            newTarget.TargetType = AspectTargetType.Signature;
+            newTarget.Signature = typeName;
+            this.Targets.Add(newTarget);
+            return newTarget;
+        }
+
+        internal PresentationPointcut GetPointcut(string name)
+        {
+            name = name.ToLower();
+            foreach (PresentationPointcut pointcut in Pointcuts)
+                if (name == pointcut.Name.ToLower())
+                    return pointcut;
+            return null;
+        }
+
+        internal PresentationPointcut GetPointcutWithNameAndInterceptor(string name, string typeName)
+        {
+            name = name.ToLower();
+            foreach (PresentationPointcut pointcut in Pointcuts)
+            {
+                if (name == pointcut.Name.ToLower())
+                {
+                    foreach (PresentationInterceptor interceptor in pointcut.Interceptors)
+                    {
+                        if (typeName == interceptor.TypeName)
+                            return pointcut;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

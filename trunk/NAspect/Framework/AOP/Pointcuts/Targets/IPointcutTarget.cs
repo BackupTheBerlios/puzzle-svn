@@ -9,12 +9,13 @@
 // *
 
 using System;
+using System.Reflection;
 namespace Puzzle.NAspect.Framework.Aop
 {
     public interface IPointcutTarget
     {
         bool Exclude { get; set; }
 
-        bool IsMatch(System.Reflection.MethodBase method);
+        bool IsMatch(MethodBase method, Type type);
     }
 }

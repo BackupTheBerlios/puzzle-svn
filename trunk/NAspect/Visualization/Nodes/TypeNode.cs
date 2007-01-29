@@ -52,7 +52,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
             ctors.Sort(new MethodComparer());
             foreach (MethodBase method in ctors)
             {
-                TreeNode methodNode = new MethodNode(method, aspects, model, pointcutMatcher);
+                TreeNode methodNode = new MethodNode(this.Type, method, aspects, model, pointcutMatcher);
                 this.Nodes.Add(methodNode);
             }
 
@@ -60,7 +60,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
             methods.Sort(new MethodComparer());
             foreach (MethodBase method in methods)
             {
-                TreeNode methodNode = new MethodNode(method, aspects, model, pointcutMatcher);
+                TreeNode methodNode = new MethodNode(this.Type, method, aspects, model, pointcutMatcher);
                 this.Nodes.Add(methodNode);
             }
 

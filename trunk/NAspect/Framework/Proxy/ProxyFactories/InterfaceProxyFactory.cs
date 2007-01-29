@@ -141,7 +141,7 @@ namespace Puzzle.NAspect.Framework
                 {
                     foreach (IPointcut pointcut in aspect.Pointcuts)
                     {
-                        if (pointcut.IsMatch(baseMethod))
+                        if (pointcut.IsMatch(baseMethod, proxyType))
                         {
                             foreach (object interceptor in pointcut.Interceptors)
                             {

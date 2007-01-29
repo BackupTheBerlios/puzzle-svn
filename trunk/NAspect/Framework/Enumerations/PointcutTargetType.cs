@@ -16,6 +16,7 @@ namespace Puzzle.NAspect.Framework.Aop
 	public enum PointcutTargetType
 	{
         Signature = 0,
-        Attribute = 1
+        FullSignature = 1,
+        Attribute = 2
 	}
 }

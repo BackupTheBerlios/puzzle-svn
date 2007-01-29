@@ -15,6 +15,7 @@ using Puzzle.NAspect.Visualization.PropertyHolders;
 using Puzzle.NAspect.Visualization.Presentation;
 using Puzzle.NAspect.Visualization.Items;
 using System.IO;
+using System.Xml;
 
 namespace Puzzle.NAspect.Visualization
 {
@@ -517,6 +518,57 @@ namespace Puzzle.NAspect.Visualization
             TreeViewMouseUp(configTreeView, e);
         }
 
+        private void configTreeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            TreeViewItemDrag(e, sender);
+        }
+
+        private void configTreeView_DragDrop(object sender, DragEventArgs e)
+        {
+            TreeViewDragDrop((TreeView)sender, e);
+        }
+
+        private void configTreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            TreeViewDragEnter(e);
+        }
+
+        private void configTreeView_DragLeave(object sender, EventArgs e)
+        {
+            TurnOffTreeDragHilite();
+        }
+
+        private void configTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            TreeViewDragOver((TreeView)sender, e);
+        }
+
+        private void assemblyTreeView_DragDrop(object sender, DragEventArgs e)
+        {
+            TreeViewDragDrop((TreeView)sender, e);
+        }
+
+        private void assemblyTreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            TreeViewDragEnter(e);
+        }
+
+        private void assemblyTreeView_DragLeave(object sender, EventArgs e)
+        {
+            TurnOffTreeDragHilite();
+        }
+
+        private void assemblyTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            TreeViewDragOver((TreeView)sender, e);
+        }
+
+        private void assemblyTreeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            TreeViewItemDrag(e, sender);
+        }
+
+
         #endregion
 
         #region MenuStrip
@@ -654,6 +706,8 @@ namespace Puzzle.NAspect.Visualization
 
         #region TreeView
 
+        #region Mouse
+
         private void TreeViewMouseUp(TreeView treeView, MouseEventArgs e)
         {
             TreeNode onNode = treeView.GetNodeAt(new Point(e.X, e.Y));
@@ -700,6 +754,340 @@ namespace Puzzle.NAspect.Visualization
 
         #endregion
 
+        #region DragDrop
+
+        private void TreeViewDragDrop(TreeView treeView, DragEventArgs e)
+        {
+            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+
+            int x = pt.X;
+            int y = pt.Y;
+            string data = "";
+
+            NodeBase overNode = (NodeBase)treeView.GetNodeAt(new Point(x, y));
+
+            if (e.Data.GetDataPresent(typeof(string)))
+            {
+                data = (string)e.Data.GetData(typeof(string));
+            }
+
+            if (data == null)
+                data = "";
+
+            if (data.Length > 0)
+            {
+                string header;
+                XmlNode payload = ParseDragData(data, out header);
+                if (header == "aspect")
+                {
+                    PresentationAspect dropAspect = GetDropAspect(payload);
+                    if (overNode != null)
+                    {
+                        if (overNode is TypeNode)
+                        {
+                            if (dropAspect != null)
+                            {
+                                dropAspect.AddTypeTarget(((TypeNode)overNode).Type);
+                                RefreshAll();
+                            }
+                        }
+                    }
+                }
+                if (header == "pointcut")
+                {
+                    PresentationPointcut dropPointcut = GetDropPointcut(payload);
+                    if (overNode != null)
+                    {
+                        if (overNode is TypeNode)
+                        {
+                            if (dropPointcut != null)
+                            {
+                                dropPointcut.AddTypeTarget(((TypeNode)overNode).Type);
+                                RefreshAll();
+                            }
+                        }
+                        if (overNode is MethodNode)
+                        {
+                            if (dropPointcut != null)
+                            {
+                                MethodNode methodNode = overNode as MethodNode;
+                                dropPointcut.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
+                                RefreshAll();
+                            }
+                        }
+                    }
+                }
+                if (header == "interceptor")
+                {
+                    PresentationInterceptor dropInterceptor = GetDropInterceptor(payload);
+                    if (overNode != null)
+                    {
+                        if (overNode is TypeNode)
+                        {
+                            if (dropInterceptor != null)
+                            {
+                                dropInterceptor.AddTypeTarget(((TypeNode)overNode).Type);
+                                RefreshAll();
+                            }
+                        }
+                        if (overNode is MethodNode)
+                        {
+                            if (dropInterceptor != null)
+                            {
+                                MethodNode methodNode = overNode as MethodNode;
+                                dropInterceptor.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
+                                RefreshAll();
+                            }
+                        }
+                    }
+                }
+            }
+
+            TurnOffTreeDragHilite();
+        }
+
+        private void TreeViewItemDrag(ItemDragEventArgs e, object sender)
+        {
+            NodeBase node = (NodeBase)e.Item;
+            object obj = node.Object;
+            string dragMsg = GetObjectXml(obj);
+            if (dragMsg != "")
+                ((Control)sender).DoDragDrop(dragMsg, DragDropEffects.Copy | DragDropEffects.Move);
+        }
+
+        private void TreeViewDragEnter(DragEventArgs e)
+        {
+            string data = "";
+
+            if (e.Data.GetDataPresent(typeof(string)))
+            {
+                data = (string)e.Data.GetData(typeof(string));
+            }
+
+            if (data == null)
+                data = "";
+
+            if (data.Length > 0)
+            {
+                string header;
+                XmlNode payload = ParseDragData(data, out header);
+                if (header == "aspect")
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+                if (header == "pointcut")
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+                if (header == "interceptor")
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            }
+        }
+
+        private bool insideTreeViewDragOver = false;
+
+        private void TreeViewDragOver(TreeView treeView, DragEventArgs e)
+        {
+            if (insideTreeViewDragOver)
+                return;
+
+            insideTreeViewDragOver = true;
+
+            try
+            {
+                Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+
+                int x = pt.X;
+                int y = pt.Y;
+                string data = "";
+                bool doHilite = false;
+
+                NodeBase overNode = (NodeBase)treeView.GetNodeAt(new Point(x, y));
+
+                if (e.Data.GetDataPresent(typeof(string)))
+                {
+                    data = (string)e.Data.GetData(typeof(string));
+                }
+
+                if (data == null)
+                    data = "";
+
+                if (data.Length > 0)
+                {
+                    string header;
+                    XmlNode payload = ParseDragData(data, out header);
+                    if (header == "aspect")
+                    {
+                        if (overNode != null)
+                        {
+                            if (overNode is TypeNode)
+                            {
+                                doHilite = true;
+                            }
+                        }
+                    }
+                    if (header == "pointcut" || header == "interceptor")
+                    {
+                        if (overNode != null)
+                        {
+                            if (overNode is TypeNode)
+                            {
+                                doHilite = true;
+                            }
+                            if (overNode is MethodNode)
+                            {
+                                doHilite = true;
+                            }
+                        }
+                    }
+                }
+
+                if (doHilite)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                    TurnOnTreeDragHilite(overNode);
+                }
+                else
+                    TurnOffTreeDragHilite();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                insideTreeViewDragOver = false;
+            }
+        }
+
+        private NodeBase m_TreeDragHilited = null;
+
+        private void TurnOnTreeDragHilite(NodeBase node)
+        {
+            if (node != m_TreeDragHilited)
+                TurnOffTreeDragHilite();
+
+            m_TreeDragHilited = node;
+
+            m_TreeDragHilited.BackColor = Color.DarkBlue;
+            m_TreeDragHilited.ForeColor = Color.White;
+        }
+
+        private void TurnOffTreeDragHilite()
+        {
+            if (m_TreeDragHilited != null)
+            {
+                m_TreeDragHilited.BackColor = Color.White;
+                m_TreeDragHilited.ForeColor = Color.Black;
+                m_TreeDragHilited = null;
+            }
+        }
+
+
+        private static string GetObjectXml(object obj)
+        {
+            PresentationAspect aspect = obj as PresentationAspect;
+            if (aspect != null)
+            {
+                return "xml:<aspect><name>" + aspect.Name + "</name></aspect>";
+            }
+            PresentationPointcut pointcut = obj as PresentationPointcut;
+            if (pointcut != null)
+            {
+                return String.Format("xml:<pointcut><aspect>{0}</aspect><pointcut>{1}</pointcut></pointcut>", 
+                    pointcut.Aspect.Name,
+                    pointcut.Name);
+            }
+            PresentationInterceptor interceptor = obj as PresentationInterceptor;
+            if (interceptor != null)
+            {
+                return String.Format("xml:<interceptor><aspect>{0}</aspect><pointcut>{1}</pointcut><type-name>{2}</type-name></interceptor>",
+                    interceptor.Pointcut.Aspect.Name,
+                    interceptor.Pointcut.Name,
+                    interceptor.TypeName);
+            }
+            return "";
+        }
+
+        private XmlNode ParseDragData(string data, out string header)
+        {
+            header = data;
+            XmlNode payload = null;
+            if (data.StartsWith("xml:"))
+            {
+                data = data.Substring(4);
+                data = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + data;
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(data);
+
+                payload = xmlDoc.SelectSingleNode("aspect");
+                if (payload != null)
+                {
+                    header = "aspect";
+                    return payload;
+                }
+
+                payload = xmlDoc.SelectSingleNode("pointcut");
+                if (payload != null)
+                {
+                    header = "pointcut";
+                    return payload;
+                }
+
+                payload = xmlDoc.SelectSingleNode("interceptor");
+                if (payload != null)
+                {
+                    header = "interceptor";
+                    return payload;
+                }
+
+            }
+            return payload;
+        }
+
+        private PresentationAspect GetDropAspect(XmlNode payload)
+        {
+            XmlNode nameNode = payload.SelectSingleNode("name");
+            return model.GetAspect(nameNode.InnerText);
+        }
+
+        private PresentationPointcut GetDropPointcut(XmlNode payload)
+        {
+            XmlNode aspectNode = payload.SelectSingleNode("aspect");
+            XmlNode pointcutNode = payload.SelectSingleNode("pointcut");
+            PresentationAspect aspect = model.GetAspect(aspectNode.InnerText);
+            if (aspect != null)
+            {
+                return aspect.GetPointcut(pointcutNode.InnerText);
+            }
+            return null;
+        }
+
+        private PresentationInterceptor GetDropInterceptor(XmlNode payload)
+        {
+            XmlNode aspectNode = payload.SelectSingleNode("aspect");
+            XmlNode pointcutNode = payload.SelectSingleNode("pointcut");
+            XmlNode typeNameNode = payload.SelectSingleNode("type-name");
+            PresentationAspect aspect = model.GetAspect(aspectNode.InnerText);
+            if (aspect != null)
+            {
+                PresentationPointcut pointcut = aspect.GetPointcutWithNameAndInterceptor(pointcutNode.InnerText, typeNameNode.InnerText);
+                if (pointcut != null)
+                {
+                    PresentationInterceptor interceptor = pointcut.GetInterceptor(typeNameNode.InnerText);
+                    return interceptor;
+                }
+            }
+            return null;
+        }
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Exception Handling
@@ -713,8 +1101,8 @@ namespace Puzzle.NAspect.Visualization
 
         private void VisualizeProjectForm_Load(object sender, EventArgs e)
         {
-            TreeViewPainter.AttachTreeView(assemblyTreeView,2);
-            TreeViewPainter.AttachTreeView(configTreeView,1);
+            //TreeViewPainter.AttachTreeView(assemblyTreeView,2);
+            //TreeViewPainter.AttachTreeView(configTreeView,1);
         }
     }
 }

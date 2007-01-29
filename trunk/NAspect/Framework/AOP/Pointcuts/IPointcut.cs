@@ -10,6 +10,7 @@
 
 using System.Collections;
 using System.Reflection;
+using System;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -28,7 +29,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        bool IsMatch(MethodBase method);
+        bool IsMatch(MethodBase method, Type type);
 
         IList Targets { get; set; }
 

@@ -13,6 +13,7 @@ using System.Text;
 using System.Reflection;
 using Puzzle.NAspect.Framework.Utils;
 using Puzzle.NAspect.Framework.Tools;
+using System.Reflection.Emit;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
@@ -95,14 +96,16 @@ namespace Puzzle.NAspect.Framework.Aop
         }
 
 
-        public bool IsMatch(MethodBase method)
+        public bool IsMatch(MethodBase method, Type type)
         {
             switch (this.targetType)
             {
                 case PointcutTargetType.Signature:
-                    return IsSignatureMatch(method);
+                    return IsSignatureMatch(method, type);
+                case PointcutTargetType.FullSignature:
+                    return IsFullSignatureMatch(method, type);
                 case PointcutTargetType.Attribute:
-                    return IsAttributeMatch(method);
+                    return IsAttributeMatch(method, type);
                 default:
                     throw new Exception(String.Format("Unknown pointcut target type {0}", targetType.ToString()));
             }
@@ -113,10 +116,34 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        public bool IsSignatureMatch(MethodBase method)
+        public bool IsSignatureMatch(MethodBase method, Type type)
         {
             string methodsignature = AopTools.GetMethodSignature(method);
             if (Text.IsMatch(methodsignature, signature))
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Matches a type plus method with the pointuct
+        /// </summary>
+        /// <param name="method">The method to match</param>
+        /// <returns>True if the pointcut matched the type plus method, otherwise false</returns>
+        public bool IsFullSignatureMatch(MethodBase method, Type type)
+        {
+            if (type == null)
+                return false;
+
+            Type tmp = type;
+            //traverse back in inheritance hierarchy to first non runtime emitted type 
+            while (tmp.Assembly is AssemblyBuilder)
+                tmp = tmp.BaseType;
+
+            string typename = tmp.FullName;
+            string methodsignature = AopTools.GetMethodSignature(method);
+            string fullsignature = typename + "." + methodsignature;
+            if (Text.IsMatch(fullsignature, signature))
                 return true;
             else
                 return false;
@@ -127,7 +154,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        public bool IsAttributeMatch(MethodBase method)
+        public bool IsAttributeMatch(MethodBase method, Type type)
         {
             Type signatureType = GetSignatureType();
             if (signatureType == null)

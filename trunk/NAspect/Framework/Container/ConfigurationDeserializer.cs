@@ -154,6 +154,9 @@ namespace Puzzle.NAspect.Framework
                                     case "signature":
                                         targetType = PointcutTargetType.Signature;
                                         break;
+                                    case "fullsignature":
+                                        targetType = PointcutTargetType.FullSignature;
+                                        break;
                                     case "attribute":
                                         targetType = PointcutTargetType.Attribute;
                                         break;

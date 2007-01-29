@@ -112,6 +112,7 @@ namespace Puzzle.NAspect.Visualization
             // 
             // assemblyTreeView
             // 
+            this.assemblyTreeView.AllowDrop = true;
             this.assemblyTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.assemblyTreeView.ImageIndex = 0;
             this.assemblyTreeView.ImageList = this.imageList1;
@@ -120,8 +121,13 @@ namespace Puzzle.NAspect.Visualization
             this.assemblyTreeView.SelectedImageIndex = 0;
             this.assemblyTreeView.Size = new System.Drawing.Size(200, 519);
             this.assemblyTreeView.TabIndex = 2;
+            this.assemblyTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragDrop);
+            this.assemblyTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragOver);
+            this.assemblyTreeView.DragLeave += new System.EventHandler(this.assemblyTreeView_DragLeave);
             this.assemblyTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.assemblyTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
+            this.assemblyTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragEnter);
+            this.assemblyTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.assemblyTreeView_ItemDrag);
             // 
             // imageList1
             // 
@@ -143,6 +149,7 @@ namespace Puzzle.NAspect.Visualization
             // 
             // configTreeView
             // 
+            this.configTreeView.AllowDrop = true;
             this.configTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.configTreeView.ImageIndex = 0;
             this.configTreeView.ImageList = this.imageList1;
@@ -151,8 +158,13 @@ namespace Puzzle.NAspect.Visualization
             this.configTreeView.SelectedImageIndex = 0;
             this.configTreeView.Size = new System.Drawing.Size(182, 245);
             this.configTreeView.TabIndex = 5;
+            this.configTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragDrop);
+            this.configTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragOver);
+            this.configTreeView.DragLeave += new System.EventHandler(this.configTreeView_DragLeave);
             this.configTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView2_AfterSelect);
             this.configTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView2_MouseUp);
+            this.configTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragEnter);
+            this.configTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.configTreeView_ItemDrag);
             // 
             // propertyGrid
             // 
@@ -428,7 +440,7 @@ namespace Puzzle.NAspect.Visualization
             // openConfigurationToolStripMenuItem
             // 
             this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
-            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openConfigurationToolStripMenuItem.Text = "Configuration";
             this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
             // 

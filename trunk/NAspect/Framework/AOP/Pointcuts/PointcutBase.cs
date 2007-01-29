@@ -26,19 +26,19 @@ namespace Puzzle.NAspect.Framework.Aop
         /// </summary>
         /// <param name="method">The method to match</param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
-        public virtual bool IsMatch(MethodBase method)
+        public virtual bool IsMatch(MethodBase method, Type type)
         {
             foreach (IPointcutTarget target in this.Targets)
             {
                 if (target.Exclude)
-                    if (target.IsMatch(method))
+                    if (target.IsMatch(method, type))
                         return false;
             }
 
             foreach (PointcutTarget target in this.Targets)
             {
                 if (!target.Exclude)
-                    if (target.IsMatch(method))
+                    if (target.IsMatch(method, type))
                         return true;
             }
             return false;

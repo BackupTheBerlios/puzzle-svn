@@ -51,7 +51,7 @@ namespace Puzzle.NAspect.Framework.Aop
 
                 foreach (IPointcut pointcut in tmpAspect.Pointcuts)
                 {
-                    if (pointcut.IsMatch(method))
+                    if (pointcut.IsMatch(method, baseType))
                         return true;
                 }
             }

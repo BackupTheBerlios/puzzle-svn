@@ -13,9 +13,10 @@ namespace Puzzle.NAspect.Visualization.Nodes
 {
     public class MethodNode : NodeBase
     {
-        public MethodNode(MethodBase method, IList aspects, PresentationModel model, PointcutMatcher pointcutMatcher)
+        public MethodNode(Type type, MethodBase method, IList aspects, PresentationModel model, PointcutMatcher pointcutMatcher)
             : base(AopTools.GetMethodSignature(method))
         {
+            this.type = type;
             this.method = method;
             this.aspects = aspects;
             this.model = model;
@@ -27,6 +28,13 @@ namespace Puzzle.NAspect.Visualization.Nodes
             if (aspects != null)
                 if (ShouldProxy())
                     AddInterceptorNodes();
+        }
+
+        private Type type;
+        public virtual Type Type
+        {
+            get { return type; }
+            set { type = value; }
         }
 
         private IList aspects;
@@ -54,7 +62,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
         {
             //if (method.IsVirtual && !method.IsFinal)
             //{
-            if (pointcutMatcher.MethodShouldBeProxied(method, aspects))
+            if (pointcutMatcher.MethodShouldBeProxied(method, aspects, type))
             {
                 return true;
             }
@@ -106,7 +114,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
             {
                 foreach (PresentationPointcut pointcut in aspect.Pointcuts)
                 {
-                    if (pointcut.IsMatch(method))
+                    if (pointcut.IsMatch(method, this.Type))
                     {
                         pointcut.AppliedOnMethods.Add(this.method);
 
@@ -130,7 +138,7 @@ namespace Puzzle.NAspect.Visualization.Nodes
             {
                 foreach (PresentationPointcut pointcut in aspect.Pointcuts)
                 {
-                    if (pointcut.IsMatch(method))
+                    if (pointcut.IsMatch(method, this.Type))
                     {
                         pointcut.AppliedOnMethods.Add(this.method);
 
