@@ -96,6 +96,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Nodes\TypeNode.cs" />
+    <Compile Include="TreeViewPainter.cs" />
     <Compile Include="VisualizeProjectForm.cs">
       <SubType>Form</SubType>
     </Compile>

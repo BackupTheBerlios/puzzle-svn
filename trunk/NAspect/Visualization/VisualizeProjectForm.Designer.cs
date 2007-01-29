@@ -421,7 +421,7 @@ namespace Puzzle.NAspect.Visualization
             // openProjectToolStripMenuItem
             // 
             this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
-            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.openProjectToolStripMenuItem.Text = "Project";
             this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
             // 
@@ -637,6 +637,7 @@ namespace Puzzle.NAspect.Visualization
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "VisualizeProjectForm";
             this.Text = "Puzzle Aspect Workbench";
+            this.Load += new System.EventHandler(this.VisualizeProjectForm_Load);
             this.aspectTargetContextMenuStrip.ResumeLayout(false);
             this.aspectContextMenuStrip.ResumeLayout(false);
             this.pointcutContextMenuStrip.ResumeLayout(false);

@@ -710,5 +710,11 @@ namespace Puzzle.NAspect.Visualization
         }
 
         #endregion
+
+        private void VisualizeProjectForm_Load(object sender, EventArgs e)
+        {
+            TreeViewPainter.AttachTreeView(assemblyTreeView,2);
+            TreeViewPainter.AttachTreeView(configTreeView,1);
+        }
     }
 }
