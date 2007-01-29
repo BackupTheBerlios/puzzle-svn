@@ -811,8 +811,11 @@ namespace Puzzle.NAspect.Visualization
                             if (dropPointcut != null)
                             {
                                 MethodNode methodNode = overNode as MethodNode;
-                                dropPointcut.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
-                                RefreshAll();
+                                if (methodNode.CanBeProxied())
+                                {
+                                    dropPointcut.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
+                                    RefreshAll();
+                                }
                             }
                         }
                     }
@@ -835,8 +838,11 @@ namespace Puzzle.NAspect.Visualization
                             if (dropInterceptor != null)
                             {
                                 MethodNode methodNode = overNode as MethodNode;
-                                dropInterceptor.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
-                                RefreshAll();
+                                if (methodNode.CanBeProxied())
+                                {
+                                    dropInterceptor.AddMethodTarget(methodNode.MethodBase, methodNode.Type);
+                                    RefreshAll();
+                                }
                             }
                         }
                     }
@@ -938,7 +944,8 @@ namespace Puzzle.NAspect.Visualization
                             }
                             if (overNode is MethodNode)
                             {
-                                doHilite = true;
+                                if (((MethodNode) overNode).CanBeProxied())
+                                    doHilite = true;
                             }
                         }
                     }

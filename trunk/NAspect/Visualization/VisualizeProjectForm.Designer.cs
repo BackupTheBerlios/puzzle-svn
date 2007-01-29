@@ -146,6 +146,7 @@ namespace Puzzle.NAspect.Visualization
             this.imageList1.Images.SetKeyName(10, "intercepted_method.gif");
             this.imageList1.Images.SetKeyName(11, "aspects.gif");
             this.imageList1.Images.SetKeyName(12, "assemblies.gif");
+            this.imageList1.Images.SetKeyName(13, "method2_grey.gif");
             // 
             // configTreeView
             // 
@@ -440,7 +441,7 @@ namespace Puzzle.NAspect.Visualization
             // openConfigurationToolStripMenuItem
             // 
             this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
-            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.openConfigurationToolStripMenuItem.Text = "Configuration";
             this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
             // 

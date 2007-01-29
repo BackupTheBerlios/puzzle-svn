@@ -60,8 +60,11 @@ namespace Puzzle.NAspect.Visualization.Nodes
             methods.Sort(new MethodComparer());
             foreach (MethodBase method in methods)
             {
-                TreeNode methodNode = new MethodNode(this.Type, method, aspects, model, pointcutMatcher);
-                this.Nodes.Add(methodNode);
+                if (!method.IsStatic)
+                {
+                    TreeNode methodNode = new MethodNode(this.Type, method, aspects, model, pointcutMatcher);
+                    this.Nodes.Add(methodNode);
+                }
             }
 
 

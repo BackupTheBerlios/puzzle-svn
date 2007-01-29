@@ -25,9 +25,17 @@ namespace Puzzle.NAspect.Visualization.Nodes
             this.ImageIndex = 2;
             this.SelectedImageIndex = 2;
 
-            if (aspects != null)
-                if (ShouldProxy())
-                    AddInterceptorNodes();
+            if (CanBeProxied())
+            {
+                if (aspects != null)
+                    if (ShouldProxy())
+                        AddInterceptorNodes();
+            }
+            else
+            {
+                this.ImageIndex = 13;
+                this.SelectedImageIndex = 13;
+            }
         }
 
         private Type type;
@@ -60,23 +68,28 @@ namespace Puzzle.NAspect.Visualization.Nodes
 
         private bool ShouldProxy()
         {
-            //if (method.IsVirtual && !method.IsFinal)
-            //{
-            if (pointcutMatcher.MethodShouldBeProxied(method, aspects, type))
+            if (CanBeProxied())
+                if (pointcutMatcher.MethodShouldBeProxied(method, aspects, type))
+                    return true;
+            return false;
+        }
+
+        public bool CanBeProxied()
+        {
+            if (method.IsVirtual && !method.IsFinal)
             {
                 return true;
             }
-            //}
-            //else if (method.IsVirtual && method.IsFinal)
-            //{
-            //    if (method.Name.IndexOf(".") >= 0)
-            //    {
-            //        return true;
-            //    }
-            //}
+            else if (method.IsVirtual && method.IsFinal)
+            {
+                if (method.Name.IndexOf(".") >= 0)
+                {
+                    return true;
+                }
+            }
             return false;
         }
-	
+
         private MethodBase method;
         public virtual MethodBase MethodBase
         {
@@ -94,14 +107,21 @@ namespace Puzzle.NAspect.Visualization.Nodes
             if (aspects == null)
                 return;
 
-            if (ShouldProxy())
-                RefreshInterceptorNodes();
+            if (CanBeProxied())
+            {
+                if (ShouldProxy())
+                    RefreshInterceptorNodes();
+                else
+                {
+                    this.ImageIndex = 2;
+                    this.SelectedImageIndex = 2;
+                }
+            }
             else
             {
-                this.ImageIndex = 2;
-                this.SelectedImageIndex = 2;
+                this.ImageIndex = 13;
+                this.SelectedImageIndex = 13;
             }
-
             base.Refresh();
         }
 

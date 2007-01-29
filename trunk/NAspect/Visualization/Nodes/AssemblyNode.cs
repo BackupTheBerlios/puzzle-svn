@@ -22,8 +22,11 @@ namespace Puzzle.NAspect.Visualization.Nodes
             types.Sort(new TypeComparer());
             foreach (Type type in types)
             {
-                TreeNode node = new TypeNode(type, model, aspectMatcher, pointcutMatcher);
-                this.Nodes.Add(node);
+                if (type.IsClass)
+                {
+                    TreeNode node = new TypeNode(type, model, aspectMatcher, pointcutMatcher);
+                    this.Nodes.Add(node);
+                }
             }
         }
 
