@@ -1,9 +1,45 @@
 using System;
+using System.ComponentModel;
 
 namespace KumoUnitTests
 {
+    public class SomeAttribAttribute : Attribute
+    {
+        #region Property Name 
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            set
+            {
+                this.name = value;
+            }
+        }                        
+        #endregion
+
+        #region Property Age 
+        private int age;
+        public int Age
+        {
+            get
+            {
+                return this.age;
+            }
+            set
+            {
+                this.age = value;
+            }
+        }                        
+        #endregion
+    }
+
 	public class Foo
 	{
+        [Browsable(false)]
+        [SomeAttrib(Name="Test",Age=10)]
 		public Foo()
 		{
 		}
@@ -44,6 +80,7 @@ namespace KumoUnitTests
 			B = b;
 		}
 
+        
 		public virtual int MyIntMethod()
 		{
 			return 0;

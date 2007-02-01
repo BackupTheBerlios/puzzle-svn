@@ -17,7 +17,9 @@ using System.Threading;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.Utils;
 using Puzzle.NAspect.Framework.Interception;
+
 #if NET2
+using System.Collections.Generic;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -300,6 +302,10 @@ namespace Puzzle.NAspect.Framework
                                          method.ReturnType, parameterTypes);
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+
+#if NET2
+            ReApplyAttributes(method);
+#endif
 
             for (int i = 0; i < parameterInfos.Length; i++)
             {
@@ -715,6 +721,9 @@ namespace Puzzle.NAspect.Framework
                                          CallingConventions.Standard, method.ReturnType, parameterTypes);
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+#if NET2
+            ReApplyAttributes(method);
+#endif
 
             for (int i = 0; i < parameterInfos.Length; i++)
             {
@@ -785,7 +794,8 @@ namespace Puzzle.NAspect.Framework
         {
             Type t = typeof (DebuggerHiddenAttribute);
             ConstructorInfo ci = t.GetConstructor(new Type[] {});
-            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] {});
+            CustomAttributeBuilder cb = new CustomAttributeBuilder(ci, new object[] {});            
+            
             return cb;
         }
 
@@ -814,6 +824,13 @@ namespace Puzzle.NAspect.Framework
 
             proxyConstructor.SetCustomAttribute(DebuggerStepThroughBuilder());
             proxyConstructor.SetCustomAttribute(DebuggerHiddenBuilder());
+
+#if NET2
+            ReApplyAttributes(constructor);            
+#endif
+            
+            
+
 
             foreach (Type mixinType in mixins)
             {
@@ -912,5 +929,77 @@ namespace Puzzle.NAspect.Framework
 
             BuildWrapperMethod(wrapperName, typeBuilder, constructor);
         }
+
+#if NET2
+        private static void ReApplyAttributes(MethodBase constructor)
+        {
+            IList<CustomAttributeData> customAttributes = System.Reflection.CustomAttributeData.GetCustomAttributes(constructor);
+
+            foreach (CustomAttributeData customAttribute in customAttributes)
+            {
+                Type attributeType = customAttribute.Constructor.DeclaringType;
+                object[] typeAttribs = attributeType.GetCustomAttributes(typeof(AttributeUsageAttribute),false);
+                if (typeAttribs.Length == 0)
+                    continue;
+
+                //Mats take a peek if you think this is correct
+                AttributeUsageAttribute attributeUsage = (AttributeUsageAttribute)typeAttribs[0];
+                if (attributeUsage.Inherited)
+                    continue;
+                
+
+                object[] ctorArgs = new object[customAttribute.ConstructorArguments.Count];
+                IList<CustomAttributeNamedArgument> namedArgs = customAttribute.NamedArguments;
+
+
+                List<PropertyInfo> properties = new List<PropertyInfo>();
+                List<object> propertyValues = new List<object>();
+                List<FieldInfo> fields = new List<FieldInfo>();
+                List<object> fieldValues = new List<object>();
+                foreach (CustomAttributeNamedArgument namedArg in namedArgs)
+                {
+                    if (namedArg.MemberInfo is PropertyInfo)
+                    {
+                        PropertyInfo pi = namedArg.MemberInfo as PropertyInfo;
+                        properties.Add(pi);
+                        propertyValues.Add(namedArg.TypedValue.Value);
+                    }
+                    else if (namedArg.MemberInfo is FieldInfo)
+                    {
+                        FieldInfo fi = namedArg.MemberInfo as FieldInfo;
+                        fields.Add(fi);
+                        fieldValues.Add(namedArg.TypedValue.Value);
+                    }
+                    else
+                    {
+                        //unknown
+                    }
+                }
+
+                PropertyInfo[] propertiesArray = new PropertyInfo[properties.Count];
+                object[] propertyValuesArray = new object[properties.Count];
+                for (int i = 0; i < properties.Count; i++)
+                {
+                    propertiesArray[i] = properties[i];
+                    propertyValuesArray[i] = propertyValues[i];
+                }
+
+                FieldInfo[] fieldsArray = new FieldInfo[fields.Count];
+                object[] fieldValuesArray = new object[fields.Count];
+                for (int i = 0; i < fields.Count; i++)
+                {
+                    fieldsArray[i] = fields[i];
+                    fieldValuesArray[i] = fieldValues[i];
+                }
+
+                for (int i = 0; i < customAttribute.ConstructorArguments.Count; i++)
+                {
+                    ctorArgs[i] = customAttribute.ConstructorArguments[i].Value;
+                }
+                CustomAttributeBuilder cb = new CustomAttributeBuilder(customAttribute.Constructor, ctorArgs,propertiesArray,propertyValuesArray , fieldsArray,fieldValuesArray);
+
+            }
+        }
+#endif
     }
 }
