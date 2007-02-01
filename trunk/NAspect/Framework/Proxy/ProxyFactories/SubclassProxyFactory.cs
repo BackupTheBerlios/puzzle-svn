@@ -936,14 +936,13 @@ namespace Puzzle.NAspect.Framework
             IList<CustomAttributeData> customAttributes = System.Reflection.CustomAttributeData.GetCustomAttributes(constructor);
 
             foreach (CustomAttributeData customAttribute in customAttributes)
-            {
-                Type attributeType = customAttribute.Constructor.DeclaringType;
-                object[] typeAttribs = attributeType.GetCustomAttributes(typeof(AttributeUsageAttribute),false);
-                if (typeAttribs.Length == 0)
-                    continue;
+            {                
 
                 //Mats take a peek if you think this is correct
-                AttributeUsageAttribute attributeUsage = (AttributeUsageAttribute)typeAttribs[0];
+                AttributeUsageAttribute attributeUsage = GetAttributeUsageAttribute(customAttribute);
+                if (attributeUsage == null)
+                    continue;
+
                 if (attributeUsage.Inherited)
                     continue;
                 
@@ -999,6 +998,16 @@ namespace Puzzle.NAspect.Framework
                 CustomAttributeBuilder cb = new CustomAttributeBuilder(customAttribute.Constructor, ctorArgs,propertiesArray,propertyValuesArray , fieldsArray,fieldValuesArray);
 
             }
+        }
+
+        private static AttributeUsageAttribute GetAttributeUsageAttribute(CustomAttributeData customAttribute)
+        {
+            Type attributeType = customAttribute.Constructor.DeclaringType;
+            object[] typeAttribs = attributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), false);
+            if (typeAttribs.Length == 0)
+                return null;
+
+            return typeAttribs[0] as AttributeUsageAttribute;
         }
 #endif
     }
