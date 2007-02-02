@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using AopDraw.Classes.Shapes;
 
 namespace AopDraw.Interfaces
 {
@@ -14,9 +15,9 @@ namespace AopDraw.Interfaces
         void MoveSelectedShapes(double xOffset, double yOffset);
         void ResizeSelectedShapes(double width, double height);
         void DeleteSelectedShapes();
-        void AddShape(IShape shape);
+        void AddShape(Shape shape);
         void ClearSelection();
-        IShape GetShapeAt(double x, double y);
-        IList<IShape> GetShapesAt(double x, double y, double width, double height);               
+        Shape GetShapeAt(double x, double y);
+        IList<Shape> GetShapesAt(double x, double y, double width, double height);               
     }
 }

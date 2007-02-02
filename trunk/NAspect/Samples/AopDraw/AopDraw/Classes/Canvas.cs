@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using AopDraw.Interfaces;
 using System.Drawing;
+using AopDraw.Classes.Shapes;
 
 namespace AopDraw.Classes
 {
     public class Canvas : ICanvas
     {
         #region Property Shapes
-        private IList<IShape> shapes = new List<IShape>();
-        public IList<IShape> Shapes
+        private IList<Shape> shapes = new List<Shape>();
+        public IList<Shape> Shapes
         {
             get
             {
@@ -75,7 +76,7 @@ namespace AopDraw.Classes
 
 
             #region RenderShapes
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
                 e.BorderPen = Pens.Black;
                 e.FillBrush = Brushes.White;
@@ -96,7 +97,7 @@ namespace AopDraw.Classes
             #endregion
 
             #region RenderSelection
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
                 ISelectable selectable = shape as ISelectable;
                 if (selectable != null && selectable.IsSelected)
@@ -112,12 +113,12 @@ namespace AopDraw.Classes
             } 
             #endregion
 
-            IsDirty = false;
+
         }
 
         public virtual void MoveSelectedShapes(double xOffset, double yOffset)
         {
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
                 ISelectable selectable = shape as ISelectable;
                 if (selectable != null && selectable.IsSelected)
@@ -135,7 +136,7 @@ namespace AopDraw.Classes
 
         public virtual void ResizeSelectedShapes(double width, double height)
         {
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
                 ISelectable selectable = shape as ISelectable;
                 if (selectable != null && selectable.IsSelected)
@@ -155,7 +156,7 @@ namespace AopDraw.Classes
         {
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                IShape shape = shapes[i];
+                Shape shape = shapes[i];
                 ISelectable selectable = shape as ISelectable;
 
                 if (selectable != null && selectable.IsSelected)
@@ -167,7 +168,7 @@ namespace AopDraw.Classes
             IsDirty = true;
         }
 
-        public virtual void AddShape(IShape shape)
+        public virtual void AddShape(Shape shape)
         {
             shapes.Add(shape);
             ICanvasAware canvasAware = shape as ICanvasAware;
@@ -176,11 +177,11 @@ namespace AopDraw.Classes
             IsDirty = true;
         }
 
-        public virtual IShape GetShapeAt(double x, double y)
+        public virtual Shape GetShapeAt(double x, double y)
         {
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                IShape shape = shapes[i];
+                Shape shape = shapes[i];
 
                 if (shape.HitTest(x, y))
                 {
@@ -190,13 +191,13 @@ namespace AopDraw.Classes
             return null;
         }
 
-        public virtual IList<IShape> GetShapesAt(double x, double y, double width, double height)
+        public virtual IList<Shape> GetShapesAt(double x, double y, double width, double height)
         {
-            IList<IShape> matchedShapes = new List<IShape>();
+            IList<Shape> matchedShapes = new List<Shape>();
             RectangleF bounds = new RectangleF((float)x, (float)y, (float)width, (float)height);
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
-                 IShape2D shape2D = shape as IShape2D;
+                 Shape2D shape2D = shape as Shape2D;
                  if (shape2D != null)
                  {
                      if (shape2D.GetBoundsF().IntersectsWith(bounds))
@@ -210,7 +211,7 @@ namespace AopDraw.Classes
 
         public virtual void ClearSelection()
         {
-            foreach (IShape shape in shapes)
+            foreach (Shape shape in shapes)
             {
                 ISelectable selectable = shape as ISelectable;
                 if (selectable != null)

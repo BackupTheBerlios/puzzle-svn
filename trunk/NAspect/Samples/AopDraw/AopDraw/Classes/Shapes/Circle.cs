@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using AopDraw.Attributes;
 
 namespace AopDraw.Classes.Shapes
 {
+    [Movable]
+    [Selectable]
     public class CircleShape : Shape2D
     {
         public override void Render(CanvasPaintArgs e)

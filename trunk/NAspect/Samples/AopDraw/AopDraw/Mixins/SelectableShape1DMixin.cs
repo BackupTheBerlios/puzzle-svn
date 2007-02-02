@@ -7,16 +7,17 @@ using AopDraw.Classes;
 using Puzzle.NAspect.Framework.Aop;
 using System.Drawing;
 using Puzzle.NAspect.Framework;
+using AopDraw.Classes.Shapes;
 
 namespace AopDraw.Mixins
 {
     public class SelectableShape1DMixin : ISelectable, IProxyAware
     {
-        private IShape1D shape;
+        private Shape1D shape;
 
         public void SetProxy(IAopProxy target)
         {
-            IShape1D shape = target as IShape1D;
+            Shape1D shape = target as Shape1D;
 
             if (shape == null)
                 throw new ArgumentException("target is not an IShape1D");

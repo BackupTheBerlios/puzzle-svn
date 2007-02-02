@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using AopDraw.Attributes;
 
 namespace AopDraw.Classes.Shapes
 {
+    [Movable]
+    [Selectable]
+    [Designable]
     public class Ellipse : Shape2D
     {
         public override void Render(CanvasPaintArgs e)

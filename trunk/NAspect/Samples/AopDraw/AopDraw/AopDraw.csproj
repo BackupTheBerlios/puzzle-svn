@@ -40,15 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DesignableAttribute.cs" />
+    <Compile Include="Attributes\MovableAttribute.cs" />
+    <Compile Include="Attributes\ResizableAttribute.cs" />
+    <Compile Include="Attributes\SelectableAttribute.cs" />
     <Compile Include="Classes\Canvas.cs" />
     <Compile Include="Classes\CanvasPaintArgs.cs" />
     <Compile Include="Classes\Shapes\Circle.cs" />
     <Compile Include="Classes\Shapes\Ellipse.cs" />
-    <Compile Include="Classes\Shapes\Line.cs" />
+    <Compile Include="Classes\Shapes\Shape1D.cs" />
     <Compile Include="Classes\Shapes\Rectangle.cs" />
     <Compile Include="Classes\Shapes\Shape.cs" />
     <Compile Include="Classes\Shapes\Shape2D.cs" />
     <Compile Include="Classes\Shapes\Square.cs" />
+    <Compile Include="Classes\Shapes\TextShape.cs" />
     <Compile Include="Controls\ViewPort.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -70,9 +75,6 @@
     <Compile Include="Interfaces\IMovable.cs" />
     <Compile Include="Interfaces\IResizable.cs" />
     <Compile Include="Interfaces\ISelectable.cs" />
-    <Compile Include="Interfaces\IShape.cs" />
-    <Compile Include="Interfaces\IShape1D.cs" />
-    <Compile Include="Interfaces\IShape2D.cs" />
     <Compile Include="Mixins\CanvasAware.cs" />
     <Compile Include="Mixins\CustomTypeDescriptorMixin.cs" />
     <Compile Include="Mixins\DesignableMixin.cs" />

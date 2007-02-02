@@ -5,25 +5,32 @@ using AopDraw.Interfaces;
 using System.Drawing;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework;
+using AopDraw.Attributes;
+using AopDraw.Classes.Shapes;
 
 namespace AopDraw.Mixins
 {
     public class DesignableMixin : IDesignable, IProxyAware
     {
-        private IShape shape;
+        private Shape shape;
 
         public void SetProxy(IAopProxy target)
         {
-            IShape shape = target as IShape;
+            Shape shape = target as Shape;
 
             if (shape == null)
                 throw new ArgumentException("target is not an IShape");
 
             this.shape = shape;
+
+            DesignableAttribute attrib = (DesignableAttribute)shape.GetType().GetCustomAttributes(typeof(DesignableAttribute), true)[0];
+            this.FillColor = attrib.FillColor;
+            this.BorderColor = attrib.BorderColor;
+            this.BorderSize = attrib.BorderSize;
         }    
 
         #region Property BorderSize 
-        private float borderSize = 2;
+        private float borderSize ;
         public float BorderSize
         {
             get
@@ -38,7 +45,7 @@ namespace AopDraw.Mixins
         #endregion
 
         #region Property BorderColor 
-        private Color borderColor = Color.Black;
+        private Color borderColor ;
         public Color BorderColor
         {
             get
@@ -53,7 +60,7 @@ namespace AopDraw.Mixins
         #endregion
 
         #region Property FillColor 
-        private Color fillColor = Color.Silver;
+        private Color fillColor ;
         public Color FillColor
         {
             get

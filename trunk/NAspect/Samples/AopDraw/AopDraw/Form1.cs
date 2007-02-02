@@ -15,6 +15,7 @@ using AopDraw.Enums;
 using Puzzle.NAspect.Framework.Interception;
 using AopDraw.Interceptors;
 using System.Drawing.Drawing2D;
+using AopDraw.Attributes;
 
 namespace AopDraw
 {
@@ -28,11 +29,7 @@ namespace AopDraw
 
         ICanvas canvas = new Canvas();
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            canvas.Render(e.Graphics);
-        }
+        
 
         RectangleShape rectangle;
         private void Form1_Load(object sender, EventArgs e)
@@ -41,29 +38,29 @@ namespace AopDraw
 
             IEngine engine = new Engine("AopDraw");
 
-            InterfaceAspect typeDescriptorAspect = new InterfaceAspect("typeDescriptorAspect", typeof(IShape), new Type[] { typeof(CustomTypeDescriptorMixin) }, new IPointcut[] { });
+            InterfaceAspect typeDescriptorAspect = new InterfaceAspect("typeDescriptorAspect", typeof(Shape), new Type[] { typeof(CustomTypeDescriptorMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(typeDescriptorAspect);
 
-            InterfaceAspect guidAspect = new InterfaceAspect("guidAspect", typeof(IShape), new Type[] { typeof(GuidObject) }, new IPointcut[] { });
+            InterfaceAspect guidAspect = new InterfaceAspect("guidAspect", typeof(Shape), new Type[] { typeof(GuidObject) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(guidAspect);
 
-            InterfaceAspect selectable2DAspect = new InterfaceAspect("selectable2DAspect", typeof(IShape2D), new Type[] { typeof(SelectableShape2DMixin) }, new IPointcut[] { });
+            AttributeAspect selectable2DAspect = new AttributeAspect("selectable2DAspect", typeof(SelectableAttribute), new Type[] { typeof(SelectableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(selectable2DAspect);
 
-            InterfaceAspect selectable1DAspect = new InterfaceAspect("selectable1DAspect", typeof(IShape1D), new Type[] { typeof(SelectableShape1DMixin) }, new IPointcut[] { });
+            InterfaceAspect selectable1DAspect = new InterfaceAspect("selectable1DAspect", typeof(Shape1D), new Type[] { typeof(SelectableShape1DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(selectable1DAspect);
 
 
-            InterfaceAspect movableAspect = new InterfaceAspect("movableAspect", typeof(IShape2D), new Type[] { typeof(MovableShape2DMixin) }, new IPointcut[] { });
+            AttributeAspect movableAspect = new AttributeAspect("movableAspect", typeof(MovableAttribute), new Type[] { typeof(MovableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(movableAspect);
 
-            InterfaceAspect designableAspect = new InterfaceAspect("designableAspect", typeof(SquareShape), new Type[] { typeof(DesignableMixin) }, new IPointcut[] { });
+            AttributeAspect designableAspect = new AttributeAspect("designableAspect", typeof(DesignableAttribute), new Type[] { typeof(DesignableMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(designableAspect);
 
-            InterfaceAspect resizableAspect = new InterfaceAspect("resizableAspect", typeof(RectangleShape), new Type[] { typeof(ResizableMixin) }, new IPointcut[] { });
+            AttributeAspect resizableAspect = new AttributeAspect("resizableAspect", typeof(ResizableAttribute), new Type[] { typeof(ResizableMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(resizableAspect);
 
-            InterfaceAspect canvasAwareAspect = new InterfaceAspect("canvasAwareAspect", typeof(IShape), new Type[] { typeof(CanvasAwareMixin) }, new IPointcut[] {new SignaturePointcut ("set_*", new ShapePropertyInterceptor())});
+            InterfaceAspect canvasAwareAspect = new InterfaceAspect("canvasAwareAspect", typeof(Shape), new Type[] { typeof(CanvasAwareMixin) }, new IPointcut[] {new SignaturePointcut ("set_*", new ShapePropertyInterceptor())});
             engine.Configuration.Aspects.Add(canvasAwareAspect);
 
             SquareShape square = engine.CreateProxy<SquareShape>();
@@ -98,15 +95,17 @@ namespace AopDraw
             line.X2 = 400;
             line.Y2 = 340;
             canvas.AddShape(line);
+
+
+            TextShape text = engine.CreateProxy<TextShape>();
+            text.X = 140;
+            text.Y = 3;
+            text.Width = 200;
+            text.Height = 100;
+            canvas.AddShape(text);
         }
 
-        void Application_Idle(object sender, EventArgs e)
-        {
-            if (canvas.IsDirty)
-            {
-                panel1.Invalidate();
-            }
-        }
+        
 
 
         private Point mouseDownPos;
@@ -118,7 +117,7 @@ namespace AopDraw
 
 
 
-            IShape shape = canvas.GetShapeAt(x, y);
+            Shape shape = canvas.GetShapeAt(x, y);
 
             #region Displaycaption
             if (shape != null)
@@ -176,7 +175,7 @@ namespace AopDraw
         {
             if (e.Button == MouseButtons.Left)
             {
-                IShape shape = GetShapeFromMouse(e);
+                Shape shape = GetShapeFromMouse(e);
                 
                 
                 mouseDownPos = new Point(e.X, e.Y);
@@ -206,11 +205,11 @@ namespace AopDraw
             }
         }
 
-        private IShape GetShapeFromMouse(MouseEventArgs e)
+        private Shape GetShapeFromMouse(MouseEventArgs e)
         {
             double x = e.X;
             double y = e.Y;
-            IShape shape = canvas.GetShapeAt(x, y);
+            Shape shape = canvas.GetShapeAt(x, y);
             return shape;
         }
 
@@ -219,7 +218,7 @@ namespace AopDraw
             currentAction = DrawAction.None;
             if (e.Button == MouseButtons.Right)
             {
-                IShape shape = GetShapeFromMouse(e);
+                Shape shape = GetShapeFromMouse(e);
                 if (shape != null)
                 {
                     IDesignable designable = shape as IDesignable;
@@ -236,6 +235,22 @@ namespace AopDraw
         private void button1_Click(object sender, EventArgs e)
         {
             rectangle.Width = 300;
+        }
+
+        void Application_Idle(object sender, EventArgs e)
+        {
+            if (canvas.IsDirty)
+            {
+                panel1.Invalidate();
+                canvas.IsDirty = false;
+            }
+        }
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            canvas.Render(e.Graphics);
         }
     }
 }

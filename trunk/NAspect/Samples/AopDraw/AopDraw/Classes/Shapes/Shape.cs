@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace AopDraw.Classes.Shapes
 {
-    public abstract class Shape : IShape
+    public abstract class Shape 
     {
         #region Property X 
         private double x;

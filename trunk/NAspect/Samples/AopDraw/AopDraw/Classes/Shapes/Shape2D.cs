@@ -6,38 +6,8 @@ using System.Drawing;
 
 namespace AopDraw.Classes.Shapes
 {
-    public abstract class Shape2D : IShape2D
+    public abstract class Shape2D : Shape
     {
-        #region Property X
-        private double x;
-        public virtual double X
-        {
-            get
-            {
-                return this.x;
-            }
-            set
-            {
-                this.x = value;
-            }
-        }
-        #endregion
-
-        #region Property Y
-        private double y;
-        public virtual double Y
-        {
-            get
-            {
-                return this.y;
-            }
-            set
-            {
-                this.y = value;
-            }
-        }
-        #endregion
-
         #region Property Width
         private double width;
         public virtual double Width
@@ -70,16 +40,15 @@ namespace AopDraw.Classes.Shapes
 
         public RectangleF GetBoundsF()
         {
-            return new RectangleF((float)x, (float)y, (float)width, (float)height);
+            return new RectangleF((float)X, (float)Y, (float)width, (float)height);
         }
         public Rectangle GetBounds()
         {
-            return new Rectangle((int)x, (int)y, (int)width, (int)height);
+            return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
         }
 
-        public abstract void Render(CanvasPaintArgs e);
 
-        public virtual bool HitTest(double x, double y)
+        public override bool HitTest(double x, double y)
         {
             if (this.GetBoundsF().Contains((float)x, (float)y))
             {
