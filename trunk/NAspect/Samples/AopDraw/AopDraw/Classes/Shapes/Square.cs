@@ -10,7 +10,7 @@ namespace AopDraw.Classes.Shapes
     [Selectable]
     [Designable]
     [Resizable(KeepProportions = true)]
-    public class SquareShape : Shape2D
+    public class SquareShape : RectangleShape
     {
         public override void Render(CanvasPaintArgs e)
         {

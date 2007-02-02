@@ -48,6 +48,7 @@
     <Compile Include="Classes\CanvasPaintArgs.cs" />
     <Compile Include="Classes\Shapes\Circle.cs" />
     <Compile Include="Classes\Shapes\Ellipse.cs" />
+    <Compile Include="Classes\Shapes\Line.cs" />
     <Compile Include="Classes\Shapes\Shape1D.cs" />
     <Compile Include="Classes\Shapes\Rectangle.cs" />
     <Compile Include="Classes\Shapes\Shape.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Mixins\CustomTypeDescriptorMixin.cs" />
     <Compile Include="Mixins\DesignableMixin.cs" />
     <Compile Include="Mixins\GuidObject.cs" />
+    <Compile Include="Mixins\MovableShape1DMixin.cs" />
     <Compile Include="Mixins\MovableShape2DMixin.cs" />
     <Compile Include="Mixins\ResizableMixin.cs" />
     <Compile Include="Mixins\SelectableShape1DMixin.cs" />

@@ -54,6 +54,9 @@ namespace AopDraw
             AttributeAspect movableAspect = new AttributeAspect("movableAspect", typeof(MovableAttribute), new Type[] { typeof(MovableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(movableAspect);
 
+            InterfaceAspect movableShape1DAspect = new InterfaceAspect("movableShape1DAspect", typeof(Shape1D), new Type[] { typeof(MovableShape1DMixin) }, new IPointcut[] { });
+            engine.Configuration.Aspects.Add(movableShape1DAspect);
+
             AttributeAspect designableAspect = new AttributeAspect("designableAspect", typeof(DesignableAttribute), new Type[] { typeof(DesignableMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(designableAspect);
 
@@ -89,7 +92,7 @@ namespace AopDraw
 
             canvas.AddShape(rectangle);
 
-            Shape1D line = engine.CreateProxy<Shape1D>();
+            Line line = engine.CreateProxy<Line>();
             line.X = 200;
             line.Y = 200;
             line.X2 = 400;
