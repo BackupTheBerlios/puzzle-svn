@@ -126,7 +126,7 @@ namespace AopDraw.Classes
                     IMovable movable = shape as IMovable;
                     if (movable != null)
                     {
-                        movable.MoveTo(shape.X + xOffset, shape.Y + yOffset);
+                        movable.MoveTo( xOffset,yOffset);
                     }
                 }
             }

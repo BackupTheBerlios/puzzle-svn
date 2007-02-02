@@ -7,5 +7,6 @@ namespace AopDraw.Interfaces
     public interface IMovable
     {
         void MoveTo(double x, double y);
+        void RememberLocation();
     }
 }

@@ -57,7 +57,7 @@ namespace AopDraw
             AttributeAspect designableAspect = new AttributeAspect("designableAspect", typeof(DesignableAttribute), new Type[] { typeof(DesignableMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(designableAspect);
 
-            AttributeAspect resizableAspect = new AttributeAspect("resizableAspect", typeof(ResizableAttribute), new Type[] { typeof(ResizableMixin) }, new IPointcut[] { });
+            AttributeAspect resizableAspect = new AttributeAspect("resizableAspect", typeof(ResizableAttribute), new Type[] { typeof(ResizableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(resizableAspect);
 
             InterfaceAspect canvasAwareAspect = new InterfaceAspect("canvasAwareAspect", typeof(Shape), new Type[] { typeof(CanvasAwareMixin) }, new IPointcut[] {new SignaturePointcut ("set_*", new ShapePropertyInterceptor())});
@@ -150,7 +150,6 @@ namespace AopDraw
                         int xdelta = e.X - mouseDownPos.X;
                         int ydelta = e.Y - mouseDownPos.Y;
 
-                        mouseDownPos = new Point(e.X, e.Y);
                         canvas.ResizeSelectedShapes(xdelta, ydelta);
                     }
                 }
@@ -163,7 +162,6 @@ namespace AopDraw
                     int xdelta = e.X - mouseDownPos.X;
                     int ydelta = e.Y - mouseDownPos.Y;
 
-                    mouseDownPos = new Point(e.X, e.Y);
                     canvas.MoveSelectedShapes(xdelta, ydelta);
                 }
             }
@@ -192,12 +190,15 @@ namespace AopDraw
                 }
 
                 IResizable resizable = shape as IResizable;
+                IMovable movable = shape as IMovable;
                 if (resizable != null && resizable.GetGripBounds().Contains(e.X, e.Y))
                 {
+                    resizable.RememberSize();
                     currentAction = DrawAction.Resize;
                 }
-                else
+                else if (movable != null) 
                 {
+                    movable.RememberLocation();
                     currentAction = DrawAction.Move;                    
                 }
 

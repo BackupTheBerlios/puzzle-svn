@@ -9,6 +9,7 @@ namespace AopDraw.Classes.Shapes
     [Movable]
     [Selectable]
     [Designable]
+    [Resizable]
     public class Ellipse : Shape2D
     {
         public override void Render(CanvasPaintArgs e)

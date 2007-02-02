@@ -8,18 +8,79 @@ using AopDraw.Classes;
 using System.Windows.Forms;
 using System.Drawing;
 using AopDraw.Classes.Shapes;
+using AopDraw.Attributes;
 
 namespace AopDraw.Mixins
 {
-    public class ResizableMixin : IResizable, IProxyAware
+    public class ResizableShape2DMixin : IResizable, IProxyAware
     {
         private Shape2D shape;
 
         public virtual void Resize(double width, double height)
         {
-            shape.Width += width;
-            shape.Height += height;
+            if (!keepProportions)
+            {
+                shape.Width = Math.Max(OldWidth + width, 5);
+                shape.Height = Math.Max(OldHeight + height, 5);
+            }
+            else
+            {
+                double max = Math.Max(OldWidth + width, OldHeight + height);
+                shape.Width = Math.Max (max,5);
+                shape.Height = Math.Max(max, 5);
+            }
             DirtyCanvas();
+        }
+
+        #region Property OldWidth 
+        private double oldWidth;
+        public double OldWidth
+        {
+            get
+            {
+                return this.oldWidth;
+            }
+            set
+            {
+                this.oldWidth = value;
+            }
+        }                        
+        #endregion
+
+        #region Property OldHeight 
+        private double oldHeight;
+        public double OldHeight
+        {
+            get
+            {
+                return this.oldHeight;
+            }
+            set
+            {
+                this.oldHeight = value;
+            }
+        }                        
+        #endregion
+
+        #region Property KeepProportions 
+        private bool keepProportions;
+        public bool KeepProportions
+        {
+            get
+            {
+                return this.keepProportions;
+            }
+            set
+            {
+                this.keepProportions = value;
+            }
+        }                        
+        #endregion
+
+        public void RememberSize()
+        {
+            this.OldWidth = shape.Width;
+            this.OldHeight = shape.Height;
         }
 
         public void SetProxy(IAopProxy target)
@@ -30,6 +91,11 @@ namespace AopDraw.Mixins
                 throw new ArgumentException("target is not an IShape2D");
 
             this.shape = shape;
+
+            ResizableAttribute attrib = (ResizableAttribute)shape.GetType().GetCustomAttributes(typeof(ResizableAttribute), true)[0];
+
+            KeepProportions = attrib.KeepProportions;
+
         }
 
         public virtual Rectangle GetGripBounds()

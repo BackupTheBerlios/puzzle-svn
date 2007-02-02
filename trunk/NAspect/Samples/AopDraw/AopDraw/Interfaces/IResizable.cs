@@ -11,6 +11,7 @@ namespace AopDraw.Interfaces
         void Resize(double width,double height);
 
         void RenderResize(CanvasPaintArgs e);
+        void RememberSize();
 
         Rectangle GetGripBounds();
     } 

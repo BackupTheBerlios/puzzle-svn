@@ -8,6 +8,7 @@ namespace AopDraw.Classes.Shapes
 {
     [Movable]
     [Selectable]
+    [Resizable(KeepProportions=true)]
     public class CircleShape : Shape2D
     {
         public override void Render(CanvasPaintArgs e)
