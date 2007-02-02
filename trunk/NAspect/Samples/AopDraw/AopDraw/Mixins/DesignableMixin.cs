@@ -72,13 +72,6 @@ namespace AopDraw.Mixins
                 this.fillColor = value;
             }
         }                        
-        #endregion
-
-        private void DirtyCanvas()
-        {
-            ICanvasAware canvasAware = shape as ICanvasAware;
-            if (canvasAware != null)
-                canvasAware.Canvas.IsDirty = true;
-        }         
+        #endregion       
     }
 }

@@ -29,7 +29,6 @@ namespace AopDraw.Mixins
                 shape.Width = Math.Max (max,5);
                 shape.Height = Math.Max(max, 5);
             }
-            DirtyCanvas();
         }
 
         #region Property OldWidth 
@@ -105,12 +104,6 @@ namespace AopDraw.Mixins
             return sizeBounds;
         }
 
-        private void DirtyCanvas()
-        {
-            ICanvasAware canvasAware = shape as ICanvasAware;
-            if (canvasAware != null)
-                canvasAware.Canvas.IsDirty = true;
-        }
 
         public void RenderResize(CanvasPaintArgs e)
         {
