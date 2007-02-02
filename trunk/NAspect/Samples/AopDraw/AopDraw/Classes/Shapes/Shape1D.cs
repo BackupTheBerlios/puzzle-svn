@@ -11,7 +11,7 @@ namespace AopDraw.Classes.Shapes
     {
         #region Property X2 
         private double x2;
-        public double X2
+        public virtual double X2
         {
             get
             {
@@ -26,7 +26,7 @@ namespace AopDraw.Classes.Shapes
 
         #region Property Y2 
         private double y2;
-        public double Y2
+        public virtual double Y2
         {
             get
             {
@@ -41,11 +41,21 @@ namespace AopDraw.Classes.Shapes
 
         public RectangleF GetBoundsF()
         {
-            return new RectangleF((float)X, (float)Y, (float)(X2-X), (float)(Y2-Y));
+            float minX = (float)Math.Min(X, X2);
+            float maxX = (float)Math.Max(X, X2);
+            float minY = (float)Math.Min(Y, Y2);
+            float maxY = (float)Math.Max(Y, Y2);
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
         public Rectangle GetBounds()
         {
-            return new Rectangle((int)X, (int)Y, (int)(X2 - X), (int)(Y2 - Y));
+            int minX = (int)Math.Min(X, X2);
+            int maxX = (int)Math.Max(X, X2);
+            int minY = (int)Math.Min(Y, Y2);
+            int maxY = (int)Math.Max(Y, Y2);
+
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
         public override void Render(CanvasPaintArgs e)
