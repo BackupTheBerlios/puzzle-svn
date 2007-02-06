@@ -68,5 +68,11 @@ namespace Puzzle.NPersist.Framework.Aop
 				return arr;
 			}
 		}
-	}
+
+        private IList targets = new ArrayList();
+        public IList Targets
+        {
+            get { return targets; }
+        }
+    }
 }

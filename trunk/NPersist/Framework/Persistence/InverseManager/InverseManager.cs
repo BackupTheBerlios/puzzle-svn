@@ -245,6 +245,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 					list.Add(obj);
 					if (mList != null) { mList.MuteNotify = stackMute; }
 					om.SetUpdatedStatus(value, invPropertyMap.Name, true);
+                    ObjectPersistenceEngine objectPersistenceEngine = this.Context.PersistenceEngine as ObjectPersistenceEngine;
+                    if (objectPersistenceEngine != null)
+                    {
+                        if (objectPersistenceEngine.SourceContext != null)
+                        {
+                            this.Context.UnitOfWork.RegisterDirty(value);
+                        }
+                    }
 				}				
 			}
 

@@ -44,7 +44,7 @@ namespace Puzzle.NPersist.Framework.Aop
 			}
 		}
 
-		public bool IsMatch(MethodBase method)
+        public bool IsMatch(MethodBase method, Type type)
 		{
 			if (method is ConstructorInfo)
 				return false;
@@ -108,5 +108,30 @@ namespace Puzzle.NPersist.Framework.Aop
 			
 			return true;
 		}
-	}
+
+        private IList targets = new ArrayList();
+        public IList Targets
+        {
+            get
+            {
+                return targets; ;
+            }
+            set
+            {
+                targets = value ;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "";
+            }
+            set
+            {
+                ;
+            }
+        }
+    }
 }

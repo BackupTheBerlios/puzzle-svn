@@ -30,5 +30,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		bool CompareLists(IList newList, IList oldList);
 
+        bool CompareListsById(IList newList, IList oldList);
+
 	}
 }

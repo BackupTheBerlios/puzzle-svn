@@ -191,7 +191,7 @@ namespace Puzzle.NPersist.Framework.Validation
 					{
 						if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
 						{
-							string value = (string) om.GetPropertyValue(obj, propertyMap.Name);
+							string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
 							if (value != null)
 							{
 								if (value.Length > max )
@@ -242,7 +242,7 @@ namespace Puzzle.NPersist.Framework.Validation
 				{
 					if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
 					{
-						string value = (string) om.GetPropertyValue(obj, propertyMap.Name);
+						string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
 						if (value != null)
 						{
 							string msg = "String too short";

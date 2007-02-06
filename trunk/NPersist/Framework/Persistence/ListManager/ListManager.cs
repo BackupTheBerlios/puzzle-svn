@@ -214,5 +214,61 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return true;
 		}
 
+        public bool CompareListsById(IList newList, IList oldList)
+        {
+            if (newList == null || oldList == null)
+            {
+                if (!((newList == null && oldList == null)))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            if (!(oldList.Count == newList.Count))
+            {
+                return false;
+            }
+            IObjectManager om = this.Context.ObjectManager;
+            IDomainMap dm = this.Context.DomainMap;
+            Hashtable ids = new Hashtable();
+            foreach (object value in newList)
+            {
+                IClassMap classMap = dm.MustGetClassMap(value.GetType());
+                string id = classMap.GetFullName() + om.GetObjectIdentity(value);
+                ids[id] =  id;
+            }
+
+            foreach (object value in oldList)
+            {
+                IClassMap classMap = dm.MustGetClassMap(value.GetType());
+                string id = classMap.GetFullName() + om.GetObjectIdentity(value);
+                if (!(ids.ContainsKey(id)))
+                {
+                    return false;
+                }
+            }
+
+            ids = new Hashtable();
+            foreach (object value in oldList)
+            {
+                IClassMap classMap = dm.MustGetClassMap(value.GetType());
+                string id = classMap.GetFullName() + om.GetObjectIdentity(value);
+                ids[id] = id;
+            }
+            foreach (object value in newList)
+            {
+                IClassMap classMap = dm.MustGetClassMap(value.GetType());
+                string id = classMap.GetFullName() + om.GetObjectIdentity(value);
+                if (!(ids.ContainsKey(id)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 	}
 }

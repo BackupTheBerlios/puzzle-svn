@@ -179,7 +179,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				else
 				{
 					this.Context.IdentityMap.RegisterLoadedObject(obj);
-					LoadObject(obj, sourceObject);
+                    LoadObject(obj, sourceObject, RefreshBehaviorType.DefaultBehavior);
 				}
 			}
 			finally
@@ -338,7 +338,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			
 				sourcePropertyMap = propertyMap.GetSourcePropertyMapOrSelf() ;	
 
-				LoadProperty(obj, propertyMap, sourceOm, source, sourcePropertyMap, om);
+				LoadProperty(obj, propertyMap, sourceOm, source, sourcePropertyMap, om, RefreshBehaviorType.DefaultBehavior);
 			}
 			finally
 			{
@@ -372,7 +372,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					//object sourceObject = sourceContext.GetObjectById(identity, sourceType, true);
 					object obj = this.Context.GetObjectById(identity, type, true);
 					//this.Context.IdentityMap.RegisterLoadedObject(obj);
-					LoadObject(obj, source);
+					LoadObject(obj, source, query.RefreshBehavior);
 					result.Add(obj);
 				}
 				return result;
@@ -445,7 +445,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 //			}			
 		}
 
-		protected virtual void LoadObject(object obj, object source)
+        protected virtual void LoadObject(object obj, object source, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
 				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
@@ -457,15 +457,34 @@ namespace Puzzle.NPersist.Framework.Persistence
 				IObjectManager sourceOm = this.sourceContext.ObjectManager;
 				IClassMap classMap = domainMap.MustGetClassMap(obj.GetType());
 				IPropertyMap sourcePropertyMap;
-				PropertyStatus propStatus;
-				foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+				PropertyStatus sourcePropStatus;
+                PropertyStatus propStatus;
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
 				{
 					sourcePropertyMap = propertyMap.GetSourcePropertyMapOrSelf() ;	
-					propStatus = sourceOm.GetPropertyStatus(source, sourcePropertyMap.Name ) ;
+					sourcePropStatus = sourceOm.GetPropertyStatus(source, sourcePropertyMap.Name ) ;
+					propStatus = om.GetPropertyStatus(obj, propertyMap.Name) ;
+                    IUpdatedPropertyTracker tracker = obj as IUpdatedPropertyTracker;
+                    if (tracker != null)
+                    {
+                        if (tracker.GetUpdatedStatus(propertyMap.Name))
+                            propStatus = PropertyStatus.Dirty;
+                    }
 
-					if (!(propStatus == PropertyStatus.NotLoaded))
+                    RefreshBehaviorType useRefreshBehavior = this.Context.PersistenceManager.GetRefreshBehavior(refreshBehavior, classMap, propertyMap);
+                    
+					if (sourcePropStatus != PropertyStatus.NotLoaded)
 					{
-						LoadProperty(obj, propertyMap, sourceOm, source, sourcePropertyMap, om);
+                        bool doLoad = false;
+
+                        if (useRefreshBehavior == RefreshBehaviorType.DefaultBehavior || useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded)
+                        {
+                            if (propStatus == PropertyStatus.NotLoaded)
+                                doLoad = true;
+                        }
+
+                        if (doLoad)
+    						LoadProperty(obj, propertyMap, sourceOm, source, sourcePropertyMap, om, refreshBehavior);
 					}
 				}
 			}
@@ -475,7 +494,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}	
 		}
 
-		private void LoadProperty(object obj, IPropertyMap propertyMap, IObjectManager om, object source, IPropertyMap sourcePropertyMap, IObjectManager sourceOm)
+        private void LoadProperty(object obj, IPropertyMap propertyMap, IObjectManager om, object source, IPropertyMap sourcePropertyMap, IObjectManager sourceOm, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
 				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
@@ -556,8 +575,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 						//that can be copied between contexts
 						IList orgList = (IList) sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
 						IList list = (IList) om.GetPropertyValue(obj, sourcePropertyMap.Name);
-						
-						this.LoadReferenceList(list, orgList);
+
+                        this.LoadReferenceList(list, orgList, refreshBehavior);
 
 						//for the org-list we can use ListManager.CloneList and clone the list of leaf objects
 						IList listOrg = this.Context.ListManager.CloneList(obj, propertyMap, list);
@@ -573,7 +592,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}	
 		}
 
-		public virtual void LoadReferenceList(IList list, IList orgList)
+        public virtual void LoadReferenceList(IList list, IList orgList, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
 				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
@@ -598,7 +617,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					//object sourceObject = sourceContext.GetObjectById(identity, sourceType, true);
 					object clone = this.Context.GetObjectById(identity, leafType, true);
 
-					LoadObject(clone, item);
+                    LoadObject(clone, item, refreshBehavior);
 					this.Context.IdentityMap.RegisterLoadedObject(clone);
 
 					list.Add(clone);
@@ -860,7 +879,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 									if (!creating)
 									{
 										//Optimistic concurrency
-										if (!CompareLists(listOrg, sourceList))
+										if (!CompareListsById(listOrg, sourceList))
 										{
 											string orgValueString = "<list>";		
 											string currValueString = "<list>";
@@ -882,7 +901,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 									SaveList(listOrg, sourceListOrg);
 
-									if (creating == false && CompareLists(list, listOrg) == false)
+									if (creating == false && CompareListsById(list, listOrg) == false)
 										sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);							
 								}
 							}									
@@ -989,12 +1008,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 										om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
 									}
 
-									IList sourceList = (IList) om.GetPropertyValue(obj, propertyMap.Name);
+									//IList sourceList = (IList) om.GetPropertyValue(obj, propertyMap.Name);
+                                    IList sourceList = (IList)sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
 
 									if (!creating)
 									{
 										//Optimistic concurrency
-										if (!CompareLists(listOrg, sourceList))
+										if (!CompareListsById(listOrg, sourceList))
 										{
 											string orgValueString = "<list>";		
 											string currValueString = "<list>";
@@ -1016,7 +1036,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 									SaveReferenceList(listOrg, sourceListOrg);
 
-									if (creating == false && CompareLists(list, listOrg) == false)
+									if (creating == false && CompareListsById(list, listOrg) == false)
 										sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);
 
 								}							
@@ -1066,10 +1086,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return true;
 		}
 
-		private bool CompareLists(IList orgValue, IList currValue)
-		{
-			return this.Context.ListManager.CompareLists(orgValue, currValue);
-		}
+        //private bool CompareLists(IList orgValue, IList currValue)
+        //{
+        //    return this.Context.ListManager.CompareLists(orgValue, currValue);
+        //}
 
-	}
+        private bool CompareListsById(IList orgValue, IList currValue)
+        {
+            return this.Context.ListManager.CompareListsById(orgValue, currValue);
+        }
+    }
 }

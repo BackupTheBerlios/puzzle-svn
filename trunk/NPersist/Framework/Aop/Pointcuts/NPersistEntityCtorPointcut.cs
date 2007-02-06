@@ -42,9 +42,34 @@ namespace Puzzle.NPersist.Framework.Aop
 			}
 		}
 
-		public bool IsMatch(MethodBase method)
+        public bool IsMatch(MethodBase method, Type type)
 		{
 			return (method.Name.StartsWith(".ctor"));
 		}
-	}
+
+        private IList targets = new ArrayList();
+        public IList Targets
+        {
+            get
+            {
+                return targets; ;
+            }
+            set
+            {
+                targets = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "";
+            }
+            set
+            {
+                ;
+            }
+        }
+    }
 }
