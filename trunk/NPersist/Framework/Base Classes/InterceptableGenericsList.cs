@@ -358,7 +358,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         {
               get
               {
-                    return false;
+                    return true;
               }
         }
 
