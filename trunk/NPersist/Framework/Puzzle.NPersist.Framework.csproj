@@ -294,6 +294,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Enums\DeadlockStrategy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Enums\DocClassMapMode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -875,6 +880,11 @@
                 />
                 <File
                     RelPath = "Mapping\Domain\PropertyMap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Mapping\Domain\TableLockIndexSorter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
