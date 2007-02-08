@@ -131,6 +131,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_TableMaps = value; }
 		}
 
+        public ITableMap MustGetTableMap(string findName)
+        {
+            ITableMap tableMap = GetTableMap(findName);
+            if (tableMap == null)
+                throw new MappingException("Could not find table " + findName + " in the source map " + this.Name + "!");
+            return tableMap;
+        }
+
 		public virtual ITableMap GetTableMap(string findName)
 		{
 			if (findName == null) { return null; }

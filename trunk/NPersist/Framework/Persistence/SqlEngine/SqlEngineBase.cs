@@ -4074,7 +4074,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             string sql = GetTouchStatement(tableMap, exceptionLimit);
             IDataSource dataSource = this.Context.GetDataSource(tableMap.SourceMap);
             using (IDataReader dr = this.Context.SqlExecutor.ExecuteReader(sql, dataSource)) { ; }
-            //this.Context.SqlExecutor.ExecuteScalar(sql, dataSource);
         }
 
         public virtual string GetTouchStatement(ITableMap tableMap, int exceptionLimit)

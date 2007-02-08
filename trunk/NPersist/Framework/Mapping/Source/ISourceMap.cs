@@ -34,6 +34,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		ITableMap GetTableMap(string findName);
 
+        ITableMap MustGetTableMap(string findName);
+
 		SourceType SourceType { get; set; }
 
 		ProviderType ProviderType { get; set; }

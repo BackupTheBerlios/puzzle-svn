@@ -568,6 +568,29 @@ namespace Puzzle.NPersist.Framework
             return this.DeadlockStrategy;
         }
 
+        public virtual void TouchTables(IList tables, DeadlockStrategy deadlockStrategy)
+        {
+            ArrayList tableMaps = new ArrayList();
+            ISourceMap sourceMap = this.DomainMap.GetSourceMap();
+            foreach (object table in tables)
+            {
+                if (table is string)
+                {
+                    if (sourceMap == null)
+                        throw new MappingException("No source map found in mapping!");
+
+                    ITableMap tableMap = sourceMap.MustGetTableMap((string)table);
+                    tableMaps.Add(tableMap);
+                }
+                else if (table is ITableMap)
+                    tableMaps.Add(table);
+                else
+                    throw new NPersistException("Only table names (strings) and instances implementing ITableMap may be used in the list passed to the tables parameter!");
+            }
+            this.UnitOfWork.TouchLockTables(null, 1, deadlockStrategy, tableMaps);
+        }
+
+
 		#region Property  DomainKey
 		
 		private string domainKey = "";

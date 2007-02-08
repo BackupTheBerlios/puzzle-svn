@@ -232,6 +232,15 @@ namespace Puzzle.NPersist.Framework
         DeadlockStrategy GetDeadlockStrategy();
 
         /// <summary>
+        /// Lets you touch (and thereby lock, assuming this is done within a serializable transaction) the tables in the list in indexed order. 
+        /// Use this method when you want to touch/lock the tables you will be reading from in a transaction to avoid deadlocks. If you select the TouchLockTable transaction,
+        /// the tables you pass to the first parameter will be ignored (you may pass null to the first parameter in this case).
+        /// </summary>
+        /// <param name="tables">A list of table names or ITableMap instances.</param>
+        /// <param name="deadlockStrategy">The deadlock strategy you want to use. Default will mean you use the strategy from the domain/context.</param>
+        void TouchTables(IList tables, DeadlockStrategy deadlockStrategy);
+
+        /// <summary>
         /// Gets or sets the domain key.
         /// </summary>
         /// <value>The domain key.</value>

@@ -40,5 +40,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         void Clear();
 
 		IList Exceptions { get; }
+
+        void TouchLockTables(object obj, int exceptionLimit, DeadlockStrategy deadlockStrategy, IList tables);
     }
 }
