@@ -69,6 +69,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private ValidationMode m_ValidationMode = ValidationMode.Default ;
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default ;
+        private DeadlockStrategy m_DeadlockStrategy = DeadlockStrategy.Default;
 
 		//O/D Mapping
 		private string m_DocSource = "";
@@ -1132,6 +1133,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { this.m_TimeToLiveBehavior = value; }
 		}
 
+        public DeadlockStrategy DeadlockStrategy
+        {
+            get { return m_DeadlockStrategy; }
+            set { m_DeadlockStrategy = value; }
+        }
 
 		#endregion
 
@@ -1401,7 +1407,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			domainMap.LoadBehavior = this.LoadBehavior;
 			domainMap.CodeLanguage = this.CodeLanguage;
 			domainMap.DocSource = this.DocSource;
-		}
+            domainMap.DeadlockStrategy = this.DeadlockStrategy;
+        }
 
 		public override bool Compare(IMap compareTo)
 		{
@@ -1506,7 +1513,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				return false;
 			}
-			return true;
+            if (!(domainMap.DeadlockStrategy == this.DeadlockStrategy))
+            {
+                return false;
+            }
+            return true;
 		}
 
 		#endregion

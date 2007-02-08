@@ -142,5 +142,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		TimeToLiveBehavior TimeToLiveBehavior { get; set; }
 
+        DeadlockStrategy DeadlockStrategy { get; set; }
+
 	}
 }

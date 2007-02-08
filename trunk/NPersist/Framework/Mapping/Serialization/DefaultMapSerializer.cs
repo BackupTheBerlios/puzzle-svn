@@ -177,6 +177,11 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 					}
 				}
 			}
+            if (!(domainMap.DeadlockStrategy == DeadlockStrategy.Default))
+            {
+                xml.Append(" deadlock-strategy=\"" + domainMap.DeadlockStrategy.ToString() + "\""); // do not localize
+            }
+
 			xml.Append(">\r\n");
 			xml.Append(SerializeMetaData(domainMap.MetaData, "  "));
 			foreach (IClassMap classMap in domainMap.ClassMaps)
@@ -853,6 +858,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" domain-key=\"" + sourceMap.DomainKey + "\""); // do not localize
 			}
+            if (sourceMap.LockTable.Length > 0)
+            {
+                xml.Append(" lock-table=\"" + sourceMap.LockTable + "\""); // do not localize
+            }
 
 
 			xml.Append(">\r\n");
@@ -874,7 +883,11 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" view=\"true\"");
 			}
-			xml.Append(">\r\n");
+            if (tableMap.LockIndex > -1)
+            {
+                xml.Append(" lock-index=\"" + tableMap.LockIndex.ToString() + "\"");
+            }
+            xml.Append(">\r\n");
 			xml.Append(SerializeMetaData(tableMap.MetaData, "      "));
 			foreach (IColumnMap columnMap in tableMap.ColumnMaps)
 			{
@@ -1091,6 +1104,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 					domainMap.MapSerializer = MapSerializer.DefaultSerializer;
 				}
 			}
+            if (!(xmlDom.Attributes["deadlock-strategy"] == null))
+            {
+                domainMap.DeadlockStrategy = (DeadlockStrategy)Enum.Parse(typeof(DeadlockStrategy), xmlDom.Attributes["deadlock-strategy"].Value);
+            }
 			else
 			{
 				domainMap.MapSerializer = MapSerializer.DefaultSerializer;
@@ -1693,7 +1710,11 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				sourceMap.DomainKey = xmlSource.Attributes["domain-key"].Value;
 			}
-			ArrayList metaData = sourceMap.MetaData;
+            if (!(xmlSource.Attributes["lock-table"] == null))
+            {
+                sourceMap.LockTable = xmlSource.Attributes["lock-table"].Value;
+            }
+            ArrayList metaData = sourceMap.MetaData;
 			DeserializeMetaData(xmlSource, ref metaData);
 			xmlConnStr = xmlSource.SelectSingleNode("connection-string");
 			if (xmlConnStr != null)
@@ -1720,7 +1741,11 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				tableMap.IsView = ParseBool(xmlTable.Attributes["view"].Value);
 			}
-			ArrayList metaData = tableMap.MetaData;
+            if (!(xmlTable.Attributes["lock-index"] == null))
+            {
+                tableMap.LockIndex = System.Convert.ToInt32(xmlTable.Attributes["lock-index"].Value);
+            }
+            ArrayList metaData = tableMap.MetaData;
 			DeserializeMetaData(xmlTable, ref metaData);
 			xmlCols = xmlTable.SelectNodes("column");
 			foreach (XmlNode xmlCol in xmlCols)

@@ -214,6 +214,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Enums\ConflictResolution.cs" />
+    <Compile Include="Enums\DeadlockStrategy.cs" />
     <Compile Include="Enums\DocClassMapMode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -562,6 +563,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mapping\Domain\Immutable\ImmutableClassMap.cs" />
+    <Compile Include="Mapping\Domain\TableLockIndexSorter.cs" />
     <Compile Include="Mapping\Exceptions\MappingException.cs">
       <SubType>Code</SubType>
     </Compile>

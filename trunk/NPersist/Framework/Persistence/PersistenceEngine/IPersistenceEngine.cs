@@ -48,5 +48,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
 
-	}
+        void TouchTable(Puzzle.NPersist.Framework.Mapping.ITableMap tableMap, int exceptionLimit);
+    }
 }

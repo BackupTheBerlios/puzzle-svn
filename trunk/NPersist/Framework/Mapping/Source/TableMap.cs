@@ -33,6 +33,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private ISourceMap m_SourceMap;
 		private string m_name = "";
 		private bool m_IsView = false;
+        private int m_LockIndex = -1;
 
 		public TableMap() : base()
 		{
@@ -217,6 +218,22 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_name = newName;
 		}
 
+        public int LockIndex 
+        {
+            get { return m_LockIndex; }
+            set { m_LockIndex = value; }
+        }
+
+        public int GetLockIndex()
+        {
+            if (m_LockIndex < 0)
+            {
+                this.SourceMap.SetupLockIndexes();
+            }
+            return m_LockIndex;
+        }
+
+
 		public override IMap Clone()
 		{
 			ITableMap tableMap = new TableMap();
@@ -318,7 +335,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			ITableMap tableMap = (ITableMap) mapObject;
 			tableMap.Name = this.Name;
 			tableMap.IsView = this.IsView;
-		}
+            tableMap.LockIndex = this.LockIndex;
+        }
 
 		public override bool Compare(IMap compareTo)
 		{
@@ -331,8 +349,18 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				return false;
 			}
-			return true;
+            if (!(tableMap.IsView == this.IsView))
+            {
+                return false;
+            }
+            if (!(tableMap.LockIndex == this.LockIndex))
+            {
+                return false;
+            }
+            return true;
 		}
+
+
 
 		public override string GetKey()
 		{

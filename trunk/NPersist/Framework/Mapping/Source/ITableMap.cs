@@ -39,5 +39,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 		ArrayList GetDefaultValueColumnMaps();
 
 		void UpdateName(string newName);
+
+        int LockIndex { get; set; }
+
+        int GetLockIndex();
 	}
 }

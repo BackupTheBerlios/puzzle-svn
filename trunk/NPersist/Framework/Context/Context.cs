@@ -75,6 +75,7 @@ namespace Puzzle.NPersist.Framework
 		private IObjectValidator m_ObjectValidator;
 		private Hashtable m_Transactions = new Hashtable();
 		private bool m_AutoTransactions = true;
+        private DeadlockStrategy m_DeadlockStrategy = DeadlockStrategy.Default;
 
 		private IList conflicts = new ArrayList();
 		private Hashtable loadedInLatestQuery = new Hashtable();
@@ -552,6 +553,20 @@ namespace Puzzle.NPersist.Framework
 			get { return m_AutoTransactions; }
 			set { m_AutoTransactions = value; }			
 		}
+
+        public DeadlockStrategy DeadlockStrategy
+        {
+            get { return m_DeadlockStrategy; }
+            set { m_DeadlockStrategy = value; }
+        }
+
+        public DeadlockStrategy GetDeadlockStrategy()
+        {
+            if (this.DomainMap != null)
+                if (this.DomainMap.DeadlockStrategy != DeadlockStrategy.Default)
+                    return this.DomainMap.DeadlockStrategy;
+            return this.DeadlockStrategy;
+        }
 
 		#region Property  DomainKey
 		

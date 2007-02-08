@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NPersist.Framework.Mapping;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -49,5 +50,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		string StatementDelimiter { get; set; }
 
-	}
+        void TouchTable(ITableMap tableMap, int exceptionLimit);
+    }
 }

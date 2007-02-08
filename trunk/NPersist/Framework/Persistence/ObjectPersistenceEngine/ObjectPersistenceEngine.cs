@@ -1095,5 +1095,8 @@ namespace Puzzle.NPersist.Framework.Persistence
         {
             return this.Context.ListManager.CompareListsById(orgValue, currValue);
         }
+
+        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
+
     }
 }

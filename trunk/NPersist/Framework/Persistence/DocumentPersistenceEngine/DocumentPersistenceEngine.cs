@@ -1278,5 +1278,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		#endregion
 
+        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
+
 	}
 }

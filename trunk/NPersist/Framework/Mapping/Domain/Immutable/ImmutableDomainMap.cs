@@ -637,5 +637,22 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
         {
             throw new Exception("The method or operation is not implemented.");
         }
+
+        #region IDomainMap Members
+
+
+        public DeadlockStrategy DeadlockStrategy
+        {
+            get
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+            set
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+        }
+
+        #endregion
     }
 }

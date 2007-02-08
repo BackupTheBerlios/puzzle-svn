@@ -32,5 +32,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		IPersistenceEngine ObjectServicePersistenceEngine { get; set; }
 
 		IPersistenceEngine ObjectObjectPersistenceEngine { get; set; }
-	}
+
+        void TouchTable(ITableMap tableMap, int exceptionLimit);
+    }
 }

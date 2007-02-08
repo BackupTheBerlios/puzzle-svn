@@ -221,6 +221,15 @@ namespace Puzzle.NPersist.Framework
         /// <value><c>true</c> if auto transactions should be used; otherwise, <c>false</c>.</value>
 		bool AutoTransactions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the deadlock strategy to be used when committing a unit of work.
+        /// </summary>
+        DeadlockStrategy DeadlockStrategy { get; set; } 
+
+        /// <summary>
+        /// Finds the deadlock strategy that should be used given the domain map.
+        /// </summary>
+        DeadlockStrategy GetDeadlockStrategy();
 
         /// <summary>
         /// Gets or sets the domain key.
@@ -239,6 +248,7 @@ namespace Puzzle.NPersist.Framework
         /// </summary>
         /// <returns></returns>
         long GetNextParamNr();
+
 
 
         /// <summary>

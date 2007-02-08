@@ -50,6 +50,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		void UpdateName(string newName);
 
+        string LockTable { get; set; }
+
+        ITableMap MustGetLockTable();
+
+        ITableMap GetLockTable();
+
+        void SetupLockIndexes();
+
 		//O/D Mapping
 
 		string DocPath { get; set; }
@@ -73,6 +81,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 //		string ContextFactoryAssembly { get; set; }
 //
 //		string ContextFactoryClass { get; set; }
+
 
 	}
 }

@@ -104,6 +104,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return null;
 		}
 
+        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit)
+        {
+            GetSqlEngine(tableMap.SourceMap.SourceType).TouchTable(tableMap, exceptionLimit);
+        }
+
+
 		public virtual void LoadObject(ref object obj)
 		{
 			GetSqlEngine(GetSourceType(obj)).LoadObject(ref obj);

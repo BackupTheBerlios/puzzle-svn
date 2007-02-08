@@ -4067,6 +4067,31 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		#endregion
 
+        #region TouchTable
 
-	}
+        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit)
+        {
+            string sql = GetTouchStatement(tableMap, exceptionLimit);
+            IDataSource dataSource = this.Context.GetDataSource(tableMap.SourceMap);
+            using (IDataReader dr = this.Context.SqlExecutor.ExecuteReader(sql, dataSource)) { ; }
+            //this.Context.SqlExecutor.ExecuteScalar(sql, dataSource);
+        }
+
+        public virtual string GetTouchStatement(ITableMap tableMap, int exceptionLimit)
+        {
+            SqlSelectStatement select = new SqlSelectStatement(tableMap.SourceMap);
+            SqlTableAlias table = select.GetSqlTableAlias(tableMap);
+
+            select.SqlSelectClause.AddSqlAllColumnsSelectListItem();
+            select.Top = 1;
+
+            select.SqlFromClause.AddSqlAliasTableSource(table);
+
+            string sql = this.GenerateSql(select);
+
+            return sql;
+        }
+
+        #endregion
+    }
 }

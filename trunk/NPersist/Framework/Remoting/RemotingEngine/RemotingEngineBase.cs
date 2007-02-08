@@ -189,5 +189,8 @@ namespace Puzzle.NPersist.Framework.Remoting
 		public abstract DataTable LoadDataTable(IQuery query);
 
 		public abstract IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);
+
+        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
+
 	}
 }

@@ -45,6 +45,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private string m_Catalog = "";
 		private string m_ProviderAssemblyPath = "";
 		private string m_ProviderConnectionTypeName = "";
+        private string m_LockTable = "";
 
 		//O/D Mapping
 		private string m_DocPath = "";
@@ -235,6 +236,60 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_name = newName;
 		}
 
+        public string LockTable 
+        {
+            get { return m_LockTable; }
+            set { m_LockTable = value; }
+        }
+
+        public ITableMap MustGetLockTable()
+        {
+            ITableMap tableMap = GetLockTable();
+            if (tableMap == null)
+                throw new MappingException("Could not find table " + m_LockTable + " in the source map " + this.Name + " in map file!");
+            return tableMap;
+        }
+
+        public ITableMap GetLockTable()
+        {
+            if (m_LockTable == "")
+            {
+                //Assign a lock table
+                foreach (ITableMap tableMap in this.TableMaps)
+                {
+                    m_LockTable = tableMap.Name;
+                    break;
+                }
+
+            }
+            return this.GetTableMap(m_LockTable);
+        }
+
+
+        public void SetupLockIndexes()
+        {
+            int highestIndex = -1;
+            //find highest existing index
+            foreach (ITableMap tableMap in this.TableMaps)
+            {
+                if (tableMap.LockIndex > highestIndex)
+                    highestIndex = tableMap.LockIndex;
+            }
+            int index = highestIndex;
+            if (index < 0)
+                index = 0;
+            //find highest existing index
+            foreach (ITableMap tableMap in this.TableMaps)
+            {
+                if (tableMap.LockIndex < 0)
+                {
+                    tableMap.LockIndex = index;
+                    index++;
+                }
+            }
+        }
+
+
 		#endregion
 
 		#region Object/Object Mapping
@@ -411,7 +466,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			sourceMap.DocEncoding = this.DocEncoding;
 			sourceMap.Url = this.Url;
 			sourceMap.DomainKey = this.DomainKey;
-		}
+            sourceMap.LockTable = this.LockTable;
+        }
 
 		public override bool Compare(IMap compareTo)
 		{
@@ -480,7 +536,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				return false;
 			}
-			return true;
+            if (!(sourceMap.LockTable == this.LockTable))
+            {
+                return false;
+            }
+            return true;
 		}
 
 		#endregion

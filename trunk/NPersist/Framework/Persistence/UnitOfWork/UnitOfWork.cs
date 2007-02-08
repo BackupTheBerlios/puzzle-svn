@@ -19,6 +19,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NPersist.Framework.Sql.Dom;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -401,7 +402,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					throw new ExceptionLimitExceededException(exceptions);					
 				}
 
-				InsertCreated(exceptionLimit); 
+                TouchLockTables(exceptionLimit);
+                InsertCreated(exceptionLimit); 
 				UpdateDirty(exceptionLimit);
 				UpdateStillDirty(exceptionLimit);
                 ExamineDeletedObjects();
@@ -481,7 +483,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					throw new ExceptionLimitExceededException(exceptions);					
 				}
 
-				InsertCreated(obj, exceptionLimit);
+                TouchLockTables(obj, exceptionLimit);
+                InsertCreated(obj, exceptionLimit);
 				UpdateDirty(obj, exceptionLimit);
 				UpdateStillDirty(obj, exceptionLimit);
 				RemoveDeleted(obj, exceptionLimit);
@@ -600,6 +603,193 @@ namespace Puzzle.NPersist.Framework.Persistence
 					this.Context.ValidateObject(obj, this.exceptions);
 			}			
 		}
+
+        protected virtual void TouchLockTables(int exceptionLimit)
+        {
+            TouchLockTables(null, exceptionLimit);
+        }
+
+        protected virtual void TouchLockTables(object obj, int exceptionLimit)
+        {
+            DeadlockStrategy deadlockStrategy = this.Context.GetDeadlockStrategy();
+            switch (deadlockStrategy)
+            {
+                case DeadlockStrategy.Default:
+                case DeadlockStrategy.None:
+                    return;
+                case DeadlockStrategy.TouchLockTable:
+                    TouchLockTable(obj, exceptionLimit);
+                    break;
+                case DeadlockStrategy.TouchTablesInOrder:
+                    TouchLockTablesInOrder(obj, exceptionLimit, false);
+                    break;
+                case DeadlockStrategy.TouchFirstTableInOrder:
+                    TouchLockTablesInOrder(obj, exceptionLimit, true);
+                    break;
+
+                default:
+                    throw new NPersistException(String.Format("Unknown deadlock strategy {0}!", deadlockStrategy.ToString()));
+            }
+        }
+
+        protected virtual void TouchLockTablesInOrder(object obj, int exceptionLimit, bool onlyFirst)
+        {
+            Hashtable tableMaps = GetConcernedTableMaps(obj, exceptionLimit);
+
+            ArrayList sorted = new ArrayList(tableMaps.Keys);
+            sorted.Sort(new TableLockIndexSorter());
+
+            foreach (ITableMap tableMap in sorted)
+            {
+                this.Context.PersistenceEngineManager.TouchTable(tableMap, exceptionLimit);
+                if (onlyFirst)
+                    return;
+            }
+        }
+
+        protected virtual void TouchLockTable(object obj, int exceptionLimit)
+        {
+            Hashtable sourceMaps = GetConcernedSourceMaps(obj, exceptionLimit);
+            foreach (ISourceMap sourceMap in sourceMaps.Keys)
+            {
+                ITableMap tableMap = sourceMap.GetLockTable();
+                if (tableMap != null)
+                    this.Context.PersistenceEngineManager.TouchTable(tableMap, exceptionLimit);
+            }
+        }
+
+        protected virtual Hashtable GetConcernedSourceMaps(object obj, int exceptionLimit)
+        {
+            Hashtable sourceMaps = new Hashtable();
+            IDomainMap dm = this.Context.DomainMap;
+            IObjectManager om = this.Context.ObjectManager;
+            if (dm.SourceMaps.Count > 0)
+            {
+                if (dm.SourceMaps.Count == 1)
+                {
+                    ISourceMap sourceMap = dm.GetSourceMap();
+                    sourceMaps[sourceMap] = sourceMap;
+                }
+                else
+                {
+                    if (obj != null)
+                    {
+                        GetConcernedSourceMaps(obj, exceptionLimit, sourceMaps, dm, om, false);
+                    }
+                    else
+                    {
+                        foreach (object iObj in m_listCreated)
+                            GetConcernedSourceMaps(iObj, exceptionLimit, sourceMaps, dm, om, false);
+                        foreach (object iObj in m_listDirty)
+                            GetConcernedSourceMaps(iObj, exceptionLimit, sourceMaps, dm, om, true);
+                        foreach (object iObj in m_listDeleted)
+                            GetConcernedSourceMaps(iObj, exceptionLimit, sourceMaps, dm, om, false);
+                    }
+                }
+            }
+            return sourceMaps;
+        }
+
+        protected virtual Hashtable GetConcernedSourceMaps(object obj, int exceptionLimit, Hashtable sourceMaps, IDomainMap dm, IObjectManager om, bool update)
+        {
+            if (obj == null)
+                return null;
+            ITableMap tableMap = null;
+            IClassMap classMap = dm.MustGetClassMap(obj.GetType());
+            if (classMap.Table != "")
+            {
+                tableMap = classMap.GetTableMap();
+                if (tableMap != null)
+                    sourceMaps[tableMap.SourceMap] = tableMap.SourceMap;
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+                {
+                    if (propertyMap.Table != "")
+                    {
+                        if (!(propertyMap.IsSlave || propertyMap.IsReadOnly))
+                        {
+                            bool ok = true;
+                            if (update)
+                            {
+                                PropertyStatus propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
+                                if (propStatus != PropertyStatus.Dirty)
+                                    ok = false;
+                            }
+                            if (ok)
+                            {
+                                tableMap = propertyMap.GetTableMap();
+                                if (tableMap != null)
+                                    sourceMaps[tableMap.SourceMap] = tableMap.SourceMap;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return sourceMaps;
+        }
+
+
+        protected virtual Hashtable GetConcernedTableMaps(object obj, int exceptionLimit)
+        {
+            Hashtable tableMaps = new Hashtable();
+            IDomainMap dm = this.Context.DomainMap;
+            IObjectManager om = this.Context.ObjectManager;
+            if (dm.SourceMaps.Count > 0)
+            {
+                if (obj != null)
+                {
+                    GetConcernedTableMaps(obj, exceptionLimit, tableMaps, dm, om, false);
+                }
+                else
+                {
+                    foreach (object iObj in m_listCreated)
+                        GetConcernedTableMaps(iObj, exceptionLimit, tableMaps, dm, om, false);
+                    foreach (object iObj in m_listDirty)
+                        GetConcernedTableMaps(iObj, exceptionLimit, tableMaps, dm, om, true);
+                    foreach (object iObj in m_listDeleted)
+                        GetConcernedTableMaps(iObj, exceptionLimit, tableMaps, dm, om, false);
+                }
+            }
+            return tableMaps;
+        }
+
+        protected virtual Hashtable GetConcernedTableMaps(object obj, int exceptionLimit, Hashtable tableMaps, IDomainMap dm, IObjectManager om, bool update)
+        {
+            if (obj == null)
+                return null;
+            ITableMap tableMap = null;
+            IClassMap classMap = dm.MustGetClassMap(obj.GetType());
+            if (classMap.Table != "")
+            {
+                tableMap = classMap.GetTableMap();
+                if (tableMap != null)
+                    tableMaps[tableMap] = tableMap;
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+                {
+                    if (propertyMap.Table != "")
+                    {
+                        if (!(propertyMap.IsSlave || propertyMap.IsReadOnly))
+                        {
+                            bool ok = true;
+                            if (update)
+                            {
+                                PropertyStatus propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
+                                if (propStatus != PropertyStatus.Dirty)
+                                    ok = false;
+                            }
+                            if (ok)
+                            {
+                                tableMap = propertyMap.GetTableMap();
+                                if (tableMap != null)
+                                    tableMaps[tableMap] = tableMap;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return tableMaps;
+        }
 
 		protected virtual void InsertCreated(int exceptionLimit)
 		{
