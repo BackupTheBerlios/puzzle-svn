@@ -293,6 +293,7 @@ namespace Puzzle.NAspect.Framework
             {
                 int index = methodName.LastIndexOf(".") + 1;
                 methodName = methodName.Substring(index);
+                //modifier = MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot;
                 modifier = MethodAttributes.Public;
             }
 
@@ -599,16 +600,54 @@ namespace Puzzle.NAspect.Framework
                     (method.IsVirtual && !method.IsFinal &&
                      engine.PointCutMatcher.MethodShouldBeProxied(method, aspects)))
                 {
-                    BuildMixinMethod(typeBuilder, method, mixinField);
+                    BuildProxiedMixinMethod(typeBuilder, method, mixinField);
                 }
                 else
                 {
-                    BuildMixinWrapperMethod(method.Name, typeBuilder, method, mixinField);
+                    string name = method.DeclaringType.FullName + "." + method.Name;
+                    name = method.Name;
+                    BuildExplicitMixinMethod(name, typeBuilder, method, mixinField);
                 }
             }
         }
 
-        private void BuildMixinMethod(TypeBuilder typeBuilder, MethodInfo method, FieldBuilder field)
+        private void BuildExplicitMixinMethod(string wrapperName, TypeBuilder typeBuilder, MethodInfo method,
+                                     FieldBuilder field)
+        {
+            ParameterInfo[] parameterInfos = method.GetParameters();
+            Type[] parameterTypes = new Type[parameterInfos.Length];
+            for (int i = 0; i < parameterInfos.Length; i++)
+                parameterTypes[i] = parameterInfos[i].ParameterType;
+
+            //MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot
+            MethodBuilder methodBuilder =
+                typeBuilder.DefineMethod(wrapperName,MethodAttributes.Public | MethodAttributes.Virtual,
+                                         CallingConventions.Standard, method.ReturnType, parameterTypes);
+            methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
+            methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
+#if NET2
+            ReApplyAttributes(method);
+#endif
+
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                methodBuilder.DefineParameter(i + 1, parameterInfos[i].Attributes, parameterInfos[i].Name);
+            }
+
+            ILGenerator il = methodBuilder.GetILGenerator();
+
+
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldfld, field);
+            for (int i = 0; i < parameterInfos.Length; i++)
+                il.Emit(OpCodes.Ldarg, i + 1);
+
+            il.Emit(OpCodes.Callvirt, method);
+            //	il.EmitWriteLine(method.Name) ;
+            il.Emit(OpCodes.Ret);
+        }
+
+        private void BuildProxiedMixinMethod(TypeBuilder typeBuilder, MethodInfo method, FieldBuilder field)
         {
             if (method.DeclaringType == typeof (IAopProxy))
             {
