@@ -618,10 +618,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                     TouchLockTable(obj, exceptionLimit);
                     break;
                 case DeadlockStrategy.TouchTablesInOrder:
-                    TouchLockTablesInOrder(obj, exceptionLimit, false, tables);
-                    break;
-                case DeadlockStrategy.TouchFirstTableInOrder:
-                    TouchLockTablesInOrder(obj, exceptionLimit, true, tables);
+                    TouchLockTablesInOrder(obj, exceptionLimit, tables);
                     break;
 
                 default:
@@ -629,7 +626,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             }
         }
 
-        protected virtual void TouchLockTablesInOrder(object obj, int exceptionLimit, bool onlyFirst, IList tables)
+        protected virtual void TouchLockTablesInOrder(object obj, int exceptionLimit, IList tables)
         {
             ArrayList sorted = null;
             if (tables == null)
@@ -643,11 +640,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             sorted.Sort(new TableLockIndexSorter());
 
             foreach (ITableMap tableMap in sorted)
-            {
                 this.Context.PersistenceEngineManager.TouchTable(tableMap, exceptionLimit);
-                if (onlyFirst)
-                    return;
-            }
         }
 
         protected virtual void TouchLockTable(object obj, int exceptionLimit)

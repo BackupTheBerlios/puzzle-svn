@@ -21,16 +21,12 @@ namespace Puzzle.NPersist.Framework.Enumerations
         /// </summary>
         None = 1,
         /// <summary>
-        /// The tables are given an order so committing a unit of work begins by touching the relevant table with the lowest index in this order.
-        /// </summary>
-        TouchFirstTableInOrder = 2,
-        /// <summary>
         /// The tables are given an order so committing a unit of work begins by touching the relevant tables in this order.
         /// </summary>
-        TouchTablesInOrder = 3,
+        TouchTablesInOrder = 2,
         /// <summary>
         /// A table is choosen as the lock table so committing a unit of work begins by touching the lock table.
         /// </summary>
-        TouchLockTable = 4
+        TouchLockTable = 3
 	}
 }
