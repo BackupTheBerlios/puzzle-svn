@@ -617,12 +617,14 @@ namespace Puzzle.NAspect.Framework
             ParameterInfo[] parameterInfos = method.GetParameters();
             Type[] parameterTypes = new Type[parameterInfos.Length];
             for (int i = 0; i < parameterInfos.Length; i++)
-                parameterTypes[i] = parameterInfos[i].ParameterType;
-
-            //MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot
+                parameterTypes[i] = parameterInfos[i].ParameterType;            
+            
             MethodBuilder methodBuilder =
-                typeBuilder.DefineMethod(wrapperName,MethodAttributes.Public | MethodAttributes.Virtual,
+                typeBuilder.DefineMethod(wrapperName, MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.Virtual,
                                          CallingConventions.Standard, method.ReturnType, parameterTypes);
+
+            typeBuilder.DefineMethodOverride(methodBuilder, method);
+            
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
 #if NET2
@@ -635,6 +637,7 @@ namespace Puzzle.NAspect.Framework
             }
 
             ILGenerator il = methodBuilder.GetILGenerator();
+            
 
 
             il.Emit(OpCodes.Ldarg_0);
