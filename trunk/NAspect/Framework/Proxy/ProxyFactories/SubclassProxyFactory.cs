@@ -605,7 +605,6 @@ namespace Puzzle.NAspect.Framework
                 else
                 {
                     string name = method.DeclaringType.FullName + "." + method.Name;
-                    name = method.Name;
                     BuildExplicitMixinMethod(name, typeBuilder, method, mixinField);
                 }
             }
@@ -670,9 +669,14 @@ namespace Puzzle.NAspect.Framework
             for (int i = 0; i < parameterInfos.Length; i++)
                 parameterTypes[i] = parameterInfos[i].ParameterType;
 
+
+            string methodName = method.DeclaringType.FullName + "." + method.Name;
             MethodBuilder methodBuilder =
-                typeBuilder.DefineMethod(method.Name, MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.NewSlot,
-                                         CallingConventions.Standard, method.ReturnType, parameterTypes);
+                typeBuilder.DefineMethod(methodName, MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.Virtual,
+                             CallingConventions.Standard, method.ReturnType, parameterTypes);
+
+            typeBuilder.DefineMethodOverride(methodBuilder, method);
+
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
 
