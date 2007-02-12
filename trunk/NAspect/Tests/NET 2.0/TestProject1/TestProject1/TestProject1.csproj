@@ -46,6 +46,8 @@
     <Compile Include="Interceptors\PassiveInterceptor.cs" />
     <Compile Include="Interceptors\RemoveExceptionInterceptor.cs" />
     <Compile Include="Interceptors\SecurityInterceptor.cs" />
+    <Compile Include="Mixins\Iface1Mixin.cs" />
+    <Compile Include="Mixins\Iface2Mixin.cs" />
     <Compile Include="Mixins\ISomeListMarkerIFace.cs" />
     <Compile Include="Mixins\MyMixin.cs" />
     <Compile Include="MyTypedAspect.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="StandardAspectTests\DirtyTrackedClass.cs" />
     <Compile Include="StandardAspectTests\LogTarget.cs" />
     <Compile Include="StandardAspectTests\StandardAspectTests.cs" />
+    <Compile Include="TestInterfaces.cs" />
     <Compile Include="Tests\Tests.cs" />
   </ItemGroup>
   <ItemGroup>

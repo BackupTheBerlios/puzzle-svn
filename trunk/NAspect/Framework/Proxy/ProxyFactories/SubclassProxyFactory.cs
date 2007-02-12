@@ -629,7 +629,7 @@ namespace Puzzle.NAspect.Framework
                 parameterTypes[i] = parameterInfos[i].ParameterType;
 
             MethodBuilder methodBuilder =
-                typeBuilder.DefineMethod(method.Name, MethodAttributes.Public | MethodAttributes.Virtual,
+                typeBuilder.DefineMethod(method.Name, MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.NewSlot,
                                          CallingConventions.Standard, method.ReturnType, parameterTypes);
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());
@@ -717,7 +717,7 @@ namespace Puzzle.NAspect.Framework
                 parameterTypes[i] = parameterInfos[i].ParameterType;
 
             MethodBuilder methodBuilder =
-                typeBuilder.DefineMethod(wrapperName, MethodAttributes.Public | MethodAttributes.Virtual,
+                typeBuilder.DefineMethod(wrapperName, MethodAttributes.Public | MethodAttributes.Virtual ,
                                          CallingConventions.Standard, method.ReturnType, parameterTypes);
             methodBuilder.SetCustomAttribute(DebuggerStepThroughBuilder());
             methodBuilder.SetCustomAttribute(DebuggerHiddenBuilder());

@@ -49,6 +49,25 @@ namespace KumoUnitTests
         }
 
         [TestMethod()]
+        public void MixinInOverlappingNames()
+        {
+            Engine c = new Engine("MixinInOverlappingNames");
+
+            c.Configuration.Aspects.Add(
+                new SignatureAspect("MixinInOverlappingNames", typeof(Foo), new Type[] { typeof(Iface1Mixin), typeof(Iface2Mixin) },
+                                    new IPointcut[0]));
+
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            Iface1 m1 = (Iface1)proxy;
+            Iface2 m2 = (Iface2)proxy;
+            
+
+            Assert.IsTrue(m1.SomeMethod () == 1, "mixin1 did not return the correct value");
+            Assert.IsTrue(m2.SomeMethod() == 2, "mixin2 did not return the correct value");
+        }
+
+        [TestMethod()]
         public void MixinInterfaceWOImplementation()
         {
             Engine c = new Engine("MixinInterfaceWOImplementation");
