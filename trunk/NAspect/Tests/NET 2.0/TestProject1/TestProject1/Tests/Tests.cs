@@ -68,6 +68,20 @@ namespace KumoUnitTests
         }
 
         [TestMethod()]
+        public void MixinInWOIface()
+        {
+            Engine c = new Engine("MixinInWOIface");
+
+            c.Configuration.Aspects.Add(
+                new SignatureAspect("MixinInWOIface", typeof(Foo), new Type[] { typeof(MixinWOIface) },
+                                    new IPointcut[0]));
+
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            
+        }
+
+        [TestMethod()]
         public void MixinInterfaceWOImplementation()
         {
             Engine c = new Engine("MixinInterfaceWOImplementation");

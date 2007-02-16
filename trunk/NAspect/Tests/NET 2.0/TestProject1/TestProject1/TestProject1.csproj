@@ -49,6 +49,7 @@
     <Compile Include="Mixins\Iface1Mixin.cs" />
     <Compile Include="Mixins\Iface2Mixin.cs" />
     <Compile Include="Mixins\ISomeListMarkerIFace.cs" />
+    <Compile Include="Mixins\MixinWOIface.cs" />
     <Compile Include="Mixins\MyMixin.cs" />
     <Compile Include="MyTypedAspect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

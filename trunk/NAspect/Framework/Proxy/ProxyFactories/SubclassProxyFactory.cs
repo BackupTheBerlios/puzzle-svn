@@ -130,6 +130,10 @@ namespace Puzzle.NAspect.Framework
                 {
                     //ignore pure interfaces
                 }
+                else if (mixinType.IsAssignableFrom (typeof(IProxyAware)) && mixinType.GetInterfaces().Length == 1)
+                {
+                    //ignore interface less mixins
+                }
                 else
                 {
                     Type mixinInterfaceType = mixinType.GetInterfaces()[0];
