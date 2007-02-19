@@ -27,7 +27,7 @@ namespace AopDraw
         }
 
 
-        ICanvas canvas = new Canvas();
+        MouseHandlerCanvas canvas = new MouseHandlerCanvas();
 
         
 
@@ -37,6 +37,9 @@ namespace AopDraw
             Application.Idle += new EventHandler(Application_Idle);
 
             IEngine engine = new Engine("AopDraw");
+
+            InterfaceAspect mouseEventAspect = new InterfaceAspect("mouseEventAspect", typeof(Shape), new Type[] { typeof(MouseHandlerMixin) }, new IPointcut[] { });
+            engine.Configuration.Aspects.Add(mouseEventAspect);
 
             InterfaceAspect typeDescriptorAspect = new InterfaceAspect("typeDescriptorAspect", typeof(Shape), new Type[] { typeof(CustomTypeDescriptorMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(typeDescriptorAspect);
@@ -108,150 +111,35 @@ namespace AopDraw
             canvas.AddShape(text);
         }
 
-        
 
 
-        private Point mouseDownPos;
-        private void panel1_MouseMove(object sender, MouseEventArgs e)
+
+        private void guiCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            double x = e.X;
-            double y = e.Y;
-
-
-
-
-            Shape shape = canvas.GetShapeAt(x, y);
-
-            #region Displaycaption
-            if (shape != null)
-            {
-                IGuidObject guidObject = shape as IGuidObject;
-                if (guidObject != null)
-                {
-                    this.Text = shape.ToString() + guidObject.Guid;
-                }
-                else
-                {
-                    this.Text = shape.ToString();
-                }
-            }
-            else
-            {
-                this.Text = "";
-            }
-            #endregion
-
-
-            IResizable resizable = shape as IResizable;
-            if (resizable != null && resizable.GetGripBounds().Contains(e.X, e.Y) || currentAction == DrawAction.Resize)
-            {
-                Cursor = Cursors.SizeNWSE;
-                if (currentAction == DrawAction.Resize)
-                {
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        int xdelta = e.X - mouseDownPos.X;
-                        int ydelta = e.Y - mouseDownPos.Y;
-
-                        canvas.ResizeSelectedShapes(xdelta, ydelta);
-                    }
-                }
-            }           
-            else
-            {
-                Cursor = Cursors.Default;
-                if (e.Button == MouseButtons.Left)
-                {
-                    int xdelta = e.X - mouseDownPos.X;
-                    int ydelta = e.Y - mouseDownPos.Y;
-
-                    canvas.MoveSelectedShapes(xdelta, ydelta);
-                }
-            }
+            canvas.MouseMove(sender, e);
         }
 
-        private DrawAction currentAction = DrawAction.None;
-        
-        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        private void guiCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                Shape shape = GetShapeFromMouse(e);
-                
-                
-                mouseDownPos = new Point(e.X, e.Y);
-
-                canvas.ClearSelection();
-                if (shape != null)
-                {
-                    ISelectable selectable = shape as ISelectable;
-                    if (selectable != null)
-                    {
-                        selectable.IsSelected = true;
-                    }
-                    
-                }
-
-                IResizable resizable = shape as IResizable;
-                IMovable movable = shape as IMovable;
-                if (resizable != null && resizable.GetGripBounds().Contains(e.X, e.Y))
-                {
-                    resizable.RememberSize();
-                    currentAction = DrawAction.Resize;
-                }
-                else if (movable != null) 
-                {
-                    movable.RememberLocation();
-                    currentAction = DrawAction.Move;                    
-                }
-
-                propertyGrid1.SelectedObject = shape;
-            }
+            canvas.MouseDown(sender, e);
         }
 
-        private Shape GetShapeFromMouse(MouseEventArgs e)
+        private void guiCanvas_MouseUp(object sender, MouseEventArgs e)
         {
-            double x = e.X;
-            double y = e.Y;
-            Shape shape = canvas.GetShapeAt(x, y);
-            return shape;
+            canvas.MouseUp(sender, e);
         }
 
-        private void panel1_MouseUp(object sender, MouseEventArgs e)
-        {
-            currentAction = DrawAction.None;
-            if (e.Button == MouseButtons.Right)
-            {
-                Shape shape = GetShapeFromMouse(e);
-                if (shape != null)
-                {
-                    IDesignable designable = shape as IDesignable;
-                    if (designable != null)
-                    {
-                        designable.BorderSize = 5;
-                        designable.BorderColor = Color.Green;
-                        designable.FillColor = Color.Magenta;                    
-                    }
-                }
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            rectangle.Width = 300;
-        }
 
         void Application_Idle(object sender, EventArgs e)
         {
             if (canvas.IsDirty)
             {
-                panel1.Invalidate();
+                guiCanvas.Invalidate();
                 canvas.IsDirty = false;
             }
         }
 
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void guiCanvas_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             canvas.Render(e.Graphics);

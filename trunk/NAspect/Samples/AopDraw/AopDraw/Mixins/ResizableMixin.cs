@@ -95,6 +95,22 @@ namespace AopDraw.Mixins
 
             KeepProportions = attrib.KeepProportions;
 
+            IMouseHandler mouseShape = (IMouseHandler)shape;
+            mouseShape.MouseDownHandlers.Add(MouseDown);
+            mouseShape.MouseUpHandlers.Add(MouseUp);
+            mouseShape.MouseMoveHandlers.Add(MouseMove);
+        }
+
+        private void MouseDown(Shape shape, int x, int y, MouseButtons buttons, ref bool handled)
+        {
+        }
+
+        private void MouseUp(Shape shape, int x, int y, MouseButtons buttons, ref bool handled)
+        {
+        }
+
+        private void MouseMove(Shape shape, int x, int y, MouseButtons buttons, ref bool handled)
+        {
         }
 
         public virtual Rectangle GetGripBounds()

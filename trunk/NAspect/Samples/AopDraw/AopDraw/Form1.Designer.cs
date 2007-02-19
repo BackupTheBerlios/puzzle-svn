@@ -31,7 +31,7 @@ namespace AopDraw
         {
             this.button1 = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.panel1 = new AopDraw.Controls.ViewPort();
+            this.guiCanvas = new AopDraw.Controls.ViewPort();
             this.SuspendLayout();
             // 
             // button1
@@ -43,7 +43,6 @@ namespace AopDraw
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // propertyGrid1
             // 
@@ -53,25 +52,25 @@ namespace AopDraw
             this.propertyGrid1.Size = new System.Drawing.Size(184, 483);
             this.propertyGrid1.TabIndex = 2;
             // 
-            // panel1
+            // guiCanvas
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(546, 460);
-            this.panel1.TabIndex = 0;
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
+            this.guiCanvas.BackColor = System.Drawing.Color.White;
+            this.guiCanvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.guiCanvas.Location = new System.Drawing.Point(0, 0);
+            this.guiCanvas.Name = "guiCanvas";
+            this.guiCanvas.Size = new System.Drawing.Size(546, 460);
+            this.guiCanvas.TabIndex = 0;
+            this.guiCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.guiCanvas_MouseDown);
+            this.guiCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.guiCanvas_MouseMove);
+            this.guiCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.guiCanvas_Paint);
+            this.guiCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.guiCanvas_MouseUp);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(730, 483);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.guiCanvas);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.propertyGrid1);
             this.Name = "Form1";
@@ -83,7 +82,7 @@ namespace AopDraw
 
         #endregion
 
-        private ViewPort panel1;
+        private ViewPort guiCanvas;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
     }

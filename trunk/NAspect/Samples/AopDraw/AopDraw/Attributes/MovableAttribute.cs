@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AopDraw.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class,Inherited=false)]
     public class MovableAttribute : Attribute
     {
     }
