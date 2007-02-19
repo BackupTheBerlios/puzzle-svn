@@ -96,6 +96,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "QuickStart.npersist"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Review.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -49,6 +49,6 @@ namespace Puzzle.NPersist.Framework.Enumerations
         /// <summary>
         /// Logs a concurrency conflict whenever a fresh value from the database differs from a loaded value in the cache.
         /// </summary>
-        LogConcurrencyConflict = 6
+	        LogConcurrencyConflict = 6
 	}
 }
