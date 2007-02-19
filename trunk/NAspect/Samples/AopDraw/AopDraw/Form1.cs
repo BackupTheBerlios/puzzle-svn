@@ -38,8 +38,8 @@ namespace AopDraw
 
             IEngine engine = new Engine("AopDraw");
 
-            InterfaceAspect mouseEventAspect = new InterfaceAspect("mouseEventAspect", typeof(Shape), new Type[] { typeof(MouseHandlerMixin) }, new IPointcut[] { });
-            engine.Configuration.Aspects.Add(mouseEventAspect);
+            InterfaceAspect canvasAwareAspect = new InterfaceAspect("canvasAwareAspect", typeof(Shape), new Type[] { typeof(CanvasAwareMixin) }, new IPointcut[] { new SignaturePointcut("set_*", new ShapePropertyInterceptor()) });
+            engine.Configuration.Aspects.Add(canvasAwareAspect);
 
             InterfaceAspect typeDescriptorAspect = new InterfaceAspect("typeDescriptorAspect", typeof(Shape), new Type[] { typeof(CustomTypeDescriptorMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(typeDescriptorAspect);
@@ -47,12 +47,17 @@ namespace AopDraw
             InterfaceAspect guidAspect = new InterfaceAspect("guidAspect", typeof(Shape), new Type[] { typeof(GuidObject) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(guidAspect);
 
+            AttributeAspect resizableAspect = new AttributeAspect("resizableAspect", typeof(ResizableAttribute), new Type[] { typeof(ResizableShape2DMixin) }, new IPointcut[] { });
+            engine.Configuration.Aspects.Add(resizableAspect);
+
             AttributeAspect selectable2DAspect = new AttributeAspect("selectable2DAspect", typeof(SelectableAttribute), new Type[] { typeof(SelectableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(selectable2DAspect);
 
             InterfaceAspect selectable1DAspect = new InterfaceAspect("selectable1DAspect", typeof(Shape1D), new Type[] { typeof(SelectableShape1DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(selectable1DAspect);
 
+            InterfaceAspect mouseEventAspect = new InterfaceAspect("mouseEventAspect", typeof(Shape), new Type[] { typeof(MouseHandlerMixin) }, new IPointcut[] { });
+            engine.Configuration.Aspects.Add(mouseEventAspect);
 
             AttributeAspect movableAspect = new AttributeAspect("movableAspect", typeof(MovableAttribute), new Type[] { typeof(MovableShape2DMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(movableAspect);
@@ -63,11 +68,9 @@ namespace AopDraw
             AttributeAspect designableAspect = new AttributeAspect("designableAspect", typeof(DesignableAttribute), new Type[] { typeof(DesignableMixin) }, new IPointcut[] { });
             engine.Configuration.Aspects.Add(designableAspect);
 
-            AttributeAspect resizableAspect = new AttributeAspect("resizableAspect", typeof(ResizableAttribute), new Type[] { typeof(ResizableShape2DMixin) }, new IPointcut[] { });
-            engine.Configuration.Aspects.Add(resizableAspect);
 
-            InterfaceAspect canvasAwareAspect = new InterfaceAspect("canvasAwareAspect", typeof(Shape), new Type[] { typeof(CanvasAwareMixin) }, new IPointcut[] {new SignaturePointcut ("set_*", new ShapePropertyInterceptor())});
-            engine.Configuration.Aspects.Add(canvasAwareAspect);
+
+
 
             SquareShape square = engine.CreateProxy<SquareShape>();
             square.X = 10;

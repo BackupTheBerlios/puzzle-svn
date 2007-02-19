@@ -14,6 +14,7 @@ namespace AopDraw.Mixins
     public class SelectableShape2DMixin : ISelectable , IProxyAware
     {
         private Shape2D shape;
+        private ISelectable selectable;
 
         public void SetProxy(IAopProxy target)
         {
@@ -23,14 +24,27 @@ namespace AopDraw.Mixins
                 throw new ArgumentException("target is not an IShape2D");
 
             this.shape = shape;
+            this.selectable = (ISelectable)shape;
+ 
             IMouseHandler mouseShape = (IMouseHandler)shape;
             mouseShape.MouseDownHandlers.Add(MouseDown);
             mouseShape.MouseUpHandlers.Add(MouseUp);
             mouseShape.MouseMoveHandlers.Add(MouseMove);
         }
+        
+        private ICanvas Canvas
+        {
+            get
+            {
+                return ((ICanvasAware)shape).Canvas;
+            }
+        }
 
         private void MouseDown(Shape shape, int x, int y, MouseButtons buttons, ref bool handled)
         {
+            Canvas.ClearSelection();
+            selectable.IsSelected = true;
+            handled = true;
         }
 
         private void MouseUp(Shape shape, int x, int y, MouseButtons buttons, ref bool handled)
