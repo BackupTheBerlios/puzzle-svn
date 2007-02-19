@@ -97,22 +97,22 @@
                 <Reference
                     Name = "Puzzle.NAspect.Framework"
                     AssemblyName = "Puzzle.NAspect.Framework"
-                    HintPath = "lib\Puzzle.NAspect.Framework.dll"
+                    HintPath = "..\lib\Puzzle.NAspect.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NCore.Framework"
                     AssemblyName = "Puzzle.NCore.Framework"
-                    HintPath = "lib\Puzzle.NCore.Framework.dll"
+                    HintPath = "..\lib\Puzzle.NCore.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NPath.Framework"
                     AssemblyName = "Puzzle.NPath.Framework"
-                    HintPath = "lib\Puzzle.NPath.Framework.dll"
+                    HintPath = "..\lib\Puzzle.NPath.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NPersist.Framework"
                     AssemblyName = "Puzzle.NPersist.Framework"
-                    HintPath = "lib\Puzzle.NPersist.Framework.dll"
+                    HintPath = "..\lib\Puzzle.NPersist.Framework.dll"
                 />
             </References>
         </Build>

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Data;
 using Puzzle.NPersist.Framework;
-using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Querying;
 using QuickStart.Domain;
 

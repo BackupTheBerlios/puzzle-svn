@@ -50,6 +50,27 @@ namespace QuickStart.WinGui
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+		//The name of the embedded resource that is the xml mapping file
+		private string mapName = @"QuickStart.Domain.QuickStart.npersist";
+
+		//The connection string to the database
+		private string connectionString = "SERVER=(local);UID=sa;PWD=;DATABASE=QuickStart";
+
+		private IContext context;
+
+		private void InitializeContext()
+		{
+			//Get the assembly containing the 
+			//xml mapping file as an embedded resource
+			Assembly asm = typeof(Author).Assembly;
+
+			//Create a new NPersist context object
+			context = new Context(asm, mapName); 
+
+			//Set the connection string to the database.
+			context.SetConnectionString(connectionString);
+		}
+
 		public Form1()
 		{
 			//
