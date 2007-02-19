@@ -96,23 +96,23 @@
                 />
                 <Reference
                     Name = "Puzzle.NAspect.Framework"
-                    Project = "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Puzzle.NAspect.Framework"
+                    HintPath = "lib\Puzzle.NAspect.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NCore.Framework"
-                    Project = "{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Puzzle.NCore.Framework"
+                    HintPath = "lib\Puzzle.NCore.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NPath.Framework"
-                    Project = "{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Puzzle.NPath.Framework"
+                    HintPath = "lib\Puzzle.NPath.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NPersist.Framework"
-                    Project = "{E6C03D2A-D150-4473-9439-D300746A1390}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Puzzle.NPersist.Framework"
+                    HintPath = "lib\Puzzle.NPersist.Framework.dll"
                 />
             </References>
         </Build>
