@@ -20,17 +20,17 @@ namespace Puzzle.NPersist.Framework.Enumerations
         /// </summary>
         /// <remarks>
         /// A propertyMap inherits from its classMap, that inherits from its DomainMap, which inherits from the Context. 
-        /// If the Context has ValidationMode.Default, this translates to ValidationMode.ValidateDirty.
+        /// If the Context has ValidationMode.Default, this translates to ValidationMode.ValidateLoaded.
         /// </remarks>
-		Default = 0, 
-        /// <summary>
-        /// Validates only Dirty properties.
-        /// </summary>
-		ValidateDirty = 1, 
+		Default = 0,
         /// <summary>
         /// Validates all Loaded properties (including all Dirty properties).
         /// </summary>
-		ValidateLoaded = 2,
+        ValidateLoaded = 1,
+        /// <summary>
+        /// Validates only Dirty properties.
+        /// </summary>
+		ValidateDirty = 2, 
         /// <summary>
         /// Validates all Loaded, Dirty and NotLoaded properties (forces loading of NotLoaded properties for validation)
         /// </summary>

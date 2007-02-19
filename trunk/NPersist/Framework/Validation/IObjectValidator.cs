@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Mapping;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -31,5 +32,12 @@ namespace Puzzle.NPersist.Framework.Validation
 
 		void ValidateProperty(object obj, string propertyName, IList exceptions);
 
+        ValidationMode GetValidationMode(object obj);
+
+        ValidationMode GetValidationMode(IClassMap classMap);
+
+        ValidationMode GetValidationMode(object obj, string propertyName);
+
+        ValidationMode GetValidationMode(IClassMap classMap, IPropertyMap propertyMap);
 	}
 }

@@ -55,14 +55,40 @@ namespace Puzzle.NPersist.Framework.Validation
 		{
 			IObjectManager om = this.Context.ObjectManager;
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
-			CustomValidateObject(obj, classMap, exceptions);
-			ObjectStatus objStatus = om.GetObjectStatus(obj);
-			foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
-			{
-				PropertyStatus propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
-				if (objStatus == ObjectStatus.UpForCreation || propStatus != PropertyStatus.NotLoaded)
-					DoValidateProperty(obj, propertyMap, exceptions);
-			}
+
+            ValidationMode objValidationMode = GetValidationMode(classMap);
+            if (objValidationMode != ValidationMode.Off)
+            {
+                CustomValidateObject(obj, classMap, exceptions);
+                ObjectStatus objStatus = om.GetObjectStatus(obj);
+                foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
+                {
+                    ValidationMode validationMode = GetValidationMode(classMap, propertyMap);
+
+                    if (validationMode != ValidationMode.Off)
+                    {
+                        PropertyStatus propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
+
+                        if (validationMode == ValidationMode.ValidateAll && objStatus != ObjectStatus.UpForCreation)
+                            this.Context.ObjectManager.EnsurePropertyIsLoaded(obj, propertyMap);
+
+                        if (objStatus == ObjectStatus.UpForCreation || propStatus != PropertyStatus.NotLoaded)
+                        {
+                            bool ok = false;
+                            if (validationMode == ValidationMode.Default || validationMode == ValidationMode.ValidateLoaded || validationMode == ValidationMode.ValidateAll)
+                                ok = true;
+                            else if (validationMode == ValidationMode.ValidateDirty)
+                            {
+                                if (propStatus == PropertyStatus.Dirty)
+                                    ok = true;
+                            }
+
+                            if (ok)
+                                DoValidateProperty(obj, propertyMap, exceptions);
+                        }
+                    }
+                }
+            }
 		}
 		
 		public void ValidateProperty(object obj, string propertyName)
@@ -96,13 +122,13 @@ namespace Puzzle.NPersist.Framework.Validation
 
 		private void DoValidateProperty(object obj, IPropertyMap propertyMap, IList exceptions)
 		{
-			ValidateNull(obj, propertyMap, exceptions);
+            CustomValidateProperty(obj, propertyMap, exceptions);
+            ValidateNull(obj, propertyMap, exceptions);
 			ValidateMaxLength(obj, propertyMap, exceptions);
 			ValidateMinLength(obj, propertyMap, exceptions);
 			ValidateMaxValue(obj, propertyMap, exceptions);
 			ValidateMinValue(obj, propertyMap, exceptions);
 			ValidateDatabaseDateRange(obj, propertyMap, exceptions);
-			CustomValidateProperty(obj, propertyMap, exceptions);
 		}
 
 		private void ValidateNull(object obj, IPropertyMap propertyMap, IList exceptions)
@@ -240,23 +266,26 @@ namespace Puzzle.NPersist.Framework.Validation
 				}
 				else
 				{
-					if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
-					{
-						string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
-						if (value != null)
-						{
-							string msg = "String too short";
-							if (value.Length < min )
-								HandleException(
-									obj, 
-									propertyMap.Name, 
-									exceptions, 
-									new ValidationException(GetExceptionMessage(obj, propertyMap, msg, min, value.Length)), 
-									min, 
-									value.Length, 
-									value) ;					
-						}					
-					}					
+                    if (propertyMap.ReferenceType == ReferenceType.None)
+                    {
+                        if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
+                        {
+                            string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
+                            if (value != null)
+                            {
+                                string msg = "String too short";
+                                if (value.Length < min)
+                                    HandleException(
+                                        obj,
+                                        propertyMap.Name,
+                                        exceptions,
+                                        new ValidationException(GetExceptionMessage(obj, propertyMap, msg, min, value.Length)),
+                                        min,
+                                        value.Length,
+                                        value);
+                            }
+                        }
+                    }
 				}
 			}
 		}
@@ -445,7 +474,15 @@ namespace Puzzle.NPersist.Framework.Validation
 					{
 						try
 						{
-							methodInfo.Invoke(obj, null);							
+                            if (methodInfo.ReturnType is IList)
+                            {
+                                IList customExceptions = (IList) methodInfo.Invoke(obj, null);
+                                if (customExceptions != null)
+                                    foreach (Exception customException in customExceptions)
+                                        exceptions.Add(customException);
+                            }
+                            else
+                                methodInfo.Invoke(obj, null);
 						}
 						catch (Exception ex)
 						{
@@ -471,8 +508,16 @@ namespace Puzzle.NPersist.Framework.Validation
 					{
 						try
 						{
-							methodInfo.Invoke(obj, null);							
-						}
+                            if (methodInfo.ReturnType is IList)
+                            {
+                                IList customExceptions = (IList) methodInfo.Invoke(obj, null);
+                                if (customExceptions != null)
+                                    foreach (Exception customException in customExceptions)
+                                        exceptions.Add(customException);
+                            }
+                            else
+                                methodInfo.Invoke(obj, null);
+                        }
 						catch (Exception ex)
 						{
 							HandleException(obj, propertyMap.Name, exceptions, ex.InnerException);							
@@ -481,7 +526,6 @@ namespace Puzzle.NPersist.Framework.Validation
 				}				
 			}
 		}
-
 		
 		//[DebuggerStepThrough()]
 		public virtual MethodInfo GetMethod(object obj, string methodName)
@@ -494,5 +538,58 @@ namespace Puzzle.NPersist.Framework.Validation
 		{
 			return ReflectionHelper.GetMethodInfo(type,methodName);
 		}
+
+        public virtual ValidationMode GetValidationMode(object obj)
+        {
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+            return GetValidationMode(classMap);
+        }
+
+        public virtual ValidationMode GetValidationMode(IClassMap classMap)
+        {
+            ValidationMode validationMode = classMap.ValidationMode;
+            if (validationMode == ValidationMode.Default)
+            {
+                validationMode = classMap.DomainMap.ValidationMode;
+                if (validationMode == ValidationMode.Default)
+                {
+                    validationMode = this.Context.ValidationMode;
+                    if (validationMode == ValidationMode.Default)
+                    {
+                        validationMode = ValidationMode.ValidateLoaded;
+                    }
+                }
+            }
+            return validationMode;
+        }
+
+        public virtual ValidationMode GetValidationMode(object obj, string propertyName)
+        {
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+            IPropertyMap propertyMap = classMap.MustGetPropertyMap(propertyName);
+            return GetValidationMode(classMap, propertyMap);
+        }
+
+        public virtual ValidationMode GetValidationMode(IClassMap classMap, IPropertyMap propertyMap)
+        {
+            ValidationMode validationMode = propertyMap.ValidationMode;
+            if (validationMode == ValidationMode.Default)
+            {
+                validationMode = classMap.ValidationMode;
+                if (validationMode == ValidationMode.Default)
+                {
+                    validationMode = classMap.DomainMap.ValidationMode;
+                    if (validationMode == ValidationMode.Default)
+                    {
+                        validationMode = this.Context.ValidationMode;
+                        if (validationMode == ValidationMode.Default)
+                        {
+                            validationMode = ValidationMode.ValidateLoaded;
+                        }
+                    }
+                }
+            }
+            return validationMode;
+        }
 	}
 }
