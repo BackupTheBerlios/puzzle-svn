@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Data;
 using Puzzle.NPersist.Framework;
+using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Persistence;
 using Puzzle.NPersist.Framework.Querying;
 using QuickStart.Domain;
 
