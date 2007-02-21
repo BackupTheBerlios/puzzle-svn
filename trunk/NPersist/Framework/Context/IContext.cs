@@ -376,6 +376,18 @@ namespace Puzzle.NPersist.Framework
 		void RegisterObject(object obj);
 
 
+
+        /// <summary>
+        /// This method commits the context and any root contexts that this context is a leaf context to, recursively. Only used in Object/Object Mapping scenarios.
+        /// </summary>
+        void CommitRecursive();
+
+        /// <summary>
+        /// This method commits the context and any root contexts that this context is a leaf context to, recursively. Only used in Object/Object Mapping scenarios.
+        /// </summary>
+        /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
+        void CommitRecursive(int exceptionLimit);
+
         /// <summary>
         /// Commits a single object to the data source.
         /// </summary>

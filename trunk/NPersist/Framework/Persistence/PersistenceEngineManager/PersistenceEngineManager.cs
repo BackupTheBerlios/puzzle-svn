@@ -152,9 +152,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				if (this.objectObjectPersistenceEngine == null)
 				{
 					//TODO: null is no good ofc :-)
-					this.objectObjectPersistenceEngine = new ObjectPersistenceEngine(null);
-					this.objectObjectPersistenceEngine.Context = this.Context;
-
+                    this.objectObjectPersistenceEngine = new ObjectPersistenceEngine(null);
+                    this.objectObjectPersistenceEngine.Context = this.Context;
 				}
 				return this.objectObjectPersistenceEngine;
 			}
@@ -182,7 +181,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (persistenceEngine == null)
 			{
 				persistenceEngine = GetPersistenceEngine(sourceMap.PersistenceType);
-			}
+                dataSourcePersistenceEngines[sourceMap] = persistenceEngine;
+            }
 			return persistenceEngine;
 		}
 

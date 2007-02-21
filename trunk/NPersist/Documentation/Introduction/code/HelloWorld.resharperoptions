@@ -4,8 +4,30 @@
     <integer />
     <boolean />
   </SettingsComponent>
-  <CompletionStatisticsManager />
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:System.Windows.Forms.TextBox">
+      <Item value="Text" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:int">
+      <Item value="ToString" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:HelloWorld.Employee">
+      <Item value="Id" priority="1" />
+      <Item value="Name" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Puzzle.NPersist.Framework.IContext">
+      <Item value="DeleteObject" priority="0" />
+      <Item value="Commit" priority="1" />
+      <Item value="SetConnectionString" priority="0" />
+      <Item value="CreatedObject" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
   <RecentFilesTracker>
-    <RecentFilesTracker />
+    <RecentFilesTracker>
+      <TrackedFile location="C:\Berlioz\Puzzle\NPersist\Documentation\Introduction\code\AssemblyInfo.cs" offset="787" line="0" column="0" />
+      <TrackedFile location="C:\Berlioz\Puzzle\NPersist\Documentation\Introduction\code\Form1.cs" offset="6513" line="92" column="0" />
+      <TrackedFile location="C:\Berlioz\Puzzle\NPersist\Documentation\Introduction\code\Employee.cs" offset="437" line="0" column="0" />
+      <TrackedFile location="C:\Berlioz\Puzzle\NPersist\Framework\Persistence\DataSourceManager\DataSourceManager.cs" offset="1845" line="19" column="0" />
+    </RecentFilesTracker>
   </RecentFilesTracker>
 </Configuration>

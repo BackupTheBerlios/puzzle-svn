@@ -1392,7 +1392,36 @@ namespace Puzzle.NPersist.Framework
 			m_EventManager.OnCommitted(this, e2);
 		}
 
-		public virtual void Dispose()
+        public virtual void CommitRecursive()
+        {
+            CommitRecursive(1);
+        }
+
+        public virtual void CommitRecursive(int exceptionLimit)
+        {
+            Commit(exceptionLimit);
+
+            if (m_PersistenceEngine != null)
+            {
+                PersistenceEngineManager persistenceEngineManager = m_PersistenceEngine as PersistenceEngineManager;
+                ObjectPersistenceEngine objectPersistenceEngine = null;
+                if (persistenceEngineManager != null)
+                {
+                    objectPersistenceEngine = persistenceEngineManager.ObjectObjectPersistenceEngine as ObjectPersistenceEngine;
+                }
+                else
+                {
+                    objectPersistenceEngine = m_PersistenceEngine as ObjectPersistenceEngine;
+                }               
+                if (objectPersistenceEngine != null)
+                {
+                    if (objectPersistenceEngine.SourceContext != null)
+                        objectPersistenceEngine.SourceContext.CommitRecursive(exceptionLimit);
+                }
+            }
+        }
+        
+        public virtual void Dispose()
 		{
 			if (this.isDisposed)
 				return;
