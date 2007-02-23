@@ -1104,14 +1104,14 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 					domainMap.MapSerializer = MapSerializer.DefaultSerializer;
 				}
 			}
-            if (!(xmlDom.Attributes["deadlock-strategy"] == null))
-            {
-                domainMap.DeadlockStrategy = (DeadlockStrategy)Enum.Parse(typeof(DeadlockStrategy), xmlDom.Attributes["deadlock-strategy"].Value);
-            }
 			else
 			{
 				domainMap.MapSerializer = MapSerializer.DefaultSerializer;
 			}
+            if (!(xmlDom.Attributes["deadlock-strategy"] == null))
+            {
+                domainMap.DeadlockStrategy = (DeadlockStrategy)Enum.Parse(typeof(DeadlockStrategy), xmlDom.Attributes["deadlock-strategy"].Value);
+            }
 			if (!(xmlDom.Attributes["target-languages"] == null))
 			{
 				str = xmlDom.Attributes["target-languages"].Value;
@@ -1582,10 +1582,6 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlProp.Attributes["access"] == null))
 			{
 				propertyMap.Accessibility = (AccessibilityType) Enum.Parse(typeof (AccessibilityType), xmlProp.Attributes["access"].Value);
-			}
-			if (!(xmlProp.Attributes["field"] == null))
-			{
-				propertyMap.FieldName = xmlProp.Attributes["field"].Value;
 			}
 			if (!(xmlProp.Attributes["field-access"] == null))
 			{

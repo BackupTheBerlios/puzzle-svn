@@ -2123,14 +2123,21 @@ namespace Puzzle.NPersist.Framework
 				case "guid" :
 					useName = "GuidIdentityGenerator";
 					break;
+				case "sequential-guid" :
+					useName = "SequentialGuidIdentityGenerator";
+					break;
 			}
 
 			switch (useName)
 			{
-				case "GuidIdentityGenerator" :
+				case "GuidIdentityGenerator": 
+				case "SequentialGuidIdentityGenerator" :
 					return GetKnownIdentityGenerator(useName);
 			}
-			throw new NPersistException("Unknown identity generator: " + name);
+			IIdentityGenerator identityGenerator = (IIdentityGenerator) this.identityGenerators[name];
+			if (identityGenerator == null)
+				throw new NPersistException("Unknown identity generator: " + name);
+			return identityGenerator;
 		}
 
 		protected virtual IIdentityGenerator GetKnownIdentityGenerator(string name)
@@ -2142,6 +2149,9 @@ namespace Puzzle.NPersist.Framework
 				{
 					case "GuidIdentityGenerator" :
 						identityGenerator = new GuidIdentityGenerator();
+						break;
+					case "SequentialGuidIdentityGenerator" :
+						identityGenerator = new SequentialGuidIdentityGenerator();
 						break;
 				}
 

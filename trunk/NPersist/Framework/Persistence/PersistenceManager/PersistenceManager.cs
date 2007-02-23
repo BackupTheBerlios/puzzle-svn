@@ -1095,7 +1095,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (visited[obj] != null)
 				return;
 
-			//We should check if the object isn't proxied and if so proxy it. (or throw exception?)
+			//We should check if the object isn't proxied. If not, we throw an exception
+			IInterceptable interceptable = obj as IInterceptable;
+			if (interceptable == null)
+			{
+				throw new NPersistException("Can't attach unproxied object!", obj);
+			}
+			
 			IInterceptor interceptor = ((IInterceptable) obj).GetInterceptor();
 			if (interceptor != null)
 			{
@@ -1115,8 +1121,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 				}
 			}
-
-			visited[obj] = obj;
 
             ((IInterceptable) obj).SetInterceptor(this.Context.Interceptor);
 
