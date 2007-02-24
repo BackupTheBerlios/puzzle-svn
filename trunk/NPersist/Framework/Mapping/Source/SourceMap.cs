@@ -604,6 +604,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			sourceMap.Schema = attrib.Schema ;
 			sourceMap.SourceType = attrib.SourceType ;
 			sourceMap.Url = attrib.Url ;
+			sourceMap.LockTable = attrib.LockTable;
 		}
 
 		#endregion

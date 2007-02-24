@@ -1600,6 +1600,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			domainMap.TimeToLiveBehavior = attrib.TimeToLiveBehavior;
 			domainMap.UpdateOptimisticConcurrencyBehavior = attrib.UpdateOptimisticConcurrencyBehavior;
 			domainMap.ValidationMode = attrib.ValidationMode;
+			domainMap.DeadlockStrategy = attrib.DeadlockStrategy;
 		}
 
 		#endregion

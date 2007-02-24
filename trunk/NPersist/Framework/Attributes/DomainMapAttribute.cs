@@ -38,6 +38,7 @@ namespace Puzzle.NPersist.Framework.Attributes
 		private ValidationMode m_ValidationMode = ValidationMode.Default ;
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default ;
+		private DeadlockStrategy m_DeadlockStrategy = DeadlockStrategy.Default ;
 
 		//O/D Mapping
 		private string m_DocSource = "";
@@ -95,8 +96,7 @@ namespace Puzzle.NPersist.Framework.Attributes
 			set { m_UpdateOptimisticConcurrencyBehavior = value; }
 		}
 
-		public virtual OptimisticConcurrencyBehaviorType DeleteOptimisticConcurrencyBehavior
-		{
+		public virtual OptimisticConcurrencyBehaviorType DeleteOptimisticConcurrencyBehavior		{
 			get { return m_DeleteOptimisticConcurrencyBehavior; }
 			set { m_DeleteOptimisticConcurrencyBehavior = value; }
 		}
@@ -125,7 +125,12 @@ namespace Puzzle.NPersist.Framework.Attributes
 			get { return this.m_TimeToLiveBehavior; }
 			set { this.m_TimeToLiveBehavior = value; }
 		}
-
+		
+		public DeadlockStrategy DeadlockStrategy
+		{
+			get { return this.m_DeadlockStrategy; }
+			set { this.m_DeadlockStrategy = value; }
+		}
 
 		#endregion
 

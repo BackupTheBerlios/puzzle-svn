@@ -30,13 +30,14 @@ namespace Puzzle.NPersist.Framework.Attributes
 
 		//O/R Mapping
 		private string m_name = "";
-		private SourceType m_SourceType = SourceType.MSSqlServer;
-		private ProviderType m_ProviderType = ProviderType.SqlClient;
+		private SourceType m_SourceType = SourceType. MSSqlServer;
+		private ProviderType m_ProviderType = ProviderType. SqlClient;
 		private string m_ConnectionString = "";
 		private string m_Schema = "dbo";
 		private string m_Catalog = "";
 		private string m_ProviderAssemblyPath = "";
 		private string m_ProviderConnectionTypeName = "";
+		private string m_LockTable = "";
 
 		//O/D Mapping
 		private string m_DocPath = "";
@@ -122,6 +123,12 @@ namespace Puzzle.NPersist.Framework.Attributes
 		{
 			get { return m_ProviderConnectionTypeName; }
 			set { m_ProviderConnectionTypeName = value; }
+		}
+
+		public virtual string LockTable
+		{
+			get { return m_LockTable; }
+			set { m_LockTable = value; }
 		}
 
 		#endregion
