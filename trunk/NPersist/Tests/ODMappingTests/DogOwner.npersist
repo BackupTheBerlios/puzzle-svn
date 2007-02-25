@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<domain name="DogOwner" assembly="ODMappingTests" root="ODMappingTests" doc-source="XmlData" >
+<domain name="DogOwner" assembly="ODMappingTests" root="ODMappingTests" source="XmlData" >
   <class name="DogOwner" doc-element="dog-owner">
     <property name="Id" id="true" doc-attribute="id" type="System.Guid" />
     <property name="Name" doc-attribute="name" type="System.String" />
@@ -34,5 +34,5 @@
     <property name="Id" id="true" doc-attribute="id" type="System.Guid" />
     <property name="Name" doc-attribute="name" type="System.String" />
   </class>
-  <source name="XmlData" doc-path="C:\Test\Xml" />
+  <source name="XmlData" persistence-type="ObjectDocument" doc-path="C:\Test\Xml" />
 </domain>

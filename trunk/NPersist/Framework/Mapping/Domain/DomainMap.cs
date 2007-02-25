@@ -444,10 +444,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 						ISourceMap sourceMap = propertyMap.GetSourceMap();
 						if (sourceMap != null)
 						{
-							IColumnMap columnMap = propertyMap.GetColumnMap();
-							if (columnMap == null)
+							if (sourceMap.PersistenceType == PersistenceType.Default || sourceMap.PersistenceType == PersistenceType.ObjectRelational)
 							{
-								throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
+								IColumnMap columnMap = propertyMap.GetColumnMap();
+								if (columnMap == null)
+								{
+									throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
+								}								
 							}
 						}
                     }

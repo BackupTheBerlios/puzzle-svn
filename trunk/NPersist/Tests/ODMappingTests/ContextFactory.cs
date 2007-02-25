@@ -18,8 +18,8 @@ namespace ODMappingTests
 		{
 			IContext context = new Context(test.GetType().Assembly, "ODMappingTests." + fileName + ".npersist" );
 
-			context.PersistenceEngine = new DocumentPersistenceEngine();
-			context.PersistenceEngine.Context = context;
+//			context.PersistenceEngine = new DocumentPersistenceEngine();
+//			context.PersistenceEngine.Context = context;
 
 			context.LogManager.Loggers.Add(new ConsoleLogger(LoggingLevel.Debug));
 			return context;
