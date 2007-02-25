@@ -16,7 +16,7 @@ namespace Puzzle.NPersist.Framework.Enumerations
 	public enum DocPropertyMapMode
 	{
         /// <summary>
-        /// The value is inherited. Finally Inline.
+        /// The value is inherited. Finally ByReference.
         /// </summary>
 		Default = 0,
         /// <summary>

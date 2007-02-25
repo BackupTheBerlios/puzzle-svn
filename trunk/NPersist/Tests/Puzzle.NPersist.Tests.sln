@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NCore.Framework", ".
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODMappingTests", "ODMappingTests\ODMappingTests.csproj", "{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -76,6 +80,12 @@ Global
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.NPDebug.Build.0 = Debug|.NET
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Release.ActiveCfg = Release|.NET
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Release.Build.0 = Release|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Debug.ActiveCfg = Debug|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Debug.Build.0 = Debug|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.NPDebug.ActiveCfg = Debug|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.NPDebug.Build.0 = Debug|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Release.ActiveCfg = Release|.NET
+		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

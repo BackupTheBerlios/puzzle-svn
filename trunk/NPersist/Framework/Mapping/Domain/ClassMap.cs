@@ -47,7 +47,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private string m_TypeColumn = "";
 		private string m_TypeValue = "";
 		private string m_InheritsClass = "";
-		private ClassType m_ClassType = ClassType.Default;
+		private ClassType m_ClassType = ClassType. Default;
 		private InheritanceType m_InheritanceType = InheritanceType.None;
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;

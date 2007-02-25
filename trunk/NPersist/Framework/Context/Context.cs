@@ -825,11 +825,11 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual object GetObjectById(object identity, Type type)
 		{
-			bool lazy = true;
+			bool lazy = false;
 
 			LoadBehavior loadBehavior = this.ObjectManager.GetLoadBehavior(type);
-			if (loadBehavior == LoadBehavior.Eager)
-				lazy = false;
+			if (loadBehavior == LoadBehavior.Lazy)
+				lazy = true;
 
 			return GetObjectById(identity, type, lazy);
 		}

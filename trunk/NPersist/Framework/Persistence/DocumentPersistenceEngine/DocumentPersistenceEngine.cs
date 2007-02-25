@@ -406,7 +406,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 			IPropertyMap propertyMap = classMap.MustGetPropertyMap(propertyName);
 
-			if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+			//if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+			if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
 				LoadObject(ref obj);
 		}
 
@@ -761,7 +762,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 				else
 				{
-					if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+					//if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+					if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
 					{
 						if (propertyMap.IsCollection)
 						{
@@ -1074,7 +1076,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					else
 					{
-						if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+						//if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Default || propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
+						if (propertyMap.DocPropertyMapMode == DocPropertyMapMode.Inline)
 						{
 							if (propertyMap.IsCollection)
 							{

@@ -830,6 +830,7 @@
     <Compile Include="Proxy\Mixins\ObjectStatusHelperMixin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\Mixins\ObservableMixin.cs" />
     <Compile Include="Proxy\Mixins\OriginalValueHelperMixin.cs">
       <SubType>Code</SubType>
     </Compile>

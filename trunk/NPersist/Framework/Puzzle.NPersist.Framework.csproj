@@ -1369,6 +1369,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\Mixins\ObservableMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\Mixins\OriginalValueHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

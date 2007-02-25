@@ -441,11 +441,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 
                     if (propertyMap.ReferenceType == ReferenceType.None)
                     {
-                        IColumnMap columnMap = propertyMap.GetColumnMap();
-                        if (columnMap == null)
-                        {
-                            throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
-                        }
+						ISourceMap sourceMap = propertyMap.GetSourceMap();
+						if (sourceMap != null)
+						{
+							IColumnMap columnMap = propertyMap.GetColumnMap();
+							if (columnMap == null)
+							{
+								throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
+							}
+						}
                     }
                 }
             }	
