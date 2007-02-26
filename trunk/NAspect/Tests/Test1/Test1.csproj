@@ -80,15 +80,14 @@
                     HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\Program\NUnit 2.2\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "KumoContainer"
                     Project = "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\..\..\Program Files\NUnit 2.2\bin\nunit.framework.dll"
                 />
             </References>
         </Build>

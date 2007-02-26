@@ -62,7 +62,6 @@ namespace Puzzle.NAspect.Visualization
             this.removeAssemblyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -348,6 +347,7 @@ namespace Puzzle.NAspect.Visualization
             this.openToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.openToolStripButton.Text = "toolStripButton1";
             this.openToolStripButton.ToolTipText = "Open";
+            this.openToolStripButton.Click += new System.EventHandler(this.openToolStripButton_Click);
             // 
             // saveToolStripButton
             // 
@@ -358,6 +358,7 @@ namespace Puzzle.NAspect.Visualization
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "toolStripButton2";
             this.saveToolStripButton.ToolTipText = "Save";
+            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // saveAllToolStripButton
             // 
@@ -368,6 +369,7 @@ namespace Puzzle.NAspect.Visualization
             this.saveAllToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveAllToolStripButton.Text = "toolStripButton1";
             this.saveAllToolStripButton.ToolTipText = "Save All";
+            this.saveAllToolStripButton.Click += new System.EventHandler(this.saveAllToolStripButton_Click);
             // 
             // assemblyContextMenuStrip
             // 
@@ -398,7 +400,6 @@ namespace Puzzle.NAspect.Visualization
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newProjectToolStripMenuItem,
             this.openToolStripMenuItem,
             this.toolStripSeparator1,
             this.addAssemblyToolStripMenuItem,
@@ -416,12 +417,6 @@ namespace Puzzle.NAspect.Visualization
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // newProjectToolStripMenuItem
-            // 
-            this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.newProjectToolStripMenuItem.Text = "New Project";
-            // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -434,14 +429,14 @@ namespace Puzzle.NAspect.Visualization
             // openProjectToolStripMenuItem
             // 
             this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
-            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openProjectToolStripMenuItem.Text = "Project";
             this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
             // 
             // openConfigurationToolStripMenuItem
             // 
             this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
-            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openConfigurationToolStripMenuItem.Text = "Configuration";
             this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
             // 
@@ -506,6 +501,7 @@ namespace Puzzle.NAspect.Visualization
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
             this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.saveAllToolStripMenuItem.Text = "Save All";
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -707,7 +703,6 @@ namespace Puzzle.NAspect.Visualization
         private System.Windows.Forms.ToolStripMenuItem removeAssemblyToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;

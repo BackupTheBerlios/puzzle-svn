@@ -14,14 +14,10 @@ namespace CacheSample
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Engine e = ApplicationContext.Configure();
+			IEngine e = ApplicationContext.Configure();
 
 			//create an instance of "SomeAopTarget" through the aop container
-<<<<<<< .mine
-			SomeAopTarget myObj = e.CreateProxy<SomeAopTarget>();
-=======
 			SomeAopTarget myObj = e.CreateProxy(typeof (SomeAopTarget)) as SomeAopTarget;
->>>>>>> .r209
 
 			for (int i=0;i<4;i++)
 			{

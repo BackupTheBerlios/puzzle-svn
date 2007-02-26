@@ -1,24 +1,24 @@
-﻿<VisualStudioProject>
+<VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{A9FC30CA-62DD-408E-9AF7-DAE7DD24D215}"
+        ProjectGuid = "{33163988-4604-43C9-9AA6-D9AEE7E4D422}"
     >
         <Build>
             <Settings
                 ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "CacheSample"
+                AssemblyName = "HelloWorld"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Exe"
+                OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = ""
+                RootNamespace = "HelloWorld"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -67,31 +67,52 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Puzzle.NPersist.Framework"
+                    AssemblyName = "Puzzle.NPersist.Framework"
+                    HintPath = "lib\Puzzle.NPersist.Framework.dll"
                 />
                 <Reference
                     Name = "Puzzle.NAspect.Framework"
-                    Project = "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Puzzle.NAspect.Framework"
+                    HintPath = "lib\Puzzle.NAspect.Framework.dll"
+                />
+                <Reference
+                    Name = "Puzzle.NCore.Framework"
+                    AssemblyName = "Puzzle.NCore.Framework"
+                    HintPath = "lib\Puzzle.NCore.Framework.dll"
+                />
+                <Reference
+                    Name = "Puzzle.NPath.Framework"
+                    AssemblyName = "Puzzle.NPath.Framework"
+                    HintPath = "lib\Puzzle.NPath.Framework.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "App.config"
-                    BuildAction = "None"
-                />
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
@@ -102,31 +123,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Class1.cs"
+                    RelPath = "Employee.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SomeAOPTarget.cs"
-                    SubType = "Code"
+                    RelPath = "Form1.cs"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Interceptors\CacheInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Mixins\CacheHolderMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Mixins\ICacheHolder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Form1.resx"
+                    DependentUpon = "Form1.cs"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>
     </CSHARP>
 </VisualStudioProject>
+

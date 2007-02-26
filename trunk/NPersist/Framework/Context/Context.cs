@@ -2829,6 +2829,12 @@ namespace Puzzle.NPersist.Framework
             return (T)o;
         }
 
+        public virtual T GetObjectById<T>(object identity, bool lazy)
+        {
+            object o = this.GetObjectById(identity, typeof(T), lazy);
+            return (T)o;
+        }
+
         public virtual T TryGetObjectByNPath<T>(string npathQuery)
         {
             return TryGetObjectByNPath<T>(npathQuery, new ArrayList());

@@ -226,7 +226,12 @@ namespace Puzzle.NAspect.Visualization
 
         private void SaveConfig(bool saveAs)
         {
-            SaveConfig(false);
+        }
+
+        private void SaveAll()
+        {
+            SaveProject();
+            SaveConfig();
         }
 
         #endregion
@@ -606,6 +611,26 @@ namespace Puzzle.NAspect.Visualization
         private void saveConfigAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveConfig(true);
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveAll();
+        }
+
+        private void openToolStripButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveToolStripButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveAllToolStripButton_Click(object sender, EventArgs e)
+        {
+
         }
 
 
