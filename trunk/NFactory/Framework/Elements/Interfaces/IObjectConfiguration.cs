@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NFactory.Framework.ConfigurationElements
 {
@@ -19,6 +20,8 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 		InstanceMode InstanceMode { get; set; }
 
 		IValue InstanceValue { get; set; }
+
+        IEngine AopEngine { get;set;}
 		
 		object CreateObject(IContainer owner);
 	}

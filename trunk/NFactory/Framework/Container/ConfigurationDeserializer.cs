@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Xml;
 using Puzzle.NFactory.Framework.ConfigurationElements;
 using Puzzle.NFactory.Framework.TypeConverters;
+using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NFactory.Framework
 {
@@ -260,6 +261,13 @@ namespace Puzzle.NFactory.Framework
 			IObjectConfiguration objectConfig = GetObjectConfiguration(objectName, container);
 			objectConfig.Name = objectName;
 
+
+            if (configNode.Attributes["aop-config"] != null)
+            {
+                string sectionName = configNode.Attributes["aop-config"].Value;
+                IEngine engine = NAspect.Framework.ApplicationContext.ConfigureFromSection(sectionName);
+                objectConfig.AopEngine = engine;
+            }
 
 			if (configNode.Attributes["type"] != null)
 			{

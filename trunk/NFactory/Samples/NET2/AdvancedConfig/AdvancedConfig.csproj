@@ -40,11 +40,16 @@
     <Compile Include="MyMailer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleInterceptor.cs" />
     <Compile Include="SomeClass.cs" />
     <Compile Include="SomePropertyPath.cs" />
     <Compile Include="SpecialConsoleLogger.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
+      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
+      <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Framework\Puzzle.NFactory.Framework.NET 2.0.csproj">
       <Project>{E78AC1F1-E81B-4DB3-92DD-6EAA5739D54B}</Project>
       <Name>Puzzle.NFactory.Framework.NET 2.0</Name>

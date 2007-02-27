@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Puzzle.NCore.Framework.Logging;
+using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NFactory.Framework.ConfigurationElements
 {
@@ -89,6 +90,21 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 
 		#endregion
 
+        #region Public Property AopEngine 
+        private IEngine aopEngine;
+        public IEngine AopEngine
+        {
+            get
+            {
+                return this.aopEngine;
+            }
+            set
+            {
+                this.aopEngine = value;
+            }
+        }                        
+        #endregion
+
 		public object Invoke(IContainer owner, Type requestedType, InstanceMode instanceMode)
 		{
 			return owner.GetObjectInternal(this.Name, instanceMode);
@@ -110,7 +126,7 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 			object instance = null;
 			try
 			{
-				instance = owner.ObjectFactory.CreateInstance(this.Type, ctorParams);
+				instance = owner.ObjectFactory.CreateInstance(aopEngine , this.Type, ctorParams);
 				LogMessage message = new LogMessage("Creating instance of type '{0}' from config '{1}'", this.Type, this.Name);
 				owner.LogManager.Info(this, message);
 			}

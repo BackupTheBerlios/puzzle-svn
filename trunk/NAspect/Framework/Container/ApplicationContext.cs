@@ -23,28 +23,56 @@ namespace Puzzle.NAspect.Framework
     {
         private static volatile Hashtable configurations = new Hashtable();
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sectionName">The name of the section to configure from</param>
+        /// <returns></returns>
+        public static IEngine ConfigureFromSection(string sectionName)
+        {
+            string key = string.Format("app.config.{0}", sectionName);
+            IEngine engine = FindCachedConfiguration(key);
+            if (engine != null)
+                return engine;
+
+            lock (configurations.SyncRoot)
+            {
+                ConfigurationDeserializer deserializer = new ConfigurationDeserializer();
+#if NET2
+                XmlElement xmlRoot = (XmlElement)ConfigurationManager.GetSection("naspect");
+#else
+				XmlElement xmlRoot = (XmlElement) ConfigurationSettings.GetConfig("naspect");
+#endif
+                IEngine res = null;
+                foreach (XmlElement element in xmlRoot.ChildNodes)
+                {
+                    if (element.Name == "section")
+                    {
+                        if (element.Attributes["name"] != null)
+                        {
+                            string foundSection = element.Attributes["name"].Value;
+                            res = deserializer.Configure(element);
+                            configurations[key] = res.Configuration;
+                            break;
+                        }
+                    }
+                }
+
+
+                return res;
+            }
+        }
+
         /// <summary>
         /// Deserializes app.config and configures an IEngine.
         /// </summary>
         /// <returns>a default configured IEngine</returns>
         public static IEngine Configure()
         {
-#if NET2
-            XmlElement o = (XmlElement) ConfigurationManager.GetSection("naspect");
-#else
-            XmlElement o = (XmlElement) ConfigurationSettings.GetConfig("naspect");
-#endif
             IEngine engine = FindCachedConfiguration("app.config");
             if (engine != null)
                 return engine;
-
-            //if (configurations.ContainsKey("app.config"))
-            //{
-            //    Engine engine = new Engine("app.config");
-            //    EngineConfiguration configuration = (EngineConfiguration) configurations["app.config"];
-            //    engine.Configuration = configuration;
-            //    return engine;
-            //}
 
             lock (configurations.SyncRoot)
             {

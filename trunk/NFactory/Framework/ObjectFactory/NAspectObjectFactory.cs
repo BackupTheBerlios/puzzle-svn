@@ -13,9 +13,16 @@ namespace Puzzle.NFactory.Framework
 		}
 
 
-		public object CreateInstance(Type type, params object[] args)
+		public object CreateInstance(IEngine specificEngine,Type type, params object[] args)
 		{
-			return engine.CreateProxy(type, args);
+            if (specificEngine != null)
+            {
+                return specificEngine.CreateProxy(type, args);
+            }
+            else
+            {
+                return engine.CreateProxy(type, args);
+            }
 		}
 	}
 }

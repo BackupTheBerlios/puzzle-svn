@@ -286,7 +286,7 @@ namespace Puzzle.NFactory.Framework
 
 		public object CreateObject(Type objectType, params object[] args)
 		{
-			return ObjectFactory.CreateInstance(objectType, args);
+			return ObjectFactory.CreateInstance(null, objectType, args);
 		}
 
 		public object WrapInstance(object target)
