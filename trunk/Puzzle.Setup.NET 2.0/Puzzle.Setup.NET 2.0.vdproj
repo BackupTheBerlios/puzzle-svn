@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_04D5B62EB2464C888E9806FD96D0A20F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_07E33CBC83F74E478D21EC7E83C8A4A8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -71,6 +77,12 @@
         {
         "MsmKey" = "8:_21C1E41C67D49B6B20088DDCE172E149"
         "OwnerKey" = "8:_AF5DBAC3770240AE9083B25E199FB6F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_41D31CCCF5AF466BBD0FF39492D17146"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -171,6 +183,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F7A4C436F97D434EBA70FCA167DE7178"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B86F0C49D051479A90433B6F73E9255F"
         "MsmSig" = "8:_UNDEFINED"
@@ -244,6 +262,11 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.2.0"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 2.0"
+                    "ProductCode" = "8:Microsoft.Net.Framework.2.0"
+                    }
                 }
             }
         }
@@ -302,6 +325,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_04D5B62EB2464C888E9806FD96D0A20F"
+            {
+            "SourcePath" = "8:..\\NAspect\\Debugger\\Puzzle.Naspect.Debug\\Resources\\Thumbs.db"
+            "TargetName" = "8:Thumbs.db"
+            "Tag" = "8:"
+            "Folder" = "8:_BDA259589556498EAA215D25DAC09A4B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0ADD3DC7E46DFFF46E78BBC1E693B6E6"
             {
             "AssemblyRegister" = "3:1"
@@ -382,6 +425,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_41D31CCCF5AF466BBD0FF39492D17146"
+            {
+            "SourcePath" = "8:..\\NAspect\\Debugger\\Puzzle.Naspect.Debug\\Resources\\interceptor.gif"
+            "TargetName" = "8:interceptor.gif"
+            "Tag" = "8:"
+            "Folder" = "8:_BDA259589556498EAA215D25DAC09A4B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42A6DDD181FB418CABC103E28C848241"
@@ -595,6 +658,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F7A4C436F97D434EBA70FCA167DE7178"
+            {
+            "SourcePath" = "8:..\\NAspect\\Debugger\\Puzzle.Naspect.Debug\\PuzzleKey.snk"
+            "TargetName" = "8:PuzzleKey.snk"
+            "Tag" = "8:"
+            "Folder" = "8:_F0FB510230C64AEDAA7BDF8E8DCACAED"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -757,6 +840,17 @@
                                             "Property" = "8:_99954B97A7A940D396944687BAE1D811"
                                                 "Folders"
                                                 {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_BDA259589556498EAA215D25DAC09A4B"
+                                                    {
+                                                    "Name" = "8:Resources"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_BBC75D46F7B44F9DBBAABAA990D5A296"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -981,7 +1075,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Puzzle.NET"
         "ProductCode" = "8:{8454FDC1-0BCF-4E79-B7D0-0D4B48ABFE33}"
-        "PackageCode" = "8:{75EBEFBE-C150-4437-B819-A2656D3F51B4}"
+        "PackageCode" = "8:{6183BD31-4450-479F-AC8D-18D778E6418D}"
         "UpgradeCode" = "8:{3DDA8363-3DD9-4175-B45D-78440A6D305A}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"

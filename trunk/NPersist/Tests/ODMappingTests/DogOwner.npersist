@@ -3,7 +3,7 @@
   <class name="DogOwner" doc-element="dog-owner">
     <property name="Id" id="true" doc-attribute="id" type="System.Guid" />
     <property name="Name" doc-attribute="name" type="System.String" />
-    <property name="Dogs" list="true" item-type="Dog" read-only="true" ref="ManyToOne" inverse="DogOwner" doc-element="dogs" />
+    <property name="Dogs" list="true" item-type="Dog" ref="ManyToOne" inverse="DogOwner" doc-element="dogs" />
     <property name="Profile" doc-attribute="profile" type="Profile" ref="OneToOne" inverse="DogOwner" doc-mode="Inline" nullable="true" />
   </class>
   <class name="Dog" >
@@ -22,7 +22,7 @@
     <property name="Number" doc-attribute="number" type="System.String" />
     <property name="Profile" doc-attribute="profile" type="Profile" ref="OneToMany" inverse="PhoneNumbers"  />
   </class>
-  <class name="PerClassX" doc-mode="PerClass">
+  <class name="PerClassX" doc-mode="PerClass" doc-element="per-classX" doc-root="per-classes">
     <property name="Id" id="true" doc-attribute="id" type="System.Guid" />
     <property name="Name" doc-attribute="name" type="System.String" />
   </class>
