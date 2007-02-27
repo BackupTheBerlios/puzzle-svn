@@ -217,9 +217,10 @@ namespace Puzzle.NPersist.Framework.Validation
 					{
 						if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
 						{
-							string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
-							if (value != null)
+							object objValue = om.GetPropertyValue(obj, propertyMap.Name);
+							if (objValue != null)
 							{
+								string value = objValue.ToString();
 								if (value.Length > max )
 								{
 									string msg = "String too long";
@@ -234,7 +235,7 @@ namespace Puzzle.NPersist.Framework.Validation
 											value.Length, 
 											value);
 								}								
-							}					
+							}
 						}						
 					}
 				}
@@ -270,20 +271,21 @@ namespace Puzzle.NPersist.Framework.Validation
                     {
                         if (!(om.GetNullValueStatus(obj, propertyMap.Name)))
                         {
-                            string value = om.GetPropertyValue(obj, propertyMap.Name).ToString();
-                            if (value != null)
-                            {
-                                string msg = "String too short";
-                                if (value.Length < min)
-                                    HandleException(
-                                        obj,
-                                        propertyMap.Name,
-                                        exceptions,
-                                        new ValidationException(GetExceptionMessage(obj, propertyMap, msg, min, value.Length)),
-                                        min,
-                                        value.Length,
-                                        value);
-                            }
+                            object objValue = om.GetPropertyValue(obj, propertyMap.Name).ToString();
+							if (objValue != null)
+							{
+								string value = objValue.ToString();
+								string msg = "String too short";
+								if (value.Length < min)
+									HandleException(
+										obj,
+										propertyMap.Name,
+										exceptions,
+										new ValidationException(GetExceptionMessage(obj, propertyMap, msg, min, value.Length)),
+										min,
+										value.Length,
+										value);
+							}
                         }
                     }
 				}
