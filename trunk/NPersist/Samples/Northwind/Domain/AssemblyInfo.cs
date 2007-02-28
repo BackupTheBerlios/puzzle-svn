@@ -54,7 +54,7 @@ using Puzzle.NPersist.Framework.Attributes;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\..\..\..\..\PuzzleKey.snk")]
+[assembly: AssemblyKeyFile(@"..\..\PuzzleKey.snk")]
 [assembly: AssemblyKeyName("")]
 
 [assembly: DomainMap(Source="DefaultSource")]
