@@ -10,7 +10,7 @@ namespace Puzzle.ObjectMapper.Plugins.ServiceLayerGenerator
 	/// <summary>
 	/// Summary description for CSharpGenerator.
 	/// </summary>
-	[PluginClass("Puzzle")]
+	[PluginClass("Puzzle", "Infratructure Generator")]
 	public class CSharpGenerator
 	{
 		public CSharpGenerator()
@@ -29,6 +29,17 @@ namespace Puzzle.ObjectMapper.Plugins.ServiceLayerGenerator
 			return code;
 		}
 	
+		[PluginMethod(typeof(IClassMap), typeof(String), "Repository Class")]
+		public static string GetRepositoryClassCsharp(IClassMap classMap)
+		{
+			CodeCompileUnit compileunit = CodeDomGenerator.GetRepositoryClassCompileUnit(classMap);
+
+			CodeDomProvider provider = new CSharpCodeProvider();
+
+			string code = CodeDomGenerator.ToCode(compileunit, provider);
+
+			return code;
+		}
 	
 	}
 }

@@ -261,10 +261,9 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void SetPropertyValue(object obj, Type type, string propertyName, object value)
         {
 #if NET2
-            
             if (value == null)
             {
-                SetPropertyValueReflection(obj, propertyName, value); 
+                SetPropertyValueReflection(obj, propertyName, value);
             }
             else
             {

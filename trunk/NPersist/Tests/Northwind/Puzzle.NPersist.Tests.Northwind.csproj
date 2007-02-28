@@ -219,6 +219,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Basic\ReferenceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Basic\RefreshTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

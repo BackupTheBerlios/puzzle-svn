@@ -52,6 +52,7 @@
     <Compile Include="Basic\OptimisticConcurrencyTests.cs" />
     <Compile Include="Basic\OriginalValueTests.cs" />
     <Compile Include="Basic\PropertyStatusTests.cs" />
+    <Compile Include="Basic\ReferenceTests.cs" />
     <Compile Include="Basic\UnitOfWorkTests.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +71,9 @@
       <Project>{D1836646-6373-4785-B1B1-AC5C6A4BF50F}</Project>
       <Name>Puzzle.NPersist.Samples.Northwind.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>
