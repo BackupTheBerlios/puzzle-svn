@@ -10,6 +10,7 @@ namespace AdvancedConfig
         {
             Console.WriteLine("Pretend that we send a mail now");
             Console.WriteLine("to {0} subject {1} body {2} via server {3}",recipients,subject,body,SmtpServer);
+            
         }
 
         #region Property SmtpServer

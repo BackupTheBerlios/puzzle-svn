@@ -1949,3 +1949,11 @@ Name: {group}\Tests\NPersist; Filename: {app}\SourceCode\NPersist\Tests\
 Name: {group}\License; Filename: {app}\SourceCode\license.txt
 
 Name: {group}\Tools\ObjectMapper; Filename: {app}\Binaries\ObjectMapper\Puzzle.ObjectMapper.GUI.exe; IconIndex: 0
+Name: {group}\Tools\ObjectMapper\Source; Filename: {app}\SourceCode\ObjectMapper\
+
+Name: {group}\Tools\DomainExplorer; Filename: {app}\Binaries\ObjectMapper\yyy.exe; IconIndex: 0
+Name: {group}\Tools\DomainExplorer\Source; Filename: {app}\SourceCode\NPersist\Tools\DomainExplorer
+
+Name: {group}\Tools\QueryAnalyzer; Filename: {app}\Binaries\ObjectMapper\yyy.exe; IconIndex: 0
+Name: {group}\Tools\QueryAnalyzer\Source; Filename: {app}\\SourceCode\NPersist\Tools\QueryAnalyzer
+
