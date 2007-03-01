@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 using System.Reflection;
 using System.Drawing;
 using Puzzle.FastTrack.Framework.Web.Factories;
-using Puzzle.FastTrack.Framework.Web.Comparers;
+using Puzzle.FastTrack.Framework.Comparers;
 
 namespace Puzzle.FastTrack.Framework.Web.Controls
 {
@@ -90,7 +90,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 ArrayList sorted = list as ArrayList;
                 if (sorted != null && sortProperty != null)
                 {
-                    ObjectComparer comparer = new ObjectComparer(page, sortProperty, descending);
+                    ObjectComparer comparer = new ObjectComparer(page.DomainController, sortProperty, descending);
                     sorted.Sort(comparer);
                     list = sorted;                    
                 }

@@ -4,10 +4,10 @@ using System.Text;
 using Puzzle.NPersist.Framework;
 using Puzzle.NPersist.Framework.Mapping;
 using System.Collections;
-using Puzzle.FastTrack.Framework.Web.Filtering;
+using Puzzle.FastTrack.Framework.Filtering;
 using Puzzle.NPersist.Framework.Querying;
 
-namespace Puzzle.FastTrack.Framework.Web.Controllers
+namespace Puzzle.FastTrack.Framework.Controllers
 {
     public class NPersistController : DomainControllerBase
     {

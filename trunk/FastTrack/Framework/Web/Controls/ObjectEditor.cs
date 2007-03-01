@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 using System.Reflection;
 using System.Drawing;
 using System.Collections;
-using Puzzle.FastTrack.Framework.Web.Comparers;
+using Puzzle.FastTrack.Framework.Comparers;
 
 namespace Puzzle.FastTrack.Framework.Web.Controls
 {

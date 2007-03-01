@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4E1F65D7-AE72-4E13-964B-D022CC205439}</ProjectGuid>
+    <ProjectGuid>{2B26DE76-2CE2-4CB2-A88D-BC041E18B4A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Puzzle.FastTrack.Framework.Web</RootNamespace>
-    <AssemblyName>Puzzle.FastTrack.Framework.Web</AssemblyName>
+    <RootNamespace>Puzzle.FastTrack.Framework.NPersist</RootNamespace>
+    <AssemblyName>Puzzle.FastTrack.Framework.NPersist</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,44 +31,14 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\DeleteObjectLinkButton.cs" />
-    <Compile Include="Controls\ListColumnHeader.cs" />
-    <Compile Include="Controls\ObjectLink.cs" />
-    <Compile Include="Controls\RemoveObjectLinkButton.cs" />
-    <Compile Include="Controls\SelectObjectLinkButton.cs" />
-    <Compile Include="Structures\NameValuePair.cs" />
-    <Compile Include="Factories\PageFactory.cs" />
-    <Compile Include="Factories\UrlFactory.cs" />
-    <Compile Include="Factories\ViewFactory.cs" />
-    <Compile Include="Controls\BooleanEditor.cs" />
-    <Compile Include="Controls\BooleanView.cs" />
-    <Compile Include="Controls\DateTimeEditor.cs" />
-    <Compile Include="Controls\DateTimeView.cs" />
-    <Compile Include="Controls\EnumerationEditor.cs" />
-    <Compile Include="Controls\EnumerationView.cs" />
-    <Compile Include="Controls\ListEditor.cs" />
-    <Compile Include="Controls\ListView.cs" />
-    <Compile Include="Controls\NumberEditor.cs" />
-    <Compile Include="Controls\NumberView.cs" />
-    <Compile Include="Controls\ObjectView.cs" />
-    <Compile Include="Controls\PropertyView.cs" />
-    <Compile Include="Controls\ReferenceEditor.cs" />
-    <Compile Include="Controls\ReferenceView.cs" />
-    <Compile Include="Controls\StringView.cs" />
-    <Compile Include="Interfaces\IValueEditor.cs" />
-    <Compile Include="Controls\ObjectEditor.cs" />
-    <Compile Include="Controls\PropertyEditor.cs" />
-    <Compile Include="Controls\StringEditor.cs" />
-    <Compile Include="FastTrackPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="NPersistController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Factories\EditorFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NPersist\Framework\Puzzle.NPersist.Framework.NET 2.0.csproj">
@@ -79,9 +49,6 @@
       <Project>{F0C4BCB9-3866-46E1-90A4-FC90EC345194}</Project>
       <Name>Puzzle.FastTrack.Framework</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,11 +4,12 @@ using System.Text;
 using System.Web.UI;
 using Puzzle.NPersist.Framework;
 using System.Reflection;
-using Puzzle.FastTrack.Framework.Web.Controllers;
+using Puzzle.FastTrack.Framework.Controllers;
 using Puzzle.FastTrack.Framework.Web.Interfaces;
 using Puzzle.FastTrack.Framework.Web.Factories;
 using System.Collections;
-using Puzzle.FastTrack.Framework.Web.Filtering;
+using Puzzle.FastTrack.Framework.Filtering;
+using Puzzle.FastTrack.Framework.Factories;
 
 namespace Puzzle.FastTrack.Framework.Web
 {
