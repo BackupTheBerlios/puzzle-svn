@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Puzzle.NPersist.Framework.Attributes;
 
 //
 // General Information about an assembly is controlled through the following 
@@ -57,5 +56,3 @@ using Puzzle.NPersist.Framework.Attributes;
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
 
-[assembly: DomainMap(Source="DefaultSource")]
-[assembly: SourceMap(Name = "DefaultSource", Compute=true)]
