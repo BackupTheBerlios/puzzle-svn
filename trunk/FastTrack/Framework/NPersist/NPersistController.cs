@@ -6,8 +6,9 @@ using Puzzle.NPersist.Framework.Mapping;
 using System.Collections;
 using Puzzle.FastTrack.Framework.Filtering;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.FastTrack.Framework.Controllers;
 
-namespace Puzzle.FastTrack.Framework.Controllers
+namespace Puzzle.FastTrack.Framework.NPersist
 {
     public class NPersistController : DomainControllerBase
     {
