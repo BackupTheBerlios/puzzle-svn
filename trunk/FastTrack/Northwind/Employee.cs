@@ -300,11 +300,5 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
                 m_TitleOfCourtesy = value;
             }
         }
-
-
-
-
-
-
     }
 }

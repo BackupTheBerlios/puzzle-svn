@@ -7,11 +7,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
-using Puzzle.NPersist.Samples.Northwind.Domain;
 using Puzzle.NPersist.Framework;
-using Puzzle.FastTrack.WebForms.Framework.Controls;
+using Puzzle.FastTrack.Framework.Web.Controls;
 using Puzzle.NPersist.Framework.Mapping;
-using Puzzle.FastTrack.WebForms.Framework;
+using Puzzle.FastTrack.Framework.Web;
 
 public partial class _Default : FastTrackPage 
 {
@@ -23,6 +22,7 @@ public partial class _Default : FastTrackPage
 
         form.Controls.Add(employeeEditor);
     }
+
     protected void updateButton_Click(object sender, EventArgs e)
     {
         this.SaveObject();
