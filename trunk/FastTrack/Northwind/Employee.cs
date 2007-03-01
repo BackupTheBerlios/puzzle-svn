@@ -53,7 +53,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             set { testBool = value; }
         }
 
-	      public virtual System.Int32 Id
+	    public virtual System.Int32 Id
         {
             get
             {
@@ -61,7 +61,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-	     public virtual System.String Address
+	    public virtual System.String Address
         {
             get
             {
@@ -97,7 +97,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-			public virtual System.String Country
+        public virtual System.String Country
         {
             get
             {
