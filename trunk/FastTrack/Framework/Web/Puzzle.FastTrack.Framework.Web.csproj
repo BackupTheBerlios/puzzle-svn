@@ -36,10 +36,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\DeleteListItemLinkButton.cs" />
     <Compile Include="Controls\DeleteObjectLinkButton.cs" />
     <Compile Include="Controls\ListColumnHeader.cs" />
     <Compile Include="Controls\ObjectLink.cs" />
+    <Compile Include="Controls\RemoveListItemLinkButton.cs" />
     <Compile Include="Controls\RemoveObjectLinkButton.cs" />
+    <Compile Include="Controls\SelectListItemLinkButton.cs" />
     <Compile Include="Controls\SelectObjectLinkButton.cs" />
     <Compile Include="Structures\NameValuePair.cs" />
     <Compile Include="Factories\PageFactory.cs" />

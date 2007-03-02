@@ -64,148 +64,235 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
 
             if (page != null)
             {
-                IList list = null;
-                int currPage = 0;
-                string sortProperty = "";
-                bool descending = false;
-                if (propertyName != null && propertyName != "")
-                {
-                    string pageNr = page.Request.QueryString[propertyName + "Page"];
-                    if (pageNr != null)
-                        int.TryParse(pageNr, out currPage);
-                    list = (IList)page.GetPropertyValue(propertyName);
+                CreateListTable(page);
+            }
+        }
 
-                    sortProperty = page.Request.QueryString[propertyName + "Sort"];
-                    if (page.Request.QueryString[propertyName + "desc"] != null)
-                        descending = true;
+        private void CreateListTable(FastTrackPage page)
+        {
+            IList list = null;
+            int currPage = 0;
+            string sortProperty = "";
+            bool descending = false;
+            if (propertyName != null && propertyName != "")
+            {
+                string pageNr = page.Request.QueryString[propertyName + "Page"];
+                if (pageNr != null)
+                    int.TryParse(pageNr, out currPage);
+                list = (IList)page.GetPropertyValue(propertyName);
+
+                sortProperty = page.Request.QueryString[propertyName + "Sort"];
+                if (page.Request.QueryString[propertyName + "desc"] != null)
+                    descending = true;
+            }
+            else
+            {
+                currPage = page.CurrentPage;
+                list = page.SelectedObjects;
+                sortProperty = page.SortProperty;
+                descending = page.Descending;
+            }
+
+            ArrayList sorted = list as ArrayList;
+            if (sorted != null && sortProperty != null)
+            {
+                ObjectComparer comparer = new ObjectComparer(page.DomainController, sortProperty, descending);
+                sorted.Sort(comparer);
+                list = sorted;
+            }
+
+            CreateHeaderAndRows(page, list, currPage, sortProperty, descending);
+
+
+        }
+
+        private void CreateHeaderAndRows(FastTrackPage page, IList list, int currPage, string sortProperty, bool descending)
+        {
+            IList listPage = PageFactory.CreatePage(list, currPage, pageSize);
+
+            if (listPage != null && listPage.Count > 0)
+            {
+                ArrayList properties = null;
+
+                foreach (object value in listPage)
+                {
+                    properties = CreateHeader(page, sortProperty, descending, properties, value);
+
+                    break;
+                }
+
+                foreach (object value in listPage)
+                {
+                    TableRow row = new TableRow();
+                    this.Rows.Add(row);
+
+                    CreateRow(page, value, row, properties);
+                }
+
+                if (list.Count > listPage.Count)
+                {
+                    AddNavigationTable(page, list, currPage, properties);
+                }
+            }
+        }
+
+        private ArrayList CreateHeader(FastTrackPage page, string sortProperty, bool descending, ArrayList properties, object value)
+        {
+            TableRow row = new TableRow();
+            this.Rows.Add(row);
+
+            properties = new ArrayList(value.GetType().GetProperties());
+            properties.Sort(new PropertyComparer());
+
+            if (page.SelectedPropertyName != null && page.SelectedPropertyName != "")
+            {
+                if (page.SelectedObject != null)
+                {
+                    TableCell cell = new TableCell();
+                    row.Cells.Add(cell);
+                    cell.BackColor = Color.White;
+                }
+            }
+
+            if (propertyName != null && propertyName != "")
+            {
+                TableCell cell = new TableCell();
+                row.Cells.Add(cell);
+                cell.BackColor = Color.White;
+            }
+
+            TableCell deleteCell = new TableCell();
+            row.Cells.Add(deleteCell);
+            deleteCell.BackColor = Color.White;
+
+            foreach (PropertyInfo property in properties)
+            {
+                TableCell cell = new TableCell();
+                ListColumnHeader header = new ListColumnHeader(property.Name, sortProperty, propertyName, descending);
+                row.Cells.Add(cell);
+                cell.Controls.Add(header);
+                cell.BackColor = Color.White;
+            }
+
+            return properties;
+        }
+
+        private void CreateRow(FastTrackPage page, object value, TableRow row, ArrayList properties)
+        {
+            if (page.SelectedPropertyName != null && page.SelectedPropertyName != "")
+            {
+                if (page.SelectedObject != null)
+                {
+                    TableCell cell = new TableCell();
+                    SelectListItemLinkButton link = new SelectListItemLinkButton();
+                    link.Text = "Select";
+                    row.Cells.Add(cell);
+                    cell.Controls.Add(link);
+                    cell.BackColor = Color.White;
+                }
+            }
+
+            if (propertyName != null && propertyName != "")
+            {
+                TableCell cell = new TableCell();
+                RemoveListItemLinkButton link = new RemoveListItemLinkButton();
+                link.Text = "Remove";
+                row.Cells.Add(cell);
+                cell.Controls.Add(link);
+                cell.BackColor = Color.White;
+            }
+
+            TableCell deleteCell = new TableCell();
+            DeleteListItemLinkButton deleteLink = new DeleteListItemLinkButton();
+            deleteLink.Text = "Delete";
+            row.Cells.Add(deleteCell);
+            deleteCell.Controls.Add(deleteLink);
+            deleteCell.BackColor = Color.White;
+
+            foreach (PropertyInfo property in properties)
+            {
+                TableCell cell = new TableCell();
+                Label label = new Label();
+                object propertyValue = page.GetPropertyValue(value, property.Name);
+
+                if (typeof(IList).IsAssignableFrom(property.PropertyType))
+                {
+                    int count = 0;
+                    if (propertyValue != null)
+                        count = ((IList)propertyValue).Count;
+                    label.Text = count.ToString() + " items";
                 }
                 else
                 {
-                    currPage = page.CurrentPage;
-                    list = page.SelectedObjects;
-                    sortProperty = page.SortProperty;
-                    descending = page.Descending;
+                    if (propertyValue != null)
+                        label.Text = propertyValue.ToString();
                 }
 
-                ArrayList sorted = list as ArrayList;
-                if (sorted != null && sortProperty != null)
-                {
-                    ObjectComparer comparer = new ObjectComparer(page.DomainController, sortProperty, descending);
-                    sorted.Sort(comparer);
-                    list = sorted;                    
-                }
+                row.Cells.Add(cell);
+                cell.Controls.Add(label);
+                cell.BackColor = Color.White;
+            }
+        }
 
-                IList listPage = PageFactory.CreatePage(list, currPage, pageSize); 
+        private void AddNavigationTable(FastTrackPage page, IList list, int currPage, ArrayList properties)
+        {
+            int colSpan = properties.Count;
+            if (page.SelectedPropertyName != null && page.SelectedPropertyName != "")
+                colSpan++;
 
-                if (listPage != null && listPage.Count > 0)
-                {
-                    ArrayList properties = null;  
+            if (propertyName != null && propertyName != "")
+                colSpan++;
 
-                    foreach (object value in listPage)
-                    {
-                        TableRow row = new TableRow();
-                        this.Rows.Add(row);
+            TableRow lastRow = new TableRow();
+            lastRow.BackColor = Color.White;
+            this.Rows.Add(lastRow);
 
-                        properties = new ArrayList(value.GetType().GetProperties());
-                        properties.Sort(new PropertyComparer());
+            TableCell lastCell = new TableCell();
+            lastCell.ColumnSpan = colSpan;
+            lastCell.Width = new Unit(100, UnitType.Percentage);
+            lastRow.Controls.Add(lastCell);
 
-                        foreach (PropertyInfo property in properties)
-                        {
-                            TableCell cell = new TableCell();
-                            ListColumnHeader header = new ListColumnHeader(property.Name, sortProperty, propertyName, descending);
-                            row.Cells.Add(cell);
-                            cell.Controls.Add(header);
-                            cell.BackColor = Color.White;
-                        }
+            Table navTable = new Table();
+            navTable.Width = new Unit(100, UnitType.Percentage);
+            lastCell.Controls.Add(navTable);
 
-                        break;
-                    }
+            TableRow navRow = new TableRow();
+            navTable.Rows.Add(navRow);
 
-                    foreach (object value in listPage)
-                    {
-                        TableRow row = new TableRow();
-                        this.Rows.Add(row);
+            TableCell prevCell = new TableCell();
+            prevCell.HorizontalAlign = HorizontalAlign.Center;
+            prevCell.BackColor = Color.White;
+            prevCell.Width = new Unit(50, UnitType.Percentage);
+            navRow.Cells.Add(prevCell);
 
-                        foreach (PropertyInfo property in properties)
-                        {
-                            TableCell cell = new TableCell();
-                            Label label = new Label();
-                            object propertyValue = page.GetPropertyValue(value, property.Name);
+            TableCell pageCell = new TableCell();
+            pageCell.HorizontalAlign = HorizontalAlign.Center;
+            pageCell.BackColor = Color.White;
+            pageCell.Wrap = false;
+            navRow.Cells.Add(prevCell);
 
-                            if (typeof(IList).IsAssignableFrom(property.PropertyType))
-                            {
-                                int count = 0;
-                                if (propertyValue != null)
-                                    count = ((IList) propertyValue).Count;
-                                label.Text = count.ToString() + " items";
-                            }
-                            else
-                            {
-                                if (propertyValue != null)
-                                    label.Text = propertyValue.ToString();
-                            }
+            TableCell nextCell = new TableCell();
+            nextCell.HorizontalAlign = HorizontalAlign.Center;
+            nextCell.BackColor = Color.White;
+            nextCell.Width = new Unit(50, UnitType.Percentage);
+            navRow.Cells.Add(nextCell);
 
-                            row.Cells.Add(cell);
-                            cell.Controls.Add(label);
-                            cell.BackColor = Color.White;
-                        }
-                    }
+            if (currPage > 0)
+            {
+                HyperLink prevLink = new HyperLink();
+                prevLink.Text = "Previous";
+                prevLink.NavigateUrl = UrlFactory.GetListPageUrl(page.Request, currPage, false, propertyName);
 
-                    if (list.Count > listPage.Count)
-                    {
-                        TableRow lastRow = new TableRow();
-                        lastRow.BackColor = Color.White;
-                        this.Rows.Add(lastRow);
+                prevCell.Controls.Add(prevLink);
+            }
 
-                        TableCell lastCell = new TableCell();
-                        lastCell.ColumnSpan = properties.Count;
-                        lastCell.Width = new Unit(100, UnitType.Percentage);
-                        lastRow.Controls.Add(lastCell);
+            if (list.Count > pageSize)
+            {
+                HyperLink nextLink = new HyperLink();
+                nextLink.Text = "Next";
+                nextLink.NavigateUrl = UrlFactory.GetListPageUrl(page.Request, currPage, true, propertyName);
 
-                        Table navTable = new Table();
-                        navTable.Width = new Unit(100, UnitType.Percentage);
-                        lastCell.Controls.Add(navTable);
-
-                        TableRow navRow = new TableRow();
-                        navTable.Rows.Add(navRow);
-
-                        TableCell prevCell = new TableCell();
-                        prevCell.HorizontalAlign = HorizontalAlign.Center;
-                        prevCell.BackColor = Color.White;
-                        prevCell.Width = new Unit(50, UnitType.Percentage);
-                        navRow.Cells.Add(prevCell);
-
-                        TableCell pageCell = new TableCell();
-                        pageCell.HorizontalAlign = HorizontalAlign.Center;
-                        pageCell.BackColor = Color.White;
-                        pageCell.Wrap = false;
-                        navRow.Cells.Add(prevCell);
-
-                        TableCell nextCell = new TableCell();
-                        nextCell.HorizontalAlign = HorizontalAlign.Center;
-                        nextCell.BackColor = Color.White;
-                        nextCell.Width = new Unit(50, UnitType.Percentage);
-                        navRow.Cells.Add(nextCell);
-
-                        if (currPage > 0)
-                        {
-                            HyperLink prevLink = new HyperLink();
-                            prevLink.Text = "Previous";
-                            prevLink.NavigateUrl = UrlFactory.GetListPageUrl(page.Request, currPage, false, propertyName);
-
-                            prevCell.Controls.Add(prevLink);
-                        }
-
-                        if (list.Count > pageSize)
-                        {
-                            HyperLink nextLink = new HyperLink();
-                            nextLink.Text = "Next";
-                            nextLink.NavigateUrl = UrlFactory.GetListPageUrl(page.Request, currPage, true, propertyName);
-
-                            nextCell.Controls.Add(nextLink);
-                        }
-                    }
-                }
+                nextCell.Controls.Add(nextLink);
             }
         }
     }

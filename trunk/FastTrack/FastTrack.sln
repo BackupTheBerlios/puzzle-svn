@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPath.Framework.NET 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework.NET 2.0", "..\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "C:\...\Demo\", "Demo\", "{4A5316B1-04CE-4296-BA45-35144A2677D8}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "C:\...\Demo\", "Demo", "{4A5316B1-04CE-4296-BA45-35144A2677D8}"
 	ProjectSection(WebsiteProperties) = preProject
 		ProjectReferences = "{D1836646-6373-4785-B1B1-AC5C6A4BF50F}|Puzzle.NPersist.Samples.Northwind.Domain.dll;{4E1F65D7-AE72-4E13-964B-D022CC205439}|Puzzle.FastTrack.Framework.Web.dll;{2B26DE76-2CE2-4CB2-A88D-BC041E18B4A8}|Puzzle.FastTrack.Framework.NPersist.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Demo"
