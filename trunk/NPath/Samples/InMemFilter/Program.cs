@@ -11,7 +11,6 @@ namespace InMemFilter
         static void Main(string[] args)
         {
 
-
             List<Person> realList = new List<Person>();
 
             Person p1 = new Person();

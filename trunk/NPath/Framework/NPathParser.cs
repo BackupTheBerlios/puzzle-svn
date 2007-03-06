@@ -24,7 +24,13 @@ namespace Puzzle.NPath.Framework
 
 		private NPathSelectQuery CurrentQuery
 		{
-			get { return queries.Peek() as NPathSelectQuery; }
+            get
+            {
+                if (queries.Count == 0)
+                    return null;
+
+                return queries.Peek() as NPathSelectQuery;
+            }
 		}
 
 		public NPathParser()
@@ -150,6 +156,17 @@ namespace Puzzle.NPath.Framework
 
 			} while (tokenizer.GetCurrentToken().IsType("comma"));
 		}
+
+        public IValue ParseFilter(string code)
+        {
+            parameterQueue = new ArrayList();
+            queries = new Stack();
+            tokenizer = new Tokenizer();
+            tokenizer.Tokenize(code);
+
+            IValue expression = ParseBooleanExpression();
+            return expression;
+        }
 
 		private void ParseWhereClause(NPathWhereClause whereClause)
 		{
@@ -815,6 +832,9 @@ namespace Puzzle.NPath.Framework
 
 		private bool IsInSelectClause()
 		{
+            if (CurrentQuery == null)
+                return false;
+
 			return CurrentQuery.Where == null;
 		}
 
