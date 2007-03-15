@@ -186,6 +186,15 @@ namespace Puzzle.NPersist.Framework.Remoting
 
 		public abstract IList LoadObjects(IQuery query, IList listToFill);
 
+        public virtual IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            string npath = "Select * From " + type.Name;
+            return LoadObjects(new NPathQuery(npath, type, null, refreshBehavior), listToFill);
+        }
+
 		public abstract DataTable LoadDataTable(IQuery query);
 
 		public abstract IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill);

@@ -153,17 +153,26 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//			return GetSqlEngine(GetSourceType(type)).LoadObjects(query, type, parameters, refreshBehavior);
 		//		}
 
-		public IList LoadObjects(IQuery query, IList listToFill)
+        public virtual IList LoadObjects(IQuery query, IList listToFill)
 		{
 			return GetSqlEngine(GetSourceType(query.PrimaryType)).LoadObjects(query, listToFill);
 		}
 
-		public DataTable LoadDataTable(IQuery query)
+        public virtual IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            string npath = "Select * From " + type.Name;
+            return LoadObjects(new NPathQuery(npath, type, null, refreshBehavior), listToFill);
+        }
+
+        public virtual DataTable LoadDataTable(IQuery query)
 		{
 			return GetSqlEngine(GetSourceType(query.PrimaryType)).LoadDataTable(query);
 		}
 
-		public IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
+        public virtual IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
 			return GetSqlEngine(GetSourceType(type)).GetObjectsBySql(sqlQuery, type, idColumns, typeColumns, propertyColumnMap, parameters, refreshBehavior, listToFill);			
 		}

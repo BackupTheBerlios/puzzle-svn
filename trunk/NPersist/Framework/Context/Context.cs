@@ -1066,11 +1066,10 @@ namespace Puzzle.NPersist.Framework
 
 		public IList GetObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
-			if (type == null)
-				throw new ArgumentNullException("type");
+            if (type == null)
+                throw new ArgumentNullException("type");
 
-			string npath = "Select * From " + type.Name;
-			return GetObjectsByNPath(new NPathQuery(npath, type, null, refreshBehavior), listToFill);
+            return m_PersistenceEngine.LoadObjects(type, refreshBehavior, listToFill);
 		}
 
 

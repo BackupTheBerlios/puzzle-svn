@@ -291,6 +291,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return GetPersistenceEngine(GetSourceMap(query.PrimaryType)).LoadObjects(query, listToFill);
 		}
 
+        public IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
+        {
+            return GetPersistenceEngine(GetSourceMap(type)).LoadObjects(type, refreshBehavior, listToFill);
+        }
 		
 		public DataTable LoadDataTable(IQuery query)
 		{

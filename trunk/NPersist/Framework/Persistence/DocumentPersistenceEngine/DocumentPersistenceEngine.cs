@@ -47,23 +47,29 @@ namespace Puzzle.NPersist.Framework.Persistence
 		#region Xml Document Cache
 
 		//non-cached
-		protected virtual string LoadFile(object obj, IClassMap classMap, string fileName)
+		protected virtual string LoadFile(object obj, string fileName)
 		{
-            LogMessage message = new LogMessage("Loading object from file");
-            LogMessage verbose = new LogMessage("File: {0}, Object Type: {1}" , fileName ,obj.GetType());
-			this.Context.LogManager.Debug(this, message , verbose); // do not localize
-
-			if (!(File.Exists(fileName)))
-				return "";
-			else
-			{
-				StreamReader fileReader = File.OpenText(fileName);
-				string xml =  fileReader.ReadToEnd() ;
-				fileReader.Close();
-
-				return xml;
-			}
+            return LoadFile(obj.GetType(), fileName);
 		}
+
+        //non-cached
+        protected virtual string LoadFile(Type type, string fileName)
+        {
+            LogMessage message = new LogMessage("Loading objects from file");
+            LogMessage verbose = new LogMessage("File: {0}, Object Type: {1}", fileName, type);
+            this.Context.LogManager.Debug(this, message, verbose); // do not localize
+
+            if (!(File.Exists(fileName)))
+                return "";
+            else
+            {
+                StreamReader fileReader = File.OpenText(fileName);
+                string xml = fileReader.ReadToEnd();
+                fileReader.Close();
+
+                return xml;
+            }
+        }
 
 		protected virtual bool HasXmlDocument(string fileName)
 		{
@@ -200,21 +206,27 @@ namespace Puzzle.NPersist.Framework.Persistence
 					xpath += " and "; // do not localize
 
 				if (idPropertyMap.DocElement.Length > 0)
-					xpath += idPropertyMap.Name + " = \"" + om.GetPropertyValue(obj, idPropertyMap.Name).ToString() + "\""; // do not localize
+					xpath += idPropertyMap.GetDocElement() + " = \"" + om.GetPropertyValue(obj, idPropertyMap.Name).ToString() + "\""; // do not localize
 				else
 					xpath += "@" + idPropertyMap.GetDocAttribute() + " = \"" + om.GetPropertyValue(obj, idPropertyMap.Name).ToString() + "\""; // do not localize
 			}
 
 			xpath = element + "[" + xpath + "]";
 
-			XmlNode xmlNode = xmlRoot.SelectSingleNode(xpath);
-
-			return xmlNode;
+			return xmlRoot.SelectSingleNode(xpath);
 		}
+
+        protected virtual XmlNodeList FindNodesForObjects(XmlNode xmlRoot, IClassMap classMap)
+        {
+            IObjectManager om = this.Context.ObjectManager;
+            string element = classMap.GetDocElement();
+
+            return xmlRoot.SelectNodes(element);
+        }
 
 		protected virtual XmlNode LoadObjectNodeFromDomainFile(object obj, IClassMap classMap)
 		{
-			string fileName = GetFileNamePerDomain(obj, classMap);
+			string fileName = GetFileNamePerDomain(classMap);
             LogMessage message = new LogMessage("Saving object to file", "File: {0}, Object Type: {1}" , fileName , obj.GetType());
 			this.Context.LogManager.Debug(this, message); // do not localize
 	
@@ -236,7 +248,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual XmlNode LoadObjectNodeFromClassFile(object obj, IClassMap classMap)
 		{
-			string fileName = GetFileNamePerClass(obj, classMap);
+			string fileName = GetFileNamePerClass(classMap);
             LogMessage message = new LogMessage("Removing object from file");
             LogMessage verbose = new LogMessage("File: {0}, Object Type: {1}",fileName , obj.GetType());
 			this.Context.LogManager.Debug(this, message,verbose); // do not localize
@@ -413,17 +425,68 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual IList LoadObjects(IQuery query, IList listToFill)
 		{
-			throw new IAmOpenSourcePleaseImplementMeException("Query capabilities not implemented in DocumentPersistenceEngine! Please load the entire set that you need to search into memory and use the IContext.FilterObjects() method instead.");
+			NPathQuery npath = query as NPathQuery;
+			if (npath == null)
+				throw new NPersistException("Only NPath query capabilities are supported by DocumentPersistenceEngine!");
+
+			IList allObjects = LoadObjects(query.PrimaryType,  query.RefreshBehavior, null);
+			IList result = this.Context.FilterObjects(allObjects, npath);
+			if (listToFill != null)
+			{
+				foreach (object obj in result)
+					listToFill.Add(obj);
+
+				return listToFill;
+			}
+			return result;
 		}
+
+        public virtual IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
+        {
+            LogMessage message = new LogMessage("Loading all objects of type");
+            LogMessage verbose = new LogMessage("Type: {0}", type);
+            this.Context.LogManager.Info(this, message, verbose); // do not localize
+
+			if (listToFill == null)
+				listToFill = new ArrayList();
+
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+
+            if (classMap.DocClassMapMode == DocClassMapMode.PerDomain)
+            {
+                LoadObjectsPerDomain(type, refreshBehavior, listToFill, classMap);
+            }
+            else if (classMap.DocClassMapMode == DocClassMapMode.PerClass)
+            {
+                LoadObjectsPerClass(type, refreshBehavior, listToFill, classMap);
+            }
+            else if (classMap.DocClassMapMode == DocClassMapMode.Default || classMap.DocClassMapMode == DocClassMapMode.PerObject)
+            {
+                LoadObjectsPerObject(type, refreshBehavior, listToFill, classMap);
+            }
+
+			foreach (IClassMap subClassMap in classMap.GetSubClassMaps())
+			{
+				Type subType = this.Context.AssemblyManager.GetTypeFromClassMap(subClassMap);	
+				LoadObjects(subType, refreshBehavior, listToFill);
+			}
+
+            return listToFill;
+        }
 
 		public virtual DataTable LoadDataTable(IQuery query)
 		{
-			throw new IAmOpenSourcePleaseImplementMeException("Query capabilities not implemented in DocumentPersistenceEngine! Please load the entire set that you need to search into memory and use the IContext.FilterObjects() method instead.");
+			NPathQuery npath = query as NPathQuery;
+			if (npath == null)
+				throw new NPersistException("Only NPath query capabilities are supported by DocumentPersistenceEngine!");
+
+			IList allObjects = LoadObjects(query.PrimaryType,  query.RefreshBehavior, null);
+			return this.Context.FilterIntoDataTable(allObjects, npath);
 		}
 
 		public virtual IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
-			throw new IAmOpenSourcePleaseImplementMeException("Query capabilities not implemented in DocumentPersistenceEngine! Please load the entire set that you need to search into memory and use the IContext.FilterObjects() method instead.");
+            throw new NPersistException("Sql query capabilities not implemented in DocumentPersistenceEngine! Please use NPath queries instead.");
 		}
 
 		public virtual IList GetObjectsOfClassWithUniReferencesToObject(Type type, object obj)
@@ -431,14 +494,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 			throw new IAmOpenSourcePleaseImplementMeException("");			
 		}
 
+		public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
+
 		#endregion
 
 		#region IPersistenceEngine Helpers
 
 		protected virtual void LoadPerDomain(ref object obj, IClassMap classMap)
 		{
-			string fileName = GetFileNamePerDomain(obj, classMap);
-			string xml = LoadFile(obj, classMap, fileName);
+			string fileName = GetFileNamePerDomain(classMap);
+			string xml = LoadFile(obj, fileName);
 			if (xml == "")
 				obj = null;
 			else
@@ -447,8 +512,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void LoadPerClass(ref object obj, IClassMap classMap)
 		{
-			string fileName = GetFileNamePerClass(obj, classMap);
-			string xml = LoadFile(obj, classMap, fileName);
+			string fileName = GetFileNamePerClass(classMap);
+			string xml = LoadFile(obj, fileName);
 			if (xml == "")
 				obj = null;
 			else
@@ -458,12 +523,50 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void LoadPerObject(ref object obj, IClassMap classMap)
 		{
 			string fileName = GetFileNamePerObject(obj, classMap);
-			string xml = LoadFile(obj, classMap, fileName);
+			string xml = LoadFile(obj, fileName);
 			if (xml == "")
 				obj = null;
 			else
 				DeserializeObject(obj, classMap, xml);				
 		}
+
+        protected virtual void LoadObjectsPerDomain(Type type, RefreshBehaviorType refreshBehavior, IList listToFill, IClassMap classMap)
+        {
+            string fileName = GetFileNamePerDomain(classMap);
+            string xml = LoadFile(type, fileName);
+            if (xml != "")
+                DeserializeDomain(type, listToFill, classMap, xml);
+        }
+
+        protected virtual void LoadObjectsPerClass(Type type, RefreshBehaviorType refreshBehavior, IList listToFill, IClassMap classMap)
+        {
+            string fileName = GetFileNamePerClass(classMap);
+            string xml = LoadFile(type, fileName);
+            if (xml != "")
+                DeserializeClass(type, listToFill, classMap, xml);
+        }
+
+        protected virtual void LoadObjectsPerObject(Type type, RefreshBehaviorType refreshBehavior, IList listToFill, IClassMap classMap)
+        {
+			string directory = GetDirectoryForClass(classMap);
+			string className = classMap.GetFullName().ToLower();
+			foreach (string fileName in Directory.GetFiles(directory))
+			{
+				FileInfo file = new FileInfo(fileName);
+				if (file.Extension.ToLower() == ".xml")
+				{
+					if (file.Name.Length > className.Length)
+					{
+						if (file.Name.Substring(0, className.Length).ToLower() == className)
+						{
+							string xml = LoadFile(type, fileName);
+							if (xml != "")
+								DeserializeObject(type, listToFill, classMap, xml);							
+						}
+					}
+				}
+			}
+        }
 
 		protected virtual void SavePerDomain(object obj, IClassMap classMap, bool creating)
 		{
@@ -656,7 +759,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		#region File Naming Strategies
 
-		protected virtual string GetFileNamePerDomain(object obj, IClassMap classMap)
+		protected virtual string GetFileNamePerDomain(IClassMap classMap)
 		{
 			IObjectManager om = this.Context.ObjectManager;
 
@@ -667,7 +770,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return fileName;
 		}
 
-		protected virtual string GetFileNamePerClass(object obj, IClassMap classMap)
+		protected virtual string GetFileNamePerClass(IClassMap classMap)
 		{
 			IObjectManager om = this.Context.ObjectManager;
 
@@ -1018,6 +1121,40 @@ namespace Puzzle.NPersist.Framework.Persistence
 		#endregion
 
 		#region Deserialization
+
+		private object InstantiateObject(Type type, IClassMap classMap, XmlNode xmlObject)
+		{
+			IObjectManager om = this.Context.ObjectManager;
+			string element = classMap.GetDocElement();
+
+			string identity = "";
+			string separator = classMap.GetIdentitySeparator();
+
+			foreach (IPropertyMap idPropertyMap in classMap.GetIdentityPropertyMaps())
+			{
+				if (identity.Length > 0)
+					identity += separator;
+
+				if (idPropertyMap.DocElement.Length > 0)
+				{
+					XmlNode idNode = xmlObject.SelectSingleNode(idPropertyMap.GetDocElement());
+					if (idNode != null)
+						identity += idNode.InnerText;
+					else
+						throw new NPersistException(String.Format("Could not find id element {0} for property {1} of class {2} in element {3}", idPropertyMap.GetDocElement(), idPropertyMap.Name, type.ToString(), xmlObject.Name));
+				}
+				else
+				{
+					string attribName = idPropertyMap.GetDocAttribute();
+					if (xmlObject.Attributes[attribName] != null)
+						identity += xmlObject.Attributes[attribName].Value;
+					else
+						throw new NPersistException(String.Format("Could not find id attribute {0} for property {1} of class {2} in element {3}", attribName, idPropertyMap.Name, type.ToString(), xmlObject.Name));
+				}
+			}
+
+			return this.Context.GetObjectById(identity, type, true);
+		}
 								
 		protected virtual void DeserializeDomain(ref object obj, IClassMap classMap, string xml)
 		{
@@ -1032,6 +1169,24 @@ namespace Puzzle.NPersist.Framework.Persistence
 				DeserializeObject(obj, classMap, xmlObject);
 		}
 
+        protected virtual void DeserializeDomain(Type type, IList listToFill, IClassMap classMap, string xml)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            XmlNode xmlRoot = xmlDoc.SelectSingleNode(classMap.GetDocSourceMap().GetDocRoot());
+            XmlNode xmlClass = xmlRoot.SelectSingleNode(classMap.GetDocRoot());
+            XmlNodeList xmlObjects = FindNodesForObjects(xmlClass, classMap);
+            if (xmlObjects != null)
+            {
+                foreach (XmlNode xmlObject in xmlObjects)
+                {
+                    object obj = InstantiateObject(type, classMap, xmlObject);
+                    DeserializeObject(obj, classMap, xmlObject);
+                    listToFill.Add(obj);
+                }
+            }
+        }
+
 		protected virtual void DeserializeClass(ref object obj, IClassMap classMap, string xml)
 		{
 			XmlDocument xmlDoc = new XmlDocument();
@@ -1043,6 +1198,23 @@ namespace Puzzle.NPersist.Framework.Persistence
 			else
 				DeserializeObject(obj, classMap, xmlObject);
 		}
+
+		protected virtual void DeserializeClass(Type type, IList listToFill, IClassMap classMap, string xml)
+		{
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.LoadXml(xml);
+			XmlNode xmlRoot = xmlDoc.SelectSingleNode(classMap.GetDocRoot());
+			XmlNodeList xmlObjects = FindNodesForObjects(xmlRoot, classMap);
+			if (xmlObjects != null)
+			{
+				foreach (XmlNode xmlObject in xmlObjects)
+				{
+					object obj = InstantiateObject(type, classMap, xmlObject);
+					DeserializeObject(obj, classMap, xmlObject);
+					listToFill.Add(obj);
+				}
+			}
+		}
 				
 		protected virtual void DeserializeObject(object obj, IClassMap classMap, string xml)
 		{
@@ -1050,6 +1222,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 			xmlDoc.LoadXml(xml);
 			XmlNode xmlRoot = xmlDoc.SelectSingleNode(classMap.GetDocElement());
 			DeserializeObject(obj, classMap, xmlRoot);
+		}
+
+		protected virtual void DeserializeObject(Type type, IList listToFill, IClassMap classMap, string xml)
+		{
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.LoadXml(xml);
+			XmlNode xmlRoot = xmlDoc.SelectSingleNode(classMap.GetDocElement());
+			object obj = InstantiateObject(type, classMap, xmlRoot);
+			DeserializeObject(obj, classMap, xmlRoot);
+			listToFill.Add(obj);
 		}
 
 		protected virtual void DeserializeObject(object obj, IClassMap classMap, XmlNode xmlObject)
@@ -1281,7 +1463,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		#endregion
 
-        public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
 
 	}
 }

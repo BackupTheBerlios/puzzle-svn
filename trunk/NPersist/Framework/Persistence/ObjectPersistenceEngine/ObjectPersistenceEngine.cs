@@ -382,6 +382,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 				Monitor.Exit(sourceContext);			
 			}	
 		}
+
+        public virtual IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            string npath = "Select * From " + type.Name;
+            return LoadObjects(new NPathQuery(npath, type, null, refreshBehavior), listToFill);
+        }
+
 		
 		public virtual DataTable LoadDataTable(IQuery query)
 		{

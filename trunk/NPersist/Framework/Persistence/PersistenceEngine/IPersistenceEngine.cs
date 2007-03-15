@@ -43,6 +43,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		IList LoadObjects(IQuery query, IList listToFill);
 
+        IList LoadObjects(Type type, RefreshBehaviorType refreshBehavior, IList listToFill);
+
 		//It is a bit ugly that these methods should have to be here, but it is so that these calls can be remoted...
 		DataTable LoadDataTable(IQuery query);
 
