@@ -51,6 +51,7 @@ namespace Puzzle.NPersist.Framework.Aop
 				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.UpdatedPropertyTrackerMixin ));
                 arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.IdentityHelperMixin));
 				arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.ObservableMixin));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.ContextChildMixin));
 #if NET2
                 arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.PropertyChangedHelperMixin));
                 arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.EditableObjectMixin));

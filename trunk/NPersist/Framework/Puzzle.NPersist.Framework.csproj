@@ -1354,6 +1354,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\Mixins\ContextChildMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\Mixins\IdentityHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

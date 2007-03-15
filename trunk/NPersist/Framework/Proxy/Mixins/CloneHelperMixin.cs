@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using Puzzle.NPersist.Framework.Enumerations;
-using Puzzle.NPersist.Framework.Interfaces;
-using Puzzle.NPersist.Framework.Persistence;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -11,6 +7,11 @@ using Puzzle.NPersist.Framework.Persistence;
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
+
+using System.Diagnostics;
+using Puzzle.NPersist.Framework.Enumerations;
+using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Persistence;
 
 
 namespace Puzzle.NPersist.Framework.Proxy.Mixins
