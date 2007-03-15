@@ -1206,7 +1206,7 @@ Public Class frmGenDomWizard
         comboSourceType.Items.Add("Microsoft SQL Server/MSDE")
         comboSourceType.Items.Add("Microsoft Access 4.0")
         comboSourceType.Items.Add("Borland InterBase")
-        'comboSourceType.Items.Add("Oracle")
+        comboSourceType.Items.Add("Oracle")
         'comboSourceType.Items.Add("IBM DB2")
         'comboSourceType.Items.Add("Sybase")
 
@@ -1236,6 +1236,9 @@ Public Class frmGenDomWizard
                 Case 2
                     'Borland InterBase
                     addTypes.Add("Borland.Data.Provider")
+                Case 3
+                    'Oracle
+                    addTypes.Add("Oracle.DataAccess")
 
 
             End Select
@@ -1303,6 +1306,11 @@ Public Class frmGenDomWizard
                         Case SourceType.Interbase
 
                             comboSourceType.SelectedIndex = 2
+
+                        Case SourceType.Oracle
+
+                            comboSourceType.SelectedIndex = 3
+
 
                         Case Else
 

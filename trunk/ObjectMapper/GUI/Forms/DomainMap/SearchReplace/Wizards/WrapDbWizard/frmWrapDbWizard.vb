@@ -1117,7 +1117,7 @@ Public Class frmWrapDbWizard
         comboSourceType.Items.Add("Microsoft SQL Server/MSDE")
         comboSourceType.Items.Add("Microsoft Access 4.0")
         comboSourceType.Items.Add("Borland InterBase")
-        'comboSourceType.Items.Add("Oracle")
+        comboSourceType.Items.Add("Oracle")
         'comboSourceType.Items.Add("IBM DB2")
         'comboSourceType.Items.Add("Sybase")
 

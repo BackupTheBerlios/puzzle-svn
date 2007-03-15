@@ -97,6 +97,8 @@ Public Class frmDomainMapBrowser
     Private m_SourceToTablesSql As ISourceToTables = New SourceToTablesMSSqlServer
     Private m_SourceToTablesMdb As ISourceToTables = New SourceToTablesMSAccess
     Private m_SourceToTablesOleDb As ISourceToTables = New SourceToTablesOleDbGeneric
+    Private m_SourceToTablesOracle As ISourceToTables = New SourceToTablesOracle
+
     'Private m_SourceToTablesBdpSql As ISourceToTables = New SourceToTablesBdpSqlServer
     'Private m_SourceToTablesBdpAccess As ISourceToTables = New SourceToTablesBdpAccess
     'Private m_SourceToTablesBdpInterbase As ISourceToTables = New SourceToTablesBdpInterbase
@@ -8589,32 +8591,43 @@ Public Class frmDomainMapBrowser
 
                                     Case ProviderType.Odbc
 
-                                        'Select Case sourceMap.SourceType
-
-                                        '    Case SourceType.MSSqlServer
-
-                                        '    Case Else
-
-                                        newDomainMap = Nothing
-                                        MsgBox(errMsg)
-
-                                        'End Select
-
-                                    Case ProviderType.Bdp
-
                                         Select Case sourceMap.SourceType
+                                            Case SourceType.Oracle
+                                                m_SourceToTablesOracle.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+                                            Case Else
+                                                newDomainMap = Nothing
+                                                MsgBox(errMsg)
 
-                                            'Case SourceType.MSSqlServer
+                                        End Select
 
-                                            '    m_SourceToTablesBdpSql.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+                                        
+                                        Case ProviderType.Bdp
 
-                                            'Case SourceType.MSAccess
+                                                Select Case sourceMap.SourceType
 
-                                            '    m_SourceToTablesBdpAccess.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+                                                    'Case SourceType.MSSqlServer
 
-                                            'Case SourceType.Interbase
+                                                    '    m_SourceToTablesBdpSql.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
 
-                                            '    m_SourceToTablesBdpInterbase.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+                                                    'Case SourceType.MSAccess
+
+                                                    '    m_SourceToTablesBdpAccess.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+
+                                                    'Case SourceType.Interbase
+
+                                                    '    m_SourceToTablesBdpInterbase.SourceToTables(sourceMap, newDomainMap, m_hashSynchDiff)
+
+                                                Case Else
+
+                                                        newDomainMap = Nothing
+                                                        MsgBox(errMsg)
+
+                                                End Select
+
+                                            Case ProviderType.Other
+
+                                                newDomainMap = Nothing
+                                                MsgBox(errMsg)
 
                                             Case Else
 
@@ -8622,18 +8635,6 @@ Public Class frmDomainMapBrowser
                                                 MsgBox(errMsg)
 
                                         End Select
-
-                                    Case ProviderType.Other
-
-                                        newDomainMap = Nothing
-                                        MsgBox(errMsg)
-
-                                    Case Else
-
-                                        newDomainMap = Nothing
-                                        MsgBox(errMsg)
-
-                                End Select
 
                             End If
 
@@ -23853,4 +23854,5 @@ Public Class frmDomainMapBrowser
     End Function
 
 End Class
+
 

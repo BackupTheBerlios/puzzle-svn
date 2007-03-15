@@ -74,6 +74,12 @@
                     Project = "{E6C03D2A-D150-4473-9439-D300746A1390}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Oracle.DataAccess"
+                    AssemblyName = "Oracle.DataAccess"
+                    HintPath = "..\..\..\..\..\oracle\ora92\BIN\Oracle.DataAccess.dll"
+                    AssemblyFolderKey = "hklm\dn\odp.net"
+                />
             </References>
             <Imports>
                 <Import Namespace = "Microsoft.VisualBasic" />
@@ -196,6 +202,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SourceToTables\SourceToTablesOracle.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TablesToClasses\ITablesToClasses.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -229,4 +240,5 @@
         </Files>
     </VisualBasic>
 </VisualStudioProject>
+
 
