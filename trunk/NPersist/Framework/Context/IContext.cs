@@ -356,26 +356,6 @@ namespace Puzzle.NPersist.Framework
         /// <returns></returns>
 		object ExecuteScalarBySql(string sql, IList parameters, IDataSource dataSource);
 
-        /// <summary>
-        /// Registers an object with the context using a specified object status
-        /// </summary>
-        /// <remarks>
-        /// This method can be useful for framework developers building on top of NPersist but should usually not be called by the normal NPersist user.
-        /// </remarks>
-        /// <param name="obj">The object to be registered.</param>
-        /// <param name="objectStatus">The object status for the object.</param>
-		void RegisterObject(object obj, ObjectStatus objectStatus);
-
-        /// <summary>
-        /// Registers an object with the context giving it the object status UpForCreation.
-        /// </summary>
-        /// <remarks>
-        /// This method can be useful for framework developers building on top of NPersist but should usually not be called by the normal NPersist user.
-        /// </remarks>
-        /// <param name="obj">The object to be registered.</param>
-		void RegisterObject(object obj);
-
-
 
         /// <summary>
         /// This method commits the context and any root contexts that this context is a leaf context to, recursively. Only used in Object/Object Mapping scenarios.
@@ -438,7 +418,9 @@ namespace Puzzle.NPersist.Framework
         [Obsolete("This method has been renamed to Commit()", false)]
 		void PersistAll();
 
+		/// <summary>
 		/// Commits all changes to the data source, inserting all new objects, removing all deleted object and saving all modified objects.
+		/// </summary>
         /// <param name="exceptionLimit">The maximum number of exception that may occur during the commit before the operation aborts. The default value of 1 means that the commit operation will break on the first exception. A value of 0 indicates no limit on the amount of exceptions that can occur during the commit before the operation aborts.</param>
 		void Commit(int exceptionLimit);
 

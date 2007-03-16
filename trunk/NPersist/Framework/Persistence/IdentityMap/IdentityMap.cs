@@ -24,23 +24,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 {
 	public class IdentityMap : ContextChild, IIdentityMap
 	{
-//		private Hashtable m_hashLoadedObjects = new Hashtable(1000);
-//		private Hashtable m_hashUnloadedObjects = new Hashtable(1000);
-//		private ArrayList m_ListAllObjects = new ArrayList(1000);
-
-		//private Hashtable m_objectStatusLookup = new Hashtable(1000);
-
-//		public virtual ObjectStatus GetObjectStatus(object obj)
-//		{
-//			if (obj == null)
-//				throw new NullReferenceException("Can't return status for null object!"); // do not localize
-//
-//			object result = m_objectStatusLookup[obj];
-//			if (result != null)
-//				return (ObjectStatus) result;
-//
-//			return ObjectStatus.Deleted;
-//		}
 
 		public virtual IObjectCache GetObjectCache()
 		{

@@ -1260,20 +1260,7 @@ namespace Puzzle.NPersist.Framework
 			return obj;
 		}
 
-		public virtual object CreateObject(object obj)
-		{	
-			if (obj is Type)
-			{
-				//HACK: Roger was here
-				throw new Exception("Do not use Context.CreateObject (object) to create new instances"); 
-			}
-		
-			RegisterObject(obj, ObjectStatus.UpForCreation);
-
-			return obj;
-		}
-
-		public virtual void RegisterObject(object obj, ObjectStatus objectStatus)
+		protected virtual void RegisterObject(object obj, ObjectStatus objectStatus)
 		{
 			if (objectStatus == ObjectStatus.UpForCreation)
 			{
@@ -1285,7 +1272,7 @@ namespace Puzzle.NPersist.Framework
 			}
 		}
 
-		public virtual void RegisterObject(object obj)
+		protected virtual void RegisterObject(object obj)
 		{
 			RegisterObject(obj, ObjectStatus.UpForCreation);
 		}

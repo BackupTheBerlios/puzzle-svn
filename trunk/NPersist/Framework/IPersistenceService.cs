@@ -169,7 +169,7 @@ namespace Puzzle.NPersist.Framework
 		/// Creates a new object with the specified type, registering it as up for creation. It will be inserted into the data source in the next call to <c>Commit</c>(). 
 		/// </summary>
         /// <remarks>
-        /// Note that you must set the values of all the identity properties on the object before calling the Commit() method.
+        /// Note that you must set the values of all the identity properties that are not assigned by the data source on the object before calling the Commit() method.
         /// </remarks>
 		/// <param name="type">The type of the new object</param>
 		/// <param name="ctorParams">Contructor parameters for the new object</param>

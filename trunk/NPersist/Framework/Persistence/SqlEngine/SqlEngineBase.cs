@@ -2831,9 +2831,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			typeColumnMap = propertyMap.ClassMap.GetTypeColumnMap();
 			if (typeColumnMap != null)
 			{
+                IClassMap actual = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+
 				SqlColumnAlias typeColumn = myTable.GetSqlColumnAlias(typeColumnMap);
 				paramName = GetParameterName(propertyMap.ClassMap, "Type_");
-				SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, propertyMap.ClassMap.TypeValue, typeColumnMap, true);
+				//SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, propertyMap.ClassMap.TypeValue, typeColumnMap, true);
+                SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, actual.TypeValue, typeColumnMap, true);
 
 				search = select.SqlWhereClause.GetNextSqlSearchCondition();
 				search.GetSqlComparePredicate(typeColumn, SqlCompareOperatorType.Equals,  param);				
@@ -2996,10 +2999,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			typeColumnMap = propertyMap.ClassMap.GetTypeColumnMap();
 			if (typeColumnMap != null)
 			{
+                IClassMap actual = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+
 				SqlColumnAlias typeColumn = myTable.GetSqlColumnAlias(typeColumnMap);
 				paramName = GetParameterName(propertyMap.ClassMap, "Type_");
-				SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, propertyMap.ClassMap.TypeValue, typeColumnMap, true);
-				search = select.SqlWhereClause.GetNextSqlSearchCondition();
+				//SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, propertyMap.ClassMap.TypeValue, typeColumnMap, true);
+                SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, actual.TypeValue, typeColumnMap, true);
+                search = select.SqlWhereClause.GetNextSqlSearchCondition();
 				search.GetSqlComparePredicate(typeColumn, SqlCompareOperatorType.Equals,  param);
 			}
 			return GenerateSql(select);
