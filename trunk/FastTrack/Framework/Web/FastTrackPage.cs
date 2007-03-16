@@ -33,7 +33,7 @@ namespace Puzzle.FastTrack.Framework.Web
                 typeName = "Employee";
 
             if (id == null)
-                id = "1";
+                id = "10";
 
             if (className != null)
             {
@@ -325,6 +325,85 @@ namespace Puzzle.FastTrack.Framework.Web
             if (obj != null)
                 return obj.GetType().GetProperty(propertyName);
             return null;
+        }
+
+        #endregion
+
+        #region IsListProperty
+
+        public bool IsListProperty(string propertyName)
+        {
+            return IsListProperty(this.SelectedObject, propertyName);
+        }
+
+        public bool IsListProperty(object obj, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsListProperty(obj, propertyName);
+            return false;
+        }
+
+        #endregion
+
+        #region GetListPropertyItemType
+
+        public Type GetListPropertyItemType(string propertyName)
+        {
+            return GetListPropertyItemType(this.SelectedObject, propertyName);
+        }
+
+        public Type GetListPropertyItemType(object obj, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.GetListPropertyItemType(obj, propertyName);
+            return null;
+        }
+
+        #endregion
+
+        #region IsNullableProperty
+
+        public bool IsNullableProperty(string propertyName)
+        {
+            return IsNullableProperty(this.SelectedObject, propertyName);
+        }
+
+        public bool IsNullableProperty(object obj, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsNullableProperty(obj, propertyName);
+            return false;
+        }
+
+        #endregion
+
+        #region GetPropertyNullStatus
+
+        public bool GetPropertyNullStatus(string propertyName)
+        {
+            return GetPropertyNullStatus(this.SelectedObject, propertyName);
+        }
+
+        public bool GetPropertyNullStatus(object obj, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.GetPropertyNullStatus(obj, propertyName);
+            return false;
+        }
+
+        #endregion
+
+        #region SetPropertyNullStatus
+
+        public void SetPropertyNullStatus(string propertyName, bool isNull)
+        {
+            SetPropertyNullStatus(this.SelectedObject, propertyName, isNull);
+        }
+
+        public void SetPropertyNullStatus(object obj, string propertyName, bool isNull)
+        {
+            if (this.domainController != null)
+                this.domainController.SetPropertyNullStatus(obj, propertyName, isNull);
         }
 
         #endregion

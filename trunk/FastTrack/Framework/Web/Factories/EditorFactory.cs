@@ -11,11 +11,11 @@ namespace Puzzle.FastTrack.Framework.Web.Factories
     public class EditorFactory
     {
 
-        public static Control GetPropertyValueEditor(PropertyInfo property)
+        public static Control GetPropertyValueEditor(FastTrackPage page, object obj, PropertyInfo property)
         {
             Control editor = null;
 
-            if (typeof(IList).IsAssignableFrom(property.PropertyType))
+            if (page.IsListProperty(obj, property.Name))
             {
                 editor = new ListEditor(property.Name);
             }

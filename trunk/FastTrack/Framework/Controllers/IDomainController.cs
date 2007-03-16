@@ -37,6 +37,26 @@ namespace Puzzle.FastTrack.Framework.Controllers
 
         void DeleteObject(object obj);
 
+        bool IsListProperty(string propertyName);
+
+        bool IsListProperty(object obj, string propertyName);
+
+        Type GetListPropertyItemType(string propertyName);
+
+        Type GetListPropertyItemType(object obj, string propertyName);
+
+        bool IsNullableProperty(string propertyName);
+
+        bool IsNullableProperty(object obj, string propertyName);
+
+        bool GetPropertyNullStatus(string propertyName);
+
+        bool GetPropertyNullStatus(object obj, string propertyName);
+
+        void SetPropertyNullStatus(string propertyName, bool isNull);
+
+        void SetPropertyNullStatus(object obj, string propertyName, bool isNull);
+
         object GetPropertyValue(string propertyName);
 
         object GetPropertyValue(object obj, string propertyName);

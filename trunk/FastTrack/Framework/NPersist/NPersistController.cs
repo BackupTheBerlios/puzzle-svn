@@ -100,6 +100,65 @@ namespace Puzzle.FastTrack.Framework.NPersist
             context.Commit();
         }
 
+        public override bool IsListProperty(object obj, string propertyName)
+        {
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                    return propertyMap.IsCollection;
+            }
+            return base.IsListProperty(obj, propertyName);
+        }
+
+        public override Type GetListPropertyItemType(object obj, string propertyName)
+        {
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                    return GetTypeFromTypeName(propertyMap.ItemType);
+            }
+            return null;
+        }
+
+        public override bool IsNullableProperty(object obj, string propertyName)
+        {
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                    return propertyMap.GetIsNullable();
+            }
+            return false;
+        }
+
+        public override bool GetPropertyNullStatus(object obj, string propertyName)
+        {
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                    return this.Context.GetNullValueStatus(obj, propertyName);
+            }
+            return false;
+        }
+
+        public override void SetPropertyNullStatus(object obj, string propertyName, bool isNull)
+        {
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                    this.Context.SetNullValueStatus(obj, propertyName, isNull);
+            }
+        }
+
         public override Type GetTypeFromType(Type type)
         {
             return this.Context.AssemblyManager.GetType(type);

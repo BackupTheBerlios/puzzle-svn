@@ -161,6 +161,14 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 cell.BackColor = Color.White;
             }
 
+            TableCell viewCell = new TableCell();
+            row.Cells.Add(viewCell);
+            viewCell.BackColor = Color.White;
+
+            TableCell editCell = new TableCell();
+            row.Cells.Add(editCell);
+            editCell.BackColor = Color.White;
+
             TableCell deleteCell = new TableCell();
             row.Cells.Add(deleteCell);
             deleteCell.BackColor = Color.White;
@@ -184,7 +192,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 if (page.SelectedObject != null)
                 {
                     TableCell cell = new TableCell();
-                    SelectListItemLinkButton link = new SelectListItemLinkButton();
+                    SelectListItemLinkButton link = new SelectListItemLinkButton(value);
                     link.Text = "Select";
                     row.Cells.Add(cell);
                     cell.Controls.Add(link);
@@ -195,12 +203,26 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
             if (propertyName != null && propertyName != "")
             {
                 TableCell cell = new TableCell();
-                RemoveListItemLinkButton link = new RemoveListItemLinkButton();
+                RemoveListItemLinkButton link = new RemoveListItemLinkButton(value, propertyName);
                 link.Text = "Remove";
                 row.Cells.Add(cell);
                 cell.Controls.Add(link);
                 cell.BackColor = Color.White;
             }
+
+            TableCell viewCell = new TableCell();
+            ViewListItemLinkButton viewLink = new ViewListItemLinkButton(value);
+            viewLink.Text = "View";
+            row.Cells.Add(viewCell);
+            viewCell.Controls.Add(viewLink);
+            viewCell.BackColor = Color.White;
+
+            TableCell editCell = new TableCell();
+            EditListItemLinkButton editLink = new EditListItemLinkButton(value);
+            editLink.Text = "Edit";
+            row.Cells.Add(editCell);
+            editCell.Controls.Add(editLink);
+            editCell.BackColor = Color.White;
 
             TableCell deleteCell = new TableCell();
             DeleteListItemLinkButton deleteLink = new DeleteListItemLinkButton();
@@ -215,7 +237,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 Label label = new Label();
                 object propertyValue = page.GetPropertyValue(value, property.Name);
 
-                if (typeof(IList).IsAssignableFrom(property.PropertyType))
+                if (page.IsListProperty(value, property.Name))
                 {
                     int count = 0;
                     if (propertyValue != null)
@@ -242,6 +264,8 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
 
             if (propertyName != null && propertyName != "")
                 colSpan++;
+
+            colSpan += 3;
 
             TableRow lastRow = new TableRow();
             lastRow.BackColor = Color.White;

@@ -44,7 +44,10 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 PropertyInfo property = page.GetPropertyInfo(propertyName);
                 if (property != null)
                 {
-                    page.Response.Redirect(page.GetListUrl(property.PropertyType, this.listUrl, page.SelectedObject, propertyName));
+                    Type type = property.PropertyType;
+                    if (page.IsListProperty(property.Name))
+                        type = page.GetListPropertyItemType(property.Name);
+                    page.Response.Redirect(page.GetListUrl(type, this.listUrl, page.SelectedObject, propertyName));
                 }
             }
         }

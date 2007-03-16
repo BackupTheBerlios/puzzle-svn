@@ -37,13 +37,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\DeleteListItemLinkButton.cs" />
+    <Compile Include="Controls\DeleteObjectButton.cs" />
     <Compile Include="Controls\DeleteObjectLinkButton.cs" />
+    <Compile Include="Controls\EditListItemLinkButton.cs" />
     <Compile Include="Controls\ListColumnHeader.cs" />
+    <Compile Include="Controls\NullValueEditor.cs" />
     <Compile Include="Controls\ObjectLink.cs" />
     <Compile Include="Controls\RemoveListItemLinkButton.cs" />
     <Compile Include="Controls\RemoveObjectLinkButton.cs" />
+    <Compile Include="Controls\SaveObjectButton.cs" />
     <Compile Include="Controls\SelectListItemLinkButton.cs" />
     <Compile Include="Controls\SelectObjectLinkButton.cs" />
+    <Compile Include="Controls\ViewListItemLinkButton.cs" />
     <Compile Include="Structures\NameValuePair.cs" />
     <Compile Include="Factories\PageFactory.cs" />
     <Compile Include="Factories\UrlFactory.cs" />

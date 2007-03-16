@@ -73,6 +73,47 @@ namespace Puzzle.FastTrack.Framework.Controllers
 
         public abstract void DeleteObject(object obj);
 
+        public virtual bool IsListProperty(string propertyName)
+        {
+            return IsListProperty(this.selectedObject, propertyName);
+        }
+
+        public virtual bool IsListProperty(object obj, string propertyName)
+        {
+            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+            //if (property != null)
+                return (typeof(IList).IsAssignableFrom(property.PropertyType));
+            //return false;
+        }
+
+        public virtual Type GetListPropertyItemType(string propertyName)
+        {
+            return GetListPropertyItemType(this.selectedObject, propertyName);
+        }
+
+        public abstract Type GetListPropertyItemType(object obj, string propertyName);
+
+        public virtual bool IsNullableProperty(string propertyName)
+        {
+            return IsNullableProperty(this.selectedObject, propertyName);
+        }
+
+        public abstract bool IsNullableProperty(object obj, string propertyName);
+
+        public virtual bool GetPropertyNullStatus(string propertyName)
+        {
+            return GetPropertyNullStatus(this.selectedObject, propertyName);
+        }
+
+        public abstract bool GetPropertyNullStatus(object obj, string propertyName);
+
+        public virtual void SetPropertyNullStatus(string propertyName, bool isNull)
+        {
+            SetPropertyNullStatus(this.selectedObject, propertyName, isNull);
+        }
+
+        public abstract void SetPropertyNullStatus(object obj, string propertyName, bool isNull);
+
         public virtual object GetPropertyValue(string propertyName)
         {
             return GetPropertyValue(this.selectedObject, propertyName);

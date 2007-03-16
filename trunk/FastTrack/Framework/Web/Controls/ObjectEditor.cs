@@ -51,6 +51,19 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                         PropertyEditor propertyEditor = new PropertyEditor(property.Name, table);
                         propertyEditor.Initialize();
                     }
+
+                    TableRow row = new TableRow();
+                    table.Rows.Add(row);
+
+                    TableCell buttonCell = new TableCell();
+                    buttonCell.ColumnSpan = 2;
+                    row.Cells.Add(buttonCell);
+
+                    SaveObjectButton saveButton = new SaveObjectButton();
+                    DeleteObjectButton deleteButton = new DeleteObjectButton();
+
+                    buttonCell.Controls.Add(saveButton);
+                    buttonCell.Controls.Add(deleteButton);
                 }
             }
         }	
