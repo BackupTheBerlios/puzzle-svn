@@ -298,6 +298,21 @@ namespace KumoUnitTests
         }
 
         [TestMethod()]
+        public void DoubleProxy2ContainerExtend()
+        {
+            Engine e1 = new Engine("DoubleProxy2ContainerExtend1");
+            Engine e2 = new Engine("DoubleProxy2ContainerExtend2");
+            e1.Configuration.Aspects.Add(
+                new SignatureAspect("ChangeReturnValue", typeof(Foo), "MyInt*", new IncreaseReturnValueInterceptor()));
+           
+            Type proxyType = e1.CreateProxyType(typeof(Foo));
+            //note the "null" param is the state that was supposed to come from the previous level of proxying
+            Foo proxy = (Foo)e2.CreateProxy(proxyType, null);
+
+            Assert.IsTrue(proxy != null, "failed to create proxified instance");
+        }
+
+        [TestMethod()]
         public void DoubleProxy1Container()
         {
             Engine e1 = new Engine("DoubleProxy1Container");

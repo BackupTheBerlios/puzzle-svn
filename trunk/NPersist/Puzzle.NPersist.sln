@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPersistWebService", "http:
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework", "..\NAspect\Framework\Puzzle.NAspect.Framework.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -137,6 +139,7 @@ Global
 		{CD5169AB-2A2A-4000-8BC0-892FB90D3CE3}.TEST.ActiveCfg = Release|.NET
 		{CD5169AB-2A2A-4000-8BC0-892FB90D3CE3}.TEST.Build.0 = Release|.NET
 		{0E3A28A4-29A0-4677-AB31-BFF6425A525B}.Debug.ActiveCfg = Debug|.NET
+		{0E3A28A4-29A0-4677-AB31-BFF6425A525B}.Debug.Build.0 = Debug|.NET
 		{0E3A28A4-29A0-4677-AB31-BFF6425A525B}.NPDebug.ActiveCfg = Debug|.NET
 		{0E3A28A4-29A0-4677-AB31-BFF6425A525B}.NPDebug.Build.0 = Debug|.NET
 		{0E3A28A4-29A0-4677-AB31-BFF6425A525B}.Release.ActiveCfg = Release|.NET

@@ -136,6 +136,9 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public object CreateProxy(Type type, params object[] args)
         {
+            if (args == null)
+                args = new object[] { null };
+
             LogMessage message = new LogMessage("Creating proxy for type {0}", type.FullName);
             LogManager.Info(this, message);
 
@@ -199,21 +202,23 @@ namespace Puzzle.NAspect.Framework
         /// </example>
         public object CreateProxyWithState(object state, Type type, params object[] args)
         {
+            if (args == null)
+                args = new object[] { null };
+
             LogMessage message = new LogMessage("Creating context bound wrapper for type {0}", type.FullName);
             LogManager.Info(this, message);
             Type proxyType = CreateProxyType(type);
 
             object[] proxyArgs;
-
-            if (typeof(IAopProxy).IsAssignableFrom(proxyType))
+			
+            if (proxyType.Name.EndsWith("AopProxy") )
             {
                 proxyArgs = AddStateToCtorParams(state, args);
             }
             else //base or non proxied type
             {
                 proxyArgs = args;
-            }
-            
+            }            		
 
             object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
             return proxyObject;
