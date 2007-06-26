@@ -670,8 +670,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 				while (tmp.Assembly is AssemblyBuilder)
 					tmp = tmp.BaseType;
 
-				className = tmp.BaseType.Name;
-				ns = tmp.BaseType.Namespace;
+				className = tmp.Name;
+				ns = tmp.Namespace;
 			}
 			else
 			{
