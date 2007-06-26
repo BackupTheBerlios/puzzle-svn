@@ -204,14 +204,16 @@ namespace Puzzle.NAspect.Framework
             Type proxyType = CreateProxyType(type);
 
             object[] proxyArgs;
-            if (proxyType == type)
-            {
-                proxyArgs = args;
-            }
-            else
+
+            if (typeof(IAopProxy).IsAssignableFrom(proxyType))
             {
                 proxyArgs = AddStateToCtorParams(state, args);
             }
+            else //base or non proxied type
+            {
+                proxyArgs = args;
+            }
+            
 
             object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
             return proxyObject;

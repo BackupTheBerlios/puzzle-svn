@@ -4,6 +4,7 @@ using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
 using System.Threading;
+using System.Collections;
 
 namespace Puzzle.NAspect.Framework
 {
@@ -17,7 +18,8 @@ namespace Puzzle.NAspect.Framework
 
             AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();            
             TypeBuilder typeBuilder = GetTypeBuilder(assemblyBuilder, moduleName, typeName, baseType);
-            Type proxyType = typeBuilder.CreateType();            
+            BuildConstructors(baseType, typeBuilder);
+            Type proxyType = typeBuilder.CreateType();
             return proxyType;
         }
 
@@ -41,5 +43,43 @@ namespace Puzzle.NAspect.Framework
         }
 
 
+        private void BuildConstructors(Type baseType, TypeBuilder typeBuilder)
+        {
+            ConstructorInfo[] constructors = baseType.GetConstructors();
+            foreach (ConstructorInfo constructor in constructors)
+            {
+                BuildConstructor(constructor, typeBuilder);
+            }
+            if (constructors.Length == 0)
+            {
+                constructors = typeof(object).GetConstructors();
+                foreach (ConstructorInfo constructor in constructors)
+                {
+                    BuildConstructor(constructor, typeBuilder);
+                }
+            }
+        }
+
+        private void BuildConstructor(ConstructorInfo constructor, TypeBuilder typeBuilder)
+        {            
+            ParameterInfo[] parameterInfos = constructor.GetParameters();
+            Type[] parameterTypes = new Type[parameterInfos.Length ];
+
+            //copy super ctor param types
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                parameterTypes[i] = parameterInfos[i].ParameterType;
+            }
+
+            ConstructorBuilder proxyConstructor = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, parameterTypes);
+            ILGenerator il = proxyConstructor.GetILGenerator();
+            for (int i = 0; i < parameterTypes.Length + 1 /* also load "this" */; i++)
+            {
+                il.Emit(OpCodes.Ldarg, i);
+            }
+            il.Emit(OpCodes.Callvirt, constructor);
+
+            il.Emit(OpCodes.Ret);
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace KumoUnitTests
         [SomeAttrib(Name="Test",Age=10)]
 		public Foo()
 		{
+
 		}
 
 		#region Public Property B
