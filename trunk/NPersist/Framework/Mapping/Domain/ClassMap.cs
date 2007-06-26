@@ -13,6 +13,7 @@ using System.Collections;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection.Emit;
 using System.Xml.Serialization;
 using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
@@ -1922,7 +1923,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 			classMap.IsAbstract = type.IsAbstract;
 			
-			Type baseType = type.BaseType;
+			Type tmp = type;
+			while (tmp.Assembly is AssemblyBuilder)
+				tmp = tmp.BaseType;
+
+			Type baseType = tmp;
 
 			IClassMap baseClassMap = (classMap.DomainMap.GetClassMap(baseType.GetType()));
 			if (baseClassMap != null)
