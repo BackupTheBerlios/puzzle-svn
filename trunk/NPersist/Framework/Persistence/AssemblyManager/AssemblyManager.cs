@@ -172,10 +172,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public static Type GetBaseType(Type type)
 		{
 			Type tmp = type;
+
 			while (tmp.Assembly is AssemblyBuilder)
 				tmp = tmp.BaseType;
 
-			return type;
+			return tmp;
 		}
 	}
 }

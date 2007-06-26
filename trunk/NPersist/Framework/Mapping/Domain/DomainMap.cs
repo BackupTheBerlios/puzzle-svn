@@ -663,21 +663,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			string className;
 			string ns = "";
-			if (typeof(IProxy).IsAssignableFrom(type))
-			{
-				Type tmp = type;
 
-				while (tmp.Assembly is AssemblyBuilder)
-					tmp = tmp.BaseType;
+			Type tmp = type;
 
-				className = tmp.Name;
-				ns = tmp.Namespace;
-			}
-			else
-			{
-				className = type.Name;
-				ns = type.Namespace;
-			}
+			while (tmp.Assembly is AssemblyBuilder)
+				tmp = tmp.BaseType;
+
+			className = tmp.Name;
+			ns = tmp.Namespace;
+
 			IClassMap classMap = GetClassMap(className);
 			if (classMap == null)
 			{
