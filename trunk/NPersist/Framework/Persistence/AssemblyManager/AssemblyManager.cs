@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using System.Reflection.Emit;
 using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
@@ -170,8 +171,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public static Type GetBaseType(Type type)
 		{
-			while (typeof(IInterceptable).IsAssignableFrom(type))
-				type = type.BaseType ;
+			Type tmp = type;
+			while (tmp.Assembly is AssemblyBuilder)
+				tmp = tmp.BaseType;
+
 			return type;
 		}
 	}
