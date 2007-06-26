@@ -174,36 +174,36 @@
     </Compile>
     <Compile Include="Enumerations\AspectTargetType.cs" />
     <Compile Include="Enumerations\PointcutTargetType.cs" />
-    <Compile Include="Proxy\AfterMethodInvocation.cs" />
-    <Compile Include="Proxy\AOPProxyMixin.cs">
+    <Compile Include="Weaving\AfterMethodInvocation.cs" />
+    <Compile Include="Weaving\AOPProxyMixin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\BeforeMethodInvocation.cs" />
-    <Compile Include="Proxy\CallInfo.cs" />
-    <Compile Include="Proxy\FastCall.cs" />
-    <Compile Include="Proxy\IAOPProxy.cs">
+    <Compile Include="Weaving\BeforeMethodInvocation.cs" />
+    <Compile Include="Weaving\CallInfo.cs" />
+    <Compile Include="Weaving\FastCall.cs" />
+    <Compile Include="Weaving\IAOPProxy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\InterfaceProxyBase.cs" />
-    <Compile Include="Proxy\Parameters\InvocationParameterInfo.cs" />
-    <Compile Include="Proxy\MethodCache.cs">
+    <Compile Include="Weaving\InterfaceProxyBase.cs" />
+    <Compile Include="Weaving\Parameters\InvocationParameterInfo.cs" />
+    <Compile Include="Weaving\MethodCache.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\MethodInvocation.cs">
+    <Compile Include="Weaving\MethodInvocation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\Parameters\InvocationParameter.cs" />
-    <Compile Include="Proxy\ProxyFactories\InterfaceProxyFactory.cs">
+    <Compile Include="Weaving\Parameters\InvocationParameter.cs" />
+    <Compile Include="Weaving\ProxyFactories\InterfaceProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\ProxyFactories\SubclassProxyFactory.cs">
+    <Compile Include="Weaving\ProxyFactories\SubclassProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\ProxyParameter.cs">
+    <Compile Include="Weaving\ProxyParameter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\Debug\SerializableProxyMixin.cs" />
-    <Compile Include="Proxy\Tools.cs">
+    <Compile Include="Weaving\Debug\SerializableProxyMixin.cs" />
+    <Compile Include="Weaving\Tools.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Serializer\Elements\VizAspect.cs" />
