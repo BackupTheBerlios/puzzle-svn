@@ -10,6 +10,8 @@ namespace Puzzle.NAspect.Framework
 	public class TypeExtender : ITypeExtender
 	{
 
+
+		private bool IsDirty = false;
         public Type Extend(Type baseType)
         {
             string typeName = baseType.Name + "ExtenderProxy";
@@ -17,9 +19,16 @@ namespace Puzzle.NAspect.Framework
 
             AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();            
             TypeBuilder typeBuilder = GetTypeBuilder(assemblyBuilder, moduleName, typeName, baseType);
-            BuildConstructors(baseType, typeBuilder);
+            BuildConstructors(baseType, typeBuilder);			
+
+
             Type proxyType = typeBuilder.CreateType();
-            return proxyType;
+
+
+			if (IsDirty)
+				return proxyType;
+			else
+				return baseType;            
         }
 
         private AssemblyBuilder GetAssemblyBuilder()
