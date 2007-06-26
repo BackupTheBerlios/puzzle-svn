@@ -230,6 +230,12 @@ namespace Puzzle.NAspect.Framework
                 //incase a proxy for this type does not exist , generate it
                 if (proxyLookup[type] == null)
                 {
+                    Type extendedType = type;
+                    foreach (ITypeExtender typeExtender in configuration.TypeExtenders)
+                    {
+                        extendedType = typeExtender.Extend(extendedType);
+                    }
+                    
                     IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
                     IList typeMixins = GetMixinsForType(type, typeAspects);
@@ -244,7 +250,7 @@ namespace Puzzle.NAspect.Framework
 #endif
 
 
-                    proxyType = SubclassProxyFactory.CreateProxyType(type, typeAspects, typeMixins, this);
+                    proxyType = SubclassProxyFactory.CreateProxyType(extendedType, typeAspects, typeMixins, this);
                     if (proxyType == null)
                         throw new NullReferenceException(
                             string.Format("Could not generate proxy for type '{0}'", type.FullName));

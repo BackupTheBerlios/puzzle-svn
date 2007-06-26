@@ -18,6 +18,22 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
     /// </summary>
     public class EngineConfiguration
     {
+        #region Public Property TypeExtenders
+
+        private IList typeExtenders;
+
+
+        /// <summary>
+        /// Untyped list of <c>ITypeExtender</c>s
+        /// </summary>
+        public IList TypeExtenders
+        {
+            get { return typeExtenders; }
+            set { typeExtenders = value; }
+        }
+
+        #endregion
+
         #region Public Property Aspects
 
         private IList aspects;
@@ -55,6 +71,7 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
         public EngineConfiguration()
         {
             aspects = new ArrayList();
+            typeExtenders = new ArrayList();
         }
     }
 }
