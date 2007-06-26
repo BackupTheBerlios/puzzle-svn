@@ -218,6 +218,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Tests\BasicTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Tests\CascadeTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
