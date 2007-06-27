@@ -1412,7 +1412,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 				paramName = GetParameterName(propertyMap, "Id_");
 
-				SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
+				//SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, propertyMap, om.GetPropertyValue(obj, propertyMap.Name), columnMap);
+				SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, propertyMap, keyValue, columnMap, true);
 
 				search.GetSqlComparePredicate(column, SqlCompareOperatorType.Equals, param);
 			}
