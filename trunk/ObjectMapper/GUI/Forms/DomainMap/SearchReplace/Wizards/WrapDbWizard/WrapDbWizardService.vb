@@ -633,7 +633,7 @@ Public Class WrapDbWizardService
 
                 Select Case useCfg.TargetLanguage
 
-                    Case SourceCodeFileTypeEnum.CSharp
+                    Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                         fileName += ".cs"
 
@@ -685,7 +685,7 @@ Public Class WrapDbWizardService
 
             Select Case useCfg.TargetLanguage
 
-                Case SourceCodeFileTypeEnum.CSharp
+                Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                     fileName += ".csproj"
 
@@ -728,7 +728,7 @@ Public Class WrapDbWizardService
 
         Select Case useCfg.TargetLanguage
 
-            Case SourceCodeFileTypeEnum.CSharp
+            Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                 ext = ".cs"
 
@@ -836,7 +836,7 @@ Public Class WrapDbWizardService
 
             Select Case src.FileType
 
-                Case SourceCodeFileTypeEnum.CSharp
+                Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
                     tag1 = "#region "" Unsynchronized Custom Code Region """ & vbCrLf
                     tag2 = "#endregion //Unsynchronized Custom Code Region" & vbCrLf
 

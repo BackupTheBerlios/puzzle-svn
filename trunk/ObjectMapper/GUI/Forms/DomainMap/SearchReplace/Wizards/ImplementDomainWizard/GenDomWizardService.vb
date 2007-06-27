@@ -596,7 +596,7 @@ Public Class GenDomWizardService
 
             Select Case useCfg.TargetLanguage
 
-                Case SourceCodeFileTypeEnum.CSharp
+                Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                     fileName += ".csproj"
 
@@ -752,7 +752,7 @@ Public Class GenDomWizardService
             tag2 = "#End Region 'Unsynchronized Custom Code Region" & vbCrLf
 
             Select Case src.FileType
-                Case SourceCodeFileTypeEnum.CSharp
+                Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
                     tag1 = "#region "" Unsynchronized Custom Code Region """ & vbCrLf
                     tag2 = "#endregion //Unsynchronized Custom Code Region" & vbCrLf
 

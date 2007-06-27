@@ -17091,7 +17091,7 @@ Public Class frmDomainMapBrowser
 
         Select Case src.FileType
 
-            Case SourceCodeFileTypeEnum.CSharp
+            Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                 docType = MainDocumentType.CodeCSharp
 
@@ -17226,7 +17226,7 @@ Public Class frmDomainMapBrowser
 
             Select Case src.FileType
 
-                Case SourceCodeFileTypeEnum.CSharp
+                Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                     If first Then
 
@@ -23854,5 +23854,6 @@ Public Class frmDomainMapBrowser
     End Function
 
 End Class
+
 
 

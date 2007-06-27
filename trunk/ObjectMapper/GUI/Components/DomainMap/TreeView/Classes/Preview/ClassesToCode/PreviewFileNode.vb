@@ -78,7 +78,7 @@ Public Class PreviewFileNode
 
         Select Case FileType
 
-            Case SourceCodeFileTypeEnum.CSharp
+            Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                 If Not DomainMap Is Nothing Then
 

@@ -52,7 +52,7 @@ Public Class SourceCodeFileItem
 
         Select Case m_Map.FileType
 
-            Case SourceCodeFileTypeEnum.CSharp
+            Case SourceCodeFileTypeEnum.CSharp, SourceCodeFileTypeEnum.CSharp2
 
                 Select Case m_Map.MapObjectType
 
@@ -131,4 +131,5 @@ Public Class SourceCodeFileItem
 
 
 End Class
+
 
