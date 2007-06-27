@@ -97,6 +97,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private string m_DocElement = "";
 		private DocPropertyMapMode m_DocPropertyMapMode = DocPropertyMapMode.Default;
 
+		//misc
+		private bool isFixed = false;
+
 		#endregion
 
 		#region Constructors
@@ -117,14 +120,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 		[XmlIgnore()]
 		public virtual IClassMap ClassMap
 		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			get
 			{
 				return m_ClassMap;
 			}
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			set
 			{
 				if (m_ClassMap != null)
@@ -239,6 +238,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_MinValue = value; }
 		}
 
+		private bool fixedGetIsNullable = false;
+		private bool fixedValueGetIsNullable = false;
+
         //Because there is no difference in the table model when 
         //the slave table has the same number of rows as the master table 
         //(for example: Users and Profiles)) and when the slave table
@@ -248,11 +250,10 @@ namespace Puzzle.NPersist.Framework.Mapping
         //of the propertyMap for a slave OneToOne property!!
 		public virtual bool GetIsNullable()
 		{
-            if (IsFixed("GetIsNullable"))
-            {
-                return (bool)GetFixedValue("GetIsNullable");
-            }
-            bool isNullable = false;
+			if (fixedGetIsNullable)
+				return fixedValueGetIsNullable;
+			
+			bool isNullable = false;
 			IColumnMap columnMap = null;
             if (this.ReferenceType == ReferenceType.OneToOne && this.IsSlave)
             {
@@ -274,30 +275,51 @@ namespace Puzzle.NPersist.Framework.Mapping
             {
                 isNullable = this.m_IsNullable;
             }
-            if (IsFixed())
-            {
-                SetFixedValue("GetIsNullable", isNullable);
-            }
+			if (isFixed)
+			{
+				fixedValueGetIsNullable = isNullable;
+				fixedGetIsNullable = true;
+			}
 
             return isNullable;
 		}
 
+		private bool fixedGetIsAssignedBySource = false;
+		private bool fixedValueGetIsAssignedBySource = false;
 
 		public virtual bool GetIsAssignedBySource()
 		{
+			if (fixedGetIsAssignedBySource)
+				return fixedValueGetIsAssignedBySource;
+
+			bool isAssignedBySource = this.m_IsAssignedBySource;
+
 			IColumnMap columnMap = this.GetColumnMap();
 			if (columnMap != null)
 			{
 				if (columnMap.IsAutoIncrease)
 				{
-					return true;
+					isAssignedBySource = true;
 				}
 			}
-			return this.m_IsAssignedBySource;
+			if (isFixed)
+			{
+				fixedValueGetIsAssignedBySource = isAssignedBySource;
+				fixedGetIsAssignedBySource = true;
+			}
+
+			return isAssignedBySource;
 		}
+
+		private bool fixedGetMaxLength = false;
+		private int fixedValueGetMaxLength = 0;
 
 		public virtual int GetMaxLength()
 		{
+			if (fixedGetMaxLength)
+				return fixedValueGetMaxLength;
+
+			int maxLength = this.m_MaxLength;
 			if (!this.IsCollection)
 			{
 				IColumnMap columnMap = this.GetColumnMap();
@@ -306,32 +328,46 @@ namespace Puzzle.NPersist.Framework.Mapping
 					switch (columnMap.DataType)
 					{
 						case DbType.AnsiString :
-							return columnMap.Precision ;
+							maxLength = columnMap.Precision ;
+							break;
 						case DbType.AnsiStringFixedLength :
-							return columnMap.Precision ;
+							maxLength = columnMap.Precision ;
+							break;
 						case DbType.String  :
-							return columnMap.Precision ;
+							maxLength = columnMap.Precision ;
+							break;
 						case DbType.StringFixedLength :
-							return columnMap.Precision ;
+							maxLength = columnMap.Precision ;
+							break;
 					}
 				}
 			}
-			return this.m_MaxLength;
+			if (isFixed)
+			{
+				fixedValueGetMaxLength = maxLength;
+				fixedGetMaxLength = true;
+			}
+
+			return maxLength;
 		}
 
-		//[DebuggerStepThrough()]
+		private bool fixedGetFieldName = false;
+		private string fixedValueGetFieldName = "";
+
 		public virtual string GetFieldName()
 		{
-			if (IsFixed("GetFieldName"))
-			{
-				return (string) GetFixedValue("GetFieldName");
-			}
+			if (fixedGetFieldName)
+				return fixedValueGetFieldName;
+
 			string fn;
 			fn = GenerateFieldName();
-			if (IsFixed())
+
+			if (isFixed)
 			{
-				SetFixedValue("GetFieldName", fn);
+				fixedValueGetFieldName = fn;
+				fixedGetFieldName = true;
 			}
+
 			return fn;
 		}
 
@@ -393,10 +429,18 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return fn;
 		}
 
+		private bool fixedGetDataType = false;
+		private string fixedValueGetDataType = "";
+
 		public virtual string DataType
 		{
 			get
 			{
+				if (fixedGetDataType)
+					return fixedValueGetDataType;
+
+				string dataType = m_DataType;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
@@ -406,33 +450,37 @@ namespace Puzzle.NPersist.Framework.Mapping
 						{
 							if (m_IsCollection)
 							{
-								return "System.Collections.IList";
+								dataType = "System.Collections.IList";
 							}
 						}
-						return m_DataType;
 					}
 					else if (inv.ReferenceType == ReferenceType.ManyToOne || inv.ReferenceType == ReferenceType.OneToOne)
 					{
-						return inv.ClassMap.Name;
+						dataType = inv.ClassMap.Name;
 					}
 				}
 				else
 				{
 					if (IsSlave == false && IsCollection && ReferenceType == ReferenceType.ManyToMany && Inverse.Length > 0 && NoInverseManagement == false)
 					{
-						//return "Puzzle.NPersist.Framework.InterceptableList";
-						return "System.Collections.IList";
+						dataType = "System.Collections.IList";
 					}
 					if (m_DataType == "")
 					{
 						if (m_IsCollection)
 						{
-							return "System.Collections.IList";
+							dataType = "System.Collections.IList";
 						}
 					}
-					return m_DataType;
 				}
-				return m_DataType;
+
+				if (isFixed)
+				{
+					fixedValueGetDataType = dataType;
+					fixedGetDataType = true;
+				}
+
+				return dataType;
 			}
 			set
 			{
@@ -440,27 +488,38 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetItemType = false;
+		private string fixedValueGetItemType = "";
+
 		public virtual string ItemType
 		{
 			get
 			{
+				if (fixedGetItemType)
+					return fixedValueGetItemType;
+
+				string itemType = m_ItemType;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
 					if (inv.ReferenceType == ReferenceType.ManyToMany || inv.ReferenceType == ReferenceType.OneToMany)
 					{
-						return inv.ClassMap.Name;
+						itemType = inv.ClassMap.Name;
 					}
 					else if (inv.ReferenceType == ReferenceType.ManyToOne || inv.ReferenceType == ReferenceType.OneToOne)
 					{
-						return m_ItemType;
+						itemType = m_ItemType;
 					}
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_ItemType;
+					fixedValueGetItemType = itemType;
+					fixedGetItemType = true;
 				}
-				return m_ItemType;
+
+				return itemType;
 			}
 			set
 			{
@@ -474,23 +533,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				if (IsCollection)
 				{
-					//NPersist wants to fill list properties with instances of lists
 					return "";
-//					if (m_DefaultValue.Length > 0)
-//					{
-//						return m_DefaultValue;
-//					}
-//					else
-//					{
-//						if (IsReadOnly == false && ReferenceType == ReferenceType.ManyToMany && Inverse.Length > 0 && NoInverseManagement == false)
-//						{
-//							return "new " + DataType + "(this, \"" + Name + "\")"; // do not localize
-//						}
-//						else
-//						{
-//							return "new " + DataType + "()"; // do not localize
-//						}
-//					}
 				}
 				else
 				{
@@ -503,14 +546,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetIsCollection = false;
+		private bool fixedValueGetIsCollection = false;
+
 		public virtual bool IsCollection
 		{
 			get
 			{
-                if (IsFixed("IsCollection"))
-                {
-                    return (bool)GetFixedValue("IsCollection");
-                }
+				if (fixedGetIsCollection)
+					return fixedValueGetIsCollection;
 
                 bool isCollection = false;
 				if (DoesInheritInverseMappings())
@@ -534,11 +578,12 @@ namespace Puzzle.NPersist.Framework.Mapping
                     isCollection = m_IsCollection;
 				}
 
-                if (IsFixed())
-                {
-                    SetFixedValue("IsCollection", isCollection);
-                }
-                return isCollection;
+				if (isFixed)
+				{
+					fixedValueGetIsCollection = isCollection;
+					fixedGetIsCollection = true;
+				}
+				return isCollection;
             }
 			set
 			{
@@ -568,53 +613,69 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return classMap;
 		}
 
+		private bool fixedGetReferencedClassMap = false;
+		private IClassMap fixedValueGetReferencedClassMap = null;
+
 		public virtual IClassMap GetReferencedClassMap()
 		{
-			if (m_ReferenceType == ReferenceType.None)
+			if (fixedGetReferencedClassMap)
+				return fixedValueGetReferencedClassMap;
+
+			IClassMap classMap = null;
+
+			if (m_ReferenceType != ReferenceType.None)
 			{
-				return null;
-			}
-			string className;
-			if (m_IsCollection)
-			{
-				className = m_ItemType;
-			}
-			else
-			{
-				className = m_DataType;
-			}
-			if (className.Length < 1)
-			{
-				return null;
-			}
-			string ns;
-			IClassMap classMap = m_ClassMap.DomainMap.GetClassMap(className);
-			if (classMap == null)
-			{
-				ns = m_ClassMap.GetNamespace();
-				if (ns.Length > 0)
+				string className;
+				if (m_IsCollection)
+					className = m_ItemType;
+				else
+					className = m_DataType;
+
+				if (className.Length > 0)
 				{
-					classMap = m_ClassMap.DomainMap.GetClassMap(ns + "." + className);
+					string ns;
+					classMap = m_ClassMap.DomainMap.GetClassMap(className);
+					if (classMap == null)
+					{
+						ns = m_ClassMap.GetNamespace();
+						if (ns.Length > 0)
+							classMap = m_ClassMap.DomainMap.GetClassMap(ns + "." + className);
+					}
 				}
 			}
+			if (isFixed)
+			{
+				fixedValueGetReferencedClassMap = classMap;
+				fixedGetReferencedClassMap = true;
+			}
+
 			return classMap;
 		}
+
+		private bool fixedGetSource = false;
+		private string fixedValueGetSource = null;
 
 		public virtual string Source
 		{
 			get
 			{
+				if (fixedGetSource)
+					return fixedValueGetSource;
+
+				string source = m_Source;
 				if (DoesInheritInverseMappings())
 				{
-					string name;
 					IPropertyMap inv = GetInversePropertyMap();
-					name = inv.Source;
-					return name;
+					source = inv.Source;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_Source;
+					fixedValueGetSource = source;
+					fixedGetSource = true;
 				}
+
+				return source;
 			}
 			set
 			{
@@ -622,16 +683,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetSourceMap = false;
+		private ISourceMap fixedValueGetSourceMap = null;
+
 		public virtual ISourceMap GetSourceMap()
 		{
+			if (fixedGetSourceMap)
+				return fixedValueGetSourceMap;
+
+			ISourceMap sourceMap = null;
+
 			if (this.Source == "")
 			{
-				return m_ClassMap.GetSourceMap();
+				sourceMap = m_ClassMap.GetSourceMap();
 			}
 			else
 			{
-				return m_ClassMap.DomainMap.GetSourceMap(this.Source);
+				sourceMap = m_ClassMap.DomainMap.GetSourceMap(this.Source);
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetSourceMap = sourceMap;
+				fixedGetSourceMap = true;
+			}
+
+			return sourceMap;
 		}
 
 		public virtual void SetSourceMap(ISourceMap value)
@@ -639,26 +716,34 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_Source = value.Name;
 		}
 
+		private bool fixedGetTable = false;
+		private string fixedValueGetTable = "";
+
 		public virtual string Table
 		{
 			get
 			{
+				if (fixedGetTable)
+					return fixedValueGetTable;
+
+				string table = m_Table;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
 					if (inv.Table.Length < 1)
-					{
-						return inv.ClassMap.Table;
-					}
+						table = inv.ClassMap.Table;
 					else
-					{
-						return inv.Table;
-					}
+						table = inv.Table;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_Table;
+					fixedValueGetTable = table;
+					fixedGetTable = true;
 				}
+
+				return table;
 			}
 			set
 			{
@@ -677,22 +762,36 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return tableMap;
 		}
 
+		private bool fixedGetTableMap = false;
+		private ITableMap fixedValueGetTableMap = null;
 
 		public virtual ITableMap GetTableMap()
 		{
+			if (fixedGetTableMap)
+				return fixedValueGetTableMap;
+
+			ITableMap tableMap = null;
+
 			if (this.Table == "")
 			{
-				return m_ClassMap.GetTableMap();
+				tableMap = m_ClassMap.GetTableMap();
 			}
 			else
 			{
 				ISourceMap sourceMap = GetSourceMap();
 				if (sourceMap != null)
 				{
-					return GetSourceMap().GetTableMap(this.Table);
+					tableMap = GetSourceMap().GetTableMap(this.Table);
 				}
 			}
-			return null;
+
+			if (isFixed)
+			{
+				fixedValueGetTableMap = tableMap;
+				fixedGetTableMap = true;
+			}
+
+			return tableMap;
 		}
 
 		public virtual void SetTableMap(ITableMap value)
@@ -700,35 +799,47 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_Table = value.Name;
 		}
 
+		private bool fixedGetColumn = false;
+		private string fixedValueGetColumn = "";
+
 		public virtual string Column
 		{
 			get
 			{
+				if (fixedGetColumn)
+					return fixedValueGetColumn;
+
+				string column = m_Column;
+
 				if (DoesInheritInverseMappings())
 				{
 					if (ReferenceType == ReferenceType.ManyToOne)
-					{
-						return "";
-					}
-					IPropertyMap inv = GetInversePropertyMap();
-					if (inv.IdColumn.Length > 0)
-					{
-						return inv.IdColumn;
-					}
+						column = "";
 					else
 					{
-						ArrayList idProps = inv.ClassMap.GetIdentityPropertyMaps();
-						if (idProps.Count == 1)
+						IPropertyMap inv = GetInversePropertyMap();
+						if (inv.IdColumn.Length > 0)
 						{
-							return ((IPropertyMap) (idProps[0])).Column;
+							column = inv.IdColumn;
+						}
+						else
+						{
+							ArrayList idProps = inv.ClassMap.GetIdentityPropertyMaps();
+							if (idProps.Count == 1)
+							{
+								column = ((IPropertyMap) (idProps[0])).Column;
+							}
 						}
 					}
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_Column;
+					fixedValueGetColumn = column;
+					fixedGetColumn = true;
 				}
-				return m_Column;
+
+				return column;
 			}
 			set
 			{
@@ -746,18 +857,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return columnMap;
 		}
 
+		private bool fixedGetColumnMap = false;
+		private IColumnMap fixedValueGetColumnMap = null;
+
 		public virtual IColumnMap GetColumnMap()
 		{
-			if (this.Column.Length < 1)
+			if (fixedGetColumnMap)
+				return fixedValueGetColumnMap;
+
+			IColumnMap columnMap = null;
+
+			if (this.Column.Length > 0)
 			{
-				return null;
+				ITableMap tableMap = GetTableMap();
+				if (tableMap != null)
+				{
+					columnMap = tableMap.GetColumnMap(this.Column);
+				}
 			}
-			ITableMap tableMap = GetTableMap();
-			if (tableMap == null)
+
+			if (isFixed)
 			{
-				return null;
+				fixedValueGetColumnMap = columnMap;
+				fixedGetColumnMap = true;
 			}
-			return tableMap.GetColumnMap(this.Column);
+
+			return columnMap;
 		}
 
 		public virtual void SetColumnMap(IColumnMap value)
@@ -765,19 +890,31 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_Column = value.Name;
 		}
 
+		private bool fixedGetIdColumn = false;
+		private string fixedValueGetIdColumn = "";
+
 		public virtual string IdColumn
 		{
 			get
 			{
+				if (fixedGetIdColumn)
+					return fixedValueGetIdColumn;
+
+				string idColumn = m_IdColumn;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
-					return inv.Column;
+					idColumn = inv.Column;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_IdColumn;
+					fixedValueGetIdColumn = idColumn;
+					fixedGetIdColumn = true;
 				}
+
+				return idColumn;
 			}
 			set
 			{
@@ -785,18 +922,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetIdColumnMap = false;
+		private IColumnMap fixedValueGetIdColumnMap = null;
+
 		public virtual IColumnMap GetIdColumnMap()
 		{
-			if (this.IdColumn.Length < 1)
+			if (fixedGetIdColumnMap)
+				return fixedValueGetIdColumnMap;
+
+			IColumnMap idColumnMap = null;
+
+			if (this.IdColumn.Length > 0)
 			{
-				return null;
+				ITableMap tableMap = GetTableMap();
+				if (tableMap != null)
+				{
+					idColumnMap = tableMap.GetColumnMap(this.IdColumn);
+				}
 			}
-			ITableMap tableMap = GetTableMap();
-			if (tableMap == null)
+
+			if (isFixed)
 			{
-				return null;
+				fixedValueGetIdColumnMap = idColumnMap;
+				fixedGetIdColumnMap = true;
 			}
-			return tableMap.GetColumnMap(this.IdColumn);
+
+			return idColumnMap;
 		}
 
 		public virtual void SetIdColumnMap(IColumnMap value)
@@ -804,24 +955,39 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_IdColumn = value.Name;
 		}
 
+		private bool fixedGetAdditionalColumns = false;
+		private ArrayList fixedValueGetAdditionalColumns = null;
+
 		[XmlArrayItem(typeof (string))]
 		public virtual ArrayList AdditionalColumns
 		{
 			get
 			{
+				if (fixedGetAdditionalColumns)
+					return fixedValueGetAdditionalColumns;
+
+				ArrayList additionalColumns = m_AdditionalColumns;
+
 				if (DoesInheritInverseMappings())
 				{
 					if (ReferenceType == ReferenceType.ManyToOne)
 					{
-						return new ArrayList();
+						additionalColumns = new ArrayList();
 					}
-					IPropertyMap inv = GetInversePropertyMap();
-					return inv.AdditionalIdColumns;
+					else
+					{
+						IPropertyMap inv = GetInversePropertyMap();
+						additionalColumns = inv.AdditionalIdColumns;						
+					}
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_AdditionalColumns;
+					fixedValueGetAdditionalColumns = additionalColumns;
+					fixedGetAdditionalColumns = true;
 				}
+
+				return additionalColumns;
 			}
 			set
 			{
@@ -829,8 +995,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetAdditionalColumnMaps = false;
+		private ArrayList fixedValueGetAdditionalColumnMaps = null;
+
 		public virtual ArrayList GetAdditionalColumnMaps()
 		{
+			if (fixedGetAdditionalColumnMaps)
+				return fixedValueGetAdditionalColumnMaps;
+
 			ArrayList columnMaps = new ArrayList();
 			ITableMap tableMap = GetTableMap();
 			if (tableMap != null)
@@ -845,23 +1017,42 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetAdditionalColumnMaps = columnMaps;
+				fixedGetAdditionalColumnMaps = true;
+			}
+
 			return columnMaps;
 		}
+
+		private bool fixedGetAdditionalIdColumns = false;
+		private ArrayList fixedValueGetAdditionalIdColumns = null;
 
 		[XmlArrayItem(typeof (string))]
 		public virtual ArrayList AdditionalIdColumns
 		{
 			get
 			{
+				if (fixedGetAdditionalIdColumns)
+					return fixedValueGetAdditionalIdColumns;
+
+				ArrayList additionalIdColumns = m_AdditionalIdColumns;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
-					return inv.AdditionalColumns;
+					additionalIdColumns = inv.AdditionalColumns;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_AdditionalIdColumns;
+					fixedValueGetAdditionalIdColumns = additionalIdColumns;
+					fixedGetAdditionalIdColumns = true;
 				}
+
+				return additionalIdColumns;
 			}
 			set
 			{
@@ -869,8 +1060,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetAdditionalIdColumnMaps = false;
+		private ArrayList fixedValueGetAdditionalIdColumnMaps = null;
+
 		public virtual ArrayList GetAdditionalIdColumnMaps()
 		{
+			if (fixedGetAdditionalIdColumnMaps)
+				return fixedValueGetAdditionalIdColumnMaps;
+
 			ArrayList columnMaps = new ArrayList();
 			ITableMap tableMap = GetTableMap();
 			if (tableMap != null)
@@ -885,22 +1082,41 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetAdditionalIdColumnMaps = columnMaps;
+				fixedGetAdditionalIdColumnMaps = true;
+			}
+
 			return columnMaps;
 		}
+
+		private bool fixedGetInverse = false;
+		private string fixedValueGetInverse = null;
 
 		public virtual string Inverse
 		{
 			get
 			{
+				if (fixedGetInverse)
+					return fixedValueGetInverse;
+
+				string inverse = m_Inverse;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
-					return inv.Name;
+					inverse = inv.Name;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_Inverse;
+					fixedValueGetInverse = inverse;
+					fixedGetInverse = true;
 				}
+
+				return inverse;
 			}
 			set
 			{
@@ -918,18 +1134,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return propertyMap;
 		}
 
+		private bool fixedGetInversePropertyMap = false;
+		private IPropertyMap fixedValueGetInversePropertyMap = null;
+
 		public virtual IPropertyMap GetInversePropertyMap()
 		{
-			if (m_Inverse.Length < 1)
+			if (fixedGetInversePropertyMap)
+				return fixedValueGetInversePropertyMap;
+
+			IPropertyMap inversePropertyMap = null;
+
+			if (m_Inverse.Length > 0)
 			{
-				return null;
+				IClassMap classMap = GetReferencedClassMap();
+				if (classMap != null)
+				{
+					inversePropertyMap = classMap.GetPropertyMap(m_Inverse);
+				}
 			}
-			IClassMap classMap = GetReferencedClassMap();
-			if (classMap != null)
+
+			if (isFixed)
 			{
-				return classMap.GetPropertyMap(m_Inverse);
+				fixedValueGetInversePropertyMap = inversePropertyMap;
+				fixedGetInversePropertyMap = true;
 			}
-			return null;
+
+			return inversePropertyMap;
 		}
 
 		public virtual void SetInversePropertyMap(IPropertyMap value)
@@ -1040,24 +1270,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetIsSlave = false;
+		private bool fixedValueGetIsSlave = false;
+
 		public virtual bool IsSlave
 		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			get
 			{
+				if (fixedGetIsSlave)
+					return fixedValueGetIsSlave;
+
+				bool isSlave = m_IsSlave;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
-					return !(inv.IsSlave);
+					isSlave = !(inv.IsSlave);
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_IsSlave;
+					fixedValueGetIsSlave = isSlave;
+					fixedGetIsSlave = true;
 				}
+
+				return isSlave;
 			}
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			set
 			{
 				m_IsSlave = value;
@@ -1076,24 +1314,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetNoInverseManagement = false;
+		private bool fixedValueGetNoInverseManagement = false;
+
 		public virtual bool NoInverseManagement
 		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			get
 			{
+				if (fixedGetNoInverseManagement)
+					return fixedValueGetNoInverseManagement;
+
+				bool noInverseManagement = m_NoInverseManagement;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
-					return inv.NoInverseManagement;
+					noInverseManagement = inv.NoInverseManagement;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_NoInverseManagement;
+					fixedValueGetNoInverseManagement = noInverseManagement;
+					fixedGetNoInverseManagement = true;
 				}
+
+				return noInverseManagement;
 			}
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			set
 			{
 				m_NoInverseManagement = value;
@@ -1136,73 +1382,100 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedDoesInheritInverseMappings = false;
+		private bool fixedValueDoesInheritInverseMappings = false;
 
-		//[DebuggerStepThrough()]
 		public virtual bool DoesInheritInverseMappings()
 		{
-			if (!(m_InheritInverseMappings))
+			if (fixedDoesInheritInverseMappings)
+				return fixedValueDoesInheritInverseMappings;
+
+			bool doesInheritInverseMappings = true;
+
+			if (!m_InheritInverseMappings)
 			{
-				return false;
+				doesInheritInverseMappings = false;
 			}
 			if (m_ReferenceType == ReferenceType.None)
 			{
-				return false;
+				doesInheritInverseMappings =false;
 			}
 			if (!(m_Inverse.Length > 0))
 			{
-				return false;
+				doesInheritInverseMappings =false;
 			}
 			IPropertyMap inv = GetInversePropertyMap();
 			if (inv == null)
 			{
-				return false;
+				doesInheritInverseMappings =false;
 			}
-			if (inv == this)
+			else
 			{
-				return false;
+				if (inv == this)
+				{
+					doesInheritInverseMappings =false;
+				}
+				if (inv.InheritInverseMappings)
+				{
+					doesInheritInverseMappings =false;
+				}				
 			}
-			if (inv.InheritInverseMappings)
+
+			if (isFixed)
 			{
-				return false;
+				fixedValueDoesInheritInverseMappings = doesInheritInverseMappings;
+				fixedDoesInheritInverseMappings = true;
 			}
-			return true;
+
+			return doesInheritInverseMappings;
 		}
+
+		private bool fixedGetReferenceType = false;
+		private ReferenceType fixedValueGetReferenceType = ReferenceType.None;
 
 		public virtual ReferenceType ReferenceType
 		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			get
 			{
+				if (fixedGetReferenceType)
+					return fixedValueGetReferenceType;
+
+				ReferenceType referenceType = m_ReferenceType;
+
 				if (DoesInheritInverseMappings())
 				{
 					IPropertyMap inv = GetInversePropertyMap();
 					if (inv.ReferenceType == ReferenceType.ManyToMany)
 					{
-						return ReferenceType.ManyToMany;
+						referenceType = ReferenceType.ManyToMany;
 					}
 					else if (inv.ReferenceType == ReferenceType.ManyToOne)
 					{
-						return ReferenceType.OneToMany;
+						referenceType =ReferenceType.OneToMany;
 					}
 					else if (inv.ReferenceType == ReferenceType.OneToMany)
 					{
-						return ReferenceType.ManyToOne;
+						referenceType = ReferenceType.ManyToOne;
 					}
 					else if (inv.ReferenceType == ReferenceType.OneToOne)
 					{
-						return ReferenceType.OneToOne;
+						referenceType = ReferenceType.OneToOne;
 					}
 					else if (inv.ReferenceType == ReferenceType.None)
 					{
-						return ReferenceType.None;
+						referenceType = ReferenceType.None;
 					}
-					return ReferenceType.None;
+					else
+						referenceType = ReferenceType.None;
 				}
-				else
+
+				if (isFixed)
 				{
-					return m_ReferenceType;
+					fixedValueGetReferenceType = referenceType;
+					fixedGetReferenceType = true;
 				}
+
+				return referenceType;
 			}
 			//[DebuggerHidden()]
 			//[DebuggerStepThrough()]
@@ -1320,18 +1593,32 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetOrderByPropertyMap = false;
+		private IPropertyMap fixedValueGetOrderByPropertyMap = null;
+
 		public virtual IPropertyMap GetOrderByPropertyMap()
 		{
-			if (m_OrderBy.Length < 1)
+			if (fixedGetOrderByPropertyMap)
+				return fixedValueGetOrderByPropertyMap;
+
+			IPropertyMap propertyMap = null;
+
+			if (m_OrderBy.Length > 0)
 			{
-				return null;
+				IClassMap classMap = GetReferencedClassMap();
+				if (classMap != null)
+				{
+					propertyMap = classMap.GetPropertyMap(m_OrderBy);
+				}
 			}
-			IClassMap classMap = GetReferencedClassMap();
-			if (classMap != null)
+
+			if (isFixed)
 			{
-				return classMap.GetPropertyMap(m_OrderBy);
+				fixedValueGetOrderByPropertyMap = propertyMap;
+				fixedGetOrderByPropertyMap = true;
 			}
-			return null;
+
+			return propertyMap;
 		}
 
 		public virtual PropertyModifier PropertyModifier
@@ -1370,8 +1657,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		private bool fixedGetAllColumnMaps = false;
+		private ArrayList fixedValueGetAllColumnMaps = null;
+
 		public ArrayList GetAllColumnMaps()
 		{
+			if (fixedGetAllColumnMaps)
+				return fixedValueGetAllColumnMaps;
+
 			ArrayList columnMaps = new ArrayList();
 			IColumnMap columnMap = this.GetColumnMap();
 			if (columnMap != null)
@@ -1380,11 +1673,24 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			//Thanks to Steven Miller for fixing a bug here
 			columnMaps.AddRange(this.GetAdditionalColumnMaps());
+
+			if (isFixed)
+			{
+				fixedValueGetAllColumnMaps = columnMaps;
+				fixedGetAllColumnMaps = true;
+			}
+
 			return columnMaps;
 		}
 
+		private bool fixedGetAllIdColumnMaps = false;
+		private ArrayList fixedValueGetAllIdColumnMaps = null;
+
 		public ArrayList GetAllIdColumnMaps()
 		{
+			if (fixedGetAllIdColumnMaps)
+				return fixedValueGetAllIdColumnMaps;
+
 			ArrayList columnMaps = new ArrayList();
 			IColumnMap columnMap = this.GetIdColumnMap();
 			if (columnMap != null)
@@ -1393,6 +1699,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			//Thanks to Steven Miller for fixing a bug here
 			columnMaps.AddRange(this.GetAdditionalIdColumnMaps());
+
+			if (isFixed)
+			{
+				fixedValueGetAllIdColumnMaps = columnMaps;
+				fixedGetAllIdColumnMaps = true;
+			}
+
 			return columnMaps;
 		}
 
@@ -1447,8 +1760,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { commitRegions = value; }
 		}
 
+		private bool fixedGetCommitRegions = false;
+		private IList fixedValueGetCommitRegions = null;
+
 		public IList GetCommitRegions()
 		{
+			if (fixedGetCommitRegions)
+				return fixedValueGetCommitRegions;
+
 			string[] regions = commitRegions.Split(";".ToCharArray());
 			IList result = new ArrayList();
 			foreach (string region in regions)
@@ -1456,6 +1775,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 				if (region != "")
 					result.Add(region);
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetCommitRegions = result;
+				fixedGetCommitRegions = true;
+			}
+
 			return result;
 		}
 
@@ -1904,6 +2230,48 @@ namespace Puzzle.NPersist.Framework.Mapping
 		#endregion
 
 		#region IFixate
+
+		public override void Fixate()
+		{
+			base.Fixate();
+			this.isFixed = true;
+		}
+
+		public override void UnFixate()
+		{
+			base.UnFixate();
+			this.isFixed = false;
+			this.fixedGetIsNullable = false;
+			this.fixedGetIsAssignedBySource = false;
+			this.fixedGetMaxLength = false;
+			this.fixedGetFieldName = false;
+			this.fixedGetDataType = false;
+			this.fixedGetItemType = false;
+			this.fixedGetIsCollection = false;
+			this.fixedGetReferencedClassMap = false;
+			this.fixedGetSource = false;
+			this.fixedGetSourceMap = false;
+			this.fixedGetTable = false;
+			this.fixedGetTableMap = false;
+			this.fixedGetColumn = false;
+			this.fixedGetColumnMap = false;
+			this.fixedGetIdColumn = false;
+			this.fixedGetIdColumnMap = false;
+			this.fixedGetAdditionalColumns = false;
+			this.fixedGetAdditionalColumnMaps = false;
+			this.fixedGetAdditionalIdColumns = false;
+			this.fixedGetAdditionalIdColumnMaps = false;
+			this.fixedGetInverse = false;
+			this.fixedGetInversePropertyMap = false;
+			this.fixedGetIsSlave = false;
+			this.fixedGetNoInverseManagement = false;
+			this.fixedDoesInheritInverseMappings = false;
+			this.fixedGetReferenceType = false;
+			this.fixedGetOrderByPropertyMap = false;
+			this.fixedGetAllColumnMaps = false;
+			this.fixedGetAllIdColumnMaps = false;
+			this.fixedGetCommitRegions = false;
+		}
 
 		#endregion
 
