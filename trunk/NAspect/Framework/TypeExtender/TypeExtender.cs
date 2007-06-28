@@ -11,6 +11,7 @@ namespace Puzzle.NAspect.Framework
 	{
 
 
+
 		private bool IsDirty = false;
         public Type Extend(Type baseType)
         {
@@ -24,7 +25,7 @@ namespace Puzzle.NAspect.Framework
 
             Type proxyType = typeBuilder.CreateType();
 
-
+           // IsDirty = true;
 			if (IsDirty)
 				return proxyType;
 			else

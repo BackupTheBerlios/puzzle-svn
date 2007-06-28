@@ -207,11 +207,12 @@ namespace Puzzle.NAspect.Framework
 
             LogMessage message = new LogMessage("Creating context bound wrapper for type {0}", type.FullName);
             LogManager.Info(this, message);
-            Type proxyType = CreateProxyType(type);
+            ProxyTypeInfo typeInfo = CreateProxyTypeInfo(type);
+            Type proxyType = typeInfo.Type;
 
             object[] proxyArgs;
 			
-            if (proxyType.Name.EndsWith("AopProxy") )
+            if (typeInfo.IsProxied)
             {
                 proxyArgs = AddStateToCtorParams(state, args);
             }
@@ -231,6 +232,13 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The proxy type</returns>
         public Type CreateProxyType(Type type)
         {
+            return CreateProxyTypeInfo(type).Type;
+        }
+        private ProxyTypeInfo CreateProxyTypeInfo(Type type)
+        {
+            bool wasProxied = false;
+            bool wasExtended = false;
+            ProxyTypeInfo typeInfo = null;
             lock (proxyLookup.SyncRoot)
             {
                 Type proxyType = null;
@@ -241,6 +249,7 @@ namespace Puzzle.NAspect.Framework
                     foreach (ITypeExtender typeExtender in configuration.TypeExtenders)
                     {
                         extendedType = typeExtender.Extend(extendedType);
+                        wasExtended = true;
                     }
                     
                     IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
@@ -258,23 +267,34 @@ namespace Puzzle.NAspect.Framework
 
 
                     proxyType = SubclassProxyFactory.CreateProxyType(extendedType, typeAspects, typeMixins, this);
+
+
                     if (proxyType == null)
                         throw new NullReferenceException(
                             string.Format("Could not generate proxy for type '{0}'", type.FullName));
 
+                    if (proxyType != extendedType)
+                        wasProxied = true;
 
-                    proxyLookup[type] = proxyType;
+                    typeInfo = new ProxyTypeInfo();
+                    typeInfo.Type = proxyType;
+                    typeInfo.IsExtended = wasExtended;
+                    typeInfo.IsProxied = wasProxied;
+
+
+                    proxyLookup[type] = typeInfo;
                     LogMessage message = new LogMessage("Emitting new proxy type for type {0}", type.FullName);
                     LogManager.Info(this, message);
                 }
                 else
                 {
+                    typeInfo = proxyLookup[type] as ProxyTypeInfo;
                     //fetch the proxy type from the lookup
-                    proxyType = proxyLookup[type] as Type;
+                    proxyType = typeInfo.Type;
                     LogMessage message = new LogMessage("Fetching proxy type from cache for type {0}", type.FullName);
                     LogManager.Info(this, message);
                 }
-                return proxyType;
+                return typeInfo;
             }
         }
 

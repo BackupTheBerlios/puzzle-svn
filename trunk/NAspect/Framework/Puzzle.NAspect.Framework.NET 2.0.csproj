@@ -169,6 +169,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Container\IEngine.cs" />
+    <Compile Include="Container\ProxyTypeInfo.cs" />
     <Compile Include="Elements\EngineConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>

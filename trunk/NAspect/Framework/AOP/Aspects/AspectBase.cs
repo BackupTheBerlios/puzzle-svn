@@ -39,6 +39,7 @@ namespace Puzzle.NAspect.Framework.Aop
         private Hashtable mixinsForTypes = new Hashtable();
         private IList pointcuts = new ArrayList();
         private IList targets = new ArrayList();
+        private IList typeExtenders = new ArrayList();
 
         /// <summary>
         /// Just a name of the aspect, has no real purpose today.
@@ -50,21 +51,18 @@ namespace Puzzle.NAspect.Framework.Aop
             set { name = value; }
         }
 
-        /// <summary>
-        /// List of mixin types.
-        /// Since this is .NET 1.x compatible and we are lazy farts, you get this in an untyped manner.
-        /// The element type of this list should be <c>System.Type</c>        
-        /// </summary>
-        /// <example>
-        /// <code lang="CS">
-        /// myAspect.Mixins.Add(typeof(MyMixin));
-        /// myAspect.Mixins.Add(typeof(ISomeMarkerInterfaceWOImplementation));
-        /// </code>
-        /// </example>
+
         public IList Mixins
         {
             get { return mixins; }
             set { mixins = value; }
+        }
+
+
+        public IList TypeExtenders
+        {
+            get { return typeExtenders; }
+            set { typeExtenders = value; }
         }
 
         /// <summary>

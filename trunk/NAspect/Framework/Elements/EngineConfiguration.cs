@@ -72,8 +72,8 @@ namespace Puzzle.NAspect.Framework.ConfigurationElements
         {
             aspects = new ArrayList();
             typeExtenders = new ArrayList();
-            TypeExtender defaultExtender = new TypeExtender();
-            typeExtenders.Add(defaultExtender);
+         //   TypeExtender defaultExtender = new TypeExtender();
+         //   typeExtenders.Add(defaultExtender);
         }
     }
 }
