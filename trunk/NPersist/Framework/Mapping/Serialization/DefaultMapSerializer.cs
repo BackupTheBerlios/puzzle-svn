@@ -554,6 +554,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 				xml.Length -= 2;
 				xml.Append("\"");
 			}
+			if (propertyMap.IsGenerated)
+			{
+				xml.Append(" generated=\"true\""); // do not localize
+			}
 			if (propertyMap.IsCollection)
 			{
 				xml.Append(" list=\"true\""); // do not localize
@@ -1510,6 +1514,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlProp.Attributes["field"] == null))
 			{
 				propertyMap.FieldName = xmlProp.Attributes["field"].Value;
+			}
+			if (!(xmlProp.Attributes["generated"] == null))
+			{
+				propertyMap.IsGenerated = ParseBool(xmlProp.Attributes["generated"].Value);
 			}
 			if (!(xmlProp.Attributes["list"] == null))
 			{

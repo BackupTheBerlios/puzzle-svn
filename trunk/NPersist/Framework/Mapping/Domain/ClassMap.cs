@@ -79,6 +79,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private DocClassMapMode m_DocClassMapMode = DocClassMapMode.Default;
 		private string m_DocParentProperty = "";
 
+		//misc
+		private bool isFixed = false;
+
 		#endregion
 
 		#region Constructors
@@ -99,11 +102,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		[XmlIgnore()]
 		public virtual IDomainMap DomainMap
 		{
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			get { return m_DomainMap; }
-			//[DebuggerHidden()]
-			//[DebuggerStepThrough()]
 			set
 			{
 				if (m_DomainMap != null)
@@ -284,34 +283,65 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_name = value; }
 		}
 
+		private bool fixedGetSource = false;
+		private string fixedValueGetSource = null;
+
 		public virtual string Source
 		{
 			get
 			{
+				if (fixedGetSource)
+					return fixedValueGetSource;
+
+				string source = m_Source;
+
 				IClassMap superClassMap;
 				if (m_InheritsClass.Length > 0)
 				{
 					superClassMap = GetInheritedClassMap();
 					if (superClassMap != null)
 					{
-						return superClassMap.Source;
+						source = superClassMap.Source;
 					}
 				}
-				return m_Source;
+
+				if (isFixed)
+				{
+					fixedValueGetSource = source;
+					fixedGetSource = true;
+				}
+
+				return source;
 			}
 			set { m_Source = value; }
 		}
 
+		private bool fixedGetSourceMap = false;
+		private ISourceMap fixedValueGetSourceMap = null;
+
 		public virtual ISourceMap GetSourceMap()
 		{
+			if (fixedGetSourceMap)
+				return fixedValueGetSourceMap;
+
+			ISourceMap sourceMap = null;
+
 			if (Source == "")
 			{
-				return m_DomainMap.GetSourceMap();
+				sourceMap = m_DomainMap.GetSourceMap();
 			}
 			else
 			{
-				return m_DomainMap.GetSourceMap(Source);
+				sourceMap = m_DomainMap.GetSourceMap(Source);
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetSourceMap = sourceMap;
+				fixedGetSourceMap = true;
+			}
+
+			return sourceMap;
 		}
 
 		public virtual void SetSourceMap(ISourceMap value)
@@ -319,20 +349,35 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_Source = value.Name;
 		}
 
+		private bool fixedGetTable = false;
+		private string fixedValueGetTable = null;
+
 		public virtual string Table
 		{
 			get
 			{
+				if (fixedGetTable)
+					return fixedValueGetTable;
+
+				string table = m_Table;
+
 				IClassMap superClassMap;
 				if (m_InheritsClass.Length > 0)
 				{
 					superClassMap = GetInheritedClassMap();
 					if (superClassMap != null)
 					{
-						return superClassMap.Table;
+						table = superClassMap.Table;
 					}
 				}
-				return m_Table;
+
+				if (isFixed)
+				{
+					fixedValueGetTable = table;
+					fixedGetTable = true;
+				}
+
+				return table;
 			}
 			set { m_Table = value; }
 		}
@@ -348,14 +393,28 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return tableMap;
 		}
 
+		private bool fixedGetTableMap = false;
+		private ITableMap fixedValueGetTableMap = null;
+
 		public virtual ITableMap GetTableMap()
 		{
+			if (fixedGetTableMap)
+				return fixedValueGetTableMap;
+
+			ITableMap tableMap = null;
 			ISourceMap sourceMap = GetSourceMap();
-			if (sourceMap == null)
+			if (sourceMap != null)
 			{
-				return null;
+				tableMap = sourceMap.GetTableMap(Table);
 			}
-			return sourceMap.GetTableMap(Table);
+
+			if (isFixed)
+			{
+				fixedValueGetTableMap = tableMap;
+				fixedGetTableMap = true;
+			}
+
+			return tableMap;
 		}
 
 		public virtual void SetTableMap(ITableMap value)
@@ -363,8 +422,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_Table = value.Name;
 		}
 
+		private bool fixedGetPrimaryPropertyMaps = false;
+		private ArrayList fixedValueGetPrimaryPropertyMaps = null;
+
 		public virtual ArrayList GetPrimaryPropertyMaps()
 		{
+			if (fixedGetPrimaryPropertyMaps)
+				return fixedValueGetPrimaryPropertyMaps;
+
 			ArrayList arrProps = new ArrayList();
 			ITableMap tableMap = null;
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
@@ -385,17 +450,62 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetPrimaryPropertyMaps = arrProps;
+				fixedGetPrimaryPropertyMaps = true;
+			}
+
 			return arrProps;
 		}
 
+		private bool fixedGetIdentityPropertyMaps = false;
+		private ArrayList fixedValueGetIdentityPropertyMaps = null;
+
 		public virtual ArrayList GetIdentityPropertyMaps()
 		{
+			if (fixedGetIdentityPropertyMaps)
+				return fixedValueGetIdentityPropertyMaps;
+
 			bool sortingFailed = false;
-			return GetSortedIdentityPropertyMaps(ref sortingFailed, true);
+			ArrayList props = GetSortedIdentityPropertyMaps(ref sortingFailed, true);
+
+			if (isFixed)
+			{
+				fixedValueGetPrimaryPropertyMaps = props;
+				fixedGetPrimaryPropertyMaps = true;
+			}
+
+			return props;
 		}
+
+		private bool fixedGetSortedIdentityPropertyMaps = false;
+		private ArrayList fixedValueGetSortedIdentityPropertyMaps = null;
+		private bool fixedValueFailedGetSortedIdentityPropertyMaps = false;
+		private bool fixedGetSortedIdentityPropertyMapsInherited = false;
+		private ArrayList fixedValueGetSortedIdentityPropertyMapsInherited = null;
+		private bool fixedValueFailedGetSortedIdentityPropertyMapsInherited = false;
 
 		public virtual ArrayList GetSortedIdentityPropertyMaps(ref bool failedSorting, bool getInherited)
 		{
+			if (getInherited)
+			{
+				if (fixedGetSortedIdentityPropertyMapsInherited)
+				{
+					failedSorting = fixedValueFailedGetSortedIdentityPropertyMapsInherited;
+					return fixedValueGetSortedIdentityPropertyMapsInherited;
+				}
+			}
+			else
+			{
+				if (fixedGetSortedIdentityPropertyMaps)
+				{
+					failedSorting = fixedValueFailedGetSortedIdentityPropertyMaps;
+					return fixedValueGetSortedIdentityPropertyMaps;
+				}
+			}
+
 			ArrayList arrProps = new ArrayList();
 			IClassMap superClassMap = GetInheritedClassMap();
 			if (getInherited)
@@ -424,31 +534,89 @@ namespace Puzzle.NPersist.Framework.Mapping
 				if (propertyMap.IdentityIndex > arr.GetUpperBound(0))
 				{
 					failedSorting = true;
-					return arrProps;
+					break;
 				}
 				if (!(arr[propertyMap.IdentityIndex] == null))
 				{
 					failedSorting = true;
-					return arrProps;
+					break;
 				}
 				arr[propertyMap.IdentityIndex] = propertyMap;
 			}
-			arrProps.Clear();
-			foreach (IPropertyMap propertyMap in arr)
+			if (!failedSorting)
 			{
-				arrProps.Add(propertyMap);
+				arrProps.Clear();
+				foreach (IPropertyMap propertyMap in arr)
+				{
+					arrProps.Add(propertyMap);
+				}				
 			}
+
+			if (isFixed)
+			{
+				if (getInherited)
+				{
+					fixedValueFailedGetSortedIdentityPropertyMapsInherited = failedSorting;
+					fixedValueGetSortedIdentityPropertyMapsInherited = arrProps;
+					fixedGetSortedIdentityPropertyMapsInherited = true;
+				}
+				else
+				{
+					fixedValueFailedGetSortedIdentityPropertyMaps = failedSorting;
+					fixedValueGetSortedIdentityPropertyMaps = arrProps;
+					fixedGetSortedIdentityPropertyMaps = true;										
+				}
+			}
+
 			return arrProps;
 		}
 
+		private bool fixedGetKeyPropertyMaps = false;
+		private ArrayList fixedValueGetKeyPropertyMaps = null;
+
 		public virtual ArrayList GetKeyPropertyMaps()
 		{
+			if (fixedGetKeyPropertyMaps)
+				return fixedValueGetKeyPropertyMaps;
+
 			bool sortingFailed = false;
-			return GetSortedKeyPropertyMaps(ref sortingFailed, true);
+			ArrayList props = GetSortedKeyPropertyMaps(ref sortingFailed, true);
+
+			if (isFixed)
+			{
+				fixedValueGetKeyPropertyMaps = props;
+				fixedGetKeyPropertyMaps = true;
+			}
+
+			return props;
 		}
+
+		private bool fixedGetSortedKeyPropertyMaps = false;
+		private ArrayList fixedValueGetSortedKeyPropertyMaps = null;
+		private bool fixedValueFailedGetSortedKeyPropertyMaps = false;
+		private bool fixedGetSortedKeyPropertyMapsInherited = false;
+		private ArrayList fixedValueGetSortedKeyPropertyMapsInherited = null;
+		private bool fixedValueFailedGetSortedKeyPropertyMapsInherited = false;
 
 		public virtual ArrayList GetSortedKeyPropertyMaps(ref bool failedSorting, bool getInherited)
 		{
+			if (getInherited)
+			{
+				if (fixedGetSortedKeyPropertyMapsInherited)
+				{
+					failedSorting = fixedValueFailedGetSortedKeyPropertyMapsInherited;
+					return fixedValueGetSortedKeyPropertyMapsInherited;
+				}
+			}
+			else
+			{
+				if (fixedGetSortedKeyPropertyMaps)
+				{
+					failedSorting = fixedValueFailedGetSortedKeyPropertyMaps;
+					return fixedValueGetSortedKeyPropertyMaps;
+				}
+			}
+
 			ArrayList arrProps = new ArrayList();
 			IClassMap superClassMap = GetInheritedClassMap();
 			if (getInherited)
@@ -477,38 +645,80 @@ namespace Puzzle.NPersist.Framework.Mapping
 				if (propertyMap.KeyIndex > arr.GetUpperBound(0))
 				{
 					failedSorting = true;
-					return arrProps;
+					break;
 				}
 				if (!(arr[propertyMap.KeyIndex] == null))
 				{
 					failedSorting = true;
-					return arrProps;
+					break;
 				}
 				arr[propertyMap.KeyIndex] = propertyMap;
 			}
-			arrProps.Clear();
-			foreach (IPropertyMap propertyMap in arr)
+			if (!failedSorting)
 			{
-				arrProps.Add(propertyMap);
+				arrProps.Clear();
+				foreach (IPropertyMap propertyMap in arr)
+				{
+					arrProps.Add(propertyMap);
+				}				
 			}
+
+			if (isFixed)
+			{
+				if (getInherited)
+				{
+					fixedValueFailedGetSortedKeyPropertyMapsInherited = failedSorting;
+					fixedValueGetSortedKeyPropertyMapsInherited = arrProps;
+					fixedGetSortedKeyPropertyMapsInherited = true;
+				}
+				else
+				{
+					fixedValueFailedGetSortedKeyPropertyMaps = failedSorting;
+					fixedValueGetSortedKeyPropertyMaps = arrProps;
+					fixedGetSortedKeyPropertyMaps = true;										
+				}
+			}
+
 			return arrProps;
 		}
 
+		private bool fixedHasAssignedBySource = false;
+		private bool fixedValueHasAssignedBySource = false;
 
 		public virtual bool HasAssignedBySource()
 		{
+			if (fixedHasAssignedBySource)
+				return fixedValueHasAssignedBySource;
+
+			bool hasAssignedBySource = false;
 			foreach (IPropertyMap propertyMap in GetAllPropertyMaps())
 			{
 				if (propertyMap.GetIsAssignedBySource())
 				{
-					return true;
+					hasAssignedBySource = true;
+					break;
 				}
 			}
-			return false;
+
+			if (isFixed)
+			{
+				fixedValueHasAssignedBySource = hasAssignedBySource;
+				fixedHasAssignedBySource = true;
+			}
+
+			return hasAssignedBySource;
 		}
+
+		private bool fixedHasGuid = false;
+		private bool fixedValueHasGuid = false;
 
 		public virtual bool HasGuid()
 		{
+			if (fixedHasGuid)
+				return fixedValueHasGuid;
+
+			bool hasGuid = false;
+
 			IColumnMap columnMap;
 			foreach (IPropertyMap propertyMap in GetAllPropertyMaps())
 			{
@@ -517,27 +727,59 @@ namespace Puzzle.NPersist.Framework.Mapping
 				{
 					if (columnMap.DataType == DbType.Guid)
 					{
-						return true;
+						hasGuid = true;
+						break;
 					}
 				}
 			}
-			return false;
+
+			if (isFixed)
+			{
+				fixedValueHasGuid = hasGuid;
+				fixedHasGuid = true;
+			}
+
+			return hasGuid;
 		}
+
+		private bool fixedHasIdAssignedBySource = false;
+		private bool fixedValueHasIdAssignedBySource = false;
 
 		public virtual bool HasIdAssignedBySource()
 		{
+			if (fixedHasIdAssignedBySource)
+				return fixedValueHasIdAssignedBySource;
+
+			bool hasIdAssignedBySource = false;
+
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
 			{
 				if (propertyMap.GetIsAssignedBySource())
 				{
-					return true;
+					hasIdAssignedBySource = true;
+					break;
 				}
 			}
-			return false;
+
+			if (isFixed)
+			{
+				fixedValueHasIdAssignedBySource = hasIdAssignedBySource;
+				fixedHasIdAssignedBySource = true;
+			}
+
+			return hasIdAssignedBySource;
 		}
+
+		private bool fixedHasIdGuid = false;
+		private bool fixedValueHasIdGuid = false;
 
 		public virtual bool HasIdGuid()
 		{
+			if (fixedHasIdGuid)
+				return fixedValueHasIdGuid;
+
+			bool hasIdGuid = false;
+
 			IColumnMap columnMap;
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
 			{
@@ -546,15 +788,31 @@ namespace Puzzle.NPersist.Framework.Mapping
 				{
 					if (columnMap.DataType == DbType.Guid)
 					{
-						return true;
+						hasIdGuid = true;
+						break;
 					}
 				}
 			}
-			return false;
+
+			if (isFixed)
+			{
+				fixedValueHasIdGuid = hasIdGuid;
+				fixedHasIdGuid = true;
+			}
+
+			return hasIdGuid;
 		}
+
+		private bool fixedHasSingleIdAutoIncreaser = false;
+		private bool fixedValueHasSingleIdAutoIncreaser = false;
 
 		public virtual bool HasSingleIdAutoIncreaser()
 		{
+			if (fixedHasSingleIdAutoIncreaser)
+				return fixedValueHasSingleIdAutoIncreaser;
+
+			bool hasSingleIdAutoIncreaser = false;
+
 			IColumnMap columnMap;
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
 			{
@@ -563,40 +821,79 @@ namespace Puzzle.NPersist.Framework.Mapping
 				{
 					if (columnMap.IsAutoIncrease)
 					{
-						return true;
+						hasSingleIdAutoIncreaser = true;
+						break;
 					}
 				}
 			}
-			return false;
+
+			if (isFixed)
+			{
+				fixedValueHasSingleIdAutoIncreaser = hasSingleIdAutoIncreaser;
+				fixedHasSingleIdAutoIncreaser = true;
+			}
+
+			return hasSingleIdAutoIncreaser;
 		}
+
+		private bool fixedGetAutoIncreasingIdentityPropertyMap = false;
+		private IPropertyMap fixedValueGetAutoIncreasingIdentityPropertyMap = null;
 
 		public virtual IPropertyMap GetAutoIncreasingIdentityPropertyMap()
 		{
-			IColumnMap columnMap;
+			if (fixedGetAutoIncreasingIdentityPropertyMap)
+				return fixedValueGetAutoIncreasingIdentityPropertyMap;
+
+			IPropertyMap autoIncreasingIdentityPropertyMap = null;
+
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
 			{
-				columnMap = propertyMap.GetColumnMap();
+				IColumnMap columnMap = propertyMap.GetColumnMap();
 				if (columnMap != null)
 				{
 					if (columnMap.IsAutoIncrease)
 					{
-						return propertyMap;
+						autoIncreasingIdentityPropertyMap = propertyMap;
+						break;
 					}
 				}
 			}
-			return null;
+
+			if (isFixed)
+			{
+				fixedValueGetAutoIncreasingIdentityPropertyMap = autoIncreasingIdentityPropertyMap;
+				fixedGetAutoIncreasingIdentityPropertyMap = true;
+			}
+
+			return autoIncreasingIdentityPropertyMap ;
 		}
+
+		private bool fixedGetAssignedBySourceIdentityPropertyMap = false;
+		private IPropertyMap fixedValueGetAssignedBySourceIdentityPropertyMap = null;
 
 		public virtual IPropertyMap GetAssignedBySourceIdentityPropertyMap()
 		{
+			if (fixedGetAssignedBySourceIdentityPropertyMap)
+				return fixedValueGetAssignedBySourceIdentityPropertyMap;
+
+			IPropertyMap assignedBySourceIdentityPropertyMap = null;
+
 			foreach (IPropertyMap propertyMap in GetIdentityPropertyMaps())
 			{
 				if (propertyMap.GetIsAssignedBySource())
 				{
-					return propertyMap;
+					assignedBySourceIdentityPropertyMap = propertyMap;
+					break;
 				}
 			}
-			return null;
+
+			if (isFixed)
+			{
+				fixedValueGetAssignedBySourceIdentityPropertyMap = assignedBySourceIdentityPropertyMap;
+				fixedGetAssignedBySourceIdentityPropertyMap = true;
+			}
+
+			return assignedBySourceIdentityPropertyMap;
 		}
 
 		public virtual string IdentitySeparator
@@ -605,9 +902,23 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_IdentitySeparator = value; }
 		}
 
+		private bool fixedGetIdentitySeparator = false;
+		private string fixedValueGetIdentitySeparator = null;
+
 		public virtual string GetIdentitySeparator()
 		{
-			return InternalGetIdentitySeparator(new Hashtable());
+			if (fixedGetIdentitySeparator)
+				return fixedValueGetIdentitySeparator;
+
+			string identitySeparator = InternalGetIdentitySeparator(new Hashtable());
+
+			if (isFixed)
+			{
+				fixedValueGetIdentitySeparator = identitySeparator;
+				fixedGetIdentitySeparator = true;
+			}
+
+			return identitySeparator;
 		}
 
 		private string InternalGetIdentitySeparator(Hashtable visited)
@@ -629,9 +940,23 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_KeySeparator = value; }
 		}
 
+		private bool fixedGetKeySeparator = false;
+		private string fixedValueGetKeySeparator = null;
+
 		public virtual string GetKeySeparator()
 		{
-			return InternalGetKeySeparator(new Hashtable());
+			if (fixedGetKeySeparator)
+				return fixedValueGetKeySeparator;
+
+			string keySeparator = InternalGetKeySeparator(new Hashtable());
+
+			if (isFixed)
+			{
+				fixedValueGetKeySeparator = keySeparator;
+				fixedGetKeySeparator = true;
+			}
+
+			return keySeparator;
 		}
 
 		private string InternalGetKeySeparator(Hashtable visited)
@@ -659,14 +984,28 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_TypeColumn = value; }
 		}
 
+		private bool fixedGetTypeColumnMap = false;
+		private IColumnMap fixedValueGetTypeColumnMap = null;
+
 		public virtual IColumnMap GetTypeColumnMap()
 		{
+			if (fixedGetTypeColumnMap)
+				return fixedValueGetTypeColumnMap;
+
+			IColumnMap typeColumnMap = null;
 			ITableMap tableMap = GetTableMap();
 			if (tableMap != null)
 			{
-				return GetTableMap().GetColumnMap(m_TypeColumn);
+				typeColumnMap = GetTableMap().GetColumnMap(m_TypeColumn);
 			}
-			return null;
+
+			if (isFixed)
+			{
+				fixedValueGetTypeColumnMap = typeColumnMap;
+				fixedGetTypeColumnMap = true;
+			}
+
+			return typeColumnMap ;
 		}
 
 		public virtual void SetTypeColumnMap(IColumnMap value)
@@ -691,14 +1030,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 			get { return m_IsAbstract; }
 			set { m_IsAbstract = value; }
 		}
+
+		private bool fixedGetAllPropertyMaps = false;
+		private ArrayList fixedValueGetAllPropertyMaps = null;
 		
-		//[DebuggerStepThrough()]
 		public virtual ArrayList GetAllPropertyMaps()
 		{
-			if (IsFixed("GetAllPropertyMaps"))
-			{
-				return (ArrayList) GetFixedValue("GetAllPropertyMaps");
-			}
+			if (fixedGetAllPropertyMaps)
+				return fixedValueGetAllPropertyMaps;
+
 			ArrayList arrProps = new ArrayList();
 			Hashtable hashAdded;
 			IClassMap superClass;
@@ -751,15 +1091,23 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
-			if (IsFixed())
+			if (isFixed)
 			{
-				SetFixedValue("GetAllPropertyMaps", arrProps);
+				fixedValueGetAllPropertyMaps = arrProps;
+				fixedGetAllPropertyMaps = true;
 			}
+
 			return arrProps;
 		}
 
+		private bool fixedGetInheritedPropertyMaps = false;
+		private ArrayList fixedValueGetInheritedPropertyMaps = null;
+
 		public virtual ArrayList GetInheritedPropertyMaps()
 		{
+			if (fixedGetInheritedPropertyMaps)
+				return fixedValueGetInheritedPropertyMaps;
+
 			IClassMap superClass = GetInheritedClassMap();
 			ArrayList propertyMaps = new ArrayList();
 			if (superClass != null)
@@ -777,11 +1125,23 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+			if (isFixed)
+			{
+				fixedValueGetInheritedPropertyMaps = propertyMaps;
+				fixedGetInheritedPropertyMaps = true;
+			}
+
 			return propertyMaps;
 		}
 
+		private bool fixedGetNonInheritedPropertyMaps = false;
+		private ArrayList fixedValueGetNonInheritedPropertyMaps = null;
+
 		public virtual ArrayList GetNonInheritedPropertyMaps()
 		{
+			if (fixedGetNonInheritedPropertyMaps)
+				return fixedValueGetNonInheritedPropertyMaps;
+
 			ArrayList arrProps = new ArrayList();
 			foreach (IPropertyMap propertyMap in GetNonInheritedIdentityPropertyMaps())
 			{
@@ -794,41 +1154,91 @@ namespace Puzzle.NPersist.Framework.Mapping
 					arrProps.Add(propertyMap);
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetNonInheritedPropertyMaps = arrProps;
+				fixedGetNonInheritedPropertyMaps = true;
+			}
+
 			return arrProps;
 		}
 
+		private bool fixedGetNonInheritedIdentityPropertyMaps = false;
+		private ArrayList fixedValueGetNonInheritedIdentityPropertyMaps = null;
+
 		public virtual ArrayList GetNonInheritedIdentityPropertyMaps()
 		{
+			if (fixedGetNonInheritedIdentityPropertyMaps)
+				return fixedValueGetNonInheritedIdentityPropertyMaps;
+
 			bool sortingFailed = false;
-			return GetSortedIdentityPropertyMaps(ref sortingFailed, false);
+			ArrayList sortedIdentityPropertyMaps = GetSortedIdentityPropertyMaps(ref sortingFailed, false);
+
+			if (isFixed)
+			{
+				fixedValueGetNonInheritedIdentityPropertyMaps = sortedIdentityPropertyMaps;
+				fixedGetNonInheritedIdentityPropertyMaps = true;
+			}
+
+			return sortedIdentityPropertyMaps;
 		}
+
+		private bool fixedGetInheritedIdentityPropertyMaps = false;
+		private ArrayList fixedValueGetInheritedIdentityPropertyMaps = null;
 
 		public virtual ArrayList GetInheritedIdentityPropertyMaps()
 		{
+			if (fixedGetInheritedIdentityPropertyMaps)
+				return fixedValueGetInheritedIdentityPropertyMaps;
+
+			ArrayList inheritedIdentityPropertyMaps = null ;
+
 			IClassMap superClass = GetInheritedClassMap();
 			if (superClass == null)
+				inheritedIdentityPropertyMaps = new ArrayList();
+			else
+				inheritedIdentityPropertyMaps = superClass.GetIdentityPropertyMaps();
+
+			if (isFixed)
 			{
-				return new ArrayList();
+				fixedValueGetInheritedIdentityPropertyMaps = inheritedIdentityPropertyMaps;
+				fixedGetInheritedIdentityPropertyMaps = true;
 			}
-			return superClass.GetIdentityPropertyMaps();
+
+			return inheritedIdentityPropertyMaps ;
 		}
+
+		private bool fixedGetInheritedClassMap = false;
+		private IClassMap fixedValueGetInheritedClassMap = null;
 
 		public virtual IClassMap GetInheritedClassMap()
 		{
-			if (m_InheritsClass.Length < 1)
+			if (fixedGetInheritedClassMap)
+				return fixedValueGetInheritedClassMap;
+
+			IClassMap classMap = null;
+
+			if (m_InheritsClass.Length > 0)
 			{
-				return null;
-			}
-			string ns;
-			IClassMap classMap = DomainMap.GetClassMap(m_InheritsClass);
-			if (classMap == null)
-			{
-				ns = GetNamespace();
-				if (ns.Length > 0)
+				string ns;
+				classMap = DomainMap.GetClassMap(m_InheritsClass);
+				if (classMap == null)
 				{
-					classMap = DomainMap.GetClassMap(ns + "." + m_InheritsClass);
+					ns = GetNamespace();
+					if (ns.Length > 0)
+					{
+						classMap = DomainMap.GetClassMap(ns + "." + m_InheritsClass);
+					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetInheritedClassMap = classMap;
+				fixedGetInheritedClassMap = true;
+			}
+
 			return classMap;
 		}
 
@@ -899,48 +1309,91 @@ namespace Puzzle.NPersist.Framework.Mapping
 			m_name = newName;
 		}
 
+		private bool fixedGetFullName = false;
+		private string fixedValueGetFullName = null;
+
 		public virtual string GetFullName()
 		{
-			if (m_name == "")
+			if (fixedGetFullName)
+				return fixedValueGetFullName;
+
+			string name = m_name;
+			if (name != "")
 			{
-				return "";
+				if (m_DomainMap.RootNamespace.Length > 0)
+					name = m_DomainMap.RootNamespace + "." + name;
 			}
-			if (m_DomainMap.RootNamespace.Length > 0)
+
+			if (isFixed)
 			{
-				return m_DomainMap.RootNamespace + "." + m_name;
+				fixedValueGetFullName = name;
+				fixedGetFullName = true;
 			}
-			else
-			{
-				return m_name;
-			}
+
+			return name;
 		}
+
+		private bool fixedGetName = false;
+		private string fixedValueGetName = null;
 
 		public virtual string GetName()
 		{
-			if (m_name == "")
+			if (fixedGetName)
+				return fixedValueGetName;
+
+			string name = m_name;
+
+			if (name != "")
 			{
-				return "";
+				string[] arrName = name.Split('.');
+				name = arrName[arrName.GetUpperBound(0)];
 			}
-			string[] arrName = m_name.Split('.');
-			return arrName[arrName.GetUpperBound(0)];
+
+			if (isFixed)
+			{
+				fixedValueGetName = name;
+				fixedGetName = true;
+			}
+
+			return name;
 		}
+
+		private bool fixedGetNamespace = false;
+		private string fixedValueGetNamespace = null;
 
 		public virtual string GetNamespace()
 		{
-			if (m_name == "")
+			if (fixedGetNamespace)
+				return fixedValueGetNamespace;
+
+			string name = m_name;
+
+			if (name != "")
 			{
-				return "";
+				string[] arrName = m_name.Split('.');
+				if (arrName.GetUpperBound(0) > 0)
+				{
+					name = m_name.Substring(0, m_name.Length - 1 - arrName[arrName.GetUpperBound(0)].Length);
+				}
 			}
-			string[] arrName = m_name.Split('.');
-			if (arrName.GetUpperBound(0) < 1)
+
+			if (isFixed)
 			{
-				return "";
+				fixedValueGetNamespace = name;
+				fixedGetNamespace = true;
 			}
-			return m_name.Substring(0, m_name.Length - 1 - arrName[arrName.GetUpperBound(0)].Length);
+
+			return name;
 		}
+
+		private bool fixedGetFullNamespace = false;
+		private string fixedValueGetFullNamespace = null;
 
 		public virtual string GetFullNamespace()
 		{
+			if (fixedGetFullNamespace)
+				return fixedValueGetFullNamespace;
+
 			string rootNs = this.DomainMap.RootNamespace;
 			string ns = this.GetNamespace();
 			if (rootNs.Length > 0)
@@ -954,6 +1407,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 					ns = rootNs;
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetFullNamespace = ns;
+				fixedGetFullNamespace = true;
+			}
+
 			return ns;
 		}
 
@@ -975,15 +1435,21 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		public virtual IPropertyMap GetPropertyMapForColumnMap(IColumnMap columnMap)
 		{
-			IColumnMap testColumnMap;
+			string key = "GetPropertyMapForColumnMap_" + columnMap.TableMap.SourceMap.Name + "." + columnMap.TableMap.Name + "." + columnMap.Name;
+
+			if (IsFixed(key))
+				return (IPropertyMap) GetFixedValue(key);
+
+			IPropertyMap propertyMapForColumnMap = null;
 			foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
 			{
-				testColumnMap = propertyMap.GetColumnMap();
+				IColumnMap testColumnMap = propertyMap.GetColumnMap();
 				if (testColumnMap != null)
 				{
 					if (testColumnMap == columnMap)
 					{
-						return propertyMap;
+						propertyMapForColumnMap = propertyMap;
+						break;
 					}
 				}
 				testColumnMap = propertyMap.GetIdColumnMap();
@@ -991,29 +1457,42 @@ namespace Puzzle.NPersist.Framework.Mapping
 				{
 					if (testColumnMap == columnMap)
 					{
-						return propertyMap;
+						propertyMapForColumnMap = propertyMap;
+						break;
 					}
-				}
+				}					
 				foreach (IColumnMap checkColumnMap in propertyMap.GetAdditionalColumnMaps())
 				{
 					if (checkColumnMap == columnMap)
 					{
-						return propertyMap;
+						propertyMapForColumnMap = propertyMap;
+						break;
 					}
-				}
+				}					
 				foreach (IColumnMap checkColumnMap in propertyMap.GetAdditionalIdColumnMaps())
 				{
 					if (checkColumnMap == columnMap)
 					{
-						return propertyMap;
+						propertyMapForColumnMap = propertyMap;
+						break;
 					}
 				}
 			}
-			return null;
+
+			if (IsFixed())
+				SetFixedValue(key, propertyMapForColumnMap);
+
+			return propertyMapForColumnMap;
 		}
+
+		private bool fixedGetDirectSubClassMaps = false;
+		private ArrayList fixedValueGetDirectSubClassMaps = null;
 
 		public virtual ArrayList GetDirectSubClassMaps()
 		{
+			if (fixedGetDirectSubClassMaps)
+				return fixedValueGetDirectSubClassMaps;
+
 			ArrayList classMaps = new ArrayList();
 			IClassMap superClassMap;
 			foreach (IClassMap classMap in m_DomainMap.ClassMaps)
@@ -1030,11 +1509,24 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetDirectSubClassMaps = classMaps;
+				fixedGetDirectSubClassMaps = true;
+			}
+
 			return classMaps;
 		}
 
+		private bool fixedGetSubClassMaps = false;
+		private ArrayList fixedValueGetSubClassMaps = null;
+
 		public virtual ArrayList GetSubClassMaps()
 		{
+			if (fixedGetSubClassMaps)
+				return fixedValueGetSubClassMaps;
+
 			ArrayList classMaps = new ArrayList();
 			foreach (IClassMap classMap in m_DomainMap.ClassMaps)
 			{
@@ -1046,6 +1538,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 					}
 				}
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetSubClassMaps = classMaps;
+				fixedGetSubClassMaps = true;
+			}
+
 			return classMaps;
 		}
 
@@ -1091,6 +1590,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return false;
 		}
 
+
 		public virtual IClassMap GetSubClassWithTypeValue(string value)
 		{
 			if (TypeValue == value)
@@ -1107,8 +1607,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return null;
 		}
 
+		private bool fixedGetBaseClassMap = false;
+		private IClassMap fixedValueGetBaseClassMap = null;
+
 		public virtual IClassMap GetBaseClassMap()
 		{
+			if (fixedGetBaseClassMap)
+				return fixedValueGetBaseClassMap;
+
 			IClassMap classMap = this;
 			IClassMap baseClassMap = classMap.GetInheritedClassMap();
 			while (baseClassMap != null)
@@ -1116,20 +1622,38 @@ namespace Puzzle.NPersist.Framework.Mapping
 				classMap = baseClassMap;
 				baseClassMap = classMap.GetInheritedClassMap();
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetBaseClassMap = classMap;
+				fixedGetBaseClassMap = true;
+			}
+
 			return classMap;
 		}
 
+		private bool fixedIsInHierarchy = false;
+		private bool fixedValueIsInHierarchy = false;
+
 		public virtual bool IsInHierarchy()
 		{
-			if (!(this.GetInheritedClassMap() == null))
+			if (fixedIsInHierarchy)
+				return fixedValueIsInHierarchy;
+
+			bool isInHierarchy = false;
+
+			if (this.GetInheritedClassMap() != null)
+				isInHierarchy = true;
+			else if (this.HasSubClasses())
+				isInHierarchy = true;
+
+			if (isFixed)
 			{
-				return true;
+				fixedValueIsInHierarchy = isInHierarchy;
+				fixedIsInHierarchy = true;
 			}
-			if (this.HasSubClasses())
-			{
-				return true;
-			}
-			return false;
+
+			return isInHierarchy;
 		}
 
 		public bool IsInheritedProperty(IPropertyMap propertyMap)
@@ -1363,8 +1887,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { commitRegions = value; }
 		}
 
+		private bool fixedGetCommitRegions = false;
+		private IList fixedValueGetCommitRegions = null;
+
 		public IList GetCommitRegions()
 		{
+			if (fixedGetCommitRegions)
+				return fixedValueGetCommitRegions;
+
 			string[] regions = commitRegions.Split(";".ToCharArray());
 			IList result = new ArrayList();
 			foreach (string region in regions)
@@ -1372,6 +1902,13 @@ namespace Puzzle.NPersist.Framework.Mapping
 				if (region != "")
 					result.Add(region);
 			}
+
+			if (isFixed)
+			{
+				fixedValueGetCommitRegions = result;
+				fixedGetCommitRegions = true;
+			}
+
 			return result;
 		}
 
@@ -1896,6 +2433,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				propertyMap.Fixate();
 			}
+			this.isFixed = true; 
 		}
 
 		public override void UnFixate()
@@ -1905,6 +2443,41 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				propertyMap.UnFixate();
 			}
+			this.isFixed = false; 
+			this.fixedGetSource = false;
+			this.fixedGetSourceMap = false;
+			this.fixedGetTable = false;
+			this.fixedGetTableMap = false;
+			this.fixedGetPrimaryPropertyMaps = false;
+			this.fixedGetIdentityPropertyMaps = false;
+			this.fixedGetSortedIdentityPropertyMaps = false;
+			this.fixedGetSortedIdentityPropertyMapsInherited = false;
+			this.fixedGetSortedKeyPropertyMaps = false;
+			this.fixedGetSortedKeyPropertyMapsInherited = false;
+			this.fixedHasAssignedBySource = false;
+			this.fixedHasGuid = false;
+			this.fixedHasIdAssignedBySource = false;
+			this.fixedHasIdGuid = false;
+			this.fixedHasSingleIdAutoIncreaser = false;
+			this.fixedGetAutoIncreasingIdentityPropertyMap = false;
+			this.fixedGetAssignedBySourceIdentityPropertyMap = false;
+			this.fixedGetIdentitySeparator = false;
+			this.fixedGetTypeColumnMap = false;
+			this.fixedGetAllPropertyMaps = false;
+			this.fixedGetInheritedPropertyMaps = false;
+			this.fixedGetNonInheritedPropertyMaps = false;
+			this.fixedGetNonInheritedIdentityPropertyMaps = false;
+			this.fixedGetInheritedIdentityPropertyMaps = false;
+			this.fixedGetInheritedClassMap = false;
+			this.fixedGetFullName = false;
+			this.fixedGetName = false;
+			this.fixedGetNamespace = false;
+			this.fixedGetFullNamespace = false;
+			this.fixedGetDirectSubClassMaps = false;
+			this.fixedGetSubClassMaps = false;
+			this.fixedGetBaseClassMap = false;
+			this.fixedIsInHierarchy = false;
+			this.fixedGetCommitRegions = false;
 		}
 
 		#endregion

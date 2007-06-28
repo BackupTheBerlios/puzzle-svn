@@ -26,6 +26,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		string GetFieldName();
 
+		bool IsGenerated { get; set; }
+
 		string DataType { get; set; }
 
 		string ItemType { get; set; }

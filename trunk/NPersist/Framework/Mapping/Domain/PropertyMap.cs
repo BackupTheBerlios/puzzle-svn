@@ -44,6 +44,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private string m_DataType = "";
 		private string m_ItemType = "";
 		private string m_DefaultValue = "";
+		private bool m_IsGenerated = false;
 		private bool m_IsCollection = false;
 		private bool m_IsIdentity = false;
 		private int m_IdentityIndex = 0;
@@ -156,6 +157,18 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set
 			{
 				m_Name = value;
+			}
+		}
+
+		public virtual bool IsGenerated
+		{
+			get
+			{
+				return m_IsGenerated;
+			}
+			set
+			{
+				m_IsGenerated = value;
 			}
 		}
 
@@ -1955,6 +1968,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			propertyMap.IdentityGenerator = this.IdentityGenerator;
 			propertyMap.InheritInverseMappings = this.InheritInverseMappings;
 			propertyMap.Inverse = this.Inverse;
+			propertyMap.IsGenerated = this.IsGenerated;
 			propertyMap.IsCollection = this.IsCollection;
 			propertyMap.IsNullable = this.IsNullable;
 			propertyMap.IsAssignedBySource = this.IsAssignedBySource;
@@ -2076,6 +2090,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return false;
 			}
 			if (!(propertyMap.Inverse == this.Inverse))
+			{
+				return false;
+			}
+			if (!(propertyMap.IsGenerated == this.IsGenerated))
 			{
 				return false;
 			}
