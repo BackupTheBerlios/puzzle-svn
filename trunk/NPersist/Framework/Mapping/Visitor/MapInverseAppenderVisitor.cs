@@ -31,7 +31,31 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 
 		public void Visit(IDomainMap domainMap)
 		{
-			;
+			bool isFixed = domainMap.IsFixed();
+			if (isFixed)
+				domainMap.UnFixate();
+
+			Hashtable newInverseProperties = new Hashtable();
+
+			foreach (IClassMap classMap in domainMap.ClassMaps)
+			{
+				foreach (IPropertyMap propertyMap in classMap.PropertyMaps)
+				{
+					CreateInverseProperty(propertyMap, newInverseProperties);				
+				}				
+			}
+
+			foreach (IClassMap classMap in newInverseProperties.Keys)
+			{
+				IList inverseProperties = (IList) newInverseProperties[classMap];
+				foreach (IPropertyMap inverseProperty in inverseProperties)
+				{
+					inverseProperty.ClassMap = classMap;
+				}
+			}
+
+			if (isFixed)
+				domainMap.Fixate();
 		}
 
 		public void Visit(ICodeMap codeMap)
@@ -51,15 +75,7 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 
 		public void Visit(IPropertyMap propertyMap)
 		{
-			if (propertyMap.ReferenceType.Equals(ReferenceType.None))
-				return;
-			if (propertyMap.GetInversePropertyMap() != null)
-				return;
-			if (propertyMap.NoInverseManagement)
-				return;
-			if (propertyMap.GetTableMap() == null)
-				return;
-			CreateInverseProperty(propertyMap);
+			;
 		}
 
 		public void Visit(ISourceListMap sourceListMap)
@@ -87,8 +103,17 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 			;
 		}
 
-		private void CreateInverseProperty(IPropertyMap propertyMap)
+		private void CreateInverseProperty(IPropertyMap propertyMap, Hashtable newInverseProperties)
 		{
+			if (propertyMap.ReferenceType.Equals(ReferenceType.None))
+				return;
+			if (propertyMap.GetInversePropertyMap() != null)
+				return;
+			if (propertyMap.NoInverseManagement)
+				return;
+			if (propertyMap.GetTableMap() == null)
+				return;
+
 			IClassMap refClassMap = propertyMap.MustGetReferencedClassMap();
 			string inverseName = propertyMap.Inverse;
 			if (inverseName == "")
@@ -133,7 +158,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 					break;
 			}
 
-			inversePropertyMap.ClassMap = refClassMap;
+			if (!newInverseProperties.ContainsKey(refClassMap))
+				newInverseProperties[refClassMap] = new ArrayList();
+			IList propertiesForClass = (IList) newInverseProperties[refClassMap];
+			propertiesForClass.Add(inversePropertyMap);
 		}
 	}
 }
