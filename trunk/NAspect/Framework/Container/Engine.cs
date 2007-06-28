@@ -246,11 +246,11 @@ namespace Puzzle.NAspect.Framework
                 if (proxyLookup[type] == null)
                 {
                     Type extendedType = type;
-                    foreach (ITypeExtender typeExtender in configuration.TypeExtenders)
-                    {
-                        extendedType = typeExtender.Extend(extendedType);
-                        wasExtended = true;
-                    }
+                    //foreach (ITypeExtender typeExtender in configuration.TypeExtenders)
+                    //{
+                    //    extendedType = typeExtender.Extend(extendedType);
+                    //    wasExtended = true;
+                    //}
                     
                     IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
@@ -264,6 +264,19 @@ namespace Puzzle.NAspect.Framework
                         AddSerializerMixin(typeMixins);
                     }
 #endif
+
+                    foreach (object aspect in typeAspects)
+                    {
+                        if (aspect is GenericAspectBase)
+                        {
+                            GenericAspectBase genericAspect = (GenericAspectBase)aspect;
+                            foreach (TypeExtender typeExtender in genericAspect.TypeExtenders)
+                            {
+                                wasExtended = true;
+                                extendedType = typeExtender.Extend(extendedType);                                
+                            }
+                        }
+                    }
 
 
                     proxyType = SubclassProxyFactory.CreateProxyType(extendedType, typeAspects, typeMixins, this);
