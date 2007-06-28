@@ -94,6 +94,21 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
         }                        
         #endregion
 
+        #region Property IsGenerated
+        private bool isGenerated;
+        public bool IsGenerated
+        {
+            get
+            {
+                return this.isGenerated;
+            }
+            set
+            {
+                this.isGenerated = value;
+            }
+        }
+        #endregion
+
         #region Property IsCollection 
         private bool isCollection;
         public bool IsCollection

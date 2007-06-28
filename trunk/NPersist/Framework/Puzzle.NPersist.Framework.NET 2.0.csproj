@@ -610,6 +610,7 @@
     <Compile Include="Mapping\Visitor\IMapVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mapping\Visitor\MapInverseAppenderVisitor.cs" />
     <Compile Include="Mapping\Visitor\MapVerificationVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
