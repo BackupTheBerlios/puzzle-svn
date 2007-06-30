@@ -163,7 +163,8 @@ namespace Puzzle.NPersist.Framework.Persistence
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            string npath = "Select * From " + type.Name;
+			//Thanks to Kenken for a bug fix here!
+            string npath = "Select * From " + type.FullName;
             return LoadObjects(new NPathQuery(npath, type, null, refreshBehavior), listToFill);
         }
 

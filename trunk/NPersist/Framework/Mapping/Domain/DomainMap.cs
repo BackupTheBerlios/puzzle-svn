@@ -346,6 +346,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		protected virtual void Validate()
 		{
+			//Add inverse properties where missing
+			MapInverseAppenderVisitor inverseAppenderVisitor = new MapInverseAppenderVisitor();
+			this.Accept(inverseAppenderVisitor);
 
             Assembly assembly = null;
 
@@ -379,31 +382,33 @@ namespace Puzzle.NPersist.Framework.Mapping
 
                 foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps())
                 {
-                    PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-				    if (propertyInfo == null)
-                        throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
+					if (!propertyMap.IsGenerated)
+					{
+						PropertyInfo propertyInfo = type.GetProperty(propertyMap.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+						if (propertyInfo == null)
+							throw new NPersistException(string.Format("Could not find property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
-                    MethodInfo getMethod = propertyInfo.GetGetMethod(true);
+						MethodInfo getMethod = propertyInfo.GetGetMethod(true);
 
-                    if (getMethod == null)
-                        throw new NPersistException(string.Format("Could not find getter method for property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
+						if (getMethod == null)
+							throw new NPersistException(string.Format("Could not find getter method for property '{0}' in type '{1}'", propertyMap.Name, classMap.GetFullName()));
 
-                    if (!getMethod.IsVirtual)
-                        throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'", propertyInfo.Name, classMap.GetFullName()));
+						if (!getMethod.IsVirtual)
+							throw new NPersistException(string.Format("Property '{0}' in type '{1}' is not marked as 'virtual'", propertyInfo.Name, classMap.GetFullName()));
 
-                    if (getMethod.IsFinal)
-                        throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'", propertyInfo.Name, classMap.GetFullName()));
+						if (getMethod.IsFinal)
+							throw new NPersistException(string.Format("Property '{0}' in type '{1}' is marked as 'final'", propertyInfo.Name, classMap.GetFullName()));
 
-                    string fieldName = propertyMap.GetFieldName();
-                    FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, fieldName);
+						string fieldName = propertyMap.GetFieldName();
+						FieldInfo fieldInfo = ReflectionHelper.GetFieldInfo(propertyMap, type, fieldName);
 
-                    if (fieldInfo == null)
-                        throw new NPersistException(string.Format("Could not find field '{0}' in type '{1}'", fieldName, classMap.GetFullName()));
+						if (fieldInfo == null)
+							throw new NPersistException(string.Format("Could not find field '{0}' in type '{1}'", fieldName, classMap.GetFullName()));
 
-                    //validate list properties
-                    if (propertyMap.ReferenceType == ReferenceType.ManyToMany || propertyMap.ReferenceType == ReferenceType.ManyToOne)
-                    {
-                        Type listType = getMethod.ReturnType;
+						//validate list properties
+						if (propertyMap.ReferenceType == ReferenceType.ManyToMany || propertyMap.ReferenceType == ReferenceType.ManyToOne)
+						{
+							Type listType = getMethod.ReturnType;
 
 #if NET2
                         if (listType.IsGenericType && listType.IsInterface && listType.Name.Contains("IList"))
@@ -412,49 +417,51 @@ namespace Puzzle.NPersist.Framework.Mapping
                         }
                         else
 #endif
-                            if (!typeof(IList).IsAssignableFrom(listType))
-                                throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
+							if (!typeof(IList).IsAssignableFrom(listType))
+								throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is not an IList or IList implementing class", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
 
-                        if (listType.IsClass)
-                        {
-                            if (listType.IsSealed)
-                                throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is marked with 'sealed'", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
-                        }
-                    }
-
-                    if (propertyMap.ReferenceType != ReferenceType.None)
-                    {
-                        if (!propertyMap.IsSlave)
-                        {
-                            foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
-                            {
-                                if (columnMap.IsForeignKey)
-                                {
-									//It is not strictly required that foreign keys are named, that is only if they are part of multiple column foreign keys...
-//                                    if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
-//                                    {
-//                                        throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name", columnMap.Name, propertyInfo.Name, classMap.GetFullName()));
-//                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (propertyMap.ReferenceType == ReferenceType.None)
-                    {
-						ISourceMap sourceMap = propertyMap.GetSourceMap();
-						if (sourceMap != null)
-						{
-							if (sourceMap.PersistenceType == PersistenceType.Default || sourceMap.PersistenceType == PersistenceType.ObjectRelational)
+							if (listType.IsClass)
 							{
-								IColumnMap columnMap = propertyMap.GetColumnMap();
-								if (columnMap == null)
-								{
-									throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
-								}								
+								if (listType.IsSealed)
+									throw new NPersistException(string.Format("Property '{0}' in type '{1}' has type '{2}' which is marked with 'sealed'", propertyInfo.Name, classMap.GetFullName(), listType.FullName));
 							}
 						}
-                    }
+
+						if (propertyMap.ReferenceType != ReferenceType.None)
+						{
+							if (!propertyMap.IsSlave)
+							{
+								foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+								{
+									if (columnMap.IsForeignKey)
+									{
+										//It is not strictly required that foreign keys are named, that is only if they are part of multiple column foreign keys...
+										//                                    if (columnMap.ForeignKeyName == null || columnMap.ForeignKeyName == "")
+										//                                    {
+										//                                        throw new NPersistException(string.Format("Column '{0}' for reference property '{1}' in type '{2}' is missing a foreignkey name", columnMap.Name, propertyInfo.Name, classMap.GetFullName()));
+										//                                    }
+									}
+								}
+							}
+						}
+
+						if (propertyMap.ReferenceType == ReferenceType.None)
+						{
+							ISourceMap sourceMap = propertyMap.GetSourceMap();
+							if (sourceMap != null)
+							{
+								if (sourceMap.PersistenceType == PersistenceType.Default || sourceMap.PersistenceType == PersistenceType.ObjectRelational)
+								{
+									IColumnMap columnMap = propertyMap.GetColumnMap();
+									if (columnMap == null)
+									{
+										throw new NPersistException(string.Format("No column was found for property '{0}' in type '{1}' ", propertyInfo.Name, classMap.GetFullName()));
+									}								
+								}
+							}
+						}
+						
+					}
                 }
             }	
 		}
