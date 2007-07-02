@@ -175,6 +175,8 @@
     </Compile>
     <Compile Include="Enumerations\AspectTargetType.cs" />
     <Compile Include="Enumerations\PointcutTargetType.cs" />
+    <Compile Include="TypeExtender\ExtendedMember.cs" />
+    <Compile Include="TypeExtender\ExtendedProperty.cs" />
     <Compile Include="TypeExtender\ITypeExtender.cs" />
     <Compile Include="TypeExtender\TypeExtender.cs" />
     <Compile Include="Weaving\AfterMethodInvocation.cs" />
