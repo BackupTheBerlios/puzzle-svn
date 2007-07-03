@@ -514,8 +514,6 @@ namespace KumoUnitTests
             property2.Type = typeof(string);
             extender.Members.Add(property2);
 
-
-
             aspect.TypeExtenders.Add(extender);
 
             c.Configuration.Aspects.Add(aspect);                
@@ -526,6 +524,51 @@ namespace KumoUnitTests
 
             Assert.IsNotNull(property1, "Property1 was not emitted");
             Assert.IsNotNull(property2, "Property2 was not emitted");
+
+
+            property1Info.SetValue(proxy, 123, null);
+            int resInt = (int)property1Info.GetValue(proxy, null);
+            Assert.IsTrue(resInt == 123, "Property1 does not hold the correct value");
+
+
+            property2Info.SetValue(proxy, "Hello", null);
+            string resString = (string)property2Info.GetValue(proxy, null);
+            Assert.IsTrue(resString == "Hello", "Property2 does not hold the correct value");
+
+        }
+
+        [TestMethod()]
+        public void InterceptExtendedProperties()
+        {
+            Engine c = new Engine("InterceptExtendedProperties");
+
+            SignatureAspect aspect = new SignatureAspect("PropertyAdder", typeof(Foo), new Type[] { }, new IPointcut[] { });
+            aspect.Pointcuts.Add(new SignaturePointcut("get_MyIntProperty", new IncreaseReturnValueInterceptor()));
+
+            TypeExtender extender = new TypeExtender();
+
+            ExtendedProperty property1 = new ExtendedProperty();
+            property1.Name = "MyIntProperty";
+            property1.FieldName = "_MyIntProperty";
+            property1.Type = typeof(int);
+            extender.Members.Add(property1);
+
+            aspect.TypeExtenders.Add(extender);
+
+            c.Configuration.Aspects.Add(aspect);
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            PropertyInfo property1Info = proxy.GetType().GetProperty("MyIntProperty");
+
+            Assert.IsNotNull(property1, "Property1 was not emitted");
+
+
+            property1Info.SetValue(proxy, 123, null);
+            int resInt = (int)property1Info.GetValue(proxy, null);
+            Assert.IsTrue(resInt == 124, "Property1 Was not intercepted");
+
+
+            
 
         }
     }
