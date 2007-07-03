@@ -30,12 +30,18 @@ namespace Puzzle.NAspect.Framework
 
             AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();            
             TypeBuilder typeBuilder = GetTypeBuilder(assemblyBuilder, moduleName, typeName, baseType);
-            BuildConstructors(baseType, typeBuilder);			
+            BuildConstructors(baseType, typeBuilder);
 
+            foreach (ExtendedMember member in members)
+            {
+                member.Extend(baseType, typeBuilder);
+            }
 
             Type proxyType = typeBuilder.CreateType();
 
-           // IsDirty = true;
+            if (members.Count > 0)
+                this.IsDirty = true;
+           
 			if (IsDirty)
 				return proxyType;
 			else

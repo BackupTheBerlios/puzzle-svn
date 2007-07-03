@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Puzzle.NAspect.Framework;
 using Puzzle.NAspect.Framework.Aop;
 using TestProject1.Aspects;
+using System.Reflection;
 
 namespace KumoUnitTests
 {
@@ -489,6 +490,43 @@ namespace KumoUnitTests
             string helloString = sayHello.SayHello();
 
             Assert.IsTrue(helloString == "Hello", "SayHelloMixin did not work");
+        }
+
+
+        [TestMethod()]
+        public void ExtendingProperties()
+        {
+            Engine c = new Engine("ExtendingProperties");
+
+            SignatureAspect aspect = new SignatureAspect("PropertyAdder", typeof(Foo), new Type[] { }, new IPointcut[] { });
+
+            TypeExtender extender = new TypeExtender();
+            
+            ExtendedProperty property1 = new ExtendedProperty();
+            property1.Name = "MyIntProperty";
+            property1.FieldName = "_MyIntProperty";
+            property1.Type = typeof(int);
+            extender.Members.Add(property1);
+
+            ExtendedProperty property2 = new ExtendedProperty();
+            property2.Name = "MyStringProperty";
+            property2.FieldName = "_MyStringProperty";
+            property2.Type = typeof(string);
+            extender.Members.Add(property2);
+
+
+
+            aspect.TypeExtenders.Add(extender);
+
+            c.Configuration.Aspects.Add(aspect);                
+            Foo proxy = (Foo)c.CreateProxy(typeof(Foo));
+
+            PropertyInfo property1Info = proxy.GetType().GetProperty("MyIntProperty");
+            PropertyInfo property2Info = proxy.GetType().GetProperty("MyStringProperty");
+
+            Assert.IsNotNull(property1, "Property1 was not emitted");
+            Assert.IsNotNull(property2, "Property2 was not emitted");
+
         }
     }
 }
