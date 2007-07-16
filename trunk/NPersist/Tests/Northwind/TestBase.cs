@@ -26,6 +26,11 @@ namespace Puzzle.NPersist.Tests.Northwind
 			return ContextFactory.CreateContextWithAttributes() ;
 		}
 
+		public virtual IContext GetContextWithCascadeDelete()
+		{
+			return ContextFactory.CreateContextWithCascadeDelete() ;
+		}
+
 		protected int EnsureNancy(int bossId)
 		{
 			int id = 0;

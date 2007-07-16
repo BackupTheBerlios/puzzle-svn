@@ -1285,6 +1285,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 							if (propertyMap.IsCollection)
 							{
 								IList list = ((IList) om.GetPropertyValue(obj, propertyMap.Name));
+								list = new ArrayList(list);
 								foreach (object itemRefObj in list)
 								{
                                     LogMessage message = new LogMessage("Cascade deleting referenced object");

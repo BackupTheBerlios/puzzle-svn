@@ -136,6 +136,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Puzzle.NPersist.Samples.Northwind.CascadeDeleteDomain.npersist"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Puzzle.NPersist.Samples.Northwind.Domain.npersist"
                     BuildAction = "EmbeddedResource"
                 />
@@ -167,3 +171,4 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
