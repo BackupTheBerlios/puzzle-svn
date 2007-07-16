@@ -304,6 +304,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Container\ProxyTypeInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Elements\EngineConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -320,6 +325,16 @@
                 />
                 <File
                     RelPath = "Tools\Text.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeExtender\ExtendedMember.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeExtender\ExtendedProperty.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -355,6 +370,7 @@
                 />
                 <File
                     RelPath = "Weaving\FastCall.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -379,6 +395,7 @@
                 />
                 <File
                     RelPath = "Weaving\ProxyParameter.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
