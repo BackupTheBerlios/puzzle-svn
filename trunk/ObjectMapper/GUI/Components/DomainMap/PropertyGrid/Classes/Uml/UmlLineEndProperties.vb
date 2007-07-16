@@ -102,6 +102,26 @@ Public Class UmlLineEndProperties
         End Set
     End Property
 
+    <Category("Runtime Generation"), _
+        Description("If true, this property will be added to the domain model class at runtime by NPersist, meaning it does not have to be present in your class declaration."), _
+        DisplayName("Runtime generated"), _
+        DefaultValue(False)> Public Property IsGenerated() As Boolean
+        Get
+            Dim propertyMap As IPropertyMap = GetPropertyMap()
+            If Not propertyMap Is Nothing Then
+                Return propertyMap.IsGenerated
+            End If
+        End Get
+        Set(ByVal Value As Boolean)
+            Dim propertyMap As IPropertyMap = GetPropertyMap()
+            If Not propertyMap Is Nothing Then
+                If Value <> propertyMap.ValidateMethod Then
+                    propertyMap.IsGenerated = Value
+                    RaiseEvent AfterPropertySet(propertyMap, "IsGenerated")
+                End If
+            End If
+        End Set
+    End Property
 
 
     <Category("Design"), _

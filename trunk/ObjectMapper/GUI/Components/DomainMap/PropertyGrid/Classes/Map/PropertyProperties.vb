@@ -779,6 +779,19 @@ Public Class PropertyProperties
         End Set
     End Property
 
+    <Category("Runtime Generation"), _
+        Description("If true, this property will be added to the domain model class at runtime by NPersist, meaning it does not have to be present in your class declaration."), _
+        DisplayName("Runtime generated"), _
+        DefaultValue("")> Public Property IsGenerated() As Boolean
+        Get
+            Return m_PropertyMap.IsGenerated
+        End Get
+        Set(ByVal Value As Boolean)
+            m_PropertyMap.IsGenerated = Value
+            RaiseEvent AfterPropertySet(m_PropertyMap, "IsGenerated")
+        End Set
+    End Property
+
 
     <Category("Special property behavior"), _
         Description("Select a special behavior that is applied to your property when the object is created. For example, 'SetDateTime' could be used for a 'CreatedAt' property. 'Increase' applies only to properties mapping to numeric columns. 'SetDateTime' applies only to properties mapping to DateTime columns."), _
