@@ -1209,6 +1209,19 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return inheritedIdentityPropertyMaps ;
 		}
 
+
+		public virtual IList GetGeneratedPropertyMaps()
+		{
+			IList generatedPropertyMaps = new ArrayList();
+
+			foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
+				if (propertyMap.IsGenerated)
+					generatedPropertyMaps.Add(propertyMap);
+
+			return generatedPropertyMaps;
+		}
+
+
 		private bool fixedGetInheritedClassMap = false;
 		private IClassMap fixedValueGetInheritedClassMap = null;
 

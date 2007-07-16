@@ -9,9 +9,13 @@
 // *
 using System;
 using Puzzle.NAspect.Framework;
+using Puzzle.NAspect.Framework.Aop;
+using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.BaseClasses;
 using System.Collections;
+using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NPersist.Framework.Persistence;
 
 namespace Puzzle.NPersist.Framework.Aop
 {
@@ -79,9 +83,56 @@ namespace Puzzle.NPersist.Framework.Aop
 				context = value;
 				aopEngine.Configuration.Aspects.Clear() ;
 				aopEngine.Configuration.Aspects.Add(new NPersistEntityAspect(Context));		
-				aopEngine.Configuration.Aspects.Add(new NPersistListAspect(Context));		
+				aopEngine.Configuration.Aspects.Add(new NPersistListAspect(Context));
+				foreach (SignatureAspect extensionAspect in GetExtensionAspects())
+					aopEngine.Configuration.Aspects.Add(extensionAspect);
 				aopEngine.LogManager = context.LogManager;
 			}
+		}
+
+		private IList GetExtensionAspects()
+		{
+			IList extensionAspects = new ArrayList();
+			foreach (IClassMap classMap in this.Context.DomainMap.ClassMaps)
+			{
+				IList generatedPropertyMaps = classMap.GetGeneratedPropertyMaps();
+				if (generatedPropertyMaps.Count > 0)
+				{
+					Type targetType = AssemblyManager.GetBaseType(
+						this.context.AssemblyManager.MustGetTypeFromClassMap(classMap));
+
+					TypeExtender extender = new TypeExtender();
+					SignatureAspect aspect = new SignatureAspect(classMap.Name + "GeneratedPropertiesExtender", targetType, 
+						new Type[] { }, new IPointcut[] { });
+
+					foreach (IPropertyMap generatedPropertyMap in generatedPropertyMaps)
+					{
+						ExtendedProperty property = new ExtendedProperty();
+						property.Name = generatedPropertyMap.Name;
+						property.FieldName = generatedPropertyMap.GetFieldName();
+						if (generatedPropertyMap.IsCollection)
+							property.Type = typeof(IList);
+						else
+						{
+							if (generatedPropertyMap.ReferenceType != ReferenceType.None)
+							{
+								IClassMap refClassMap = generatedPropertyMap.MustGetReferencedClassMap();
+								property.Type = AssemblyManager.GetBaseType(
+									this.context.AssemblyManager.MustGetTypeFromClassMap(refClassMap));
+							}							
+							else
+							{
+								property.Type = Type.GetType(generatedPropertyMap.DataType);
+							}
+						}
+						extender.Members.Add(property);
+					}
+
+					aspect.TypeExtenders.Add(extender);
+					extensionAspects.Add(aspect);
+				}
+			}
+			return extensionAspects;
 		}
 	}
 }

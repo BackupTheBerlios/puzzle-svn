@@ -125,6 +125,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		ArrayList GetInheritedIdentityPropertyMaps();
 
+		IList GetGeneratedPropertyMaps();
+
 		void UpdateName(string newName);
 
 		string GetFullName();

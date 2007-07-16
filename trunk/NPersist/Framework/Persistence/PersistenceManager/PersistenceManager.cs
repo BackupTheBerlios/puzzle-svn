@@ -1279,7 +1279,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 							propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
 							if (propStatus == PropertyStatus.NotLoaded)
 							{
-								//this.Context.SqlEngineManager.LoadProperty(obj, propertyMap.Name);
 								this.Context.PersistenceEngine.LoadProperty(obj, propertyMap.Name);
 							}
 							if (propertyMap.IsCollection)
