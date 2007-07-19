@@ -924,5 +924,15 @@ namespace Puzzle.NPersist.Framework.Mapping.Immutable
         {
             throw new Exception("The method or operation is not implemented.");
         }
+
+        #region IClassMap Members
+
+
+        public IList GetGeneratedPropertyMaps()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        #endregion
     }
 }

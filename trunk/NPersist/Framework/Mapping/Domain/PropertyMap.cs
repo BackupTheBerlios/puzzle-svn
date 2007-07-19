@@ -416,7 +416,15 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				strategyName = name.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture) + name.Substring(1);
 			}
-			if (pre.Length > 0)
+            else if (dm.FieldNameStrategy == FieldNameStrategyType.LowerCase)
+            {
+                strategyName = name.ToLower(CultureInfo.InvariantCulture);
+            }
+            else if (dm.FieldNameStrategy == FieldNameStrategyType.UpperCase)
+            {
+                strategyName = name.ToUpper(CultureInfo.InvariantCulture);
+            }
+            if (pre.Length > 0)
 			{
 				fn = pre + strategyName;
 

@@ -26,6 +26,14 @@ namespace Puzzle.NPersist.Framework.Enumerations
         /// <summary>
         /// The name of the field is the same as the name of the property converted to PascalCase. 
         /// </summary>
-		PascalCase = 2
+		PascalCase = 2,
+        /// <summary>
+        /// The name of the field is the same as the name of the property converted to lowercase. 
+        /// </summary>
+        LowerCase = 3,
+        /// <summary>
+        /// The name of the field is the same as the name of the property converted to UPPERCASE. 
+        /// </summary>
+        UpperCase = 4
 	}
 }
