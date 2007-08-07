@@ -278,7 +278,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 				}
 			}
 
-			CalculateTableModel(domainMap);
+            RecalculateModel(domainMap);
 
 			domainMap.Dirty = false;
 
@@ -323,7 +323,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 				}
 			}
 
-			CalculateTableModel(domainMap);
+            RecalculateModel(domainMap);
 
 			domainMap.Dirty = false;
 
@@ -338,18 +338,27 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return DomainMap.LoadFromXml(xml,mapSerializer,true,true);
 		}
 
+        public static void RecalculateModel(IDomainMap domainMap)
+        {
+            GenerateInversePropeties(domainMap);
+            CalculateTableModel(domainMap);
+        }
+
 		public static void CalculateTableModel(IDomainMap domainMap)
 		{
 			ClassesToTablesTransformer classesToTablesTransformer = new ClassesToTablesTransformer();
 			classesToTablesTransformer.GenerateTablesForClasses(domainMap, domainMap, true, true);					
 		}
 
+        public static void GenerateInversePropeties(IDomainMap domainMap)
+        {
+            //Add inverse properties where missing
+            MapInverseAppenderVisitor inverseAppenderVisitor = new MapInverseAppenderVisitor();
+            domainMap.Accept(inverseAppenderVisitor);
+        }
+
 		protected virtual void Validate()
 		{
-			//Add inverse properties where missing
-			MapInverseAppenderVisitor inverseAppenderVisitor = new MapInverseAppenderVisitor();
-			this.Accept(inverseAppenderVisitor);
-
             Assembly assembly = null;
 
             string assemblyName = this.GetAssemblyName();

@@ -23,5 +23,14 @@ namespace Puzzle.NPersist.Framework.Mapping
 		[XmlIgnore()]
 		IClassMap ClassMap { get; set; }
 
+        [XmlArrayItem(typeof(IParameterMap))]
+        IList PropertyMaps { get; set; }
+
+        string ReturnType { get; set; }
+
+        [XmlArrayItem(typeof(ICodeMap))]
+        IList CodeMaps { get; set; }
+
+        AccessibilityType Accessibility { get; set; }
 	}
 }

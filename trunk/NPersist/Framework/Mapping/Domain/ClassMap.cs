@@ -1384,11 +1384,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 			if (name != "")
 			{
 				string[] arrName = m_name.Split('.');
-				if (arrName.GetUpperBound(0) > 0)
-				{
-					name = m_name.Substring(0, m_name.Length - 1 - arrName[arrName.GetUpperBound(0)].Length);
-				}
-			}
+                if (arrName.GetUpperBound(0) < 1)
+                    name = "";
+                else
+                    name = m_name.Substring(0, m_name.Length - 1 - arrName[arrName.GetUpperBound(0)].Length);
+            }
 
 			if (isFixed)
 			{

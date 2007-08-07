@@ -20,5 +20,11 @@ namespace Puzzle.NPersist.Framework.Mapping
 	/// </summary>
 	public interface IParameterMap : IMap
 	{
+        [XmlIgnore()]
+        IMethodMap MethodMap { get; set; }
+
+        string Type { get; set; }
+
+        bool IsParams { get; set; }
 	}
 }
