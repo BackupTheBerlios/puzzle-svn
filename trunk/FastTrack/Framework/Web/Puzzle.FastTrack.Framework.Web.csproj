@@ -36,10 +36,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CreateObjectButton.cs" />
+    <Compile Include="Controls\CreateObjectLinkButton.cs" />
     <Compile Include="Controls\DeleteListItemLinkButton.cs" />
     <Compile Include="Controls\DeleteObjectButton.cs" />
     <Compile Include="Controls\DeleteObjectLinkButton.cs" />
     <Compile Include="Controls\EditListItemLinkButton.cs" />
+    <Compile Include="Controls\EditTypeLinkButton.cs" />
     <Compile Include="Controls\ListColumnHeader.cs" />
     <Compile Include="Controls\NullValueEditor.cs" />
     <Compile Include="Controls\ObjectLink.cs" />
@@ -49,6 +52,7 @@
     <Compile Include="Controls\SelectListItemLinkButton.cs" />
     <Compile Include="Controls\SelectObjectLinkButton.cs" />
     <Compile Include="Controls\ViewListItemLinkButton.cs" />
+    <Compile Include="Controls\ViewTypeLinkButton.cs" />
     <Compile Include="Structures\NameValuePair.cs" />
     <Compile Include="Factories\PageFactory.cs" />
     <Compile Include="Factories\UrlFactory.cs" />
@@ -82,6 +86,10 @@
     <ProjectReference Include="..\..\..\NPersist\Framework\Puzzle.NPersist.Framework.NET 2.0.csproj">
       <Project>{E6C03D2A-D150-4473-9439-D300746A1390}</Project>
       <Name>Puzzle.NPersist.Framework.NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SideFX\Framework\Puzzle.SideFX.Framework.csproj">
+      <Project>{78026FCB-F95A-402C-A37A-3A43F2AACE6B}</Project>
+      <Name>Puzzle.SideFX.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Puzzle.FastTrack.Framework.csproj">
       <Project>{F0C4BCB9-3866-46E1-90A4-FC90EC345194}</Project>

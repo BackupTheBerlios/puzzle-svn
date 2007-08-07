@@ -39,14 +39,26 @@
     <Compile Include="Comparers\ValueComparer.cs" />
     <Compile Include="Controllers\DomainControllerBase.cs" />
     <Compile Include="Controllers\IDomainController.cs" />
+    <Compile Include="Controllers\ITypeController.cs" />
+    <Compile Include="Controllers\TypeControllerBase.cs" />
     <Compile Include="Factories\ControllerFactory.cs" />
+    <Compile Include="Factories\EngineFactory.cs" />
     <Compile Include="Filtering\Filter.cs" />
     <Compile Include="Filtering\FilterItem.cs" />
     <Compile Include="Filtering\MatchCondition.cs" />
+    <Compile Include="Presenters\DomainPresenterBase.cs" />
+    <Compile Include="Presenters\IDomainPresenter.cs" />
+    <Compile Include="Presenters\ITypePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SideFX\Framework\Puzzle.SideFX.Framework.csproj">
+      <Project>{78026FCB-F95A-402C-A37A-3A43F2AACE6B}</Project>
+      <Name>Puzzle.SideFX.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

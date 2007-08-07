@@ -65,7 +65,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                 PropertyInfo property = page.GetPropertyInfo(propertyName);
                 if (property != null)
                 {
-                    if (property.GetSetMethod() == null)
+                    if (page.IsReadOnlyProperty(property.Name))
                         return;
                 }
 

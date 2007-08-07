@@ -9,7 +9,15 @@ namespace Puzzle.FastTrack.Framework.Controllers
 {
     public interface IDomainController : IDisposable 
     {
-        Assembly DomainAssembly { get; }
+        Assembly DomainAssembly { get; set; }
+
+        void RegisterTypeController(string typeName, ITypeController typeController);
+
+        void RegisterTypeController(Type type, ITypeController typeController);
+
+        ITypeController GetTypeController(Type type);
+
+        bool HasTypeController(Type type);
 
         Type SelectedType { get; set; }
 
@@ -29,17 +37,31 @@ namespace Puzzle.FastTrack.Framework.Controllers
 
         object CreateObject(Type type);
 
+        object ExecuteCreateObject(Type type);
+
         void SaveObject();
 
         void SaveObject(object obj);
+
+        void ExecuteSaveObject(object obj);
 
         void DeleteObject();
 
         void DeleteObject(object obj);
 
+        void ExecuteDeleteObject(object obj);
+
         bool IsListProperty(string propertyName);
 
         bool IsListProperty(object obj, string propertyName);
+
+        bool IsListProperty(Type type, string propertyName);
+
+        bool IsReadOnlyProperty(string propertyName);
+
+        bool IsReadOnlyProperty(object obj, string propertyName);
+
+        bool IsReadOnlyProperty(Type type, string propertyName);
 
         Type GetListPropertyItemType(string propertyName);
 
@@ -48,6 +70,8 @@ namespace Puzzle.FastTrack.Framework.Controllers
         bool IsNullableProperty(string propertyName);
 
         bool IsNullableProperty(object obj, string propertyName);
+
+        bool IsNullableProperty(Type type, string propertyName);
 
         bool GetPropertyNullStatus(string propertyName);
 
@@ -79,5 +103,7 @@ namespace Puzzle.FastTrack.Framework.Controllers
         string GetTypeNameFromType(Type type);
 
         Type GetTypeFromTypeName(string typeName);
+
+        IList GetTypeNames();
     }
 }

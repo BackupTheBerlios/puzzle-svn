@@ -35,15 +35,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NPersistController.cs" />
+    <Compile Include="NPersistFastTrackEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FastForward\Framework\NPersist\Puzzle.FastForward.Framework.NPersist.csproj">
+      <Project>{401CF4E3-530E-48EE-9155-C67C6B6EB8DD}</Project>
+      <Name>Puzzle.FastForward.Framework.NPersist</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FastForward\Framework\Puzzle.FastForward.Framework.csproj">
+      <Project>{4056E119-3EA6-4D29-BEA4-F72ED246B72D}</Project>
+      <Name>Puzzle.FastForward.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\NPersist\Framework\Puzzle.NPersist.Framework.NET 2.0.csproj">
       <Project>{E6C03D2A-D150-4473-9439-D300746A1390}</Project>
       <Name>Puzzle.NPersist.Framework.NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SideFX\Framework\Puzzle.SideFX.Framework.csproj">
+      <Project>{78026FCB-F95A-402C-A37A-3A43F2AACE6B}</Project>
+      <Name>Puzzle.SideFX.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Puzzle.FastTrack.Framework.csproj">
       <Project>{F0C4BCB9-3866-46E1-90A4-FC90EC345194}</Project>

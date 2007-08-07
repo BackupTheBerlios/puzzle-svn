@@ -10,49 +10,53 @@ namespace Puzzle.FastTrack.Framework.Web.Factories
 {
     public class EditorFactory
     {
-
         public static Control GetPropertyValueEditor(FastTrackPage page, object obj, PropertyInfo property)
+        {
+            return GetPropertyValueEditor(page, obj.GetType(), property);
+        }
+
+        public static Control GetPropertyValueEditor(FastTrackPage page, Type type, PropertyInfo property)
         {
             Control editor = null;
 
-            if (page.IsListProperty(obj, property.Name))
+            if (page.IsListProperty(type, property.Name))
             {
                 editor = new ListEditor(property.Name);
             }
             else
             {
-                Type type = property.PropertyType;
+                Type propertyType = property.PropertyType;
 
-                if (type.IsEnum)
+                if (propertyType.IsEnum)
                     editor = new EnumerationEditor(property.Name);
 
-                else if (type.IsPrimitive)
+                else if (propertyType.IsPrimitive)
                 {
-                    if (type == typeof(bool))
+                    if (propertyType == typeof(bool))
                         editor = new BooleanEditor(property.Name);
 
 
-                    else if (type == typeof(Int16)
-                       || type == typeof(Int32)
-                       || type == typeof(Int64)
-                       || type == typeof(Byte))
+                    else if (propertyType == typeof(Int16)
+                       || propertyType == typeof(Int32)
+                       || propertyType == typeof(Int64)
+                       || propertyType == typeof(Byte))
                         editor = new NumberEditor(property.Name);
                 }
-                else if (type.IsValueType)
+                else if (propertyType.IsValueType)
                 {
-                    if (type == typeof(DateTime))
+                    if (propertyType == typeof(DateTime))
                         editor = new DateTimeEditor(property.Name);
 
-                    else if (type == typeof(Decimal))
+                    else if (propertyType == typeof(Decimal))
                         editor = new NumberEditor(property.Name);
                 }
-                else if (type.IsClass)
+                else if (propertyType.IsClass)
                 {
-                    if (type == typeof(string))
+                    if (propertyType == typeof(string))
                         editor = new StringEditor(property.Name);
 
 
-                    else if (type == typeof(byte[]))
+                    else if (propertyType == typeof(byte[]))
                         ; //editor = new DateTimeEditor(property.Name);
                     
                     else

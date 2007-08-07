@@ -59,27 +59,27 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
 
                 if (page != null)
                 {
-                    object obj = page.SelectedObject;
-
-                    if (obj != null)
-                    {
-                        SetupEditor(obj);
-                    }
+                    SetupEditor();
                 }
             }
 
         }
 
-        private void SetupEditor(object obj)
+        private void SetupEditor()
         {
             FastTrackPage page = GetPage();
 
             if (page != null)
             {
-                PropertyInfo property = obj.GetType().GetProperty(propertyName);
+                object obj = page.SelectedObject;
+                Type type = page.SelectedType;
+                if (obj != null)
+                    type = obj.GetType();
+
+                PropertyInfo property = type.GetProperty(propertyName);
                 if (property != null)
                 {
-                    Control editor = EditorFactory.GetPropertyValueEditor(page, obj, property);
+                    Control editor = EditorFactory.GetPropertyValueEditor(page, type, property);
 
                     if (editor != null)
                     {
@@ -120,7 +120,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
                             row.Cells.Add(nameCell);
                             row.Cells.Add(editorCell);
 
-                            if (page.IsNullableProperty(obj, propertyName))
+                            if (page.IsNullableProperty(type, propertyName))
                             {
                                 NullValueEditor nullEditor = new NullValueEditor(propertyName);
 

@@ -7,6 +7,11 @@ using System.Collections;
 using Puzzle.FastTrack.Framework.Filtering;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.FastTrack.Framework.Controllers;
+using Puzzle.NPersist.Framework.Mapping.Serialization;
+using Puzzle.NPersist.Framework.Mapping.Transformation;
+using System.CodeDom.Compiler;
+using Microsoft.CSharp;
+using System.Reflection;
 
 namespace Puzzle.FastTrack.Framework.NPersist
 {
@@ -16,9 +21,54 @@ namespace Puzzle.FastTrack.Framework.NPersist
         {
             string mapPath = System.Configuration.ConfigurationManager.AppSettings["MapPath"];
             string connectionString = System.Configuration.ConfigurationManager.AppSettings["ConnectionString"];
+            string assemblyName = System.Configuration.ConfigurationManager.AppSettings["DomainAssembly"];
 
-            context = new Context(mapPath);
+            if (!string.IsNullOrEmpty(assemblyName))
+                context = new Context(mapPath);
+            else
+                context = GetContext(mapPath);
+            
             context.SetConnectionString(connectionString);
+        }
+
+        private IContext GetContext(string mapPath)
+        {
+            IMapSerializer serialier = new DefaultMapSerializer();
+            IDomainMap domainMap = DomainMap.Load(mapPath, serialier, false, false);
+
+            IContext context = new Context(domainMap);
+            GenerateAssembly(context);
+
+            return context;
+        }
+
+        private void GenerateAssembly(IContext context)
+        {
+            try
+            {
+                IDomainMap domainMap = context.DomainMap;
+                ModelToCodeTransformer modelToCodeTransformer = new ModelToCodeTransformer();
+                CodeDomProvider provider = null;
+
+                provider = new CSharpCodeProvider();
+
+                string code = modelToCodeTransformer.ToCode(domainMap, provider);
+
+                CompilerResults cr = modelToCodeTransformer.ToCompilerResults(domainMap, provider);
+                if (cr.Errors.Count > 0)
+                {
+                }
+                else
+                {
+                    Assembly domain = cr.CompiledAssembly;
+                    context.AssemblyManager.RegisterAssembly(domain);
+                    this.DomainAssembly = domain;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.DomainAssembly = null;
+            }
         }
 
         private IContext context;
@@ -84,32 +134,32 @@ namespace Puzzle.FastTrack.Framework.NPersist
             return context.GetObjectsByNPath(query);
         }
 
-        public override object CreateObject(Type type)
+        public override object ExecuteCreateObject(Type type)
         {
             return context.CreateObject(type);
         }
 
-        public override void SaveObject(object obj)
+        public override void ExecuteSaveObject(object obj)
         {
             context.Commit();
         }
 
-        public override void DeleteObject(object obj)
+        public override void ExecuteDeleteObject(object obj)
         {
             context.DeleteObject(obj);
             context.Commit();
         }
 
-        public override bool IsListProperty(object obj, string propertyName)
+        public override bool IsListProperty(Type type, string propertyName)
         {
-            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(type);
             if (classMap != null)
             {
                 IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
                 if (propertyMap != null)
                     return propertyMap.IsCollection;
             }
-            return base.IsListProperty(obj, propertyName);
+            return base.IsListProperty(type, propertyName);
         }
 
         public override Type GetListPropertyItemType(object obj, string propertyName)
@@ -124,15 +174,36 @@ namespace Puzzle.FastTrack.Framework.NPersist
             return null;
         }
 
-        public override bool IsNullableProperty(object obj, string propertyName)
+        public override bool IsNullableProperty(Type type, string propertyName)
         {
-            IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType());
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(type);
             if (classMap != null)
             {
                 IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
                 if (propertyMap != null)
                     return propertyMap.GetIsNullable();
             }
+            return false;
+        }
+
+        public override bool IsReadOnlyProperty(Type type, string propertyName)
+        {
+            if (base.IsReadOnlyProperty(type, propertyName))
+                return true;
+
+            IClassMap classMap = this.Context.DomainMap.GetClassMap(type);
+            if (classMap != null)
+            {
+                IPropertyMap propertyMap = classMap.GetPropertyMap(propertyName);
+                if (propertyMap != null)
+                {
+                    if (propertyMap.IsReadOnly)
+                        return true;
+                    if (propertyMap.IsAssignedBySource)
+                        return true;
+                }
+            }
+
             return false;
         }
 
@@ -157,6 +228,15 @@ namespace Puzzle.FastTrack.Framework.NPersist
                 if (propertyMap != null)
                     this.Context.SetNullValueStatus(obj, propertyName, isNull);
             }
+        }
+
+        public override IList GetTypeNames()
+        {
+            IList typeNames = new ArrayList();
+            foreach (IClassMap classMap in this.context.DomainMap.ClassMaps)
+                typeNames.Add(classMap.Name);
+
+            return typeNames;
         }
 
         public override Type GetTypeFromType(Type type)

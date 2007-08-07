@@ -12,6 +12,31 @@ namespace Puzzle.FastTrack.Framework.Web.Factories
 
         #region Urls
 
+        #region GetTypeEditUrl()
+
+        public static string GetTypeEditUrl(string typeName, string specified)
+        {
+            string url = "";
+
+            if (specified != null && specified != "")
+                url = specified;
+
+            if (url == null || url == "")
+                url = System.Configuration.ConfigurationManager.AppSettings["EditClassUrl-" + typeName];
+
+            if (url == null || url == "")
+                url = System.Configuration.ConfigurationManager.AppSettings["EditClassUrl"];
+
+            if (url == null || url == "")
+                url = "EditClass.aspx";
+
+            url += "?" + GetClassParameterName() + "=" + typeName;
+
+            return url;
+        }
+
+        #endregion
+
         #region GetObjectViewUrl
 
         public static string GetObjectViewUrl(string typeName, string id, string specified)
@@ -60,6 +85,27 @@ namespace Puzzle.FastTrack.Framework.Web.Factories
             url += "?" + GetTypeParameterName() + "=" + typeName;
 
             url += "&" + GetIdentityParameterName() + "=" + id;
+
+            return url;
+        }
+
+        public static string GetObjectEditUrl(string typeName, string specified)
+        {
+            string url = "";
+
+            if (specified != null && specified != "")
+                url = specified;
+
+            if (url == null || url == "")
+                url = System.Configuration.ConfigurationManager.AppSettings["EditUrl-" + typeName];
+
+            if (url == null || url == "")
+                url = System.Configuration.ConfigurationManager.AppSettings["EditUrl"];
+
+            if (url == null || url == "")
+                url = "Edit.aspx";
+
+            url += "?" + GetClassParameterName() + "=" + typeName;
 
             return url;
         }
@@ -259,5 +305,6 @@ namespace Puzzle.FastTrack.Framework.Web.Factories
         }
 
         #endregion
+
     }
 }

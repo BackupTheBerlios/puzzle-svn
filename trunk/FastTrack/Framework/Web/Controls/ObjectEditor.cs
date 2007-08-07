@@ -40,6 +40,7 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
 
                 if (obj != null)
                 {
+                    //Edit existing object
                     Table table = new Table();
                     this.Controls.Add(table);
 
@@ -64,6 +65,38 @@ namespace Puzzle.FastTrack.Framework.Web.Controls
 
                     buttonCell.Controls.Add(saveButton);
                     buttonCell.Controls.Add(deleteButton);
+                }
+                else
+                {
+                    if (page.SelectedType != null)
+                    {
+                        //Create new object
+                        Type type = page.SelectedType;
+
+                        Table table = new Table();
+                        this.Controls.Add(table);
+
+                        ArrayList properties = new ArrayList(type.GetProperties());
+                        properties.Sort(new PropertyComparer());
+
+                        foreach (PropertyInfo property in properties)
+                        {
+                            PropertyEditor propertyEditor = new PropertyEditor(property.Name, table);
+                            propertyEditor.Initialize();
+                        }
+
+                        TableRow row = new TableRow();
+                        table.Rows.Add(row);
+
+                        TableCell buttonCell = new TableCell();
+                        buttonCell.ColumnSpan = 2;
+                        row.Cells.Add(buttonCell);
+
+                        CreateObjectButton createButton = new CreateObjectButton();
+                        
+                        buttonCell.Controls.Add(createButton);
+
+                    }
                 }
             }
         }	

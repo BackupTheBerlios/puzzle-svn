@@ -12,15 +12,47 @@ namespace Puzzle.FastTrack.Framework.Controllers
         public DomainControllerBase()
         {
             string assemblyName = System.Configuration.ConfigurationManager.AppSettings["DomainAssembly"];
-            domainAssembly = Assembly.Load(assemblyName);
+            if (!string.IsNullOrEmpty(assemblyName))
+                domainAssembly = Assembly.Load(assemblyName);
         }
 
         private Assembly domainAssembly;
         public virtual Assembly DomainAssembly
         {
             get { return domainAssembly; }
+            set { domainAssembly = value; }
         }
-	
+
+
+        private IDictionary<Type, ITypeController> typeControllers = new Dictionary<Type, ITypeController>();
+
+        public virtual void RegisterTypeController(string typeName, ITypeController typeController)
+        {
+            Type type = GetTypeFromTypeName(typeName);
+            RegisterTypeController(type, typeController);
+        }
+            
+        public virtual void RegisterTypeController(Type type, ITypeController typeController)
+        {
+            type = GetTypeFromType(type);
+            typeController.DomainController = this;
+            typeControllers[type] = typeController;
+        }
+
+        public ITypeController GetTypeController(Type type)
+        {
+            type = GetTypeFromType(type);
+            if (HasTypeController(type))
+                return typeControllers[type];
+            return null;
+        }
+
+        public bool HasTypeController(Type type)
+        {
+            type = GetTypeFromType(type);
+            return typeControllers.ContainsKey(type);
+        }
+
         private Type selectedType;
         public virtual Type SelectedType
         {
@@ -57,34 +89,95 @@ namespace Puzzle.FastTrack.Framework.Controllers
 
         public abstract IList GetObjectsOfType(Type type, Filter filter);
 
-        public abstract object CreateObject(Type type);
+        public virtual object CreateObject(Type type)
+        {
+            ITypeController typeController = GetTypeController(type);
+            if (typeController != null)
+                return typeController.CreateObject(type);
+            return ExecuteCreateObject(type);
+        }
+
+        public abstract object ExecuteCreateObject(Type type);
 
         public virtual void SaveObject()
         {
             SaveObject(this.selectedObject);
         }
 
-        public abstract void SaveObject(object obj);
+        public virtual void SaveObject(object obj)
+        {
+            ITypeController typeController = GetTypeController(obj.GetType());
+            if (typeController != null)
+                typeController.SaveObject(obj);
+            else
+                ExecuteSaveObject(obj);
+        }
+
+        public abstract void ExecuteSaveObject(object obj);
 
         public virtual void DeleteObject()
         {
             DeleteObject(this.SelectedObject);
         }
 
-        public abstract void DeleteObject(object obj);
+        public virtual void DeleteObject(object obj)
+        {
+            ITypeController typeController = GetTypeController(obj.GetType());
+            if (typeController != null)
+                typeController.DeleteObject(obj);
+            else
+                ExecuteDeleteObject(obj);
+        }
+
+        public abstract void ExecuteDeleteObject(object obj);
 
         public virtual bool IsListProperty(string propertyName)
         {
-            return IsListProperty(this.selectedObject, propertyName);
+            if (this.selectedObject != null)
+                return IsListProperty(this.SelectedObject, propertyName);
+            else if (this.selectedType != null)
+                return IsListProperty(this.SelectedType, propertyName);
+            return false;
         }
 
         public virtual bool IsListProperty(object obj, string propertyName)
         {
-            PropertyInfo property = obj.GetType().GetProperty(propertyName);
-            //if (property != null)
-                return (typeof(IList).IsAssignableFrom(property.PropertyType));
-            //return false;
+            return IsListProperty(obj.GetType(), propertyName);
         }
+
+        public virtual bool IsListProperty(Type type, string propertyName)
+        {
+            PropertyInfo property = type.GetProperty(propertyName);
+            if (property != null)
+                return (typeof(IList).IsAssignableFrom(property.PropertyType));
+            return false;
+        }
+
+        #region IsReadOnlyProperty
+
+        public virtual bool IsReadOnlyProperty(string propertyName)
+        {
+            if (this.selectedObject != null)
+                return IsReadOnlyProperty(this.SelectedObject, propertyName);
+            else if (this.selectedType != null)
+                return IsReadOnlyProperty(this.SelectedType, propertyName);
+            return false;
+        }
+
+        public virtual bool IsReadOnlyProperty(object obj, string propertyName)
+        {
+            return IsReadOnlyProperty(obj.GetType(), propertyName); 
+        }
+
+        public virtual bool IsReadOnlyProperty(Type type, string propertyName)
+        {
+            PropertyInfo property = type.GetProperty(propertyName);
+            if (property != null)
+                return (property.GetSetMethod() == null);
+            return false;
+        }
+
+        #endregion
 
         public virtual Type GetListPropertyItemType(string propertyName)
         {
@@ -95,10 +188,19 @@ namespace Puzzle.FastTrack.Framework.Controllers
 
         public virtual bool IsNullableProperty(string propertyName)
         {
-            return IsNullableProperty(this.selectedObject, propertyName);
+            if (this.selectedObject != null)
+                return IsNullableProperty(this.SelectedObject, propertyName);
+            else if (this.selectedType != null)
+                return IsNullableProperty(this.SelectedType, propertyName);
+            return false;
         }
 
-        public abstract bool IsNullableProperty(object obj, string propertyName);
+        public virtual bool IsNullableProperty(object obj, string propertyName)
+        {
+            return IsNullableProperty(obj.GetType(), propertyName);
+        }
+
+        public abstract bool IsNullableProperty(Type type, string propertyName);
 
         public virtual bool GetPropertyNullStatus(string propertyName)
         {
@@ -172,6 +274,11 @@ namespace Puzzle.FastTrack.Framework.Controllers
         public virtual string GetObjectName(object obj)
         {
             return obj.ToString();
+        }
+
+        public virtual IList GetTypeNames()
+        {
+            return new ArrayList();
         }
 
         public virtual Type GetTypeFromType()

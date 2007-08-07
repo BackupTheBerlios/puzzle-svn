@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<domain name="test" source="Test" root="TestDomain">
+  <class name="Employee" table="Employees">
+    <property name="Id" id="true" columns="EmployeeId" type="System.Int32" />
+    <property name="FirstName" columns="FirstName" type="System.String" />
+    <property name="LastName" columns="FirstName" type="System.String" />
+  </class>
+  <source name="Test" type="MSSqlServer" provider="SqlClient" schema="dbo" compute="true">
+    <connection-string>SERVER=(local);UID=sa;PWD=;DATABASE=Northwind</connection-string>
+  </source>
+</domain>

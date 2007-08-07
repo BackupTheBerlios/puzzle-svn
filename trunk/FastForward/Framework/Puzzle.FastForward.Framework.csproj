@@ -1,0 +1,96 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4056E119-3EA6-4D29-BEA4-F72ED246B72D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Puzzle.FastForward.Framework</RootNamespace>
+    <AssemblyName>Puzzle.FastForward.Framework</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Executors\CreateClass\CreateClassCommand.cs" />
+    <Compile Include="Executors\CreateClass\CreateClassDatabaseExecutor.cs" />
+    <Compile Include="Executors\CreateClass\CreateClassSchemaExecutor.cs" />
+    <Compile Include="Executors\CreateObject\CreateObjectCommand.cs" />
+    <Compile Include="Executors\CreateObject\CreateObjectDomainExecutor.cs" />
+    <Compile Include="Executors\CreateProperty\CreatePropertyCommand.cs" />
+    <Compile Include="Executors\CreateProperty\CreatePropertyDatabaseExecutor.cs" />
+    <Compile Include="Executors\CreateProperty\CreatePropertySchemaExecutor.cs" />
+    <Compile Include="Executors\CreateProperty\Multiplicity.cs" />
+    <Compile Include="Executors\DeleteObjects\DeleteObjectsCommand.cs" />
+    <Compile Include="Executors\DeleteObjects\DeleteObjectsDomainExecutor.cs" />
+    <Compile Include="Executors\DisplayObjects\DisplayObjectsCommand.cs" />
+    <Compile Include="Executors\DisplayObjects\DisplayObjectsDomainExecutor.cs" />
+    <Compile Include="Executors\UpdateObjects\UpdateObjectsCommand.cs" />
+    <Compile Include="Executors\UpdateObjects\UpdateObjectsDomainExecutor.cs" />
+    <Compile Include="FastForwardEngine.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ColumnMetaData.cs" />
+    <Compile Include="Service\ConfigurationService.cs" />
+    <Compile Include="Service\ConsoleLoggingService.cs" />
+    <Compile Include="Service\DatabaseServiceBase.cs" />
+    <Compile Include="Service\ConsoleDisplayService.cs" />
+    <Compile Include="Service\IConfigurationService.cs" />
+    <Compile Include="Service\IDatabaseService.cs" />
+    <Compile Include="Service\IDisplayService.cs" />
+    <Compile Include="Service\IObjectService.cs" />
+    <Compile Include="Service\ILoggingService.cs" />
+    <Compile Include="Service\IRenderService.cs" />
+    <Compile Include="Service\ISchemaService.cs" />
+    <Compile Include="Service\ISqlService.cs" />
+    <Compile Include="Service\ObjectServiceBase.cs" />
+    <Compile Include="Service\PropertyMetaData.cs" />
+    <Compile Include="Service\SqlServerDatabaseService.cs" />
+    <Compile Include="Service\SqlServerSqlService.cs" />
+    <Compile Include="Service\TextRenderService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SideFX\Framework\Puzzle.SideFX.Framework.csproj">
+      <Project>{78026FCB-F95A-402C-A37A-3A43F2AACE6B}</Project>
+      <Name>Puzzle.SideFX.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Executors\AddObjects\" />
+    <Folder Include="Executors\CallMethod\" />
+    <Folder Include="Executors\DeleteClass\" />
+    <Folder Include="Executors\RemoveObjects\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

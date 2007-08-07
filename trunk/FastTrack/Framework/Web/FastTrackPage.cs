@@ -10,6 +10,7 @@ using Puzzle.FastTrack.Framework.Web.Factories;
 using System.Collections;
 using Puzzle.FastTrack.Framework.Filtering;
 using Puzzle.FastTrack.Framework.Factories;
+using Puzzle.SideFX.Framework;
 
 namespace Puzzle.FastTrack.Framework.Web
 {
@@ -20,6 +21,7 @@ namespace Puzzle.FastTrack.Framework.Web
         protected override void OnLoad(EventArgs e)
         {
             domainController = ControllerFactory.CreateDomainController();
+            engine = EngineFactory.CreateEngine();
 
             string className = Request["class"];
             string typeName = Request["type"];
@@ -29,12 +31,6 @@ namespace Puzzle.FastTrack.Framework.Web
             string sort = Request["sort"];
             string desc = Request["desc"];
             
-            if (typeName == null)
-                typeName = "Employee";
-
-            if (id == null)
-                id = "10";
-
             if (className != null)
             {
                 SelectedType = GetTypeFromTypeName(className);
@@ -93,6 +89,17 @@ namespace Puzzle.FastTrack.Framework.Web
         {
             get { return domainController; }
             set { domainController = value; }
+        }
+
+        #endregion
+
+        #region Engine
+
+        private IEngine engine;
+        public virtual IEngine Engine
+        {
+            get { return engine; }
+            set { engine = value; }
         }
 
         #endregion
@@ -254,9 +261,17 @@ namespace Puzzle.FastTrack.Framework.Web
 
         public object CreateObject(Type type)
         {
+            object obj = null;
             if (this.domainController != null)
-                return this.domainController.CreateObject(type);
-            return null;
+                obj = this.domainController.CreateObject(type);
+
+            if (obj != null)
+            {
+                SelectedObject = obj;
+                SaveObject(obj);
+            }
+
+            return obj;
         }
 
         #endregion
@@ -333,13 +348,47 @@ namespace Puzzle.FastTrack.Framework.Web
 
         public bool IsListProperty(string propertyName)
         {
-            return IsListProperty(this.SelectedObject, propertyName);
+            if (this.domainController != null)
+                return this.domainController.IsListProperty(propertyName);
+            return false;
         }
 
         public bool IsListProperty(object obj, string propertyName)
         {
             if (this.domainController != null)
                 return this.domainController.IsListProperty(obj, propertyName);
+            return false;
+        }
+
+        public bool IsListProperty(Type type, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsListProperty(type, propertyName);
+            return false;
+        }
+
+        #endregion
+
+        #region IsReadOnlyProperty
+
+        public bool IsReadOnlyProperty(string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsReadOnlyProperty(propertyName);
+            return false;
+        }
+
+        public bool IsReadOnlyProperty(object obj, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsReadOnlyProperty(obj, propertyName);
+            return false;
+        }
+
+        public bool IsReadOnlyProperty(Type type, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsReadOnlyProperty(type, propertyName);
             return false;
         }
 
@@ -375,6 +424,13 @@ namespace Puzzle.FastTrack.Framework.Web
             return false;
         }
 
+        public bool IsNullableProperty(Type type, string propertyName)
+        {
+            if (this.domainController != null)
+                return this.domainController.IsNullableProperty(type, propertyName);
+            return false;
+        }
+
         #endregion
 
         #region GetPropertyNullStatus
@@ -386,6 +442,9 @@ namespace Puzzle.FastTrack.Framework.Web
 
         public bool GetPropertyNullStatus(object obj, string propertyName)
         {
+            if (obj == null)
+                return IsNullableProperty(this.SelectedType, propertyName);
+
             if (this.domainController != null)
                 return this.domainController.GetPropertyNullStatus(obj, propertyName);
             return false;
@@ -460,6 +519,13 @@ namespace Puzzle.FastTrack.Framework.Web
 
         #endregion
 
+        internal IList GetTypeNames()
+        {
+            if (this.domainController != null)
+                return this.domainController.GetTypeNames();
+            return new ArrayList();
+        }
+
         #region GetTypeFromType
 
         public Type GetTypeFromType()
@@ -525,6 +591,16 @@ namespace Puzzle.FastTrack.Framework.Web
             return UrlFactory.GetObjectViewUrl(typeName, id, specified);
         }
 
+        public string GetViewUrl(Type type, string specified)
+        {
+            if (type == null)
+                return "";
+
+            string typeName = GetTypeNameFromType(type);
+
+            return UrlFactory.GetObjectListUrl(typeName, specified);
+        }
+
         #endregion
 
         #region GetEditUrl
@@ -543,6 +619,30 @@ namespace Puzzle.FastTrack.Framework.Web
             string id = GetObjectIdentity(obj);
 
             return UrlFactory.GetObjectEditUrl(typeName, id, specified);
+        }
+
+        public string GetEditUrl(Type type, string specified)
+        {
+            if (type == null)
+                return "";
+
+            string typeName = GetTypeNameFromType(type);
+
+            return UrlFactory.GetObjectEditUrl(typeName, specified);
+        }
+
+        #region GetTypeEditUrl
+
+        #endregion
+
+        public string GetTypeEditUrl(Type type, string specified)
+        {
+            if (type == null)
+                return "";
+
+            string typeName = GetTypeNameFromType(type);
+
+            return UrlFactory.GetTypeEditUrl(typeName, specified);
         }
 
         #endregion
