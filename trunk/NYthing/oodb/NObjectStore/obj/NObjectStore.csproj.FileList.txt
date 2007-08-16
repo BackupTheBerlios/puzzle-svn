@@ -1,0 +1,10 @@
+obj\Debug\ResolveAssemblyReference.cache
+bin\Debug\NObjectStore.dll
+bin\Debug\NObjectStore.pdb
+obj\Debug\NObjectStore.dll
+obj\Debug\NObjectStore.pdb
+bin\Debug\Puzzle.NAspect.Framework.NET2.dll
+bin\Debug\Puzzle.NCore.Framework.NET2.dll
+bin\Debug\Puzzle.NCore.Framework.NET2.pdb
+bin\Debug\Puzzle.NAspect.Framework.NET2.pdb
+bin\Debug\Puzzle.NAspect.Framework.NET2.xml

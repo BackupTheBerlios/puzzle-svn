@@ -565,11 +565,7 @@ namespace KumoUnitTests
 
             property1Info.SetValue(proxy, 123, null);
             int resInt = (int)property1Info.GetValue(proxy, null);
-            Assert.IsTrue(resInt == 124, "Property1 Was not intercepted");
-
-
-            
-
+            Assert.IsTrue(resInt == 124, "Property1 Was not intercepted");         
         }
     }
 }
