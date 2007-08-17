@@ -16,7 +16,7 @@ using System.ComponentModel;
 
 namespace Puzzle.NPersist.Framework.BaseClasses
 {
-    class InterceptableGenericsList<T> : IList<T> , IInterceptableList , IBindingList , ICancelAddNew , IRaiseItemChangedEvents
+    public class InterceptableGenericsList<T> : IList<T> , IInterceptableList , IBindingList , ICancelAddNew , IRaiseItemChangedEvents
 	{
         private List<T> list = new List<T>();
 
