@@ -194,7 +194,9 @@ Public Class ClassesToCodeCs
 
                     If Len(ns) > 0 Then
 
-                        ns = classMap.DomainMap.RootNamespace & "." & ns
+						'KS: This breaks the generated code, since it is not done this way w. the Xml and the variables inside the class
+						'This names the class Namespace.ClassName, and the properties are created as ClassName, and thus fails
+                        ns = classMap.DomainMap.RootNamespace '& "." & ns
 
                     Else
 
@@ -709,7 +711,9 @@ Public Class ClassesToCodeCs
 
                     If Len(ns) > 0 Then
 
-                        ns = classMap.DomainMap.RootNamespace & "." & ns
+						'KS: This breaks the generated code, since it is not done this way w. the Xml and the variables inside the class
+						'This names the class Namespace.ClassName, and the properties are created as ClassName, and thus fails
+                        ns = classMap.DomainMap.RootNamespace '& "." & ns
 
                     Else
 
@@ -1018,7 +1022,7 @@ Public Class ClassesToCodeCs
 
         End If
 
-        If propertyMap.GetIsAssignedBySource Then
+        If propertyMap.GetIsAssignedBySource OrElse propertyMap.IsReadOnly Then
 
             makeReadOnly = True
 

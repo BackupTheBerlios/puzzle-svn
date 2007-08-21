@@ -826,7 +826,8 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			}
 			xml.Append(" type=\"" + sourceMap.SourceType.ToString() + "\""); // do not localize
 			xml.Append(" provider=\"" + sourceMap.ProviderType.ToString() + "\""); // do not localize
-			if (sourceMap.Schema.Length > 0)
+			//KS: We like it with no schema name for Access
+			//if (sourceMap.Schema.Length > 0)
 			{
 				xml.Append(" schema=\"" + sourceMap.Schema + "\""); // do not localize
 			}

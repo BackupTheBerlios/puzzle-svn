@@ -1345,15 +1345,26 @@ namespace Puzzle.NPersist.Framework.Persistence
                     }
                 }				
 			}
+
 			typeColMap = classMap.GetTypeColumnMap();
 			if (typeColMap != null)
 			{
-				SqlColumnAlias typeColumn = table.GetSqlColumnAlias(typeColMap);								
+				bool isMapped = false;
+				SqlColumnAlias typeColumn = table.GetSqlColumnAlias(typeColMap);	
+				foreach(SqlColumn c in insert.SqlColumnList)
+					if (c.Name == typeColumn.SqlColumn.Name && c.SqlTable.Name == typeColumn.SqlColumn.SqlTable.Name)
+					{
+						isMapped = true;
+						break;
+					}
 
-				paramName = GetParameterName(classMap, "Type_");
-				SqlParameter param = AddSqlParameter(insert, parameters, paramName, obj, null, classMap.TypeValue, typeColMap, true);
+				if (!isMapped)
+				{
+					paramName = GetParameterName(classMap, "Type_");
+					SqlParameter param = AddSqlParameter(insert, parameters, paramName, obj, null, classMap.TypeValue, typeColMap, true);
 
-				insert.AddSqlColumnAndValue(typeColumn, param);
+					insert.AddSqlColumnAndValue(typeColumn, param);
+				}
 			}
 			return GenerateSql(insert);
 		}

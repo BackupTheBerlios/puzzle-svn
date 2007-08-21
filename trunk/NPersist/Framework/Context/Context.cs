@@ -1193,7 +1193,6 @@ namespace Puzzle.NPersist.Framework
 			return FilterIntoDataTable(new NPathQuery(npath, type, parameters));
 		}
 
-
 		public DataTable GetDataTable(NPathQuery query)
 		{
 			return this.PersistenceEngine.LoadDataTable(query);
@@ -1254,6 +1253,17 @@ namespace Puzzle.NPersist.Framework
 				}
 				string id = TransformIdentity(identities, type);
 				m_ObjectManager.SetObjectIdentity(obj, id);				
+			}
+
+			IColumnMap typeColMap = classMap.GetTypeColumnMap();
+			if (typeColMap != null)
+			{
+				IPropertyMap typeMap = classMap.GetPropertyMapForColumnMap(typeColMap);
+				if (typeMap != null)
+				{
+					m_ObjectManager.SetPropertyValue(obj, typeMap.Name, classMap.TypeValue);
+					m_ObjectManager.SetOriginalPropertyValue(obj, typeMap.Name, classMap.TypeValue);
+				}
 			}
 
 			RegisterObject(obj, ObjectStatus.UpForCreation);

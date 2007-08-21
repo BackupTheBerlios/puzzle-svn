@@ -96,7 +96,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				if (typeColumnMap != null)
 				{
 					string pathParent = GetPathParent(path);
-					SqlColumnAlias column = GetPropertyColumnAlias(tbl, pathParent + ".NPersistTypeColumn" , typeColumnMap, pathParent + ".NPersistTypeColumn");
+					string suggestedPath = pathParent.Length == 0 ? "NPersistTypeColumn" : pathParent + ".NPersistTypeColumn";
+					SqlColumnAlias column = GetPropertyColumnAlias(tbl, suggestedPath , typeColumnMap, suggestedPath);
 					columnAliases.Add(column);
 				}
 			}
@@ -115,7 +116,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
                     if (inverseTypeColumnMap != null && inverseTypeColumnMap == columnMap.GetPrimaryKeyColumnMap())
                     {
                         string suggestionString;
-                        suggestionString = propPath + ".NPersistTypeColumn";
+                        suggestionString = propPath.Length == 0 ? "NPersistTypeColum" : propPath + ".NPersistTypeColumn";
 
                         SqlColumnAlias column = GetPropertyColumnAlias(tbl, path, columnMap, suggestionString);
                         columnAliases.Add(column);

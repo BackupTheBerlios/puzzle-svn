@@ -472,6 +472,22 @@ namespace Puzzle.NPersist.Framework.Mapping
 						
 					}
                 }
+
+				IColumnMap typeColMap = classMap.GetTypeColumnMap();
+				if (typeColMap != null)
+				{
+					IPropertyMap typeMap = classMap.GetPropertyMapForColumnMap(typeColMap);
+					if (typeMap != null)
+					{
+						PropertyInfo propertyInfo = type.GetProperty(typeMap.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+						if (propertyInfo == null) //Should not happen, checked earlier
+							throw new NPersistException("Failed - internal error");	
+
+						if (propertyInfo.CanWrite)
+							throw new NPersistException(string.Format("The property '{0}' in class '{1}' is mapped to the database Type column '{2}'. When mapping to the type column, the property must be ReadOnly.", typeMap.Name, classMap.GetFullName(), typeColMap.Name ));
+					}
+				}
             }	
 		}
 

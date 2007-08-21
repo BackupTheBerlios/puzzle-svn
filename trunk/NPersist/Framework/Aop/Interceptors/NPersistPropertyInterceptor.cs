@@ -59,11 +59,13 @@ namespace Puzzle.NPersist.Framework.Aop
 			Puzzle.NPersist.Framework.Interfaces.IInterceptor interceptor = proxy.GetInterceptor();
 			if (interceptor != null) { interceptor.NotifyPropertySet(call.Target, propertyName, ref refValue, ref cancel); }
 			if (cancel) { return null; }
+			object oldValue = call.ExecutionTarget.GetType().GetProperty(propertyName).GetValue(call.ExecutionTarget, null);
 			((InterceptedParameter)call.Parameters[0]).Value = refValue;
 			call.Proceed();		
 #if NET2
             propertyChangedObj.OnPropertyChanged (propertyName);
 #endif
+			if (interceptor != null) { interceptor.NotifyWroteProperty(call.Target, propertyName, refValue, oldValue); }
 			return null;
 		}
 

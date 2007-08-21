@@ -310,7 +310,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			IColumnMap columnMap = this.GetColumnMap();
 			if (columnMap != null)
 			{
-				if (columnMap.IsAutoIncrease)
+				//KS: We fix it, since this is a one-to-one
+				if (columnMap.IsAutoIncrease && !this.CascadingCreate)
 				{
 					isAssignedBySource = true;
 				}
