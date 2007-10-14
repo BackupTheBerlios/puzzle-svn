@@ -46,7 +46,10 @@ namespace Puzzle.NCore.Framework.Collections
 
             for (int i = 0; i < keys.Length; i++)
             {
-                if (keys[i] != other.keys[i])
+                object thisKey = keys[i];
+                object thatKey = other.keys[i];
+
+                if (Comparer.Default.Compare(thisKey,thatKey)!=0)
                     return false;
             }
 
