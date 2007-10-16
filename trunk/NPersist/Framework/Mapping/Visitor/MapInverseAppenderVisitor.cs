@@ -39,19 +39,25 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 
 			foreach (IClassMap classMap in domainMap.ClassMaps)
 			{
-				foreach (IPropertyMap propertyMap in classMap.PropertyMaps)
-				{
-					CreateInverseProperty(propertyMap, newInverseProperties);				
-				}				
+                if (classMap.ClassType.Equals(ClassType.Class) || classMap.ClassType.Equals(ClassType.Default))
+                {
+                    foreach (IPropertyMap propertyMap in classMap.PropertyMaps)
+                    {
+                        CreateInverseProperty(propertyMap, newInverseProperties);
+                    }
+                }
 			}
 
 			foreach (IClassMap classMap in newInverseProperties.Keys)
 			{
-				IList inverseProperties = (IList) newInverseProperties[classMap];
-				foreach (IPropertyMap inverseProperty in inverseProperties)
-				{
-					inverseProperty.ClassMap = classMap;
-				}
+                if (classMap.ClassType.Equals(ClassType.Class) || classMap.ClassType.Equals(ClassType.Default))
+                {
+                    IList inverseProperties = (IList)newInverseProperties[classMap];
+                    foreach (IPropertyMap inverseProperty in inverseProperties)
+                    {
+                        inverseProperty.ClassMap = classMap;
+                    }
+                }
 			}
 
 			if (isFixed)
@@ -115,6 +121,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 				return;
 
 			IClassMap refClassMap = propertyMap.MustGetReferencedClassMap();
+
+            if (!(refClassMap.ClassType.Equals(ClassType.Class) || refClassMap.ClassType.Equals(ClassType.Default)))
+                return;
+
 			string inverseName = propertyMap.Inverse;
 			if (inverseName == "")
 			{
