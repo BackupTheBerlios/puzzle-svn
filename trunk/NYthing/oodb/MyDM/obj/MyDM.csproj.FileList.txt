@@ -1,5 +1,0 @@
-bin\Debug\MyDM.dll
-bin\Debug\MyDM.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\MyDM.dll
-obj\Debug\MyDM.pdb
