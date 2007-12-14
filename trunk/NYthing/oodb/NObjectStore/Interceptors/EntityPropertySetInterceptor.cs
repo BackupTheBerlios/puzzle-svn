@@ -22,7 +22,7 @@ namespace NObjectStore
 
             managed.SetReference(property, valueParameter.Value);
 
-            if (!managed.Mute)
+            if (!managed.Mute && !managed.Initializing)
                 managed.Context.RegisterDirty(managed);
             
             managed.SetUnloaded(property, true);

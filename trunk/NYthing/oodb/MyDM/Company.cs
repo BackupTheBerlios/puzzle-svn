@@ -13,8 +13,8 @@ namespace MyDM
             set { name = value; }
         }
 
-        private List<Employee> employees;
-        public virtual List<Employee> Employees
+        private IList<Employee> employees;
+        public virtual IList<Employee> Employees
         {
             get { return employees; }
             set { employees = value; }

@@ -38,6 +38,7 @@
     <Compile Include="Interceptors\EntityPropertyGetInterceptor.cs" />
     <Compile Include="Interceptors\EntityPropertySetInterceptor.cs" />
     <Compile Include="Classes\InterceptableList.cs" />
+    <Compile Include="Interfaces\IPersistentList.cs" />
     <Compile Include="Interfaces\IPersistentObject.cs" />
     <Compile Include="Mixins\PersistentObjectMixin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

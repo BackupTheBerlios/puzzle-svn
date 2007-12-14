@@ -1,51 +1,94 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace NObjectStore
 {
-    public class InterceptableList<T> : IList<T>
+    [Serializable]
+    public class InterceptableList<T> : IList<T> , IPersistentList
     {
+
+        private ArrayList list = new ArrayList();
+        private object ConvertToId(object item)
+        {
+            if (item is IPersistentObject)
+            {
+                string id = ((IPersistentObject)item).Id;
+                PersistentId persId = new PersistentId();
+                persId.Id = id;
+                return persId;
+            }
+            else
+            {
+                return item;
+            }
+        }
+
+        private object ConvertFromId(object item)
+        {
+
+            if (item is PersistentId)
+            {
+                PersistentId id = item as PersistentId;
+                object res = owner.Context.Get(id.Id);
+                return res;
+            }
+            else
+            {
+                return item;
+            }
+        }
+
         public int IndexOf(T item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            object value = ConvertToId(item);
+
+            return list.IndexOf(value);         
         }
+
+        
 
         public void Insert(int index, T item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            object value = ConvertToId(item);
+            list.Insert(index, value);
         }
 
         public void RemoveAt(int index)
         {
-            throw new Exception("The method or operation is not implemented.");
+            list.RemoveAt(index);
         }
 
         public T this[int index]
         {
             get
             {
-                throw new Exception("The method or operation is not implemented.");
+                object tmp = ConvertFromId(list[index]);
+                return (T)tmp;
             }
             set
             {
-                throw new Exception("The method or operation is not implemented.");
+                object tmp = ConvertToId(value);
+                list[index]=tmp;
             }
         }
 
         public void Add(T item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            object tmp = ConvertToId(item);
+            list.Add(tmp);
         }
 
         public void Clear()
         {
-            throw new Exception("The method or operation is not implemented.");
+            list.Clear();
         }
 
         public bool Contains(T item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            object tmp = ConvertToId(item);
+            return list.Contains(tmp);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -55,17 +98,28 @@ namespace NObjectStore
 
         public int Count
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get
+            {
+                return list.Count;
+            }
         }
 
         public bool IsReadOnly
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get
+            {
+                return list.IsReadOnly;
+            }
         }
 
         public bool Remove(T item)
         {
-            throw new Exception("The method or operation is not implemented.");
+            object tmp = ConvertToId(item);
+            int count = list.Count;
+            list.Remove(item);
+            
+            bool wasRemoved = list.Count != count;
+            return wasRemoved;
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -77,5 +131,23 @@ namespace NObjectStore
         {
             throw new Exception("The method or operation is not implemented.");
         }
+
+        #region IPersistentList Members
+
+        [NonSerialized]
+        private IPersistentObject owner;        
+        public IPersistentObject Owner
+        {
+            get
+            {
+                return owner;
+            }
+            set
+            {
+                owner = value;
+            }
+        }
+
+        #endregion
     }
 }

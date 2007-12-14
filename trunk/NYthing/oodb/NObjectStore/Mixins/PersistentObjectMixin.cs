@@ -12,6 +12,14 @@ namespace NObjectStore
         {
         }
 
+        ~PersistentObjectMixin()
+        {
+            if (Context != null)
+            {
+                Context.NotifyUnload(id);
+            }
+        }
+
         private object target;
         public void SetProxy(Puzzle.NAspect.Framework.IAopProxy target)
         {
@@ -107,6 +115,18 @@ namespace NObjectStore
             unloadedProperties[property] = unloaded;
         }
 
+        private bool initializing = true;
+        public bool Initializing
+        {
+            get
+            {
+                return initializing;
+            }
+            set
+            {
+                initializing = value;
+            }
+        }
         private bool mute;
 
         public bool Mute
@@ -143,6 +163,9 @@ namespace NObjectStore
             Hashtable ht = new Hashtable();
             foreach (DictionaryEntry de in properties)
             {
+                if ((string)de.Key == "Initializing")
+                    continue;
+
                 if ((string)de.Key == "Mute")
                     continue;
 

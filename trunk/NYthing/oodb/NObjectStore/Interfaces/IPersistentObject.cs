@@ -17,6 +17,7 @@ namespace NObjectStore
         void SetUnloaded(string property, bool unloaded);
         Context Context { get;set;}
         bool Mute { get;set;}
+        bool Initializing { get;set;}
         IList GetReferences();
         void AddReference(ObjectReference reference);
         void RemoveReference(ObjectReference reference);

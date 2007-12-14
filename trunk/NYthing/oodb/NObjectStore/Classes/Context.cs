@@ -127,9 +127,9 @@ namespace NObjectStore
         private object Create<T>(string id,object[] args)
         {
             IPersistentObject instance = (IPersistentObject)engine.CreateProxyWithState<T>(this, args);
-            uow.NewObjects.Add(instance);            
-            RegisterObject(instance);
+            uow.NewObjects.Add(instance);
             ((IPersistentObject)instance).Id = id;
+            RegisterObject(instance);            
             return instance;
         }
 
@@ -221,6 +221,11 @@ namespace NObjectStore
         internal bool IsLoaded(string p)
         {
             return uow.Objects.Contains (p);
+        }
+
+        internal static void NotifyUnload(string id)
+        {
+            Console.WriteLine("Unloading object {0}", id);
         }
     }
 }
