@@ -175,9 +175,8 @@ namespace NObjectStore
 
                 managed.Context = this;
                 managed.Id = id;                
-                RegisterObject(managed);
-                bool stackMute = managed.Mute;
-                managed.Mute = true;
+                RegisterObject(managed);                
+                managed.Initializing = true;
                 foreach (DictionaryEntry de in so.Data)
                 {
                     string property = (string)de.Key;
@@ -191,9 +190,15 @@ namespace NObjectStore
                     {
                         pi.SetValue(managed, de.Value, null);
                         managed.SetUnloaded(property, false);
+
+                        if (de.Value is IPersistentList)
+                        {
+                            IPersistentList list = de.Value as IPersistentList;
+                            list.Owner = managed;
+                        }
                     }
                 }
-                managed.Mute = stackMute;
+                managed.Initializing  = false;
 
 
                 return managed;
