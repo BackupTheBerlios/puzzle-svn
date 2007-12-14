@@ -33,15 +33,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context.cs" />
-    <Compile Include="EntityCtorInterceptor.cs" />
-    <Compile Include="EntityPropertyGetInterceptor.cs" />
-    <Compile Include="EntityPropertySetInterceptor.cs" />
-    <Compile Include="IPersistentObject.cs" />
-    <Compile Include="PersistentObjectMixin.cs" />
+    <Compile Include="Classes\Context.cs" />
+    <Compile Include="Interceptors\EntityCtorInterceptor.cs" />
+    <Compile Include="Interceptors\EntityPropertyGetInterceptor.cs" />
+    <Compile Include="Interceptors\EntityPropertySetInterceptor.cs" />
+    <Compile Include="Classes\InterceptableList.cs" />
+    <Compile Include="Interfaces\IPersistentObject.cs" />
+    <Compile Include="Mixins\PersistentObjectMixin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializedObject.cs" />
-    <Compile Include="UnitOfWork.cs" />
+    <Compile Include="Classes\SerializedObject.cs" />
+    <Compile Include="Classes\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Puzzle\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">

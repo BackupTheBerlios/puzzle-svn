@@ -49,6 +49,7 @@ namespace NObjectStore
             if (Mute)
                 return;
 
+            //drop old references
             if (properties[property] is PersistentId)
             {
                 PersistentId id = (PersistentId)properties[property];
@@ -62,7 +63,7 @@ namespace NObjectStore
                 }
             }
             
-
+            //create new reference
             if (value is IPersistentObject)
             {
                 ObjectReference reference = new ObjectReference();
