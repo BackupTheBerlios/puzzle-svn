@@ -191,6 +191,7 @@ namespace NObjectStore
                         pi.SetValue(managed, de.Value, null);
                         managed.SetUnloaded(property, false);
 
+                        //setup list owner
                         if (de.Value is IPersistentList)
                         {
                             IPersistentList list = de.Value as IPersistentList;

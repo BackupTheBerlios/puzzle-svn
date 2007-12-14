@@ -33,6 +33,7 @@ namespace OODBLabb
             {
                 Employee emp = company.Employees[i];            
                 Console.WriteLine("Name {0}", emp.Name);
+                emp.Name += i.ToString();
             }
 
             ctx.Commit();

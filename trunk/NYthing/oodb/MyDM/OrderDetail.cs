@@ -23,7 +23,6 @@ namespace MyDM
         }
 
         private Order order;
-
         public virtual Order Order
         {
             get { return order; }

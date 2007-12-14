@@ -23,9 +23,10 @@ namespace MyDM
         }
 
 
-        private List<OrderDetail> details;
-
-        public virtual List<OrderDetail> Details
+        private IList<OrderDetail> details;
+      
+        //[InverseOf(typeof(OrderDetail),"Order")]
+        public virtual IList<OrderDetail> Details
         {
             get { return details; }
             set { details = value; }
