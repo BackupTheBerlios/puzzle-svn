@@ -1,0 +1,209 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E78AC1F1-E81B-4DB3-92DD-6EAA5739D54B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Puzzle.NFactory.Framework.NET2</AssemblyName>
+    <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>
+    </RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET2</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\NFactoryConfigurationHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\ApplicationContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\ConfigurationDeserializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\Container.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\ContainerFactory.cs" />
+    <Compile Include="Container\IContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\ObjectCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\BaseElements\ElementConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ContainerConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\FactoryConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IContainerConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IFactoryConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IListConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IListItemConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IObjectConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IParameterConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IPropertyConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IValue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\Interfaces\IValueConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ListConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ListItemConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ObjectConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ParameterConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\PropertyConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Elements\ValueConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ObjectFactory\IObjectFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ObjectFactory\NAspectObjectFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TypeConverters\AssemblyTypeConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TypeConverters\WebPathTypeConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\PropertyPathSorter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
+      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
+      <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
+      <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
+      <Name>Puzzle.NCore.Framework NET 2.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PuzzleKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
