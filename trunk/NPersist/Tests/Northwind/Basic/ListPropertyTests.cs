@@ -17,6 +17,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 		}
 
+		//Note: This test changes the connection to the ordinary Northwind 
+		//database which it assumes has a state where the ALFKI customer has
+		//six orders...yes, this is an ugly "special, special" test. Don't ever do
+		//anything like this and pretend you didn't see this. Just comment out the test
+		//when it doesn't run on your machine rather than giving your poor ALFKI customer
+		//six orders...
 		[Test()]
 		public void TestListLoadingBeforeCommit()
 		{
@@ -34,6 +40,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			}
 		}
 
+		//Note: This test changes the connection to the ordinary Northwind 
+		//database which it assumes has a state where the ALFKI customer has
+		//six orders...yes, this is an ugly "special, special" test. Don't ever do
+		//anything like this and pretend you didn't see this. Just comment out the test
+		//when it doesn't run on your machine rather than giving your poor ALFKI customer
+		//six orders...
 		[Test()]
 		public void TestListLoadingAfterCommit()
 		{

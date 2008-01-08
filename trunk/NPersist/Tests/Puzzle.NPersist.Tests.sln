@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODMappingTests", "ODMapping
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPersist.Tests.PerfTests", "PerfTests\Puzzle.NPersist.Tests.PerfTests.csproj", "{51734CC6-8B47-47BA-90CE-0539A97ECAD0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -86,6 +90,12 @@ Global
 		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.NPDebug.Build.0 = Debug|.NET
 		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Release.ActiveCfg = Release|.NET
 		{2D4C083C-1761-4357-9EF0-CD2B5F5AD04A}.Release.Build.0 = Release|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.Debug.ActiveCfg = Debug|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.Debug.Build.0 = Debug|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.NPDebug.ActiveCfg = Debug|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.NPDebug.Build.0 = Debug|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.Release.ActiveCfg = Release|.NET
+		{51734CC6-8B47-47BA-90CE-0539A97ECAD0}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

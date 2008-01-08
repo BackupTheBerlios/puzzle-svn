@@ -75,6 +75,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 		//O/D Mapping
 		private string m_DocSource = "";
 
+		//misc
+		private bool isFixed = false;
+
 		#endregion
 
 		#region Constructors
@@ -715,7 +718,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 			return classMap;
 		}
-
 		
 		public virtual IClassMap MustGetClassMap(string findName)
 		{
@@ -727,6 +729,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return classMap;
 		}
 
+		private bool fixedGetClassMap = false;
+		private Hashtable fixedValueGetClassMap = new Hashtable();
+
 		//Mats : Added case insensitivity
 		//[DebuggerStepThrough()]
 		public virtual IClassMap GetClassMap(string findName)
@@ -734,37 +739,83 @@ namespace Puzzle.NPersist.Framework.Mapping
 			if (findName == null) { return null; }
 			if (findName == "") { return null; }
 			findName = findName.ToLower(CultureInfo.InvariantCulture);
-			if (IsFixed("GetClassMap_" + findName))
+			if (fixedGetClassMap)
 			{
-				return (IClassMap) GetFixedValue("GetClassMap_" + findName);
+				return (IClassMap) fixedValueGetClassMap[findName];
 			}
-			foreach (IClassMap classMap in m_ClassMaps)
+			if (isFixed)
 			{
-				if (classMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
-				{
-					if (IsFixed())
-					{
-						SetFixedValue("GetClassMap_" + findName, classMap);
-					}
-					return classMap;
-				}
-			}
-			if (RootNamespace.Length > 0)
-			{
+				IClassMap result = null;
 				foreach (IClassMap classMap in m_ClassMaps)
 				{
-					if ((RootNamespace + "." + classMap.Name).ToLower(CultureInfo.InvariantCulture) == findName)
+					string low = classMap.Name.ToLower(CultureInfo.InvariantCulture);
+					fixedValueGetClassMap[low] = classMap; 
+					if (low == findName)
+						result = classMap;
+					
+					if (RootNamespace.Length > 0)
 					{
-						if (IsFixed())
-						{
-							SetFixedValue("GetClassMap_" + findName, classMap);
-						}
-						return classMap;
+						low = (RootNamespace + "." + classMap.Name).ToLower(CultureInfo.InvariantCulture);
+						fixedValueGetClassMap[low] = classMap; 
+						if (low == findName)
+							result = classMap;
 					}
+				}
+				fixedGetClassMap = true;
+				return result;
+			}
+			else
+			{
+				foreach (IClassMap classMap in m_ClassMaps)
+					if (classMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
+						return classMap;
+
+				if (RootNamespace.Length > 0)
+				{
+					foreach (IClassMap classMap in m_ClassMaps)
+						if ((RootNamespace + "." + classMap.Name).ToLower(CultureInfo.InvariantCulture) == findName)
+							return classMap;
 				}
 			}
 			return null;
 		}
+
+//		public virtual IClassMap GetClassMap(string findName)
+//		{
+//			if (findName == null) { return null; }
+//			if (findName == "") { return null; }
+//			findName = findName.ToLower(CultureInfo.InvariantCulture);
+//			if (IsFixed("GetClassMap_" + findName))
+//			{
+//				return (IClassMap) GetFixedValue("GetClassMap_" + findName);
+//			}
+//			foreach (IClassMap classMap in m_ClassMaps)
+//			{
+//				if (classMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
+//				{
+//					if (IsFixed())
+//					{
+//						SetFixedValue("GetClassMap_" + findName, classMap);
+//					}
+//					return classMap;
+//				}
+//			}
+//			if (RootNamespace.Length > 0)
+//			{
+//				foreach (IClassMap classMap in m_ClassMaps)
+//				{
+//					if ((RootNamespace + "." + classMap.Name).ToLower(CultureInfo.InvariantCulture) == findName)
+//					{
+//						if (IsFixed())
+//						{
+//							SetFixedValue("GetClassMap_" + findName, classMap);
+//						}
+//						return classMap;
+//					}
+//				}
+//			}
+//			return null;
+//		}
 
 		[XmlArrayItem(typeof (SourceMap))]
 		public virtual ArrayList SourceMaps
@@ -1590,6 +1641,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				sourceMap.Fixate();
 			}
+			this.isFixed = true; 
 		}
 
 		public override void UnFixate()
@@ -1603,6 +1655,9 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				sourceMap.UnFixate();
 			}
+			this.isFixed = false;
+			this.fixedGetClassMap = false;
+			this.fixedValueGetClassMap.Clear();
 		}
 
 		#endregion

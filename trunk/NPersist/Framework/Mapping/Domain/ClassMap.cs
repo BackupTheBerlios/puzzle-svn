@@ -144,6 +144,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return propertyMap;
 		}
 
+        private bool fixedGetPropertyMap = false;
+        private Hashtable fixedValueGetPropertyMap = new Hashtable();
 
 		//Mats : Added case insensitivity
 		//[DebuggerStepThrough()]
@@ -152,23 +154,54 @@ namespace Puzzle.NPersist.Framework.Mapping
 			if (findName == null) { return null; }
 			if (findName == "") { return null; }
 			findName = findName.ToLower(CultureInfo.InvariantCulture);
-			if (IsFixed("GetPropertyMap_" + findName))
+			if (fixedGetPropertyMap)
 			{
-				return (IPropertyMap) GetFixedValue("GetPropertyMap_" + findName);
+				return (IPropertyMap) fixedValueGetPropertyMap[findName];
 			}
-			foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
-			{
-				if (propertyMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
-				{
-					if (IsFixed())
-					{
-						SetFixedValue("GetPropertyMap_" + findName, propertyMap);
-					}
-					return propertyMap;
-				}
-			}
+            if (isFixed)
+            {
+                IPropertyMap result = null;
+                foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
+                {
+					string low = propertyMap.Name.ToLower(CultureInfo.InvariantCulture);
+                    fixedValueGetPropertyMap[low] = propertyMap;
+                    if (low == findName)
+                        result = propertyMap;
+                }
+                fixedGetPropertyMap = true;
+                return result;
+            }
+            else
+            {
+                foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
+                    if (propertyMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
+                        return propertyMap;
+            }
 			return null;
 		}
+
+//        public virtual IPropertyMap GetPropertyMap(string findName)
+//        {
+//            if (findName == null) { return null; }
+//            if (findName == "") { return null; }
+//            findName = findName.ToLower(CultureInfo.InvariantCulture);
+//            if (IsFixed("GetPropertyMap_" + findName))
+//            {
+//                return (IPropertyMap)GetFixedValue("GetPropertyMap_" + findName);
+//            }
+//            foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
+//            {
+//                if (propertyMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
+//                {
+//                    if (IsFixed())
+//                    {
+//                        SetFixedValue("GetPropertyMap_" + findName, propertyMap);
+//                    }
+//                    return propertyMap;
+//                }
+//            }
+//            return null;
+//        }
 
 		[XmlArrayItem(typeof (CodeMap))]
 		public virtual ArrayList CodeMaps
@@ -2491,6 +2524,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 			this.fixedGetBaseClassMap = false;
 			this.fixedIsInHierarchy = false;
 			this.fixedGetCommitRegions = false;
+            this.fixedGetPropertyMap = false;
+            this.fixedValueGetPropertyMap.Clear();
 		}
 
 		#endregion
