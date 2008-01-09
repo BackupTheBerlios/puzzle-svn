@@ -53,6 +53,71 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			}
 		}
 
+		[Test()]
+		public virtual void CanCancelReading()
+		{ 
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
+			using (IContext context = GetContext() )
+			{
+				context.ReadingProperty += new ReadingPropertyEventHandler(Context_ReadingProperty_Cancel); 
+
+				//Ask the context to fetch the employee
+				Employee employee = (Employee) context.GetObjectById(id, typeof(Employee));
+
+				//Assert that the employee has the name Nancy Davolio
+				//(She should, in a standard northwind setup)
+				Assert.AreEqual("Permission denied", employee.FirstName);
+			}
+		}
+
+		[Test()]
+		public virtual void CanCancelRead()
+		{ 
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
+			using (IContext context = GetContext() )
+			{
+				context.ReadProperty += new ReadPropertyEventHandler(Context_ReadProperty_Cancel); 
+
+				//Ask the context to fetch the employee
+				Employee employee = (Employee) context.GetObjectById(id, typeof(Employee));
+
+				//Assert that the employee has the name Nancy Davolio
+				//(She should, in a standard northwind setup)
+				Assert.AreEqual("Name hidden", employee.FirstName);
+				Assert.AreEqual(id, employee.Id);
+			}
+		}
+
+		[Test()]
+		public virtual void CanCancelWriting()
+		{ 
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
+			using (IContext context = GetContext() )
+			{
+				context.WritingProperty += new WritingPropertyEventHandler(Context_WritingProperty_Cancel); 
+
+				//Ask the context to fetch the employee
+				Employee employee = (Employee) context.GetObjectById(id, typeof(Employee));
+
+				//Assert that the employee has the name Nancy Davolio
+				//(She should, in a standard northwind setup)
+				Assert.AreEqual("Nancy", employee.FirstName);
+
+				employee.FirstName = "Test";
+
+				//Assert that the employee has the name Nancy Davolio
+				//(She should, in a standard northwind setup)
+				Assert.AreEqual("Nancy", employee.FirstName);
+			}
+		}
+
+
 		private void ResetCnt()
 		{
 			readingCnt = 0;
@@ -92,6 +157,26 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		public void Context_WroteProperty_Cnt(object sender, PropertyEventArgs e)
 		{
 			wroteCnt++;
+		}
+
+		public void Context_ReadingProperty_Cancel(object sender, PropertyCancelEventArgs e)
+		{
+			e.Value = "Permission denied";
+			e.Cancel = true;
+		}
+
+		public void Context_ReadProperty_Cancel(object sender, PropertyEventArgs e)
+		{
+			if (e.Value.Equals("Nancy"))
+			{
+				e.Value = "Name hidden";
+			}
+			readCnt++;
+		}
+
+		public void Context_WritingProperty_Cancel(object sender, PropertyCancelEventArgs e)
+		{
+			e.Cancel = true;
 		}
 	}
 }

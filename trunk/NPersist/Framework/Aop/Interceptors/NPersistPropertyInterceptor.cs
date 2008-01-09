@@ -60,8 +60,6 @@ namespace Puzzle.NPersist.Framework.Aop
 			if (interceptor != null) { interceptor.NotifyPropertySet(call.Target, propertyName, ref refValue, ref cancel); }
 			if (cancel) { return null; }
 
-			//Roggan made teh horrible buug!!11! :-)))
-			//object oldValue = call.ExecutionTarget.GetType().GetProperty(propertyName).GetValue(call.ExecutionTarget, null);
 			IContext context = null;
 			if (interceptor != null) { context = interceptor.Context; }
 			object oldValue = null;
