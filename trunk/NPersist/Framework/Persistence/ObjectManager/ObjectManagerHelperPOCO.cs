@@ -40,16 +40,23 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         private string BuildObjectIdentity(object obj, IPropertyMap newPropertyMap, object newValue)
         {
-            string id = "";
+			string id = "";
+			IIdentityHelper identityHelper = obj as IIdentityHelper;
+			if (identityHelper != null)
+			{
+				id = identityHelper.GetIdentity();
+				if (id != null)
+					return id;
+				id = "";
+			}
+
             IClassMap classMap = m_ObjectManager.Context.DomainMap.MustGetClassMap(obj.GetType());
             string sep = classMap.IdentitySeparator;
-            //			bool gotObjectStatus = false;
-            //			ObjectStatus objStatus = ObjectStatus.Clean;
-            if (sep == "")
-            {
-                sep = "|";
-            }
-            object value;
+
+			if (sep == "")
+				sep = "|";
+
+			object value;
             foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps())
             {
                 if (propertyMap == newPropertyMap)
@@ -85,6 +92,9 @@ namespace Puzzle.NPersist.Framework.Persistence
             {
                 id = id.Substring(0, id.Length - sep.Length);
             }
+			if (identityHelper != null)
+				identityHelper.SetIdentity(id);
+
             return id;
         }
 
@@ -325,62 +335,80 @@ namespace Puzzle.NPersist.Framework.Persistence
         }
 
         public virtual bool IsDirtyProperty(object obj, string propertyName)
-        {
-            if (!(m_ObjectManager.HasOriginalValues(obj, propertyName)))
-            {
-                return false;
-            }
+        {				
+			if (!this.ObjectManager.GetUpdatedStatus(obj, propertyName))
+				return false;
+
+			if (!(m_ObjectManager.HasOriginalValues(obj, propertyName)))
+				return false;
+
             object orgValue = m_ObjectManager.GetOriginalPropertyValue(obj, propertyName);
             if (Convert.IsDBNull(orgValue))
             {
-                if (!(m_ObjectManager.GetNullValueStatus(obj, propertyName)))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                if (m_ObjectManager.GetNullValueStatus(obj, propertyName))
+					return false;
+				else
+					return true;
+			}
             else
             {
                 if (m_ObjectManager.GetNullValueStatus(obj, propertyName))
-                {
-                    return true;
-                }
-            }
-            //			if (obj is IProxy)
-            //			{
-            if (this.ObjectManager.GetUpdatedStatus(obj, propertyName))
-            {
-                object value = m_ObjectManager.GetPropertyValue(obj, propertyName);
-                if (!(ComparePropertyValues(obj, propertyName, value, orgValue)))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-            //			}
-            //			else
-            //			{
-            //				object value = m_ObjectManager.GetPropertyValue(obj, propertyName);
-            //				if (!(ComparePropertyValues(obj, propertyName, value, orgValue)))
-            //				{
-            //					return true;
-            //				}
-            //				else
-            //				{
-            //					return false;
-            //				}								
-            //			}
-        }
+					return true;
+			}
+
+			object value = m_ObjectManager.GetPropertyValue(obj, propertyName);
+			if (!(ComparePropertyValues(obj, propertyName, value, orgValue)))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+//		public virtual bool IsDirtyProperty(object obj, string propertyName)
+//		{
+//			if (!(m_ObjectManager.HasOriginalValues(obj, propertyName)))
+//			{
+//				return false;
+//			}
+//			object orgValue = m_ObjectManager.GetOriginalPropertyValue(obj, propertyName);
+//			if (Convert.IsDBNull(orgValue))
+//			{
+//				if (!(m_ObjectManager.GetNullValueStatus(obj, propertyName)))
+//				{
+//					return true;
+//				}
+//				else
+//				{
+//					return false;
+//				}
+//			}
+//			else
+//			{
+//				if (m_ObjectManager.GetNullValueStatus(obj, propertyName))
+//				{
+//					return true;
+//				}
+//			}
+//			if (this.ObjectManager.GetUpdatedStatus(obj, propertyName))
+//			{
+//				object value = m_ObjectManager.GetPropertyValue(obj, propertyName);
+//				if (!(ComparePropertyValues(obj, propertyName, value, orgValue)))
+//				{
+//					return true;
+//				}
+//				else
+//				{
+//					return false;
+//				}
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
 
         public virtual bool ComparePropertyValues(object obj, string propertyName, object value1, object value2)
         {

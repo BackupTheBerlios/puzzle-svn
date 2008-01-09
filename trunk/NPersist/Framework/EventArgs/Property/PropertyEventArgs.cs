@@ -62,7 +62,7 @@ namespace Puzzle.NPersist.Framework.EventArguments
 			set { m_NewValue = value; }
 		}
 
-		public object value
+		public object Value
 		{
 			get { return m_Value; }
 			set { m_Value = value; }

@@ -57,15 +57,17 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			bool hasPropertyStatus = false;
 			PropertyCancelEventArgs e = new PropertyCancelEventArgs(obj, propertyName, null, value, this.Context.ObjectManager.GetNullValueStatus(obj, propertyName));
 			this.Context.EventManager.OnReadingProperty(this, e);
+
+			//For a caching before get event, it would set the 
+			//Value from cache and raise the cancel flag to return it
+			value = e.Value;
+
 			if (e.Cancel)
 			{
 				cancel = true;
 				return;
 			}
-			value = e.value;
 			
-			bool didLoadObject = false;
-
 			if (objStatus == ObjectStatus.Deleted)
 			{
 				throw new DeletedObjectException("The object has been deleted!", obj, propertyName); // do not localize
@@ -92,20 +94,12 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 						{
 							throw new ObjectNotFoundException("Object not found!"); // do not localize
 						}
-						didLoadObject = true;						
 					}
 				}
 			}
 			if (!hasPropertyStatus)
 				propStatus = this.Context.ObjectManager.GetPropertyStatus(obj, propertyName);
 	
-			if (propStatus == PropertyStatus.Clean)
-			{
-				if (didLoadObject)
-				{
-					value = this.Context.ObjectManager.GetPropertyValue(obj, propertyName);
-				}
-			}
 			if (propStatus == PropertyStatus.Deleted)
 			{
 				if (obj is IObjectHelper)
@@ -118,7 +112,6 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 				if (!(objStatus == ObjectStatus.UpForCreation))
 				{
 					this.Context.PersistenceEngine.LoadProperty(obj, propertyName);
-					value = this.Context.ObjectManager.GetPropertyValue(obj, propertyName);
 				}
 			}
 			this.Context.InverseManager.NotifyPropertyGet(obj, propertyName);
@@ -135,12 +128,6 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 		//[DebuggerStepThrough()]
 		public virtual void NotifyPropertySet(object obj, string propertyName, ref object value, ref bool cancel)
 		{
-            if (obj is IIdentityHelper)
-            {
-                IIdentityHelper idObj = (IIdentityHelper)obj;
-                idObj.IsInvalid = true;
-            }
-
 			if (this.isDisposed) { return; }
 			if (notification == Notification.Disabled) { return; }
 			DoNotifyPropertySet(obj, propertyName, ref value, null, false, ref cancel);
@@ -154,12 +141,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			DoNotifyPropertySet(obj, propertyName, ref value, oldValue, true, ref cancel);
 		}
 
-		public virtual void NotifyReadProperty(object obj, string propertyName, object value)
+		public virtual void NotifyReadProperty(object obj, string propertyName, ref object value)
 		{
 			if (this.isDisposed) { return; }
 			if (notification != Notification.Full) { return; }
 			PropertyEventArgs e = new PropertyEventArgs(obj, propertyName, null, value, this.Context.ObjectManager.GetNullValueStatus(obj, propertyName));
-			this.Context.EventManager.OnReadProperty(this, e);
+            this.Context.EventManager.OnReadProperty(this, e);
+            value = e.Value;
 		}
 
 		public virtual void NotifyWroteProperty(object obj, string propertyName, object value)

@@ -225,8 +225,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound)
 		{
-			type = this.Context.AssemblyManager.GetType(type);
-			//string key = type.ToString() + "." + identity;
+			//type = this.Context.AssemblyManager.GetType(type);
+            type = AssemblyManager.GetBaseType(type);
+            //string key = type.ToString() + "." + identity;
 			string key = GetKey(type, identity);
 			object obj;
 			ObjectCancelEventArgs e;
@@ -283,8 +284,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public void LoadObject(ref object obj, bool ignoreObjectNotFound)
 		{
-			Type type = this.Context.AssemblyManager.GetType(obj.GetType());
-			string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
+			//Type type = this.Context.AssemblyManager.GetType(obj.GetType());
+            Type type = AssemblyManager.GetBaseType(obj.GetType());
+            string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
 			string key = GetKey(type, identity);
 			LoadObject(identity, ref obj, ignoreObjectNotFound, type, key);			
 		}
@@ -351,7 +353,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual bool HasObject(string identity, Type type)
 		{
-			type = this.Context.AssemblyManager.GetType(type);
+            type = AssemblyManager.GetBaseType(type);
+            //type = this.Context.AssemblyManager.GetType(type);
 			string key = GetKey(type, identity);
 			object obj;
 
@@ -383,7 +386,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual object GetObjectByKey(string keyPropertyName, object keyValue, Type type, bool ignoreObjectNotFound)
 		{
-			type = this.Context.AssemblyManager.GetType(type);
+            type = AssemblyManager.GetBaseType(type);
+            //type = this.Context.AssemblyManager.GetType(type);
 			object obj;
 			string key;
 			string identity;
@@ -492,9 +496,27 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				throw new NullReferenceException("Can't create key for null object!"); // do not localize
 			}
+
+			string key = "";
+			IIdentityHelper identityHelper = obj as IIdentityHelper;
+			if (identityHelper != null)
+			{
+				key = identityHelper.GetKey();
+				if (key != null)
+					return key;
+				key = "";
+			}
+
 			Type type = AssemblyManager.GetBaseType(obj);
-			return type.ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
-//			return obj.GetType().ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
+			key = type.ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
+
+			if (identityHelper != null)
+			{
+				if (identityHelper.GetIdentity() != null)
+					identityHelper.SetKey(key);
+			}
+
+			return key;
 		}
 
 		protected virtual string GetKey(object obj, string identity)

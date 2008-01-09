@@ -25,7 +25,7 @@ namespace Puzzle.NPersist.Framework.Interfaces
 
 		void NotifyPropertyGet(object obj, string propertyName, ref object value, ref bool Cancel);
 
-		void NotifyReadProperty(object obj, string propertyName, object value);
+		void NotifyReadProperty(object obj, string propertyName, ref object value);
 
 		void NotifyPropertySet(object obj, string propertyName, ref object value);
 

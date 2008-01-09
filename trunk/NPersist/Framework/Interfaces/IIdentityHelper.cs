@@ -16,10 +16,10 @@ namespace Puzzle.NPersist.Framework.Interfaces
 	{
 		string GetIdentity();
 
-		string GetIdentity(IPropertyMap propertyMap, object value);
-
 		void SetIdentity(string identity);
 
-        bool IsInvalid { get;set;}
+		string GetKey();
+
+		void SetKey(string key);
 	}
 }

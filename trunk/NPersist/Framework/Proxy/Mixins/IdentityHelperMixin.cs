@@ -18,16 +18,21 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
 {
 	public class IdentityHelperMixin : IIdentityHelper , IProxyAware
 	{
-    //    private IAopProxy target;
-        private string identity;
+		private IAopProxy target = null;
+
+		#region IProxyAware Members
+
+		public void SetProxy(Puzzle.NAspect.Framework.IAopProxy target)
+		{
+			this.target = target ;
+		}
+
+		#endregion
+
+		private string identity;
         public string GetIdentity()
         {
             return identity;
-        }
-
-        public string GetIdentity(Puzzle.NPersist.Framework.Mapping.IPropertyMap propertyMap, object value)
-        {
-            throw new System.Exception("The method or operation is not implemented.");
         }
 
         public void SetIdentity(string identity)
@@ -35,24 +40,15 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
             this.identity = identity;
         }
 
-        public void SetProxy(IAopProxy target)
-        {
-        //    this.target = target;
-        }
+		private string key;
+		public string GetKey()
+		{
+			return key;
+		}
 
-        #region Property IsInvalid 
-        private bool isInvalid = true;
-        public bool IsInvalid
-        {
-            get
-            {
-                return this.isInvalid;
-            }
-            set
-            {
-                this.isInvalid = value;
-            }
-        }                        
-        #endregion
-    }
+		public void SetKey(string key)
+		{
+			this.key = key;
+		}
+	}
 }

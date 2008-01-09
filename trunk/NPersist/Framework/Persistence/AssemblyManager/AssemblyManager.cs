@@ -23,6 +23,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	public class AssemblyManager : ContextChild, IAssemblyManager
 	{
 		private Hashtable m_LoadedAssemblies = new Hashtable();
+		private Hashtable m_BaseTypes = new Hashtable();
 
 		public void RegisterAssembly(Assembly asm)
 		{
@@ -141,7 +142,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             type = GetBaseType(type);
 //			while(typeof(IInterceptable).IsAssignableFrom(type))
 //				type = type.BaseType;
-
             
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
 			obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);            

@@ -38,7 +38,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private ArrayList m_Observers = new ArrayList();
 		private ArrayList m_ContextObservers = new ArrayList();
 		private ArrayList m_AllTypeObservers = new ArrayList();
-		private Hashtable m_TypeObservers = new Hashtable();
+		private Hashtable m_TypeObservers; // Note! do not init...lazy init for best perf (used in GetTypeObservers() to avoid checks if this is null..
 		private Hashtable m_ObjectObservers = new Hashtable();
 
 		private ArrayList m_EmptyList = new ArrayList();
@@ -1699,6 +1699,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		private IList GetTypeObservers(Type type)
 		{
+			if (m_TypeObservers == null)
+				return m_EmptyList;
+
             type = AssemblyManager.GetBaseType(type);            
 
 			ArrayList result = (ArrayList) m_TypeObservers[type];
@@ -1767,6 +1770,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public void AddObserver(IObserver observer, Type type)
 		{
+			if (m_TypeObservers == null)
+				m_TypeObservers = new Hashtable();
+
 			ArrayList result = (ArrayList) m_TypeObservers[type];
 			if (result == null)
 			{

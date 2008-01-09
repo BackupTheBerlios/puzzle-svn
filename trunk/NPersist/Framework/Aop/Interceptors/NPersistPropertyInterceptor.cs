@@ -59,9 +59,19 @@ namespace Puzzle.NPersist.Framework.Aop
 			Puzzle.NPersist.Framework.Interfaces.IInterceptor interceptor = proxy.GetInterceptor();
 			if (interceptor != null) { interceptor.NotifyPropertySet(call.Target, propertyName, ref refValue, ref cancel); }
 			if (cancel) { return null; }
-			object oldValue = call.ExecutionTarget.GetType().GetProperty(propertyName).GetValue(call.ExecutionTarget, null);
+
+			//Roggan made teh horrible buug!!11! :-)))
+			//object oldValue = call.ExecutionTarget.GetType().GetProperty(propertyName).GetValue(call.ExecutionTarget, null);
+			IContext context = null;
+			if (interceptor != null) { context = interceptor.Context; }
+			object oldValue = null;
+			if (context != null)
+				oldValue = context.ObjectManager.GetPropertyValue(call.ExecutionTarget, propertyName);				
+			else
+				oldValue =  call.ExecutionTarget.GetType().GetProperty(propertyName).GetValue(call.ExecutionTarget, null);
 			((InterceptedParameter)call.Parameters[0]).Value = refValue;
-			call.Proceed();		
+			call.Proceed();
+
 #if NET2
             propertyChangedObj.OnPropertyChanged (propertyName);
 #endif
@@ -73,12 +83,20 @@ namespace Puzzle.NPersist.Framework.Aop
 		{
 			IProxy proxy = (IProxy) call.Target;
 			string propertyName = call.Method.Name.Substring(4);
-			object value = call.Proceed();
+			//object value = call.Proceed();
+
+			object value = null;
 			bool cancel = false;
+			
 			Puzzle.NPersist.Framework.Interfaces.IInterceptor interceptor = proxy.GetInterceptor() ;
 			if (interceptor != null) {interceptor.NotifyPropertyGet(call.Target,propertyName,ref value,ref cancel) ;}
-			if (cancel) {return GetDefaultValue(call.ReturnType);}
-			return value;
+			if (cancel) {return value;}
+			//if (cancel) {return GetDefaultValue(call.ReturnType);}
+
+			value = call.Proceed();
+
+            if (interceptor != null) { interceptor.NotifyReadProperty(proxy, propertyName, ref value); }
+            return value;
 		}
 
 		private static object GetDefaultValue(Type dataType)

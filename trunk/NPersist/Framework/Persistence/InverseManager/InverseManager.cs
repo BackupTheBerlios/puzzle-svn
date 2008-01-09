@@ -40,19 +40,22 @@ namespace Puzzle.NPersist.Framework.Persistence
         private void ExecuteInverseActions(object obj, string propertyName)
         {
             ArrayList actions = GetActionsForProperty(obj, propertyName);
-            foreach (InverseAction action in actions)
+            if (actions != null)
             {
-                if (action.ActionType == InverseActionType.Add)
+                foreach (InverseAction action in actions)
                 {
-                    PerformAddAction(action);
-                }
-                else if (action.ActionType == InverseActionType.Remove)
-                {
-                    PerformRemoveAction(action);
-                }
-                else if (action.ActionType == InverseActionType.Set)
-                {
-                    PerformSetAction(action);
+                    if (action.ActionType == InverseActionType.Add)
+                    {
+                        PerformAddAction(action);
+                    }
+                    else if (action.ActionType == InverseActionType.Remove)
+                    {
+                        PerformRemoveAction(action);
+                    }
+                    else if (action.ActionType == InverseActionType.Set)
+                    {
+                        PerformSetAction(action);
+                    }
                 }
             }
         }
@@ -371,29 +374,25 @@ namespace Puzzle.NPersist.Framework.Persistence
         }
 
         protected virtual ArrayList GetActionsForProperty(object obj, string propertyName)
-		{
+        {
             return GetActionsForProperty(obj, propertyName, false);
         }
 
-		protected virtual ArrayList GetActionsForProperty(object obj, string propertyName, bool keepMasters)
+        protected virtual ArrayList GetActionsForProperty(object obj, string propertyName, bool keepMasters)
 		{
-			Hashtable objActions;
-			ArrayList propActions;
 			if (!(inverseActions.ContainsKey(obj)))
-			{
-				inverseActions[obj] = new Hashtable();
-			}
-			objActions = (Hashtable) inverseActions[obj] ;
-			if (!(objActions.ContainsKey(propertyName)))
-			{
-				objActions[propertyName] = new ArrayList();
-			}
-			propActions = (ArrayList) objActions[propertyName] ;
+                return null;
+            Hashtable objActions = (Hashtable)inverseActions[obj];
+
+            if (!(objActions.ContainsKey(propertyName)))
+                return null;
+            ArrayList propActions = (ArrayList)objActions[propertyName];
+
 			objActions.Remove(propertyName);
+
 			if (objActions.Count < 1)
-			{
-				inverseActions.Remove(obj);				
-			}
+                inverseActions.Remove(obj);
+
             if (!keepMasters)
             {
                 foreach (InverseAction action in propActions)
@@ -401,8 +400,37 @@ namespace Puzzle.NPersist.Framework.Persistence
                     RemoveActionFromMasters(action);
                 }
             }
-			return propActions;			
+            return propActions;			
 		}
+
+        //protected virtual ArrayList GetActionsForProperty(object obj, string propertyName, bool keepMasters)
+        //{
+        //    Hashtable objActions;
+        //    ArrayList propActions;
+        //    if (!(inverseActions.ContainsKey(obj)))
+        //    {
+        //        inverseActions[obj] = new Hashtable();
+        //    }
+        //    objActions = (Hashtable)inverseActions[obj];
+        //    if (!(objActions.ContainsKey(propertyName)))
+        //    {
+        //        objActions[propertyName] = new ArrayList();
+        //    }
+        //    propActions = (ArrayList)objActions[propertyName];
+        //    objActions.Remove(propertyName);
+        //    if (objActions.Count < 1)
+        //    {
+        //        inverseActions.Remove(obj);
+        //    }
+        //    if (!keepMasters)
+        //    {
+        //        foreach (InverseAction action in propActions)
+        //        {
+        //            RemoveActionFromMasters(action);
+        //        }
+        //    }
+        //    return propActions;
+        //}
 
         protected virtual void RemoveActionFromMasters(InverseAction action)
         {
@@ -414,7 +442,6 @@ namespace Puzzle.NPersist.Framework.Persistence
                     inverseMasters.Remove(action.Master);
             }
         }
-
 
         protected virtual void ClearActionsForMaster(object master)
         {
@@ -428,7 +455,6 @@ namespace Puzzle.NPersist.Framework.Persistence
                 inverseMasters.Remove(master);
             }
         }
-
 
 		protected virtual void PerformAddAction(InverseAction action)
 		{

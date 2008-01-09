@@ -180,29 +180,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 			return null;
 		}
 
-//        public virtual IPropertyMap GetPropertyMap(string findName)
-//        {
-//            if (findName == null) { return null; }
-//            if (findName == "") { return null; }
-//            findName = findName.ToLower(CultureInfo.InvariantCulture);
-//            if (IsFixed("GetPropertyMap_" + findName))
-//            {
-//                return (IPropertyMap)GetFixedValue("GetPropertyMap_" + findName);
-//            }
-//            foreach (IPropertyMap propertyMap in this.GetAllPropertyMaps())
-//            {
-//                if (propertyMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
-//                {
-//                    if (IsFixed())
-//                    {
-//                        SetFixedValue("GetPropertyMap_" + findName, propertyMap);
-//                    }
-//                    return propertyMap;
-//                }
-//            }
-//            return null;
-//        }
-
 		[XmlArrayItem(typeof (CodeMap))]
 		public virtual ArrayList CodeMaps
 		{

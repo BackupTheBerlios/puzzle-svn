@@ -297,7 +297,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 			if (mapSerializer == null)
 			{
-				mapSerializer = GetMapSerializerFromXml(xml);
+				mapSerializer = new DefaultMapSerializer(); // GetMapSerializerFromXml(xml);
 			}
 			if (mapSerializer != null)
 			{
@@ -494,48 +494,47 @@ namespace Puzzle.NPersist.Framework.Mapping
             }	
 		}
 
-		protected static IMapSerializer GetMapSerializerFromXml(string xml)
-		{
-			IMapSerializer mapSerializer = null;
-			XmlDocument xmlDoc = new XmlDocument();
-			XmlNode xmlDom;
-			if (xml.Length > 0)
-			{
-				xmlDoc.LoadXml(xml);
-				xmlDom = xmlDoc.SelectSingleNode("domain");
-				if (xmlDom != null)
-				{
-					if (!(xmlDom.Attributes["serializer"] == null))
-					{
-						if (xmlDom.Attributes["serializer"].Value.ToLower(CultureInfo.InvariantCulture) == "dotnet")
-						{
-							mapSerializer = null;
-						}
-						else
-						{
-							mapSerializer = new DefaultMapSerializer();
-						}
-					}
-					else
-					{
-						mapSerializer = new DefaultMapSerializer();
-					}
-				}
-				else
-				{
-					xmlDom = xmlDoc.SelectSingleNode("DomainMap");
-					if (xmlDom != null)
-					{
-						mapSerializer = null;
-					}
-					else
-					{
-						mapSerializer = null;
-					}
-				}
-			}
-			return mapSerializer;
-		}
+//		protected static IMapSerializer GetMapSerializerFromXml(string xml)
+//		{
+//			IMapSerializer mapSerializer = null;
+//			XmlDocument xmlDoc = new XmlDocument();
+//			XmlNode xmlDom;
+//			if (xml.Length > 0)
+//			{
+//				xmlDoc.LoadXml(xml);
+//				xmlDom = xmlDoc.SelectSingleNode("domain");
+//				if (xmlDom != null)
+//				{
+//					if (!(xmlDom.Attributes["serializer"] == null))
+//					{
+//						if (xmlDom.Attributes["serializer"].Value.ToLower(CultureInfo.InvariantCulture) == "dotnet")
+//						{
+//							mapSerializer = null;
+//						}
+//						else
+//						{
+//						}
+//					}
+//					else
+//					{
+//						mapSerializer = new DefaultMapSerializer();
+//					}
+//				}
+//				else
+//				{
+//					xmlDom = xmlDoc.SelectSingleNode("DomainMap");
+//					if (xmlDom != null)
+//					{
+//						mapSerializer = null;
+//					}
+//					else
+//					{
+//						mapSerializer = null;
+//					}
+//				}
+//			}
+//			return mapSerializer;
+//		}
 
 
 		public virtual void Save()
@@ -692,10 +691,20 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 			return classMap;
 		}
-
+		
+		private Hashtable fixedValueGetClassMapByType = new Hashtable();
+		private Hashtable fixedValueGetClassMapByTypeNull = new Hashtable();
+ 
 //		//[DebuggerStepThrough()]
 		public virtual IClassMap GetClassMap(Type type)
 		{
+			IClassMap classMap = (IClassMap) fixedValueGetClassMapByType[type];
+			if (classMap != null)
+				return classMap;
+
+			if (fixedValueGetClassMapByTypeNull.ContainsKey(type))
+				return null;
+
 			string className;
 			string ns = "";
 
@@ -704,10 +713,25 @@ namespace Puzzle.NPersist.Framework.Mapping
 			while (tmp.Assembly is AssemblyBuilder)
 				tmp = tmp.BaseType;
 
+			classMap = (IClassMap) fixedValueGetClassMapByType[tmp];
+			if (classMap != null)
+			{
+				if (type != tmp)
+					fixedValueGetClassMapByType[type] = classMap;
+				return classMap;
+			}
+
+			if (fixedValueGetClassMapByTypeNull.ContainsKey(tmp))
+			{
+				if (type != tmp)
+					fixedValueGetClassMapByTypeNull[type] = true;
+				return null;
+			}
+
 			className = tmp.Name;
 			ns = tmp.Namespace;
 
-			IClassMap classMap = GetClassMap(className);
+			classMap = GetClassMap(className);
 			if (classMap == null)
 			{
 				if (ns.Length > 0)
@@ -716,8 +740,48 @@ namespace Puzzle.NPersist.Framework.Mapping
 				}
 			}
 
+			if (isFixed)
+			{
+				if (classMap == null)
+					fixedValueGetClassMapByTypeNull[tmp] = true;
+				else
+					fixedValueGetClassMapByType[tmp] = classMap;
+				if (tmp != type)
+				{
+					if (classMap == null)
+						fixedValueGetClassMapByTypeNull[type] = true;
+					else
+						fixedValueGetClassMapByType[type] = classMap;
+				}
+			}
+
 			return classMap;
 		}
+
+//		public virtual IClassMap GetClassMap(Type type)
+//		{
+//			string className;
+//			string ns = "";
+//
+//			Type tmp = type;
+//
+//			while (tmp.Assembly is AssemblyBuilder)
+//				tmp = tmp.BaseType;
+//
+//			className = tmp.Name;
+//			ns = tmp.Namespace;
+//
+//			IClassMap classMap = GetClassMap(className);
+//			if (classMap == null)
+//			{
+//				if (ns.Length > 0)
+//				{
+//					classMap = GetClassMap(ns + "." + className);
+//				}
+//			}
+//
+//			return classMap;
+//		}
 		
 		public virtual IClassMap MustGetClassMap(string findName)
 		{
@@ -779,43 +843,6 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 			return null;
 		}
-
-//		public virtual IClassMap GetClassMap(string findName)
-//		{
-//			if (findName == null) { return null; }
-//			if (findName == "") { return null; }
-//			findName = findName.ToLower(CultureInfo.InvariantCulture);
-//			if (IsFixed("GetClassMap_" + findName))
-//			{
-//				return (IClassMap) GetFixedValue("GetClassMap_" + findName);
-//			}
-//			foreach (IClassMap classMap in m_ClassMaps)
-//			{
-//				if (classMap.Name.ToLower(CultureInfo.InvariantCulture) == findName)
-//				{
-//					if (IsFixed())
-//					{
-//						SetFixedValue("GetClassMap_" + findName, classMap);
-//					}
-//					return classMap;
-//				}
-//			}
-//			if (RootNamespace.Length > 0)
-//			{
-//				foreach (IClassMap classMap in m_ClassMaps)
-//				{
-//					if ((RootNamespace + "." + classMap.Name).ToLower(CultureInfo.InvariantCulture) == findName)
-//					{
-//						if (IsFixed())
-//						{
-//							SetFixedValue("GetClassMap_" + findName, classMap);
-//						}
-//						return classMap;
-//					}
-//				}
-//			}
-//			return null;
-//		}
 
 		[XmlArrayItem(typeof (SourceMap))]
 		public virtual ArrayList SourceMaps
@@ -1658,6 +1685,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			this.isFixed = false;
 			this.fixedGetClassMap = false;
 			this.fixedValueGetClassMap.Clear();
+			this.fixedValueGetClassMapByType.Clear();
 		}
 
 		#endregion
