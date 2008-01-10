@@ -95,6 +95,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 					//Ask the context to create the new employee
 					Employee employee = (Employee) context.GetObject(id, typeof(Employee));
 
+                    Console.WriteLine(employee.HireDate);
+
 					//Assert that the context didn't return a null value
 					Assert.IsNotNull(employee);
 
