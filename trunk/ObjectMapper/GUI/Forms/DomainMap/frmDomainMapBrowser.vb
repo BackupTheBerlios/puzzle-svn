@@ -15458,12 +15458,9 @@ Public Class frmDomainMapBrowser
 
     Private Sub frmDomainMapBrowser_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        Me.Show()
-
         mapListView.frmDomainMapBrowser = Me
 
-        LogServices.mainForm = Me
-
+        Me.Show()
 
         'LoadSettings()
 

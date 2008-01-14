@@ -48,6 +48,8 @@ Public Class AppEntry
 
         frm = New frmDomainMapBrowser
 
+        LogServices.mainForm = frm
+
         frm.Starting()
 
         If openFiles.Count < 1 Then

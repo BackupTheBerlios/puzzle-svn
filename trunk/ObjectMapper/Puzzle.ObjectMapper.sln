@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.SyntaxBox.NET 2.0", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0", "..\Windows\Forms\Controls\Syntaxbox\Puzzle.Syntaxbox.DefaultSyntaxFiles\Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0.csproj", "{F2D0D973-95A3-47EE-AF0C-2336192CB264}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.ObjectMapper.Plugins.DataSetGenerator", "Plugins\DataSetGenerator\Puzzle.ObjectMapper.Plugins.DataSetGenerator.csproj", "{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -218,6 +220,14 @@ Global
 		{F2D0D973-95A3-47EE-AF0C-2336192CB264}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2D0D973-95A3-47EE-AF0C-2336192CB264}.TEST|Any CPU.ActiveCfg = Release|Any CPU
 		{F2D0D973-95A3-47EE-AF0C-2336192CB264}.TEST|Any CPU.Build.0 = Release|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.NPDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.NPDebug|Any CPU.Build.0 = Debug|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.TEST|Any CPU.ActiveCfg = Release|Any CPU
+		{2D24B772-B77E-41FE-A8D7-C7B207EE5C0B}.TEST|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
