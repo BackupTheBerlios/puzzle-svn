@@ -71,10 +71,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				this.sourceContext.BeginEdit() ;
 
+                //We make this 2-pass:
+                //If we create A and B in a leaf ctx and commit,
+                //where A has a ref to B, if we insert A into root ctx
+                //first and save it (copy values from leaf A to root A)
+                //a ghost B will be created in the root and a ref is made
+                //to it from the root A. When we then want to insert the 
+                //leaf B into the root ctx, it already exists and we get
+                //an id map exception...
 				foreach (object obj in listInsert)
 				{
 					DoInsertObject(obj);
 				}
+                foreach (object obj in listInsert)
+                {
+                    DoSaveInsertedObject(obj);
+                }
 
 				foreach (object obj in listUpdate)
 				{
@@ -169,8 +181,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
 				Type sourceType = ToSourceType(GetSourceType(obj));
 			
-				//object sourceObject = sourceContext.GetObjectById(identity, sourceType, true);
-				object sourceObject = sourceContext.GetObjectById(identity, sourceType);
+				//object sourceObject = sourceContext.GetObjectById(identity, sourceType);
+                object sourceObject = sourceContext.TryGetObjectById(identity, sourceType);
 
 				if (sourceObject == null)
 				{
@@ -229,13 +241,33 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 				hashInserted[obj] = sourceObject;
 
-				SaveObject(obj, sourceObject, true);
+				//SaveObject(obj, sourceObject, true);
 			}
 			finally
 			{
 				Monitor.Exit(sourceContext);			
 			}	
 		}
+
+        public virtual void DoSaveInsertedObject(object obj)
+        {
+            if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
+                throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
+
+            try
+            {
+                object sourceObject = hashInserted[obj];
+
+                if (sourceContext == null)
+                    throw new NPersistException("Internal Error! Could not find associated source context object for leaf context object in hash table!");
+
+                SaveObject(obj, sourceObject, true);
+            }
+            finally
+            {
+                Monitor.Exit(sourceContext);
+            }
+        }
 
 
 		public virtual void RemoveObject(object obj)
