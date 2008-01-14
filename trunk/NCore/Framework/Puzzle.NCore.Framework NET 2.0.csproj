@@ -135,6 +135,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IO\FileTools.cs" />
     <Compile Include="Logging\ConsoleLogger.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -17429,6 +17429,10 @@ Public Class frmDomainMapBrowser
 
                                                     add = True
 
+                                                Case Else
+
+                                                    If plugMethodAttr.ReturnsType Is GetType(IPluginOutput) Then add = True
+
                                             End Select
 
                                         End If
@@ -17667,6 +17671,18 @@ Public Class frmDomainMapBrowser
                             End If
                         End If
                         AddNewMainDocument(result, plugMeth.PluginName & "." & plugMeth.MethodName & ".txt", docTitle, MainDocumentType.Text)
+
+                    Case Else
+                        docTitle = "Output from plugin '" & plugMeth.PluginName & "." & plugMeth.MethodName & "'"
+                        If Not obj Is Nothing Then
+                            If Not obj.GetType.GetInterface(GetType(IMap).ToString) Is Nothing Then
+                                docTitle += " for '" & CType(obj, IMap).Name & "'"
+                            End If
+                            If Not result.GetType.GetInterface(GetType(IPluginOutput).ToString) Is Nothing Then
+                                Dim output As IPluginOutput = CType(result, IPluginOutput)
+                                AddNewMainDocument(output.Content, output.Filename & "." & output.Extension, docTitle, output.DocumentType)
+                            End If
+                        End If
 
                 End Select
 

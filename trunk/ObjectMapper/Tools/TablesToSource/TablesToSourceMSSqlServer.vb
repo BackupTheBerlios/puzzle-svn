@@ -1110,7 +1110,7 @@ Public Class TablesToSourceMSSqlServer
                 Return "[bigint]"
             Case DbType.Object
                 Return "[image]"
-            Case DbType.SByte
+            Case DbType.[SByte]
                 Return "[tinyint]"
             Case DbType.Single
                 Return "[real]"

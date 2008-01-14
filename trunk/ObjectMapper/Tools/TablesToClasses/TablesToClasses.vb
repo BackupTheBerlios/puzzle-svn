@@ -450,7 +450,7 @@ Public Class TablesToClasses
                 propertyType = "System.Int64"
             Case DbType.Object
                 propertyType = "System.Byte()"
-            Case DbType.SByte
+            Case DbType.[SByte]
                 propertyType = "System.Byte"
             Case DbType.Single
                 propertyType = "System.Single"

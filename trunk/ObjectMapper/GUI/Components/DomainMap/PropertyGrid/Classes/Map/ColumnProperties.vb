@@ -495,7 +495,7 @@ Public Class ColumnProperties
                 If propertyName = "Scale" Then Return False
 
 
-            Case DbType.SByte
+            Case DbType.[SByte]
 
                 If propertyName = "Length" Then Return False
                 If propertyName = "Precision" Then Return False
@@ -658,7 +658,7 @@ Public Class ColumnProperties
                 prec = 0
                 scale = 0
 
-            Case DbType.SByte
+            Case DbType.[SByte]
 
                 length = 1
                 prec = 4

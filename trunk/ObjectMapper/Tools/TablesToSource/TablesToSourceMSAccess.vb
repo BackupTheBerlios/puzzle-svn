@@ -1180,7 +1180,7 @@ Public Class TablesToSourceMSAccess
                 Return "single"
             Case DbType.Object
                 '                Return "[image]"
-            Case DbType.SByte
+            Case DbType.[SByte]
                 'Return "[tinyint]"
                 Return "byte"
             Case DbType.Single
