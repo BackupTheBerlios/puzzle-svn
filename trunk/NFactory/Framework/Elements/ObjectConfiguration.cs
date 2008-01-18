@@ -107,7 +107,7 @@ namespace Puzzle.NFactory.Framework.ConfigurationElements
 
 		public object Invoke(IContainer owner, Type requestedType, InstanceMode instanceMode)
 		{
-			return owner.GetObjectInternal(this.Name, instanceMode);
+			return owner.GetObjectInternal(this.Name, instanceMode,null);
 		}
 
 		public object CreateObject(IContainer owner)

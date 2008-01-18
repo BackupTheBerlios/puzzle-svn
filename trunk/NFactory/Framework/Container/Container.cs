@@ -96,7 +96,7 @@ namespace Puzzle.NFactory.Framework
                 LogMessage message = new LogMessage("Getting object '{0}'", name);
                 LogMessage verbose = new LogMessage("Force new instance {0}", forceNewInstance);
                 LogManager.Info(this, message, verbose);
-                return GetObjectInternal(name, forceNewInstance ? InstanceMode.PerReference : InstanceMode.Default);
+                return GetObjectInternal(name, forceNewInstance ? InstanceMode.PerReference : InstanceMode.Default,null);
             }
 		}
 
@@ -128,19 +128,47 @@ namespace Puzzle.NFactory.Framework
         }
 #endif
 
+        public virtual IObjectConfiguration GetConfiguration(string name)
+        {
+            IObjectConfiguration objectConfig = Configuration.GetObjectConfiguration(name);
+            if (objectConfig == null)
+            {
+                if (ParentContainer == null)
+                    throw new Exception(string.Format("Configuration not found '{0}'", name));
+                else
+                    return ParentContainer.GetConfiguration(name);
+            }
+            return objectConfig;
+        }
 
-        public object GetObjectInternal(string name, InstanceMode instanceMode)
+        public object GetObjectInternal(string name, InstanceMode instanceMode,IContainer rootContainer)
 		{
             lock (syncRoot)
             {
                 IObjectConfiguration objectConfig = Configuration.GetObjectConfiguration(name);
+                
+                if (rootContainer != null)
+                {
+                    IObjectConfiguration overrideConfig = rootContainer.GetConfiguration(name);
+
+                    if (overrideConfig == objectConfig || overrideConfig == null)
+                    {
+                        //not overridden
+                    }
+                    else
+                    {
+                        objectConfig = overrideConfig;
+                    }
+                }
+                
+                
 
                 if (objectConfig == null)
                 {
                     if (ParentContainer == null)
                         throw new Exception(string.Format("Object not found '{0}'", name));
                     else
-                        return ParentContainer.GetObjectInternal(name, instanceMode);
+                        return ParentContainer.GetObjectInternal(name, instanceMode,rootContainer);
                 }
 
                 if (instanceMode == InstanceMode.Default)

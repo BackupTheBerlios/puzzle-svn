@@ -16,11 +16,13 @@ namespace Puzzle.NFactory.Framework
 		object GetObject(string name, bool forceNewInstance);
 		object GetObject(string name);
 
-		object GetObjectInternal(string name, InstanceMode instanceMode);
+        IObjectConfiguration GetConfiguration(string name);
+		object GetObjectInternal(string name, InstanceMode instanceMode,IContainer rootContainer);
 		void ConfigureObject(object target, string configureAs);
 		object CreateObject(Type objectType, params object[] args);
 		object WrapInstance(object target);
         void PrepareNewGraph();
+        
 #if NET2
         T CreateObject<T>(params object[] args);
         T GetObject<T>(string name, bool forceNewInstance);
