@@ -32,11 +32,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private OptimisticConcurrencyBehaviorType m_UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior;
 		private OptimisticConcurrencyBehaviorType m_DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior;
 
-		public virtual object GetObject(string identity, Type type)
-		{
-			return this.Context.IdentityMap.GetObject(identity, type);
-		}
-
 		public virtual object GetObject(string identity, Type type, bool lazy)
 		{
 			return this.Context.IdentityMap.GetObject(identity, type, lazy);			

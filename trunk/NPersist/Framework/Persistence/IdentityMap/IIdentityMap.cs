@@ -38,8 +38,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void LoadObject(ref object obj, bool ignoreObjectNotFound);
 
-		object GetObject(string identity, Type type);
-
 		object GetObject(string identity, Type type, bool lazy);
 
 		object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound);

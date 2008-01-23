@@ -213,11 +213,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.LogManager.Debug(this,message , verbose); // do not localize
 		}
 
-		public virtual object GetObject(string identity, Type type)
-		{
-			return GetObject(identity, type, false);
-		}
-
 		public virtual object GetObject(string identity, Type type, bool lazy)
 		{
 			return GetObject(identity, type, lazy, false);			

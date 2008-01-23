@@ -18,8 +18,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 {
 	public interface IPersistenceManager : IContextChild
 	{
-		object GetObject(string identity, Type type);
-
 		object GetObject(string identity, Type type, bool lazy);
 
 		object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound);

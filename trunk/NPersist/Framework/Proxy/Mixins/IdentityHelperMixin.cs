@@ -10,6 +10,7 @@
 
 
 using System.Collections;
+using Puzzle.NCore.Framework.Collections;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework;
@@ -49,6 +50,20 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
 		public void SetKey(string key)
 		{
 			this.key = key;
+		}
+
+		private IList identityValues = new ArrayList(1);
+
+		public IList IdentityValues
+		{
+			get { return identityValues; }
+		}
+
+		private KeyStruct keyStruct;
+		public KeyStruct KeyStruct
+		{
+			get { return this.keyStruct; }
+			set { this.keyStruct = value; }
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using NUnit.Framework;
 using Puzzle.NPersist.Framework;
 using Puzzle.NPersist.Framework.Delegates;
@@ -195,7 +196,10 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				Customer deleteCustomer = (Customer) context.TryGetObjectById("APEYO", typeof(Customer));
 				if (deleteCustomer != null)
 				{
-					foreach (Order order in deleteCustomer.Orders)
+					//We have to copy to a new list...every time we delete an order,
+					//it is removed from the customer.Orders list. 
+					IList deleteOrders = new ArrayList(deleteCustomer.Orders);
+					foreach (Order order in deleteOrders)
 						context.DeleteObject(order);
 					context.DeleteObject(deleteCustomer);
 					context.Commit();
