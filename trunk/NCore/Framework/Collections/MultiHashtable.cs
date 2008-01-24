@@ -54,9 +54,6 @@ namespace Puzzle.NCore.Framework.Collections
 
 				if (!(thisKey.Equals(thatKey)))
 					return false;
-
-                //if (Comparer.Default.Compare(thisKey,thatKey)!=0)
-                //    return false;
             }
 
             return true;
