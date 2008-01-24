@@ -18,9 +18,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 {
 	public interface IPersistenceManager : IContextChild
 	{
-		object GetObject(string identity, Type type, bool lazy);
+		object GetObject(object identity, Type type, bool lazy);
 
-		object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound);
+        object GetObject(object identity, Type type, bool lazy, bool ignoreObjectNotFound);
 
 		object GetObjectByKey(string keyPropertyName, object keyValue, Type type);
 

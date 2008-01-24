@@ -731,7 +731,7 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual object TryGetObjectById(object identity, Type type)
 		{
-			string id = TransformIdentity(identity, type);
+			object id = EnsureIdentity(identity, type);
 			return m_PersistenceManager.GetObject(id, type, false, true);	
 		}
 
@@ -836,8 +836,22 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual object GetObjectById(object identity, Type type, bool lazy)
 		{
-			string id = TransformIdentity(identity, type);
+			object id = EnsureIdentity(identity, type);
 			return m_PersistenceManager.GetObject(id, type, lazy);
+		}
+
+		protected virtual object EnsureIdentity(object identity, Type type)
+		{
+			if (identity.GetType().IsAssignableFrom(type))
+			{
+				return m_ObjectManager.GetObjectIdentity(identity);
+			}
+			else if (identity is Hashtable)
+			{
+				return  GetHashtableIdentity((Hashtable) identity, type);
+			}
+
+			return identity;
 		}
 
 		protected virtual string TransformIdentity(object identity, Type type)

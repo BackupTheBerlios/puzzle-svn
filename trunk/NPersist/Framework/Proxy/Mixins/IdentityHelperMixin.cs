@@ -52,18 +52,34 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
 			this.key = key;
 		}
 
-		private IList identityValues = new ArrayList(1);
+        public bool HasIdentityKeyParts()
+        {
+            return this.identityKeyParts.Count > 0;
+        }
 
-		public IList IdentityValues
+        private IList identityKeyParts = new ArrayList(1);
+
+        public IList GetIdentityKeyParts()
 		{
-			get { return identityValues; }
+            return identityKeyParts; 
 		}
 
-		private KeyStruct keyStruct;
-		public KeyStruct KeyStruct
+        public bool HasKeyStruct()
+        {
+            return this.hasKeyStruct;
+        }
+
+        private bool hasKeyStruct;
+        private KeyStruct keyStruct;
+		public KeyStruct GetKeyStruct()
 		{
-			get { return this.keyStruct; }
-			set { this.keyStruct = value; }
+			return this.keyStruct;
+		}
+
+		public void SetKeyStruct(KeyStruct value)
+		{
+			this.keyStruct = value;
+            this.hasKeyStruct = true;
 		}
 	}
 }

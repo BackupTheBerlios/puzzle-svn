@@ -3481,6 +3481,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 				}
 				identity = "";
+				object objIdentity = null;
+				int identityCnt = 0;
 				//iterate through the identity properties for our type, get the columnname for each from propertyColumnMap
 				//and get the id values from the datareader, then concatenate the id values to an identity string using the id separator of the type
 				//also add the id columns to the foundIdColumns hashtable
@@ -3491,8 +3493,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						if (propertyColumnMap[idPropertyMap.Name] is string)
 						{
-							identity += Convert.ToString(dr[(string) propertyColumnMap[idPropertyMap.Name]]) + sep;
+							objIdentity = dr[(string) propertyColumnMap[idPropertyMap.Name]];
+							identity += Convert.ToString(objIdentity) + sep;
 							foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;							
+							identityCnt++;
 						}
 						else
 						{
@@ -3517,8 +3521,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 							for (int iter = index; iter < aliases.Count ; iter++ )
 							{
-								identity += Convert.ToString(dr[(string) aliases[iter]]) + sep;
-								foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;								
+								objIdentity = dr[(string) aliases[iter]];
+								identity += Convert.ToString(objIdentity) + sep;
+								foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;
+								identityCnt++;
 							}
 						}
 					}
@@ -3526,16 +3532,24 @@ namespace Puzzle.NPersist.Framework.Persistence
 				//iterate through the id columns and concatenate the id values to an identity string using the id separator of the type
 				//ignore idcolumns that are aready added in the previous loop
 				foreach (string strColumnName in idColumns)
+				{
 					if (!(foundIdColumns.ContainsKey(strColumnName.ToLower(CultureInfo.InvariantCulture))))
-						identity += Convert.ToString(dr[strColumnName]) + sep;						
-
+					{
+						objIdentity = dr[strColumnName];
+						identity += Convert.ToString(objIdentity) + sep;
+						identityCnt++;
+					}					
+				}
 				//if the identity string ends with a separator, remove the trailing separator
 				if (identity.Length > sep.Length)
 					identity = identity.Substring(0, identity.Length - sep.Length);
 
 				//ask the context for the object with our identity and type 
 				//this is the "root" object represented by the row
-				obj = this.Context.GetObjectById(identity, useType, true);
+				if (identityCnt == 1)
+					obj = this.Context.GetObjectById(objIdentity, useType, true);
+				else
+					obj = this.Context.GetObjectById(identity, useType, true);
 
 				//add the object to the result list
 				object test = added[obj];

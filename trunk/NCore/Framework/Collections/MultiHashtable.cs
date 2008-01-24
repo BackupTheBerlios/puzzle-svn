@@ -49,8 +49,11 @@ namespace Puzzle.NCore.Framework.Collections
                 object thisKey = keys[i];
                 object thatKey = other.keys[i];
 
-                if (Comparer.Default.Compare(thisKey,thatKey)!=0)
-                    return false;
+				if (!(thisKey.Equals(thatKey)))
+					return false;
+
+                //if (Comparer.Default.Compare(thisKey,thatKey)!=0)
+                //    return false;
             }
 
             return true;

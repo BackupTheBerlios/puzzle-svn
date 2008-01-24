@@ -12,22 +12,38 @@ using System;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NCore.Framework.Collections;
 using System.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
 	public interface IObjectManager : IContextChild
 	{
-
 		string GetObjectIdentity(object obj);
 
 		string GetObjectIdentity(object obj, IPropertyMap propertyMap, object value);
 
+        IList GetObjectIdentityKeyParts(object obj);
+
+        IList GetObjectIdentityKeyParts(object obj, IPropertyMap propertyMap, object value);
+
 		void SetObjectIdentity(object obj, string identity);
+
+		void SetObjectIdentity(object obj, KeyStruct keyStruct);
+
+        IList ParseObjectIdentityKeyParts(Type type, string identity);
+
+        IList ParseObjectIdentityKeyParts(IClassMap classMap, IList idPropertyMaps, Type type, string identity);
+
+		bool HasIdentity(object obj);
 
 		string GetObjectKey(object obj);
 
 		string GetObjectKeyOrIdentity(object obj);
+
+        object ConvertValueToType(object obj, IPropertyMap propertyMap, string value);
+
+        object ConvertValueToType(Type type, IPropertyMap propertyMap, string value);
 
 		string GetPropertyDisplayName(object obj, string propertyName);
 

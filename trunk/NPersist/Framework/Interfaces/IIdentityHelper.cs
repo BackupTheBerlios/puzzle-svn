@@ -8,7 +8,9 @@
 // *
 // *
 
+using System.Collections;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NCore.Framework.Collections;
 
 namespace Puzzle.NPersist.Framework.Interfaces
 {
@@ -18,8 +20,18 @@ namespace Puzzle.NPersist.Framework.Interfaces
 
 		void SetIdentity(string identity);
 
-		string GetKey();
+		//string GetKey();
 
-		void SetKey(string key);
+		//void SetKey(string key);
+
+        bool HasIdentityKeyParts();
+
+        IList GetIdentityKeyParts();
+
+        bool HasKeyStruct();
+
+        KeyStruct GetKeyStruct();
+
+        void SetKeyStruct(KeyStruct keyStruct);
 	}
 }

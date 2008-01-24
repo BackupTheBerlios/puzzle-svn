@@ -32,12 +32,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private OptimisticConcurrencyBehaviorType m_UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior;
 		private OptimisticConcurrencyBehaviorType m_DeleteOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior;
 
-		public virtual object GetObject(string identity, Type type, bool lazy)
+		public virtual object GetObject(object identity, Type type, bool lazy)
 		{
 			return this.Context.IdentityMap.GetObject(identity, type, lazy);			
 		}
 
-		public virtual object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound)
+		public virtual object GetObject(object identity, Type type, bool lazy, bool ignoreObjectNotFound)
 		{
 			return this.Context.IdentityMap.GetObject(identity, type, lazy, ignoreObjectNotFound);
 		}
@@ -162,12 +162,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			IClassMap refClassMap;
 			IPropertyMap mapToId;
-			bool isIdentity = false;
 			if (!(propertyMap.ReferenceType == ReferenceType.None))
 			{
 				if (value != null)
 				{
-					string identity = "";
 					refClassMap = propertyMap.MustGetReferencedClassMap();
 					if (discriminator != null)
 					{
@@ -184,33 +182,9 @@ namespace Puzzle.NPersist.Framework.Persistence
                     IColumnMap propertyColumnMap = propertyMap.GetColumnMap();
                     IColumnMap inverseColumnMap = propertyColumnMap.MustGetPrimaryKeyColumnMap();
                     mapToId = refClassMap.MustGetPropertyMapForColumnMap(inverseColumnMap);
+
 					if (mapToId.IsIdentity)
-					{
-						isIdentity = true;
-						IList valueAsList = value as IList;
-						if (valueAsList == null)
-							identity = Convert.ToString(value);
-						else
-						{
-							string separator = refClassMap.GetIdentitySeparator();
-
-                            if (separator == "")
-                            {
-                                separator = "|";
-                            }
-
-							StringBuilder identityBuilder = new StringBuilder() ;
-							foreach (object valueItem in valueAsList)
-								identityBuilder.Append(Convert.ToString(valueItem) + separator) ;
-							identityBuilder.Length -= separator.Length;
-
-							identity = identityBuilder.ToString(); 
-						}
-					}
-					if (isIdentity)
-					{
-					    return this.Context.GetObjectById(identity, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
-					}
+						return this.Context.GetObjectById(value, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
 					else
 						return this.Context.GetObjectByKey(mapToId.Name, Convert.ToString(value), obj.GetType().GetProperty(propertyMap.Name).PropertyType);
 				}
@@ -1035,6 +1009,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}	
 			if (refObj != null && DBNull.Value.Equals(refObj) != true)
 			{
+                //hmmmm won't this fail if we have two objects of different classes but with the same id?
+                //probably the type should be included (and preferably change to KeyStruct comparisons...)
 				refObjId = om.GetObjectIdentity(refObj);
 				extOrgObjId = "";
 				if (extOrgObj != null)

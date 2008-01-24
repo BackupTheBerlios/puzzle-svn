@@ -19,6 +19,9 @@ using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Proxy;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NCore.Framework.Logging;
+using Puzzle.NCore.Framework.Collections;
+using System.Reflection;
+using System.Globalization;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -41,7 +44,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			cache.AllObjects.Remove(obj);
 
-			string key = GetKey(obj);
+			KeyStruct key = GetKey(obj);
 			cache.LoadedObjects.Remove(key);
 			//m_objectStatusLookup.Remove(key);
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotRegistered);
@@ -59,7 +62,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			IContext ctx = this.Context;
 
-			string key = GetKey(obj);
+            KeyStruct key = GetKey(obj);
 
 			IObjectCache cache = GetObjectCache();
 
@@ -92,7 +95,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			IContext ctx = this.Context;
 
-			string key = GetKey(obj);
+            KeyStruct key = GetKey(obj);
 
 			IObjectCache cache = GetObjectCache();
 
@@ -137,7 +140,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			if (cache.AllObjects != null)
 				cache.AllObjects.Add(obj);
-			string key = GetKey(obj);
+            KeyStruct key = GetKey(obj);
 			
 			cache.UnloadedObjects[key] = obj;
 			//m_objectStatusLookup[obj] = ObjectStatus.NotLoaded;
@@ -149,14 +152,20 @@ namespace Puzzle.NPersist.Framework.Persistence
             ctx.LogManager.Info(this, message, verbose); // do not localize
 		}
 
+		/// <summary>
+		/// This method assumes that the previous identity was a temporary, 
+		/// GUID id assigned before the id was set up
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="previousIdentity"></param>
 		public virtual void UpdateIdentity(object obj, string previousIdentity)
 		{
 			if (obj == null)
 			{
 				throw new NullReferenceException("Can't update temporary identity for null object!"); // do not localize
 			}
-			string key = GetKey(obj);
-			string prevKey = GetKey(obj, previousIdentity);
+            KeyStruct key = GetKey(obj);
+            KeyStruct prevKey = GetOldKey(obj, previousIdentity);
 
 			IObjectCache cache = GetObjectCache();
 
@@ -187,8 +196,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				throw new NullReferenceException("Can't update temporary identity for null object!"); // do not localize
 			}
-			string key = GetKey(obj, newIdentity);
-			string prevKey = GetKey(obj, previousIdentity);
+            KeyStruct key = GetKey(obj, newIdentity);
+            KeyStruct prevKey = GetOldKey(obj, previousIdentity);
 
 			IObjectCache cache = GetObjectCache( );
 
@@ -213,17 +222,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.LogManager.Debug(this,message , verbose); // do not localize
 		}
 
-		public virtual object GetObject(string identity, Type type, bool lazy)
+        public virtual object GetObject(object identity, Type type, bool lazy)
 		{
 			return GetObject(identity, type, lazy, false);			
 		}
 
-		public virtual object GetObject(string identity, Type type, bool lazy, bool ignoreObjectNotFound)
+        public virtual object GetObject(object identity, Type type, bool lazy, bool ignoreObjectNotFound)
 		{
 			//type = this.Context.AssemblyManager.GetType(type);
             type = AssemblyManager.GetBaseType(type);
             //string key = type.ToString() + "." + identity;
-			string key = GetKey(type, identity);
+			KeyStruct key = GetKey(type, identity);
 			object obj;
 			ObjectCancelEventArgs e;
 
@@ -254,7 +263,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				else
 				{
 					obj = this.Context.AssemblyManager.CreateInstance(type);
-					this.Context.ObjectManager.SetObjectIdentity(obj, identity);
+					this.Context.ObjectManager.SetObjectIdentity(obj, key);
 					e = new ObjectCancelEventArgs(obj);
 					this.Context.EventManager.OnGettingObject(this, e);
 					if (e.Cancel)
@@ -268,7 +277,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					else
 					{
-						LoadObject(identity, ref obj, ignoreObjectNotFound, type, key);
+						string strIdentity = ToStringIdentity(identity);
+						LoadObject(strIdentity, ref obj, ignoreObjectNotFound, type, key);
 					}
 				}				
 			}
@@ -282,11 +292,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			//Type type = this.Context.AssemblyManager.GetType(obj.GetType());
             Type type = AssemblyManager.GetBaseType(obj.GetType());
             string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
-			string key = GetKey(type, identity);
+            KeyStruct key = GetKey(type, identity);
 			LoadObject(identity, ref obj, ignoreObjectNotFound, type, key);			
 		}
 
-		private void LoadObject(string identity, ref object obj, bool ignoreObjectNotFound, Type type, string key)
+        private void LoadObject(string identity, ref object obj, bool ignoreObjectNotFound, Type type, KeyStruct key)
 		{
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 			IObjectCache cache = GetObjectCache();
@@ -343,14 +353,27 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual bool HasObject(object obj)
 		{
-			return HasObject(this.Context.ObjectManager.GetObjectIdentity(obj), obj.GetType() );
+			string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
+			if (this.Context.ObjectManager.HasIdentity(obj))
+				return HasObject(identity, obj.GetType() );
+
+			Type type = AssemblyManager.GetBaseType(obj.GetType());
+			KeyStruct key = GetOldKey(obj, identity);
+
+			return HasObject(identity, type, key);				
 		}
 
 		public virtual bool HasObject(string identity, Type type)
 		{
             type = AssemblyManager.GetBaseType(type);
             //type = this.Context.AssemblyManager.GetType(type);
-			string key = GetKey(type, identity);
+            KeyStruct key = GetKey(type, identity);
+
+			return HasObject(identity, type, key);
+		}
+
+		protected virtual bool HasObject(string identity, Type type, KeyStruct key)
+		{
 			object obj;
 
 			IObjectCache cache = GetObjectCache();
@@ -373,7 +396,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 
 
-
 		public virtual object GetObjectByKey(string keyPropertyName, object keyValue, Type type)
 		{
 			return GetObjectByKey(keyPropertyName, keyValue, type, false);			
@@ -384,8 +406,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             type = AssemblyManager.GetBaseType(type);
             //type = this.Context.AssemblyManager.GetType(type);
 			object obj;
-			string key;
-			string identity;
 			obj = this.Context.AssemblyManager.CreateInstance(type);
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
 			this.Context.EventManager.OnGettingObject(this, e);
@@ -405,9 +425,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			else
 			{
-				identity = this.Context.ObjectManager.GetObjectIdentity(obj);
+//				identity = this.Context.ObjectManager.GetObjectIdentity(obj);
 //				key = type.ToString() + "." + identity;
-				key = GetKey(type, identity);
+                IList idKeyParts = this.Context.ObjectManager.GetObjectIdentityKeyParts(obj);
+                KeyStruct key = GetKey(type, idKeyParts);
 				IObjectCache cache = GetObjectCache();
 				obj = cache.LoadedObjects[key];
 //				if (m_hashLoadedObjects.ContainsKey(key))
@@ -426,7 +447,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				throw new NullReferenceException("Can't remove null object!"); // do not localize
 			}
-			string key = GetKey(obj);
+            KeyStruct key = GetKey(obj);
 
 			IObjectCache cache = GetObjectCache();
 
@@ -485,53 +506,135 @@ namespace Puzzle.NPersist.Framework.Persistence
 //			}
 		}
 
-		protected virtual string GetKey(object obj)
+        protected virtual KeyStruct GetKey(object obj)
 		{
 			if (obj == null)
 			{
 				throw new NullReferenceException("Can't create key for null object!"); // do not localize
 			}
 
-			string key = "";
 			IIdentityHelper identityHelper = obj as IIdentityHelper;
 			if (identityHelper != null)
 			{
-				key = identityHelper.GetKey();
-				if (key != null)
-					return key;
-				key = "";
+                if (identityHelper.HasKeyStruct())
+					return identityHelper.GetKeyStruct();
 			}
 
 			Type type = AssemblyManager.GetBaseType(obj);
-			key = type.ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
+            //KeyStruct key = new KeyStruct(GetKeyParts(type, this.Context.ObjectManager.GetObjectIdentity(obj)));
+			KeyStruct key = new KeyStruct(GetKeyParts(type, this.Context.ObjectManager.GetObjectIdentityKeyParts(obj)));
+			//string key = type.ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
 
 			if (identityHelper != null)
 			{
-				if (identityHelper.GetIdentity() != null)
-					identityHelper.SetKey(key);
+                //Only cache the keyStruct if the identity 
+                //has been stored (which means it is no longer
+                //a temporary identity)
+				if (identityHelper.HasIdentityKeyParts())
+					identityHelper.SetKeyStruct(key);
 			}
-
-			return key;
+            return key;
 		}
 
-		protected virtual string GetKey(object obj, string identity)
+        protected virtual KeyStruct GetKey(object obj, object identity)
 		{
 			if (obj == null)
 			{
 				throw new NullReferenceException("Can't create key for null object!"); // do not localize
 			}
 			Type type = AssemblyManager.GetBaseType(obj);
-			return type.ToString() + "." + identity;
+            return new KeyStruct(GetKeyParts(type, identity));
+			//return type.ToString() + "." + identity;
 //			return obj.GetType().ToString() + "." + identity;
 		}
 
-		protected virtual string GetKey(Type type, string identity)
+        protected virtual KeyStruct GetKey(Type type, object identity)
 		{
 			Type fixedType = AssemblyManager.GetBaseType(type);
-			return fixedType.ToString() + "." + identity;
+            return new KeyStruct(GetKeyParts(fixedType, identity));
+            //return fixedType.ToString() + "." + identity;
 			//			return obj.GetType().ToString() + "." + identity;
 		}
 
+		protected virtual KeyStruct GetOldKey(object obj, string previousIdentity)
+		{
+			if (obj == null)
+			{
+				throw new NullReferenceException("Can't create key for null object!"); // do not localize
+			}
+			Type type = AssemblyManager.GetBaseType(obj);
+			return new KeyStruct(GetOldKeyParts(type, previousIdentity));
+		}
+
+        private object[] GetKeyParts(Type type, object identity)
+        {
+            if (identity.GetType().IsAssignableFrom(typeof(string)))
+                return GetKeyParts(type, (string)identity);
+
+            if (identity.GetType().IsAssignableFrom(typeof(IList)))
+                return GetKeyParts(type, (IList) identity);
+
+            object[] keyParts = new object[2];
+            keyParts[0] = type;
+            keyParts[1] = identity;
+            return keyParts;
+        }
+
+        private object[] GetKeyParts(Type type, IList identity)
+        {
+            object[] keyParts = new object[identity.Count + 1];
+            keyParts[0] = type;
+            identity.CopyTo(keyParts, 1);
+            return keyParts;
+        }
+
+        private object[] GetKeyParts(Type type, string identity)
+        {
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+            IList idProperties = classMap.GetIdentityPropertyMaps();
+            if (idProperties.Count < 1)
+                throw new NPersistException(string.Format("Type {0} has no known identity properties!",type.ToString()));
+            if (idProperties.Count > 1)
+                return GetKeyParts(type, identity, classMap, idProperties);
+
+            object[] keyParts = new object[2];
+            keyParts[0] = type;
+            keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
+            return keyParts;
+        }
+
+        private object[] GetKeyParts(Type type, string identity, IClassMap classMap, IList idProperties)
+        {
+            IList idKeyParts = this.Context.ObjectManager.ParseObjectIdentityKeyParts(classMap, idProperties, type, identity);
+            object[] keyParts = new object[idKeyParts.Count + 1];
+            keyParts[0] = type;
+            idKeyParts.CopyTo(keyParts, 1);
+            return keyParts;
+        }
+
+		private object[] GetOldKeyParts(Type type, string identity)
+		{
+			object[] keyParts = new object[2];
+			keyParts[0] = type;
+			keyParts[1] = identity;
+			return keyParts;
+		}
+
+        private string ToStringIdentity(object identity)
+        {
+            if (identity.GetType().IsAssignableFrom(typeof(string)))
+                return (string) identity;
+
+            if (identity.GetType().IsAssignableFrom(typeof(IList)))
+            {
+                string strIdentity = "";
+                foreach (object value in (IList) identity)
+                    strIdentity += Convert.ToString(value, CultureInfo.InvariantCulture);
+                return strIdentity;
+            }
+
+            return Convert.ToString(identity, CultureInfo.InvariantCulture);
+        }
 
 		public virtual IList GetObjects()
 		{
