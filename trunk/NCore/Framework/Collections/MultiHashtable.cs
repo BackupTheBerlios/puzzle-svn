@@ -44,6 +44,9 @@ namespace Puzzle.NCore.Framework.Collections
         {
             KeyStruct other = (KeyStruct) obj;
 
+			if (keys.Length != other.keys.Length)
+				return false;
+
             for (int i = 0; i < keys.Length; i++)
             {
                 object thisKey = keys[i];
