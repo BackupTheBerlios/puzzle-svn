@@ -41,17 +41,6 @@ namespace Puzzle.NPersist.Framework.Proxy.Mixins
             this.identity = identity;
         }
 
-		private string key;
-		public string GetKey()
-		{
-			return key;
-		}
-
-		public void SetKey(string key)
-		{
-			this.key = key;
-		}
-
         public bool HasIdentityKeyParts()
         {
             return this.identityKeyParts.Count > 0;

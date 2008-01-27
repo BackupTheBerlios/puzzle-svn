@@ -268,25 +268,29 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						foreach (object itemRefObj in list)
 						{
-							//Ensure inverse is loaded
-							PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(itemRefObj, invPropertyMap.Name);
-							if (invPropertyStatus == PropertyStatus.NotLoaded)
+							ObjectStatus refObjStatus = om.GetObjectStatus(itemRefObj);
+							if (!(refObjStatus.Equals(ObjectStatus.UpForDeletion) && refObjStatus.Equals(ObjectStatus.Deleted)))
 							{
-								this.Context.LoadProperty(itemRefObj, invPropertyMap.Name);
-							}
-
-							refList = ((IList) (om.GetPropertyValue(itemRefObj, invPropertyMap.Name)));
-							if (refList.Contains(obj))
-							{
-								mList = refList as IInterceptableList;					
-								if (mList != null)
+								//Ensure inverse is loaded
+								PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(itemRefObj, invPropertyMap.Name);
+								if (invPropertyStatus == PropertyStatus.NotLoaded)
 								{
-									stackMute = mList.MuteNotify;
-									mList.MuteNotify = true;
+									this.Context.LoadProperty(itemRefObj, invPropertyMap.Name);
 								}
-								refList.Remove(obj);
-								if (mList != null) { mList.MuteNotify = stackMute; }
-								om.SetUpdatedStatus(itemRefObj, invPropertyMap.Name, true);
+
+								refList = ((IList) (om.GetPropertyValue(itemRefObj, invPropertyMap.Name)));
+								if (refList.Contains(obj))
+								{
+									mList = refList as IInterceptableList;					
+									if (mList != null)
+									{
+										stackMute = mList.MuteNotify;
+										mList.MuteNotify = true;
+									}
+									refList.Remove(obj);
+									if (mList != null) { mList.MuteNotify = stackMute; }
+									om.SetUpdatedStatus(itemRefObj, invPropertyMap.Name, true);
+								}
 							}
 						}
 					}
@@ -294,20 +298,24 @@ namespace Puzzle.NPersist.Framework.Persistence
 					{
 						foreach (object itemRefObj in list)
 						{
-							//Ensure inverse is loaded
-							PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(itemRefObj, invPropertyMap.Name);
-							if (invPropertyStatus == PropertyStatus.NotLoaded)
+							ObjectStatus refObjStatus = om.GetObjectStatus(itemRefObj);
+							if (!(refObjStatus.Equals(ObjectStatus.UpForDeletion) && refObjStatus.Equals(ObjectStatus.Deleted)))
 							{
-								this.Context.LoadProperty(itemRefObj, invPropertyMap.Name);
-							}
-
-							thisObj = om.GetPropertyValue(itemRefObj, invPropertyMap.Name);
-							if (thisObj != null)
-							{
-								if (thisObj == obj)
+								//Ensure inverse is loaded
+								PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(itemRefObj, invPropertyMap.Name);
+								if (invPropertyStatus == PropertyStatus.NotLoaded)
 								{
-									om.SetPropertyValue(itemRefObj, invPropertyMap.Name, null);
-									om.SetUpdatedStatus(itemRefObj, invPropertyMap.Name, true);
+									this.Context.LoadProperty(itemRefObj, invPropertyMap.Name);
+								}
+
+								thisObj = om.GetPropertyValue(itemRefObj, invPropertyMap.Name);
+								if (thisObj != null)
+								{
+									if (thisObj == obj)
+									{
+										om.SetPropertyValue(itemRefObj, invPropertyMap.Name, null);
+										om.SetUpdatedStatus(itemRefObj, invPropertyMap.Name, true);
+									}
 								}
 							}
 						}
@@ -319,43 +327,46 @@ namespace Puzzle.NPersist.Framework.Persistence
 				refObj = om.GetPropertyValue(obj, propertyMap.Name);
 				if (refObj != null)
 				{
-					PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(refObj, invPropertyMap.Name);
-					//Ensure inverse is loaded
-					if (invPropertyStatus == PropertyStatus.NotLoaded)
+					ObjectStatus refObjStatus = om.GetObjectStatus(refObj);
+					if (!(refObjStatus.Equals(ObjectStatus.UpForDeletion) && refObjStatus.Equals(ObjectStatus.Deleted)))
 					{
-						this.Context.LoadProperty(refObj, invPropertyMap.Name);
-					}
-					if (invPropertyMap.IsCollection)
-					{												
-						refList = ((IList) (om.GetPropertyValue(refObj, invPropertyMap.Name)));
-						if (refList.Contains(obj))
+						PropertyStatus invPropertyStatus = this.Context.GetPropertyStatus(refObj, invPropertyMap.Name);
+						//Ensure inverse is loaded
+						if (invPropertyStatus == PropertyStatus.NotLoaded)
 						{
-							mList = refList as IInterceptableList;					
-							if (mList != null)
-							{
-								stackMute = mList.MuteNotify;
-								mList.MuteNotify = true;
-							}
-							refList.Remove(obj);
-							if (mList != null) {mList.MuteNotify = stackMute;}
-							om.SetUpdatedStatus(refObj, invPropertyMap.Name, true);
+							this.Context.LoadProperty(refObj, invPropertyMap.Name);
 						}
-
-					}
-					else
-					{
-						//only update back ref if it is actually pointing at me
-						thisObj = om.GetPropertyValue(refObj, invPropertyMap.Name);
-						if (thisObj != null)
-						{
-							if (thisObj == obj)
+						if (invPropertyMap.IsCollection)
+						{												
+							refList = ((IList) (om.GetPropertyValue(refObj, invPropertyMap.Name)));
+							if (refList.Contains(obj))
 							{
-								om.SetPropertyValue(refObj, invPropertyMap.Name, null);
+								mList = refList as IInterceptableList;					
+								if (mList != null)
+								{
+									stackMute = mList.MuteNotify;
+									mList.MuteNotify = true;
+								}
+								refList.Remove(obj);
+								if (mList != null) {mList.MuteNotify = stackMute;}
 								om.SetUpdatedStatus(refObj, invPropertyMap.Name, true);
 							}
+
+						}
+						else
+						{
+							thisObj = om.GetPropertyValue(refObj, invPropertyMap.Name);
+							if (thisObj != null)
+							{
+								//only update back ref if it is actually pointing at me
+								if (thisObj == obj)
+								{
+									om.SetPropertyValue(refObj, invPropertyMap.Name, null);
+									om.SetUpdatedStatus(refObj, invPropertyMap.Name, true);
+								}
+							}
 						}
 					}
-
 				}
 			}
 		}

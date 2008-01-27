@@ -19,7 +19,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// <summary>
 	/// Summary description for IObjectClone.
 	/// </summary>
-	public interface IObjectClone : IValueHelper, IOriginalValueHelper, INullValueHelper, IUpdatedPropertyTracker, IObjectStatusHelper  
+	public interface IObjectClone : IValueHelper, IOriginalValueHelper, INullValueHelper, IUpdatedPropertyTracker, IObjectStatusHelper, IIdentityHelper
 	{
 		void Restore(object obj);
 	}

@@ -632,12 +632,6 @@
     <Compile Include="Persistence\Cloning\ObjectCloner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\DataManager\DataManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Persistence\DataManager\IDataManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Persistence\DataSourceManager\DataSourceManager.cs">
       <SubType>Code</SubType>
     </Compile>

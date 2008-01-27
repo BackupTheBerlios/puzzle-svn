@@ -1009,16 +1009,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Persistence\DataManager\DataManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Persistence\DataManager\IDataManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Persistence\DataSource\DataSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

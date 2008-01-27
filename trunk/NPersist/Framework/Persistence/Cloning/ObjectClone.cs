@@ -17,6 +17,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Proxy.Mixins;
+using Puzzle.NCore.Framework.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -37,6 +38,18 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			get { return this.nullValueHelperMixin; }
 			set { this.nullValueHelperMixin = value; }
+		}
+		
+		#endregion
+
+		#region Property  IdentityHelperMixin
+		
+		private IdentityHelperMixin identityHelperMixin = new IdentityHelperMixin() ;
+		
+		public IdentityHelperMixin IdentityHelperMixin
+		{
+			get { return this.identityHelperMixin; }
+			set { this.identityHelperMixin = value; }
 		}
 		
 		#endregion
@@ -183,5 +196,40 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			this.objectStatusHelperMixin.SetObjectStatus(value);
 		}
-	}
+
+        public string GetIdentity()
+        {
+            return identityHelperMixin.GetIdentity();
+        }
+
+        public void SetIdentity(string identity)
+        {
+            identityHelperMixin.SetIdentity(identity);
+        }
+
+        public bool HasIdentityKeyParts()
+        {
+            return identityHelperMixin.HasIdentityKeyParts();
+        }
+
+        public IList GetIdentityKeyParts()
+        {
+            return identityHelperMixin.GetIdentityKeyParts();
+        }
+
+        public bool HasKeyStruct()
+        {
+            return identityHelperMixin.HasKeyStruct();
+        }
+
+        public KeyStruct GetKeyStruct()
+        {
+            return identityHelperMixin.GetKeyStruct();
+        }
+
+        public void SetKeyStruct(KeyStruct keyStruct)
+        {
+            identityHelperMixin.SetKeyStruct(keyStruct);
+        }
+    }
 }

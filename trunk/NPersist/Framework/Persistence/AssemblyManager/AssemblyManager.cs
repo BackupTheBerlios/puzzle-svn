@@ -140,8 +140,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			object obj;
 
             type = GetBaseType(type);
-//			while(typeof(IInterceptable).IsAssignableFrom(type))
-//				type = type.BaseType;
             
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
 			obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);            

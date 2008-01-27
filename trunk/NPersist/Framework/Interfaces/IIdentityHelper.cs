@@ -20,10 +20,6 @@ namespace Puzzle.NPersist.Framework.Interfaces
 
 		void SetIdentity(string identity);
 
-		//string GetKey();
-
-		//void SetKey(string key);
-
         bool HasIdentityKeyParts();
 
         IList GetIdentityKeyParts();

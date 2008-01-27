@@ -75,22 +75,33 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (propertyMap.IsCollection)
 				{
-					
+                    //TODO: Implement this					
 				}
 				else
 				{
+					clone.SetPropertyValue(propertyMap.Name, om.GetPropertyValue(obj, propertyMap.Name) );	
+					clone.SetNullValueStatus(propertyMap.Name, om.GetNullValueStatus(obj, propertyMap.Name) );	
+					clone.SetUpdatedStatus(propertyMap.Name, om.GetUpdatedStatus(obj, propertyMap.Name) );	
+
 					if (om.HasOriginalValues(obj, propertyMap.Name))
-					{
-						clone.SetPropertyValue(propertyMap.Name, om.GetPropertyValue(obj, propertyMap.Name) );	
-						clone.SetOriginalPropertyValue(propertyMap.Name, om.GetOriginalPropertyValue(obj, propertyMap.Name) );
-						clone.SetNullValueStatus(propertyMap.Name, om.GetNullValueStatus(obj, propertyMap.Name) );	
-						clone.SetUpdatedStatus(propertyMap.Name, om.GetUpdatedStatus(obj, propertyMap.Name) );	
-					}
+                        clone.SetOriginalPropertyValue(propertyMap.Name, om.GetOriginalPropertyValue(obj, propertyMap.Name));
 
 				}
 			}
 
-			clone.SetObjectStatus(om.GetObjectStatus(obj) );	
+			clone.SetObjectStatus(om.GetObjectStatus(obj) );
+
+            IIdentityHelper identityHelper = obj as IIdentityHelper;
+            if (identityHelper != null)
+            {
+                clone.SetIdentity(identityHelper.GetIdentity());
+
+                if (identityHelper.HasIdentityKeyParts())
+                    foreach (object keyPart in identityHelper.GetIdentityKeyParts())
+                        clone.GetIdentityKeyParts().Add(keyPart);
+                if (identityHelper.HasKeyStruct())
+                    clone.SetKeyStruct(identityHelper.GetKeyStruct());
+            }
 
 			this.clonedObjects.Add(obj);
 
@@ -124,20 +135,33 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (propertyMap.IsCollection)
 				{
-					
+					//TODO: Implement this
 				}
 				else
 				{
-					if (clone.HasOriginalValues(propertyMap.Name))
-					{
-						om.SetPropertyValue(obj, propertyMap.Name, clone.GetPropertyValue(propertyMap.Name) );	
-						om.SetOriginalPropertyValue(obj, propertyMap.Name, clone.GetOriginalPropertyValue(propertyMap.Name) );
-						om.SetNullValueStatus(obj, propertyMap.Name, clone.GetNullValueStatus(propertyMap.Name) );	
-						om.SetUpdatedStatus(obj, propertyMap.Name, clone.GetUpdatedStatus(propertyMap.Name) );	
-					}
+                    if (clone.HasOriginalValues(propertyMap.Name))
+                        om.SetOriginalPropertyValue(obj, propertyMap.Name, clone.GetOriginalPropertyValue(propertyMap.Name));
 
+                    om.SetPropertyValue(obj, propertyMap.Name, clone.GetPropertyValue(propertyMap.Name));
+                    om.SetNullValueStatus(obj, propertyMap.Name, clone.GetNullValueStatus(propertyMap.Name));
+                    om.SetUpdatedStatus(obj, propertyMap.Name, clone.GetUpdatedStatus(propertyMap.Name));
 				}
 			}
+
+            IIdentityHelper identityHelper = obj as IIdentityHelper;
+            if (identityHelper != null)
+            {
+                identityHelper.SetIdentity(clone.GetIdentity());
+
+                if (clone.HasIdentityKeyParts())
+                {
+                    identityHelper.GetIdentityKeyParts().Clear();
+                    foreach (object keyPart in clone.GetIdentityKeyParts())
+                        identityHelper.GetIdentityKeyParts().Add(keyPart);
+                }
+                if (clone.HasKeyStruct())
+                    identityHelper.SetKeyStruct(clone.GetKeyStruct());
+            }
 
 			ObjectStatus objStatus = clone.GetObjectStatus() ;
 			om.SetObjectStatus(obj, objStatus);	
