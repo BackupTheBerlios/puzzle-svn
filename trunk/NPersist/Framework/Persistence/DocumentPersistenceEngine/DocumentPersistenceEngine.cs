@@ -1,3 +1,13 @@
+// *
+// * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
+// *
+// * This library is free software; you can redistribute it and/or modify it
+// * under the terms of the GNU Lesser General Public License 2.1 or later, as
+// * published by the Free Software Foundation. See the included license.txt
+// * or http://www.gnu.org/copyleft/lesser.html for details.
+// *
+// *
+
 using System;
 using System.Collections;
 using System.Data;
@@ -12,15 +22,6 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NCore.Framework.Logging;
-// *
-// * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
-// *
-// * This library is free software; you can redistribute it and/or modify it
-// * under the terms of the GNU Lesser General Public License 2.1 or later, as
-// * published by the Free Software Foundation. See the included license.txt
-// * or http://www.gnu.org/copyleft/lesser.html for details.
-// *
-// *
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -285,6 +286,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public void Commit()
 		{
+            //TODO
 			//lock all files
 
 			foreach (CachedXmlDocument cachedXmlDocument in cachedXmlDocuments.Values)
@@ -668,7 +670,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string xml = Encoding.GetEncoding( "utf-8" ).GetString(ms.ToArray(),0,(int)ms.Length);
 			xmlWriter.Close();
 
-			//Obs fulhack!! Jag får ett konstigt skräptecken i början!!
+			//TODO: ugly hack!! Do this right way to avoid extra char in the beginning!!
 			xml = xml.Substring(1);
 
 			XmlDocument xmlDocument = new XmlDocument() ;

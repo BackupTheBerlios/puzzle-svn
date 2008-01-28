@@ -133,6 +133,9 @@ namespace Puzzle.NPersist.Tests.Main
 					invCyclicA.InvCyclicB = invCyclicB;
 					invCyclicB.InvCyclicA = invCyclicA;
 
+					Assert.AreEqual(invCyclicA, invCyclicB.InvOfInvCyclicB);
+					Assert.AreEqual(invCyclicB, invCyclicA.InvOfInvCyclicA);
+					
 					invCyclicA.SomeText = "Testing";
 					invCyclicB.SomeText = "More Testing";
 

@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
-using System.Xml;
-using Puzzle.NPersist.Framework.Mapping;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -13,6 +7,13 @@ using Puzzle.NPersist.Framework.Mapping;
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
+
+using System;
+using System.Collections;
+using System.IO;
+using System.Text;
+using System.Xml;
+using Puzzle.NPersist.Framework.Mapping;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {

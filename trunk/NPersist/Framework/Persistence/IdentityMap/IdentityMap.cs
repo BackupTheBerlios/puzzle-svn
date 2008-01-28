@@ -568,10 +568,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         private object[] GetKeyParts(Type type, object identity)
         {
-            if (identity.GetType().IsAssignableFrom(typeof(string)))
-                return GetKeyParts(type, (string)identity);
+			if (typeof(string).IsAssignableFrom(identity.GetType()))
+				return GetKeyParts(type, (string)identity);
 
-            if (identity.GetType().IsAssignableFrom(typeof(IList)))
+            if (typeof(IList).IsAssignableFrom(identity.GetType()))
                 return GetKeyParts(type, (IList) identity);
 
             object[] keyParts = new object[2];
@@ -622,10 +622,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         private string ToStringIdentity(object identity)
         {
-            if (identity.GetType().IsAssignableFrom(typeof(string)))
+			if (typeof(string).IsAssignableFrom(identity.GetType()))
                 return (string) identity;
 
-            if (identity.GetType().IsAssignableFrom(typeof(IList)))
+			if (typeof(IList).IsAssignableFrom(identity.GetType()))
             {
                 string strIdentity = "";
                 foreach (object value in (IList) identity)
