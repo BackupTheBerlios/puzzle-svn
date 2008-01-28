@@ -48,6 +48,11 @@ namespace Puzzle.NPersist.Framework.Interfaces
 			set;
 		}
 
+        bool BeforeCount(ref int count);
+
+        void AfterCount(ref int count);
+
+		void BeforeRead();
 	}
 
 }

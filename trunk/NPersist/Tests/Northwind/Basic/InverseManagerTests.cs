@@ -5,6 +5,8 @@ using Puzzle.NPersist.Framework;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Samples.Northwind.Domain;
+using Puzzle.NPersist.Framework.EventArguments;
+using Puzzle.NPersist.Framework.Delegates;
 
 namespace Puzzle.NPersist.Tests.Northwind.Basic
 {
@@ -258,6 +260,37 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		}
 
 		#endregion
+
+		
+		[Test()]
+		public void TestManyOneResolveOnLoad()
+		{
+			using (IContext context = GetContext() )
+			{
+				context.SetConnectionString(ContextFactory.NormalNWConnectionString);
+
+				Customer customer = (Customer) context.GetObjectById("ALFKI", typeof(Customer));
+
+				Assert.IsNotNull(customer);
+
+				IList orders = customer.Orders;
+
+				Assert.AreEqual(6, orders.Count);
+
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ThrowOnExecutingSql);
+
+				foreach (Order order in orders)
+				{
+					Assert.AreEqual(customer, order.Customer);
+				}
+			}
+		}
+
+		private void m_Context_ThrowOnExecutingSql(object sender, SqlExecutorCancelEventArgs e)
+		{
+			Console.Out.WriteLine(e.Sql);
+			throw new Exception("Should not have executed sql!");
+		}
 
 	}
 

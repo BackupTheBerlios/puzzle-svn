@@ -1039,7 +1039,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				SerializeInlineReferenceElement(obj, xmlElement, value);
 			}
 
-			IList orgList =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+			//IList orgList =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+			IList orgList =   new ArrayList( ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, orgList);
 
 		}
@@ -1094,7 +1095,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				SerializeInlineObjectElement(xmlObject, obj, xmlInline , value, creating);
 			}
 
-			IList orgList =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+			//IList orgList =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+			IList orgList =   new ArrayList( ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, orgList);
 
 		}
@@ -1368,7 +1370,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{				
 				list = lm.CreateList(obj, propertyMap) ;
 				om.SetPropertyValue(obj,propertyMap.Name,list) ;								
-				IList cloneList = lm.CloneList(obj, propertyMap, list);
+				//IList cloneList = lm.CloneList(obj, propertyMap, list);
+				IList cloneList = new ArrayList( list);
 				om.SetOriginalPropertyValue(obj, propertyMap.Name, cloneList);
 			}
 						
@@ -1394,7 +1397,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 				mList.MuteNotify = stackMute ;
 
 			om.SetNullValueStatus(obj, propertyMap.Name, false);
-			IList clone = lm.CloneList(obj, propertyMap, list);
+			//IList clone = lm.CloneList(obj, propertyMap, list);
+			IList clone = new ArrayList( list);
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);		
 		}
 

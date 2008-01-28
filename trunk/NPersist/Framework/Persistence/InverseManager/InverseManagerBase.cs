@@ -42,6 +42,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public abstract void NotifyCommitted(object obj);
 
+		public abstract void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value);
+
 		public virtual void RemoveAllReferencesToObject(object obj)
 		{
 			RemoveInverseReferences(obj);
@@ -594,10 +596,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				this.Context.LogManager.Debug(this, message,verbose); // do not localize
 			}
 		}	
-
-		public virtual void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value)
-		{
-		}
 
         public virtual void Clear()
         {

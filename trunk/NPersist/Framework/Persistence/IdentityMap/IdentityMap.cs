@@ -46,7 +46,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			KeyStruct key = GetKey(obj);
 			cache.LoadedObjects.Remove(key);
-			//m_objectStatusLookup.Remove(key);
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotRegistered);
 
             LogMessage message = new LogMessage("Unregistered created object");
@@ -74,14 +73,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (result != null)
 				throw new IdentityMapException("An object with the key " + key + " is already registered in the identity map!");
 
-			//ctx.PersistenceManager.InitializeObject(obj);				
-			
 			if (cache.AllObjects != null)
 				cache.AllObjects.Add(obj);
 
 			cache.LoadedObjects[key] = obj;
-			//m_objectStatusLookup[obj] = ObjectStatus.Clean;
-			//ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);
 
             LogMessage message = new LogMessage("Registered created object");
             LogMessage verbose = new LogMessage( "Type: {0}, Key: {1}" , obj.GetType(), key );
@@ -107,8 +102,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				result = cache.LoadedObjects[key];
 				if (result == null)
 				{
-					//ctx.PersistenceManager.InitializeObject(obj);				
-
 					if (cache.AllObjects != null)
 						cache.AllObjects.Add(obj);
 				}
@@ -118,7 +111,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			
 			if (this.Context.GetObjectStatus(obj) != ObjectStatus.Dirty)
 			{
-				//m_objectStatusLookup[obj] = ObjectStatus.Clean;
 				ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.Clean);						
 			}
             LogMessage message = new LogMessage("Registered loaded object");
@@ -143,7 +135,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             KeyStruct key = GetKey(obj);
 			
 			cache.UnloadedObjects[key] = obj;
-			//m_objectStatusLookup[obj] = ObjectStatus.NotLoaded;
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotLoaded);
 
             LogMessage message = new LogMessage("Registered lazy loaded object");
@@ -229,9 +220,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public virtual object GetObject(object identity, Type type, bool lazy, bool ignoreObjectNotFound)
 		{
-			//type = this.Context.AssemblyManager.GetType(type);
             type = AssemblyManager.GetBaseType(type);
-            //string key = type.ToString() + "." + identity;
 			KeyStruct key = GetKey(type, identity);
 			object obj;
 			ObjectCancelEventArgs e;
@@ -289,7 +278,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public void LoadObject(ref object obj, bool ignoreObjectNotFound)
 		{
-			//Type type = this.Context.AssemblyManager.GetType(obj.GetType());
             Type type = AssemblyManager.GetBaseType(obj.GetType());
             string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
             KeyStruct key = GetKey(type, identity);
@@ -366,7 +354,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual bool HasObject(string identity, Type type)
 		{
             type = AssemblyManager.GetBaseType(type);
-            //type = this.Context.AssemblyManager.GetType(type);
             KeyStruct key = GetKey(type, identity);
 
 			return HasObject(identity, type, key);
@@ -404,7 +391,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual object GetObjectByKey(string keyPropertyName, object keyValue, Type type, bool ignoreObjectNotFound)
 		{
             type = AssemblyManager.GetBaseType(type);
-            //type = this.Context.AssemblyManager.GetType(type);
 			object obj;
 			obj = this.Context.AssemblyManager.CreateInstance(type);
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
@@ -414,7 +400,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				return null;
 			}
 			this.Context.ObjectManager.SetPropertyValue(obj, keyPropertyName, keyValue);
-			//this.Context.SqlEngineManager.LoadObjectByKey(obj, keyPropertyName, keyValue);
 			this.Context.PersistenceEngine.LoadObjectByKey(ref obj, keyPropertyName, keyValue);
 			if (obj == null)
 			{
@@ -425,16 +410,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			else
 			{
-//				identity = this.Context.ObjectManager.GetObjectIdentity(obj);
-//				key = type.ToString() + "." + identity;
                 IList idKeyParts = this.Context.ObjectManager.GetObjectIdentityKeyParts(obj);
                 KeyStruct key = GetKey(type, idKeyParts);
 				IObjectCache cache = GetObjectCache();
 				obj = cache.LoadedObjects[key];
-//				if (m_hashLoadedObjects.ContainsKey(key))
-//				{
-//					obj = m_hashLoadedObjects[key];
-//				}
 				ObjectEventArgs e2 = new ObjectEventArgs(obj);
 				this.Context.EventManager.OnGotObject(this, e2);				
 			}
@@ -457,54 +436,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				cache.AllObjects.Remove(obj);
 			}
-			//m_objectStatusLookup[obj] = null;
-			RemoveAllReferencesToObject(obj);
 		}
 
-		//This might work better if we skip CascadeDelete props :-)
-
-		protected virtual void RemoveAllReferencesToObject(object obj)
-		{
-//			IClassMap classMap = this.Context.DomainMap.GetClassMap(obj.GetType() );
-//			object refObj;
-//			IObjectManager om = this.Context.ObjectManager ;
-//			foreach (object checkObject in GetObjects() )
-//			{
-//				IClassMap checkClassMap = this.Context.DomainMap.GetClassMap(checkObject.GetType() );
-//				foreach (IPropertyMap propertyMap in checkClassMap.GetAllPropertyMaps() )
-//				{
-//					if (propertyMap.ReferenceType != ReferenceType.None)
-//					{
-//						if (propertyMap.GetReferencedClassMap() == classMap)
-//						{
-//							if (propertyMap.GetInversePropertyMap() == null)
-//							{
-//								if (checkObject != obj)
-//								{
-//									if (propertyMap.IsCollection)
-//									{
-//								
-//									}
-//									else
-//									{
-//										refObj = om.GetPropertyValue( checkObject, propertyMap.Name );
-//										if (refObj != null)
-//										{
-//											if (refObj == obj)
-//											{
-//												om.SetOriginalPropertyValue( checkObject, propertyMap.Name, null );
-//												om.SetPropertyValue( checkObject, propertyMap.Name, null );
-//											}									
-//										}
-//									}																	
-//								}
-//							}
-//						}
-//					}
-//				}
-//
-//			}
-		}
 
         protected virtual KeyStruct GetKey(object obj)
 		{
@@ -521,9 +454,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 
 			Type type = AssemblyManager.GetBaseType(obj);
-            //KeyStruct key = new KeyStruct(GetKeyParts(type, this.Context.ObjectManager.GetObjectIdentity(obj)));
 			KeyStruct key = new KeyStruct(GetKeyParts(type, this.Context.ObjectManager.GetObjectIdentityKeyParts(obj)));
-			//string key = type.ToString() + "." + this.Context.ObjectManager.GetObjectIdentity(obj);
 
 			if (identityHelper != null)
 			{
@@ -544,16 +475,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			Type type = AssemblyManager.GetBaseType(obj);
             return new KeyStruct(GetKeyParts(type, identity));
-			//return type.ToString() + "." + identity;
-//			return obj.GetType().ToString() + "." + identity;
 		}
 
         protected virtual KeyStruct GetKey(Type type, object identity)
 		{
 			Type fixedType = AssemblyManager.GetBaseType(type);
             return new KeyStruct(GetKeyParts(fixedType, identity));
-            //return fixedType.ToString() + "." + identity;
-			//			return obj.GetType().ToString() + "." + identity;
 		}
 
 		protected virtual KeyStruct GetOldKey(object obj, string previousIdentity)

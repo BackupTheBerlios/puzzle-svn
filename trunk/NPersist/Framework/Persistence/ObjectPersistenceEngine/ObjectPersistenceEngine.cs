@@ -570,7 +570,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 						//that can be copied between contexts
 						IList list = (IList) sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
 						IList listClone = this.Context.ListManager.CloneList(obj, propertyMap, list);
-						IList listCloneOrg = this.Context.ListManager.CloneList(obj, propertyMap, list);
+						//IList listCloneOrg = this.Context.ListManager.CloneList(obj, propertyMap, list);
+						IList listCloneOrg = new ArrayList( list);
 						om.SetPropertyValue(obj, propertyMap.Name, listClone);
 						om.SetOriginalPropertyValue(obj, propertyMap.Name, listCloneOrg);
 					}
@@ -621,7 +622,8 @@ namespace Puzzle.NPersist.Framework.Persistence
                         this.LoadReferenceList(list, orgList, refreshBehavior);
 
 						//for the org-list we can use ListManager.CloneList and clone the list of leaf objects
-						IList listOrg = this.Context.ListManager.CloneList(obj, propertyMap, list);
+						//IList listOrg = this.Context.ListManager.CloneList(obj, propertyMap, list);
+						IList listOrg = new ArrayList( list);
 						om.SetPropertyValue(obj, propertyMap.Name, list);
 						om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
 							
@@ -912,7 +914,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 									//OBS! listOrg may be null if the object is under creation!
 									if (listOrg == null)
 									{				
-										listOrg = lm.CreateList(obj, propertyMap) ;
+										//listOrg = lm.CreateList(obj, propertyMap) ;
+										listOrg = new ArrayList() ;
 										om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
 									}
 
@@ -937,7 +940,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 									//OBS! sourceListOrg may be null if the object is under creation!
 									if (sourceListOrg == null)
 									{				
-										sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
+										//sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
+										sourceListOrg = new ArrayList() ;
 										om.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
 									}
 
@@ -1046,7 +1050,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 									//OBS! listOrg may be null if the object is under creation!
 									if (listOrg == null)
 									{				
-										listOrg = lm.CreateList(obj, propertyMap) ;
+										//listOrg = lm.CreateList(obj, propertyMap) ;
+										listOrg = new ArrayList() ;
 										om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
 									}
 
@@ -1072,7 +1077,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 									//OBS! sourceListOrg may be null if the object is under creation!
 									if (sourceListOrg == null)
 									{				
-										sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
+										//sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
+										sourceListOrg = new ArrayList() ;
 										om.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
 									}
 

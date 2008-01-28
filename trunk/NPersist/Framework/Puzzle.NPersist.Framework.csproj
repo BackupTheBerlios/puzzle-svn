@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Interceptors\NPersistListCountInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Interceptors\NPersistListInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -185,6 +190,11 @@
                 />
                 <File
                     RelPath = "Aop\Pointcuts\NPersistEntityPropertyPointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Pointcuts\NPersistListCountPointcut.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -339,8 +339,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			if (propertyMap.IsCollection)
 			{
-				IList list =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
-				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);						
+				//IList list =   lm.CloneList(obj, propertyMap, ((IList) (om.GetPropertyValue(obj, propertyMap.Name))));
+				IInterceptableList list = om.GetPropertyValue(obj, propertyMap.Name) as IInterceptableList;
+				IList orgList = null;
+				if (list != null)
+				{
+					bool stackMute = list.MuteNotify;
+					list.MuteNotify = true;
+					orgList =  new ArrayList( list );
+					list.MuteNotify = stackMute;
+				}
+				om.SetOriginalPropertyValue(obj, propertyMap.Name, orgList);						
 			}
 			else
 			{

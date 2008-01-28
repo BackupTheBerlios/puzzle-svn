@@ -54,8 +54,9 @@ namespace Puzzle.NPersist.Framework.Aop
 			get 
 			{
 				IList arr = new ArrayList();
-				arr.Add(new NPersistListPointcut(context));
-				return arr;
+				arr.Add(new NPersistListPointcut());
+                arr.Add(new NPersistListCountPointcut());
+                return arr;
 			}
 		}
 

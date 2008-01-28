@@ -178,15 +178,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 						if (refClassMap == null)
 							throw new NPersistException("Could not find class map with type value '" + (string) discriminator + "'");
 					}
-                    //TODO: bug if one slave prop in a subclass references another subclass in sungle table inheritance
+                    //TODO: bug if one slave prop in a subclass references another subclass in single table inheritance
                     IColumnMap propertyColumnMap = propertyMap.GetColumnMap();
                     IColumnMap inverseColumnMap = propertyColumnMap.MustGetPrimaryKeyColumnMap();
                     mapToId = refClassMap.MustGetPropertyMapForColumnMap(inverseColumnMap);
 
 					if (mapToId.IsIdentity)
-						return this.Context.GetObjectById(value, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
+						value = this.Context.GetObjectById(value, this.Context.AssemblyManager.MustGetTypeFromClassMap(refClassMap), true);
 					else
-						return this.Context.GetObjectByKey(mapToId.Name, Convert.ToString(value), obj.GetType().GetProperty(propertyMap.Name).PropertyType);
+						value = this.Context.GetObjectByKey(mapToId.Name, Convert.ToString(value), obj.GetType().GetProperty(propertyMap.Name).PropertyType);
 				}
 			}
 			return value;
@@ -1215,8 +1215,9 @@ namespace Puzzle.NPersist.Framework.Persistence
                                     list.Add(refObj);
                                 }
                                 om.SetPropertyValue(obj, propertyMap.Name, list);
-                                IList clone = this.Context.ListManager.CloneList(obj, propertyMap, list);
-                                om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);
+                                //IList clone = this.Context.ListManager.CloneList(obj, propertyMap, list);
+								IList clone = new ArrayList( list);
+								om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);
                             }
                             else
                             {

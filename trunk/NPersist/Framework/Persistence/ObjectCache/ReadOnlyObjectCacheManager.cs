@@ -266,7 +266,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 							list.Add(value);	
 
 						if (mList != null) { mList.MuteNotify = stackMute; }
-						IList cloneList = lm.CloneList(obj, propertyMap, list);
+						//IList cloneList = lm.CloneList(obj, propertyMap, list);
+						IList cloneList = new ArrayList( list);
 						om.SetOriginalPropertyValue(obj, propertyMap.Name, cloneList);
 						om.SetNullValueStatus(obj, propertyMap.Name, false);
 					}
@@ -310,7 +311,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}
 
 							if (mList != null) { mList.MuteNotify = stackMute; }
-							IList cloneList = lm.CloneList(obj, propertyMap, list);
+							//IList cloneList = lm.CloneList(obj, propertyMap, list);
+							IList cloneList = new ArrayList( list);
 							om.SetOriginalPropertyValue(obj, propertyMap.Name, cloneList);
 							om.SetNullValueStatus(obj, propertyMap.Name, false);							
 						}

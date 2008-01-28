@@ -89,13 +89,28 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			interceptor.AfterCall() ;
 		}
 
+		public override IEnumerator GetEnumerator()
+		{
+			interceptor.BeforeRead() ;
+			return base.GetEnumerator ();
+		}
+
+		public override IEnumerator GetEnumerator(int index, int count)
+		{
+			interceptor.BeforeRead() ;
+			return base.GetEnumerator (index, count);
+		}
+
+		public override bool Contains(object item)
+		{
+			interceptor.BeforeRead() ;
+			return base.Contains (item);
+		}
+
 		public override object this[int index]
 		{
 			get { return base[index]; }
-			set
-			{
-				base[index] = value;
-			}
+			set { base[index] = value; }
 		}
 
 		public override void Remove(object obj)
@@ -125,5 +140,18 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			base.SetRange(index, c);
 			interceptor.AfterCall() ;
 		}
+
+		public override int Count
+		{
+			get
+			{
+				int count = 0;
+				if (!interceptor.BeforeCount(ref count))
+					count = base.Count;
+				interceptor.AfterCount(ref count) ;
+				return count;
+			}
+		}
+
 	}
 }

@@ -52,7 +52,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			if (this.isDisposed) { return; }
 			if (notification == Notification.Disabled) { return; }
 			ObjectStatus objStatus = this.Context.ObjectManager.GetObjectStatus(obj);
-			IPropertyMap propertyMap;
+			IPropertyMap propertyMap = null;
 			PropertyStatus propStatus = PropertyStatus.Clean;
 			bool hasPropertyStatus = false;
 			PropertyCancelEventArgs e = new PropertyCancelEventArgs(obj, propertyName, null, value, this.Context.ObjectManager.GetNullValueStatus(obj, propertyName));
@@ -111,7 +111,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			{
 				if (!(objStatus == ObjectStatus.UpForCreation))
 				{
-					this.Context.PersistenceEngine.LoadProperty(obj, propertyName);
+					if (propertyMap == null)
+						propertyMap = this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName);
+
+					if (!propertyMap.IsCollection)
+					{
+						this.Context.PersistenceEngine.LoadProperty(obj, propertyName);
+					}
 				}
 			}
 			this.Context.InverseManager.NotifyPropertyGet(obj, propertyName);

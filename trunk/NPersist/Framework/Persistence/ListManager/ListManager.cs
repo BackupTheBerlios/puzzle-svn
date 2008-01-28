@@ -104,19 +104,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual IList CloneList(object obj, IPropertyMap propertyMap, IList orgList)
 		{
-			//IList newList = CreateList(orgList.GetType(), obj, propertyMap);
 			Type t = obj.GetType() ;
 			Type listType = t.GetProperty(propertyMap.Name).PropertyType;
 
-			//if (listType == typeof(IList))
-			//	listType = typeof(IInterceptableList);
-
-
 			IList newList = Context.ProxyFactory.CreateListProxy(listType,Context.ObjectFactory,new object[0] ) ;
-
 			
-			//ORGINALRADEN SOM IAF GÅR ATT SÄTTA BP PÅ!!!
-			//IList newList = (IList) Activator.CreateInstance(orgList.GetType());	
 			IInterceptableList mList;
 			bool stackMute = false;
 
@@ -181,6 +173,33 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 		public bool CompareLists(IList newList, IList oldList)
+		{
+			bool stackNewMute = false;
+			bool stackOldMute = false;
+			IInterceptableList iNewList = newList as IInterceptableList;
+			if (iNewList != null)
+			{
+				stackNewMute = iNewList.MuteNotify;
+				iNewList.MuteNotify = true;
+			}
+			IInterceptableList iOldList = newList as IInterceptableList;
+			if (iOldList != null)
+			{
+				stackOldMute = iOldList.MuteNotify;
+				iOldList.MuteNotify = true;
+			}
+			
+			bool result = DoCompareLists(newList, oldList);
+
+			if (iNewList != null)
+				iNewList.MuteNotify = stackNewMute;
+			if (iOldList != null)
+				iOldList.MuteNotify = stackOldMute;
+
+			return result;
+		}
+
+		private bool DoCompareLists(IList newList, IList oldList)
 		{
 			if (newList == null || oldList == null)
 			{

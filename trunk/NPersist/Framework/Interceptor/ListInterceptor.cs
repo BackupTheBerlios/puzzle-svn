@@ -13,6 +13,8 @@ using System.Collections;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NPersist.Framework.Persistence;
 
 namespace Puzzle.NPersist.Framework.BaseClasses
 {
@@ -225,6 +227,52 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			copy.AddRange(List) ;
 			MuteNotify = stackMute;
 			return copy;
+		}
+
+        public bool BeforeCount(ref int count)
+        {
+			if (MuteNotify)
+				return false;
+
+			EnsureLoaded();
+			return false;
+            //throw new Exception("The method or operation is not implemented.");
+        }
+
+        public void AfterCount(ref int count)
+        {
+            //throw new Exception("The method or operation is not implemented.");
+        }
+
+		public void BeforeRead()
+		{
+			if (MuteNotify)
+				return;
+
+			EnsureLoaded();
+		}
+
+		public void EnsureLoaded()
+		{
+			if (MuteNotify)
+				return;
+
+			IContext ctx = interceptable.GetInterceptor().Context;
+			IObjectManager om = ctx.ObjectManager;
+			PropertyStatus propStatus = om.GetPropertyStatus(interceptable, propertyName);
+			if (propStatus == PropertyStatus.NotLoaded)
+			{
+				ObjectStatus objStatus = om.GetObjectStatus(interceptable); 
+				if (!(objStatus == ObjectStatus.UpForCreation))
+				{
+					bool stackMute = MuteNotify;
+					MuteNotify = true;
+
+					ctx.PersistenceEngine.LoadProperty(interceptable, propertyName);
+
+					MuteNotify = stackMute;
+				}
+			}						
 		}
 	}
 }

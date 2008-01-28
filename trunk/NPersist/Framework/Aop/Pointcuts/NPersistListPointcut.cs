@@ -31,9 +31,8 @@ namespace Puzzle.NPersist.Framework.Aop
 			return arr;
 		}
 
-		public NPersistListPointcut(IContext context)
+		public NPersistListPointcut()
 		{
-		//	this.context = context;
 		}
 
 		public IList Interceptors

@@ -335,7 +335,8 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client
 
 				if (mList != null) { mList.MuteNotify = stackMute; }
 			}
-			IList listClone = this.Context.ListManager.CloneList(obj, propertyMap, orgList);
+			//IList listClone = this.Context.ListManager.CloneList(obj, propertyMap, orgList);
+			IList listClone = new ArrayList( orgList);
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, listClone);
 		}
 

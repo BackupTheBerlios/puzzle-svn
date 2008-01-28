@@ -403,35 +403,6 @@ namespace Puzzle.NPersist.Framework.Persistence
             return propActions;			
 		}
 
-        //protected virtual ArrayList GetActionsForProperty(object obj, string propertyName, bool keepMasters)
-        //{
-        //    Hashtable objActions;
-        //    ArrayList propActions;
-        //    if (!(inverseActions.ContainsKey(obj)))
-        //    {
-        //        inverseActions[obj] = new Hashtable();
-        //    }
-        //    objActions = (Hashtable)inverseActions[obj];
-        //    if (!(objActions.ContainsKey(propertyName)))
-        //    {
-        //        objActions[propertyName] = new ArrayList();
-        //    }
-        //    propActions = (ArrayList)objActions[propertyName];
-        //    objActions.Remove(propertyName);
-        //    if (objActions.Count < 1)
-        //    {
-        //        inverseActions.Remove(obj);
-        //    }
-        //    if (!keepMasters)
-        //    {
-        //        foreach (InverseAction action in propActions)
-        //        {
-        //            RemoveActionFromMasters(action);
-        //        }
-        //    }
-        //    return propActions;
-        //}
-
         protected virtual void RemoveActionFromMasters(InverseAction action)
         {
             if (inverseMasters.ContainsKey(action.Master))
@@ -549,5 +520,76 @@ namespace Puzzle.NPersist.Framework.Persistence
             this.inverseMasters.Clear();
         }
 
+
+
+		public override void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value)
+		{
+			if (propertyMap.NoInverseManagement)
+				return;
+			if (propertyMap.ReferenceType == ReferenceType.None)
+				return;
+			if (!(propertyMap.Inverse.Length > 0))
+				return;
+			IPropertyMap invPropertyMap = propertyMap.MustGetInversePropertyMap();
+			if (invPropertyMap == null)
+				return;
+
+			if (propertyMap.ReferenceType == ReferenceType.ManyToMany)
+			{
+				//HandleManyManyPropertyLoad(obj, propertyMap, (IList) value, (IList) oldValue);				
+			}
+			if (propertyMap.ReferenceType == ReferenceType.ManyToOne)
+			{
+				HandleManyOnePropertyLoad(obj, propertyMap, invPropertyMap, (IList) value);				
+			}
+			if (propertyMap.ReferenceType == ReferenceType.OneToMany)
+			{
+				//if (!(hasOldValue))
+				//{
+				//	oldValue = this.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
+				//}
+				//HandleOneManyPropertyLoad(obj, propertyMap, value, oldValue);				
+			}
+			if (propertyMap.ReferenceType == ReferenceType.OneToOne)
+			{
+				HandleOneOnePropertyLoad(obj, propertyMap, invPropertyMap, value);				
+			}
+		}
+
+		protected virtual void HandleOneOnePropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, object value)
+		{
+			if (value == null)
+				return;
+
+			IObjectManager om = this.Context.ObjectManager;
+			PropertyStatus invPropStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
+			if (!invPropStatus.Equals(PropertyStatus.NotLoaded))
+				return;
+	
+			om.SetPropertyValue(value, invPropertyMap.Name, obj);
+			om.SetOriginalPropertyValue(value, invPropertyMap.Name, obj);
+			om.SetNullValueStatus(value, invPropertyMap.Name, false);
+			om.SetUpdatedStatus(value, invPropertyMap.Name, false);			
+		}
+
+		protected virtual void HandleManyOnePropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, IList list)
+		{
+			if (list == null)
+				return;
+
+			IObjectManager om = this.Context.ObjectManager;
+
+			foreach (object value in list)
+			{
+				PropertyStatus invPropStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
+				if (invPropStatus.Equals(PropertyStatus.NotLoaded))
+				{
+					om.SetPropertyValue(value, invPropertyMap.Name, obj);
+					om.SetOriginalPropertyValue(value, invPropertyMap.Name, obj);
+					om.SetNullValueStatus(value, invPropertyMap.Name, false);
+					om.SetUpdatedStatus(value, invPropertyMap.Name, false);			
+				}
+			}
+		}
 	}
 }

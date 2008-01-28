@@ -513,39 +513,50 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
 			IPropertyMap propertyMap = classMap.MustGetPropertyMap(propertyName);
+			bool loaded = false;
 			if (propertyMap.IsCollection)
 			{
 				LoadCollectionProperty(obj, propertyMap);
-				return;
+				loaded = true;
 			}
-			if (!(propertyMap.ReferenceType == ReferenceType.None))
+			if (!loaded)
 			{
-				LoadReferenceProperty(obj, propertyMap);
-				return;
+				if (!(propertyMap.ReferenceType == ReferenceType.None))
+				{
+					LoadReferenceProperty(obj, propertyMap);
+					loaded = true;
+				}
 			}
-			if (!(propertyMap.MustGetTableMap() == classMap.MustGetTableMap()))
+			if (!loaded)
 			{
-				LoadNonPrimaryProperty(obj, propertyMap);
-				return;
+				if (!(propertyMap.MustGetTableMap() == classMap.MustGetTableMap()))
+				{
+					LoadNonPrimaryProperty(obj, propertyMap);
+					loaded = true;
+				}
 			}
-			parameters = new ArrayList() ;
-			IObjectManager om = ctx.ObjectManager;
-			IPersistenceManager pm = ctx.PersistenceManager;
-			string sql = GetSelectPropertyStatement(obj, propertyName, parameters);
-			IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
-			object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
-			if (Util.IsArray(result))
+			if (!loaded)
 			{
-				orgValue = result[0, 0];
-				value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
-				om.SetPropertyValue(obj, propertyName, value);
-				om.SetOriginalPropertyValue(obj, propertyName, orgValue);
-				om.SetNullValueStatus(obj, propertyName, DBNull.Value.Equals(orgValue));
+				parameters = new ArrayList() ;
+				IObjectManager om = ctx.ObjectManager;
+				IPersistenceManager pm = ctx.PersistenceManager;
+				string sql = GetSelectPropertyStatement(obj, propertyName, parameters);
+				IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
+				object[,] result = (object[,]) ctx.SqlExecutor.ExecuteArray(sql, ds, parameters);
+				if (Util.IsArray(result))
+				{
+					orgValue = result[0, 0];
+					value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
+					om.SetPropertyValue(obj, propertyName, value);
+					om.SetOriginalPropertyValue(obj, propertyName, orgValue);
+					om.SetNullValueStatus(obj, propertyName, DBNull.Value.Equals(orgValue));
+				}
+				else
+				{
+					throw new ObjectNotFoundException("Object not found!"); // do not localize
+				}
 			}
-			else
-			{
-				throw new ObjectNotFoundException("Object not found!"); // do not localize
-			}
+
 			PropertyEventArgs e2 = new PropertyEventArgs(obj, propertyName);
 			ctx.EventManager.OnLoadedProperty(this, e2);
 		}
@@ -567,7 +578,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 				return;
 			}
 			parameters = new ArrayList() ;
-			IList propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
+
+			IList propList = (IList) m_SqlEngineManager.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
+			if (propList == null)
+				propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
+
 			IObjectManager om = ctx.ObjectManager;
 			IListManager lm = ctx.ListManager;
 			IPersistenceManager pm = ctx.PersistenceManager;
@@ -606,7 +621,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					mList.MuteNotify = stackMute ;
 
 				om.SetPropertyValue(obj, propertyMap.Name, propList);
-				list = lm.CloneList(obj, propertyMap, propList);
+				//list = lm.CloneList(obj, propertyMap, propList);
+				list = new ArrayList( propList);
 				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
 			}
 			else
@@ -675,6 +691,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, orgValue);
             om.SetNullValueStatus(obj, propertyMap.Name, Convert.IsDBNull(orgValue));
+
+			ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, orgValue);
 		}
 
 		protected virtual void LoadReferenceCollectionProperty(object obj, IPropertyMap propertyMap, Type itemType)
@@ -692,7 +710,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void LoadManyOneCollectionProperty(object obj, IPropertyMap propertyMap, Type itemType)
 		{
 			IList parameters = new ArrayList() ;
-			IList propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
+
+			IList propList = (IList) m_SqlEngineManager.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
+			if (propList == null)
+				propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
+
 			IList refObjects;
 			IList idColumns = new ArrayList();
 			IList typeColumns = new ArrayList();
@@ -722,8 +744,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 				mList.MuteNotify = stackMute ;
 			}
 			om.SetPropertyValue(obj, propertyMap.Name, propList);
-			list = lm.CloneList(obj, propertyMap, propList);
+			//list = lm.CloneList(obj, propertyMap, propList);
+			list = new ArrayList( propList );
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
+
+			ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);
 		}
 
 		protected virtual void LoadManyManyCollectionProperty(object obj, IPropertyMap propertyMap, Type itemType)
@@ -734,9 +759,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IList list;
 			propList = (IList) m_SqlEngineManager.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
 			if (propList == null)
-			{
 				propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
-			}
 			IList refObjects;
 			IList idColumns = new ArrayList();
 			IList typeColumns = new ArrayList();
@@ -764,8 +787,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 				mList.MuteNotify = stackMute;
 			}
 			om.SetPropertyValue(obj, propertyMap.Name, propList);
-			list = lm.CloneList(obj, propertyMap, propList);
+			//list = lm.CloneList(obj, propertyMap, propList);
+			list = new ArrayList( propList);
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
+
+			ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);
 		}
 
 		protected virtual void LoadObjectByIdOrKey(ref object obj, string keyPropertyName, object keyValue)
@@ -811,9 +837,13 @@ namespace Puzzle.NPersist.Framework.Persistence
                                 else
                                     om.SetOriginalPropertyValue(obj, propName, value);
                                 om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
-                            }
+
+								if (propertyMap.ReferenceType != ReferenceType.None)
+									this.Context.InverseManager.NotifyPropertyLoad(obj, propertyMap, value);
+							}
                             else
                             {
+								//TODO: Add immediate ghost loading of refernced composite key objects.
                                 //							orgValue = result[col, row];
                                 //							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
                                 //							om.SetPropertyValue(obj, propName, value);
@@ -3754,7 +3784,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 																	{
 																		if (orgList == null)
 																		{
-																			orgList = lm.CreateList(prevObj, arr[i]);
+																			//orgList = lm.CreateList(prevObj, arr[i]);
+																			orgList = new ArrayList() ;
 																			om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
 																		}
 
@@ -3817,7 +3848,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 													{
 														if (orgList == null)
 														{
-															orgList = lm.CreateList(prevObj, arr[i]);
+															//orgList = lm.CreateList(prevObj, arr[i]);
+															orgList = new ArrayList();
 															om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
 														}
 														mList = orgList as IInterceptableList;
@@ -4049,10 +4081,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 												{
 													if (value != null)
 													{
-														//if (registerLoaded[value] == null)
-															registerLoaded[value] = value;
+														registerLoaded[value] = value;
 
-														//Inverse management
 														if (doWrite)
 															this.Context.InverseManager.NotifyPropertyLoad(refObj, propertyMap, value);
 													}

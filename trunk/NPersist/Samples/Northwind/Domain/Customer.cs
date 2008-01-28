@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
@@ -194,6 +195,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 		private void MayNotHaveDifferentShippingAddresses()
 		{
 			string address = "";
+			//IList orders = this.Orders;
 			foreach (Order order in this.Orders)
 			{
 				if (order.ShipAddress != null)
