@@ -135,6 +135,7 @@
     <Compile Include="Aop\Interceptors\NPersistCtorInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Interceptors\NPersistListCountInterceptor.cs" />
     <Compile Include="Aop\Interceptors\NPersistListInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -159,6 +160,7 @@
     <Compile Include="Aop\Pointcuts\NPersistEntityPropertyPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Pointcuts\NPersistListCountPointcut.cs" />
     <Compile Include="Aop\Pointcuts\NPersistListPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
