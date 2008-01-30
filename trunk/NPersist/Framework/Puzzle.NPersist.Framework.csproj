@@ -149,16 +149,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\NPersistInterceptableListStateMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Aop\NPersistListAspect.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Aop\NPersistProxyMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -169,17 +159,52 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\Interceptors\NPersistListCountInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Aop\Interceptors\NPersistListInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Aop\Interceptors\NPersistPropertyInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\CloneHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\ContextChildMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\IdentityHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\NullValueHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\ObjectStatusHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\ObservableMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\OriginalValueHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\UpdatedPropertyTrackerMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Mixins\ValueHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -190,16 +215,6 @@
                 />
                 <File
                     RelPath = "Aop\Pointcuts\NPersistEntityPropertyPointcut.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Aop\Pointcuts\NPersistListCountPointcut.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Aop\Pointcuts\NPersistListPointcut.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1330,71 +1345,6 @@
                 />
                 <File
                     RelPath = "Persistence\ValidationManager\ValidationManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\EmitHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\ListProxyFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\ListProxyHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\ProxyHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\CloneHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\ContextChildMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\IdentityHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\NullValueHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\ObjectStatusHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\ObservableMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\OriginalValueHelperMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\UpdatedPropertyTrackerMixin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Proxy\Mixins\ValueHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -30,7 +30,6 @@ using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPath.Framework;
 using Puzzle.NPersist.Framework.NPath;
 using Puzzle.NPersist.Framework.Persistence;
-using Puzzle.NPersist.Framework.Proxy;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Mapping.Serialization;
 using Puzzle.NPersist.Framework.Remoting.Formatting;

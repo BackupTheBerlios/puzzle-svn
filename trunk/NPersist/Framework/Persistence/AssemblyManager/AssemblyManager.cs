@@ -16,7 +16,7 @@ using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
-using Puzzle.NPersist.Framework.Proxy;
+using Puzzle.NPersist.Framework.Aop;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {

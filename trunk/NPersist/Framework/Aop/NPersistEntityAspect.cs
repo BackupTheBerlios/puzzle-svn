@@ -44,17 +44,17 @@ namespace Puzzle.NPersist.Framework.Aop
 			{
 				IList arr = new ArrayList();
 				arr.Add(typeof( NPersistProxyMixin ));
-				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.NullValueHelperMixin ));
-				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.ObjectStatusHelperMixin ));
-				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.CloneHelperMixin ));
-				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.OriginalValueHelperMixin ));
-				arr.Add(typeof( Puzzle.NPersist.Framework.Proxy.Mixins.UpdatedPropertyTrackerMixin ));
-                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.IdentityHelperMixin));
-				arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.ObservableMixin));
-                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.ContextChildMixin));
+				arr.Add(typeof( Puzzle.NPersist.Framework.Aop.Mixins.NullValueHelperMixin ));
+				arr.Add(typeof( Puzzle.NPersist.Framework.Aop.Mixins.ObjectStatusHelperMixin ));
+				arr.Add(typeof( Puzzle.NPersist.Framework.Aop.Mixins.CloneHelperMixin ));
+				arr.Add(typeof( Puzzle.NPersist.Framework.Aop.Mixins.OriginalValueHelperMixin ));
+				arr.Add(typeof( Puzzle.NPersist.Framework.Aop.Mixins.UpdatedPropertyTrackerMixin ));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.IdentityHelperMixin));
+				arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.ObservableMixin));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.ContextChildMixin));
 #if NET2
-                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.PropertyChangedHelperMixin));
-                arr.Add(typeof(Puzzle.NPersist.Framework.Proxy.Mixins.EditableObjectMixin));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.PropertyChangedHelperMixin));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.EditableObjectMixin));
 #endif
 				return arr;
 			}

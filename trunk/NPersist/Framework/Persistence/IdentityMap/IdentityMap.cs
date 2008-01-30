@@ -16,7 +16,7 @@ using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
-using Puzzle.NPersist.Framework.Proxy;
+using Puzzle.NPersist.Framework.Aop;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NCore.Framework.Collections;

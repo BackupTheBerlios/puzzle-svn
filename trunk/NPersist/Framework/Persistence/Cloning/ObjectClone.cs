@@ -16,7 +16,7 @@ using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
-using Puzzle.NPersist.Framework.Proxy.Mixins;
+using Puzzle.NPersist.Framework.Aop.Mixins;
 using Puzzle.NCore.Framework.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence

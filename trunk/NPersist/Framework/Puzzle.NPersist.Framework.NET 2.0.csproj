@@ -134,20 +134,21 @@
     <Compile Include="Aop\Interceptors\NPersistCtorInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Aop\Interceptors\NPersistListCountInterceptor.cs" />
-    <Compile Include="Aop\Interceptors\NPersistListInterceptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Aop\Interceptors\NPersistPropertyInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Mixins\CloneHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\ContextChildMixin.cs" />
+    <Compile Include="Aop\Mixins\EditableObjectMixin.cs" />
+    <Compile Include="Aop\Mixins\IdentityHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\NullValueHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\ObjectStatusHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\ObservableMixin.cs" />
+    <Compile Include="Aop\Mixins\OriginalValueHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\PropertyChangedMixin.cs" />
+    <Compile Include="Aop\Mixins\UpdatedPropertyTrackerMixin.cs" />
+    <Compile Include="Aop\Mixins\ValueHelperMixin.cs" />
     <Compile Include="Aop\NPersistEntityAspect.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Aop\NPersistInterceptableListStateMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Aop\NPersistListAspect.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\NPersistProxyMixin.cs">
@@ -157,10 +158,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\Pointcuts\NPersistEntityPropertyPointcut.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Aop\Pointcuts\NPersistListCountPointcut.cs" />
-    <Compile Include="Aop\Pointcuts\NPersistListPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
@@ -547,8 +544,6 @@
     <Compile Include="Mapping\Domain\IMethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mapping\Domain\Immutable\ImmutableDomainMap.cs" />
-    <Compile Include="Mapping\Domain\Immutable\ImmutablePropertyMap.cs" />
     <Compile Include="Mapping\Domain\IParameterMap.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -564,7 +559,6 @@
     <Compile Include="Mapping\Domain\PropertyMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mapping\Domain\Immutable\ImmutableClassMap.cs" />
     <Compile Include="Mapping\Domain\TableLockIndexSorter.cs" />
     <Compile Include="Mapping\Exceptions\MappingException.cs">
       <SubType>Code</SubType>
@@ -805,41 +799,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\ValidationManager\ValidationManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\EmitHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\ListProxyFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\ListProxyHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\CloneHelperMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\ContextChildMixin.cs" />
-    <Compile Include="Proxy\Mixins\EditableObjectMixin.cs" />
-    <Compile Include="Proxy\Mixins\IdentityHelperMixin.cs" />
-    <Compile Include="Proxy\Mixins\NullValueHelperMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\ObjectStatusHelperMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\ObservableMixin.cs" />
-    <Compile Include="Proxy\Mixins\OriginalValueHelperMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\PropertyChangedMixin.cs" />
-    <Compile Include="Proxy\Mixins\UpdatedPropertyTrackerMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\Mixins\ValueHelperMixin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\ProxyHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Query\IQuery.cs">

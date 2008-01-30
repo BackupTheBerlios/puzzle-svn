@@ -83,7 +83,7 @@ namespace Puzzle.NPersist.Framework.Aop
 				context = value;
 				aopEngine.Configuration.Aspects.Clear() ;
 				aopEngine.Configuration.Aspects.Add(new NPersistEntityAspect(Context));		
-				aopEngine.Configuration.Aspects.Add(new NPersistListAspect(Context));
+				//aopEngine.Configuration.Aspects.Add(new NPersistListAspect(Context));
 				foreach (SignatureAspect extensionAspect in GetExtensionAspects())
 					aopEngine.Configuration.Aspects.Add(extensionAspect);
 				aopEngine.LogManager = context.LogManager;
