@@ -483,8 +483,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 			if (isFixed)
 			{
-				fixedValueGetPrimaryPropertyMaps = props;
-				fixedGetPrimaryPropertyMaps = true;
+				fixedValueGetIdentityPropertyMaps = props;
+				fixedGetIdentityPropertyMaps = true;
 			}
 
 			return props;
