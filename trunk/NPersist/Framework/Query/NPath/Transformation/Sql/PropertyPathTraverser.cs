@@ -361,7 +361,7 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 							{
 								if (iPropertyMap.IsCollection)
 								{
-									if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, iPropertyMap) == LoadBehavior.Eager)
+									if (this.SqlEmitter.NPathEngine.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, iPropertyMap) == LoadBehavior.Eager)
 									{
 										if (iPropertyMap.GetIdColumnMap() != null)
 										{
