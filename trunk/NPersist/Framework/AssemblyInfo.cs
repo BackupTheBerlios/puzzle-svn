@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTrademark("")]
 //[assembly: CLSCompliant(true)]
 [assembly : Guid("0DD94A98-25F4-4DAF-A85A-4A1257A814BE")]
-[assembly : AssemblyVersion("1.0.9.0")]
+[assembly : AssemblyVersion("1.0.10.0")]
 
 [assembly: AssemblyDelaySign(false)]
 //#if !NET2
