@@ -2648,23 +2648,64 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 
 			IObjectManager om;
-			foreach (IPropertyMap iRefPropertyMap in classMap.GetPrimaryPropertyMaps())
+			foreach (IPropertyMap iRefPropertyMap in classMap.GetAllPropertyMaps())
 			{
 				refPropertyMap = iRefPropertyMap;
-				if (!(propertyMap.LazyLoad))
+				if (refPropertyMap.IsCollection)
 				{
-					if (!((refPropertyMap.IsCollection || (refPropertyMap.ReferenceType != ReferenceType.None && !(refPropertyMap.IsIdentity)))))
+					if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, refPropertyMap) == LoadBehavior.Eager)
 					{
-						IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
-						SqlColumnAlias refColumn = forTable.GetSqlColumnAlias(refColumnMap);
-						colName = refColumnMap.Name;
-						if (refPropertyMap.IsIdentity)
-							idColumns.Add(colName);
+						if (refPropertyMap.ReferenceType != ReferenceType.None)
+						{
+							ITableMap listTableMap = refPropertyMap.GetTableMap();
 
+							ISourceMap listSourceMap = listTableMap.SourceMap;
+
+							SqlSelectStatement subSelect = new SqlSelectStatement(listSourceMap);
+							SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "t" + select.GetNextTableAliasIndex());
+
+							SqlCountFunction count = new SqlCountFunction();
+                        
+							subSelect.SqlSelectClause.AddSqlAliasSelectListItem(count);
+
+							subSelect.SqlFromClause.AddSqlAliasTableSource(listTable);
+
+							foreach (IColumnMap fkIdColumnMap in refPropertyMap.GetAllIdColumnMaps())
+							{
+								IColumnMap pkIdColumnMap = fkIdColumnMap.MustGetPrimaryKeyColumnMap();
+
+								SqlColumnAlias fkIdColumn = listTable.GetSqlColumnAlias(fkIdColumnMap);
+								SqlColumnAlias pkIdColumn = forTable.GetSqlColumnAlias(pkIdColumnMap);
+								SqlSearchCondition searchCount = subSelect.SqlWhereClause.GetNextSqlSearchCondition();
+
+								searchCount.GetSqlComparePredicate(fkIdColumn, SqlCompareOperatorType.Equals, pkIdColumn);
+							}
+
+							select.SqlSelectClause.AddSqlAliasSelectListItem(subSelect, refPropertyMap.Name);
+							hashPropertyColumnMap[refPropertyMap.Name] = refPropertyMap.Name;
+						}
+					}
+				}
+				else
+				{
+					if (refPropertyMap.MustGetTableMap() == forTableMap)
+					{
 						if (!(refPropertyMap.LazyLoad))
 						{
-							select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
-							hashPropertyColumnMap[refPropertyMap.Name] = colName;
+							if (!((refPropertyMap.IsCollection || ((refPropertyMap.ReferenceType != ReferenceType.None && refPropertyMap.GetAdditionalColumnMaps().Count > 0) && !(refPropertyMap.IsIdentity)))))
+							{
+								IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
+								SqlColumnAlias refColumn = forTable.GetSqlColumnAlias(refColumnMap);
+								colName = refColumnMap.Name;
+								if (refPropertyMap.IsIdentity)
+									idColumns.Add(colName);
+
+								if (!(refPropertyMap.LazyLoad))
+								{
+									select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
+									hashPropertyColumnMap[refPropertyMap.Name] = colName;
+								}
+							}
 						}
 					}
 				}
