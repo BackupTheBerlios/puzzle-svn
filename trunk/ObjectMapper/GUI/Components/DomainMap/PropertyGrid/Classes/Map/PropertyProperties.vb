@@ -195,6 +195,21 @@ Public Class PropertyProperties
         End Set
     End Property
 
+
+    <Category("Merging"), _
+    Description("The default merging behavior for this property. DefaultBehavior means that the merging behavior of the class map will be used."), _
+    DisplayName("Merging behavior"), _
+    DefaultValue(MergeBehaviorType.DefaultBehavior)> Public Property MergeBehavior() As MergeBehaviorType
+        Get
+            Return m_PropertyMap.MergeBehavior
+        End Get
+        Set(ByVal Value As MergeBehaviorType)
+            m_PropertyMap.MergeBehavior = Value
+            RaiseEvent AfterPropertySet(m_PropertyMap, "MergeBehavior")
+        End Set
+    End Property
+
+
     <Category("Inverse"), _
         Description("Set to True for an inverse property that should not have its values saved to the database since its inverse property will manage all persistence. Normally, when mapping to a relational database, one of the properties in an inverse property relationship should be set to slave (in a OneMany relationship the list property side should be set to slave)."), _
         DisplayName("Slave"), _
@@ -391,6 +406,19 @@ Public Class PropertyProperties
             m_PropertyMap.OrderBy = Value
             SetShouldReloadProperties()
             RaiseEvent AfterPropertySet(m_PropertyMap, "OrderBy")
+        End Set
+    End Property
+
+    <Category("Collection property"), _
+    Description("The default loading behavior for the Count property of this list property. Eager means that subqueries will be used to eagerly load the count properties when the object is loaded, lazy means that accessing the count property will cause the list property to be loaded if it wasn't already. Default means that the list count loading behavior of the domain map will be used."), _
+    DisplayName("List count loading behavior"), _
+    DefaultValue(LoadBehavior.Default)> Public Property ListCountLoadBehavior() As LoadBehavior
+        Get
+            Return m_PropertyMap.ListCountLoadBehavior
+        End Get
+        Set(ByVal Value As LoadBehavior)
+            m_PropertyMap.ListCountLoadBehavior = Value
+            RaiseEvent AfterPropertySet(m_PropertyMap, "ListCountLoadBehavior")
         End Set
     End Property
 
@@ -1319,6 +1347,10 @@ Public Class PropertyProperties
                 If m_PropertyMap.ReferenceType = ReferenceType.None Then propDesc.SetReadOnly()
 
             Case "OrderBy"
+                If Not (m_PropertyMap.ReferenceType = ReferenceType.ManyToMany Or m_PropertyMap.ReferenceType = ReferenceType.ManyToOne) Then propDesc.SetReadOnly()
+
+            Case "ListCountLoadBehavior"
+                If Not m_PropertyMap.IsCollection Then propDesc.SetReadOnly()
                 If Not (m_PropertyMap.ReferenceType = ReferenceType.ManyToMany Or m_PropertyMap.ReferenceType = ReferenceType.ManyToOne) Then propDesc.SetReadOnly()
 
         End Select

@@ -15,6 +15,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NCore.Framework.Logging;
+using Puzzle.NPersist.Framework.Exceptions;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -536,7 +537,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			if (propertyMap.ReferenceType == ReferenceType.ManyToMany)
 			{
-				//HandleManyManyPropertyLoad(obj, propertyMap, (IList) value, (IList) oldValue);				
+				HandleManyManyPropertyLoad(obj, propertyMap, invPropertyMap, (IList) value);				
 			}
 			if (propertyMap.ReferenceType == ReferenceType.ManyToOne)
 			{
@@ -544,11 +545,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			if (propertyMap.ReferenceType == ReferenceType.OneToMany)
 			{
-				//if (!(hasOldValue))
-				//{
-				//	oldValue = this.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
-				//}
-				//HandleOneManyPropertyLoad(obj, propertyMap, value, oldValue);				
+				HandleOneManyPropertyLoad(obj, propertyMap, invPropertyMap, value);				
 			}
 			if (propertyMap.ReferenceType == ReferenceType.OneToOne)
 			{
@@ -558,7 +555,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleOneOnePropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, object value)
 		{
-			if (value == null)
+            if (value == null)
 				return;
 
 			IObjectManager om = this.Context.ObjectManager;
@@ -591,5 +588,78 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 			}
 		}
+
+        protected virtual void HandleOneManyPropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, object value)
+        {
+            if (value == null)
+                return;
+
+            ITransaction tx = null;
+
+            ConsistencyMode readConsistency = this.Context.ReadConsistency;
+            if (readConsistency == ConsistencyMode.Pessimistic)
+            {
+                tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
+                if (tx == null)
+                    return;
+            }
+
+			IInverseHelper inverseHelper = value as IInverseHelper;
+			if (inverseHelper == null)
+				return;
+
+            IObjectManager om = this.Context.ObjectManager;
+            PropertyStatus invPropStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
+            if (!invPropStatus.Equals(PropertyStatus.NotLoaded))
+                return;
+
+            IList partialList = inverseHelper.GetPartiallyLoadedList(invPropertyMap.Name, tx);
+            if (partialList.Contains(obj))
+                return;
+
+            partialList.Add(obj);
+
+            if (inverseHelper.HasCount(invPropertyMap.Name, tx))
+				inverseHelper.CheckPartiallyLoadedList(invPropertyMap.Name, tx);
+		}
+
+        protected virtual void HandleManyManyPropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, IList list)
+        {
+            if (list == null)
+                return;
+
+            ITransaction tx = null;
+
+            ConsistencyMode readConsistency = this.Context.ReadConsistency;
+            if (readConsistency == ConsistencyMode.Pessimistic)
+            {
+                tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
+                if (tx == null)
+                    return;
+            }
+
+            IObjectManager om = this.Context.ObjectManager;
+
+            foreach (object value in list)
+            {
+                PropertyStatus invPropStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
+                if (invPropStatus.Equals(PropertyStatus.NotLoaded))
+                {
+                    IInverseHelper inverseHelper = value as IInverseHelper;
+                    if (inverseHelper != null)
+                    {
+                        IList partialList = inverseHelper.GetPartiallyLoadedList(invPropertyMap.Name, tx);
+                        if (!partialList.Contains(obj))
+                        {
+                            partialList.Add(obj);
+
+                            if (inverseHelper.HasCount(invPropertyMap.Name, tx))
+								inverseHelper.CheckPartiallyLoadedList(invPropertyMap.Name, tx);
+                        }
+                    }
+                }
+            }
+        }
+
 	}
 }

@@ -14,14 +14,14 @@ using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.EventArguments;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NCore.Framework.Logging;
+using System.Collections;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
-	public class Transaction : ContextChild, ITransaction
+	public class Transaction : TransactionBase
 	{
 		private IDbTransaction m_DbTransaction;
 		private IDataSource m_DataSource;
-		private bool m_AutoPersistAllOnCommit = true;
 		private bool m_OriginalKeepOpen;
 
 		public Transaction(IDbTransaction dbTransaction, IDataSource dataSource, IContext ctx) : base(ctx)
@@ -32,27 +32,29 @@ namespace Puzzle.NPersist.Framework.Persistence
 			m_DataSource.KeepConnectionOpen = true;
 		}
 
-		public virtual IDbTransaction DbTransaction
+		public override IDbTransaction DbTransaction
 		{
 			get { return m_DbTransaction; }
 			set { m_DbTransaction = value; }
 		}
 
-		public virtual void Commit()
+        public override void Commit()
 		{
+            base.Commit();
+
             LogMessage message = new LogMessage("Committing local transaction");
-            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}" , m_DataSource.Name , m_AutoPersistAllOnCommit  );
+            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}" , m_DataSource.Name , this.AutoPersistAllOnCommit  );
 			this.Context.LogManager.Info(this, message , verbose); // do not localize	
 
-			TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, this.IsolationLevel, m_AutoPersistAllOnCommit);
+			TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, this.IsolationLevel, this.AutoPersistAllOnCommit);
 			this.Context.EventManager.OnCommittingTransaction(this, e);
 			if (e.Cancel)
 			{
 				return;
 			}
-			m_AutoPersistAllOnCommit = e.AutoPersistAllOnCommit;			
+			this.AutoPersistAllOnCommit = e.AutoPersistAllOnCommit;			
 
-			if (m_AutoPersistAllOnCommit)
+			if (this.AutoPersistAllOnCommit)
 			{
 				this.Context.Commit();
 			}
@@ -62,55 +64,51 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			m_DataSource.ReturnConnection();
 
-			TransactionEventArgs e2 = new TransactionEventArgs(this, m_DataSource, m_AutoPersistAllOnCommit);
+			TransactionEventArgs e2 = new TransactionEventArgs(this, m_DataSource, this.AutoPersistAllOnCommit);
 			this.Context.EventManager.OnCommittedTransaction(this, e2);
 		}
 
-		public virtual IDbConnection Connection
+        public override IDbConnection Connection
 		{
 			get { return m_DbTransaction.Connection; }
 		}
 
-		public virtual IsolationLevel IsolationLevel
+        public override IsolationLevel IsolationLevel
 		{
 			get { return m_DbTransaction.IsolationLevel; }
 		}
 
-		public virtual void Rollback()
+        public override void Rollback()
 		{
+            base.Rollback();
+
             LogMessage message = new LogMessage("Rolling back local transaction");
-            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}", m_DataSource.Name, m_AutoPersistAllOnCommit);
+            LogMessage verbose = new LogMessage("Data source: {0}, Auto persist: {1}", m_DataSource.Name, this.AutoPersistAllOnCommit);
             this.Context.LogManager.Info(this, message, verbose); // do not localize	
 
-            TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, m_AutoPersistAllOnCommit);
+            TransactionCancelEventArgs e = new TransactionCancelEventArgs(this, m_DataSource, this.AutoPersistAllOnCommit);
 			this.Context.EventManager.OnRollingbackTransaction(this, e);
 			if (e.Cancel)
 			{
 				return;
 			}
-			m_AutoPersistAllOnCommit = e.AutoPersistAllOnCommit;			
+			this.AutoPersistAllOnCommit = e.AutoPersistAllOnCommit;			
 			m_DbTransaction.Rollback();
 			this.Context.OnTransactionComplete(this);
 			m_DataSource.KeepConnectionOpen = m_OriginalKeepOpen;
 			m_DataSource.ReturnConnection();
 
-			TransactionEventArgs e2 = new TransactionEventArgs(this, m_DataSource, m_AutoPersistAllOnCommit);
+			TransactionEventArgs e2 = new TransactionEventArgs(this, m_DataSource, this.AutoPersistAllOnCommit);
 			this.Context.EventManager.OnRolledbackTransaction(this, e2);
 		}
 
-		public virtual void Dispose()
+		public override void Dispose()
 		{
 			m_DbTransaction.Dispose();
 			GC.SuppressFinalize(this);
 		}
 
-		public virtual bool AutoPersistAllOnCommit
-		{
-			get { return m_AutoPersistAllOnCommit; }
-			set { m_AutoPersistAllOnCommit = value; }
-		}
-
-		public virtual IDataSource DataSource
+        public override IDataSource DataSource
 		{
 			get { return m_DataSource; }
 			set { m_DataSource = value; }

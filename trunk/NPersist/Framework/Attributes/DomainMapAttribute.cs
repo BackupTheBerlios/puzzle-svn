@@ -28,6 +28,7 @@ namespace Puzzle.NPersist.Framework.Attributes
 		private string m_Source = "";
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private bool m_IsReadOnly = false;
 		private string m_RootNamespace = "";
 		private string m_FieldPrefix = "m_";
@@ -64,6 +65,12 @@ namespace Puzzle.NPersist.Framework.Attributes
 		{
 			get { return m_RefreshBehavior; }
 			set { m_RefreshBehavior = value; }
+		}
+
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
 		}
 
 		public virtual bool IsReadOnly

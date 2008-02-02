@@ -176,6 +176,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		ValidationMode ValidationMode { get; set; }
 
+		LoadBehavior ListCountLoadBehavior { get; set; }
+
 		long TimeToLive { get; set; }
 
 		TimeToLiveBehavior TimeToLiveBehavior { get; set; }

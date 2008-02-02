@@ -24,12 +24,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// <summary>
 	/// Summary description for CompositeTransaction.
 	/// </summary>
-	public class CompositeTransaction : ContextChild, ITransaction
+	public class CompositeTransaction : TransactionBase
 	{
-
 		public CompositeTransaction(IContext ctx, IsolationLevel iso, bool autoPersistAllOnCommit) : base(ctx)
 		{
-			this.autoPersistAllOnCommit = autoPersistAllOnCommit ;
+			this.AutoPersistAllOnCommit = autoPersistAllOnCommit ;
 			foreach (ISourceMap sourceMap in this.Context.DomainMap.SourceMaps )
 			{
 				if (sourceMap.PersistenceType == PersistenceType.Default || sourceMap.PersistenceType == PersistenceType.ObjectRelational )
@@ -45,7 +44,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
-
 		#region Property  Transactions
 		
 		private IList transactions = new ArrayList() ;
@@ -58,9 +56,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 		
 		#endregion
 
-		public void Commit()
+		public override void Commit()
 		{
-			if (this.autoPersistAllOnCommit)
+            base.Commit();
+
+			if (this.AutoPersistAllOnCommit)
 				this.Context.Commit() ;
 
 			foreach (ITransaction transaction in this.transactions)
@@ -70,8 +70,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
-		public void Rollback()
+        public override void Rollback()
 		{
+            base.Rollback();
+
 			IList exceptions = new ArrayList() ;
 			foreach (ITransaction transaction in this.transactions)
 			{
@@ -86,45 +88,38 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 			//Bug in following line fixed by Vlad Ivanov
 			if (exceptions!=null && exceptions.Count > 0)
-				throw new ExceptionLimitExceededException("Exceptions were encountered during rollback! One or more databases are potentially in a corrpt state!");
+				throw new ExceptionLimitExceededException("Exceptions were encountered during rollback! One or more databases are potentially in a corrupt state!");
 		}
 
-		public IDbConnection Connection
+        public override IDbConnection Connection
 		{
 			get { throw new IAmOpenSourcePleaseImplementMeException(); }
 		}
 
-		public IDbTransaction DbTransaction
-		{
-			get { throw new IAmOpenSourcePleaseImplementMeException(); }
-			set { throw new IAmOpenSourcePleaseImplementMeException(); }
-		}
-
-		private bool autoPersistAllOnCommit = true;
-
-		public bool AutoPersistAllOnCommit
-		{
-			get { return autoPersistAllOnCommit; }
-			set { autoPersistAllOnCommit = value; }
-		}
-
-		public IDataSource DataSource
+        public override IDbTransaction DbTransaction
 		{
 			get { throw new IAmOpenSourcePleaseImplementMeException(); }
 			set { throw new IAmOpenSourcePleaseImplementMeException(); }
 		}
 
-		public IsolationLevel IsolationLevel
+        public override IDataSource DataSource
+		{
+			get { throw new IAmOpenSourcePleaseImplementMeException(); }
+			set { throw new IAmOpenSourcePleaseImplementMeException(); }
+		}
+
+        public override IsolationLevel IsolationLevel
 		{
 			get { throw new IAmOpenSourcePleaseImplementMeException(); }
 		}
 
-		public void Dispose()
+		public override void Dispose()
 		{
 			foreach (ITransaction transaction in this.transactions)
 			{
 				transaction.Dispose() ;
 			}
 		}
+
 	}
 }

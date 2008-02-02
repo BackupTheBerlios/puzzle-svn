@@ -129,16 +129,57 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
             try
             {
-                object managedValue;
-                managedValue = ManageNullValue(obj, propertyMap, value);
-                managedValue = ManageReferenceValue(obj, propertyMap, managedValue, discriminator);
-                return managedValue;
+				if (propertyMap.IsCollection)
+				{
+					return ManageListCountValue(obj, propertyMap, value);
+				}
+				else
+				{
+					object managedValue;
+					managedValue = ManageNullValue(obj, propertyMap, value);
+					managedValue = ManageReferenceValue(obj, propertyMap, managedValue, discriminator);
+					return managedValue;
+				}
             }
             catch (Exception x)
             {
                 string message = string.Format("Could not load value for property '{0}' on object {1}.{2}", propertyMap.Name, AssemblyManager.GetBaseType(obj).Name, this.Context.ObjectManager.GetObjectKeyOrIdentity(obj));
                 throw new LoadException(message, x, obj);
             }
+		}
+
+		public virtual object ManageListCountValue(object obj, IPropertyMap propertyMap, object value)
+		{
+			if (value == null)
+				return value;
+
+			ITransaction tx = null;
+
+			ConsistencyMode readConsistency = this.Context.ReadConsistency;
+			if (readConsistency == ConsistencyMode.Pessimistic)
+			{
+				tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
+				if (tx == null)
+					return value;
+			}
+
+			IInverseHelper inverseHelper = obj as IInverseHelper;
+			if (inverseHelper == null)
+				return value;
+
+			IObjectManager om = this.Context.ObjectManager;
+			PropertyStatus propStatus = om.GetPropertyStatus(obj, propertyMap.Name);
+			if (!propStatus.Equals(PropertyStatus.NotLoaded))
+				return value;
+
+			if (inverseHelper.HasCount(propertyMap.Name, tx))
+				return value;
+
+			inverseHelper.SetCount(propertyMap.Name, (int) value, tx);
+
+			inverseHelper.CheckPartiallyLoadedList(propertyMap.Name, tx);
+
+			return value;
 		}
 
 		public virtual object ManageReferenceValue(object obj, string propertyName, object value)
@@ -673,6 +714,30 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return optimisticConcurrencyBehavior;
 		}
 
+		public virtual LoadBehavior GetListCountLoadBehavior(LoadBehavior loadBehavior, IPropertyMap propertyMap)
+		{
+			if (loadBehavior == LoadBehavior.Default)
+			{
+				loadBehavior = propertyMap.ListCountLoadBehavior;
+				if (loadBehavior == LoadBehavior.Default)
+				{
+					loadBehavior = propertyMap.ClassMap.ListCountLoadBehavior;
+					if (loadBehavior == LoadBehavior.Default)
+					{
+						loadBehavior = propertyMap.ClassMap.DomainMap.ListCountLoadBehavior;
+						if (loadBehavior == LoadBehavior.Default)
+						{
+							loadBehavior = this.listCountLoadBehavior ;
+							if (loadBehavior == LoadBehavior.Default)
+							{
+								loadBehavior = LoadBehavior.Eager;
+							}
+						}
+					}
+				}
+			}
+			return loadBehavior;
+		}
 
 		public virtual RefreshBehaviorType RefreshBehavior
 		{
@@ -699,6 +764,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			set { m_DeleteOptimisticConcurrencyBehavior = value; }
 		}
 
+		private LoadBehavior listCountLoadBehavior = LoadBehavior.Default;
+
+		public LoadBehavior ListCountLoadBehavior 
+		{
+			get { return listCountLoadBehavior; }
+			set { listCountLoadBehavior = value; }
+		}
 
         private Hashtable nullValueStatusTemplateCache = new Hashtable();
 		public virtual void SetupNullValueStatuses(object obj)

@@ -67,6 +67,7 @@ namespace Puzzle.NPersist.Framework.Attributes
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
 		private ValidationMode m_ValidationMode = ValidationMode.Default;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default ;
 		private string commitRegions = "";
@@ -515,6 +516,12 @@ namespace Puzzle.NPersist.Framework.Attributes
 			{
 				m_RefreshBehavior = value;
 			}
+		}
+
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
 		}
 		
 		public ValidationMode ValidationMode

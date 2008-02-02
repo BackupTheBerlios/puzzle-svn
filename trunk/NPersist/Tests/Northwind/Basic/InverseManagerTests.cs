@@ -275,7 +275,9 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 				IList orders = customer.Orders;
 
-				Assert.AreEqual(6, orders.Count);
+				//make sure orders are loaded...
+				foreach (Order order in orders)
+					break;
 
 				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ThrowOnExecutingSql);
 

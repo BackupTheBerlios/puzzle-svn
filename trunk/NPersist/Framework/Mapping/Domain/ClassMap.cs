@@ -53,6 +53,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private InheritanceType m_InheritanceType = InheritanceType.None;
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private bool m_IsAbstract = false;
 		private bool m_IsReadOnly = false;
 		private string m_InheritsTransientClass = "";
@@ -1033,6 +1034,12 @@ namespace Puzzle.NPersist.Framework.Mapping
 		{
 			get { return m_RefreshBehavior; }
 			set { m_RefreshBehavior = value; }
+		}
+
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
 		}
 
 		public virtual bool IsAbstract
@@ -2265,6 +2272,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			classMap.InheritsClass = this.InheritsClass;
 			classMap.MergeBehavior = this.MergeBehavior;
 			classMap.RefreshBehavior = this.RefreshBehavior;
+			classMap.ListCountLoadBehavior = this.ListCountLoadBehavior;
 			classMap.Name = this.Name;
 			classMap.ClassType = this.ClassType;
 			classMap.Source = this.Source;
@@ -2326,6 +2334,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return false;
 			}
 			if (!(classMap.RefreshBehavior == this.RefreshBehavior))
+			{
+				return false;
+			}
+			if (!(classMap.ListCountLoadBehavior == this.ListCountLoadBehavior))
 			{
 				return false;
 			}
@@ -2548,6 +2560,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			classMap.LoadSpan = attrib.LoadSpan ;
 			classMap.MergeBehavior = attrib.MergeBehavior ;
 			classMap.RefreshBehavior = attrib.RefreshBehavior ;
+			classMap.ListCountLoadBehavior = attrib.ListCountLoadBehavior;
 			classMap.Source = attrib.Source ;
 			classMap.SourceClass = attrib.SourceClass ;
 			classMap.Table = attrib.Table ;

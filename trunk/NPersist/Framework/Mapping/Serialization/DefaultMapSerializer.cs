@@ -97,6 +97,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				xml.Append(" refresh=\"" + domainMap.RefreshBehavior.ToString() + "\""); // do not localize
 			}
+			if (!(domainMap.ListCountLoadBehavior == LoadBehavior.Default))
+			{
+				xml.Append(" count=\"" + domainMap.ListCountLoadBehavior.ToString() + "\""); // do not localize
+			}
 			if (!(domainMap.UpdateOptimisticConcurrencyBehavior == OptimisticConcurrencyBehaviorType.DefaultBehavior))
 			{
 				xml.Append(" optimistic-update=\"" + domainMap.UpdateOptimisticConcurrencyBehavior.ToString() + "\""); // do not localize
@@ -322,6 +326,11 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(classMap.RefreshBehavior == RefreshBehaviorType.DefaultBehavior))
 			{
 				xml.Append(" refresh=\"" + classMap.RefreshBehavior.ToString() + "\""); // do not localize
+			}
+
+			if (!(classMap.ListCountLoadBehavior == LoadBehavior.Default))
+			{
+				xml.Append(" count=\"" + classMap.ListCountLoadBehavior.ToString() + "\""); // do not localize
 			}
 
 			if (classMap.DeleteOptimisticConcurrencyBehavior == OptimisticConcurrencyBehaviorType.Disabled)
@@ -682,6 +691,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(propertyMap.ValidationMode == ValidationMode.Default))
 			{
 				xml.Append(" validation=\"" + propertyMap.ValidationMode.ToString() + "\""); // do not localize
+			}
+			if (!(propertyMap.ListCountLoadBehavior == LoadBehavior.Default))
+			{
+				xml.Append(" count=\"" + propertyMap.ListCountLoadBehavior.ToString() + "\""); // do not localize
 			}
 
 			if (!(propertyMap.TimeToLive < 0))
@@ -1086,6 +1099,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			{
 				domainMap.RefreshBehavior = (RefreshBehaviorType) Enum.Parse(typeof (RefreshBehaviorType), xmlDom.Attributes["refresh"].Value);
 			}
+			if (!(xmlDom.Attributes["count"] == null))
+			{
+				domainMap.ListCountLoadBehavior = (LoadBehavior) Enum.Parse(typeof (LoadBehavior), xmlDom.Attributes["count"].Value);
+			}
 			if (!(xmlDom.Attributes["optimistic-delete"] == null))
 			{
 				domainMap.DeleteOptimisticConcurrencyBehavior = (OptimisticConcurrencyBehaviorType) Enum.Parse(typeof (OptimisticConcurrencyBehaviorType), xmlDom.Attributes["optimistic-delete"].Value);
@@ -1319,6 +1336,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlClass.Attributes["validation"] == null))
 			{
 				classMap.ValidationMode = (ValidationMode) Enum.Parse(typeof (ValidationMode), xmlClass.Attributes["validation"].Value);
+			}
+			if (!(xmlClass.Attributes["count"] == null))
+			{
+				classMap.ListCountLoadBehavior = (LoadBehavior) Enum.Parse(typeof (LoadBehavior), xmlClass.Attributes["count"].Value);
 			}
 
 			if (!(xmlClass.Attributes["optimistic-delete"] == null))
@@ -1635,6 +1656,10 @@ namespace Puzzle.NPersist.Framework.Mapping.Serialization
 			if (!(xmlProp.Attributes["refresh"] == null))
 			{
 				propertyMap.RefreshBehavior = (RefreshBehaviorType) Enum.Parse(typeof (RefreshBehaviorType), xmlProp.Attributes["refresh"].Value);
+			}
+			if (!(xmlProp.Attributes["count"] == null))
+			{
+				propertyMap.ListCountLoadBehavior = (LoadBehavior) Enum.Parse(typeof (LoadBehavior), xmlProp.Attributes["count"].Value);
 			}
 			if (!(xmlProp.Attributes["ttl"] == null))
 			{

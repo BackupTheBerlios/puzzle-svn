@@ -550,6 +550,25 @@ Public Class UmlLineEndProperties
         End Set
     End Property
 
+    <Category("Collection property"), _
+    Description("The default loading behavior for the Count property of this list property. Eager means that subqueries will be used to eagerly load the count properties when the object is loaded, lazy means that accessing the count property will cause the list property to be loaded if it wasn't already. Default means that the list count loading behavior of the domain map will be used."), _
+    DisplayName("List count loading behavior"), _
+    DefaultValue(LoadBehavior.Default)> Public Property ListCountLoadBehavior() As LoadBehavior
+        Get
+            Dim propertyMap As IPropertyMap = GetPropertyMap()
+            If Not propertyMap Is Nothing Then
+                Return propertyMap.ListCountLoadBehavior
+            End If
+        End Get
+        Set(ByVal Value As LoadBehavior)
+            Dim propertyMap As IPropertyMap = GetPropertyMap()
+            If Not propertyMap Is Nothing Then
+                propertyMap.ListCountLoadBehavior = Value
+                RaiseEvent AfterPropertySet(propertyMap, "ListCountLoadBehavior")
+            End If
+        End Set
+    End Property
+
 
     <Category("Identity"), _
         Description("Set to true if this is an identity property. An identity property is a property that by itself or together with other identity properties (composite key) can be used to uniquely identify the object."), _
@@ -1908,6 +1927,10 @@ Public Class UmlLineEndProperties
                     If propertyMap.ReferenceType = ReferenceType.None Then propDesc.SetReadOnly()
 
                 Case "OrderBy"
+                    If Not (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then propDesc.SetReadOnly()
+
+                Case "ListCountLoadBehavior"
+                    If Not propertyMap.IsCollection Then propDesc.SetReadOnly()
                     If Not (propertyMap.ReferenceType = ReferenceType.ManyToMany Or propertyMap.ReferenceType = ReferenceType.ManyToOne) Then propDesc.SetReadOnly()
 
             End Select

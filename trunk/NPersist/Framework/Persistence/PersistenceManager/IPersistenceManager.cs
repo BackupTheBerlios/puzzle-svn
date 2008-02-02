@@ -48,6 +48,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		OptimisticConcurrencyBehaviorType DeleteOptimisticConcurrencyBehavior { get; set; }
 
+		/// <summary>
+		/// Specifies the load behavior for the Count property of list properties. 
+		/// Eager means subselects will be added to sql queries for eagerly fetching the count of load properties. 
+		/// Lazy means no subselects will be included and the Count property can only be read as a consequence of the list property becoming fully loaded.
+		/// Default is Eager.
+		/// </summary>
+		/// <remarks>
+		/// With Eager list count load behavior, the inverse manager is able to resolve list properties intelligently, 
+		/// so that it knows (by comparing to the eagerly loaded count value) when a list has been completely filled 
+		/// with inverse references and can be regarded as fully loaded (transitioning from NotLoaded to Clean)
+		/// </remarks>
+		LoadBehavior ListCountLoadBehavior { get; set; }
+		
 		object ManageLoadedValue(object obj, IPropertyMap propertyMap, object value);
 
 		object ManageLoadedValue(object obj, IPropertyMap propertyMap, object value, object discriminator);
@@ -79,5 +92,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		OptimisticConcurrencyBehaviorType GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType optimisticConcurrencyBehavior, IClassMap classMap);
 
 		OptimisticConcurrencyBehaviorType GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType optimisticConcurrencyBehavior, IPropertyMap propertyMap);
+
+		LoadBehavior GetListCountLoadBehavior(LoadBehavior loadBehavior, IPropertyMap propertyMap);
 	}
 }

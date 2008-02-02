@@ -46,6 +46,8 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 		#region Private Member Variables
 
 		private int nextParameterIndex = 0;
+		private int nextTableAliasIndex = 0;
+		private int nextColumnAliasIndex = 0;
 
 		#endregion
 
@@ -213,6 +215,18 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 		{
 			nextParameterIndex++;
 			return nextParameterIndex;
+		}
+
+		public int GetNextTableAliasIndex()
+		{
+			nextTableAliasIndex++;
+			return nextTableAliasIndex;
+		}
+
+		public int GetNextColumnAliasIndex()
+		{
+			nextColumnAliasIndex++;
+			return nextColumnAliasIndex;
 		}
 	}
 }

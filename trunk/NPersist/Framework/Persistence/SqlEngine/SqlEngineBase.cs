@@ -729,26 +729,31 @@ namespace Puzzle.NPersist.Framework.Persistence
 			
 			string sql = GetSelectManyOnePropertyStatement(obj, propertyMap, idColumns, typeColumns, hashPropertyColumnMap, parameters);
 			refObjects = m_SqlEngineManager.Context.GetObjectsBySql(sql, itemType, idColumns, typeColumns, hashPropertyColumnMap, parameters);
-			mList = propList as IInterceptableList;
-			if (mList != null)
-			{
-				stackMute = mList.MuteNotify;
-				mList.MuteNotify = true;
-			}
-			foreach (object refObject in refObjects)
-			{
-				propList.Add(refObject);
-			}
-			if (mList != null)
-			{
-				mList.MuteNotify = stackMute ;
-			}
-			om.SetPropertyValue(obj, propertyMap.Name, propList);
-			//list = lm.CloneList(obj, propertyMap, propList);
-			list = new ArrayList( propList );
-			om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
 
-			ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);
+			//The list might have been loaded by the inverse manager as its inverse references are loaded and managed
+			if (om.GetPropertyStatus(obj, propertyMap.Name) == PropertyStatus.NotLoaded)
+			{
+				mList = propList as IInterceptableList;
+				if (mList != null)
+				{
+					stackMute = mList.MuteNotify;
+					mList.MuteNotify = true;
+				}
+				foreach (object refObject in refObjects)
+				{
+					propList.Add(refObject);
+				}
+				if (mList != null)
+				{
+					mList.MuteNotify = stackMute ;
+				}
+				om.SetPropertyValue(obj, propertyMap.Name, propList);
+				//list = lm.CloneList(obj, propertyMap, propList);
+				list = new ArrayList( propList );
+				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
+
+				ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);
+			}
 		}
 
 		protected virtual void LoadManyManyCollectionProperty(object obj, IPropertyMap propertyMap, Type itemType)
@@ -827,28 +832,36 @@ namespace Puzzle.NPersist.Framework.Persistence
                         {
                             propName = (string)propertyNames[col];
                             propertyMap = classMap.MustGetPropertyMap(propName);
-                            if (propertyMap.GetAllColumnMaps().Count < 2)
-                            {
-                                orgValue = result[col, row];
-                                value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
-                                om.SetPropertyValue(obj, propName, value);
-                                if (propertyMap.ReferenceType == ReferenceType.None)
-                                    om.SetOriginalPropertyValue(obj, propName, orgValue);
-                                else
-                                    om.SetOriginalPropertyValue(obj, propName, value);
-                                om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
-
-								if (propertyMap.ReferenceType != ReferenceType.None)
-									this.Context.InverseManager.NotifyPropertyLoad(obj, propertyMap, value);
+							if (propertyMap.IsCollection)
+							{
+								orgValue = result[col, row];
+								pm.ManageLoadedValue(obj, propertyMap, orgValue);
 							}
-                            else
-                            {
-								//TODO: Add immediate ghost loading of refernced composite key objects.
-                                //							orgValue = result[col, row];
-                                //							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
-                                //							om.SetPropertyValue(obj, propName, value);
-                                //							om.SetOriginalPropertyValue(obj, propName, orgValue);							
-                            }
+							else
+							{
+								if (propertyMap.GetAllColumnMaps().Count < 2)
+								{
+									orgValue = result[col, row];
+									value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
+									om.SetPropertyValue(obj, propName, value);
+									if (propertyMap.ReferenceType == ReferenceType.None)
+										om.SetOriginalPropertyValue(obj, propName, orgValue);
+									else
+										om.SetOriginalPropertyValue(obj, propName, value);
+									om.SetNullValueStatus(obj, propName, DBNull.Value.Equals(orgValue));
+
+									if (propertyMap.ReferenceType != ReferenceType.None)
+										this.Context.InverseManager.NotifyPropertyLoad(obj, propertyMap, value);
+								}
+								else
+								{
+									//TODO: Add immediate ghost loading of refernced composite key objects.
+									//							orgValue = result[col, row];
+									//							value = pm.ManageLoadedValue(obj, propertyMap, orgValue);
+									//							om.SetPropertyValue(obj, propName, value);
+									//							om.SetOriginalPropertyValue(obj, propName, orgValue);							
+								}
+							}
                         }
                     }
                     ctx.IdentityMap.RegisterLoadedObject(obj);
@@ -1414,32 +1427,69 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IColumnMap typeColumnMap;
 			string paramName = "";
 
-
 			classMap = m_SqlEngineManager.Context.DomainMap.MustGetClassMap(obj.GetType());
 
 			tableMap = classMap.MustGetTableMap();
 			ISourceMap sourceMap = tableMap.SourceMap;
 
 			SqlSelectStatement select = new SqlSelectStatement(sourceMap) ; 
-			SqlTableAlias table = select.GetSqlTableAlias(tableMap);
+
+			SqlTableAlias table = select.GetSqlTableAlias(tableMap, "t" + select.GetNextTableAliasIndex());
 
 			foreach (IPropertyMap iPropertyMap in classMap.GetAllPropertyMaps())
 			{
 				propertyMap = iPropertyMap;
-				if (propertyMap.MustGetTableMap() == tableMap)
-				{
-					//if (!((propertyMap.IsCollection || (propertyMap.ReferenceType != ReferenceType.None && !(propertyMap.IsIdentity)))))
-					if (!(propertyMap.IsCollection || propertyMap.GetAllColumnMaps().Count > 1))
+				if (propertyMap.IsCollection)
+                {
+					if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, propertyMap) == LoadBehavior.Eager)
 					{
-						if (!(propertyMap.LazyLoad))
+						if (propertyMap.ReferenceType != ReferenceType.None)
 						{
-							IColumnMap columnMap = propertyMap.GetColumnMap();
-							SqlColumnAlias column = select.GetSqlColumnAlias(columnMap);
-							select.SqlSelectClause.AddSqlAliasSelectListItem(column);
+							ITableMap listTableMap = propertyMap.GetTableMap();
+
+							ISourceMap listSourceMap = listTableMap.SourceMap;
+
+							SqlSelectStatement subSelect = new SqlSelectStatement(listSourceMap);
+							SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "t" + select.GetNextTableAliasIndex());
+
+							SqlCountFunction count = new SqlCountFunction();
+                        
+							subSelect.SqlSelectClause.AddSqlAliasSelectListItem(count);
+
+							subSelect.SqlFromClause.AddSqlAliasTableSource(listTable);
+
+							foreach (IColumnMap fkIdColumnMap in propertyMap.GetAllIdColumnMaps())
+							{
+								IColumnMap idColumnMap = fkIdColumnMap.MustGetPrimaryKeyColumnMap();
+
+								SqlColumnAlias fkIdColumn = listTable.GetSqlColumnAlias(fkIdColumnMap);
+								SqlColumnAlias idColumn = table.GetSqlColumnAlias(idColumnMap);
+								SqlSearchCondition search = subSelect.SqlWhereClause.GetNextSqlSearchCondition();
+
+								search.GetSqlComparePredicate(fkIdColumn, SqlCompareOperatorType.Equals, idColumn);
+							}
+
+							select.SqlSelectClause.AddSqlAliasSelectListItem(subSelect, propertyMap.Name);
 							propertyNames.Add(propertyMap.Name);
 						}
 					}
-				}
+                }
+                else
+                {
+                    if (propertyMap.MustGetTableMap() == tableMap)
+                    {
+                        if (!(propertyMap.GetAllColumnMaps().Count > 1))
+                        {
+                            if (!(propertyMap.LazyLoad))
+                            {
+                                IColumnMap columnMap = propertyMap.GetColumnMap();
+                                SqlColumnAlias column = table.GetSqlColumnAlias(columnMap);
+                                select.SqlSelectClause.AddSqlAliasSelectListItem(column);
+                                propertyNames.Add(propertyMap.Name);
+                            }
+                        }
+                    }
+                }
 			}
 			select.SqlFromClause.AddSqlAliasTableSource(table);
 			om = m_SqlEngineManager.Context.ObjectManager;
@@ -2768,25 +2818,68 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			IObjectManager om;
 			orderByMap = propertyMap.GetOrderByPropertyMap();
-			foreach (IPropertyMap iRefPropertyMap in rootClassMap.GetPrimaryPropertyMaps())
+
+			//foreach (IPropertyMap iRefPropertyMap in rootClassMap.GetPrimaryPropertyMaps())
+			foreach (IPropertyMap iRefPropertyMap in rootClassMap.GetAllPropertyMaps())
 			{
 				refPropertyMap = iRefPropertyMap;
-				if (!((refPropertyMap.IsCollection || ((refPropertyMap.ReferenceType != ReferenceType.None && refPropertyMap.GetAdditionalColumnMaps().Count > 0) && !(refPropertyMap.IsIdentity)))))
+				if (refPropertyMap.IsCollection)
 				{
-					IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
-					//SqlColumnAlias refColumn = table.GetSqlColumnAlias(refColumnMap);
-					SqlColumnAlias refColumn = rootTable.GetSqlColumnAlias(refColumnMap);
-
-					colName = refColumnMap.Name;
-					if (refPropertyMap.IsIdentity)
-						idColumns.Add(colName);
-
-					if (!(refPropertyMap.LazyLoad))
+					if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, refPropertyMap) == LoadBehavior.Eager)
 					{
-						select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
-						hashPropertyColumnMap[refPropertyMap.Name] = colName;
-						if (refPropertyMap == orderByMap)
-							select.SqlOrderByClause.AddSqlOrderByItem(refColumn);
+						if (refPropertyMap.ReferenceType != ReferenceType.None)
+						{
+							ITableMap listTableMap = refPropertyMap.GetTableMap();
+
+							ISourceMap listSourceMap = listTableMap.SourceMap;
+
+							SqlSelectStatement subSelect = new SqlSelectStatement(listSourceMap);
+							SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "t" + select.GetNextTableAliasIndex());
+
+							SqlCountFunction count = new SqlCountFunction();
+                        
+							subSelect.SqlSelectClause.AddSqlAliasSelectListItem(count);
+
+							subSelect.SqlFromClause.AddSqlAliasTableSource(listTable);
+
+							foreach (IColumnMap fkIdColumnMap in refPropertyMap.GetAllIdColumnMaps())
+							{
+								IColumnMap pkIdColumnMap = fkIdColumnMap.MustGetPrimaryKeyColumnMap();
+
+								SqlColumnAlias fkIdColumn = listTable.GetSqlColumnAlias(fkIdColumnMap);
+								SqlColumnAlias pkIdColumn = table.GetSqlColumnAlias(pkIdColumnMap);
+								SqlSearchCondition searchCount = subSelect.SqlWhereClause.GetNextSqlSearchCondition();
+
+								searchCount.GetSqlComparePredicate(fkIdColumn, SqlCompareOperatorType.Equals, pkIdColumn);
+							}
+
+							select.SqlSelectClause.AddSqlAliasSelectListItem(subSelect, refPropertyMap.Name);
+							hashPropertyColumnMap[refPropertyMap.Name] = refPropertyMap.Name;
+						}
+					}
+				}
+				else
+				{
+					if (refPropertyMap.MustGetTableMap() == rootTableMap)
+					{
+						if (!((refPropertyMap.IsCollection || ((refPropertyMap.ReferenceType != ReferenceType.None && refPropertyMap.GetAdditionalColumnMaps().Count > 0) && !(refPropertyMap.IsIdentity)))))
+						{
+							IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
+							//SqlColumnAlias refColumn = table.GetSqlColumnAlias(refColumnMap);
+							SqlColumnAlias refColumn = rootTable.GetSqlColumnAlias(refColumnMap);
+
+							colName = refColumnMap.Name;
+							if (refPropertyMap.IsIdentity)
+								idColumns.Add(colName);
+
+							if (!(refPropertyMap.LazyLoad))
+							{
+								select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
+								hashPropertyColumnMap[refPropertyMap.Name] = colName;
+								if (refPropertyMap == orderByMap)
+									select.SqlOrderByClause.AddSqlOrderByItem(refColumn);
+							}
+						}
 					}
 				}
 			}
@@ -2881,7 +2974,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                 SqlParameter param = AddSqlParameter(select, parameters, paramName, obj, null, actual.TypeValue, typeColumnMap, true);
 
 				search = select.SqlWhereClause.GetNextSqlSearchCondition();
-				search.GetSqlComparePredicate(typeColumn, SqlCompareOperatorType.Equals,  param);				
+				search.GetSqlComparePredicate(typeColumn, SqlCompareOperatorType.Equals,  param);		
 			}
 
 			return GenerateSql(select);
@@ -2942,25 +3035,66 @@ namespace Puzzle.NPersist.Framework.Persistence
 			SqlColumnAlias colColumn = joinTable.GetSqlColumnAlias(colColumnMap);
 
 			orderByMap = propertyMap.GetOrderByPropertyMap();
-
-			foreach (IPropertyMap iRefPropertyMap in classMap.GetPrimaryPropertyMaps())
+			//foreach (IPropertyMap iRefPropertyMap in classMap.GetPrimaryPropertyMaps())
+			foreach (IPropertyMap iRefPropertyMap in classMap.GetAllPropertyMaps())
 			{
 				refPropertyMap = iRefPropertyMap;
-				if (!((refPropertyMap.IsCollection || (refPropertyMap.ReferenceType != ReferenceType.None && !(refPropertyMap.IsIdentity)))))
+				if (refPropertyMap.IsCollection)
 				{
-					IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
-					SqlColumnAlias refColumn = select.GetSqlColumnAlias(refColumnMap);
-					colName = refColumnMap.Name;
-					if (refPropertyMap.IsIdentity)
-						idColumns.Add(colName);
-
-					if (!(refPropertyMap.LazyLoad))
+					if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, refPropertyMap) == LoadBehavior.Eager)
 					{
-						select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
+						if (refPropertyMap.ReferenceType != ReferenceType.None)
+						{
+							ITableMap listTableMap = refPropertyMap.GetTableMap();
 
-						hashPropertyColumnMap[refPropertyMap.Name] = colName;
-						if (refPropertyMap == orderByMap)
-							select.SqlOrderByClause.AddSqlOrderByItem(refColumn);
+							ISourceMap listSourceMap = listTableMap.SourceMap;
+
+							SqlSelectStatement subSelect = new SqlSelectStatement(listSourceMap);
+							SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "t" + select.GetNextTableAliasIndex());
+
+							SqlCountFunction count = new SqlCountFunction();
+                        
+							subSelect.SqlSelectClause.AddSqlAliasSelectListItem(count);
+
+							subSelect.SqlFromClause.AddSqlAliasTableSource(listTable);
+
+							foreach (IColumnMap fkIdColumnMap in refPropertyMap.GetAllIdColumnMaps())
+							{
+								IColumnMap pkIdColumnMap = fkIdColumnMap.MustGetPrimaryKeyColumnMap();
+
+								SqlColumnAlias fkIdColumn = listTable.GetSqlColumnAlias(fkIdColumnMap);
+								SqlColumnAlias pkIdColumn = table.GetSqlColumnAlias(pkIdColumnMap);
+								SqlSearchCondition searchCount = subSelect.SqlWhereClause.GetNextSqlSearchCondition();
+
+								searchCount.GetSqlComparePredicate(fkIdColumn, SqlCompareOperatorType.Equals, pkIdColumn);
+							}
+
+							select.SqlSelectClause.AddSqlAliasSelectListItem(subSelect, refPropertyMap.Name);
+							hashPropertyColumnMap[refPropertyMap.Name] = refPropertyMap.Name;
+						}
+					}
+				}
+				else
+				{
+					if (refPropertyMap.MustGetTableMap() == forTableMap)
+					{
+						if (!((refPropertyMap.IsCollection || (refPropertyMap.ReferenceType != ReferenceType.None && !(refPropertyMap.IsIdentity)))))
+						{
+							IColumnMap refColumnMap = refPropertyMap.GetColumnMap();
+							SqlColumnAlias refColumn = select.GetSqlColumnAlias(refColumnMap);
+							colName = refColumnMap.Name;
+							if (refPropertyMap.IsIdentity)
+								idColumns.Add(colName);
+
+							if (!(refPropertyMap.LazyLoad))
+							{
+								select.SqlSelectClause.AddSqlAliasSelectListItem(refColumn);
+
+								hashPropertyColumnMap[refPropertyMap.Name] = colName;
+								if (refPropertyMap == orderByMap)
+									select.SqlOrderByClause.AddSqlOrderByItem(refColumn);
+							}
+						}
 					}
 				}
 			}
@@ -3963,6 +4097,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 											//Manage the column value and set the managed value in a new variable
 											value = pm.ManageLoadedValue( refObj, propertyMap, orgValue, discriminator);
+											if (!(propertyMap.IsCollection))
+											{
 											doWrite = false;
 											doWriteOrg = false;
 											propStatus = om.GetPropertyStatus(refObj, strPropertyName);
@@ -4055,36 +4191,37 @@ namespace Puzzle.NPersist.Framework.Persistence
 											{
 												throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
 											}
-											if (doWrite || doWriteOrg)
-											{
-												//To keep inverse management correct,
-												//We really should pick out a ref to any
-												//eventual already referenced object here (in the
-												//case of MergeBehaviorType.OverwriteDirty)
-												//and perform proper inverse management on that object...
-
-                                                if (doWrite)
-                                                {
-													om.SetPropertyValue(refObj, strPropertyName, value);
-													om.SetNullValueStatus(refObj, strPropertyName, DBNull.Value.Equals(orgValue));
-                                                }
-
-												if (doWriteOrg)
+												if (doWrite || doWriteOrg)
 												{
-													if (propertyMap.ReferenceType == ReferenceType.None)
-														om.SetOriginalPropertyValue(refObj, strPropertyName, orgValue);
-													else
-														om.SetOriginalPropertyValue(refObj, strPropertyName, value);												
-												}
+													//To keep inverse management correct,
+													//We really should pick out a ref to any
+													//eventual already referenced object here (in the
+													//case of MergeBehaviorType.OverwriteDirty)
+													//and perform proper inverse management on that object...
 
-												if (propertyMap.ReferenceType != ReferenceType.None )
-												{
-													if (value != null)
+													if (doWrite)
 													{
-														registerLoaded[value] = value;
+														om.SetPropertyValue(refObj, strPropertyName, value);
+														om.SetNullValueStatus(refObj, strPropertyName, DBNull.Value.Equals(orgValue));
+													}
 
-														if (doWrite)
-															this.Context.InverseManager.NotifyPropertyLoad(refObj, propertyMap, value);
+													if (doWriteOrg)
+													{
+														if (propertyMap.ReferenceType == ReferenceType.None)
+															om.SetOriginalPropertyValue(refObj, strPropertyName, orgValue);
+														else
+															om.SetOriginalPropertyValue(refObj, strPropertyName, value);												
+													}
+
+													if (propertyMap.ReferenceType != ReferenceType.None )
+													{
+														if (value != null)
+														{
+															registerLoaded[value] = value;
+
+															if (doWrite)
+																this.Context.InverseManager.NotifyPropertyLoad(refObj, propertyMap, value);
+														}
 													}
 												}
 											}											

@@ -234,14 +234,15 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			if (MuteNotify)
 				return false;
 
+			if (HasCount(ref count))
+				return true;
+			
 			EnsureLoaded();
 			return false;
-            //throw new Exception("The method or operation is not implemented.");
         }
 
         public void AfterCount(ref int count)
         {
-            //throw new Exception("The method or operation is not implemented.");
         }
 
 		public void BeforeRead()
@@ -250,6 +251,38 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 				return;
 
 			EnsureLoaded();
+		}
+
+		private bool HasCount(ref int count)
+		{
+			IContext context = interceptable.GetInterceptor().Context;
+
+			PropertyStatus propStatus = context.ObjectManager.GetPropertyStatus(interceptable, propertyName);
+			if (propStatus != PropertyStatus.NotLoaded)
+				return false;
+			
+			IInverseHelper inverseHelper = interceptable as IInverseHelper;
+			if (inverseHelper == null)
+				return false;
+
+			ITransaction tx = null;
+
+			ConsistencyMode readConsistency = context.ReadConsistency;
+			if (readConsistency == ConsistencyMode.Pessimistic)
+			{
+				IPropertyMap propertyMap = context.DomainMap.MustGetClassMap(interceptable.GetType()).MustGetPropertyMap(propertyName);
+				tx = context.GetTransaction(context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
+				if (tx == null)
+					return false;
+			}
+
+			if (inverseHelper.HasCount(propertyName, tx))
+			{
+				count = inverseHelper.GetCount(propertyName, tx);
+				return true;
+			}
+			
+			return false;
 		}
 
 		public void EnsureLoaded()

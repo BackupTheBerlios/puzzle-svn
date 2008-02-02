@@ -198,8 +198,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				{
 					//We have to copy to a new list...every time we delete an order,
 					//it is removed from the customer.Orders list. 
-					IList orders = deleteCustomer.Orders;
-					IList deleteOrders = new ArrayList(orders);
+					IList deleteOrders = new ArrayList(deleteCustomer.Orders);
+					Assert.AreEqual(2, deleteOrders.Count);
 					foreach (Order order in deleteOrders)
 						context.DeleteObject(order);
 					context.DeleteObject(deleteCustomer);

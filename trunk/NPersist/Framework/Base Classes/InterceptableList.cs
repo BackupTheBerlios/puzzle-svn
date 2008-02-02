@@ -51,7 +51,6 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			get { return interceptor.MuteNotify; }
 			set { interceptor.MuteNotify = value; }
 		}
-
 		public override int Add(object value)
 		{
 			interceptor.BeforeCall() ;
@@ -106,6 +105,43 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			interceptor.BeforeRead() ;
 			return base.Contains (item);
 		}
+
+		public override void CopyTo(int index, Array array, int arrayIndex, int count)
+		{
+			interceptor.BeforeRead() ;
+			base.CopyTo (index, array, arrayIndex, count);
+		}
+
+		public override void CopyTo(Array array)
+		{
+			interceptor.BeforeRead() ;
+			base.CopyTo (array);
+		}
+
+		public override void CopyTo(Array array, int arrayIndex)
+		{
+			interceptor.BeforeRead() ;
+			base.CopyTo (array, arrayIndex);
+		}
+
+		public override ArrayList GetRange(int index, int count)
+		{
+			interceptor.BeforeRead() ;
+			return base.GetRange (index, count);
+		}
+
+		public override object[] ToArray()
+		{
+			interceptor.BeforeRead() ;
+			return base.ToArray ();
+		}
+
+		public override Array ToArray(Type type)
+		{
+			interceptor.BeforeRead() ;
+			return base.ToArray (type);
+		}
+
 
 		public override object this[int index]
 		{

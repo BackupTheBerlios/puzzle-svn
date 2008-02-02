@@ -97,7 +97,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 				//Read the Employees property, causing the property
 				//to be loaded with values from the database
-				Assert.IsTrue(boss.Employees.Count > 0);
+				foreach (Employee e in boss.Employees)
+					break;
 
 				//Assert that the Employees property of the employee object has not been loaded yet
 				Assert.AreEqual(PropertyStatus.Clean, context.GetPropertyStatus(boss, "Employees"));

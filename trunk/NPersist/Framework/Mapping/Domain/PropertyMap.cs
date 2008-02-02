@@ -85,6 +85,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
 		private ValidationMode m_ValidationMode = ValidationMode.Default;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private long m_TimeToLive = -1;
 		private TimeToLiveBehavior m_TimeToLiveBehavior = TimeToLiveBehavior.Default ;
 		private string commitRegions = "";
@@ -1679,6 +1680,12 @@ namespace Puzzle.NPersist.Framework.Mapping
 			}
 		}
 
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
+		}
+
 		private bool fixedGetAllColumnMaps = false;
 		private ArrayList fixedValueGetAllColumnMaps = null;
 
@@ -2008,6 +2015,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			propertyMap.PropertyModifier = this.PropertyModifier;
 			propertyMap.MergeBehavior = this.MergeBehavior;
 			propertyMap.RefreshBehavior = this.RefreshBehavior;
+			propertyMap.ListCountLoadBehavior  = this.ListCountLoadBehavior;
 			propertyMap.CascadingCreate = this.CascadingCreate;
 			propertyMap.CascadingDelete = this.CascadingDelete;
 			propertyMap.TimeToLive = this.TimeToLive;
@@ -2198,6 +2206,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 			{
 				return false;
 			}
+			if (!(propertyMap.ListCountLoadBehavior == this.ListCountLoadBehavior))
+			{
+				return false;
+			}
 			if (!(propertyMap.CascadingCreate == this.CascadingCreate))
 			{
 				return false;
@@ -2341,6 +2353,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			propertyMap.ItemType = attrib.ItemType ;
 			propertyMap.KeyIndex = attrib.KeyIndex ;
 			propertyMap.LazyLoad = attrib.LazyLoad ;
+			propertyMap.ListCountLoadBehavior = attrib.ListCountLoadBehavior;
 			propertyMap.MaxLength = attrib.MaxLength ;
 			propertyMap.MaxValue = attrib.MaxValue ;
 			propertyMap.MergeBehavior = attrib.MergeBehavior ;

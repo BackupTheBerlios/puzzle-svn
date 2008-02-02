@@ -82,9 +82,47 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 			return pathParent;
 		}
 
+		public virtual void GetListPropertySubselectAndAlias(IPropertyMap propertyMap, object hash, Hashtable columns, ArrayList order, string propPath, string suggestion)
+		{	
+			if (hash == null) { hash = propertyMap; }
+			ITableMap listTableMap = propertyMap.MustGetTableMap();
+			ITableMap parentTableMap = propertyMap.ClassMap.MustGetTableMap();
+			SqlTableAlias parentTable = sqlEmitter.GetTableAlias(parentTableMap, hash);
+
+			SqlSelectStatement subSelect = new SqlSelectStatement(parentTableMap.SourceMap);
+
+			//Hmmm....can an alias be redefined in a subselect?
+			//SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "cnt" + subSelect.GetNextTableAliasIndex());
+			SqlTableAlias listTable = subSelect.GetSqlTableAlias(listTableMap, "cnt" + sqlEmitter.Select.GetNextTableAliasIndex());
+
+			SqlCountFunction count = new SqlCountFunction();
+
+			subSelect.SqlSelectClause.AddSqlAliasSelectListItem(count);
+
+			subSelect.SqlFromClause.AddSqlAliasTableSource(listTable);
+
+			foreach (IColumnMap fkIdColumnMap in propertyMap.GetAllIdColumnMaps())
+			{
+				IColumnMap idColumnMap = fkIdColumnMap.MustGetPrimaryKeyColumnMap();
+
+				SqlColumnAlias fkIdColumn = listTable.GetSqlColumnAlias(fkIdColumnMap);
+				SqlColumnAlias idColumn = parentTable.GetSqlColumnAlias(idColumnMap);
+				SqlSearchCondition search = subSelect.SqlWhereClause.GetNextSqlSearchCondition();
+
+				search.GetSqlComparePredicate(fkIdColumn, SqlCompareOperatorType.Equals, idColumn);
+			}
+
+			if (suggestion == "")
+				suggestion = propPath;
+
+			SqlAliasSelectListItem countAlias = this.sqlEmitter.Select.SqlSelectClause.AddSqlAliasSelectListItem(subSelect, suggestion);
+			this.sqlEmitter.PropertyColumnMap[propPath] = countAlias.SqlExpressionAlias.Alias;						
+		}
+
+
+
 		public virtual void GetPropertyColumnNamesAndAliases(IPropertyMap propertyMap, object hash, Hashtable columns, ArrayList order, string path, string propPath, string suggestion)
 		{	
-
 			if (hash == null) { hash = propertyMap; }
 			SqlTableAlias tbl = sqlEmitter.GetTableAlias(propertyMap.MustGetTableMap(), hash)  ;
 			IList columnAliases = new ArrayList();
@@ -108,11 +146,12 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
             IPropertyMap inverse = propertyMap.GetInversePropertyMap();
 
+			//Type column first
             if (inverse != null)
             {
-                foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
+				IColumnMap inverseTypeColumnMap = inverse.ClassMap.GetTypeColumnMap();
+				foreach (IColumnMap columnMap in propertyMap.GetAllColumnMaps())
                 {
-                    IColumnMap inverseTypeColumnMap = inverse.ClassMap.GetTypeColumnMap();
                     if (inverseTypeColumnMap != null && inverseTypeColumnMap == columnMap.GetPrimaryKeyColumnMap())
                     {
                         string suggestionString;
@@ -280,7 +319,6 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 					{
 						if (path == "")
 						{
-							//GetPropertyColumnNamesAndAliases(propertyMap, propertyMap, selectedColumns, columnOrder, path, propertyMap.Name, "");
 							GetPropertyColumnNamesAndAliases(propertyMap, propertyMap, selectedColumns, columnOrder, propertyMap.Name, propertyMap.Name, "");
 						}
 						else
@@ -306,7 +344,6 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 				{
 					if (special == "*")
 					{
-
 						IClassMap classMap = null;
 						if (propertyMaps.Count == 1)
 						{
@@ -322,7 +359,27 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 						{
 							if (!(iPropertyMap.ReferenceType != ReferenceType.None && iPropertyMap.AdditionalColumns.Count > 0))
 							{
-								if (!(iPropertyMap.IsCollection))
+								if (iPropertyMap.IsCollection)
+								{
+									if (this.Context.PersistenceManager.GetListCountLoadBehavior(LoadBehavior.Default, iPropertyMap) == LoadBehavior.Eager)
+									{
+										if (iPropertyMap.GetIdColumnMap() != null)
+										{
+											if (path == "")
+											{
+												GetListPropertySubselectAndAlias(iPropertyMap, iPropertyMap.ClassMap, selectedColumns, columnOrder, iPropertyMap.Name, "");
+											}
+											else
+											{
+												if (prevPath != "")
+													GetListPropertySubselectAndAlias(iPropertyMap, prevPath, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, suggestion);                                                
+												else
+													GetListPropertySubselectAndAlias(iPropertyMap, path, selectedColumns, columnOrder, path + "." + iPropertyMap.Name, suggestion);                                                
+											}
+										}
+									}
+								}
+								else
 								{
                                     //This if should be removed some day when the "JoinNonPrimary()" call a bit further down
                                     //has been refined to handle nullable OneToOne slaves...

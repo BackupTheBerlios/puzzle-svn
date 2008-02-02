@@ -135,6 +135,25 @@ Public Class UmlClassProperties
         End Set
     End Property
 
+    <Category("Design"), _
+    Description("The default loading behavior for the Count property of list properties of objects of this class. Default means that the list count loading behavior of the domain map will be used."), _
+    DisplayName("List count loading behavior"), _
+    DefaultValue(LoadBehavior.Default)> Public Property ListCountLoadBehavior() As LoadBehavior
+        Get
+            Dim classMap As IClassMap = m_UmlClass.GetClassMap
+            If Not classMap Is Nothing Then
+                Return classMap.ListCountLoadBehavior
+            End If
+        End Get
+        Set(ByVal Value As LoadBehavior)
+            Dim classMap As IClassMap = m_UmlClass.GetClassMap
+            If Not classMap Is Nothing Then
+                classMap.ListCountLoadBehavior = Value
+                RaiseEvent AfterPropertySet(classMap, "ListCountLoadBehavior")
+            End If
+        End Set
+    End Property
+
     <Category("Inheritance"), _
         TypeConverter(GetType(SuperClassConverter)), _
         Description("The name of the superclass that this class inherits from. Leave blank if this class does not inherit from any superclass."), _

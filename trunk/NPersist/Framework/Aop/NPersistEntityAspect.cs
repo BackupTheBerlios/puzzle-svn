@@ -52,6 +52,7 @@ namespace Puzzle.NPersist.Framework.Aop
                 arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.IdentityHelperMixin));
 				arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.ObservableMixin));
                 arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.ContextChildMixin));
+                arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.InverseHelperMixin));
 #if NET2
                 arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.PropertyChangedHelperMixin));
                 arr.Add(typeof(Puzzle.NPersist.Framework.Aop.Mixins.EditableObjectMixin));

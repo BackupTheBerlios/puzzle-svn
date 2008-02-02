@@ -65,5 +65,11 @@ namespace Puzzle.NPersist.Framework.Sql.Dom
 			visitor.Visiting(this);	
 			visitor.Visited(this);	
 		}
+
+		public override string ToString()
+		{
+			return this.sqlColumn.Name + " as " + this.alias;
+		}
+
 	}
 }

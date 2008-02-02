@@ -32,6 +32,7 @@ namespace Puzzle.NPersist.Framework.Attributes
 		private string m_TypeValue = "";
 		private InheritanceType m_InheritanceType = InheritanceType.None;
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
 		private bool m_IsReadOnly = false;
 		private OptimisticConcurrencyBehaviorType m_UpdateOptimisticConcurrencyBehavior = OptimisticConcurrencyBehaviorType.DefaultBehavior;
@@ -104,6 +105,12 @@ namespace Puzzle.NPersist.Framework.Attributes
 		{
 			get { return m_RefreshBehavior; }
 			set { m_RefreshBehavior = value; }
+		}
+
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
 		}
 
 		public virtual InheritanceType InheritanceType

@@ -113,6 +113,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		RefreshBehaviorType RefreshBehavior { get; set; }
 
+		LoadBehavior ListCountLoadBehavior { get; set; }
+
 		bool IsAbstract { get; set; }
 
 		ArrayList GetAllPropertyMaps();

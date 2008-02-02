@@ -48,6 +48,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 		private string m_Source = "";
 		private MergeBehaviorType m_MergeBehavior = MergeBehaviorType.DefaultBehavior;
 		private RefreshBehaviorType m_RefreshBehavior = RefreshBehaviorType.DefaultBehavior;
+		private LoadBehavior m_ListCountLoadBehavior = LoadBehavior.Default;
 		private string m_LoadedFromPath = "";
 		private string m_LastSavedToPath = "";
 		private bool m_IsReadOnly = false;
@@ -954,6 +955,12 @@ namespace Puzzle.NPersist.Framework.Mapping
 			set { m_RefreshBehavior = value; }
 		}
 
+		public virtual LoadBehavior ListCountLoadBehavior
+		{
+			get { return m_ListCountLoadBehavior; }
+			set { m_ListCountLoadBehavior = value; }
+		}
+
 		public virtual string GetLastSavedToPath()
 		{
 			return m_LastSavedToPath;
@@ -1495,6 +1502,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			IDomainMap domainMap = (IDomainMap) mapObject;
 			domainMap.MergeBehavior = this.MergeBehavior;
 			domainMap.RefreshBehavior = this.RefreshBehavior;
+			domainMap.ListCountLoadBehavior = this.ListCountLoadBehavior;
 			domainMap.Name = this.Name;
 			domainMap.Source = this.Source;
 			domainMap.IsReadOnly = this.IsReadOnly;
@@ -1532,6 +1540,10 @@ namespace Puzzle.NPersist.Framework.Mapping
 				return false;
 			}
 			if (!(domainMap.RefreshBehavior == this.RefreshBehavior))
+			{
+				return false;
+			}
+			if (!(domainMap.ListCountLoadBehavior == this.ListCountLoadBehavior))
 			{
 				return false;
 			}
@@ -1708,6 +1720,7 @@ namespace Puzzle.NPersist.Framework.Mapping
 			domainMap.LoadBehavior = attrib.LoadBehavior;
 			domainMap.MergeBehavior = attrib.MergeBehavior;
 			domainMap.RefreshBehavior = attrib.RefreshBehavior;
+			domainMap.ListCountLoadBehavior = attrib.ListCountLoadBehavior;
 			if (attrib.RootNamespace != "")
 				domainMap.RootNamespace = attrib.RootNamespace ;
 			domainMap.Source = attrib.Source ;

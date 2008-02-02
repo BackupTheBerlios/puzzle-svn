@@ -241,8 +241,15 @@ namespace Puzzle.NPersist.Framework.Sql.Visitor
 
 		public virtual void Visiting(SqlExpressionAlias expressionAlias)
 		{
+            if (expressionAlias.SqlExpression is SqlSelectStatement)
+                sqlBuilder.Append("(");
+
 			expressionAlias.SqlExpression.Accept(this);
-			string alias = expressionAlias.Alias;
+
+            if (expressionAlias.SqlExpression is SqlSelectStatement)
+                sqlBuilder.Append(")");
+
+            string alias = expressionAlias.Alias;
 			if (alias.Length > 0)
 				sqlBuilder.Append(" " + this.ColumnAliasKeyword + Encapsulate(alias));
 		}

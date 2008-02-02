@@ -179,6 +179,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Mixins\InverseHelperMixin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Mixins\NullValueHelperMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -315,6 +320,11 @@
                 />
                 <File
                     RelPath = "Enums\ConflictResolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Enums\ConsistencyMode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -735,6 +745,11 @@
                 />
                 <File
                     RelPath = "Interfaces\IInterceptableListState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\IInverseHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1305,6 +1320,11 @@
                 />
                 <File
                     RelPath = "Persistence\Transaction\Transaction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Persistence\Transaction\TransactionBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

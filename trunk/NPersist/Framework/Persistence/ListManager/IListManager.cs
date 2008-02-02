@@ -11,6 +11,7 @@
 using System.Collections;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
+using Puzzle.NPersist.Framework.Enumerations;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -18,8 +19,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// Summary description for IListManager.
 	/// </summary>
 	public interface IListManager : IContextChild
-	{
-	
+	{	
 		IList CreateList(object obj, IPropertyMap propertyMap);
 
 		IList CreateList(object obj, string propertyName);
@@ -31,6 +31,5 @@ namespace Puzzle.NPersist.Framework.Persistence
 		bool CompareLists(IList newList, IList oldList);
 
         bool CompareListsById(IList newList, IList oldList);
-
-	}
+    }
 }

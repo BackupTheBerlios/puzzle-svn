@@ -181,6 +181,19 @@ Public Class DomainProperties
         End Set
     End Property
 
+    <Category("Design"), _
+    Description("The default loading behavior for the Count property of list properties of objects in this domain. Default means that the list count loading behavior of the ListCountLoadBehavior property on the PersistenceManager (accessible via IContext.PersistenceManager) will be used."), _
+    DisplayName("List count loading behavior"), _
+    DefaultValue(LoadBehavior.Default)> Public Property ListCountLoadBehavior() As LoadBehavior
+        Get
+            Return m_DomainMap.ListCountLoadBehavior
+        End Get
+        Set(ByVal Value As LoadBehavior)
+            m_DomainMap.ListCountLoadBehavior = Value
+            RaiseEvent AfterPropertySet(m_DomainMap, "ListCountLoadBehavior")
+        End Set
+    End Property
+
     <Category("Field"), _
         Description("The prefix for the fields that hold the values for the properties in this domain. The prefix will be added before the name of the property to generate a name for the field if no field name is explicitly given."), _
         DisplayName("Default field prefix"), _

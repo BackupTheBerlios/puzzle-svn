@@ -1595,6 +1595,16 @@ namespace Puzzle.NPersist.Framework
 		/// </summary>
 		IList Exceptions { get; }
 
+		/// <summary>
+		/// Specifies the read consistency mode. Pessimistic means objects with references to each other may not be loaded during different transactions scopes. Default is Optimistic.
+		/// </summary>
+        ConsistencyMode ReadConsistency { get; set; }
+
+		/// <summary>
+		/// Specifies the write consistency mode. Pessimistic means that dirty objects may only be saved back to their data source within the same transaction scope that they were loaded. Default is Optimistic (in which case optimistic concurrency is used).
+		/// </summary>
+        ConsistencyMode WriteConsistency { get; set; }
+
         #region .NET 2.0 Specific Code
 #if NET2
 

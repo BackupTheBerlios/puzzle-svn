@@ -8,20 +8,12 @@
 // *
 // *
 
-using System.Data;
-using Puzzle.NPersist.Framework.Persistence;
-using System.Collections;
-
-namespace Puzzle.NPersist.Framework.Interfaces
+namespace Puzzle.NPersist.Framework.Enumerations
 {
-	public interface ITransaction : IContextChild, IDbTransaction
+	public enum ConsistencyMode
 	{
-		IDbTransaction DbTransaction { get; set; }
-
-		bool AutoPersistAllOnCommit { get; set; }
-
-		IDataSource DataSource { get; set; }
-
-        Hashtable InverseHelpers { get; }
+        Default = 0,
+        Optimistic = 1,
+        Pessimistic = 2,
 	}
 }

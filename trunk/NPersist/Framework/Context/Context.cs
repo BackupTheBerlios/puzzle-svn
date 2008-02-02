@@ -2823,6 +2823,23 @@ namespace Puzzle.NPersist.Framework
 			get { return conflicts; }
 		}
 
+
+        private ConsistencyMode readConsistency = ConsistencyMode.Default;
+
+        public ConsistencyMode ReadConsistency
+        {
+            get { return readConsistency; }
+            set { readConsistency = value; }
+        }
+
+        private ConsistencyMode writeConsistency = ConsistencyMode.Default;
+
+        public ConsistencyMode WriteConsistency
+        {
+            get { return writeConsistency; }
+            set { writeConsistency = value; }
+        }
+
         #region .NET 2.0 Specific Code
 #if NET2
 

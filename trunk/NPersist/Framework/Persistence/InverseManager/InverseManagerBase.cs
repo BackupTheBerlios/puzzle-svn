@@ -27,7 +27,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected InverseManagerBase()
 		{
 		}
-
+	
         public abstract void NotifyPropertyGet(object obj, string propertyName);
 
 		public abstract void NotifyPropertySet(object obj, string propertyName, object value);

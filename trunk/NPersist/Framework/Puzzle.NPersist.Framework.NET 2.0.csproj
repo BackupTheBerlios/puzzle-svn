@@ -141,6 +141,7 @@
     <Compile Include="Aop\Mixins\ContextChildMixin.cs" />
     <Compile Include="Aop\Mixins\EditableObjectMixin.cs" />
     <Compile Include="Aop\Mixins\IdentityHelperMixin.cs" />
+    <Compile Include="Aop\Mixins\InverseHelperMixin.cs" />
     <Compile Include="Aop\Mixins\NullValueHelperMixin.cs" />
     <Compile Include="Aop\Mixins\ObjectStatusHelperMixin.cs" />
     <Compile Include="Aop\Mixins\ObservableMixin.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Enums\ReferenceQualifier.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\ConsistencyMode.cs" />
     <Compile Include="Enums\ReferenceTypeEnum.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -453,6 +455,7 @@
     <Compile Include="Interfaces\IInterceptableListState.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IInverseHelper.cs" />
     <Compile Include="Interfaces\INullValueHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -785,6 +788,7 @@
     <Compile Include="Persistence\Transaction\Transaction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Transaction\TransactionBase.cs" />
     <Compile Include="Persistence\UnitOfWork\IRefreshConflict.cs" />
     <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs">
       <SubType>Code</SubType>

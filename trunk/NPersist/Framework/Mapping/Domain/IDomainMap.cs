@@ -70,6 +70,8 @@ namespace Puzzle.NPersist.Framework.Mapping
 
 		RefreshBehaviorType RefreshBehavior { get; set; }
 
+		LoadBehavior ListCountLoadBehavior { get; set; }
+
 		string GetLoadedFromPath();
 
 		void SetLoadedFromPath(string value);
