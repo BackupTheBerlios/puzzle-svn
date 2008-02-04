@@ -599,10 +599,17 @@ namespace Puzzle.NPersist.Framework.Persistence
             ConsistencyMode readConsistency = this.Context.ReadConsistency;
             if (readConsistency == ConsistencyMode.Pessimistic)
             {
-                tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
-                if (tx == null)
-                    return;
-            }
+				ISourceMap sourceMap = propertyMap.ClassMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						tx = this.Context.GetTransaction(this.Context.GetDataSource().GetConnection());
+						if (tx == null)
+							return;
+					}
+				}
+			}
 
 			IInverseHelper inverseHelper = value as IInverseHelper;
 			if (inverseHelper == null)
@@ -633,9 +640,16 @@ namespace Puzzle.NPersist.Framework.Persistence
             ConsistencyMode readConsistency = this.Context.ReadConsistency;
             if (readConsistency == ConsistencyMode.Pessimistic)
             {
-                tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
-                if (tx == null)
-                    return;
+				ISourceMap sourceMap = propertyMap.ClassMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						tx = this.Context.GetTransaction(this.Context.GetDataSource().GetConnection());
+						if (tx == null)
+							return;
+					}
+				}
             }
 
             IObjectManager om = this.Context.ObjectManager;

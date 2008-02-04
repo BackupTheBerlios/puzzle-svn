@@ -1596,13 +1596,31 @@ namespace Puzzle.NPersist.Framework
 		IList Exceptions { get; }
 
 		/// <summary>
-		/// Specifies the read consistency mode. Pessimistic means objects with references to each other may not be loaded during different transactions scopes. Default is Optimistic.
+		/// Specifies the read consistency mode. Default means Optimistic.
 		/// </summary>
+		/// <remarks>
+		/// Pessimistic read consistency means a ReadConsistencyException will be thrown if: <br />
+		/// 1) An object is created or loaded outside of a transaction. <br />
+		/// 2) A property is loaded outside of the transaction that the object that the property belongs to was loaded in. <br />
+		/// 3) A property is loaded with a reference to an object that was loaded in another transaction than the transaction that 
+		/// the object that the property belongs to was loaded in. <br />
+		/// </remarks>
         ConsistencyMode ReadConsistency { get; set; }
 
 		/// <summary>
-		/// Specifies the write consistency mode. Pessimistic means that dirty objects may only be saved back to their data source within the same transaction scope that they were loaded. Default is Optimistic (in which case optimistic concurrency is used).
+		/// Specifies the write consistency mode. Default means Optimistic.
 		/// </summary>
+		/// <remarks>
+		/// With Optimistic write consistency, optimistic concurrency is used to enforce write consistency.
+		/// With Pessimistic write concurrency, dirty objects may only be saved back to their data source within the same transaction that they were loaded. 
+		/// Pessimistic write consistency means a WriteConsistencyException will be thrown if: <br />
+		/// 1) An object is created or loaded outside of a transaction. <br />
+		/// 2) A property is written to outside of the transaction that the object that the property belongs to was loaded or created in. <br />
+		/// 3) A property is written to with a reference to an object that was loaded or created in another transaction than the transaction that 
+		/// the object that the property belongs to was loaded or created in. <br />
+		/// 4) An object is inserted, updated or removed from the data source in another transaction than
+		/// the object that the property belongs to was loaded or created in. <br />
+		/// </remarks>
         ConsistencyMode WriteConsistency { get; set; }
 
         #region .NET 2.0 Specific Code

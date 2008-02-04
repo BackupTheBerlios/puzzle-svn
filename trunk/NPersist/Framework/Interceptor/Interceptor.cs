@@ -295,6 +295,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			}
 
 			this.Context.ObjectCloner.EnsureIsClonedIfEditing(obj);
+			EnsureWriteConsistency(obj, propertyMap, value);
 
 			if (objStatus == ObjectStatus.UpForCreation)
 			{
@@ -377,6 +378,75 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			else
 			{
 				ctx.InverseManager.NotifyPropertySet(obj, propertyName, value);
+			}
+		}
+
+		private void EnsureWriteConsistency(object obj, IPropertyMap propertyMap, object value)
+		{
+			IContext ctx = Context;
+			if (ctx.WriteConsistency.Equals(ConsistencyMode.Pessimistic))
+			{
+				IIdentityHelper identityHelper = obj as IIdentityHelper;
+				if (obj == null)
+					throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", obj.GetType()));
+
+				ISourceMap sourceMap = propertyMap.ClassMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+						if (tx == null)
+						{
+							throw new WriteConsistencyException(
+								string.Format("A write consistency exception has occurred. The property {0} for the object of type {1} and with identity {2} was updated with a value outside of a transaction. This is not permitted in a context using Pessimistic WriteConsistency.",
+								propertyMap.Name,
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj)),									 
+								obj);
+						}
+
+						Guid txGuid = identityHelper.GetTransactionGuid();
+						if (!(tx.Guid.Equals(txGuid)))
+						{
+							throw new WriteConsistencyException(
+								string.Format("A write consistency exception has occurred. The property {0} for the object of type {1} and with identity {2} was loaded or initialized inside a transactions with Guid {3} and was now updated with a value under another transaction with Guid {4}. This is not permitted in a context using Pessimistic WriteConsistency.",
+								propertyMap.Name,
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj),
+								txGuid, 
+								tx.Guid),
+								txGuid, 
+								tx.Guid, 
+								obj);
+						}
+
+						if (value != null)
+						{
+							if (propertyMap.ReferenceType.Equals(ReferenceType.OneToMany) || propertyMap.ReferenceType.Equals(ReferenceType.OneToOne))
+							{
+								IIdentityHelper valueIdentityHelper = value as IIdentityHelper;
+								if (valueIdentityHelper == null)
+									throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", value.GetType()));
+
+								Guid valueTxGuid = valueIdentityHelper.GetTransactionGuid();
+								if (!(tx.Guid.Equals(valueTxGuid)))
+								{
+									throw new WriteConsistencyException(
+										string.Format("A write consistency exception has occurred. The property {0} for the object of type {1} and with identity {2} was loaded or initialized inside a transactions with Guid {3} and was now updated with a reference to an object that was loaded under another transaction with Guid {4}. This is not permitted in a context using Pessimistic WriteConsistency.",
+										propertyMap.Name,
+										obj.GetType(),
+										ctx.ObjectManager.GetObjectIdentity(obj),
+										tx.Guid, 
+										valueTxGuid),
+										tx.Guid, 
+										valueTxGuid, 
+										obj);
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 

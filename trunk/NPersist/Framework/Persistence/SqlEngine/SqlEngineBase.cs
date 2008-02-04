@@ -123,6 +123,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Inserting object"), new LogMessage("Type: {0}" , obj.GetType())); // do not localize
 
+			EnsureWriteConsistency(obj, "inserted to");
+
 			ArrayList propertyNames = new ArrayList();
 			IList parameters = new ArrayList() ;
 			ArrayList nonPrimaryPropertyMaps = new ArrayList();
@@ -257,6 +259,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void UpdateObject(object obj, IList stillDirty)
 		{
 			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Updating object"), new LogMessage("Type: {0}" , obj.GetType())); // do not localize
+
+			EnsureWriteConsistency(obj, "saved to");
+
 			IList parameters = new ArrayList() ;
 			IContext ctx = m_SqlEngineManager.Context;
 			IObjectManager om = ctx.ObjectManager;
@@ -326,6 +331,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void RemoveObject(object obj)
 		{
 			this.SqlEngineManager.Context.LogManager.Info(this, new LogMessage("Removing object"),  new LogMessage("Type: {0}" , obj.GetType())); // do not localize
+
+			EnsureWriteConsistency(obj, "removed from");
+
 			IList parameters = new ArrayList() ;
 			IContext ctx = m_SqlEngineManager.Context;
 			ObjectCancelEventArgs e = new ObjectCancelEventArgs(obj);
@@ -494,6 +502,49 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			npath += " Where " + whereClause;
 			return new NPathQuery(npath, type, parameters);
+		}
+
+		private void EnsureWriteConsistency(object obj, string msg)
+		{
+			IContext ctx = this.Context;
+			if (ctx.WriteConsistency.Equals(ConsistencyMode.Pessimistic))
+			{
+				IIdentityHelper identityHelper = obj as IIdentityHelper;
+				if (identityHelper == null)
+					throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", obj.GetType()));
+
+				IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
+				ISourceMap sourceMap = classMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+						if (tx == null)
+						{
+							throw new WriteConsistencyException(
+								string.Format("A write consistency exception has occurred. The object of type {0} and with identity {1} is being " + msg + " the data source outside a transaction. This is not permitted in a context using Pessimistic WriteConsistency.",
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj)),									 
+								obj);
+						}
+
+						Guid txGuid = identityHelper.GetTransactionGuid();
+						if (!(tx.Guid.Equals(txGuid)))
+						{
+							throw new WriteConsistencyException(
+								string.Format("A write consistency exception has occurred. The object of type {0} and with identity {1} was loaded or initialized inside a transactions with Guid {2} and is now being " + msg + " the data source under another transaction with Guid {3}. This is not permitted in a context using Pessimistic WriteConsistency.",
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj),
+								txGuid, 
+								tx.Guid),
+								txGuid, 
+								tx.Guid, 
+								obj);
+						}
+					}
+				}
+			}			
 		}
 
 		public virtual void LoadProperty(object obj, string propertyName)

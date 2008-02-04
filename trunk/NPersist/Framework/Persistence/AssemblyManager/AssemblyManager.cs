@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Puzzle.NPersist.Framework.BaseClasses;
 using Puzzle.NPersist.Framework.Exceptions;
+using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Aop;
@@ -142,8 +143,42 @@ namespace Puzzle.NPersist.Framework.Persistence
             type = GetBaseType(type);
             
 			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
-			obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);            
+
+			EnsureConsistency(type, classMap);
+
+			obj = this.Context.ProxyFactory.CreateEntityProxy(type, this.Context.ObjectFactory, classMap, ctorParams);
 			return obj;
+		}
+
+		private void EnsureConsistency(Type type, IClassMap classMap)
+		{
+			IContext ctx = this.Context;
+
+			if (ctx.ReadConsistency.Equals(ConsistencyMode.Pessimistic) || ctx.WriteConsistency.Equals(ConsistencyMode.Pessimistic))
+			{
+				ISourceMap sourceMap = classMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+						if (tx == null)
+						{
+							if (ctx.WriteConsistency.Equals(ConsistencyMode.Pessimistic))
+							{
+								throw new WriteConsistencyException(
+									string.Format("A write consistency exception has occurred. An object of type {0} was created outside of a transaction. This is not permitted in a context using Pessimistic WriteConsistency.",
+									type),
+									null);								
+							}
+							throw new ReadConsistencyException(
+								string.Format("A read consistency exception has occurred. An object of type {0} was created outside of a transaction. This is not permitted in a context using Pessimistic ReadConsistency.",
+								type),
+								null);								
+						}
+					}
+				}
+			}
 		}
 
 		public virtual Type GetType(Type type)

@@ -50,6 +50,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		string GetPropertyDescription(object obj, string propertyName);
 
 		object GetPropertyValue(object obj, string propertyName);
+		
+		void SetPropertyValue(bool ensureReadConsistency, object obj, string propertyName, object value);
 
 		void SetPropertyValue(object obj, string propertyName, object value);
 

@@ -231,5 +231,20 @@ namespace Puzzle.NPersist.Framework.Persistence
         {
             identityHelperMixin.SetKeyStruct(keyStruct);
         }
+
+		public void Reset()
+		{
+			identityHelperMixin.Reset();
+		}
+
+		public Guid GetTransactionGuid()
+		{
+			return identityHelperMixin.GetTransactionGuid();
+		}
+
+		public void SetTransactionGuid(Guid value)
+		{
+			identityHelperMixin.SetTransactionGuid(value);
+		}
     }
 }

@@ -564,6 +564,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Exceptions\ConsistencyException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\DeletedObjectException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -649,6 +654,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Exceptions\ReadConsistencyException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\RefreshException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -675,6 +685,11 @@
                 />
                 <File
                     RelPath = "Exceptions\ValidationException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Exceptions\WriteConsistencyException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1205,11 +1220,6 @@
                 />
                 <File
                     RelPath = "Persistence\ObjectManager\IObjectManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Persistence\ObjectManager\ObjectManagerHelperPOCO.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

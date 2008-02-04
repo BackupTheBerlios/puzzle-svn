@@ -353,6 +353,7 @@
     <Compile Include="Exceptions\ConcurrencyException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\ConsistencyException.cs" />
     <Compile Include="Exceptions\DeletedObjectException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -400,6 +401,7 @@
     <Compile Include="Exceptions\PropertyNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\ReadConsistencyException.cs" />
     <Compile Include="Exceptions\RefreshException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -416,6 +418,7 @@
     <Compile Include="Exceptions\ValidationException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\WriteConsistencyException.cs" />
     <Compile Include="IdentityGeneration\GuidIdentityGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

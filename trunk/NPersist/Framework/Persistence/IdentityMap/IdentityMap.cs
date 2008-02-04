@@ -48,6 +48,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			cache.LoadedObjects.Remove(key);
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotRegistered);
 
+			IIdentityHelper identityHelper = obj as IIdentityHelper;
+			if (identityHelper == null)
+				throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", obj.GetType()));
+
+			identityHelper.Reset();
+
             LogMessage message = new LogMessage("Unregistered created object");
             LogMessage verbose = new LogMessage("Type: {0}, Key: {1}" , obj.GetType(), key );
 
@@ -58,6 +64,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			if (obj == null)
 				throw new NullReferenceException("Can't register null object as created!"); // do not localize
+
+			//This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
+			SetTransactionGuid(obj);
 
 			IContext ctx = this.Context;
 
@@ -87,6 +96,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			if (obj == null)
 				throw new NullReferenceException("Can't register null object as loaded!"); // do not localize
+
+			//This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
+			SetTransactionGuid(obj);
 
 			IContext ctx = this.Context;
 
@@ -124,9 +136,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 			if (obj == null)
 				throw new NullReferenceException("Can't register null object as lazy loaded!"); // do not localize
 
-			IContext ctx = this.Context;
+			//This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
+			SetTransactionGuid(obj);
 
-			//ctx.PersistenceManager.InitializeObject(obj);
+			IContext ctx = this.Context;
 
 			IObjectCache cache = GetObjectCache();
 
@@ -136,7 +149,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			
 			cache.UnloadedObjects[key] = obj;
 			ctx.ObjectManager.SetObjectStatus(obj, ObjectStatus.NotLoaded);
-
+			
             LogMessage message = new LogMessage("Registered lazy loaded object");
             LogMessage verbose = new LogMessage("Type: {0}, Key: {1}" , obj.GetType(),key);
 
@@ -152,9 +165,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void UpdateIdentity(object obj, string previousIdentity)
 		{
 			if (obj == null)
-			{
 				throw new NullReferenceException("Can't update temporary identity for null object!"); // do not localize
-			}
+
             KeyStruct key = GetKey(obj);
             KeyStruct prevKey = GetOldKey(obj, previousIdentity);
 
@@ -184,10 +196,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void UpdateIdentity(object obj, string previousIdentity, string newIdentity)
 		{
 			if (obj == null)
-			{
 				throw new NullReferenceException("Can't update temporary identity for null object!"); // do not localize
-			}
-            KeyStruct key = GetKey(obj, newIdentity);
+
+			KeyStruct key = GetKey(obj, newIdentity);
             KeyStruct prevKey = GetOldKey(obj, previousIdentity);
 
 			IObjectCache cache = GetObjectCache( );
@@ -211,6 +222,31 @@ namespace Puzzle.NPersist.Framework.Persistence
             LogMessage message = new LogMessage("Updated identity");
             LogMessage verbose = new LogMessage("Type: {0}, New Key: {1}, Previous Key: {2}", obj.GetType(), key , prevKey);
 			this.Context.LogManager.Debug(this,message , verbose); // do not localize
+		}
+
+
+		private void SetTransactionGuid(object obj)
+		{
+			IIdentityHelper identityHelper = obj as IIdentityHelper;
+			if (identityHelper == null)
+				throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", obj.GetType()));
+
+			IContext ctx = this.Context;
+
+			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
+			ISourceMap sourceMap = classMap.GetSourceMap();
+			if (sourceMap != null)
+			{
+				if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+				{
+					ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+					//This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
+					if (tx != null)
+						identityHelper.SetTransactionGuid(tx.Guid);
+					else
+						identityHelper.SetTransactionGuid(Guid.Empty);
+				}
+			}
 		}
 
         public virtual object GetObject(object identity, Type type, bool lazy)
@@ -293,6 +329,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (this.Context.ReadOnlyObjectCacheManager.LoadObject(obj))
 				{
+					SetTransactionGuid(obj);
 					cache.LoadedObjects[key] = obj;
 					return;					
 				}
@@ -319,11 +356,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 				else
 				{
 					obj = listToFill[0];
+					SetTransactionGuid(obj);
 					cache.LoadedObjects[key] = obj;						
 				}							
 			}
 			else
 			{
+				SetTransactionGuid(obj);
 				this.Context.PersistenceEngine.LoadObject(ref obj);
 				if (obj == null)
 				{

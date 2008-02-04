@@ -11,6 +11,7 @@
 using System.Collections;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
+using Puzzle.NPersist.Framework.Mapping;
 
 namespace Puzzle.NPersist.Framework.Interfaces
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;

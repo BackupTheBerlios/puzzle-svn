@@ -234,6 +234,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Basic\ReadConsistencyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Basic\ReferenceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -245,6 +250,11 @@
                 />
                 <File
                     RelPath = "Basic\UnitOfWorkTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Basic\WriteConsistencyTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

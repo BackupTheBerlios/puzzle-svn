@@ -7,7 +7,7 @@
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
-
+using System;
 using System.Collections;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NCore.Framework.Collections;
@@ -29,5 +29,11 @@ namespace Puzzle.NPersist.Framework.Interfaces
         KeyStruct GetKeyStruct();
 
         void SetKeyStruct(KeyStruct keyStruct);
+
+		Guid GetTransactionGuid();
+
+		void SetTransactionGuid(Guid value);
+
+		void Reset();
 	}
 }

@@ -321,7 +321,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 					else
 					{
 						val = keyStruct.keys[i];
-						SetPropertyValue(obj, propertyMap.Name, val);
+						SetPropertyValue(false, obj, propertyMap.Name, val);
 						SetOriginalPropertyValue(obj, propertyMap.Name, val);
 						SetNullValueStatus(obj, propertyMap.Name, false);
 					}
@@ -370,6 +370,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual void SetPropertyValue(object obj, string propertyName, object value)
 		{
+			SetPropertyValue(true, obj, propertyName, value);
+		}
+
+		public virtual void SetPropertyValue(bool ensureReadConsistency, object obj, string propertyName, object value)
+		{
+			if (ensureReadConsistency)
+				EnsureReadConsistency(obj, propertyName);
 			this.Context.ObjectCloner.EnsureIsClonedIfEditing(obj);
 			try
 			{
@@ -379,6 +386,52 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				string message = string.Format("Failed to set property {0} to value {1} on object {2}.{3}", propertyName, value == null ? "null" : value,AssemblyManager.GetBaseType (obj).Name, GetObjectKeyOrIdentity(obj));
 				throw new LoadException(message, x,obj);
+			}
+		}
+
+		private void EnsureReadConsistency(object obj, string propertyName)
+		{
+			IContext ctx = this.Context;
+
+			if (ctx.ReadConsistency.Equals(ConsistencyMode.Pessimistic))
+			{
+				IIdentityHelper identityHelper = obj as IIdentityHelper;
+				if (identityHelper == null)
+					throw new NPersistException(string.Format("Object of type {0} does not implement IIdentityHelper", obj.GetType()));
+
+				IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
+				ISourceMap sourceMap = classMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+						if (tx == null)
+						{
+							throw new ReadConsistencyException(
+								string.Format("A read consistency exception has occurred. The property {0} for the object of type {1} and with identity {2} was loaded or initialized with a value outside of a transaction. This is not permitted in a context using Pessimistic ReadConsistency.",
+								propertyName,
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj)),									 
+								obj);
+						}
+
+						Guid txGuid = identityHelper.GetTransactionGuid();
+						if (!(tx.Guid.Equals(txGuid)))
+						{
+							throw new ReadConsistencyException(
+								string.Format("A read consistency exception has occurred. The property {0} for the object of type {1} and with identity {2} has already been loaded or initialized inside a transactions with Guid {3} and was now loaded or initialized again under another transaction with Guid {4}. This is not permitted in a context using Pessimistic ReadConsistency.",
+								propertyName,
+								obj.GetType(),
+								ctx.ObjectManager.GetObjectIdentity(obj),
+								txGuid, 
+								tx.Guid),
+								txGuid, 
+								tx.Guid, 
+								obj);
+						}
+					}
+				}
 			}
 		}
 

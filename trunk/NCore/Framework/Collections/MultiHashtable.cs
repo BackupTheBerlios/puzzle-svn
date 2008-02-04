@@ -9,6 +9,8 @@
 // *
 
 using System.Collections;
+using System;
+using System.Text;
 
 namespace Puzzle.NCore.Framework.Collections
 {
@@ -58,6 +60,19 @@ namespace Puzzle.NCore.Framework.Collections
 
             return true;
         }
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (object key in keys)
+				sb.Append(key.ToString() + ", ");
+				
+			if (sb.Length > 0)
+				sb.Length -= 2;
+
+			return sb.ToString();
+		}
+
     }
 
     public class MultiHashtable

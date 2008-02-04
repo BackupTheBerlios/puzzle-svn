@@ -142,7 +142,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
             IObjectManager om = this.Context.ObjectManager;
             foreach (PropertyMap propertyMap in template.PropertyMaps)
-                om.SetPropertyValue(obj, propertyMap.Name, CreateList(obj, propertyMap));
+                om.SetPropertyValue(false, obj, propertyMap.Name, CreateList(obj, propertyMap));
 
 
         }

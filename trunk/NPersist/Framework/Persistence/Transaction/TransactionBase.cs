@@ -26,6 +26,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         #region ITransaction Members
 
+
+		private Guid guid = Guid.NewGuid();
+
+		public Guid Guid 
+		{
+			get { return guid; }
+		}
+
         private bool autoPersistAllOnCommit = true;
 
         public bool AutoPersistAllOnCommit

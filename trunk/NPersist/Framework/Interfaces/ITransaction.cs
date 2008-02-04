@@ -7,7 +7,7 @@
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
-
+using System;
 using System.Data;
 using Puzzle.NPersist.Framework.Persistence;
 using System.Collections;
@@ -23,5 +23,7 @@ namespace Puzzle.NPersist.Framework.Interfaces
 		IDataSource DataSource { get; set; }
 
         Hashtable InverseHelpers { get; }
+
+		Guid Guid { get; } 
 	}
 }

@@ -158,9 +158,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 			ConsistencyMode readConsistency = this.Context.ReadConsistency;
 			if (readConsistency == ConsistencyMode.Pessimistic)
 			{
-				tx = this.Context.GetTransaction(this.Context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
-				if (tx == null)
-					return value;
+				ISourceMap sourceMap = propertyMap.ClassMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						tx = this.Context.GetTransaction(this.Context.GetDataSource().GetConnection());
+						if (tx == null)
+							return value;
+					}
+				}
 			}
 
 			IInverseHelper inverseHelper = obj as IInverseHelper;

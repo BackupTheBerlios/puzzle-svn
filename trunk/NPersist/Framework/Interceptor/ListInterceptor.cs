@@ -270,10 +270,17 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			ConsistencyMode readConsistency = context.ReadConsistency;
 			if (readConsistency == ConsistencyMode.Pessimistic)
 			{
-				IPropertyMap propertyMap = context.DomainMap.MustGetClassMap(interceptable.GetType()).MustGetPropertyMap(propertyName);
-				tx = context.GetTransaction(context.GetDataSource(propertyMap.GetSourceMap()).GetConnection());
-				if (tx == null)
-					return false;
+				IClassMap classMap = context.DomainMap.MustGetClassMap(interceptable.GetType());
+				ISourceMap sourceMap = classMap.GetSourceMap();
+				if (sourceMap != null)
+				{
+					if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
+					{
+						tx = context.GetTransaction(context.GetDataSource(sourceMap).GetConnection());
+						if (tx == null)
+							return false;
+					}
+				}
 			}
 
 			if (inverseHelper.HasCount(propertyName, tx))
