@@ -1,5 +1,5 @@
 // *
-// * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com, Roger Johansson
+// * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com, Roger Alsing
 // *
 // * This library is free software; you can redistribute it and/or modify it
 // * under the terms of the GNU Lesser General Public License 2.1 or later, as
@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyDescription("Persistence Framework for .NET")]
 [assembly : AssemblyCompany("Puzzle")]
 [assembly : AssemblyProduct("Puzzle NPersist Framework")]
-[assembly : AssemblyCopyright("Mats Helander, Roger Johansson")]
+[assembly : AssemblyCopyright("Mats Helander, Roger Alsing")]
 [assembly : AssemblyTrademark("")]
 //[assembly: CLSCompliant(true)]
 [assembly : Guid("0DD94A98-25F4-4DAF-A85A-4A1257A814BE")]

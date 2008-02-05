@@ -1,6 +1,6 @@
 using MatsSoft.NPersist.Framework.Interfaces;
 // *
-// * Copyright (C) 2005 Roger Johansson
+// * Copyright (C) 2005 Roger Alsing
 // *
 // * This library is free software; you can redistribute it and/or modify it
 // * under the terms of the GNU Lesser General Public License 2.1 or later, as

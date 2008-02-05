@@ -1,5 +1,5 @@
 // *
-// * Copyright (C) 2005 Roger Johansson : http://www.puzzleframework.com
+// * Copyright (C) 2005 Roger Alsing : http://www.puzzleframework.com
 // *
 // * This library is free software; you can redistribute it and/or modify it
 // * under the terms of the GNU Lesser General Public License 2.1 or later, as
