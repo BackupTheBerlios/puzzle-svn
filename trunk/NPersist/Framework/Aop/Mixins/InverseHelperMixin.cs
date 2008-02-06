@@ -209,7 +209,8 @@ namespace Puzzle.NPersist.Framework.Aop.Mixins
 
 			if (count == partialList.Count)
 			{
-				IObjectManager om = ((IInterceptable) this.target).GetInterceptor().Context.ObjectManager;
+				IContext context = ((IInterceptable) this.target).GetInterceptor().Context;
+				IObjectManager om = context.ObjectManager;
 
 				IInterceptableList iList = om.GetPropertyValue(target, propertyName) as IInterceptableList;
 				if (iList == null)
@@ -231,6 +232,8 @@ namespace Puzzle.NPersist.Framework.Aop.Mixins
 					om.SetOriginalPropertyValue(target, propertyName, orgList);
 					om.SetNullValueStatus(target, propertyName, false);
 					om.SetUpdatedStatus(target, propertyName, false);
+
+					context.InverseManager.NotifyPropertyGet(target, propertyName);
 				}
 				else
 					iList.MuteNotify = stackMute;
