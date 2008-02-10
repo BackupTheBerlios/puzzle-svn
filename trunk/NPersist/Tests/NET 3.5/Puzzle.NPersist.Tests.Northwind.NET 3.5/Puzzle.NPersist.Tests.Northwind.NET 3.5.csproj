@@ -65,7 +65,7 @@
       <Project>{E6C03D2A-D150-4473-9439-D300746A1390}</Project>
       <Name>Puzzle.NPersist.Framework.NET 3.5</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Samples\Northwind\Domain\Puzzle.NPersist.Samples.Northwind.Domain.NET 3.5.csproj">
+    <ProjectReference Include="..\..\..\Samples\Northwind\Domain\NET 3.5\Puzzle.NPersist.Samples.Northwind.Domain.NET 3.5.csproj">
       <Project>{D1836646-6373-4785-B1B1-AC5C6A4BF50F}</Project>
       <Name>Puzzle.NPersist.Samples.Northwind.Domain.NET 3.5</Name>
     </ProjectReference>
