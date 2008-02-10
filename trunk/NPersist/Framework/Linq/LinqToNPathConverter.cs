@@ -186,7 +186,7 @@ namespace Puzzle.NPersist.Framework.Linq
                 return ConvertSoundexExpression(expression);
             }            
 
-            throw new Exception("The method or operation is not implemented.");
+            throw new Exception(string.Format ("The method or operation is not implemented. : {0}",expression));
         }
 
         private static string ConvertSubWhereExpression(MethodCallExpression expression)

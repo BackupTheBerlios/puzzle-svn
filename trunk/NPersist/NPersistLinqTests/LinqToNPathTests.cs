@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Puzzle.NPersist.Framework;
 using NPersistLinqTests.DM;
-using Puzzle.NPersist.Linq;
+using Puzzle.NPersist.Framework.Linq;
 
 namespace NPersistLinqTests
 {
@@ -65,14 +65,14 @@ namespace NPersistLinqTests
         {
             Context ctx = null;
 
-            var res = from cust in ctx.Repository(new LoadSpan<Customer> ("Name","Email"))
+            var res = from cust in ctx.Repository(new LoadSpan<Customer>("Name", "Email"))
                       where cust.Address.StreetName == "abc123"
                       select cust;
 
             string expected = "select Name, Email from Customer where ((Address.StreetName = \"abc123\"))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);                                  
+            Assert.AreEqual<string>(expected, actual);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace NPersistLinqTests
         {
             Context ctx = null;
 
-            var res = from cust in ctx.Repository(new LoadSpan<Customer> ("Name","Email","Address.StreetName"))                      
+            var res = from cust in ctx.Repository(new LoadSpan<Customer>("Name", "Email", "Address.StreetName"))
                       select cust;
 
             string expected = "select Name, Email, Address.StreetName from Customer";
@@ -141,7 +141,7 @@ namespace NPersistLinqTests
 
             var res = from cust in ctx.Repository<Customer>()
                       where (from order in cust.Orders
-                             where order.OrderDate == new DateTime(2008,01,01) && order.Total == 3.1
+                             where order.OrderDate == new DateTime(2008, 01, 01) && order.Total == 3.1
                              select order).Count > 0
                       select cust;
 
@@ -159,7 +159,7 @@ namespace NPersistLinqTests
             var res = from cust in ctx.Repository<Customer>()
                       where (from order in cust.Orders
                              where order.OrderDate == new DateTime(2008, 01, 01)
-                             select order).Sum( order => order.Total) > 200
+                             select order).Sum(order => order.Total) > 200
                       select cust;
 
             string expected = "";
