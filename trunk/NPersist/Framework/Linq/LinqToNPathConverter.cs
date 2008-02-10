@@ -242,6 +242,11 @@ namespace Puzzle.NPersist.Framework.Linq
                 return string.Format ("({0} = {1})",left,right);
             }
 
+            if (expression.NodeType == ExpressionType.NotEqual)
+            {
+                return string.Format("({0} != {1})", left, right);
+            }
+
             if (expression.NodeType == ExpressionType.GreaterThan)
             {
                 return string.Format ("({0} > {1})",left,right);
