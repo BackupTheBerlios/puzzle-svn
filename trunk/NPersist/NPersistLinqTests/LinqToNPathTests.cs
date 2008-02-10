@@ -66,11 +66,10 @@ namespace NPersistLinqTests
             Context ctx = null;
 
             var res = from cust in ctx.Repository(new LoadSpan<Customer> ("Name","Email"))
-                      where cust.Address.StreetName == "Linfrövägen 12"
+                      where cust.Address.StreetName == "abc123"
                       select cust;
 
-
-            string expected = "select Name, Email from Customer where ((Address.StreetName = \"Linfrövägen 12\"))";
+            string expected = "select Name, Email from Customer where ((Address.StreetName = \"abc123\"))";
             string actual = res.Query.ToNPath();
 
             Assert.AreEqual<string>(expected, actual);                                  
