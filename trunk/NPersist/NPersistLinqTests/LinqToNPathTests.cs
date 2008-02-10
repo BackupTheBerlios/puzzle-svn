@@ -168,6 +168,57 @@ namespace NPersistLinqTests
 
             Assert.AreEqual<string>(expected, actual);
         }
+
+        [TestMethod]
+        public void SubQueryAvgTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Average(order => order.Total) > 200
+                      select cust;
+
+            string expected = "select * from Customer where (((select avg(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryMinTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Min(order => order.Total) > 200
+                      select cust;
+
+            string expected = "select * from Customer where (((select min(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryMaxTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Max(order => order.Total) > 200
+                      select cust;
+
+            string expected = "select * from Customer where (((select max(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
     }
 }
 

@@ -504,6 +504,10 @@
     <Compile Include="IPersistenceService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Linq\Converter\Aggregates.cs" />
+    <Compile Include="Linq\Converter\Constants.cs" />
+    <Compile Include="Linq\Converter\Functions.cs" />
+    <Compile Include="Linq\Converter\Operators.cs" />
     <Compile Include="Linq\DataBindingList.cs" />
     <Compile Include="Linq\DataContext.cs" />
     <Compile Include="Linq\Extensions.cs" />

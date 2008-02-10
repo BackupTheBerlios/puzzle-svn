@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace Puzzle.NPersist.Framework.Linq
 {
-    public class LinqToNPathConverter
+    public partial class LinqToNPathConverter
     {
         public static string ConvertToString<T>(Expression<T> expression)
         {
@@ -101,20 +101,7 @@ namespace Puzzle.NPersist.Framework.Linq
             }
         }
 
-        private static string ConvertConstantExpression(ConstantExpression expression)
-        {
-            //TODO: escape string
-            if (expression.Value is string)
-                return string.Format ("\"{0}\"",expression.Value);
 
-            if (expression.Value  is int)
-                return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
-
-            if (expression.Value is double)
-                return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
-
-            throw new Exception("The method or operation is not implemented.");
-        }
 
         private static string ConvertParameterExpression(ParameterExpression expression)
         {
@@ -162,11 +149,9 @@ namespace Puzzle.NPersist.Framework.Linq
                 
                 
                 
-                string propPath = ConvertExpression (methodCall.Arguments[0]);
+                string propPath = ConvertExpression (methodCall.Arguments[0]);                
+                string whereClause = ConvertExpression(methodCall.Arguments[1]);
 
-                LambdaExpression exp = (LambdaExpression)methodCall.Arguments[1];
-                
-                string whereClause = ConvertExpression(exp.Body);
                 return string.Format ("(select count(*) from {0} where {1})",propPath,whereClause);
             }
 
@@ -177,7 +162,19 @@ namespace Puzzle.NPersist.Framework.Linq
         {
             if (expression.Method.Name == "Sum")
             {
-                return ConvertSubExpression(expression);
+                return ConvertSumExpression(expression);
+            }
+            if (expression.Method.Name == "Average")
+            {
+                return ConvertAvgExpression(expression);
+            }
+            if (expression.Method.Name == "Min")
+            {
+                return ConvertMinExpression(expression);
+            }
+            if (expression.Method.Name == "Max")
+            {
+                return ConvertMaxExpression(expression);
             }
             if (expression.Method.Name == "Where")
             {
@@ -204,14 +201,9 @@ namespace Puzzle.NPersist.Framework.Linq
             throw new Exception(string.Format("The method or operation is not implemented. : {0}", expression.Method.Name));
         }
 
-        private static string ConvertSubExpression(MethodCallExpression expression)
-        {
+        
 
-            LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression; 
-            string sum = ConvertExpression (sumLambda.Body);
-            string from = ConvertExpression(expression.Arguments[0]);
-            return string.Format("(select sum({0}) from {1})", sum,from);
-        }
+
 
         private static string ConvertSubWhereExpression(MethodCallExpression expression)
         {            
@@ -222,88 +214,10 @@ namespace Puzzle.NPersist.Framework.Linq
         }
 
 
-        private static string ConvertToInequalityExpression(MethodCallExpression expression)
-        {
-            string left = ConvertExpression(expression.Arguments[0]);
-            string right = ConvertExpression(expression.Arguments[1]);
+        
 
 
-            return string.Format ("{0} != {1}",left,right);
-        }
-
-        private static string ConvertSoundexExpression(MethodCallExpression expression)
-        {
-            string left = ConvertExpression(expression.Arguments[0]);            
-
-            return string.Format ("soundex ({0})",left);
-        }
-
-        private static string ConvertLikeExpression(MethodCallExpression expression)
-        {
-            string left = ConvertExpression(expression.Arguments[0]);
-            string right = ConvertExpression(expression.Arguments[1]);
-
-            return string.Format ("{0} like {1}",left,right);
-        }
-
-        private static string ConvertToEqualityExpression(MethodCallExpression expression)
-        {
-            string left = ConvertExpression(expression.Arguments[0]);
-            string right = ConvertExpression(expression.Arguments[1]);
-
-
-            return string.Format ("{0} = {1}",left,right);
-        }
-
-
-        private static string ConvertBinaryExpression(BinaryExpression expression)
-        {
-            string left = ConvertExpression(expression.Left);
-            string right = ConvertExpression (expression.Right);
-
-            if (expression.NodeType == ExpressionType.Equal)
-            {
-                return string.Format ("({0} = {1})",left,right);
-            }
-
-            if (expression.NodeType == ExpressionType.NotEqual)
-            {
-                return string.Format("({0} != {1})", left, right);
-            }
-
-            if (expression.NodeType == ExpressionType.GreaterThan)
-            {
-                return string.Format ("({0} > {1})",left,right);
-            }
-
-            if (expression.NodeType == ExpressionType.LessThan)
-            {
-                return string.Format ("({0} < {1})",left,right);
-            }
-
-            if (expression.NodeType == ExpressionType.GreaterThanOrEqual)
-            {
-                return string.Format ("({0} >= {1})",left,right);
-            }
-
-            if (expression.NodeType == ExpressionType.LessThanOrEqual)
-            {
-                return string.Format ("({0} <= {1})",left,right);
-            }
-
-
-            if (expression.NodeType == ExpressionType.AndAlso)
-            {
-                return string.Format ("({0} and {1})",left,right);
-            }
-
-            if (expression.NodeType == ExpressionType.OrElse)
-            {
-                return string.Format ("({0} or {1})",left,right);
-            }
-
-            throw new Exception(string.Format ("The method or operation is not implemented. : {0}", expression.NodeType));
-        }
+        
 
         //public static void CreateLoadspan<T>(NewExpression expression,LinqQuery<T> query)
         //{
