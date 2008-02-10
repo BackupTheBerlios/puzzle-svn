@@ -50,12 +50,23 @@ namespace Puzzle.NPersist.Linq
         public string ToNPath()
         {
             ApplyLoadSpan();
-            return (SelectClause + " " + FromClause + " " + WhereClause + " " + OrderByClause).Trim () ;
+            string selectClause = AddSpaces(SelectClause);
+            string fromClause = AddSpaces(FromClause);
+            string whereClause = AddSpaces(WhereClause);
+            string orderByClause = AddSpaces(OrderByClause);
+
+
+            return (selectClause + fromClause + whereClause + orderByClause).Trim () ;
+        }
+
+        private string AddSpaces(string source)
+        {
+            return (source + " ").TrimStart();
         }
 
         private void ApplyLoadSpan()
         {
-            if (LoadSpan.PropertyPaths.Length == 0)
+            if (LoadSpan == null || LoadSpan.PropertyPaths.Length == 0)
             {
                 SelectClause = "select *";
             }

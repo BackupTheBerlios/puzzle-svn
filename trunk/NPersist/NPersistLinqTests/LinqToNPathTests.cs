@@ -61,7 +61,7 @@ namespace NPersistLinqTests
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void WorldFirstNPathLinqTest()
         {
             Context ctx = null;
 
@@ -73,6 +73,50 @@ namespace NPersistLinqTests
             string actual = res.Query.ToNPath();
 
             Assert.AreEqual<string>(expected, actual);                                  
+        }
+
+        [TestMethod]
+        public void WherePropertyPathTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where cust.Address.StreetName == "abc123"
+                      select cust;
+
+            string expected = "select * from Customer where ((Address.StreetName = \"abc123\"))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
+
+        [TestMethod]
+        public void LoadSpanTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository(new LoadSpan<Customer> ("Name","Email","Address.StreetName"))                      
+                      select cust;
+
+            string expected = "select Name, Email, Address.StreetName from Customer";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
+
+        [TestMethod]
+        public void OrderByTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      orderby cust.Name, cust.Address.StreetName
+                      select cust;
+
+            string expected = "select * from Customer order by Name, Address.StreetName";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
         }
     }
 }
