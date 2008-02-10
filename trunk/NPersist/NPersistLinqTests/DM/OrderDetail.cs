@@ -5,9 +5,9 @@ using System.Text;
 
 namespace NPersistLinqTests.DM
 {
-    class Order
+    class OrderDetail
     {
-        public DateTime OrderDate { get; set; }
-        public List<OrderDetail> Details { get; set; }
+        public string Product { get; set; }
+        public double Quantity { get; set; }
     }
 }

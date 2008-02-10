@@ -43,6 +43,7 @@
     <Compile Include="DM\Address.cs" />
     <Compile Include="DM\Customer.cs" />
     <Compile Include="DM\Order.cs" />
+    <Compile Include="DM\OrderDetail.cs" />
     <Compile Include="LinqToNPathTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

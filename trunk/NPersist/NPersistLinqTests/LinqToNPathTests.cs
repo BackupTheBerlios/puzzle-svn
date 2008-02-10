@@ -133,6 +133,23 @@ namespace NPersistLinqTests
 
             Assert.AreEqual<string>(expected, actual);
         }
+
+        [TestMethod]
+        public void SubQueryTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008,01,01)
+                             select order).Count > 0
+                      select cust;
+
+            string expected = "";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
     }
 }
 
