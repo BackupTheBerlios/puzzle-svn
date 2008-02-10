@@ -18,5 +18,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return new SqlSqlServerVisitor();
 		}
 
+		private string selectNewIdentity = "SELECT Scope_Identity();";
+		
+		public override string SelectNewIdentity
+		{
+			get { return this.selectNewIdentity; }
+			set { this.selectNewIdentity = value; }
+		}
+
 	}
 }
