@@ -9,5 +9,6 @@ namespace NPersistLinqTests.DM
     {
         public DateTime OrderDate { get; set; }
         public List<OrderDetail> Details { get; set; }
+        public double Total { get; set; }
     }
 }

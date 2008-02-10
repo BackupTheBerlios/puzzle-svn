@@ -141,8 +141,25 @@ namespace NPersistLinqTests
 
             var res = from cust in ctx.Repository<Customer>()
                       where (from order in cust.Orders
-                             where order.OrderDate == new DateTime(2008,01,01)
+                             where order.OrderDate == new DateTime(2008,01,01) && order.Total == 3.1
                              select order).Count > 0
+                      select cust;
+
+            string expected = "select * from Customer where (((select count(*) from Orders where ((OrderDate = #2008-01-01#) and (Total = 3.1))) > 0))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQuerySumTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Sum( order => order.Total) > 200
                       select cust;
 
             string expected = "";

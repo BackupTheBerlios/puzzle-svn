@@ -6,6 +6,7 @@ using Puzzle.NPath.Framework.CodeDom;
 using System.Collections;
 using Puzzle.NPersist.Linq.Strings;
 using System.Linq.Expressions;
+using System.Globalization;
 
 namespace Puzzle.NPersist.Linq
 {
@@ -48,8 +49,26 @@ namespace Puzzle.NPersist.Linq
             {
                 return ConvertUnaryExpression((UnaryExpression) expression);
             }
-
+            if (expression is NewExpression)
+            {
+                return ConvertNewExpression((NewExpression)expression);
+            }
+            
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        private static string ConvertNewExpression(NewExpression expression)
+        {
+            if (expression.Constructor.DeclaringType == typeof(DateTime))
+            {
+                //HACK: make it typed - Roger
+                string year = expression.Arguments[0].ToString().PadLeft (4,'0');
+                string month = expression.Arguments[1].ToString().PadLeft(2, '0');
+                string day = expression.Arguments[1].ToString().PadLeft(2, '0');
+                return string.Format("#{0}-{1}-{2}#",year,month,day);
+            }
+
+            throw new NotImplementedException();
         }
 
         private static string ConvertUnaryExpression(UnaryExpression expression)
@@ -58,6 +77,12 @@ namespace Puzzle.NPersist.Linq
             {
                 string operand = ConvertExpression(expression.Operand);
                 return string.Format ("not ({0})",operand);
+            }
+            else if (expression.NodeType == ExpressionType.Quote)
+            {
+                
+                LambdaExpression lambda = expression.Operand as LambdaExpression;
+                return ConvertExpression(lambda.Body);    
             }
             else
             {
@@ -73,7 +98,10 @@ namespace Puzzle.NPersist.Linq
                 return string.Format ("\"{0}\"",expression.Value);
 
             if (expression.Value  is int)
-                return string.Format ("{0}",expression.Value);
+                return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
+
+            if (expression.Value is double)
+                return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
 
             throw new Exception("The method or operation is not implemented.");
         }
@@ -101,6 +129,10 @@ namespace Puzzle.NPersist.Linq
                 if (suffix == "Count" && typeof(IList).IsAssignableFrom (expression.Member.ReflectedType))
                 {
                     suffix += "()";
+                }
+                else if (suffix == "Count" && expression is MemberExpression)
+                {
+                    return string.Format("(select count(*) from {0})", prefix);
                 }
 
                 if (prefix != "")
@@ -133,6 +165,10 @@ namespace Puzzle.NPersist.Linq
 
         private static string ConvertMethodCallExpression(MethodCallExpression expression)
         {
+            if (expression.Method.Name == "Where")
+            {
+                return ConvertSubWhereExpression(expression);
+            }
             if (expression.Method.Name == "op_Equality")
             {
                 return ConvertToEqualityExpression(expression);
@@ -151,6 +187,14 @@ namespace Puzzle.NPersist.Linq
             }            
 
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        private static string ConvertSubWhereExpression(MethodCallExpression expression)
+        {            
+            string from = ConvertExpression(expression.Arguments[0]);
+            string predicate = ConvertUnaryExpression((UnaryExpression)expression.Arguments[1]);
+
+            return string.Format("{0} where {1}", from, predicate);
         }
 
 
