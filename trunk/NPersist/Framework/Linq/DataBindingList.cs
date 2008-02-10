@@ -5,7 +5,7 @@ using System.ComponentModel;
 using Puzzle.NPersist.Framework;
 using System.Reflection;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public class EntityBindingList<T> : BindingList<T>
     {

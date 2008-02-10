@@ -5,7 +5,7 @@ using System.Collections;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public class Table<T> :  ITable<T> , ITable
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NPersist.Framework;
-using Puzzle.NPersist.Linq;
+using Puzzle.NPersist.Framework.Linq;
 
 namespace Puzzle.NPersist.Framework
 {

@@ -4,11 +4,11 @@ using System.Text;
 using System.Linq;
 using Puzzle.NPath.Framework.CodeDom;
 using System.Collections;
-using Puzzle.NPersist.Linq.Strings;
+using Puzzle.NPersist.Framework.Linq.Strings;
 using System.Linq.Expressions;
 using System.Globalization;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public class LinqToNPathConverter
     {

@@ -4,7 +4,7 @@ using System.Text;
 using Puzzle.NPersist.Framework;
 using System.Linq;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public class LinqQuery<T> 
     {

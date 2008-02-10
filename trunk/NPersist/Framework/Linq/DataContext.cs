@@ -4,7 +4,7 @@ using System.Text;
 using System.Reflection;
 using Puzzle.NPersist.Framework;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public class DataContext
     {

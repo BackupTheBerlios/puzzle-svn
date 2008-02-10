@@ -9,7 +9,7 @@ using Puzzle.NPath.Framework.CodeDom;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework.Linq
 {
     public delegate T Func<T>();
     public delegate T Func<A0, T>(A0 arg0);
