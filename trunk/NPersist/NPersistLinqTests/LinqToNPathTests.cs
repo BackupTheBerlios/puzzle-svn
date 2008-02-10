@@ -60,6 +60,7 @@ namespace NPersistLinqTests
         //
         #endregion
 
+
         [TestMethod]
         public void WorldFirstNPathLinqTest()
         {
