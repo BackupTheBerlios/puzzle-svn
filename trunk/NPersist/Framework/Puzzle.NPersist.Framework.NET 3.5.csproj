@@ -28,6 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -101,6 +102,9 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -500,6 +504,16 @@
     <Compile Include="IPersistenceService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Linq\DataBindingList.cs" />
+    <Compile Include="Linq\DataContext.cs" />
+    <Compile Include="Linq\Extensions.cs" />
+    <Compile Include="Linq\IContextExtensions.cs" />
+    <Compile Include="Linq\ILinqList.cs" />
+    <Compile Include="Linq\LinqList.cs" />
+    <Compile Include="Linq\LinqQuery.cs" />
+    <Compile Include="Linq\LinqToNPathConverter.cs" />
+    <Compile Include="Linq\LoadSpan.cs" />
+    <Compile Include="Linq\StringExtensions.cs" />
     <Compile Include="Mapping\Base\IFixable.cs">
       <SubType>Code</SubType>
     </Compile>
