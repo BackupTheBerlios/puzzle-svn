@@ -163,7 +163,7 @@ namespace NPersistLinqTests
                              select order).Sum(order => order.Total) > 200
                       select cust;
 
-            string expected = "";
+            string expected = "select * from Customer where (((select sum(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
             string actual = res.Query.ToNPath();
 
             Assert.AreEqual<string>(expected, actual);

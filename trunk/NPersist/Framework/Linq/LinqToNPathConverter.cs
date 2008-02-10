@@ -175,6 +175,10 @@ namespace Puzzle.NPersist.Framework.Linq
 
         private static string ConvertMethodCallExpression(MethodCallExpression expression)
         {
+            if (expression.Method.Name == "Sum")
+            {
+                return ConvertSubExpression(expression);
+            }
             if (expression.Method.Name == "Where")
             {
                 return ConvertSubWhereExpression(expression);
@@ -198,6 +202,15 @@ namespace Puzzle.NPersist.Framework.Linq
 
 
             throw new Exception(string.Format("The method or operation is not implemented. : {0}", expression.Method.Name));
+        }
+
+        private static string ConvertSubExpression(MethodCallExpression expression)
+        {
+
+            LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression; 
+            string sum = ConvertExpression (sumLambda.Body);
+            string from = ConvertExpression(expression.Arguments[0]);
+            return string.Format("(select sum({0}) from {1})", sum,from);
         }
 
         private static string ConvertSubWhereExpression(MethodCallExpression expression)
