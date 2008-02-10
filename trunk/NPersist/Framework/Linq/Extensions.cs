@@ -59,16 +59,16 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            if (selector.Body is NewExpression)
-            {
-                LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body, source.Query);
-                //throw new NotSupportedException("Not supported yet");
-            }
+            //if (selector.Body is NewExpression)
+            //{
+            //    LinqToNPathConverter.CreateLoadspan((NewExpression)selector.Body, source.Query);
+            //    //throw new NotSupportedException("Not supported yet");
+            //}
 
-            if (selector.Body is MemberInitExpression)
-            {
-                LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body, source.Query);
-            }
+            //if (selector.Body is MemberInitExpression)
+            //{
+            //    LinqToNPathConverter.CreateLoadspan((MemberInitExpression)selector.Body, source.Query);
+            //}
 
             return source;
         }

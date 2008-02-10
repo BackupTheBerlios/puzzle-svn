@@ -184,9 +184,10 @@ namespace Puzzle.NPersist.Framework.Linq
             if (expression.Method.Name == "Soundex" && expression.Method.ReflectedType == typeof(StringExtensions))
             {
                 return ConvertSoundexExpression(expression);
-            }            
+            }
 
-            throw new Exception(string.Format ("The method or operation is not implemented. : {0}",expression));
+
+            throw new Exception(string.Format("The method or operation is not implemented. : {0}", expression.Method.Name));
         }
 
         private static string ConvertSubWhereExpression(MethodCallExpression expression)
@@ -278,40 +279,40 @@ namespace Puzzle.NPersist.Framework.Linq
                 return string.Format ("({0} or {1})",left,right);
             }
 
-             throw new Exception("The method or operation is not implemented.");
+            throw new Exception(string.Format ("The method or operation is not implemented. : {0}", expression.NodeType));
         }
 
-        public static void CreateLoadspan<T>(NewExpression expression,LinqQuery<T> query)
-        {
-            NewArrayExpression newArray = (NewArrayExpression)expression.Arguments[0];
+        //public static void CreateLoadspan<T>(NewExpression expression,LinqQuery<T> query)
+        //{
+        //    NewArrayExpression newArray = (NewArrayExpression)expression.Arguments[0];
 
-            query.SelectClause = "select ";
-            int i = 0;
-            foreach (Expression arg in newArray.Expressions)
-            {
-                string path = ConvertExpression(arg);
-                query.SelectClause += path;
+        //    query.SelectClause = "select ";
+        //    int i = 0;
+        //    foreach (Expression arg in newArray.Expressions)
+        //    {
+        //        string path = ConvertExpression(arg);
+        //        query.SelectClause += path;
 
-                i++;
-                if (i<newArray.Expressions.Count)
-                    query.SelectClause += ",";
-            }
-        }
+        //        i++;
+        //        if (i<newArray.Expressions.Count)
+        //            query.SelectClause += ",";
+        //    }
+        //}
 
-        public static void CreateLoadspan<T>(MemberInitExpression expression,LinqQuery<T> query)
-        {
+        //public static void CreateLoadspan<T>(MemberInitExpression expression,LinqQuery<T> query)
+        //{
 
-            query.SelectClause = "select ";
-            int i = 0;
-            foreach (MemberAssignment binding in expression.Bindings)
-            {
-                string path = ConvertExpression(binding.Expression);
-                query.SelectClause += path;
+        //    query.SelectClause = "select ";
+        //    int i = 0;
+        //    foreach (MemberAssignment binding in expression.Bindings)
+        //    {
+        //        string path = ConvertExpression(binding.Expression);
+        //        query.SelectClause += path;
 
-                i++;
-                if (i<expression.Bindings.Count)
-                    query.SelectClause += ",";
-            }
-        }
+        //        i++;
+        //        if (i<expression.Bindings.Count)
+        //            query.SelectClause += ",";
+        //    }
+        //}
     }
 }
