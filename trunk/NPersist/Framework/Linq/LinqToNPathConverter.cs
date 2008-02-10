@@ -98,7 +98,7 @@ namespace Puzzle.NPersist.Linq
                 string prefix = ConvertExpression (expression.Expression);
 
 
-                if (suffix == "Count" && expression.Member.ReflectedType == typeof(ICollection))
+                if (suffix == "Count" && typeof(IList).IsAssignableFrom (expression.Member.ReflectedType))
                 {
                     suffix += "()";
                 }

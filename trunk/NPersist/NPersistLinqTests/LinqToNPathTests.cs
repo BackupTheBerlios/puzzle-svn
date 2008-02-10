@@ -118,6 +118,21 @@ namespace NPersistLinqTests
 
             Assert.AreEqual<string>(expected, actual);
         }
+
+        [TestMethod]
+        public void ListPropCountTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where cust.Orders.Count == 1
+                      select cust;
+
+            string expected = "select * from Customer where ((Orders.Count() = 1))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);
+        }
     }
 }
 
