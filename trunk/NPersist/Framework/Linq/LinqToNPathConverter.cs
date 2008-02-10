@@ -68,6 +68,7 @@ namespace Puzzle.NPersist.Linq
 
         private static string ConvertConstantExpression(ConstantExpression expression)
         {
+            //TODO: escape string
             if (expression.Value is string)
                 return string.Format ("\"{0}\"",expression.Value);
 

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPath.Framework.NET 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework.NET 3.5", "..\NAspect\Framework\Puzzle.NAspect.Framework.NET 3.5.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LinqRelated", "LinqRelated", "{EBFB2917-FEAE-4B53-B26F-D6A4DC7BEF07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

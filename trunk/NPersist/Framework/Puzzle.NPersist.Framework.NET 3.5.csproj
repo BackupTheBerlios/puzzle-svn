@@ -114,19 +114,19 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
-      <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
+    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 3.5.csproj">
+      <Name>Puzzle.NAspect.Framework.NET 3.5</Name>
       <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
-      <Name>Puzzle.NCore.Framework NET 2.0</Name>
+    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj">
+      <Name>Puzzle.NCore.Framework NET 3.5</Name>
       <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\..\NPath\Framework\Puzzle.NPath.Framework.NET 2.0.csproj">
+    <ProjectReference Include="..\..\NPath\Framework\Puzzle.NPath.Framework.NET 3.5.csproj">
       <Project>{7F415FBF-21FA-4E00-82DE-AAD8CEECC84B}</Project>
-      <Name>Puzzle.NPath.Framework.NET 2.0</Name>
+      <Name>Puzzle.NPath.Framework.NET 3.5</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

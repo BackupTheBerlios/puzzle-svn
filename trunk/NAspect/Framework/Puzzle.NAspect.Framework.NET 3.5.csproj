@@ -231,9 +231,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
+    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj">
       <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
-      <Name>Puzzle.NCore.Framework NET 2.0</Name>
+      <Name>Puzzle.NCore.Framework NET 3.5</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
