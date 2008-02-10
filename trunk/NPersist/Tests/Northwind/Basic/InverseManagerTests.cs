@@ -245,6 +245,112 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			}
 		}
 
+		#endregion
+
+		#region TestInverseManagerLazySynchOnDeleteOnReferenceListProperty
+
+		[Test()]
+		public virtual void TestInverseManagerLazySynchOnDeleteOnReferenceListProperty()
+		{
+			int employeeId = 0;
+			int employee2Id = 0;
+			int bossId = 0;
+
+			using (IContext context = GetContext() )
+			{
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Ask the context to create a new employee object
+					Employee employee = (Employee) context.CreateObject(typeof(Employee));
+					Employee employee2 = (Employee) context.CreateObject(typeof(Employee));
+
+					//Ask the context to create a new employee object
+					Employee boss = (Employee) context.CreateObject(typeof(Employee));
+
+					//Assert that the context didn't return null values
+					Assert.IsNotNull(employee);
+					Assert.IsNotNull(employee2);
+					Assert.IsNotNull(boss);
+
+					//set up the relationship using the Employees reference list property 
+					boss.Employees.Add(employee);
+					boss.Employees.Add(employee2);
+
+					SetupEmployee(boss);
+					SetupEmployee(employee);
+					SetupEmployee(employee2);
+
+					context.Commit();
+
+					bossId = boss.Id;
+					employeeId = employee.Id;
+					employee2Id = employee2.Id;
+
+					tx.Commit();
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}
+			}
+
+			using (IContext context = GetContext() )
+			{
+				//context.PersistenceManager.ListCountLoadBehavior = LoadBehavior.Lazy;
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+					//Ask the context to create a new employee object
+					Employee employee = (Employee) context.GetObjectById(employeeId, typeof(Employee));
+
+					//Assert that the context didn't return null values
+					Assert.IsNotNull(employee);
+
+					//delete the employee
+					context.DeleteObject(employee);
+
+					Employee boss = (Employee) context.GetObjectById(bossId, typeof(Employee));
+
+					Assert.IsNotNull(boss);
+
+					//Assert.AreEqual(ObjectStatus.NotLoaded, context.GetObjectStatus(employee));
+					Assert.AreEqual(PropertyStatus.NotLoaded, context.GetPropertyStatus(boss, "Employees"));
+
+					Assert.AreEqual(1, boss.Employees.Count);
+					Assert.IsFalse(ContainsId(boss.Employees, employeeId));
+					Assert.IsTrue(ContainsId(boss.Employees, employee2Id));
+
+					tx.Commit();
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}
+			}
+		}
+
+		#endregion
+
+
 		public bool ContainsId(IList list, int id)
 		{
 			foreach (Employee employee in list)
@@ -259,7 +365,6 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			employee.LastName = "Test";
 		}
 
-		#endregion
 
 		
 		[Test()]
@@ -287,6 +392,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				}
 			}
 		}
+
 
 		private void m_Context_ThrowOnExecutingSql(object sender, SqlExecutorCancelEventArgs e)
 		{

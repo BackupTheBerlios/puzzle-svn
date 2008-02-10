@@ -668,12 +668,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					propList.Add(value);
 				}
+
+				list = new ArrayList( propList);
+
 				if (mList != null)
 					mList.MuteNotify = stackMute ;
 
 				om.SetPropertyValue(obj, propertyMap.Name, propList);
-				//list = lm.CloneList(obj, propertyMap, propList);
-				list = new ArrayList( propList);
+
 				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
 			}
 			else
@@ -762,7 +764,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			IList parameters = new ArrayList() ;
 
-			IList propList = (IList) m_SqlEngineManager.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
+			object test = m_SqlEngineManager.Context.ObjectManager.GetPropertyValue(obj, propertyMap.Name);
+			IList propList = (IList) test;
 			if (propList == null)
 				propList = m_SqlEngineManager.Context.ListManager.CreateList(obj, propertyMap);
 
@@ -794,13 +797,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 				{
 					propList.Add(refObject);
 				}
+
+				list = new ArrayList( propList );
+
 				if (mList != null)
 				{
 					mList.MuteNotify = stackMute ;
 				}
 				om.SetPropertyValue(obj, propertyMap.Name, propList);
 				//list = lm.CloneList(obj, propertyMap, propList);
-				list = new ArrayList( propList );
 				om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
 
 				ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);
@@ -838,13 +843,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				propList.Add(refObject);
 			}
-			if (mList != null)
-			{
-				mList.MuteNotify = stackMute;
-			}
-			om.SetPropertyValue(obj, propertyMap.Name, propList);
-			//list = lm.CloneList(obj, propertyMap, propList);
+
 			list = new ArrayList( propList);
+
+			if (mList != null)
+				mList.MuteNotify = stackMute;
+			om.SetPropertyValue(obj, propertyMap.Name, propList);
+
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, list);
 
 			ctx.InverseManager.NotifyPropertyLoad(obj, propertyMap, propList);

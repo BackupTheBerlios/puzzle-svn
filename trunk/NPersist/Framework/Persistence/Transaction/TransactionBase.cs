@@ -84,6 +84,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void Commit()
         {
             ClearInverseHelpers();
+			//this.Context.InverseManager.Clear(this);
         }
 
         public abstract IDbConnection Connection
@@ -99,7 +100,8 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void Rollback()
         {
             ClearInverseHelpers();
-        }
+			//this.Context.InverseManager.Clear(this);
+		}
 
         #endregion
 

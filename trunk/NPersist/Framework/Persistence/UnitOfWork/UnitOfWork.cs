@@ -139,7 +139,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                 m_objectStatusLookup[obj] = ObjectStatus.UpForDeletion;
                 this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.UpForDeletion);
             }
-			this.Context.IdentityMap.RemoveObject(obj);
+			//this.Context.IdentityMap.RemoveObject(obj);
 		}
 
 		public virtual void RegisterClean(object obj)
@@ -309,6 +309,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				m_objectStatusLookup.Remove(obj);
 				this.Context.ObjectManager.ClearUpdatedStatuses(obj);
 				this.Context.ObjectManager.SetObjectStatus(obj, ObjectStatus.Deleted);
+				this.Context.IdentityMap.RemoveObject(obj);
 			}			
 			m_listRemoved.Clear() ;
 		}

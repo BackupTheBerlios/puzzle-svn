@@ -1393,12 +1393,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 					list.Add(value);
 			}
 
+			IList clone = new ArrayList( list);
+
 			if (mList != null)
 				mList.MuteNotify = stackMute ;
 
 			om.SetNullValueStatus(obj, propertyMap.Name, false);
 			//IList clone = lm.CloneList(obj, propertyMap, list);
-			IList clone = new ArrayList( list);
 			om.SetOriginalPropertyValue(obj, propertyMap.Name, clone);		
 		}
 

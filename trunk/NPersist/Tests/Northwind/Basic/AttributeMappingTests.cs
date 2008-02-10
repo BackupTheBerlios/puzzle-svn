@@ -94,6 +94,9 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestFetchEmployeesNamedNancyDavolioByNPathQuery()
 		{
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
 			using (IContext context = GetContextWithAttributes() )
 			{
 				//Create the query string
