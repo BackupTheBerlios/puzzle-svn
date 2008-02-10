@@ -29,14 +29,24 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void NotifyCommitted(object obj);
 
+		void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value);
+
 		void RemoveAllReferencesToObject(object obj);
 
 		void RemoveNonInverseReferences(object obj);
 
 		void RemoveInverseReferences(object obj);
 
-		void NotifyPropertyLoad(object obj, IPropertyMap propertyMap, object value);
+		//bool HasFullyLoadedProperty(Type type, string propertyName);
+
+		//bool HasFullyLoadedProperty(Type type, string propertyName, ITransaction transaction);
+
+		//bool SetFullyLoadedProperty(Type type, string propertyName);
+
+		//bool SetFullyLoadedProperty(Type type, string propertyName, ITransaction transaction);
 
         void Clear();
-    }
+
+		//void Clear(ITransaction transaction);
+	}
 }
