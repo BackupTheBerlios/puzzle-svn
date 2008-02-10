@@ -21,8 +21,6 @@ namespace Puzzle.NPersist.Linq
     {
         public static ITable<T> Where<T>(this IList source, Expression<Func<T, bool>> predicate)
         {
-            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
-
             Table<T> list = new Table<T>();
 
             return list;
@@ -30,8 +28,6 @@ namespace Puzzle.NPersist.Linq
 
         public static ITable<T> Where<T>(this IList<T> source, Expression<Func<T, bool>> predicate)
         {
-            //source.WhereClause = "where " + LinqToNPathConverter.ConvertToString(predicate);
-
             Table<T> list = new Table<T>();
 
             return list;

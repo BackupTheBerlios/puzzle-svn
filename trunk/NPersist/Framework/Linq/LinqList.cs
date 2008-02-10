@@ -191,9 +191,10 @@ namespace Puzzle.NPersist.Linq
 
        #region ILinqList Members
 
-       public void AttachContext(IContext context)
+       public void Init(IContext context,ILoadSpan loadSpan)
        {
            this.Query.Context = context;
+           this.Query.LoadSpan = loadSpan;
        }
 
        #endregion

@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NPersist.Framework;
+using Puzzle.NPersist.Linq;
 
-namespace Puzzle.NPersist.Linq
+namespace Puzzle.NPersist.Framework
 {
     public static class IContextExtensions
     {
@@ -11,7 +12,16 @@ namespace Puzzle.NPersist.Linq
         {
             Table<T> list = new Table<T>();
             ITable ilinqList = (ITable)list;
-            ilinqList.AttachContext (context);
+            ilinqList.Init (context,null);
+
+            return list;
+        }
+
+        public static ITable<T> Repository<T>(this IContext context,LoadSpan<T> loadSpan)
+        {            
+            Table<T> list = new Table<T>();
+            ITable ilinqList = (ITable)list;
+            ilinqList.Init(context,loadSpan);
 
             return list;
         }

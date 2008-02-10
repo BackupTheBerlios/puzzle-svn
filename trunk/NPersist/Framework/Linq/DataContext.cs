@@ -32,7 +32,7 @@ namespace Puzzle.NPersist.Linq
                     Type genericType = field.FieldType.GetGenericArguments ()[0];
 
                     ITable instance = (ITable)Activator.CreateInstance(field.FieldType);
-                    instance.AttachContext (this.context);
+                    instance.Init (this.context,null);
 
                     field.SetValue (this,instance);                    
                 }

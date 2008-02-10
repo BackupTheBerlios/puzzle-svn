@@ -8,8 +8,7 @@ namespace Puzzle.NPersist.Linq
 {
     public interface ITable
     {
-        void AttachContext(IContext context);
-
+        void Init(IContext context,ILoadSpan loadSpan);       
     }
     
     public interface ITable<T> : IList<T> 

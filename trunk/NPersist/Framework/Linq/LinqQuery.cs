@@ -2,25 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Puzzle.NPersist.Framework;
+using System.Linq;
 
 namespace Puzzle.NPersist.Linq
 {
     public class LinqQuery<T> 
     {
-        #region Property Context
-        private IContext context;
-        public virtual IContext Context
-        {
-            get
-            {
-                return this.context;
-            }
-            set
-            {
-                this.context = value;
-            }
-        }
-        #endregion
+        public IContext Context { get; set; }
+        public ILoadSpan LoadSpan { get; set; }
 
         string selectClause = "select *";
         public string SelectClause
@@ -60,7 +49,20 @@ namespace Puzzle.NPersist.Linq
 
         public string ToNPath()
         {
-            return SelectClause + " " + FromClause + " " + WhereClause + " " + OrderByClause ;
+            ApplyLoadSpan();
+            return (SelectClause + " " + FromClause + " " + WhereClause + " " + OrderByClause).Trim () ;
+        }
+
+        private void ApplyLoadSpan()
+        {
+            if (LoadSpan.PropertyPaths.Length == 0)
+            {
+                SelectClause = "select *";
+            }
+            else
+            {
+                SelectClause = "select " + LoadSpan.PropertyPaths.Aggregate((left, right) => left + ", " + right);
+            }
         }
 
         #region Property OrderByClause
@@ -85,6 +87,7 @@ namespace Puzzle.NPersist.Linq
             clone.OrderByClause = this.OrderByClause;
             clone.SelectClause = this.SelectClause;
             clone.WhereClause = this.WhereClause;
+            clone.LoadSpan = this.LoadSpan;
 
             return clone;
         }

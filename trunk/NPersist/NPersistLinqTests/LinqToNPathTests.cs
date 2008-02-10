@@ -3,6 +3,9 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Puzzle.NPersist.Framework;
+using NPersistLinqTests.DM;
+using Puzzle.NPersist.Linq;
 
 namespace NPersistLinqTests
 {
@@ -60,7 +63,17 @@ namespace NPersistLinqTests
         [TestMethod]
         public void TestMethod1()
         {
+            Context ctx = null;
 
+            var res = from cust in ctx.Repository(new LoadSpan<Customer> ("Name","Email"))
+                      where cust.Address.StreetName == "Linfrövägen 12"
+                      select cust;
+
+
+            string expected = "select Name, Email from Customer where ((Address.StreetName = \"Linfrövägen 12\"))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual<string>(expected, actual);                                  
         }
     }
 }
