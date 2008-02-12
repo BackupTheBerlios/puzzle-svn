@@ -101,13 +101,13 @@ namespace Puzzle.NAspect.Framework.Aop
         /// Signature aspect ctor.
         /// </summary>
         /// <param name="name">Name of the aspect</param>
-        /// <param name="TargetType">Specific Type to which the aspect should be applied.</param>
-        /// <param name="TargetMethodsignature">Signature of the target methods.</param>
-        /// <param name="Interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
-        public SignatureAspect(string name, Type targetType, string TargetMethodsignature, IInterceptor Interceptor)
+        /// <param name="targetType">Specific Type to which the aspect should be applied.</param>
+        /// <param name="targetMethodsignature">Signature of the target methods.</param>
+        /// <param name="interceptor">Single <c>IInterceptor</c> that should intercept the matched methods.</param>
+        public SignatureAspect(string name, Type targetType, string targetMethodsignature, IInterceptor interceptor)
         {
             Name = name;
-            Pointcuts.Add(new SignaturePointcut(TargetMethodsignature, Interceptor));
+            Pointcuts.Add(new SignaturePointcut(targetMethodsignature, interceptor));
             Targets.Add(new AspectTarget(targetType.FullName, AspectTargetType.Signature));
         }
     }
