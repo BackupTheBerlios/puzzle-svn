@@ -173,6 +173,7 @@
     <Compile Include="Attributes\DomainMapAttribute.cs" />
     <Compile Include="Attributes\PropertyMapAttribute.cs" />
     <Compile Include="Attributes\SourceMapAttribute.cs" />
+    <Compile Include="Base Classes\BindableInterceptableGenericList.cs" />
     <Compile Include="Base Classes\EntityBindingList.cs" />
     <Compile Include="Base Classes\Interceptable.cs">
       <SubType>Code</SubType>

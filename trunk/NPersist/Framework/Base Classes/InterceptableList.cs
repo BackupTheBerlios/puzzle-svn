@@ -199,13 +199,23 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
 		public override object this[int index]
 		{
-			get { return base[index]; }
-			set { 
-				if (!MuteNotify)
-					EnsureWriteConsistency(value);
-				base[index] = value; 
+            get { return IListThisGet(index); }
+			set {
+                IListThisSet(index, value);
 			}
 		}
+
+        protected virtual void IListThisSet(int index, object value)
+        {
+            if (!MuteNotify)
+                EnsureWriteConsistency(value);
+            base[index] = value;
+        }
+
+        protected virtual object IListThisGet(int index)
+        {
+            return base[index];
+        }
 
 		public override void Remove(object obj)
 		{
