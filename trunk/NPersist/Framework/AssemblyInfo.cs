@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyVersion("1.0.10.0")]
 
 [assembly: AssemblyDelaySign(false)]
-//#if !NET2
+#if !NET2
 [assembly: AssemblyKeyFile(@"..\..\..\..\PuzzleKey.snk")]
-//#endif
+#endif

@@ -153,6 +153,7 @@ namespace Puzzle.NAspect.Framework.Aop
         /// Matches a method with the pointuct
         /// </summary>
         /// <param name="method">The method to match</param>
+        /// <param name="type"></param>
         /// <returns>True if the pointcut matched the method, otherwise false</returns>
         public bool IsAttributeMatch(MethodBase method, Type type)
         {

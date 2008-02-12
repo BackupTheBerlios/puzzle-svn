@@ -52,13 +52,18 @@ namespace Puzzle.NAspect.Framework.Aop
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IList Mixins
         {
             get { return mixins; }
             set { mixins = value; }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public IList TypeExtenders
         {
             get { return typeExtenders; }

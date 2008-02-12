@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Puzzle.NAspect.Framework.Aop
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public enum PointcutTargetType
 	{
         Signature = 0,

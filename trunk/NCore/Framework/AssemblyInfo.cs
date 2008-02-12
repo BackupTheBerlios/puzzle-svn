@@ -55,7 +55,7 @@ using System.Runtime.InteropServices;
 //       documentation for more information on this.
 //
 [assembly : AssemblyDelaySign(false)]
-//#if !NET2
+#if !NET2
 [assembly : AssemblyKeyFile(@"..\..\..\..\PuzzleKey.snk")]
-//#endif
+#endif
 [assembly : AssemblyKeyName("")]

@@ -44,6 +44,12 @@ namespace Puzzle.NAspect.Framework
             return ApplicationContext.Configure(fileName);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="useTypePlaceHolders"></param>
+        /// <returns></returns>
         public static IEngine FromFile(string fileName, bool useTypePlaceHolders)
         {
             return ApplicationContext.Configure(fileName, useTypePlaceHolders);

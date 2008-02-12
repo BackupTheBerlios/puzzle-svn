@@ -31,7 +31,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             base.Insert(index, item);
         }
 
-        public virtual T this[int index]
+        public new virtual T this[int index]
         {
             get
             {
@@ -74,7 +74,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         #region IEnumerable<T> Members
 
-        public virtual IEnumerator<T> GetEnumerator()
+        public new virtual IEnumerator<T> GetEnumerator()
         {
             foreach (T item in (IEnumerable)this)
             {
