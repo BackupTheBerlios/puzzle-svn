@@ -86,6 +86,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 			set { interceptor.MuteNotify = value; }
 		}
 
+        public virtual void EnsureLoaded()
+        {
+            bool stackMute = Interceptor.MuteNotify;
+            interceptor.BeforeRead();
+            interceptor.MuteNotify = stackMute;
+        }
+
 		public override int Add(object value)
 		{
 			if (MuteNotify)

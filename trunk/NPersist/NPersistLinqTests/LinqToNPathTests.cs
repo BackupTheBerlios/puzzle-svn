@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Puzzle.NPersist.Framework;
 using NPersistLinqTests.DM;
 using Puzzle.NPersist.Framework.Linq;
+using Puzzle.NPersist.Framework.BaseClasses;
 
 namespace NPersistLinqTests
 {
@@ -218,6 +219,24 @@ namespace NPersistLinqTests
             string actual = res.Query.ToNPath();
 
             Assert.AreEqual<string>(expected, actual);
+        }
+    }
+
+    public static class PersistExtensionMethods
+    {
+        public static void SortList<T>(this InterceptableGenericsList<T> list, string propertyName)
+        {
+            list.EnsureLoaded();
+            bool stackMute = list.Interceptor.MuteNotify;
+            list.Interceptor.MuteNotify = true;
+            try
+            {                
+                list.Sort(new GenericComparer<T>(propertyName));
+            }
+            finally
+            {
+                list.Interceptor.MuteNotify = stackMute;
+            }
         }
     }
 }
