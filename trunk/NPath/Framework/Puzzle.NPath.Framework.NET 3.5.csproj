@@ -10,7 +10,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Puzzle.NPath.Framework.NET2</AssemblyName>
+    <AssemblyName>Puzzle.NPath.Framework.NET3.5</AssemblyName>
     <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>

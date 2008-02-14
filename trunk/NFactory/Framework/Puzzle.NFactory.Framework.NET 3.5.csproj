@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E78AC1F1-E81B-4DB3-92DD-6EAA5739D54B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Puzzle.NFactory.Framework.NET2</AssemblyName>
+    <AssemblyName>Puzzle.NFactory.Framework.NET3.5</AssemblyName>
     <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -28,6 +28,7 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -59,7 +60,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -80,6 +81,9 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -184,20 +188,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj">
-      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
-      <Name>Puzzle.NAspect.Framework.NET 2.0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj">
-      <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
-      <Name>Puzzle.NCore.Framework NET 2.0</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="PuzzleKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 3.5.csproj">
+      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
+      <Name>Puzzle.NAspect.Framework.NET 3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj">
+      <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
+      <Name>Puzzle.NCore.Framework NET 3.5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

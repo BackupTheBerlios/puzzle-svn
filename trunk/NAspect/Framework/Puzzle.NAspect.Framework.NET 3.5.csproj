@@ -10,7 +10,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Puzzle.NAspect.Framework.NET2</AssemblyName>
+    <AssemblyName>Puzzle.NAspect.Framework.NET3.5</AssemblyName>
     <AssemblyOriginatorKeyFile>PuzzleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -61,7 +61,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;NET2</DefineConstants>
-    <DocumentationFile>bin\Release\Puzzle.NAspect.Framework.NET2.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Puzzle.NAspect.Framework.NET3.5.xml</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
