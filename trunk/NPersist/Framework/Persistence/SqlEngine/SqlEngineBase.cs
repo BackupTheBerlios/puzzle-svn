@@ -3672,483 +3672,488 @@ namespace Puzzle.NPersist.Framework.Persistence
 		//when propertyColumnMap are lists, the convention is that:
 		//A) if the referenced class has a type value (and the type value is part of the composite key), it should be the first value in the list
 		//B) the rest if the items should be the rest of the composite 
-		protected virtual void FetchObjectsFromDataReader(IDataReader dr, ref IList colret, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, RefreshBehaviorType refreshBehavior)
-		{
-			IObjectManager om = this.Context.ObjectManager;
-			IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
-			IDomainMap dm = this.Context.DomainMap;
-			IAssemblyManager am = this.Context.AssemblyManager ;
-			IListManager lm = this.Context.ListManager;
-			Hashtable added = new Hashtable() ;
-			Hashtable addedToList = new Hashtable() ;
-			int rowNr = 0;
-			object obj;
-			object refObj;
-			object objColumnIndex;
-			IPropertyMap propertyMap;
-			string strPropertyName;
-			string[] arr;
-			int start;
-			int CurrLevel;
-			int iLevel;
-			int MaxLevel = 0;
-			object value;
-			object orgValue;
-			string identity;
-			string sep = classMap.IdentitySeparator;
-			if (sep == "")
-			{
-				sep = "|";
-			}
-			bool doWrite;
-			bool doWriteOrg;
-			PropertyStatus propStatus;
-			string strTypeValue;
-			object discriminator; //TODO: ensure disc is set
-			IClassMap useClassMap;
-			IClassMap refClassMap;
-			Type useType;
-			IPersistenceManager pm = this.Context.PersistenceManager;
-			Hashtable registerLoaded = new Hashtable() ;
-			Hashtable clearedLists = new Hashtable() ;
-			Hashtable doWriteLists = new Hashtable() ;
-			Hashtable doWriteOrgLists = new Hashtable() ;
-			Hashtable writeCachedUpdates = new Hashtable() ;
-			Hashtable cachedListUpdates = new Hashtable() ;
-			
-			RefreshBehaviorType useRefreshBehavior;
+        protected virtual void FetchObjectsFromDataReader(IDataReader dr, ref IList colret, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, RefreshBehaviorType refreshBehavior)
+        {
+            IObjectManager om = this.Context.ObjectManager;
+            IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+            IDomainMap dm = this.Context.DomainMap;
+            IAssemblyManager am = this.Context.AssemblyManager;
+            IListManager lm = this.Context.ListManager;
+            Hashtable added = new Hashtable();
+            Hashtable addedToList = new Hashtable();
+            int rowNr = 0;
+            object obj;
+            object refObj;
+            object objColumnIndex;
+            IPropertyMap propertyMap;
+            string strPropertyName;
+            string[] arr;
+            int start;
+            int CurrLevel;
+            int iLevel;
+            int MaxLevel = 0;
+            object value;
+            object orgValue;
+            string identity;
+            string sep = classMap.IdentitySeparator;
+            if (sep == "")
+            {
+                sep = "|";
+            }
+            bool doWrite;
+            bool doWriteOrg;
+            PropertyStatus propStatus;
+            string strTypeValue;
+            object discriminator; //TODO: ensure disc is set
+            IClassMap useClassMap;
+            IClassMap refClassMap;
+            Type useType;
+            IPersistenceManager pm = this.Context.PersistenceManager;
+            Hashtable registerLoaded = new Hashtable();
+            Hashtable clearedLists = new Hashtable();
+            Hashtable doWriteLists = new Hashtable();
+            Hashtable doWriteOrgLists = new Hashtable();
+            Hashtable writeCachedUpdates = new Hashtable();
+            Hashtable cachedListUpdates = new Hashtable();
 
-			Hashtable foundIdColumns = new Hashtable() ;
-			
-			//iterate through each column in the datareader,
-			//where each row contains id columns for the new object, eventual loaded properties and also possibly columns for values (icluding ids) of referenced objects
-			//each column in the row should have a property-path associated ith it in propertyColumnMap
-			//(some columns may be referenced by the same property-path)
-			while (dr.Read())
-			{
-				rowNr += 1;
-				useType = type;
-				useClassMap = classMap;
+            RefreshBehaviorType useRefreshBehavior;
 
-				//begin by seeing if a typecolumn has been supplied
-				//if so, get the type value from the datareader and make sure our classMap is of this type
-				foreach (string strColumnName in typeColumns)
-				{
-					strTypeValue = (string) dr[strColumnName];
-					if (!(strTypeValue == classMap.TypeValue))
-					{
-						useClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
-						useType = this.Context.AssemblyManager.MustGetTypeFromClassMap(useClassMap);
-					}
-				}
-				identity = "";
-				object objIdentity = null;
-				int identityCnt = 0;
-				//iterate through the identity properties for our type, get the columnname for each from propertyColumnMap
-				//and get the id values from the datareader, then concatenate the id values to an identity string using the id separator of the type
-				//also add the id columns to the foundIdColumns hashtable
-				//if the id columns are repeated later in the idcolumnlist they can then be ignored
-				foreach (IPropertyMap idPropertyMap in useClassMap.GetIdentityPropertyMaps())
-				{
-					if (propertyColumnMap.ContainsKey(idPropertyMap.Name))
-					{
-						if (propertyColumnMap[idPropertyMap.Name] is string)
-						{
-							objIdentity = dr[(string) propertyColumnMap[idPropertyMap.Name]];
-							identity += Convert.ToString(objIdentity) + sep;
-							foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;							
-							identityCnt++;
-						}
-						else
-						{
-							IList aliases = (IList) propertyColumnMap[idPropertyMap.Name];
-							int index = 0;
+            Hashtable foundIdColumns = new Hashtable();
 
-							IColumnMap typeColMap = useClassMap.GetTypeColumnMap();
-							if (typeColMap != null)
-							{
-								strTypeValue = Convert.ToString(dr[(string) aliases[0]]);
-								if (!(strTypeValue == classMap.TypeValue))
-								{
-									//When npath adds TypeColumn to where clause, uncomment this
-									//useClassMap = classMap.GetSubClassWithTypeValue(strTypeValue);
-									useClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
+            //iterate through each column in the datareader,
+            //where each row contains id columns for the new object, eventual loaded properties and also possibly columns for values (icluding ids) of referenced objects
+            //each column in the row should have a property-path associated ith it in propertyColumnMap
+            //(some columns may be referenced by the same property-path)
+            while (dr.Read())
+            {
+                rowNr += 1;
+                useType = type;
+                useClassMap = classMap;
 
-									//useType = type.Assembly.GetType(useClassMap.Name);
-									useType = this.Context.AssemblyManager.MustGetTypeFromClassMap(useClassMap);
-								}
-								index = 1;
-							}
+                //begin by seeing if a typecolumn has been supplied
+                //if so, get the type value from the datareader and make sure our classMap is of this type
+                foreach (string strColumnName in typeColumns)
+                {
+                    strTypeValue = (string)dr[strColumnName];
+                    if (!(strTypeValue == classMap.TypeValue))
+                    {
+                        useClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
+                        useType = this.Context.AssemblyManager.MustGetTypeFromClassMap(useClassMap);
+                    }
+                }
+                identity = "";
+                object objIdentity = null;
+                int identityCnt = 0;
+                //iterate through the identity properties for our type, get the columnname for each from propertyColumnMap
+                //and get the id values from the datareader, then concatenate the id values to an identity string using the id separator of the type
+                //also add the id columns to the foundIdColumns hashtable
+                //if the id columns are repeated later in the idcolumnlist they can then be ignored
+                foreach (IPropertyMap idPropertyMap in useClassMap.GetIdentityPropertyMaps())
+                {
+                    if (propertyColumnMap.ContainsKey(idPropertyMap.Name))
+                    {
+                        if (propertyColumnMap[idPropertyMap.Name] is string)
+                        {
+                            objIdentity = dr[(string)propertyColumnMap[idPropertyMap.Name]];
+                            identity += Convert.ToString(objIdentity) + sep;
+                            foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;
+                            identityCnt++;
+                        }
+                        else
+                        {
+                            IList aliases = (IList)propertyColumnMap[idPropertyMap.Name];
+                            int index = 0;
 
-							for (int iter = index; iter < aliases.Count ; iter++ )
-							{
-								objIdentity = dr[(string) aliases[iter]];
-								identity += Convert.ToString(objIdentity) + sep;
-								foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;
-								identityCnt++;
-							}
-						}
-					}
-				}
-				//iterate through the id columns and concatenate the id values to an identity string using the id separator of the type
-				//ignore idcolumns that are aready added in the previous loop
-				foreach (string strColumnName in idColumns)
-				{
-					if (!(foundIdColumns.ContainsKey(strColumnName.ToLower(CultureInfo.InvariantCulture))))
-					{
-						objIdentity = dr[strColumnName];
-						identity += Convert.ToString(objIdentity) + sep;
-						identityCnt++;
-					}					
-				}
-				//if the identity string ends with a separator, remove the trailing separator
-				if (identity.Length > sep.Length)
-					identity = identity.Substring(0, identity.Length - sep.Length);
+                            IColumnMap typeColMap = useClassMap.GetTypeColumnMap();
+                            if (typeColMap != null)
+                            {
+                                strTypeValue = Convert.ToString(dr[(string)aliases[0]]);
+                                if (!(strTypeValue == classMap.TypeValue))
+                                {
+                                    //When npath adds TypeColumn to where clause, uncomment this
+                                    //useClassMap = classMap.GetSubClassWithTypeValue(strTypeValue);
+                                    useClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
 
-				//ask the context for the object with our identity and type 
-				//this is the "root" object represented by the row
-				if (identityCnt == 1)
-					obj = this.Context.GetObjectById(objIdentity, useType, true);
-				else
-					obj = this.Context.GetObjectById(identity, useType, true);
+                                    //useType = type.Assembly.GetType(useClassMap.Name);
+                                    useType = this.Context.AssemblyManager.MustGetTypeFromClassMap(useClassMap);
+                                }
+                                index = 1;
+                            }
 
-				//add the object to the result list
-				object test = added[obj];
-				if (test == null)
-				{
-					colret.Add(obj);
-					added[obj] = obj;					
-				}
+                            for (int iter = index; iter < aliases.Count; iter++)
+                            {
+                                objIdentity = dr[(string)aliases[iter]];
+                                identity += Convert.ToString(objIdentity) + sep;
+                                foundIdColumns[idPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;
+                                identityCnt++;
+                            }
+                        }
+                    }
+                }
+                //iterate through the id columns and concatenate the id values to an identity string using the id separator of the type
+                //ignore idcolumns that are aready added in the previous loop
+                foreach (string strColumnName in idColumns)
+                {
+                    if (!(foundIdColumns.ContainsKey(strColumnName.ToLower(CultureInfo.InvariantCulture))))
+                    {
+                        objIdentity = dr[strColumnName];
+                        identity += Convert.ToString(objIdentity) + sep;
+                        identityCnt++;
+                    }
+                }
+                //if the identity string ends with a separator, remove the trailing separator
+                if (identity.Length > sep.Length)
+                    identity = identity.Substring(0, identity.Length - sep.Length);
 
-				if (propertyColumnMap != null)
-				{
-					string typeName = type.ToString();
-					//Find the maximum number of levels traversed in any of the propertypaths
-					foreach (string iPropertyName in propertyColumnMap.Keys)
-					{
-						strPropertyName = iPropertyName;
-						if (strPropertyName.Length > 0)
-						{
-							if (strPropertyName.IndexOf(".") > 0)
-							{
-								arr = strPropertyName.Split('.');
-								iLevel = arr.GetUpperBound(0);
-								if (String.Compare(arr[0], typeName, true, CultureInfo.InvariantCulture) == 0)
-									iLevel -= 1;
-								if (iLevel > MaxLevel)
-									MaxLevel = iLevel;
-							}
-						}
-					}
-					//go through properties level by level, filling properties in each level with values from the datareader
-					//first person.FirstName, person.LastName, person.Project and person.House
-					//then person.Project.Name, person.Project.Date, person.Project.Company,
-					//     person.House.Street, person.House.Color, person.House.City
-					//then person.Project.Company.Name, person.Project.Company.Address..
-					//     person.House.City.Name, person.House.City.Country....
-					//this ensures that when travelling a propertypath all the parts in it will always be loaded
-					for (int Level = 0; Level <= MaxLevel; Level++)
-					{
-						//iterate through all the propertypaths to see which represent properties on the current level
-						foreach (string iPropertyName in propertyColumnMap.Keys)
-						{
-							strPropertyName = iPropertyName;
-							if (strPropertyName.Length > 0)
-							{
-								objColumnIndex = propertyColumnMap[strPropertyName];
-								refObj = obj;
-								//if it is a propertypath, traverse it
-								if (strPropertyName.IndexOf(".") > 0)
-								{
-									CurrLevel = 0;
-									arr = strPropertyName.Split('.');
-									start = 0;
-									//if the propertypath beginis with the classname, skip one level
-									if (arr[0].ToLower(CultureInfo.InvariantCulture) == type.ToString().ToLower(CultureInfo.InvariantCulture))
-										start = 1;
+                //ask the context for the object with our identity and type 
+                //this is the "root" object represented by the row
+                if (identityCnt == 1)
+                    obj = this.Context.GetObjectById(objIdentity, useType, true);
+                else
+                    obj = this.Context.GetObjectById(identity, useType, true);
 
-									//count the number of levels in the path
-									for (int i = start; i <= arr.GetUpperBound(0) - 1; i++)
-										CurrLevel += 1;
+                //add the object to the result list
+                object test = added[obj];
+                if (test == null)
+                {
+                    colret.Add(obj);
+                    added[obj] = obj;
+                }
 
-									//check if the level of the path equals the current level
-									if (CurrLevel == Level)
-									{
-										object prevObj = obj;
-										string path = "";
-										//if so, traverse the propertypath (knowing that all parts in it have been loaded)
-										for (int i = start; i <= arr.GetUpperBound(0) - 1; i++)
-										{
-											//read the next part in the path
-											refObj = om.GetPropertyValue(refObj, arr[i]);
-											if (refObj == null)
-												break;
+                if (propertyColumnMap != null)
+                {
+                    string typeName = type.ToString();
+                    //Find the maximum number of levels traversed in any of the propertypaths
+                    foreach (string iPropertyName in propertyColumnMap.Keys)
+                    {
+                        strPropertyName = iPropertyName;
+                        if (strPropertyName.Length > 0)
+                        {
+                            if (strPropertyName.IndexOf(".") > 0)
+                            {
+                                arr = strPropertyName.Split('.');
+                                iLevel = arr.GetUpperBound(0);
+                                if (String.Compare(arr[0], typeName, true, CultureInfo.InvariantCulture) == 0)
+                                    iLevel -= 1;
+                                if (iLevel > MaxLevel)
+                                    MaxLevel = iLevel;
+                            }
+                        }
+                    }
+                    //go through properties level by level, filling properties in each level with values from the datareader
+                    //first person.FirstName, person.LastName, person.Project and person.House
+                    //then person.Project.Name, person.Project.Date, person.Project.Company,
+                    //     person.House.Street, person.House.Color, person.House.City
+                    //then person.Project.Company.Name, person.Project.Company.Address..
+                    //     person.House.City.Name, person.House.City.Country....
+                    //this ensures that when travelling a propertypath all the parts in it will always be loaded
+                    for (int Level = 0; Level <= MaxLevel; Level++)
+                    {
+                        //iterate through all the propertypaths to see which represent properties on the current level
+                        foreach (string iPropertyName in propertyColumnMap.Keys)
+                        {
+                            strPropertyName = iPropertyName;
+                            if (strPropertyName.Length > 0)
+                            {
+                                objColumnIndex = propertyColumnMap[strPropertyName];
+                                refObj = obj;
+                                //if it is a propertypath, traverse it
+                                if (strPropertyName.IndexOf(".") > 0)
+                                {
+                                    CurrLevel = 0;
+                                    arr = strPropertyName.Split('.');
+                                    start = 0;
+                                    //if the propertypath beginis with the classname, skip one level
+                                    if (arr[0].ToLower(CultureInfo.InvariantCulture) == type.ToString().ToLower(CultureInfo.InvariantCulture))
+                                        start = 1;
 
-											path += arr[i] + ".";
+                                    //count the number of levels in the path
+                                    for (int i = start; i <= arr.GetUpperBound(0) - 1; i++)
+                                        CurrLevel += 1;
 
-											IList listObject = refObj as IList;
-											if (listObject != null)
-											{
-												string refId = "";
-												IClassMap refObjClassMap = dm.MustGetClassMap(prevObj.GetType()).MustGetPropertyMap(arr[i]).MustGetReferencedClassMap() ;
-												Type refType = am.GetTypeFromClassMap(refObjClassMap);
-												foreach (IPropertyMap refIdPropertyMap in refObjClassMap.GetIdentityPropertyMaps() )
-												{
-													string find = path + refIdPropertyMap.Name;
-													if (propertyColumnMap.ContainsKey(find))
-													{
-														if (propertyColumnMap[find] is string)
-														{
-															refId += Convert.ToString(dr[(string) propertyColumnMap[find]]) + sep;
-															//foundIdColumns[refIdPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;							
-														}
-														else
-														{
-															IList aliases = (IList) propertyColumnMap[find];
-															int index = 0;
+                                    //check if the level of the path equals the current level
+                                    if (CurrLevel == Level)
+                                    {
+                                        object prevObj = obj;
+                                        string path = "";
+                                        //if so, traverse the propertypath (knowing that all parts in it have been loaded)
+                                        for (int i = start; i <= arr.GetUpperBound(0) - 1; i++)
+                                        {
+                                            //read the next part in the path
+                                            refObj = om.GetPropertyValue(refObj, arr[i]);
+                                            if (refObj == null)
+                                                break;
 
-															IColumnMap typeColMap = refObjClassMap.GetTypeColumnMap();
-															if (typeColMap != null)
-															{
-																strTypeValue = Convert.ToString(dr[(string) aliases[0]]);
-																if (!(strTypeValue == classMap.TypeValue))
-																{
-																	//When npath adds TypeColumn to where clause, uncomment this
-																	//useClassMap = classMap.GetSubClassWithTypeValue(strTypeValue);
-																	refObjClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
+                                            path += arr[i] + ".";
 
-																	//useType = type.Assembly.GetType(useClassMap.Name);
-																	refType = am.MustGetTypeFromClassMap(useClassMap);
-																}
-																index = 1;
-															}
+                                            IList listObject = refObj as IList;
+                                            if (listObject != null)
+                                            {
+                                                string refId = "";
+                                                IClassMap refObjClassMap = dm.MustGetClassMap(prevObj.GetType()).MustGetPropertyMap(arr[i]).MustGetReferencedClassMap();
+                                                Type refType = am.GetTypeFromClassMap(refObjClassMap);
+                                                foreach (IPropertyMap refIdPropertyMap in refObjClassMap.GetIdentityPropertyMaps())
+                                                {
+                                                    string find = path + refIdPropertyMap.Name;
+                                                    if (propertyColumnMap.ContainsKey(find))
+                                                    {
+                                                        if (propertyColumnMap[find] is string)
+                                                        {
+                                                            refId += Convert.ToString(dr[(string)propertyColumnMap[find]]) + sep;
+                                                            //foundIdColumns[refIdPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;							
+                                                        }
+                                                        else
+                                                        {
+                                                            IList aliases = (IList)propertyColumnMap[find];
+                                                            int index = 0;
 
-															for (int iter = index; iter < aliases.Count ; iter++ )
-															{
-																refId += Convert.ToString(dr[(string) aliases[iter]]) + sep;
-																//foundIdColumns[refIdPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;								
-															}
-														}
-													}
-												}
-												
-												//if the identity string ends with a separator, remove the trailing separator
-												if (refId.Length > sep.Length)
-													refId = refId.Substring(0, refId.Length - sep.Length);
+                                                            IColumnMap typeColMap = refObjClassMap.GetTypeColumnMap();
+                                                            if (typeColMap != null)
+                                                            {
+                                                                strTypeValue = Convert.ToString(dr[(string)aliases[0]]);
+                                                                if (!(strTypeValue == classMap.TypeValue))
+                                                                {
+                                                                    //When npath adds TypeColumn to where clause, uncomment this
+                                                                    //useClassMap = classMap.GetSubClassWithTypeValue(strTypeValue);
+                                                                    refObjClassMap = classMap.GetBaseClassMap().GetSubClassWithTypeValue(strTypeValue);
 
-												refObj = this.Context.GetObjectById(refId, refType, true);
+                                                                    //useType = type.Assembly.GetType(useClassMap.Name);
+                                                                    refType = am.MustGetTypeFromClassMap(useClassMap);
+                                                                }
+                                                                index = 1;
+                                                            }
 
-												//if (registerLoaded[refObj] == null)
-													registerLoaded[refObj] = refObj;
+                                                            for (int iter = index; iter < aliases.Count; iter++)
+                                                            {
+                                                                refId += Convert.ToString(dr[(string)aliases[iter]]) + sep;
+                                                                //foundIdColumns[refIdPropertyMap.Column.ToLower(CultureInfo.InvariantCulture)] = true;								
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
-												string key = path + rowNr.ToString();
-												object testRef = addedToList[key] ;
-												if (testRef == null)
-												{
-													addedToList[key] = refObj;
+                                                //if the identity string ends with a separator, remove the trailing separator
+                                                if (refId.Length >= sep.Length)
+                                                    refId = refId.Substring(0, refId.Length - sep.Length);
 
-													bool stackMute = false;
-													IInterceptableList mList = listObject as IInterceptableList;
-													IList orgList = (IList) om.GetOriginalPropertyValue(prevObj, arr[i]);
+                                                if (refId.Length > 0)
+                                                {
+                                                    refObj = this.Context.GetObjectById(refId, refType, true);
 
-													doWrite = false;
-													doWriteOrg = false;
-													bool writeCachedUpdate = false;
+                                                    //if (registerLoaded[refObj] == null)
+                                                    registerLoaded[refObj] = refObj;
 
-													object testDoWrite = doWriteLists[listObject];
-													if (testDoWrite != null)
-													{
-														doWrite = (bool) testDoWrite;
-														doWriteOrg = (bool) doWriteLists[listObject];
-														writeCachedUpdate = (bool) writeCachedUpdates[listObject];
-													}
-													else
-													{
-														if (mList != null)
-														{
-															object owner = mList.Interceptable;
-															PropertyStatus listStatus = om.GetPropertyStatus(owner, mList.PropertyName);
-															IClassMap ownerMap = dm.MustGetClassMap(owner.GetType());
-															IPropertyMap listMap = ownerMap.MustGetPropertyMap(mList.PropertyName);
+                                                    string key = path + rowNr.ToString();
+                                                    object testRef = addedToList[key];
+                                                    if (testRef == null)
+                                                    {
+                                                        addedToList[key] = refObj;
 
-															useRefreshBehavior = pm.GetRefreshBehavior(refreshBehavior, ownerMap, listMap);
+                                                        bool stackMute = false;
+                                                        IInterceptableList mList = listObject as IInterceptableList;
+                                                        IList orgList = (IList)om.GetOriginalPropertyValue(prevObj, arr[i]);
 
-															if (useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded || useRefreshBehavior == RefreshBehaviorType.DefaultBehavior)
-															{
-																//Overwrite both value and original for all unloaded properties
-																if (listStatus == PropertyStatus.NotLoaded)
-																{
-																	doWrite = true;
-																	doWriteOrg = true;
-																}
-															}
-															else if (useRefreshBehavior == RefreshBehaviorType.OverwriteLoaded)
-															{
-																//Overwrite value and original for all clean or unloaded properties (but not for dirty or deleted properties)
-																if (listStatus == PropertyStatus.Clean || listStatus == PropertyStatus.NotLoaded)
-																{
-																	doWriteOrg = true;
-																	doWrite = true;												
-																}
-															}
-															else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
-															{
-																//Overwrite original for all properties unless the old originial value and the fresh value from the
-																//database mismatch, in that case raise an exception
-																//Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
+                                                        doWrite = false;
+                                                        doWriteOrg = false;
+                                                        bool writeCachedUpdate = false;
 
-																//If property is not loaded there is no room for conflicts
-																if (listStatus == PropertyStatus.NotLoaded)
-																{
-																	doWrite = true;
-																	doWriteOrg = true;
-																}
-																else if (listStatus == PropertyStatus.Deleted)
-																{
-																	doWrite = false;
-																	doWriteOrg = false;
-																}
-																else
-																{
-																	CachedListUpdate cachedListUpdate = (CachedListUpdate) cachedListUpdates[listObject];
-																	if (cachedListUpdate == null)
-																	{
-																		if (orgList == null)
-																		{
-																			//orgList = lm.CreateList(prevObj, arr[i]);
-																			orgList = new ArrayList() ;
-																			om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
-																		}
+                                                        object testDoWrite = doWriteLists[listObject];
+                                                        if (testDoWrite != null)
+                                                        {
+                                                            doWrite = (bool)testDoWrite;
+                                                            doWriteOrg = (bool)doWriteLists[listObject];
+                                                            writeCachedUpdate = (bool)writeCachedUpdates[listObject];
+                                                        }
+                                                        else
+                                                        {
+                                                            if (mList != null)
+                                                            {
+                                                                object owner = mList.Interceptable;
+                                                                PropertyStatus listStatus = om.GetPropertyStatus(owner, mList.PropertyName);
+                                                                IClassMap ownerMap = dm.MustGetClassMap(owner.GetType());
+                                                                IPropertyMap listMap = ownerMap.MustGetPropertyMap(mList.PropertyName);
 
-																		cachedListUpdate = new CachedListUpdate(listObject, orgList, owner, listMap.Name, listStatus, useRefreshBehavior);
-																		cachedListUpdates[listObject] = cachedListUpdate;
-																	}
+                                                                useRefreshBehavior = pm.GetRefreshBehavior(refreshBehavior, ownerMap, listMap);
 
-																	doWrite = false;
-																	doWriteOrg = false;
-																	writeCachedUpdate = true;
+                                                                if (useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded || useRefreshBehavior == RefreshBehaviorType.DefaultBehavior)
+                                                                {
+                                                                    //Overwrite both value and original for all unloaded properties
+                                                                    if (listStatus == PropertyStatus.NotLoaded)
+                                                                    {
+                                                                        doWrite = true;
+                                                                        doWriteOrg = true;
+                                                                    }
+                                                                }
+                                                                else if (useRefreshBehavior == RefreshBehaviorType.OverwriteLoaded)
+                                                                {
+                                                                    //Overwrite value and original for all clean or unloaded properties (but not for dirty or deleted properties)
+                                                                    if (listStatus == PropertyStatus.Clean || listStatus == PropertyStatus.NotLoaded)
+                                                                    {
+                                                                        doWriteOrg = true;
+                                                                        doWrite = true;
+                                                                    }
+                                                                }
+                                                                else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                                                                {
+                                                                    //Overwrite original for all properties unless the old originial value and the fresh value from the
+                                                                    //database mismatch, in that case raise an exception
+                                                                    //Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
 
-																}
-															}
-															else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
-															{
-																//Overwrite original for all properties
-																//Overwrite value for all clean, unloaded or dirty properties (but not for deleted properties)
-																doWriteOrg = true;
-																if (!(listStatus == PropertyStatus.Deleted))
-																	doWrite = true;
-															}
-															else
-															{
-																throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
-															}
+                                                                    //If property is not loaded there is no room for conflicts
+                                                                    if (listStatus == PropertyStatus.NotLoaded)
+                                                                    {
+                                                                        doWrite = true;
+                                                                        doWriteOrg = true;
+                                                                    }
+                                                                    else if (listStatus == PropertyStatus.Deleted)
+                                                                    {
+                                                                        doWrite = false;
+                                                                        doWriteOrg = false;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        CachedListUpdate cachedListUpdate = (CachedListUpdate)cachedListUpdates[listObject];
+                                                                        if (cachedListUpdate == null)
+                                                                        {
+                                                                            if (orgList == null)
+                                                                            {
+                                                                                //orgList = lm.CreateList(prevObj, arr[i]);
+                                                                                orgList = new ArrayList();
+                                                                                om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
+                                                                            }
 
-															doWriteLists[listObject] = doWrite;
-															doWriteOrgLists[listObject] = doWriteOrg;																
-															writeCachedUpdates[listObject] = writeCachedUpdate;																
-														}														
-													}
+                                                                            cachedListUpdate = new CachedListUpdate(listObject, orgList, owner, listMap.Name, listStatus, useRefreshBehavior);
+                                                                            cachedListUpdates[listObject] = cachedListUpdate;
+                                                                        }
 
-													if (writeCachedUpdate)
-													{
-														CachedListUpdate cachedListUpdate = (CachedListUpdate) cachedListUpdates[listObject];
-														cachedListUpdate.FreshList.Add(refObj);														
-													}
-													if (doWrite)
-													{														
-														if (mList != null)
-														{
-															stackMute = mList.MuteNotify;
-															mList.MuteNotify = true;
-														}
+                                                                        doWrite = false;
+                                                                        doWriteOrg = false;
+                                                                        writeCachedUpdate = true;
 
-														object clearedList = clearedLists[listObject];
-														if (clearedList == null)
-														{
-															clearedLists[listObject] = listObject;
-															listObject.Clear();
-														}
+                                                                    }
+                                                                }
+                                                                else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
+                                                                {
+                                                                    //Overwrite original for all properties
+                                                                    //Overwrite value for all clean, unloaded or dirty properties (but not for deleted properties)
+                                                                    doWriteOrg = true;
+                                                                    if (!(listStatus == PropertyStatus.Deleted))
+                                                                        doWrite = true;
+                                                                }
+                                                                else
+                                                                {
+                                                                    throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
+                                                                }
 
-														listObject.Add(refObj);
-														if (mList != null)
-														{
-															mList.MuteNotify = stackMute ;
-														}
-													}
-													if (doWriteOrg)
-													{
-														if (orgList == null)
-														{
-															//orgList = lm.CreateList(prevObj, arr[i]);
-															orgList = new ArrayList();
-															om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
-														}
-														mList = orgList as IInterceptableList;
-														if (mList != null)
-														{
-															stackMute = mList.MuteNotify;
-															mList.MuteNotify = true;
-														}
+                                                                doWriteLists[listObject] = doWrite;
+                                                                doWriteOrgLists[listObject] = doWriteOrg;
+                                                                writeCachedUpdates[listObject] = writeCachedUpdate;
+                                                            }
+                                                        }
 
-														object clearedList = clearedLists[orgList];
-														if (clearedList == null)
-														{
-															clearedLists[orgList] = orgList;
-															orgList.Clear();
-														}
+                                                        if (writeCachedUpdate)
+                                                        {
+                                                            CachedListUpdate cachedListUpdate = (CachedListUpdate)cachedListUpdates[listObject];
+                                                            cachedListUpdate.FreshList.Add(refObj);
+                                                        }
+                                                        if (doWrite)
+                                                        {
+                                                            if (mList != null)
+                                                            {
+                                                                stackMute = mList.MuteNotify;
+                                                                mList.MuteNotify = true;
+                                                            }
 
-														orgList.Add(refObj);
-														if (mList != null)
-														{
-															mList.MuteNotify = stackMute ;
-														}
-													}
-												}
-											}
-											prevObj = refObj;
-										}
-									}
-									//make sure we have arrived at an object to work with for the property, if not break
-									if (refObj == null)
-										break;
-									else
-										strPropertyName = arr[arr.GetUpperBound(0)];										
-								}
-								else
-								{
-									CurrLevel = 0;
-								}
-								//if the proppath is on the current level, put a value in the property from the datareader
-								if (CurrLevel == Level)
-								{
-									if (refObj != null)
-									{
-										//Check if this property is part of a composite key foreign key (ref prop)
-										//If so, add it to the list for this FK
-										//Check if the list is complete
-										//if so, do()
-										discriminator = null;
-										
-										//get the class map for the object holding the property we're working with
-										refClassMap = classMap.DomainMap.MustGetClassMap(refObj.GetType());
+                                                            object clearedList = clearedLists[listObject];
+                                                            if (clearedList == null)
+                                                            {
+                                                                clearedLists[listObject] = listObject;
+                                                                listObject.Clear();
+                                                            }
 
-										//get the property map for the property we're working with
-										propertyMap = refClassMap.GetPropertyMap(strPropertyName);
+                                                            listObject.Add(refObj);
+                                                            if (mList != null)
+                                                            {
+                                                                mList.MuteNotify = stackMute;
+                                                            }
+                                                        }
+                                                        if (doWriteOrg)
+                                                        {
+                                                            if (orgList == null)
+                                                            {
+                                                                //orgList = lm.CreateList(prevObj, arr[i]);
+                                                                orgList = new ArrayList();
+                                                                om.SetOriginalPropertyValue(prevObj, arr[i], orgList);
+                                                            }
+                                                            mList = orgList as IInterceptableList;
+                                                            if (mList != null)
+                                                            {
+                                                                stackMute = mList.MuteNotify;
+                                                                mList.MuteNotify = true;
+                                                            }
 
-										if (propertyMap != null && !(CurrLevel == 0 && propertyMap.IsIdentity))
-										{
-											IList listColumnIndexes = objColumnIndex as IList;
-											if (listColumnIndexes != null )
-											{
+                                                            object clearedList = clearedLists[orgList];
+                                                            if (clearedList == null)
+                                                            {
+                                                                clearedLists[orgList] = orgList;
+                                                                orgList.Clear();
+                                                            }
+
+                                                            orgList.Add(refObj);
+                                                            if (mList != null)
+                                                            {
+                                                                mList.MuteNotify = stackMute;
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+
+                                            }
+                                            prevObj = refObj;
+                                        }
+                                    }
+                                    //make sure we have arrived at an object to work with for the property, if not break
+                                    if (refObj == null)
+                                        break;
+                                    else
+                                        strPropertyName = arr[arr.GetUpperBound(0)];
+                                }
+                                else
+                                {
+                                    CurrLevel = 0;
+                                }
+                                //if the proppath is on the current level, put a value in the property from the datareader
+                                if (CurrLevel == Level)
+                                {
+                                    if (refObj != null)
+                                    {
+                                        //Check if this property is part of a composite key foreign key (ref prop)
+                                        //If so, add it to the list for this FK
+                                        //Check if the list is complete
+                                        //if so, do()
+                                        discriminator = null;
+
+                                        //get the class map for the object holding the property we're working with
+                                        refClassMap = classMap.DomainMap.MustGetClassMap(refObj.GetType());
+
+                                        //get the property map for the property we're working with
+                                        propertyMap = refClassMap.GetPropertyMap(strPropertyName);
+
+                                        if (propertyMap != null && !(CurrLevel == 0 && propertyMap.IsIdentity))
+                                        {
+                                            IList listColumnIndexes = objColumnIndex as IList;
+                                            if (listColumnIndexes != null)
+                                            {
                                                 int startIndex = 0;
-												IPropertyMap inverse = propertyMap.GetInversePropertyMap();
+                                                IPropertyMap inverse = propertyMap.GetInversePropertyMap();
                                                 if (inverse != null)
                                                 {
                                                     //HACK: roger tried to fix this
                                                     //IClassMap otherClassMap = propertyMap.GetReferencedClassMap();
                                                     IClassMap otherClassMap = inverse.ClassMap;//propertyMap.ClassMap;
                                                     IColumnMap typeColumnMap = otherClassMap.GetTypeColumnMap();
-                                                    
+
                                                     if (typeColumnMap != null)
                                                     {
                                                         bool foundTypeCol = false;
@@ -4171,194 +4176,194 @@ namespace Puzzle.NPersist.Framework.Persistence
                                                         }
                                                     }
                                                 }
-												orgValue = new ArrayList();
-												for (int i = startIndex; i < listColumnIndexes.Count; i++)
-												{
-													object itemValue; 
-													if (Util.IsNumeric(Convert.ToString(listColumnIndexes[i])))
-														itemValue = dr[Convert.ToInt32(listColumnIndexes[i])];
-													else
-														itemValue = dr[Convert.ToString(listColumnIndexes[i])];												
-													((IList)orgValue).Add(itemValue);
-												}											
-											}
-											else
-											{
-												//get the unmanaged value from the datareader by column index, name or alias
-												if (Util.IsNumeric(Convert.ToString(objColumnIndex)))
-													orgValue = dr[Convert.ToInt32(objColumnIndex)];
-												else
-													orgValue = dr[Convert.ToString(objColumnIndex)];
-											
-											}
+                                                orgValue = new ArrayList();
+                                                for (int i = startIndex; i < listColumnIndexes.Count; i++)
+                                                {
+                                                    object itemValue;
+                                                    if (Util.IsNumeric(Convert.ToString(listColumnIndexes[i])))
+                                                        itemValue = dr[Convert.ToInt32(listColumnIndexes[i])];
+                                                    else
+                                                        itemValue = dr[Convert.ToString(listColumnIndexes[i])];
+                                                    ((IList)orgValue).Add(itemValue);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //get the unmanaged value from the datareader by column index, name or alias
+                                                if (Util.IsNumeric(Convert.ToString(objColumnIndex)))
+                                                    orgValue = dr[Convert.ToInt32(objColumnIndex)];
+                                                else
+                                                    orgValue = dr[Convert.ToString(objColumnIndex)];
 
-											//Manage the column value and set the managed value in a new variable
-											value = pm.ManageLoadedValue( refObj, propertyMap, orgValue, discriminator);
-											if (!(propertyMap.IsCollection))
-											{
-											doWrite = false;
-											doWriteOrg = false;
-											propStatus = om.GetPropertyStatus(refObj, strPropertyName);
+                                            }
 
-											useRefreshBehavior = pm.GetRefreshBehavior(refreshBehavior, refClassMap, propertyMap);
+                                            //Manage the column value and set the managed value in a new variable
+                                            value = pm.ManageLoadedValue(refObj, propertyMap, orgValue, discriminator);
+                                            if (!(propertyMap.IsCollection))
+                                            {
+                                                doWrite = false;
+                                                doWriteOrg = false;
+                                                propStatus = om.GetPropertyStatus(refObj, strPropertyName);
 
-											if (useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded || useRefreshBehavior == RefreshBehaviorType.DefaultBehavior)
-											{
-												//Overwrite both value and original for all unloaded properties
-												if (propStatus == PropertyStatus.NotLoaded)
-												{
-													doWrite = true;
-													doWriteOrg = true;
-												}
-											}
-											else if (useRefreshBehavior == RefreshBehaviorType.OverwriteLoaded)
-											{
-												//Overwrite value and original for all clean or unloaded properties (but not for dirty or deleted properties)
-												if (propStatus == PropertyStatus.Clean || propStatus == PropertyStatus.NotLoaded)
-												{
-													doWriteOrg = true;
-													doWrite = true;												
-												}
-											}
-                                            else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
-											{
-												//Overwrite original for all properties unless the old originial value and the fresh value from the
-												//database mismatch, in that case raise an exception
-												//Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
-												if (propStatus == PropertyStatus.Clean || propStatus == PropertyStatus.NotLoaded || propStatus == PropertyStatus.Dirty)
-												{
-                                                    bool skip = false;
-													if (!(propStatus == PropertyStatus.NotLoaded))
-													{
-														object testValue = om.GetOriginalPropertyValue(refObj, strPropertyName);
-														object testValue2 = value;
-														if (DBNull.Value.Equals(testValue)) { testValue = null; }
-														if (DBNull.Value.Equals(testValue2)) { testValue2 = null; }
-														if (DBNull.Value.Equals(orgValue)) { testValue2 = null; }
-														if (testValue2 != testValue)
-														{
-															string cachedValue = "null";
-															string freshValue = "null";
-															try
-															{
-																if (testValue != null)
-																	cachedValue = testValue.ToString() ;
-															} 
-															catch { ; }
-															try
-															{
-																if (value != null)
-																	freshValue = value.ToString() ;
-															} 
-															catch { ; }
-                                                            if (!cachedValue.Equals(freshValue))
+                                                useRefreshBehavior = pm.GetRefreshBehavior(refreshBehavior, refClassMap, propertyMap);
+
+                                                if (useRefreshBehavior == RefreshBehaviorType.OverwriteNotLoaded || useRefreshBehavior == RefreshBehaviorType.DefaultBehavior)
+                                                {
+                                                    //Overwrite both value and original for all unloaded properties
+                                                    if (propStatus == PropertyStatus.NotLoaded)
+                                                    {
+                                                        doWrite = true;
+                                                        doWriteOrg = true;
+                                                    }
+                                                }
+                                                else if (useRefreshBehavior == RefreshBehaviorType.OverwriteLoaded)
+                                                {
+                                                    //Overwrite value and original for all clean or unloaded properties (but not for dirty or deleted properties)
+                                                    if (propStatus == PropertyStatus.Clean || propStatus == PropertyStatus.NotLoaded)
+                                                    {
+                                                        doWriteOrg = true;
+                                                        doWrite = true;
+                                                    }
+                                                }
+                                                else if (useRefreshBehavior == RefreshBehaviorType.ThrowConcurrencyException || useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                                                {
+                                                    //Overwrite original for all properties unless the old originial value and the fresh value from the
+                                                    //database mismatch, in that case raise an exception
+                                                    //Overwrite value for all clean or unloaded properties (but not for dirty or deleted properties)
+                                                    if (propStatus == PropertyStatus.Clean || propStatus == PropertyStatus.NotLoaded || propStatus == PropertyStatus.Dirty)
+                                                    {
+                                                        bool skip = false;
+                                                        if (!(propStatus == PropertyStatus.NotLoaded))
+                                                        {
+                                                            object testValue = om.GetOriginalPropertyValue(refObj, strPropertyName);
+                                                            object testValue2 = value;
+                                                            if (DBNull.Value.Equals(testValue)) { testValue = null; }
+                                                            if (DBNull.Value.Equals(testValue2)) { testValue2 = null; }
+                                                            if (DBNull.Value.Equals(orgValue)) { testValue2 = null; }
+                                                            if (testValue2 != testValue)
                                                             {
-                                                                if (useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                                                                string cachedValue = "null";
+                                                                string freshValue = "null";
+                                                                try
                                                                 {
-                                                                    this.Context.UnclonedConflicts.Add(new RefreshConflict(
-                                                                        this.Context,
-                                                                        refObj, 
-                                                                        strPropertyName,
-                                                                        om.GetPropertyValue(refObj, strPropertyName),
-                                                                        testValue,
-                                                                        testValue2));
-                                                                    doWrite = false;
-                                                                    doWriteOrg = false;
-                                                                    skip = true;
+                                                                    if (testValue != null)
+                                                                        cachedValue = testValue.ToString();
                                                                 }
-                                                                else
-                                                                    throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + refObj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + strPropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected). Cashed value: " + cachedValue + ", Fresh value: " + freshValue, cachedValue, freshValue, refObj, strPropertyName); // do not localize
+                                                                catch { ; }
+                                                                try
+                                                                {
+                                                                    if (value != null)
+                                                                        freshValue = value.ToString();
+                                                                }
+                                                                catch { ; }
+                                                                if (!cachedValue.Equals(freshValue))
+                                                                {
+                                                                    if (useRefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                                                                    {
+                                                                        this.Context.UnclonedConflicts.Add(new RefreshConflict(
+                                                                            this.Context,
+                                                                            refObj,
+                                                                            strPropertyName,
+                                                                            om.GetPropertyValue(refObj, strPropertyName),
+                                                                            testValue,
+                                                                            testValue2));
+                                                                        doWrite = false;
+                                                                        doWriteOrg = false;
+                                                                        skip = true;
+                                                                    }
+                                                                    else
+                                                                        throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + refObj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + strPropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected). Cashed value: " + cachedValue + ", Fresh value: " + freshValue, cachedValue, freshValue, refObj, strPropertyName); // do not localize
+                                                                }
                                                             }
-														}
-													}
-                                                    if (!skip)
-    													if (!(propStatus == PropertyStatus.Dirty))
-	    													doWrite = true;
-												}
-											}
-											else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
-											{
-												//Overwrite original for all properties
-												//Overwrite value for all clean, unloaded or dirty properties (but not for deleted properties)
-												doWriteOrg = true;
-												if (!(propStatus == PropertyStatus.Deleted))
-													doWrite = true;
-											}
-											else
-											{
-												throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
-											}
-												if (doWrite || doWriteOrg)
-												{
-													//To keep inverse management correct,
-													//We really should pick out a ref to any
-													//eventual already referenced object here (in the
-													//case of MergeBehaviorType.OverwriteDirty)
-													//and perform proper inverse management on that object...
+                                                        }
+                                                        if (!skip)
+                                                            if (!(propStatus == PropertyStatus.Dirty))
+                                                                doWrite = true;
+                                                    }
+                                                }
+                                                else if (useRefreshBehavior == RefreshBehaviorType.OverwriteDirty)
+                                                {
+                                                    //Overwrite original for all properties
+                                                    //Overwrite value for all clean, unloaded or dirty properties (but not for deleted properties)
+                                                    doWriteOrg = true;
+                                                    if (!(propStatus == PropertyStatus.Deleted))
+                                                        doWrite = true;
+                                                }
+                                                else
+                                                {
+                                                    throw new NPersistException("Unknown object refresh behavior specified!"); // do not localize
+                                                }
+                                                if (doWrite || doWriteOrg)
+                                                {
+                                                    //To keep inverse management correct,
+                                                    //We really should pick out a ref to any
+                                                    //eventual already referenced object here (in the
+                                                    //case of MergeBehaviorType.OverwriteDirty)
+                                                    //and perform proper inverse management on that object...
 
-													if (doWrite)
-													{
-														om.SetPropertyValue(refObj, strPropertyName, value);
-														om.SetNullValueStatus(refObj, strPropertyName, DBNull.Value.Equals(orgValue));
-													}
+                                                    if (doWrite)
+                                                    {
+                                                        om.SetPropertyValue(refObj, strPropertyName, value);
+                                                        om.SetNullValueStatus(refObj, strPropertyName, DBNull.Value.Equals(orgValue));
+                                                    }
 
-													if (doWriteOrg)
-													{
-														if (propertyMap.ReferenceType == ReferenceType.None)
-															om.SetOriginalPropertyValue(refObj, strPropertyName, orgValue);
-														else
-															om.SetOriginalPropertyValue(refObj, strPropertyName, value);												
-													}
+                                                    if (doWriteOrg)
+                                                    {
+                                                        if (propertyMap.ReferenceType == ReferenceType.None)
+                                                            om.SetOriginalPropertyValue(refObj, strPropertyName, orgValue);
+                                                        else
+                                                            om.SetOriginalPropertyValue(refObj, strPropertyName, value);
+                                                    }
 
-													if (propertyMap.ReferenceType != ReferenceType.None )
-													{
-														if (value != null)
-														{
-															registerLoaded[value] = value;
+                                                    if (propertyMap.ReferenceType != ReferenceType.None)
+                                                    {
+                                                        if (value != null)
+                                                        {
+                                                            registerLoaded[value] = value;
 
-															if (doWrite)
-																this.Context.InverseManager.NotifyPropertyLoad(refObj, propertyMap, value);
-														}
-													}
-												}
-											}											
-										}																				
-									}
-								}
-							}
-						}
-					}
-				}
-				//if (registerLoaded[obj] == null)
-					registerLoaded[obj] = obj;
-			}
-			foreach (object register in registerLoaded.Keys)
-			{
-				this.Context.IdentityMap.RegisterLoadedObject(register);				
-			}
+                                                            if (doWrite)
+                                                                this.Context.InverseManager.NotifyPropertyLoad(refObj, propertyMap, value);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //if (registerLoaded[obj] == null)
+                registerLoaded[obj] = obj;
+            }
+            foreach (object register in registerLoaded.Keys)
+            {
+                this.Context.IdentityMap.RegisterLoadedObject(register);
+            }
 
-			foreach (CachedListUpdate cachedListUpdate in cachedListUpdates.Values)
-			{				
-				if (!lm.CompareLists(cachedListUpdate.FreshList, cachedListUpdate.OriginalList))
-				{
-					if (cachedListUpdate.RefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
-					{
-						this.Context.UnclonedConflicts.Add(new RefreshConflict(
-							this.Context,
-							cachedListUpdate.Obj, 
-							cachedListUpdate.PropertyName,
-							cachedListUpdate.CachedList,
-							cachedListUpdate.OriginalList,
-							cachedListUpdate.FreshList));
-					}
-					else
-						throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + cachedListUpdate.Obj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + cachedListUpdate.PropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected).", cachedListUpdate.OriginalList, cachedListUpdate.FreshList, cachedListUpdate.Obj, cachedListUpdate.PropertyName); // do not localize
-					
-				}
-			}
+            foreach (CachedListUpdate cachedListUpdate in cachedListUpdates.Values)
+            {
+                if (!lm.CompareLists(cachedListUpdate.FreshList, cachedListUpdate.OriginalList))
+                {
+                    if (cachedListUpdate.RefreshBehavior == RefreshBehaviorType.LogConcurrencyConflict)
+                    {
+                        this.Context.UnclonedConflicts.Add(new RefreshConflict(
+                            this.Context,
+                            cachedListUpdate.Obj,
+                            cachedListUpdate.PropertyName,
+                            cachedListUpdate.CachedList,
+                            cachedListUpdate.OriginalList,
+                            cachedListUpdate.FreshList));
+                    }
+                    else
+                        throw new RefreshException("A refresh concurrency exception occurred when refreshing a cached object of type " + cachedListUpdate.Obj.GetType().ToString() + " with fresh data from the data source. The data source row has been modified since the last time this version of the object was loaded, specifically the value for property " + cachedListUpdate.PropertyName + ". (this exception occurs because ThrowConcurrencyExceptions refresh behavior was selected).", cachedListUpdate.OriginalList, cachedListUpdate.FreshList, cachedListUpdate.Obj, cachedListUpdate.PropertyName); // do not localize
 
-			this.Context.LoadedInLatestQuery = registerLoaded; 
-		}
+                }
+            }
+
+            this.Context.LoadedInLatestQuery = registerLoaded;
+        }
 
 
 		#endregion

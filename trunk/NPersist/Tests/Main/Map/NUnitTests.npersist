@@ -17,7 +17,7 @@
     <property name="Id" id="true" columns="BookId" type="Long" />
     <property name="Name" columns="Name" type="System.String" />
     <property name="Cover" columns="Cover_CoverId" ref="OneToMany" cascade-create="true" cascade-delete="true" type="Cover" />
-    <property name="BookInfo" table="tblBookInfo" columns="BookInfoId" id-columns="Book_BookId" read-only="true" slave="true" ref="OneToOne" inverse="Book" inherits-inverse="true" cascade-create="true" cascade-delete="true" type="BookInfo" />
+    <property name="BookInfo" nullable="true" table="tblBookInfo" columns="BookInfoId" id-columns="Book_BookId" read-only="true" slave="true" ref="OneToOne" inverse="Book" inherits-inverse="true" cascade-create="true" cascade-delete="true" type="BookInfo" />
   </class>
   <class name="BookInfo" table="tblBookInfo">
     <property name="Id" id="true" columns="BookInfoId" type="Long" />
@@ -161,7 +161,7 @@
     </table>
     <table name="tblBookInfo">
       <column name="BookInfoId" primary="true" type="Int32" prec="10" length="4" scale="0" auto-inc="true" seed="1" inc="1" />
-      <column name="Book_BookId" type="Int32" prec="10" length="4" scale="0" foreign="true" primary-table="tblBook" primary-column="BookId" />
+      <column name="Book_BookId" allow-null="true" type="Int32" prec="10" length="4" scale="0" foreign="true" primary-table="tblBook" primary-column="BookId" />
       <column name="ISBN" type="AnsiString" prec="255" length="255" scale="0" />
     </table>
     <table name="tblClsTblEmployee">

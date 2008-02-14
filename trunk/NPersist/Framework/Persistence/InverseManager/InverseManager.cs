@@ -904,6 +904,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleOneOnePropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, object value)
 		{
+			if (System.DBNull.Value.Equals(value))
+				return;
+
 			if (value == null)
 				return;
 
@@ -940,6 +943,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		protected virtual void HandleOneManyPropertyLoad(object obj, IPropertyMap propertyMap, IPropertyMap invPropertyMap, object value)
 		{
+			if (System.DBNull.Value.Equals(value))
+				return;
+
 			if (value == null)
 				return;
 

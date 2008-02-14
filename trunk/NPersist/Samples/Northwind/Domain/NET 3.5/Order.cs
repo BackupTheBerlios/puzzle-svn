@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
@@ -10,7 +11,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
         private Employee m_Employee;
         private System.Decimal m_Freight;
         private System.DateTime m_OrderDate;
-        private System.Collections.IList m_OrderDetails;
+        private IList<OrderDetail> m_OrderDetails;
         private System.DateTime m_RequiredDate;
         private System.String m_ShipAddress;
         private System.String m_ShipCity;
@@ -99,7 +100,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList OrderDetails
+        public virtual IList<OrderDetail> OrderDetails
         {
             get
             {

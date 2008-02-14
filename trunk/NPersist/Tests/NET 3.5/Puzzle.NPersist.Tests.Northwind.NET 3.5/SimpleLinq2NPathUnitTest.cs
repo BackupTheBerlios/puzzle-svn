@@ -102,6 +102,43 @@ namespace Puzzle.NPersist.Tests.Northwind.NET_3._5
         }
 
         [TestMethod]
+        public void CanSelectWithLoadSpanListFromRepository()
+        {
+            using (IContext context = GetContext())
+            {
+                context.ExecutingSql += new ExecutingSqlEventHandler(Context_ShowExecutingSql);
+
+                var q = from c in context.Repository(new LoadSpan<Customer>("ContactName", "Orders.*")) where c.ContactName != "" select c;
+
+                int i = 0;
+                foreach (Customer c in q)
+                {
+                    Debug.WriteLine(c.ContactName);
+                    i++;
+                }
+                Assert.IsTrue(i > 0);
+            }
+        }
+
+        [TestMethod]
+        public void CanSelectWithLoadSpanListUsingNPath()
+        {
+            using (IContext context = GetContext())
+            {
+                context.ExecutingSql += new ExecutingSqlEventHandler(Context_ShowExecutingSql);
+
+                IList<Customer> customers = context.GetObjectsByNPath<Customer>("Select ContactName, Orders.* From Customer Where ContactName != ''"); 
+                int i = 0;
+                foreach (Customer c in customers)
+                {
+                    Debug.WriteLine(c.ContactName);
+                    i++;
+                }
+                Assert.IsTrue(i > 0);
+            }
+        }
+
+        [TestMethod]
         public void CanSelectWithSubselectFromRepository()
         {
             using (IContext context = GetContext())
@@ -109,6 +146,25 @@ namespace Puzzle.NPersist.Tests.Northwind.NET_3._5
                 context.ExecutingSql += new ExecutingSqlEventHandler(Context_ShowExecutingSql);
 
                 var q = from c in context.Repository<Customer>() where (from o in c.Orders where o.ShipName != "" select o).Count > 0 select c;
+
+                int i = 0;
+                foreach (Customer c in q)
+                {
+                    Debug.WriteLine(c.ContactName);
+                    i++;
+                }
+                Assert.IsTrue(i > 0);
+            }
+        }
+
+        [TestMethod]
+        public void CanSelectWithNestedSubselectFromRepository()
+        {
+            using (IContext context = GetContext())
+            {
+                context.ExecutingSql += new ExecutingSqlEventHandler(Context_ShowExecutingSql);
+
+                var q = from c in context.Repository<Customer>() where (from o in c.Orders where (from d in o.OrderDetails where d.Quantity > 0 select d).Count > 0 select o).Count > 0 select c;
 
                 int i = 0;
                 foreach (Customer c in q)
