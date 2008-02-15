@@ -19,7 +19,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
     public class BindableInterceptableGenericList<T> : InterceptableGenericsList<T>, IBindingList, ICancelAddNew, IRaiseItemChangedEvents
 	{
 
-        public override void RemoveAt(int index)
+        public virtual void RemoveAt(int index)
         {
             T item = base[index];
             base.RemoveAt(index);
@@ -35,37 +35,38 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             this.OnListChanged(ListChangedType.Reset, -1);
         }
 
-        public override int Add(object value)
+        public virtual int Add(object value)
         {
-            int index = base.Add(value);
+            int index = list.Count;
+            list.Add(value);
             this.OnListChanged(ListChangedType.ItemAdded, index);
             return index;
         }
 
-        public override void Insert(int index, object value)
+        public virtual void Insert(int index, object value)
         {
-            base.Insert(index, value);
+            list.Insert(index, value);
             HookPropertyChanged((T)value);
             this.OnListChanged(ListChangedType.ItemAdded, index);
         }
 
-        public override void Remove(object value)
+        public virtual void Remove(object value)
         {
-            int index = base.IndexOf(value);
+            int index = list.IndexOf(value);
 
             //the item does not exist in the list
             if (index == -1)
                 return;
 
-            base.Remove(value);
+            list.Remove(value);
 
             UnhookPropertyChanged((T)value);
             this.OnListChanged(ListChangedType.ItemDeleted, index);
         }
 
-        protected override void IListThisSet(int index, object value)
+        protected virtual void IListThisSet(int index, object value)
         {
-            base.IListThisSet(index, value);
+            list[index] = value;
             HookPropertyChanged((T)value);
             this.OnListChanged(ListChangedType.ItemChanged, index);
         }
@@ -96,7 +97,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public object AddNew()
         {
-            T entity = this.Context.CreateObject<T>();
+            T entity = list.Context.CreateObject<T>();
             this.Add(entity);
             this.addNewPos = (entity != null) ? IndexOf(entity) : -1;
 
@@ -280,7 +281,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             {
                 this.RemoveItem(this.addNewPos);
                 this.addNewPos = -1;
-                this.Context.DeleteObject(entity);
+                list.Context.DeleteObject(entity);
             }
         }
 

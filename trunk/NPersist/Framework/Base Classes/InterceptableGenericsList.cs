@@ -16,30 +16,38 @@ using System.ComponentModel;
 
 namespace Puzzle.NPersist.Framework.BaseClasses
 {
-    public class InterceptableGenericsList<T> : InterceptableList, IList<T>
+    public class InterceptableGenericsList<T> : IList<T>, IList, IInterceptableList 
 	{
+
+        protected InterceptableList list;
+
+        public InterceptableGenericsList()
+        {
+            list = new InterceptableList();
+        }
+
 
         #region IList<T> Members
 
         public virtual int IndexOf(T item)
         {
-            return base.IndexOf(item);
+            return list.IndexOf(item);
         }
 
         public virtual void Insert(int index, T item)
         {
-            base.Insert(index, item);
+            list.Insert(index, item);
         }
 
         public new virtual T this[int index]
         {
             get
             {
-                return (T)base[index];
+                return (T)list[index];
             }
             set
             {
-                base[index] = value;
+                list[index] = value;
             }
         }
 
@@ -49,23 +57,23 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public virtual void Add(T item)
         {
-            base.Add(item);
+            list.Add(item);
         }
 
         public virtual bool Contains(T item)
         {
-            return base.Contains(item);
+            return list.Contains(item);
         }
 
         public virtual void CopyTo(T[] array, int arrayIndex)
         {
-            base.CopyTo(array, arrayIndex);
+            list.CopyTo(array, arrayIndex);
         }
 
         public virtual bool Remove(T item)
         {
             int oldCount = this.Count;
-            base.Remove(item);
+            list.Remove(item);
 
             return (oldCount != this.Count);
         }
@@ -83,5 +91,153 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         }
 
         #endregion
+
+        #region IList Members
+
+        
+
+        public virtual void Clear()
+        {
+            list.Clear();
+        }
+
+
+
+        public bool IsFixedSize
+        {
+            get { return list.IsFixedSize; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return list.IsReadOnly; }
+        }
+
+        
+
+        public virtual void RemoveAt(int index)
+        {
+            list.RemoveAt(index);
+        }
+
+        
+
+        #endregion
+
+        #region ICollection Members
+
+        public void CopyTo(Array array, int index)
+        {
+            list.CopyTo(array, index);
+        }
+
+        public int Count
+        {
+            get { return list.Count; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return list.IsSynchronized; }
+        }
+
+        public object SyncRoot
+        {
+            get { return list.SyncRoot; }
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IInterceptableListState Members
+
+        public IListInterceptor Interceptor
+        {
+            get { return list.Interceptor; }
+        }
+
+        public IInterceptable Interceptable
+        {
+            get
+            {
+                return list.Interceptable;
+            }
+            set
+            {
+                list.Interceptable = value;
+            }
+        }
+
+        public string PropertyName
+        {
+            get
+            {
+                return list.PropertyName;
+            }
+            set
+            {
+                list.PropertyName = value;
+            }
+        }
+
+        public bool MuteNotify
+        {
+            get
+            {
+                return list.MuteNotify;
+            }
+            set
+            {
+                list.MuteNotify = value;
+            }
+        }
+
+        #endregion
+
+
+        int IList.Add(object value)
+        {
+            list.Add(value);
+        }
+
+        bool IList.Contains(object value)
+        {
+            return list.Contains(value);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return list.IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            list.Insert(index, value);
+        }
+
+        void IList.Remove(object value)
+        {
+            list.Remove(value);
+        }
+
+        object IList.this[int index]
+        {
+            get
+            {
+                return list[index];
+            }
+            set
+            {
+                list[index] = value;
+            }
+        }
     }
 }
