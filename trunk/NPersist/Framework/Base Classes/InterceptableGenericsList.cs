@@ -205,7 +205,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         int IList.Add(object value)
         {
-            list.Add(value);
+            return list.Add(value);
         }
 
         bool IList.Contains(object value)
