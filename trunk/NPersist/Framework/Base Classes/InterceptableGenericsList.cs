@@ -268,7 +268,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             list.EnsureLoaded();
             list.Sort(wrapper);
             list.MuteNotify = stackMute;
-        }  
+        }
     }
 
     public class WrapperComparer<T> : IComparer
