@@ -257,7 +257,31 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         protected virtual void IListItemSet(int index, object value)
         {
-            list[index] = value;
+            list[index] = value;                        
         }
+
+        public void Sort(IComparer<T> comparer)
+        {
+            WrapperComparer<T> wrapper = new WrapperComparer<T>(comparer);
+            bool stackMute = list.MuteNotify;
+            list.MuteNotify = true;
+            list.EnsureLoaded();
+            list.Sort(wrapper);
+            list.MuteNotify = stackMute;
+        }  
+    }
+
+    public class WrapperComparer<T> : IComparer
+    {
+        public IComparer<T> GenericComparer { get; set; }
+        public WrapperComparer (IComparer<T> genericComparer)
+        {
+            GenericComparer = genericComparer;
+        }
+
+        public int Compare(object x, object y)
+        {
+            return GenericComparer.Compare ((T)x,(T)y);
+        }        
     }
 }
