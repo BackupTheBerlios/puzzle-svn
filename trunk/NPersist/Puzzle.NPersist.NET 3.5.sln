@@ -22,11 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Puzzle.NPersist.NET 3.54.vsmdi = Puzzle.NPersist.NET 3.54.vsmdi
 		Puzzle.NPersist.NET 3.55.vsmdi = Puzzle.NPersist.NET 3.55.vsmdi
 		Puzzle.NPersist.NET 3.56.vsmdi = Puzzle.NPersist.NET 3.56.vsmdi
+		Puzzle.NPersist.NET 3.57.vsmdi = Puzzle.NPersist.NET 3.57.vsmdi
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Puzzle.NPersist.NET 3.56.vsmdi
+		CategoryFile = Puzzle.NPersist.NET 3.57.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

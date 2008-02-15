@@ -47,7 +47,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             }
             set
             {
-                list[index] = value;
+                IListItemSet(index, value);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         public virtual void Add(T item)
         {
-            list.Add(item);
+            IListAdd(item);
         }
 
         public virtual bool Contains(T item)
@@ -73,7 +73,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         public virtual bool Remove(T item)
         {
             int oldCount = this.Count;
-            list.Remove(item);
+            IListRemove(item);
 
             return (oldCount != this.Count);
         }
@@ -205,6 +205,11 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         int IList.Add(object value)
         {
+            return IListAdd(value);
+        }
+
+        protected virtual int IListAdd(object value)
+        {
             return list.Add(value);
         }
 
@@ -220,10 +225,20 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
         void IList.Insert(int index, object value)
         {
+            IListInsert(index, value);
+        }
+
+        protected virtual void IListInsert(int index, object value)
+        {
             list.Insert(index, value);
         }
 
         void IList.Remove(object value)
+        {
+            IListRemove(value);
+        }
+
+        protected virtual void IListRemove(object value)
         {
             list.Remove(value);
         }
@@ -236,8 +251,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             }
             set
             {
-                list[index] = value;
+                IListItemSet(index, value);
             }
+        }
+
+        protected virtual void IListItemSet(int index, object value)
+        {
+            list[index] = value;
         }
     }
 }

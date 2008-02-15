@@ -19,7 +19,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
     public class BindableInterceptableGenericList<T> : InterceptableGenericsList<T>, IBindingList, ICancelAddNew, IRaiseItemChangedEvents
 	{
 
-        public virtual void RemoveAt(int index)
+        public override void RemoveAt(int index)
         {
             T item = base[index];
             base.RemoveAt(index);
@@ -31,11 +31,10 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         public override void Clear()
         {
             base.Clear();
-
             this.OnListChanged(ListChangedType.Reset, -1);
         }
 
-        public virtual int Add(object value)
+        protected override int IListAdd(object value)
         {
             int index = list.Count;
             list.Add(value);
@@ -43,14 +42,15 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             return index;
         }
 
-        public virtual void Insert(int index, object value)
+
+        protected override void IListInsert(int index, object value)
         {
             list.Insert(index, value);
             HookPropertyChanged((T)value);
             this.OnListChanged(ListChangedType.ItemAdded, index);
         }
 
-        public virtual void Remove(object value)
+        protected override void IListRemove(object value)
         {
             int index = list.IndexOf(value);
 
@@ -64,13 +64,12 @@ namespace Puzzle.NPersist.Framework.BaseClasses
             this.OnListChanged(ListChangedType.ItemDeleted, index);
         }
 
-        protected virtual void IListThisSet(int index, object value)
+        protected override void IListItemSet(int index, object value)
         {
             list[index] = value;
             HookPropertyChanged((T)value);
             this.OnListChanged(ListChangedType.ItemChanged, index);
         }
-
 
         #region IBindingList Members
 
