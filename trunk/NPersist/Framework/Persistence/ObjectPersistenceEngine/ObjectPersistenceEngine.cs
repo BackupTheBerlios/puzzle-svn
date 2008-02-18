@@ -543,6 +543,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			try
 			{
+				sourceOm.EnsurePropertyIsLoaded(source, sourcePropertyMap.Name);
+
 				bool nullValueStatus;
 				object value;
 				if (propertyMap.ReferenceType == ReferenceType.None)

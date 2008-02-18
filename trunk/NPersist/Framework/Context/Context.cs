@@ -1054,12 +1054,12 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior)
 		{
-			return m_PersistenceEngine.GetObjectsBySql(sqlQuery, type, idColumns, typeColumns, propertyColumnMap, parameters, refreshBehavior, new ArrayList() );
+			return GetPersistenceEngine().GetObjectsBySql(sqlQuery, type, idColumns, typeColumns, propertyColumnMap, parameters, refreshBehavior, new ArrayList() );
 		}
 
 		public virtual IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
-			return m_PersistenceEngine.GetObjectsBySql(sqlQuery, type, idColumns, typeColumns, propertyColumnMap, parameters, refreshBehavior, listToFill);
+			return GetPersistenceEngine().GetObjectsBySql(sqlQuery, type, idColumns, typeColumns, propertyColumnMap, parameters, refreshBehavior, listToFill);
 		}
 
 		public IList GetObjects(Type type)
@@ -2839,6 +2839,13 @@ namespace Puzzle.NPersist.Framework
             get { return writeConsistency; }
             set { writeConsistency = value; }
         }
+
+		private IPersistenceEngine GetPersistenceEngine()
+		{
+			if (m_PersistenceEngineManager != null)
+				return m_PersistenceEngineManager;
+			return m_PersistenceEngine;
+		}
 
         #region .NET 2.0 Specific Code
 #if NET2

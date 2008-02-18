@@ -765,7 +765,10 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void EnsurePropertyIsLoaded(object obj, IPropertyMap propertyMap)
 		{
 			IObjectManager om = this.Context.ObjectManager;
-			IPersistenceEngine pe = this.Context.PersistenceEngine ;
+			IPersistenceEngine pe = this.Context.PersistenceEngineManager ;
+			if (pe == null)
+				pe = this.Context.PersistenceEngine ;
+
 			ObjectStatus objStatus;
 			PropertyStatus propStatus;
 			objStatus = om.GetObjectStatus(obj) ;
