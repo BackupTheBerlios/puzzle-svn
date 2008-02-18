@@ -24,6 +24,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         public InterceptableGenericsList()
         {
             list = new InterceptableList();
+            list.Interceptor.List = this;
         }
 
 
