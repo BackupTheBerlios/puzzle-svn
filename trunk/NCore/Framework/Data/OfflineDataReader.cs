@@ -256,7 +256,10 @@ namespace Puzzle.NCore.Framework.Data
 
         public int GetOrdinal(string name)
         {
-            return 0;
+			name = name.ToLower();
+			if (columnLookup.ContainsKey(name))
+				return (int) columnLookup[name];
+			return -1; //schemaTable.Columns.IndexOf(name);
         }
 
         public string GetDataTypeName(int i)
