@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Basic\GetObjectsBySqlTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Basic\IdentityMapTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
