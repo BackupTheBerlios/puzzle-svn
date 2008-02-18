@@ -16,6 +16,7 @@ using Puzzle.NPersist.Framework.Enumerations;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Aop;
+using System.ComponentModel;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -52,15 +53,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 #if NET2
             if (listType.IsGenericType && listType.IsInterface)
             {
-                Type subType = listType.GetGenericArguments ()[0];
                 
+                    Type subType = listType.GetGenericArguments()[0];
+                    Type genericType = null;
 
-                Type genericType = typeof(InterceptableGenericsList<>).MakeGenericType(subType);
-
-                mList = (IInterceptableList) Activator.CreateInstance(genericType);
-				mList.Interceptable = (IInterceptable) obj;
-				mList.PropertyName = propertyName;
-				newList = mList;				
+                    if (obj is IEditableObject)
+                    {
+                        genericType=typeof(BindableInterceptableGenericList<>).MakeGenericType(subType);
+                    }
+                    else
+                    {
+                        genericType=typeof(InterceptableGenericsList<>).MakeGenericType(subType);
+                    }
+                    mList = (IInterceptableList)Activator.CreateInstance(genericType);
+                    mList.Interceptable = (IInterceptable)obj;
+                    mList.PropertyName = propertyName;
+                    newList = mList;                
             }
             else if (listType == typeof(IList))
 #else
