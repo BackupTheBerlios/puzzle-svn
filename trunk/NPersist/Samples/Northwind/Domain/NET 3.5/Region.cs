@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
@@ -7,7 +8,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 
         private System.Int32 m_Id;
         private System.String m_RegionDescription;
-        private System.Collections.IList m_Territories;
+        private IList<Territory> m_Territories;
 
 		
 		public override string ToString()
@@ -40,7 +41,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Territories
+        public virtual IList<Territory> Territories
         {
             get
             {

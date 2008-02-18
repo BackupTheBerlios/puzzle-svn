@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
@@ -7,7 +8,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 
         private System.Int32 m_Id;
         private System.String m_CompanyName;
-        private System.Collections.IList m_Orders;
+        private IList<Order> m_Orders;
         private System.String m_Phone;
 
 		
@@ -36,7 +37,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Orders
+        public virtual IList<Order> Orders
         {
             get
             {

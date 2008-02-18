@@ -1,6 +1,7 @@
 using System;
 using Puzzle.NPersist.Framework.Attributes;
 using Puzzle.NPersist.Framework.Enumerations;
+using System.Collections.Generic;
 
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
@@ -13,20 +14,20 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
         private System.DateTime m_BirthDate;
         private System.String m_City;
         private System.String m_Country;
-        private System.Collections.IList m_Employees;
+        private IList<Employee> m_Employees;
         private System.String m_Extension;
         private System.String m_FirstName;
         private System.DateTime m_HireDate;
         private System.String m_HomePhone;
         private System.String m_LastName;
         private System.String m_Notes;
-        private System.Collections.IList m_Orders;
+        private IList<Order> m_Orders;
         private System.Byte[] m_Photo;
         private System.String m_PhotoPath;
         private System.String m_PostalCode;
         private System.String m_Region;
         private Employee m_ReportsTo;
-        private System.Collections.IList m_Territories;
+        private IList<Territory> m_Territories;
         private System.String m_Title;
         private System.String m_TitleOfCourtesy;
 
@@ -96,10 +97,8 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-//		[PropertyMap(Table="Employees", IdColumns="ReportsTo", IsCollection=true, ItemType="Employee", 
-//			 IsSlave=true, ReferenceType=ReferenceType.ManyToOne, Inverse="ReportsTo", InheritInverseMappings=true)]
 		[PropertyMap(IsCollection=true, ReferenceType=ReferenceType.ManyToOne, ItemType="Employee", Inverse="ReportsTo", InheritInverseMappings=true)]
-		public virtual System.Collections.IList Employees
+		public virtual IList<Employee> Employees
         {
             get
             {
@@ -189,7 +188,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-		public virtual System.Collections.IList Orders
+		public virtual IList<Order> Orders
         {
             get
             {
@@ -265,7 +264,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-		public virtual System.Collections.IList Territories
+		public virtual IList<Territory> Territories
         {
             get
             {

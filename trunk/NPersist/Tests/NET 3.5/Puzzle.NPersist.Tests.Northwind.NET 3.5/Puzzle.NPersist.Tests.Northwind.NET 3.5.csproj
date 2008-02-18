@@ -36,14 +36,17 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Basic\CascadeDeleteTests.cs" />
+    <Compile Include="Basic\CommitRegionTests.cs" />
+    <Compile Include="ContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLinq2NPathUnitTest.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="UnitTest1.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ManualTest1.mht" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AuthoringTests.txt" />

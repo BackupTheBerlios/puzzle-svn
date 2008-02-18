@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
 
@@ -7,7 +8,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
 
         private System.String m_Id;
         private System.String m_CustomerDesc;
-        private System.Collections.IList m_Customers;
+        private IList<Customer> m_Customers;
 
 		
 		public override string ToString()
@@ -40,7 +41,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Customers
+        public virtual IList<Customer> Customers
         {
             get
             {

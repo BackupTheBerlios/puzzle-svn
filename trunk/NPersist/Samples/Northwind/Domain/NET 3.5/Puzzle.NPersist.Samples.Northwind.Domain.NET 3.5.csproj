@@ -171,6 +171,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Puzzle.NPersist.Samples.Northwind.CascadeDeleteDomain.npersist" />
+    <EmbeddedResource Include="Puzzle.NPersist.Samples.Northwind.PureDomain.npersist" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

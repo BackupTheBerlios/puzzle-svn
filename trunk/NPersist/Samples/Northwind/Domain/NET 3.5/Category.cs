@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace Puzzle.NPersist.Samples.Northwind.Domain
 {
     public class Category
@@ -7,7 +8,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
         private System.String m_CategoryName;
         private System.String m_Description;
         private System.Byte[] m_Picture;
-        private System.Collections.IList m_Products;
+        private IList<Product> m_Products;
 
 		public override string ToString()
 		{
@@ -58,7 +59,7 @@ namespace Puzzle.NPersist.Samples.Northwind.Domain
             }
         }
 
-        public virtual System.Collections.IList Products
+        public virtual IList<Product> Products
         {
             get
             {

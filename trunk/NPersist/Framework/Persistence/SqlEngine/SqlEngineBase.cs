@@ -3885,14 +3885,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 									}
 								}
 								else
-									hasColumn =  dr.GetOrdinal((string) objColumnIndex) > 0;
+									hasColumn =  dr.GetOrdinal((string) objColumnIndex) >= 0;
 
-								if (!hasColumn)
-								{
-									//Well..we could throw here, but we could also just play nice...
-									//If NPersist had warnings, this would be the time for one.
-								}
-								else
+								if (hasColumn)
 								{
 									//if it is a propertypath, traverse it
 									if (strPropertyName.IndexOf(".") > 0)
@@ -3973,7 +3968,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 													if (refId.Length >= sep.Length)
 														refId = refId.Substring(0, refId.Length - sep.Length);
 
-													if (refId.Length > 0)
+                                                    if (refId.Length < 1)
+                                                        refObj = null;
+                                                    else
 													{
 														refObj = this.Context.GetObjectById(refId, refType, true);
 
