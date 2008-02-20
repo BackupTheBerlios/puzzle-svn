@@ -22,7 +22,7 @@ namespace Puzzle.NPersist.Framework.Linq
 {
     public partial class LinqToNPathConverter
     {
-        private static string ConvertBinaryExpression(BinaryExpression expression)
+        private string ConvertBinaryExpression(BinaryExpression expression)
         {
             string left = ConvertExpression(expression.Left);
             string right = ConvertExpression(expression.Right);
@@ -71,7 +71,7 @@ namespace Puzzle.NPersist.Framework.Linq
             throw new Exception(string.Format("The method or operation is not implemented. : {0}", expression.NodeType));
         }
 
-        private static string ConvertToInequalityExpression(MethodCallExpression expression)
+        private string ConvertToInequalityExpression(MethodCallExpression expression)
         {
             string left = ConvertExpression(expression.Arguments[0]);
             string right = ConvertExpression(expression.Arguments[1]);
@@ -79,7 +79,7 @@ namespace Puzzle.NPersist.Framework.Linq
             return string.Format("{0} != {1}", left, right);
         }
 
-        private static string ConvertToEqualityExpression(MethodCallExpression expression)
+        private string ConvertToEqualityExpression(MethodCallExpression expression)
         {
             string left = ConvertExpression(expression.Arguments[0]);
             string right = ConvertExpression(expression.Arguments[1]);

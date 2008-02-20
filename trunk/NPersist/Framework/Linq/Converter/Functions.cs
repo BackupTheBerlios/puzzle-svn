@@ -17,19 +17,55 @@ using System.Collections;
 using Puzzle.NPersist.Framework.Linq.Strings;
 using System.Linq.Expressions;
 using System.Globalization;
+using System.Reflection;
 
 namespace Puzzle.NPersist.Framework.Linq
 {
     public partial class LinqToNPathConverter
     {
-        private static string ConvertSoundexExpression(MethodCallExpression expression)
+        private string ConvertAnyExpression(MethodCallExpression expression)
+        {
+            string fromWhere = ConvertExpression(expression.Arguments[0]);
+
+            if (expression.Arguments.Count == 1)
+                return string.Format("(select count(*) from {0}) > 0", fromWhere);
+            else
+            {
+                LambdaExpression lambda = expression.Arguments[1] as LambdaExpression;
+                string anyCond = ConvertExpression(lambda.Body);
+                return string.Format("(select count(*) from {0} and {1}) > 0", fromWhere,anyCond);
+            }
+        }
+
+        private string ConvertAllExpression(MethodCallExpression expression)
+        {
+            string fromWhere = ConvertExpression(expression.Arguments[0]);
+
+            LambdaExpression lambda = expression.Arguments[1] as LambdaExpression;
+            string anyCond = ConvertExpression(lambda.Body);
+            return string.Format("(select count(*) from {0}) = (select count(*) from {0} and {1})", fromWhere, anyCond);
+        }
+
+        private string ConvertContainsExpression(MethodCallExpression expression)
+        {
+            
+            string from = ConvertExpression(expression.Object);
+            string item = ConvertExpression(expression.Arguments[0]);
+            ParameterInfo param = expression.Method.GetParameters().First();
+            string typeName = param.ParameterType.Name;
+
+
+            return string.Format("(select count(*) from {0} where {1} = {2}) > 0", from,typeName,item);
+        }
+
+        private string ConvertSoundexExpression(MethodCallExpression expression)
         {
             string left = ConvertExpression(expression.Arguments[0]);
 
             return string.Format("soundex ({0})", left);
         }
 
-        private static string ConvertLikeExpression(MethodCallExpression expression)
+        private string ConvertLikeExpression(MethodCallExpression expression)
         {
             string left = ConvertExpression(expression.Arguments[0]);
             string right = ConvertExpression(expression.Arguments[1]);

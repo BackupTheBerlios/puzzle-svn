@@ -22,7 +22,7 @@ namespace Puzzle.NPersist.Framework.Linq
 {
     public partial class LinqToNPathConverter
     {
-        private static string ConvertSumExpression(MethodCallExpression expression)
+        private string ConvertSumExpression(MethodCallExpression expression)
         {
 
             LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression;
@@ -31,7 +31,7 @@ namespace Puzzle.NPersist.Framework.Linq
             return string.Format("(select sum({0}) from {1})", sum, from);
         }
 
-        private static string ConvertAvgExpression(MethodCallExpression expression)
+        private string ConvertAvgExpression(MethodCallExpression expression)
         {
 
             LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression;
@@ -40,7 +40,7 @@ namespace Puzzle.NPersist.Framework.Linq
             return string.Format("(select avg({0}) from {1})", sum, from);
         }
 
-        private static string ConvertMinExpression(MethodCallExpression expression)
+        private string ConvertMinExpression(MethodCallExpression expression)
         {
 
             LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression;
@@ -50,7 +50,7 @@ namespace Puzzle.NPersist.Framework.Linq
         }
 
 
-        private static string ConvertMaxExpression(MethodCallExpression expression)
+        private string ConvertMaxExpression(MethodCallExpression expression)
         {
 
             LambdaExpression sumLambda = expression.Arguments[1] as LambdaExpression;

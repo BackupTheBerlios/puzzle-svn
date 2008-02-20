@@ -17,12 +17,13 @@ using System.Collections;
 using Puzzle.NPersist.Framework.Linq.Strings;
 using System.Linq.Expressions;
 using System.Globalization;
+using System.Reflection;
 
 namespace Puzzle.NPersist.Framework.Linq
 {
     public partial class LinqToNPathConverter
     {
-        private static string ConvertConstantExpression(ConstantExpression expression)
+        private string ConvertConstantExpression(ConstantExpression expression)
         {
             //TODO: escape string
             if (expression.Value is string)
@@ -34,20 +35,34 @@ namespace Puzzle.NPersist.Framework.Linq
             if (expression.Value is double)
                 return ConvertDouble(expression);
 
+            if (expression.Value.GetType().IsNested && expression.Value.GetType().IsSealed)
+            {
+                
+                return ConvertEntityRef(expression);
+            }
+
             throw new Exception("The method or operation is not implemented.");
         }
 
-        private static string ConvertDouble(ConstantExpression expression)
+        private string ConvertEntityRef(ConstantExpression expression)
+        {
+            FieldInfo field = expression.Value.GetType().GetFields().First();
+            object value = field.GetValue(expression.Value);
+            this.Parameters.Add(value);
+            return "?";
+        }
+
+        private string ConvertDouble(ConstantExpression expression)
         {
             return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
         }
 
-        private static string ConvertInt(ConstantExpression expression)
+        private string ConvertInt(ConstantExpression expression)
         {
             return string.Format(NumberFormatInfo.InvariantInfo, "{0}", expression.Value);
         }
 
-        private static string ConvertString(ConstantExpression expression)
+        private string ConvertString(ConstantExpression expression)
         {
             return string.Format("\"{0}\"", expression.Value);
         }

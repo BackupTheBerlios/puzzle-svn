@@ -22,18 +22,20 @@ namespace Puzzle.NPersist.Framework.Linq
 {
     public partial class LinqToNPathConverter
     {
-        public static string ConvertToString<T>(Expression<T> expression)
+        public List<object> Parameters = new List<object>();
+
+        public string ConvertToString<T>(Expression<T> expression)
         {
             return ConvertExpression(expression);
         }
 
-        public static string ConvertExpression<T>(Expression<T> expression)
+        public string ConvertExpression<T>(Expression<T> expression)
         {
             return ConvertExpression(expression.Body);
            
         }
 
-        public static string ConvertExpression(Expression expression)
+        public string ConvertExpression(Expression expression)
         {
             if (expression is MethodCallExpression)
             {
@@ -67,7 +69,7 @@ namespace Puzzle.NPersist.Framework.Linq
             throw new Exception("The method or operation is not implemented.");
         }
 
-        private static string ConvertNewExpression(NewExpression expression)
+        private string ConvertNewExpression(NewExpression expression)
         {
             if (expression.Constructor.DeclaringType == typeof(DateTime))
             {
@@ -81,7 +83,7 @@ namespace Puzzle.NPersist.Framework.Linq
             throw new NotImplementedException();
         }
 
-        private static string ConvertUnaryExpression(UnaryExpression expression)
+        private string ConvertUnaryExpression(UnaryExpression expression)
         {
             if (expression.NodeType == ExpressionType.Not)
             {
@@ -103,15 +105,22 @@ namespace Puzzle.NPersist.Framework.Linq
 
 
 
-        private static string ConvertParameterExpression(ParameterExpression expression)
+        private string ConvertParameterExpression(ParameterExpression expression)
         {
-            return "";
+            return expression.Type.Name;
+            //return "";
           //  return expression.Name;
         }
 
-        private static string ConvertMemberExpression(MemberExpression expression)
+        private string ConvertMemberExpression(MemberExpression expression)
         {
             string suffix = expression.Member.Name;
+
+            if (expression.Expression.NodeType == ExpressionType.Constant)
+            {
+                string prefix = ConvertExpression(expression.Expression);
+                return prefix;
+            }
 
             if (expression.Expression is UnaryExpression && suffix == "Count")
             {
@@ -141,7 +150,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
 
 
-        private static string ConvertSubquery(UnaryExpression expression)
+        private string ConvertSubquery(UnaryExpression expression)
         {
             if (expression.Operand is MethodCallExpression && ((MethodCallExpression)expression.Operand).Method.Name == "Where")
             {
@@ -158,8 +167,24 @@ namespace Puzzle.NPersist.Framework.Linq
             throw new Exception("The method or operation is not implemented.");        
         }
 
-        private static string ConvertMethodCallExpression(MethodCallExpression expression)
+        private string ConvertMethodCallExpression(MethodCallExpression expression)
         {
+            if (expression.Method.Name == "Select")
+            {
+                throw new NotSupportedException("Projections in subqueries are not supported");
+            }
+            if (expression.Method.Name == "Any")
+            {
+                return ConvertAnyExpression(expression);
+            }
+            if (expression.Method.Name == "All")
+            {
+                return ConvertAllExpression(expression);
+            }
+            if (expression.Method.Name == "Contains")
+            {
+                return ConvertContainsExpression(expression);
+            }
             if (expression.Method.Name == "Sum")
             {
                 return ConvertSumExpression(expression);
@@ -205,7 +230,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
 
 
-        private static string ConvertSubWhereExpression(MethodCallExpression expression)
+        private string ConvertSubWhereExpression(MethodCallExpression expression)
         {            
             string from = ConvertExpression(expression.Arguments[0]);
             string predicate = ConvertUnaryExpression((UnaryExpression)expression.Arguments[1]);

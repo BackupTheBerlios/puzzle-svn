@@ -25,7 +25,8 @@ namespace Puzzle.NPersist.Framework.Linq
     {
         bool IsLoaded {get;set;}
         bool IsDirty {get;set;}
-        LinqQuery<T> Query {get;}        
+        LinqQuery<T> Query {get;}
+        LinqToNPathConverter Converter { get; set; }
 
         ITable<T> Clone();
     }

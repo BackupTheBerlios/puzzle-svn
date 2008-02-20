@@ -49,7 +49,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            string whereClause = LinqToNPathConverter.ConvertToString(predicate);
+            string whereClause = source.Converter.ConvertToString(predicate);
 
             if (source.Query.WhereClause != "")
             {
@@ -89,7 +89,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause = "order by " + LinqToNPathConverter.ConvertToString(keySelector);
+            source.Query.OrderByClause = "order by " + source.Converter.ConvertToString(keySelector);
             return source;
         }
 
@@ -99,7 +99,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause = "order by " + LinqToNPathConverter.ConvertToString(keySelector) + " desc";
+            source.Query.OrderByClause = "order by " + source.Converter.ConvertToString(keySelector) + " desc";
             return source;
         }
 
@@ -109,7 +109,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause += ", " + LinqToNPathConverter.ConvertToString(keySelector);
+            source.Query.OrderByClause += ", " + source.Converter.ConvertToString(keySelector);
             return source;
         }
 
@@ -119,7 +119,7 @@ namespace Puzzle.NPersist.Framework.Linq
 
             source.IsDirty = true;
 
-            source.Query.OrderByClause += ", " + LinqToNPathConverter.ConvertToString(keySelector) + " desc";
+            source.Query.OrderByClause += ", " + source.Converter.ConvertToString(keySelector) + " desc";
             return source;
         }
 

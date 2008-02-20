@@ -54,6 +54,22 @@ namespace Puzzle.NPersist.Framework.Linq
        }
        #endregion
 
+       #region Property Converter
+       private LinqToNPathConverter converter = new LinqToNPathConverter();
+       public virtual LinqToNPathConverter Converter
+       {
+           get
+           {
+               return this.converter;
+           }
+           set
+           {
+               this.converter = value;
+           }
+       }
+       #endregion
+
+
 
         protected virtual void EnsureLoaded()
         {
@@ -62,6 +78,10 @@ namespace Puzzle.NPersist.Framework.Linq
                 if (!IsLoaded)
                 {
                     NPathQuery npquery = new NPathQuery(query.ToNPath(),typeof(T));
+                    
+                    Converter.Parameters
+                        .ForEach(param => npquery.Parameters.Add(new QueryParameter (param)));
+                    
                     innerList.Clear ();
                     query.Context.GetObjectsByNPath (npquery,innerList);
                 //    IsLoaded = true;
