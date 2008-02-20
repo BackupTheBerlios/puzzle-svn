@@ -71,10 +71,10 @@ namespace NPersistLinqTests
                       where cust.Address.StreetName == "abc123"
                       select cust;
 
-            string expected = "select Name, Email from Customer where ((Address.StreetName = \"abc123\"))";
+            string expected = "select Name, Email from Customer where ((Customer.Address.StreetName = \"abc123\"))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -86,10 +86,10 @@ namespace NPersistLinqTests
                       where cust.Address.StreetName == "abc123"
                       select cust;
 
-            string expected = "select * from Customer where ((Address.StreetName = \"abc123\"))";
+            string expected = "select * from Customer where ((Customer.Address.StreetName = \"abc123\"))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace NPersistLinqTests
             string expected = "select Name, Email, Address.StreetName from Customer";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -115,10 +115,10 @@ namespace NPersistLinqTests
                       orderby cust.Name, cust.Address.StreetName
                       select cust;
 
-            string expected = "select * from Customer order by Name, Address.StreetName";
+            string expected = "select * from Customer order by Customer.Name, Customer.Address.StreetName";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -130,10 +130,10 @@ namespace NPersistLinqTests
                       where cust.Orders.Count == 1
                       select cust;
 
-            string expected = "select * from Customer where ((Orders.Count() = 1))";
+            string expected = "select * from Customer where ((Customer.Orders.Count() = 1))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -147,10 +147,10 @@ namespace NPersistLinqTests
                              select order).Count > 0
                       select cust;
 
-            string expected = "select * from Customer where (((select count(*) from Orders where ((OrderDate = #2008-01-01#) and (Total = 3.1))) > 0))";
+            string expected = "select * from Customer where (((select count(*) from Customer.Orders where ((Order.OrderDate = #2008-01-01#) and (Order.Total = 3.1))) > 0))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -164,10 +164,10 @@ namespace NPersistLinqTests
                              select order).Sum(order => order.Total) > 200
                       select cust;
 
-            string expected = "select * from Customer where (((select sum(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string expected = "select * from Customer where (((select sum(Order.Total) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 200))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -181,10 +181,10 @@ namespace NPersistLinqTests
                              select order).Average(order => order.Total) > 200
                       select cust;
 
-            string expected = "select * from Customer where (((select avg(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string expected = "select * from Customer where (((select avg(Order.Total) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 200))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -198,10 +198,10 @@ namespace NPersistLinqTests
                              select order).Min(order => order.Total) > 200
                       select cust;
 
-            string expected = "select * from Customer where (((select min(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string expected = "select * from Customer where (((select min(Order.Total) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 200))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -215,10 +215,109 @@ namespace NPersistLinqTests
                              select order).Max(order => order.Total) > 200
                       select cust;
 
-            string expected = "select * from Customer where (((select max(Total) from Orders where (OrderDate = #2008-01-01#)) > 200))";
+            string expected = "select * from Customer where (((select max(Order.Total) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 200))";
             string actual = res.Query.ToNPath();
 
-            Assert.AreEqual<string>(expected, actual);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryAnyTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Any ()
+                      select cust;
+
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 0)";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryAny2Test()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (cust.Orders.Where (order => order.OrderDate == new DateTime(2008, 01, 01))).Any ()
+                      select cust;
+
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) > 0)";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryAnyCondTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).Any(order => order.Total == 3)
+                      select cust;
+
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#) and (Order.Total = 3)) > 0)";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryAllCondTest()
+        {
+            Context ctx = null;
+
+            var res = from cust in ctx.Repository<Customer>()
+                      where (from order in cust.Orders
+                             where order.OrderDate == new DateTime(2008, 01, 01)
+                             select order).All(order => order.Total == 3)
+                      select cust;
+
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) = (select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#) and (Order.Total = 3)))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void SubQueryContainsTest()
+        {
+            Context ctx = null;
+
+            Order myOrder = new Order();
+            var res = from cust in ctx.Repository<Customer>()                      
+                      where cust.Orders.Contains (myOrder)
+                      select cust;
+
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where Order = ?) > 0)";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestMethod]
+        public void EntityParameterTest()
+        {
+            Context ctx = null;
+
+            Customer myCustomer = new Customer();
+            var res = from cust in ctx.Repository<Customer>()
+                      where cust != myCustomer
+                      select cust;
+
+            string expected = "select * from Customer where ((Customer != ?))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
         }
     }    
 }
