@@ -131,12 +131,14 @@
     <Compile Include="Aop\AopProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\DatabindingAspect.cs" />
+    <Compile Include="Aop\EntityAspect.cs" />
+    <Compile Include="Aop\Interceptors\DatabindingPropertySetInterceptor.cs" />
     <Compile Include="Aop\Interceptors\NPersistCtorInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Aop\Interceptors\NPersistPropertyInterceptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Aop\Interceptors\PropertyGetInterceptor.cs" />
+    <Compile Include="Aop\Interceptors\PropertySetInterceptor.cs" />
     <Compile Include="Aop\Mixins\CloneHelperMixin.cs" />
     <Compile Include="Aop\Mixins\ContextChildMixin.cs" />
     <Compile Include="Aop\Mixins\EditableObjectMixin.cs" />
@@ -149,18 +151,15 @@
     <Compile Include="Aop\Mixins\PropertyChangedMixin.cs" />
     <Compile Include="Aop\Mixins\UpdatedPropertyTrackerMixin.cs" />
     <Compile Include="Aop\Mixins\ValueHelperMixin.cs" />
-    <Compile Include="Aop\NPersistEntityAspect.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Aop\NPersistProxyMixin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Pointcuts\DatabindingPropertySetPointcut.cs" />
     <Compile Include="Aop\Pointcuts\NPersistEntityCtorPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Aop\Pointcuts\NPersistEntityPropertyPointcut.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Aop\Pointcuts\PropertyGetPointcut.cs" />
+    <Compile Include="Aop\Pointcuts\PropertySetPointcut.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
