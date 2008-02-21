@@ -274,7 +274,13 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 
     public class WrapperComparer<T> : IComparer
     {
-        public IComparer<T> GenericComparer { get; set; }
+        private IComparer<T> genericComparer;
+        public IComparer<T> GenericComparer
+        {
+            get { return genericComparer; }
+            set { genericComparer = value; }
+        }
+    
         public WrapperComparer (IComparer<T> genericComparer)
         {
             GenericComparer = genericComparer;
