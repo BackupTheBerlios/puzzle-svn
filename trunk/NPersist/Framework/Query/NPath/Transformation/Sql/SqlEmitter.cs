@@ -1287,6 +1287,11 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 		{
 			NPathClassName className = (NPathClassName) subQuery.From.Classes[0];
 			string collectionProperty = className.Name;
+
+            if (collectionProperty.StartsWith(RootClassMap.Name + "."))
+                collectionProperty = collectionProperty.Substring(RootClassMap.Name.Length + 1);
+
+
 			IPropertyMap rootPropertyMap = this.RootClassMap.MustGetPropertyMap(collectionProperty);
 
 			if (!rootPropertyMap.IsCollection)
@@ -1573,6 +1578,8 @@ namespace Puzzle.NPersist.Framework.NPath.Sql
 
 		#region Expression Evaluation Helpers
 
+
+        //HACK: fix
 		protected virtual string GetParameterName()
 		{
 			ISourceMap sourceMap = this.rootClassMap.GetSourceMap();
