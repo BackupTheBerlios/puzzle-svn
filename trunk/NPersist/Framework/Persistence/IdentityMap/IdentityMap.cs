@@ -239,6 +239,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
 				{
+                    
+
 					ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
 					//This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
 					if (tx != null)

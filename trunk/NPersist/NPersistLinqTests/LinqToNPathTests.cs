@@ -281,7 +281,7 @@ namespace NPersistLinqTests
                              select order).All(order => order.Total == 3)
                       select cust;
 
-            string expected = "select * from Customer where ((select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#)) = (select count(*) from Customer.Orders where (Order.OrderDate = #2008-01-01#) and (Order.Total = 3)))";
+            string expected = "select * from Customer where ((select count(*) from Customer.Orders where not ((Order.OrderDate = #2008-01-01#) and (Order.Total = 3))) > 0)";
             string actual = res.Query.ToNPath();
 
             Assert.AreEqual(expected, actual);

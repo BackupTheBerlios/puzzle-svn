@@ -25,25 +25,31 @@ namespace Puzzle.NPersist.Framework.Linq
     {
         private string ConvertAnyExpression(MethodCallExpression expression)
         {
-            string fromWhere = ConvertExpression(expression.Arguments[0]);
+            MethodCallExpression callExpression = expression.Arguments[0] as MethodCallExpression;
+            string from = ConvertExpression(callExpression.Arguments[0]);
+            string where = ConvertExpression(callExpression.Arguments[1]);
+            
 
             if (expression.Arguments.Count == 1)
-                return string.Format("(select count(*) from {0}) > 0", fromWhere);
+                return string.Format("(select count(*) from {0} where {1}) > 0", from,where);
             else
             {
                 LambdaExpression lambda = expression.Arguments[1] as LambdaExpression;
                 string anyCond = ConvertExpression(lambda.Body);
-                return string.Format("(select count(*) from {0} and {1}) > 0", fromWhere,anyCond);
+                return string.Format("(select count(*) from {0} where {1} and {2}) > 0", from,where,anyCond);
             }
         }
 
         private string ConvertAllExpression(MethodCallExpression expression)
         {
-            string fromWhere = ConvertExpression(expression.Arguments[0]);
+            MethodCallExpression callExpression = expression.Arguments[0] as MethodCallExpression;
+            string from = ConvertExpression(callExpression.Arguments[0]);
+            string where = ConvertExpression(callExpression.Arguments[1]);
+            
 
             LambdaExpression lambda = expression.Arguments[1] as LambdaExpression;
-            string anyCond = ConvertExpression(lambda.Body);
-            return string.Format("(select count(*) from {0}) = (select count(*) from {0} and {1})", fromWhere, anyCond);
+            string allCond = ConvertExpression(lambda.Body);
+            return string.Format("(select count(*) from {0} where not ({1} and {2})) > 0",from,where,allCond);
         }
 
         private string ConvertContainsExpression(MethodCallExpression expression)
