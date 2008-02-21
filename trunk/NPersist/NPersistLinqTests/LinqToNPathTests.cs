@@ -319,6 +319,22 @@ namespace NPersistLinqTests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void EntityTypeTest()
+        {
+            Context ctx = null;
+
+            
+            var res = from cust in ctx.Repository<Customer>()
+                      where cust is Customer
+                      select cust;
+
+            string expected = "select * from Customer where ((Customer is Customer))";
+            string actual = res.Query.ToNPath();
+
+            Assert.AreEqual(expected, actual);
+        }
     }    
 }
 

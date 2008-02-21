@@ -65,8 +65,19 @@ namespace Puzzle.NPersist.Framework.Linq
             {
                 return ConvertNewExpression((NewExpression)expression);
             }
+            if (expression is TypeBinaryExpression)
+            {
+                return ConvertIsExpression((TypeBinaryExpression)expression);
+            }
             
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        private string ConvertIsExpression(TypeBinaryExpression expression)
+        {
+            string path = ConvertExpression(expression.Expression);
+            string type = expression.TypeOperand.Name;
+            return string.Format("({0} is {1})", path, type);
         }
 
         private string ConvertNewExpression(NewExpression expression)
