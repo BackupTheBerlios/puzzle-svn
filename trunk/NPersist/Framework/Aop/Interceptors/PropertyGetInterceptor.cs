@@ -15,7 +15,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 
 namespace Puzzle.NPersist.Framework.Aop
 {
-	public class PropertyGetInterceptor
+    public class PropertyGetInterceptor : IAroundInterceptor
 	{
         public object HandleCall(MethodInvocation call)
         {
