@@ -239,18 +239,18 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				if (sourceMap.PersistenceType.Equals(PersistenceType.ObjectRelational) || sourceMap.PersistenceType.Equals(PersistenceType.Default))
 				{
+                    IDataSource ds = ctx.GetDataSource(sourceMap);
 
-                    //HACK: fix asap
-                    try
+                    if (ds != null && ds.HasConnection())
                     {
-                        ITransaction tx = ctx.GetTransaction(ctx.GetDataSource(sourceMap).GetConnection());
+                        ITransaction tx = ctx.GetTransaction(ds.GetConnection());
                         //This may throw if ReadConsistency is Pessimistic and a tx guid has already been set...
                         if (tx != null)
                             identityHelper.SetTransactionGuid(tx.Guid);
                         else
                             identityHelper.SetTransactionGuid(Guid.Empty);
                     }
-                    catch
+                    else
                     {
                         identityHelper.SetTransactionGuid(Guid.Empty);
                     }

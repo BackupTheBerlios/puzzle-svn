@@ -22,7 +22,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		ISourceMap SourceMap { get; set; }
 
-		IDbConnection GetConnection();
+        bool HasConnection();
+
+        bool HasOpenConnection();
+        
+        IDbConnection GetConnection();
 
 		void ReturnConnection();
 

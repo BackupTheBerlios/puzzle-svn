@@ -46,6 +46,19 @@ namespace Puzzle.NPersist.Framework.Persistence
 			set { m_SourceMap = value; }
 		}
 
+        public virtual bool HasConnection()
+        {
+            return m_Connection != null;
+        }
+
+        public virtual bool HasOpenConnection()
+        {
+            if (m_Connection == null)
+                return false;
+
+            return m_Connection.State.Equals(ConnectionState.Open);
+        }
+
 		public virtual IDbConnection GetConnection()
 		{
 			InitConnection();

@@ -144,7 +144,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\NPersistEntityAspect.cs"
+                    RelPath = "Aop\EntityAspect.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -159,7 +159,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\Interceptors\NPersistPropertyInterceptor.cs"
+                    RelPath = "Aop\Interceptors\PropertyGetInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Interceptors\PropertySetInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -219,7 +224,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\Pointcuts\NPersistEntityPropertyPointcut.cs"
+                    RelPath = "Aop\Pointcuts\PropertyGetPointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Pointcuts\PropertySetPointcut.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

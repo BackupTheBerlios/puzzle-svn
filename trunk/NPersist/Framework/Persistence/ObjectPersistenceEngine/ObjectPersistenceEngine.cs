@@ -723,8 +723,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 					if (!found)
 					{
 						Type sourceType = ToSourceType(itemObj);
-						object itemOrgObj = this.sourceContext.GetObjectById(itemObjId, sourceType, true);
-						objectsToAdd.Add(itemOrgObj);
+                        object itemOrgObj = null;
+                        //if (creating)
+    					//	itemOrgObj = this.sourceContext.CreateObject(sourceType);
+                        //else
+    						itemOrgObj = this.sourceContext.GetObjectById(itemObjId, sourceType, true);
+
+                        if (itemOrgObj != null)
+    						objectsToAdd.Add(itemOrgObj);
 					}
 				}
 	
