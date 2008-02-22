@@ -51,7 +51,7 @@
     <Content Include="AuthoringTests.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Framework\Puzzle.NPersist.Framework.NET 3.5.csproj">
+    <ProjectReference Include="..\..\..\Framework\Puzzle.NPersist.Framework.NET 3.5.csproj">
       <Project>{E6C03D2A-D150-4473-9439-D300746A1390}</Project>
       <Name>Puzzle.NPersist.Framework.NET 3.5</Name>
     </ProjectReference>
