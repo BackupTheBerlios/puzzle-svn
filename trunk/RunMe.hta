@@ -1,6 +1,7 @@
 <head>
-<title>PuzzleFramework</title>
-<script language="VBScript"> 
+    <title>PuzzleFramework</title>
+
+    <script language="VBScript"> 
 
     Sub Run(path)
         path = """" + path + """"
@@ -8,173 +9,169 @@
         objShell.Run ([path])
     End Sub
 
-</script> 
+    </script>
 
-<style>
-body
-{
-	font-family: Tahoma;
-	font-size:14px;
-	color:Black;
-	background-color:White;
-}    
-a
-{
-	text-decoration:none;
-	color: #0000f0;
-	cursor:hand;
-}
-a:hover
-{
-	text-decoration:underline;
-}
-a:visited
-{
-	text-decoration:none;
-}
-td 
-{
-	border:dotted 1px #a0a0a0;
-	vertical-align: top;
-	font-size:14px;
-	width:300px;
-}
-table
-{
-	border:dotted 1px #a0a0a0;
-}
-.info
-{
-	background-color:#fffff0;
-	font-size:14px;
-}
-</style>
+    <style>
+        body
+        {
+            font-family: Tahoma;
+            font-size: 14px;
+            color: Black;
+            background-color: White;
+        }
+        a
+        {
+            text-decoration: none;
+            color: #0000f0;
+            cursor: hand;
+        }
+        a:hover
+        {
+            text-decoration: underline;
+        }
+        a:visited
+        {
+            text-decoration: none;
+        }
+        td
+        {
+            border: dotted 1px #a0a0a0;
+            vertical-align: top;
+            font-size: 14px;
+            width: 300px;
+        }
+        table
+        {
+            border: dotted 1px #a0a0a0;
+        }
+        .info
+        {
+            background-color: #fffff0;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-<div> <center>
-
-<h1>Puzzle Framework</h1>
-
-<table width="900" cellpadding="15">
-<tr>
-    <td>
-    <h2>
-    NPersist
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("NPersist/Puzzle.NPersist.sln")' >Open VS.NET 2003 Solution</a><br />
-    <a onclick='Run("NPersist/Puzzle.NPersist.NET 2.0.sln")'>Open VS.NET 2005 Solution</a><br />
-    <a onclick='Run("NPersist/Puzzle.NPersist.NET 3.5.sln")' >Open VS.NET 2008 Solution</a><br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    <a onclick='Run("NPersist/Documentation/Inside NPersist.doc")'>Inside NPersist</a></p>
-    </td>
-    <td>
-    <h2>
-    NAspect
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("NAspect/Puzzle.NAspect.Framework.sln")' >Open VS.NET 2003 Solution</a><br />
-    <a onclick='Run("NAspect/Puzzle.NAspect.Framework.NET 2.0.sln")' >Open VS.NET 2005 Solution</a><br />
-    <a onclick='Run("NAspect/Puzzle.NAspect.Framework.NET 3.5.sln")' >Open VS.NET 2008 Solution</a><br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    </p>   
-    </td>
-    <td>
-    <h2>
-    NFactory
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("NFactory/Puzzle.NFactory.Framework.sln")' >Open VS.NET 2003 Solution</a><br />
-    <a onclick='Run("NFactory/Puzzle.NFactory.Framework.NET 2.0.sln")' >Open VS.NET 2005 Solution</a><br />
-    <a onclick='Run("NFactory/Puzzle.NFactory.Framework.NET 3.5.sln")' >Open VS.NET 2008 Solution</a><br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    </p>   
-    </td>
-</tr>
-<tr>
-<td class="info">
-  O/R Mapper Framework
-</td>
-<td class="info">
-  Proxy AOP Framework
-</td>
-<td class="info">
-  Dependency Injection Framework
-</td>
-</tr>
-<tr>
-    <td>
-    <h2>
-    NPath
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("NPath/Puzzle.NPath.Framework.sln")' >Open VS.NET 2003 Solution</a><br />
-    <a onclick='Run("NPath/Puzzle.NPath.Framework.NET 2.0.sln")' >Open VS.NET 2005 Solution</a><br />
-    <a onclick='Run("NPath/Puzzle.NPath.Framework.NET 3.5.sln")' >Open VS.NET 2008 Solution</a><br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    </p> 
-    </td>
-    <td>
-    <h2>
-    SyntaxBox
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("Windows/Forms/Controls/Syntaxbox/Syntaxbox.sln")' >Open VS.NET 2003 Solution</a><br />
-    <a onclick='Run("Windows/Forms/Controls/Syntaxbox/Syntaxbox.NET 2.0.sln")' >Open VS.NET 2005 Solution</a><br />
-    &nbsp;<br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    </p> 
-    </td>
-    <td>
-    <h2>
-    ObjectMapper
-</h2>
-<p>
-    <b>Solutions:</b><br />
-    <a onclick='Run("ObjectMapper/Puzzle.ObjectMapper.sln")' >Open VS.NET 2005 Solution</a><br />
-    &nbsp;<br />
-    &nbsp;<br />
-</p>
-<p>
-    <b>Documentation:</b><br />
-    </p> 
-    </td>
-</tr>
-<tr>
-<td class="info">
-  Object Query Language
-</td>
-<td class="info">
-  SyntaxHighlight Windows Forms Control
-</td>
-<td class="info">
-  Mapping tool for NPersist and NHibernate
-</td>
-</tr>
-</table>
-</center>
-</div>
+    <div>
+        <center>
+            <h1>
+                Puzzle Framework</h1>
+            <table width="900" cellpadding="15">
+                <tr>
+                    <td>
+                        <h2>
+                            NPersist
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("NPersist/Puzzle.NPersist.sln")'>Open VS.NET 2003 Solution</a><br />
+                            <a onclick='Run("NPersist/Puzzle.NPersist.NET 2.0.sln")'>Open VS.NET 2005 Solution</a><br />
+                            <a onclick='Run("NPersist/Puzzle.NPersist.NET 3.5.sln")'>Open VS.NET 2008 Solution</a><br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                            <a onclick='Run("NPersist/Documentation/Inside NPersist.doc")'>Inside NPersist</a></p>
+                    </td>
+                    <td>
+                        <h2>
+                            NAspect
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("NAspect/Puzzle.NAspect.Framework.sln")'>Open VS.NET 2003 Solution</a><br />
+                            <a onclick='Run("NAspect/Puzzle.NAspect.Framework.NET 2.0.sln")'>Open VS.NET 2005 Solution</a><br />
+                            <a onclick='Run("NAspect/Puzzle.NAspect.Framework.NET 3.5.sln")'>Open VS.NET 2008 Solution</a><br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                        </p>
+                    </td>
+                    <td>
+                        <h2>
+                            NFactory
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("NFactory/Puzzle.NFactory.Framework.sln")'>Open VS.NET 2003 Solution</a><br />
+                            <a onclick='Run("NFactory/Puzzle.NFactory.Framework.NET 2.0.sln")'>Open VS.NET 2005
+                                Solution</a><br />
+                            <a onclick='Run("NFactory/Puzzle.NFactory.Framework.NET 3.5.sln")'>Open VS.NET 2008
+                                Solution</a><br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info">
+                        O/R Mapper Framework
+                    </td>
+                    <td class="info">
+                        Proxy AOP Framework
+                    </td>
+                    <td class="info">
+                        Dependency Injection Framework
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>
+                            NPath
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("NPath/Puzzle.NPath.Framework.sln")'>Open VS.NET 2003 Solution</a><br />
+                            <a onclick='Run("NPath/Puzzle.NPath.Framework.NET 2.0.sln")'>Open VS.NET 2005 Solution</a><br />
+                            <a onclick='Run("NPath/Puzzle.NPath.Framework.NET 3.5.sln")'>Open VS.NET 2008 Solution</a><br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                        </p>
+                    </td>
+                    <td>
+                        <h2>
+                            SyntaxBox
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("Windows/Forms/Controls/Syntaxbox/Syntaxbox.sln")'>Open VS.NET 2003
+                                Solution</a><br />
+                            <a onclick='Run("Windows/Forms/Controls/Syntaxbox/Syntaxbox.NET 2.0.sln")'>Open VS.NET
+                                2005 Solution</a><br />
+                            &nbsp;<br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                        </p>
+                    </td>
+                    <td>
+                        <h2>
+                            ObjectMapper
+                        </h2>
+                        <p>
+                            <b>Solutions:</b><br />
+                            <a onclick='Run("ObjectMapper/Puzzle.ObjectMapper.sln")'>Open VS.NET 2005 Solution</a><br />
+                            &nbsp;<br />
+                            &nbsp;<br />
+                        </p>
+                        <p>
+                            <b>Documentation:</b><br />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info">
+                        Object Query Language
+                    </td>
+                    <td class="info">
+                        SyntaxHighlight Windows Forms Control
+                    </td>
+                    <td class="info">
+                        Mapping tool for NPersist and NHibernate
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </div>
 </body>
-
-    
- 
-
-
-    
-
-    
