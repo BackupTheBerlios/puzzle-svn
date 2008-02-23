@@ -426,6 +426,10 @@ namespace Puzzle.NPersist.Framework.Mapping
             {
                 strategyName = name.ToUpper(CultureInfo.InvariantCulture);
             }
+            else if (dm.FieldNameStrategy == FieldNameStrategyType.AutoProperty)
+            {
+                strategyName = string.Format("<{0}>k__BackingField", name);
+            }
             if (pre.Length > 0)
 			{
 				fn = pre + strategyName;
