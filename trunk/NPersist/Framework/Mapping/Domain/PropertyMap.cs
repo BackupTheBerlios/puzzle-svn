@@ -426,7 +426,7 @@ namespace Puzzle.NPersist.Framework.Mapping
             {
                 strategyName = name.ToUpper(CultureInfo.InvariantCulture);
             }
-            else if (dm.FieldNameStrategy == FieldNameStrategyType.AutoProperty)
+            else if (dm.FieldNameStrategy == FieldNameStrategyType.CSAutoProperty)
             {
                 strategyName = string.Format("<{0}>k__BackingField", name);
             }
