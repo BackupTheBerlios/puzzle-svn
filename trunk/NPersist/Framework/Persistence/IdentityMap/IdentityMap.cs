@@ -18,6 +18,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Aop;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NPersist.Framework.Utility;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NCore.Framework.Collections;
 using System.Reflection;
@@ -572,9 +573,27 @@ namespace Puzzle.NPersist.Framework.Persistence
             if (idProperties.Count > 1)
                 return GetKeyParts(type, identity, classMap, idProperties);
 
+			IPropertyMap idPropertyMap = (IPropertyMap) idProperties[0];
             object[] keyParts = new object[2];
             keyParts[0] = type;
-            keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
+			bool found = false;
+			if (idPropertyMap.GetIsAssignedBySource())
+			{
+				IColumnMap columnMap = idPropertyMap.GetColumnMap();
+				if (columnMap != null)
+				{
+					if (columnMap.IsAutoIncrease)
+					{
+						if (Util.IsNumeric(identity))
+							keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
+						else
+							keyParts[1] = identity;
+						found = true;
+					}
+				}
+			}
+			if (!found)
+	            keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
             return keyParts;
         }
 

@@ -23,9 +23,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			{
 				Employee employee = (Employee) context.CreateObject(typeof(Employee));
 				
-				IContext ctx = ((IContextChild) employee).Context;
+				string id = context.ObjectManager.GetObjectIdentity(employee);
+				Employee employee2 = (Employee) context.GetObjectById(id, typeof(Employee));
 
-				Assert.IsNotNull(ctx);
+				Assert.IsNotNull(employee2);
+
 			}
 
 		}
