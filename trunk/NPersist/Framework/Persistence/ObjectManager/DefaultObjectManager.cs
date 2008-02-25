@@ -187,6 +187,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return (string)m_hashTempIds[obj];
 		}
 
+        private string GetTempId(object obj, string identity)
+        {
+            if (!(m_hashTempIds.ContainsKey(obj)))
+            {
+                m_hashTempIds[obj] = identity;
+            }
+            return (string)m_hashTempIds[obj];
+        }
 
 		public virtual IList GetObjectIdentityKeyParts(object obj)
 		{
@@ -270,7 +278,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				long i = 0;
 				Type refType;
 				object refObj;
-				object val;
 				foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps())
 				{
 					if (propertyMap.ReferenceType != ReferenceType.None)
@@ -284,7 +291,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					else
 					{
-						val = ConvertValueToType(obj, propertyMap, arrId[i]);
+                        if (propertyMap.GetIsAssignedBySource())
+                        {
+                            IColumnMap columnMap = propertyMap.GetColumnMap();
+                            if (columnMap != null)
+                            {
+                                if (columnMap.IsAutoIncrease)
+                                {
+                                    if (!Util.IsNumeric(identity))
+                                    {
+                                        identity = GetTempId(obj, identity);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        object val = ConvertValueToType(obj, propertyMap, arrId[i]);
 						SetPropertyValue(obj, propertyMap.Name, val);
 						SetOriginalPropertyValue(obj, propertyMap.Name, val);
 						SetNullValueStatus(obj, propertyMap.Name, false);

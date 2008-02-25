@@ -93,6 +93,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 					DoUpdateObject(obj);
 				}
 
+                foreach (object obj in listRemove)
+                {
+                    DoSaveRemovedObject(obj);
+                }
+
 				foreach (object obj in listRemove)
 				{
 					DoRemoveObject(obj);
@@ -230,15 +235,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 				IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 				Type sourceType = ToSourceType(GetSourceType(obj));
 				object sourceObject = null;
-				if (classMap.HasIdAssignedBySource())
-				{
-					sourceObject = sourceContext.CreateObject(sourceType);
-				} 
-				else
-				{
+				//if (classMap.HasIdAssignedBySource())
+				//{
+				//	sourceObject = sourceContext.CreateObject(sourceType);
+				//} 
+				//else
+				//{
 					string identity = this.Context.ObjectManager.GetObjectIdentity(obj);			
 					sourceObject = sourceContext.CreateObject(identity, sourceType);
-				}
+				//}
 				hashInserted[obj] = sourceObject;
 
 				//SaveObject(obj, sourceObject, true);
@@ -275,7 +280,27 @@ namespace Puzzle.NPersist.Framework.Persistence
 			listRemove.Add(obj);
 		}
 
-		public virtual void DoRemoveObject(object obj)
+        public virtual void DoRemoveObject(object obj)
+        {
+            if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
+                throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
+
+            try
+            {
+                string identity = this.Context.ObjectManager.GetObjectIdentity(obj);
+                Type sourceType = ToSourceType(GetSourceType(obj));
+
+                object sourceObject = sourceContext.GetObjectById(identity, sourceType, true);
+
+                this.sourceContext.DeleteObject(sourceObject);
+            }
+            finally
+            {
+                Monitor.Exit(sourceContext);
+            }	
+        }
+
+		public virtual void DoSaveRemovedObject(object obj)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
 				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
@@ -288,8 +313,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				object sourceObject = sourceContext.GetObjectById(identity, sourceType, true);
 
 				SaveObject(obj, sourceObject);
-
-				this.sourceContext.DeleteObject(sourceObject);
 			}
 			finally
 			{
@@ -927,7 +950,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 										om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
 									}
 
-									IList sourceList = (IList) om.GetPropertyValue(obj, propertyMap.Name);
+									IList sourceList = (IList) sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
 
 									if (!creating)
 									{
@@ -943,14 +966,14 @@ namespace Puzzle.NPersist.Framework.Persistence
 							
 									SaveList(list, sourceList);
 
-									IList sourceListOrg = (IList) om.GetOriginalPropertyValue(obj, propertyMap.Name);
+									IList sourceListOrg = (IList) sourceOm.GetOriginalPropertyValue(source, sourcePropertyMap.Name);
 
 									//OBS! sourceListOrg may be null if the object is under creation!
 									if (sourceListOrg == null)
 									{				
 										//sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
 										sourceListOrg = new ArrayList() ;
-										om.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
+										sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
 									}
 
 									SaveList(listOrg, sourceListOrg);
@@ -961,141 +984,158 @@ namespace Puzzle.NPersist.Framework.Persistence
 							}									
 							else
 							{
-								if (!(propertyMap.IsCollection))
-								{
-									object refObject = om.GetPropertyValue(obj, propertyMap.Name);
+                                if (!(propertyMap.IsSlave && propertyMap.NoInverseManagement == false))
+                                {
+                                    if (!(propertyMap.IsCollection))
+                                    {
+                                        object refObject = om.GetPropertyValue(obj, propertyMap.Name);
+                                        object orgValue = om.GetOriginalPropertyValue(obj, propertyMap.Name);
+                                        object sourceOrgRef = null;
+                                        if (!(orgValue == null || DBNull.Value.Equals(orgValue)))
+                                        {
+                                            string orgIdentity = om.GetObjectIdentity(orgValue);
+                                            Type orgRefType = ToSourceType(orgValue);
+                                            sourceOrgRef = sourceContext.GetObjectById(orgIdentity, orgRefType, true);
+                                        }
 
-									if (refObject == null)
-									{
-										sourceOm.SetPropertyValue(source, sourcePropertyMap.Name, null);
-										//sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, null);
+                                        if (refObject == null)
+                                        {
+                                            if (!creating)
+                                            {
+                                                //TODO: optimistic concurrency
+                                            }
 
-										sourceOm.SetNullValueStatus(source, sourcePropertyMap.Name, true);								
-									}
-									else
-									{
-										string identity = om.GetObjectIdentity(refObject);
+                                            sourceOm.SetPropertyValue(source, sourcePropertyMap.Name, null);
+                                            sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceOrgRef);
 
-										Type refType = ToSourceType(refObject);
+                                            sourceOm.SetNullValueStatus(source, sourcePropertyMap.Name, true);
 
-										//Impossible to solve for inheritance scenarios when mapping presentation model to domain model!!!!
-										//We could try checking which presentation domain map which class map that maps to the 
-										//domain class map, but that could be a many-one relationship (many presentation model classes
-										//map to the same domain model class!)
-										//								IClassMap sourceOrgClassMap = this.sourceContext.DomainMap.GetClassMap(orgObject.GetType() );
-										//								IClassMap leafOrgClassMap = this.sourceContext.DomainMap.GetClassMap(sourceOrgClassMap.Name );
-										//								IClassMap theClassMap = this.sourceContext.DomainMap.GetClassMap (sourceOrgClassMap.Name );																
+                                            sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, sourceOm.GetNullValueStatus(source, sourcePropertyMap.Name));
+                                        }
+                                        else
+                                        {
+                                            string identity = om.GetObjectIdentity(refObject);
 
-										object orgValue = om.GetOriginalPropertyValue(obj, propertyMap.Name);
+                                            Type refType = ToSourceType(refObject);
 
-										if (!creating)
-										{
-											//Optimistic concurrency
-											object currValue = sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
-											if (orgValue == null || currValue == null)
-											{
-												if (!(orgValue == null && currValue == null))
-												{
-													string orgValueString = "<null>";											
-													string currValueString = "<null>";											
-													if (orgValue != null)
-														orgValueString = orgValue.ToString() ;
-													if (currValue != null)
-														currValueString = currValue.ToString() ;
+                                            //Impossible to solve for inheritance scenarios when mapping presentation model to domain model!!!!
+                                            //We could try checking which presentation domain map which class map that maps to the 
+                                            //domain class map, but that could be a many-one relationship (many presentation model classes
+                                            //map to the same domain model class!)
+                                            //								IClassMap sourceOrgClassMap = this.sourceContext.DomainMap.GetClassMap(orgObject.GetType() );
+                                            //								IClassMap leafOrgClassMap = this.sourceContext.DomainMap.GetClassMap(sourceOrgClassMap.Name );
+                                            //								IClassMap theClassMap = this.sourceContext.DomainMap.GetClassMap (sourceOrgClassMap.Name );																
 
-													throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, orgValue, currValue, obj, propertyMap.Name);
-												}
-											}
-											else
-											{
-												string orgIdentity = om.GetObjectIdentity(orgValue);
-												string currIdentity = sourceOm.GetObjectIdentity(currValue);
+                                            if (!creating)
+                                            {
+                                                //Optimistic concurrency
+                                                object currValue = sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
+                                                if (orgValue == null || currValue == null)
+                                                {
+                                                    if (!(orgValue == null && currValue == null))
+                                                    {
+                                                        string orgValueString = "<null>";
+                                                        string currValueString = "<null>";
+                                                        if (orgValue != null)
+                                                            orgValueString = orgValue.ToString();
+                                                        if (currValue != null)
+                                                            currValueString = currValue.ToString();
 
-												//											IClassMap leafOrgClassMap = this.Context.DomainMap.GetClassMap(refObject.GetType() );
-												//											IClassMap sourceOrgClassMap = this.sourceContext.DomainMap.GetClassMap(leafOrgClassMap.Name );
-												//											Type orgType = this.sourceContext.AssemblyManager.GetTypeFromClassMap(sourceOrgClassMap);
+                                                        throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, orgValue, currValue, obj, propertyMap.Name);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    string orgIdentity = om.GetObjectIdentity(orgValue);
+                                                    string currIdentity = sourceOm.GetObjectIdentity(currValue);
 
-//												Type orgType = ToSourceType(orgValue) ;
-//
-//												object sourceOrgvalue = this.sourceContext.GetObjectById(orgIdentity, orgType, true);
+                                                    //											IClassMap leafOrgClassMap = this.Context.DomainMap.GetClassMap(refObject.GetType() );
+                                                    //											IClassMap sourceOrgClassMap = this.sourceContext.DomainMap.GetClassMap(leafOrgClassMap.Name );
+                                                    //											Type orgType = this.sourceContext.AssemblyManager.GetTypeFromClassMap(sourceOrgClassMap);
 
-												if (!(orgIdentity.Equals(currIdentity)))
-												{
-													string orgValueString = "<null>";											
-													string currValueString = "<null>";											
-													if (orgValue != null)
-														orgValueString = om.GetObjectKeyOrIdentity(orgValue) ;
-													if (currValue != null)
-														currValueString = om.GetObjectKeyOrIdentity(currValue) ;
+                                                    //												Type orgType = ToSourceType(orgValue) ;
+                                                    //
+                                                    //												object sourceOrgvalue = this.sourceContext.GetObjectById(orgIdentity, orgType, true);
 
-													throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, orgValue, currValue, obj, propertyMap.Name);
-												}
+                                                    if (!(orgIdentity.Equals(currIdentity)))
+                                                    {
+                                                        string orgValueString = "<null>";
+                                                        string currValueString = "<null>";
+                                                        if (orgValue != null)
+                                                            orgValueString = om.GetObjectKeyOrIdentity(orgValue);
+                                                        if (currValue != null)
+                                                            currValueString = om.GetObjectKeyOrIdentity(currValue);
 
-											}
-										}
+                                                        throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, orgValue, currValue, obj, propertyMap.Name);
+                                                    }
 
-										value = this.sourceContext.GetObjectById(identity, refType, true);
-										nullValueStatus = om.GetNullValueStatus(obj, propertyMap.Name);										
+                                                }
+                                            }
 
-										sourceOm.SetPropertyValue(source, sourcePropertyMap.Name, value);
-										sourceOm.SetNullValueStatus(source, sourcePropertyMap.Name, nullValueStatus);								
+                                            value = this.sourceContext.GetObjectById(identity, refType, true);
+                                            nullValueStatus = om.GetNullValueStatus(obj, propertyMap.Name);
 
-										if (orgValue == null || DBNull.Value.Equals(orgValue))
-											sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, null);
-										else
-											sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, orgValue);
+                                            sourceOm.SetPropertyValue(source, sourcePropertyMap.Name, value);
+                                            sourceOm.SetNullValueStatus(source, sourcePropertyMap.Name, nullValueStatus);
 
-										if (creating == false && CompareValues(value, orgValue) == false)
-											sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);
+                                            if (orgValue == null || DBNull.Value.Equals(orgValue))
+                                                sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, null);
+                                            else
+                                                sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceOrgRef);
 
-									}
-								}				
-								else
-								{
-									IList list = (IList) om.GetPropertyValue(obj, propertyMap.Name);
-									IList listOrg = (IList) om.GetOriginalPropertyValue(obj, propertyMap.Name);
+                                            if (creating == false && CompareValues(value, orgValue) == false)
+                                                sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);
 
-									//OBS! listOrg may be null if the object is under creation!
-									if (listOrg == null)
-									{				
-										//listOrg = lm.CreateList(obj, propertyMap) ;
-										listOrg = new ArrayList() ;
-										om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
-									}
+                                        }
+                                    }
+                                    else
+                                    {
+                                        IList list = (IList)om.GetPropertyValue(obj, propertyMap.Name);
+                                        IList listOrg = (IList)om.GetOriginalPropertyValue(obj, propertyMap.Name);
 
-									//IList sourceList = (IList) om.GetPropertyValue(obj, propertyMap.Name);
-                                    IList sourceList = (IList)sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
+                                        //OBS! listOrg may be null if the object is under creation!
+                                        if (listOrg == null)
+                                        {
+                                            //listOrg = lm.CreateList(obj, propertyMap) ;
+                                            listOrg = new ArrayList();
+                                            om.SetOriginalPropertyValue(obj, propertyMap.Name, listOrg);
+                                        }
 
-									if (!creating)
-									{
-										//Optimistic concurrency
-										if (!CompareListsById(listOrg, sourceList))
-										{
-											string orgValueString = "<list>";		
-											string currValueString = "<list>";
+                                        if (!creating)
+                                            sourceOm.EnsurePropertyIsLoaded(source, sourcePropertyMap.Name);
 
-											throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, listOrg, sourceList, obj, propertyMap.Name);
-										}
-									}	
-							
-									SaveReferenceList(list, sourceList);
+                                        IList sourceList = (IList)sourceOm.GetPropertyValue(source, sourcePropertyMap.Name);
 
-									IList sourceListOrg = (IList) om.GetOriginalPropertyValue(obj, propertyMap.Name);
+                                        if (!creating)
+                                        {
+                                            //Optimistic concurrency
+                                            if (!CompareListsById(listOrg, sourceList))
+                                            {
+                                                string orgValueString = "<list>";
+                                                string currValueString = "<list>";
 
-									//OBS! sourceListOrg may be null if the object is under creation!
-									if (sourceListOrg == null)
-									{				
-										//sourceListOrg = lm.CreateList(source, sourcePropertyMap) ;
-										sourceListOrg = new ArrayList() ;
-										om.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
-									}
+                                                throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when persisting to the data source! Object: " + obj.GetType().ToString() + om.GetObjectKeyOrIdentity(obj) + ", Property: " + sourcePropertyMap.Name + ", Cached original value: " + orgValueString + ", Data source value: " + currValueString, listOrg, sourceList, obj, propertyMap.Name);
+                                            }
+                                        }
 
-									SaveReferenceList(listOrg, sourceListOrg);
+                                        SaveReferenceList(list, sourceList);
 
-									if (creating == false && CompareListsById(list, listOrg) == false)
-										sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);
+                                        IList sourceListOrg = (IList)om.GetOriginalPropertyValue(source, sourcePropertyMap.Name);
 
-								}							
+                                        //OBS! sourceListOrg may be null if the object is under creation!
+                                        if (sourceListOrg == null)
+                                        {
+                                            sourceListOrg = new ArrayList();
+                                            sourceOm.SetOriginalPropertyValue(source, sourcePropertyMap.Name, sourceListOrg);
+                                        }
+
+                                        SaveReferenceList(listOrg, sourceListOrg);
+
+                                        if (creating == false && CompareListsById(list, listOrg) == false)
+                                            sourceOm.SetUpdatedStatus(source, sourcePropertyMap.Name, true);
+
+                                    }
+                                }															
 							}
 						}					
 					}

@@ -348,16 +348,16 @@ namespace Puzzle.NPersist.Framework.Persistence
 			string sql = GetDeleteStatement(obj, parameters);
 			IDataSource ds = ctx.DataSourceManager.GetDataSource(obj);
 			int rowsAffected = ctx.SqlExecutor.ExecuteNonQuery(sql, ds, parameters);
-			parameters.Clear();
 			IClassMap classMap = ctx.DomainMap.MustGetClassMap(obj.GetType());
 			if (rowsAffected < 1)
 			{
 				if (!(SqlEngineManager.Context.PersistenceManager.GetDeleteOptimisticConcurrencyBehavior(OptimisticConcurrencyBehaviorType.DefaultBehavior, classMap) == OptimisticConcurrencyBehaviorType.Disabled))
 				{
 					throw new OptimisticConcurrencyException("An optimistic concurrency exception occurred when deleting the row for object " + obj.GetType().ToString() + this.Context.ObjectManager.GetObjectKeyOrIdentity(obj) + " in the data source. The row may have been modified by another thread or user or is already deleted.", obj); // do not localize
-				}
+				}   
 			}
-			ctx.InverseManager.NotifyDelete(obj);
+            parameters.Clear();
+            ctx.InverseManager.NotifyDelete(obj);
 			ObjectEventArgs e2 = new ObjectEventArgs(obj);
 			ctx.EventManager.OnRemovedObject(this, e2);
 		}
@@ -1848,8 +1848,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 														paramName = GetParameterName(propertyMap, "Org_");
 													else
 														paramName = GetParameterName(propertyMap, columnMap, "Org_");
-													SqlParameter param = AddSqlParameter(delete, parameters, paramName, obj, propertyMap, om.GetOriginalPropertyValue(obj, propertyMap.Name), columnMap, false);
-													search.GetSqlComparePredicate(column, SqlCompareOperatorType.Equals, param);
+													//SqlParameter param = AddSqlParameter(delete, parameters, paramName, obj, propertyMap, om.GetOriginalPropertyValue(obj, propertyMap.Name), columnMap, false);
+                                                    SqlParameter param = AddSqlParameter(delete, parameters, paramName, obj, propertyMap, om.GetOriginalPropertyValue(obj, propertyMap.Name), columnMap, true);
+                                                    search.GetSqlComparePredicate(column, SqlCompareOperatorType.Equals, param);
 												}
 												first = false;
 											}

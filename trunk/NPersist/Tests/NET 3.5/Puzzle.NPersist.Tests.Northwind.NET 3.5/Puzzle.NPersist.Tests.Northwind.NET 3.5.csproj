@@ -44,6 +44,7 @@
     <Compile Include="Basic\CascadeDeleteTests.cs" />
     <Compile Include="Basic\CommitRegionTests.cs" />
     <Compile Include="Basic\CrudTests.cs" />
+    <Compile Include="Basic\DeleteTests.cs" />
     <Compile Include="Basic\EditTests.cs" />
     <Compile Include="Basic\IdentityMapTests.cs" />
     <Compile Include="Basic\InverseManagerTests.cs" />

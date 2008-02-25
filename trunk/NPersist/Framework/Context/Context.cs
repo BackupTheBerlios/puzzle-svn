@@ -1268,6 +1268,7 @@ namespace Puzzle.NPersist.Framework
 				m_ObjectManager.SetObjectIdentity(obj, id);				
 			}
 
+            //lol? Have I written this hack? :-)) Highly humorous...but I could see the point I guess :-P
 			IColumnMap typeColMap = classMap.GetTypeColumnMap();
 			if (typeColMap != null)
 			{

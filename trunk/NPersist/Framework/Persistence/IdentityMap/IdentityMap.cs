@@ -576,23 +576,23 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IPropertyMap idPropertyMap = (IPropertyMap) idProperties[0];
             object[] keyParts = new object[2];
             keyParts[0] = type;
-			bool found = false;
-			if (idPropertyMap.GetIsAssignedBySource())
-			{
-				IColumnMap columnMap = idPropertyMap.GetColumnMap();
-				if (columnMap != null)
-				{
-					if (columnMap.IsAutoIncrease)
-					{
-						if (Util.IsNumeric(identity))
-							keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
-						else
-							keyParts[1] = identity;
-						found = true;
-					}
-				}
-			}
-			if (!found)
+            bool found = false;
+            if (idPropertyMap.GetIsAssignedBySource())
+            {
+                IColumnMap columnMap = idPropertyMap.GetColumnMap();
+                if (columnMap != null)
+                {
+                    if (columnMap.IsAutoIncrease)
+                    {
+                        if (Util.IsNumeric(identity))
+                            keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap)idProperties[0]), identity);
+                        else
+                            keyParts[1] = identity;
+                        found = true;
+                    }
+                }
+            }
+            if (!found)
 	            keyParts[1] = this.Context.ObjectManager.ConvertValueToType(type, ((IPropertyMap) idProperties[0]), identity);
             return keyParts;
         }
