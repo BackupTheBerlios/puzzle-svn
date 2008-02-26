@@ -165,6 +165,8 @@ namespace Puzzle.NPersist.Framework.Mapping.Visitor
 					inversePropertyMap.ReferenceType = ReferenceType.OneToOne;
 					inversePropertyMap.DataType = dataType;
 					inversePropertyMap.IsSlave = !propertyMap.IsSlave;
+					if (!propertyMap.IsSlave)
+						inversePropertyMap.IsNullable = true;
 					break;
 			}
 

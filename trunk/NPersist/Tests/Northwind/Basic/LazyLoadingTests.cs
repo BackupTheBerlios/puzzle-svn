@@ -107,5 +107,28 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 		#endregion
 
+		[Test]
+		public virtual void TestLazyLoadingDirectAccessOnReferenceListProperty()
+		{
+			int bossid = EnsureBoss();
+			int id = EnsureNancy(bossid);
+
+			using (IContext context = GetContext())
+			{
+				//Ask the context to fetch the employee with id = 2
+				Employee boss = (Employee)context.GetObjectById(bossid, typeof(Employee));
+
+				//Assert that the context didn't return a null value
+				Assert.IsNotNull(boss);
+
+				Employee emp = (Employee) boss.Employees[0];
+
+				Assert.IsNotNull(emp);
+
+				//Assert that the Employees property of the employee object has not been loaded yet
+				Assert.AreEqual(PropertyStatus.Clean, context.GetPropertyStatus(boss, "Employees"));
+			}
+		}
+
 	}
 }

@@ -217,12 +217,14 @@ namespace Puzzle.NPersist.Framework.BaseClasses
         {
             if (!MuteNotify)
                 EnsureWriteConsistency(value);
+			interceptor.BeforeRead();
             base[index] = value;
         }
 
         protected virtual object IListThisGet(int index)
         {
-            return base[index];
+			interceptor.BeforeRead();
+			return base[index];
         }
 
 		public override void Remove(object obj)

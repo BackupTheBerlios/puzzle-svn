@@ -76,6 +76,8 @@ namespace Puzzle.NPersist.Tests.Main
 			}
 		}
 
+
+
 		[Test()]
 		public void TestLazyLoadOneOneNestedContext()
 		{
@@ -151,6 +153,291 @@ namespace Puzzle.NPersist.Tests.Main
 					Assert.IsNotNull(bi.Book);
 					Assert.AreEqual(bookId, bi.Book.Id);
 				}
+			}
+		}
+
+
+		[Test()]
+		public void TestLoadOneOneSlaveClass()
+		{
+			long bookInfoId = 0;
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Create a new book object
+					//This should, in addition to creating a new book object,
+					//cause a new Cover object to be created and a reference to
+					//this object should be added to the Cover property of the new book.
+					//Likewise a new BookInfo object should be created and referenced.
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					tx.Commit();
+
+					bookInfoId = b.BookInfo.Id;
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				BookInfo bi = (BookInfo) context.GetObjectById(bookInfoId, typeof(BookInfo));
+
+				Assert.IsNotNull(bi);
+				Assert.IsNotNull(bi.Book);
+			}
+		}
+
+		[Test()]
+		public void TestLoadOneOneSlaveClassUsingNPath()
+		{
+			long bookInfoId = 0;
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Create a new book object
+					//This should, in addition to creating a new book object,
+					//cause a new Cover object to be created and a reference to
+					//this object should be added to the Cover property of the new book.
+					//Likewise a new BookInfo object should be created and referenced.
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					tx.Commit();
+
+					bookInfoId = b.BookInfo.Id;
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				string npath = "Select * From BookInfo Where Id = " + bookInfoId.ToString();
+				BookInfo bi = (BookInfo) context.GetObjectByNPath(npath, typeof(BookInfo));
+
+				Assert.IsNotNull(bi);
+				Assert.IsNotNull(bi.Book);
+			}
+		}
+
+		[Test()]
+		public void TestLoadOneOneMasterClassUsingNPath()
+		{
+			long bookId = 0;
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Create a new book object
+					//This should, in addition to creating a new book object,
+					//cause a new Cover object to be created and a reference to
+					//this object should be added to the Cover property of the new book.
+					//Likewise a new BookInfo object should be created and referenced.
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					tx.Commit();
+
+					bookId = b.Id;
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				string npath = "Select * From Book Where Id = " + bookId.ToString();
+				Book b = (Book) context.GetObjectByNPath(npath, typeof(Book));
+
+				Assert.IsNotNull(b);
+				Assert.IsNotNull(b.BookInfo);
+			}
+		}
+
+		[Test()]
+		public void TestLoadOneOneMasterClass()
+		{
+			long bookId = 0;
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Create a new book object
+					//This should, in addition to creating a new book object,
+					//cause a new Cover object to be created and a reference to
+					//this object should be added to the Cover property of the new book.
+					//Likewise a new BookInfo object should be created and referenced.
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					tx.Commit();
+
+					bookId = b.Id;
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				Book b = (Book) context.GetObjectById(bookId, typeof(Book));
+
+				Assert.IsNotNull(b);
+				Assert.IsNotNull(b.BookInfo);
+			}
+		}
+
+		[Test()]
+		public void TestLoadOneOneMasterClassWithNulledSlaveUsingNPath()
+		{
+			long bookId = 0;
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+
+					//Create a new book object
+					//This should, in addition to creating a new book object,
+					//cause a new Cover object to be created and a reference to
+					//this object should be added to the Cover property of the new book.
+					//Likewise a new BookInfo object should be created and referenced.
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					context.Commit();
+
+					context.DeleteObject(b.BookInfo);
+
+					context.Commit();
+
+					tx.Commit();
+
+					bookId = b.Id;
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+
+			using (IContext context = GetContext())
+			{
+				//Hook up an event handler for the executing sql event, allowinng us to log the sql to the console
+				context.ExecutingSql += new ExecutingSqlEventHandler(this.m_Context_ExecutingSql);
+
+				string npath = "Select * From Book Where Id = " + bookId.ToString();
+				Book b = (Book) context.GetObjectByNPath(npath, typeof(Book));
+
+				Assert.IsNotNull(b);
+				Assert.IsNull(b.BookInfo);
 			}
 		}
 
