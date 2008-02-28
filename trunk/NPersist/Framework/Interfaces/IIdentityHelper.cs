@@ -35,5 +35,13 @@ namespace Puzzle.NPersist.Framework.Interfaces
 		void SetTransactionGuid(Guid value);
 
 		void Reset();
-	}
+
+        bool HasTemporaryIdentity();
+
+        string GetTemporaryIdentity();
+
+        void SetTemporaryIdentity(string temporaryIdentity);
+
+        void RevertToTemporaryIdentity();
+    }
 }

@@ -755,6 +755,7 @@
     <Compile Include="Persistence\ObjectManager\ReflectionHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\ObjectPersistenceEngine\IObjectPersistenceEngine.cs" />
     <Compile Include="Persistence\ObjectPersistenceEngine\ObjectPersistenceEngine.cs">
       <SubType>Code</SubType>
     </Compile>

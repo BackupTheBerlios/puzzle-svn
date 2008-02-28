@@ -45,6 +45,7 @@ namespace Puzzle.NPersist.Framework.Interfaces
 
 		void OnLoadedObject(object sender, ObjectEventArgs e);
 
+
 		void OnReadingProperty(object sender, PropertyCancelEventArgs e);
 
 		void OnReadProperty(object sender, PropertyEventArgs e);
@@ -61,5 +62,7 @@ namespace Puzzle.NPersist.Framework.Interfaces
 
 		void OnInstantiatedObject(object sender, ObjectEventArgs e);
 
+
+		void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e);
 	}
 }

@@ -49,7 +49,7 @@ namespace Puzzle.NPersist.Framework.Remoting
 
 		public abstract void Begin();
 
-		public abstract void Commit();
+		public abstract void Commit(bool recursive);
 
 		public abstract void Abort();
 

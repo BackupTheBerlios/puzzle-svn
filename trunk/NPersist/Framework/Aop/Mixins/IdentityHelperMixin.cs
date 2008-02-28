@@ -39,6 +39,7 @@ namespace Puzzle.NPersist.Framework.Aop.Mixins
 			hasKeyStruct = false;
 			hasTransactionGuid = false;
 			transactionGuid = Guid.Empty;
+            temporaryIdentity = null;
 		}
 
 		private string identity;
@@ -75,6 +76,30 @@ namespace Puzzle.NPersist.Framework.Aop.Mixins
 		{
 			return this.keyStruct;
 		}
+
+        private string temporaryIdentity = null;
+
+        public bool HasTemporaryIdentity()
+        {
+            return temporaryIdentity != null;
+        }
+
+        public string GetTemporaryIdentity()
+        {
+            return temporaryIdentity;
+        }
+
+        public void SetTemporaryIdentity(string temporaryIdentity)
+        {
+            this.temporaryIdentity = temporaryIdentity;
+        }
+
+        public void RevertToTemporaryIdentity()
+        {
+            identity = null;
+            identityKeyParts = new ArrayList(1);
+            hasKeyStruct = false;
+        }
 
 		public void SetKeyStruct(KeyStruct value)
 		{
@@ -144,5 +169,6 @@ namespace Puzzle.NPersist.Framework.Aop.Mixins
 			this.transactionGuid = value;
 			hasTransactionGuid = true;
 		}
-	}
+
+    }
 }

@@ -101,11 +101,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 			CascadeCreate(obj);
 		}
 
-		public virtual void CommitObject(object obj, int exceptionLimit)
-		{
-			this.Context.UnitOfWork.CommitObject(obj, exceptionLimit);
-		}
-
 		public virtual void DeleteObject(object obj)
 		{
 			CascadeDelete(obj);
@@ -113,9 +108,15 @@ namespace Puzzle.NPersist.Framework.Persistence
 			this.Context.UnitOfWork.RegisterDeleted(obj);
 		}
 
-		public virtual void Commit(int exceptionLimit)
+
+		public virtual void CommitObject(object obj, int exceptionLimit, bool recursive)
 		{
-			this.Context.UnitOfWork.Commit(exceptionLimit);
+			this.Context.UnitOfWork.CommitObject(obj, exceptionLimit, recursive);
+		}
+
+		public virtual void Commit(int exceptionLimit, bool recursive)
+		{
+			this.Context.UnitOfWork.Commit(exceptionLimit, recursive);
 			this.Context.SqlExecutor.ExecuteBatchedStatements();
 		}
 

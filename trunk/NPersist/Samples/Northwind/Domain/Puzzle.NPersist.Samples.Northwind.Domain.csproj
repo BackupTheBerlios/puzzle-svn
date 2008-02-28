@@ -140,6 +140,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Puzzle.NPersist.Samples.Northwind.CommitRegionDomain.npersist"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Puzzle.NPersist.Samples.Northwind.Domain.npersist"
                     BuildAction = "EmbeddedResource"
                 />

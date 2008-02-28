@@ -23,7 +23,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	{
 		void Begin();
 
-		void Commit();
+		void Commit(bool recursive);
 
 		void Abort();
 

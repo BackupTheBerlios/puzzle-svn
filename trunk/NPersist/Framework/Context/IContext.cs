@@ -67,6 +67,7 @@ namespace Puzzle.NPersist.Framework
 		event WrotePropertyEventHandler WroteProperty;
 		event LoadingPropertyEventHandler LoadingProperty;
 		event LoadedPropertyEventHandler LoadedProperty;
+		event AquiredSourceAssignedIdentityEventHandler AquiredSourceAssignedIdentity;
 
         /// <summary>
         /// Gets or sets the interceptor.
@@ -1622,6 +1623,11 @@ namespace Puzzle.NPersist.Framework
 		/// the object that the property belongs to was loaded or created in. <br />
 		/// </remarks>
         ConsistencyMode WriteConsistency { get; set; }
+
+		/// <summary>
+		/// Indicates whether calls to the Commit method will behave like calls to the CommitRecursive method. Default is true.
+		/// </summary>
+		bool AlwaysCommitRecursive { get; set; }
 
         #region .NET 2.0 Specific Code
 #if NET2

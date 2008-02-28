@@ -87,8 +87,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		public virtual string GetObjectIdentity(object obj, IPropertyMap newPropertyMap, object newValue)
 		{
-			string id = BuildObjectIdentity(obj, newPropertyMap, newValue);
-			return id;
+			return BuildObjectIdentity(obj, newPropertyMap, newValue);
 		}
 
 		public bool HasIdentity(object obj)
@@ -171,8 +170,12 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				id = id.Substring(0, id.Length - sep.Length);
 			}
-			if (identityHelper != null)
-				identityHelper.SetIdentity(id);
+            if (identityHelper != null)
+            {
+                identityHelper.SetIdentity(id);
+                if (identityHelper.HasTemporaryIdentity())
+                    this.Context.UnitOfWork.AddPromotedIdentity(obj);
+            }
 
 			return id;
 		}
@@ -180,18 +183,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		private string GetTempId(object obj)
 		{
-			if (!(m_hashTempIds.ContainsKey(obj)))
-			{
-				m_hashTempIds[obj] = Guid.NewGuid().ToString();
-			}
-			return (string)m_hashTempIds[obj];
+            return GetTempId(obj, null);
 		}
 
         private string GetTempId(object obj, string identity)
         {
             if (!(m_hashTempIds.ContainsKey(obj)))
             {
+                if (identity == null || identity.Length < 1)
+                    identity = Guid.NewGuid().ToString();
+
                 m_hashTempIds[obj] = identity;
+                IIdentityHelper identityHelper = obj as IIdentityHelper;
+                if (identityHelper != null)
+                {
+                    identityHelper.SetTemporaryIdentity(identity);
+                }
             }
             return (string)m_hashTempIds[obj];
         }
@@ -235,12 +242,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 					value = GetPropertyValue(obj, propertyMap.Name);
 					if (value == null || GetNullValueStatus(obj, propertyMap.Name) == true)
 					{
-						if (!(m_hashTempIds.ContainsKey(obj)))
-						{
-							m_hashTempIds[obj] = Guid.NewGuid().ToString();
-						}
 						idKeyParts.Clear();
-						idKeyParts.Add(m_hashTempIds[obj]);
+						idKeyParts.Add(GetTempId(obj));
 						return idKeyParts;
 					}
 					else if (propertyMap.ReferenceType != ReferenceType.None)
@@ -269,6 +272,16 @@ namespace Puzzle.NPersist.Framework.Persistence
             try
             {
 				IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+				if (Util.IsGuid(identity))
+				{
+					//figure out if it is a temporary identity
+                    if (GuidMustBeTemporaryIdentity(obj.GetType(), classMap))
+                    {
+                        GetTempId(obj, identity);
+                        return;
+                    }
+				}
+
 				string sep = classMap.IdentitySeparator;
 				if (sep == "")
 				{
@@ -278,6 +291,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				long i = 0;
 				Type refType;
 				object refObj;
+
 				foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps())
 				{
 					if (propertyMap.ReferenceType != ReferenceType.None)
@@ -291,34 +305,44 @@ namespace Puzzle.NPersist.Framework.Persistence
 					}
 					else
 					{
-                        if (propertyMap.GetIsAssignedBySource())
-                        {
-                            IColumnMap columnMap = propertyMap.GetColumnMap();
-                            if (columnMap != null)
-                            {
-                                if (columnMap.IsAutoIncrease)
-                                {
-                                    if (!Util.IsNumeric(identity))
-                                    {
-                                        identity = GetTempId(obj, identity);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                        object val = ConvertValueToType(obj, propertyMap, arrId[i]);
+						object val = ConvertValueToType(obj, propertyMap, arrId[i]);
 						SetPropertyValue(obj, propertyMap.Name, val);
 						SetOriginalPropertyValue(obj, propertyMap.Name, val);
 						SetNullValueStatus(obj, propertyMap.Name, false);
 					}
 					i += 1;
 				}
+
 			}
             catch (Exception ex)
             {
                 throw new NPersistException(string.Format ("Could not set Identity '{0}' on object '{1}'",identity,obj), ex);
             }
 		}
+
+        private bool GuidMustBeTemporaryIdentity(Type type, IClassMap classMap)
+        {
+            IList idPropertyMaps = classMap.GetIdentityPropertyMaps();
+            if (idPropertyMaps.Count > 1)
+                return true;
+
+            //should only be one id prop..
+            foreach (IPropertyMap propertyMap in idPropertyMaps)
+            {
+                Type propType = type.GetProperty(propertyMap.Name).PropertyType;
+                if (propertyMap.ReferenceType != ReferenceType.None)
+                {
+                    IClassMap refClassMap = this.Context.DomainMap.MustGetClassMap(propType);
+                    return GuidMustBeTemporaryIdentity(propType, refClassMap);
+                }
+                else
+                {
+                    if (!propType.IsAssignableFrom(typeof(Guid)))
+                        return true;
+                }
+            }
+            return false;
+        }
 
 		public virtual void SetObjectIdentity(object obj, KeyStruct keyStruct)
 		{

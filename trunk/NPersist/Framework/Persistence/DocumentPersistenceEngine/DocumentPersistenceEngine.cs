@@ -284,7 +284,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			cachedXmlDocuments.Clear();
 		}
 
-		public void Commit()
+		public void Commit(bool recursive)
 		{
             //TODO
 			//lock all files

@@ -25,7 +25,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		public void TestNPathSelectSiblings()
 		{
 			int order1Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -54,7 +54,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order1Id = order1.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
 
@@ -76,7 +76,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			string detail1Id = "";
 			string detail3Id = "";
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				Product product1 = CreateProduct(context, "Banana", 100);
 				Product product2 = CreateProduct(context, "Apple", 150);
@@ -104,7 +104,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 //		public void TestNPathSelectListWithCompositeKey()
 //		{
 //			int orderId = 0;
-//			using (IContext context = GetContext() )
+//			using (IContext context = GetContextWithCommitRegions() )
 //			{
 //				Product product1 = CreateProduct(context, "Banana", 10);
 //				Product product2 = CreateProduct(context, "Apple", 15);
@@ -121,7 +121,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 //				orderId = order.Id;
 //			}			
 //
-//			using (IContext context = GetContext() )
+//			using (IContext context = GetContextWithCommitRegions() )
 //			{
 //				Order order = (Order) context.GetObjectsByNPath("Select Id, OrderDetails.* From Order Where Id = " + orderId.ToString() , typeof(Order));
 //			}
@@ -132,7 +132,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 //		{
 //			string detail1Id = "";
 //			string detail3Id = "";
-//			using (IContext context = GetContext() )
+//			using (IContext context = GetContextWithCommitRegions() )
 //			{
 //				Product product1 = CreateProduct(context, "Banana", 10);
 //				Product product2 = CreateProduct(context, "Apple", 15);
@@ -150,12 +150,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 //				detail3Id = context.ObjectManager.GetObjectIdentity(detail3);
 //			}			
 //
-//			using (IContext context = GetContext())
+//			using (IContext context = GetContextWithCommitRegions())
 //			{
 //				OrderDetail detail1 = (OrderDetail) context.GetObjectById(detail1Id, typeof(OrderDetail));
 //				Assert.IsNotNull(detail1);
 //
-//				IContext context2 = GetContext();
+//				IContext context2 = GetContextWithCommitRegions();
 //
 //				OrderDetail detail3 = (OrderDetail) context2.GetObjectById(detail3Id, typeof(OrderDetail));
 //				Assert.IsNotNull(detail3);
@@ -170,7 +170,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public void TestDeletes()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
 
@@ -189,7 +189,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				context.Commit();
 			}
 
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.ExecutingSql += new ExecutingSqlEventHandler(Context_ExecutingSql) ;
 
@@ -215,7 +215,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			int order1Id = 0;
 			int order3Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -236,11 +236,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order3Id = order3.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				Order order1 = (Order) context.GetObjectById(order1Id, typeof(Order));
 
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
 
@@ -263,7 +263,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			int order1Id = 0;
 			int order3Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -284,11 +284,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order3Id = order3.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
 
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
 
@@ -310,7 +310,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			int order1Id = 0;
 			int order3Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -331,11 +331,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order3Id = order3.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
 
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
 
@@ -368,7 +368,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			int order1Id = 0;
 			int order3Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -389,11 +389,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order3Id = order3.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				Order order1 = (Order) context.GetObjectByNPath("Select *, Customer.*, Customer.Orders.* from Order Where Id = " + order1Id.ToString(), typeof(Order));
 
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
 
@@ -428,7 +428,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		{
 			int order1Id = 0;
 			int order3Id = 0;
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.SqlExecutor.ExecuteNonQuery("Delete From [Order Details]");
 				context.SqlExecutor.ExecuteNonQuery("Delete From Orders");
@@ -449,12 +449,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				order3Id = order3.Id;
 			}			
 
-			using (IContext context = GetContext())
+			using (IContext context = GetContextWithCommitRegions())
 			{
 				Order order1 = (Order) context.GetObjectById(order1Id, typeof(Order));
 				//Order order1 = (Order) context.GetObjectById(order3Id, typeof(Order));
 
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Order order3 = (Order) context2.GetObjectById(order3Id, typeof(Order));
 

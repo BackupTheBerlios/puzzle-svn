@@ -9,6 +9,7 @@ using Puzzle.NPersist.Framework.Exceptions;
 using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
+using Puzzle.NPersist.Framework.EventArguments;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -24,9 +25,8 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// <summary>
 	/// Summary description for ObjectPersistenceEngine.
 	/// </summary>
-	public class ObjectPersistenceEngine : ContextChild, IPersistenceEngine
+	public class ObjectPersistenceEngine : ContextChild, IObjectPersistenceEngine
 	{
-
 		private IContext sourceContext;
 
 		private ArrayList listInsert = new ArrayList();
@@ -52,8 +52,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			try
 			{
-				if (this.sourceContext.IsDirty)
-					throw new EditException("Can't begin commit operation against dirty root context!");
+				//Not true with non-recursive commits...
+				//if (this.sourceContext.IsDirty)
+				//	throw new EditException("Can't begin commit operation against dirty root context!");
 
 			}
 			finally
@@ -62,7 +63,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}	
 		}
 
-		public void Commit()
+		public void Commit(bool recursive)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
 				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
@@ -103,13 +104,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 					DoRemoveObject(obj);
 				}
 
-				this.sourceContext.Commit() ;				
+				if (recursive)
+					this.sourceContext.CommitRecursive() ;				
 
 				listInsert.Clear() ;
 				listUpdate.Clear() ;
 				listRemove.Clear() ;
 
-				UpdateIdentities();
+				//if (recursive)
+				//	UpdateIdentities();
+				//else
+				//	AddIdentityObservers();
 
 				hashInserted.Clear() ;
 
@@ -235,18 +240,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 				IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
 				Type sourceType = ToSourceType(GetSourceType(obj));
 				object sourceObject = null;
-				//if (classMap.HasIdAssignedBySource())
-				//{
-				//	sourceObject = sourceContext.CreateObject(sourceType);
-				//} 
-				//else
-				//{
-					string identity = this.Context.ObjectManager.GetObjectIdentity(obj);			
-					sourceObject = sourceContext.CreateObject(identity, sourceType);
-				//}
+				string identity = this.Context.ObjectManager.GetObjectIdentity(obj);			
+				sourceObject = sourceContext.CreateObject(identity, sourceType);
 				hashInserted[obj] = sourceObject;
-
-				//SaveObject(obj, sourceObject, true);
 			}
 			finally
 			{
@@ -1194,5 +1190,63 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
 
+		public virtual void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+		{
+			if (e.EventObject == null)
+				return;
+
+			IIdentityHelper identityHelper = e.EventObject as IIdentityHelper;
+			if (identityHelper != null)
+			{
+				//if (!(identityHelper.HasTemporaryIdentity()))
+				//	return;
+
+				string tempId = identityHelper.GetTemporaryIdentity();
+				Type type = ToLeafType(e.EventObject);
+
+				object obj = this.Context.TryGetObjectById(tempId, type);
+
+				if (obj != null)
+				{
+					IObjectManager om = this.Context.ObjectManager;
+					IObjectManager sourceOm = this.SourceContext.ObjectManager;
+
+					IClassMap classMap = this.Context.DomainMap.MustGetClassMap(type);
+					foreach (IPropertyMap idPropertyMap in classMap.GetIdentityPropertyMaps())
+					{
+						IPropertyMap sourcePropertyMap = idPropertyMap.GetSourcePropertyMapOrSelf() ;
+						if (idPropertyMap.ReferenceType.Equals(ReferenceType.None))
+						{
+							object id = sourceOm.GetPropertyValue(e.EventObject, sourcePropertyMap.Name);   
+							om.SetPropertyValue(obj, idPropertyMap.Name, id);
+							om.SetOriginalPropertyValue(obj, idPropertyMap.Name, id);
+							om.SetNullValueStatus(obj, idPropertyMap.Name, false);
+						}
+						else
+						{
+							object sourceRefObj = sourceOm.GetPropertyValue(e.EventObject, sourcePropertyMap.Name);
+							if (sourceRefObj == null)
+								throw new NPersistException(string.Format("Tried to set the reference identity property {0}.{1} in a child context but the corresponding reference property {2}.(3) in the object from the parent context contained a null value!", idPropertyMap.ClassMap.Name, idPropertyMap.Name, sourcePropertyMap.ClassMap.Name, sourcePropertyMap.Name));
+
+							Type refType = ToLeafType(sourceRefObj);
+							string id = sourceOm.GetObjectIdentity(sourceRefObj);
+							object refObj = this.Context.GetObject(id, refType);
+							if (refObj == null)
+								throw new NPersistException(string.Format("Tried to set the reference identity property {0}.{1} in a child context but the corresponding reference property {2}.(3) in the object from the parent context referenced an object of type {4} and with the identity {5} which could not be found in the child context!", idPropertyMap.ClassMap.Name, idPropertyMap.Name, sourcePropertyMap.ClassMap.Name, sourcePropertyMap.Name, sourceRefObj.GetType().ToString(), id));
+
+							om.SetPropertyValue(obj, idPropertyMap.Name, refObj);
+							om.SetOriginalPropertyValue(obj, idPropertyMap.Name, refObj);
+							om.SetNullValueStatus(obj, idPropertyMap.Name, false);
+						}
+					}
+
+					this.Context.IdentityMap.UpdateIdentity(obj, tempId);
+
+					//raise the event for further child contexts
+					ObjectEventArgs e2 = new ObjectEventArgs(obj);
+					this.Context.EventManager.OnAquiredSourceAssignedIdentity(this, e2);
+				}
+			}
+		}
     }
 }

@@ -23,7 +23,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test(), ExpectedException(typeof(OptimisticConcurrencyException))]
 		public virtual void TestOptimisticConcurrencyBasic()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				//first we create a new employee
 				Employee employee = (Employee) context.CreateObject(typeof(Employee));
@@ -35,7 +35,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				context.Commit();
 
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -68,7 +68,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestOptimisticConcurrencyIncludeWhenDirty()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				//first we create a new employee
 				Employee employee = (Employee) context.CreateObject(typeof(Employee));
@@ -80,7 +80,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				context.Commit();
 
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -112,7 +112,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test(), ExpectedException(typeof(OptimisticConcurrencyException))]
 		public virtual void TestOptimisticConcurrencyIncludeWhenLoaded()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				//Set the context to include all loaded properties
 				//in the optimistic concurrency check (default is to only
@@ -128,7 +128,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				context.Commit();
 
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -159,7 +159,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestOptimisticConcurrencyThenResolveWithRefresh()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				//Set the context to include all loaded properties
 				//in the optimistic concurrency check (default is to only
@@ -174,8 +174,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 				context.Commit();
 
+				int employeeId = employee.Id;
+				Assert.IsTrue(employeeId > 0);
+
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -183,6 +186,8 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				employee2.LastName = "Johansson";
 
 				context2.Commit();
+
+				Assert.AreEqual(employeeId, employee.Id);
 
 				context2.Dispose();
 
@@ -199,12 +204,19 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				catch (OptimisticConcurrencyException ex)
 				{
 					catches++;
+
+					Assert.AreEqual(employeeId, employee.Id);
+
 					context.RefreshObject(employee, RefreshBehaviorType.OverwriteLoaded);
 
 					Assert.AreEqual("John", employee.FirstName );
 					Assert.AreEqual("Johansson", employee.LastName );
 
 					context.Commit();					
+				}
+				catch (Exception ex2)
+				{
+					throw ex2;
 				}
 
 				Assert.AreEqual(1, catches );
@@ -220,7 +232,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestOptimisticConcurrencyThenResolveWithRefreshThenOverwriteDirty()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.ExecutingSql += new ExecutingSqlEventHandler(this.HandleExecutingSql) ;
 
@@ -242,7 +254,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				Assert.AreEqual(ObjectStatus.Clean, context.GetObjectStatus(employee));
 
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 
@@ -316,7 +328,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		[Test()]
 		public virtual void TestOptimisticConcurrencyThenResolveWithRefreshThenRefreshProperty()
 		{
-			using (IContext context = GetContext() )
+			using (IContext context = GetContextWithCommitRegions() )
 			{
 				context.ExecutingSql += new ExecutingSqlEventHandler(this.HandleExecutingSql) ;
 
@@ -338,7 +350,7 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 				Assert.AreEqual(ObjectStatus.Clean, context.GetObjectStatus(employee));
 
 				//then we load up the employee in a different context
-				IContext context2 = GetContext();
+				IContext context2 = GetContextWithCommitRegions();
 
 				Employee employee2 = (Employee) context2.GetObjectById(employee.Id, typeof(Employee));
 

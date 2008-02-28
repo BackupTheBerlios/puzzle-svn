@@ -188,6 +188,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 					cache.UnloadedObjects[prevKey] = null;
 				}				
 			}
+
+            this.Context.UnitOfWork.AddPromotedIdentity(obj);
+
             LogMessage message = new LogMessage("Updated identity");
             LogMessage verbose = new LogMessage("Type: {0}, New Key: {1}, Previous Key: {2}" , obj.GetType(), key , prevKey);
 

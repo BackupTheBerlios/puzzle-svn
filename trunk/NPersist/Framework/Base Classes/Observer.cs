@@ -168,5 +168,10 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 		public virtual void OnInstantiatedObject(object sender, ObjectEventArgs e)
 		{
 		}
+
+        public virtual void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+        {
+        }
+
 	}
 }

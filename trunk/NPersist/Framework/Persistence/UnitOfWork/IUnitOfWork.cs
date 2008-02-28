@@ -27,9 +27,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 //
 //		ObjectStatus GetObjectStatus(object obj);
 
-		void Commit(int exceptionLimit);
+		void Commit(int exceptionLimit, bool recursive);
 
-		void CommitObject(object obj, int exceptionLimit);
+		void CommitObject(object obj, int exceptionLimit, bool recursive);
 
 		ArrayList GetCreatedObjects();
 
@@ -42,5 +42,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		IList Exceptions { get; }
 
         void TouchLockTables(object obj, int exceptionLimit, DeadlockStrategy deadlockStrategy, IList tables);
+
+        void AddPromotedIdentity(object obj);
     }
 }

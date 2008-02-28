@@ -246,5 +246,25 @@ namespace Puzzle.NPersist.Framework.Persistence
 		{
 			identityHelperMixin.SetTransactionGuid(value);
 		}
+
+        public bool HasTemporaryIdentity()
+        {
+            return identityHelperMixin.HasTemporaryIdentity();
+        }
+
+        public string GetTemporaryIdentity()
+        {
+            return identityHelperMixin.GetTemporaryIdentity();
+        }
+
+        public void SetTemporaryIdentity(string temporaryIdentity)
+        {
+            identityHelperMixin.SetTemporaryIdentity(temporaryIdentity);
+        }
+
+        public void RevertToTemporaryIdentity()
+        {
+            identityHelperMixin.RevertToTemporaryIdentity();
+        }
     }
 }

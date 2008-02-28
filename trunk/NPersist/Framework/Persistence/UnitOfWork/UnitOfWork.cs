@@ -20,6 +20,7 @@ using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.Sql.Dom;
+using Puzzle.NPersist.Framework.EventArguments;
 
 namespace Puzzle.NPersist.Framework.Persistence
 {
@@ -39,6 +40,20 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private Hashtable m_hashSpeciallyUpdated = new Hashtable();
 
 		private TopologicalGraph m_topologicalDelete = new TopologicalGraph();
+
+        private Hashtable m_hashPromoted = new Hashtable();
+		private IList m_listPromoted = new ArrayList();
+		private IList m_listNewPromoted = new ArrayList();
+
+        public void AddPromotedIdentity(object obj)
+        {
+			if (!(m_hashPromoted.ContainsKey(obj)))
+			{
+				m_hashPromoted[obj] = obj;
+				m_listPromoted.Add(obj); 
+				m_listNewPromoted.Add(obj); 
+			}
+        }
 
 		private IList exceptions = new ArrayList();
 
@@ -179,22 +194,34 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void AbortInserted()
 		{
 			IObjectManager om = this.Context.ObjectManager;
-			foreach (object obj in m_listInserted)
-			{
+
+            //roll back autoincreasers
+            foreach (object obj in m_listPromoted)
+            {
+                IIdentityHelper identityHelper = obj as IIdentityHelper;
+                if (identityHelper != null)
+                {
+                    identityHelper.RevertToTemporaryIdentity(); 
+				}
 				IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
-				//we must roll back autoincreasers
+
+				//roll back autoincreasers
 				if (classMap.HasAssignedBySource() )
 				{
-					foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
+					//foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
+					foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps() )
 					{
-						if (propertyMap.IsAssignedBySource)
+						if (propertyMap.GetIsAssignedBySource())
 						{
-							string prevId = om.GetObjectIdentity(obj);
 							om.SetPropertyValue(obj, propertyMap.Name, 0);			
-							this.Context.IdentityMap.UpdateIdentity(obj, prevId);
+							om.SetNullValueStatus(obj, propertyMap.Name, true);			
 						}
 					}
 				}
+			}
+
+			foreach (object obj in m_listInserted)
+			{
 				m_listCreated.Add(obj);
 				om.SetObjectStatus(obj, ObjectStatus.UpForCreation);
 			}			
@@ -290,8 +317,90 @@ namespace Puzzle.NPersist.Framework.Persistence
 			{
 				CommitPersisted(obj, true);
 			}
+
+            IObjectManager om = this.Context.ObjectManager;
+            //notify promoted identities
+			IList originallyPromoted = new ArrayList(m_listPromoted); 
+
+			//loop until no more objects are promoted...
+			while (m_listNewPromoted.Count > 0)
+			{
+				IList newPromoted = new ArrayList(m_listNewPromoted); 
+
+				m_listNewPromoted.Clear();
+
+				foreach (object obj in newPromoted)
+				{
+					IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType());
+
+					//roll back autoincreasers
+					if (classMap.HasAssignedBySource())
+					{
+						foreach (IPropertyMap propertyMap in classMap.GetAllPropertyMaps() )
+						{
+							if (propertyMap.ReferenceType != ReferenceType.None)
+							{
+								IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
+								if (invPropertyMap != null)
+								{
+									if (invPropertyMap.IsIdentity)
+									{
+										//here we go..
+										if (propertyMap.IsCollection)
+										{
+											IList list = (IList) om.GetPropertyValue(obj, propertyMap.Name);
+											IInterceptableList iList = list as IInterceptableList;
+											bool stackMute = false;
+											if (iList != null)
+											{
+												stackMute = iList.MuteNotify;
+												iList.MuteNotify = true;
+											}
+											foreach (object refObj in list)
+											{
+												//will provoke the object to become registered (from inside GetObjectIdentity() ) 
+												//in m_hashPromoted if the identity is ready for use. 
+												string identity = om.GetObjectIdentity(refObj); 
+											}
+											if (iList != null)
+												iList.MuteNotify = stackMute;
+
+										}
+										else
+										{
+											object refObj = om.GetPropertyValue(obj, propertyMap.Name);
+											if (refObj != null)
+											{
+												//will provoke the object to become registered (from inside GetObjectIdentity() ) 
+												//in m_hashPromoted if the identity is ready for use. 
+												string identity = om.GetObjectIdentity(refObj); 
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			//only the objects originally in the promoted list need have their ids set
+			foreach (object obj in originallyPromoted)
+			{
+				//will provoke the object to have its identity set in the IdentityHelper mixin, 
+				//preventing that this is done in another commit (and the id is erroneously registered 
+				//as promoted when that happens..). 
+				string identity = om.GetObjectIdentity(obj); 
+			}
+
+            foreach (object obj in m_listPromoted)
+            {
+                ObjectEventArgs e = new ObjectEventArgs(obj);
+                this.Context.EventManager.OnAquiredSourceAssignedIdentity(this, e);
+            }
+
 			m_listInserted.Clear() ;
-		}
+        }
 
 		public virtual void CommitUpdated()
 		{
@@ -366,7 +475,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
-		public virtual void Commit(int exceptionLimit)
+		public virtual void Commit(int exceptionLimit, bool recursive)
 		{
 			this.Context.LogManager.Info(this, "Committing Unit of Work"); // do not localize
 
@@ -376,6 +485,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 			exceptions = new ArrayList(); 
 
 			m_hashSpeciallyUpdated.Clear() ;
+            m_hashPromoted.Clear();
+			m_listPromoted.Clear();
+			m_listNewPromoted.Clear();
 
 			try
 			{
@@ -419,7 +531,7 @@ namespace Puzzle.NPersist.Framework.Persistence
                 ExamineDeletedObjects();
 				RemoveDeleted(exceptionLimit);	
 				
-				this.Context.PersistenceEngine.Commit();
+				this.Context.PersistenceEngine.Commit(recursive);
 
 				//Bug in following line fixed by Vlad Ivanov
 				if (exceptions!=null && exceptions.Count > 0)
@@ -458,7 +570,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
-		public void CommitObject(object obj, int exceptionLimit)
+		public void CommitObject(object obj, int exceptionLimit, bool recursive)
 		{
             LogMessage message = new LogMessage("Committing object");
             LogMessage verbose = new LogMessage("Type: {0}" , obj.GetType());
@@ -470,6 +582,9 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 			exceptions = new ArrayList(); 
 			m_hashSpeciallyUpdated.Clear() ;
+			m_hashPromoted.Clear();
+			m_listPromoted.Clear();
+			m_listNewPromoted.Clear();
 			
 			try
 			{
@@ -499,7 +614,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 				UpdateStillDirty(obj, exceptionLimit);
 				RemoveDeleted(obj, exceptionLimit);
 
-				this.Context.PersistenceEngine.Commit();
+				this.Context.PersistenceEngine.Commit(recursive);
 
 				//Bug in following line fixed by Vlad Ivanov
 				if (exceptions != null && exceptions.Count > 0)
@@ -1532,7 +1647,10 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void Clear()
         {
             this.m_hashSpeciallyUpdated.Clear();
-            this.m_hashStillDirty.Clear();
+			this.m_hashPromoted.Clear();
+			this.m_listPromoted.Clear();
+			this.m_listNewPromoted.Clear();
+			this.m_hashStillDirty.Clear();
             this.m_listCreated.Clear();
             this.m_listDeleted.Clear();
             this.m_listDirty.Clear();

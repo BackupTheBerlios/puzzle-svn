@@ -201,11 +201,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 			}
 		}
 
-		public void Commit()
+		public void Commit(bool recursive)
 		{
 			foreach (ISourceMap sourceMap in this.Context.DomainMap.SourceMaps )
 			{
-				GetPersistenceEngine(sourceMap).Commit();				
+				GetPersistenceEngine(sourceMap).Commit(recursive);				
 			}
 		}
 

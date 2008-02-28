@@ -130,7 +130,7 @@ namespace Puzzle.NPersist.Framework.Remoting.WebService.Client
 			
 		}
 
-		public override void Commit()
+		public override void Commit(bool recursive)
 		{
 			if (this.url.Length < 1)
 				throw new NPersistException("You must specify an url to your NPersist Web Service in your WebServiceRemotingEngine!");

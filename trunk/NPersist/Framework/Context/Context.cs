@@ -119,6 +119,7 @@ namespace Puzzle.NPersist.Framework
 		public event LoadedPropertyEventHandler LoadedProperty;
 		public event InstantiatingObjectEventHandler InstantiatingObject;
 		public event InstantiatedObjectEventHandler InstantiatedObject;
+        public event AquiredSourceAssignedIdentityEventHandler AquiredSourceAssignedIdentity;
 
 		#endregion
 
@@ -147,9 +148,25 @@ namespace Puzzle.NPersist.Framework
 
 		public Context(IContext rootContext) : base()
 		{
+			NewChildContext(rootContext);
+			this.alwaysCommitRecursive = rootContext.AlwaysCommitRecursive;
+		}
+
+		public Context(IContext rootContext, bool alwaysCommitRecursive) : base()
+		{
+			NewChildContext(rootContext);
+			this.alwaysCommitRecursive = alwaysCommitRecursive;
+		}
+
+		private void NewChildContext(IContext rootContext)
+		{
 			m_DomainMap = rootContext.DomainMap;
-			m_PersistenceEngine = new ObjectPersistenceEngine(rootContext);
+			IObjectPersistenceEngine objectPersistenceEngine = new ObjectPersistenceEngine(rootContext);
+			m_PersistenceEngine = objectPersistenceEngine;
 			m_PersistenceEngine.Context = this;
+
+			rootContext.AquiredSourceAssignedIdentity += new AquiredSourceAssignedIdentityEventHandler(objectPersistenceEngine.OnAquiredSourceAssignedIdentity);
+ 
 			InitManagers(true);
 		}
 
@@ -1337,7 +1354,7 @@ namespace Puzzle.NPersist.Framework
 			{
 				throw new ReadOnlyException("Objects from class '" + classMap.Name + "' can not be updated because the class is marked as read-only!");
 			}
-			m_PersistenceManager.CommitObject(obj, exceptionLimit);
+			m_PersistenceManager.CommitObject(obj, exceptionLimit, false);
 			ObjectEventArgs e2 = new ObjectEventArgs(obj);
 			m_EventManager.OnCommittedObject(this, e2);
 		}
@@ -1388,18 +1405,7 @@ namespace Puzzle.NPersist.Framework
 
 		public virtual void Commit(int exceptionLimit)
 		{
-			ContextCancelEventArgs e = new ContextCancelEventArgs(this);
-			m_EventManager.OnCommitting(this, e);
- 
-			if (e.Cancel)
-				return;
-			if (!DomainMap.IsReadOnly)
-			{
-				m_PersistenceManager.Commit(exceptionLimit);				
-			}
-
-			ContextEventArgs e2 = new ContextEventArgs(this);
-			m_EventManager.OnCommitted(this, e2);
+			DoCommit(exceptionLimit, alwaysCommitRecursive);
 		}
 
         public virtual void CommitRecursive()
@@ -1409,27 +1415,24 @@ namespace Puzzle.NPersist.Framework
 
         public virtual void CommitRecursive(int exceptionLimit)
         {
-            Commit(exceptionLimit);
+			DoCommit(exceptionLimit, true);
+		}
 
-            if (m_PersistenceEngine != null)
-            {
-                PersistenceEngineManager persistenceEngineManager = m_PersistenceEngine as PersistenceEngineManager;
-                ObjectPersistenceEngine objectPersistenceEngine = null;
-                if (persistenceEngineManager != null)
-                {
-                    objectPersistenceEngine = persistenceEngineManager.ObjectObjectPersistenceEngine as ObjectPersistenceEngine;
-                }
-                else
-                {
-                    objectPersistenceEngine = m_PersistenceEngine as ObjectPersistenceEngine;
-                }               
-                if (objectPersistenceEngine != null)
-                {
-                    if (objectPersistenceEngine.SourceContext != null)
-                        objectPersistenceEngine.SourceContext.CommitRecursive(exceptionLimit);
-                }
-            }
-        }
+		protected virtual void DoCommit(int exceptionLimit, bool recursive)
+		{
+			ContextCancelEventArgs e = new ContextCancelEventArgs(this);
+			m_EventManager.OnCommitting(this, e);
+ 
+			if (e.Cancel)
+				return;
+			if (!DomainMap.IsReadOnly)
+			{
+				m_PersistenceManager.Commit(exceptionLimit, recursive);		
+			}
+
+			ContextEventArgs e2 = new ContextEventArgs(this);
+			m_EventManager.OnCommitted(this, e2);
+		}
         
         public virtual void Dispose()
 		{
@@ -2812,6 +2815,15 @@ namespace Puzzle.NPersist.Framework
 			}
 		}
 
+
+        void IEventListener.OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+        {
+            if (AquiredSourceAssignedIdentity != null)
+            {
+                AquiredSourceAssignedIdentity(sender, e);
+            }
+        }
+
 		#endregion
 
         public virtual IList Conflicts
@@ -2846,6 +2858,16 @@ namespace Puzzle.NPersist.Framework
 			if (m_PersistenceEngineManager != null)
 				return m_PersistenceEngineManager;
 			return m_PersistenceEngine;
+		}
+
+		private bool alwaysCommitRecursive = true;
+		/// <summary>
+		/// Indicates whether calls to the Commit method will behave like calls to the CommitRecursive method. Default is true.
+		/// </summary>
+		public virtual bool AlwaysCommitRecursive
+		{ 
+			get { return alwaysCommitRecursive; }
+			set { alwaysCommitRecursive = value; }
 		}
 
         #region .NET 2.0 Specific Code

@@ -7,6 +7,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Samples.Northwind.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace Puzzle.NPersist.Tests.Northwind.NET_3._5.Basic
 {

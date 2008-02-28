@@ -30,11 +30,11 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void CreateObject(object obj);
 
-		void CommitObject(object obj, int exceptionLimit);
-
 		void DeleteObject(object obj);
 
-		void Commit(int exceptionLimit);
+		void CommitObject(object obj, int exceptionLimit, bool recursive);
+
+		void Commit(int exceptionLimit, bool recursive);
 
 		RefreshBehaviorType RefreshBehavior { get; set; }
 
