@@ -235,6 +235,18 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName).GetSourceMap().SourceType;
 		}
 
+		#region Dispose
+
+		private bool isDisposed = false;
+		public virtual void Dispose()
+		{
+			if (isDisposed)
+				return;
+
+			isDisposed = true;
+		}
+
+		#endregion
 
 	}
 }

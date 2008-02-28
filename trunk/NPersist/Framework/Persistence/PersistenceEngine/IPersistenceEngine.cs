@@ -19,7 +19,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 	/// <summary>
 	/// Summary description for IPersistenceEngine.
 	/// </summary>
-	public interface IPersistenceEngine : IContextChild
+	public interface IPersistenceEngine : IContextChild, IDisposable
 	{
 		void Begin();
 

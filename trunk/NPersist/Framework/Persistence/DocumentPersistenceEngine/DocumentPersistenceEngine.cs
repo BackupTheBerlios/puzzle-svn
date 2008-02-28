@@ -1470,6 +1470,17 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		#endregion
 
+		#region Dispose
 
+		private bool isDisposed = false;
+		public virtual void Dispose()
+		{
+			if (isDisposed)
+				return;
+
+			isDisposed = true;
+		}
+
+		#endregion
 	}
 }

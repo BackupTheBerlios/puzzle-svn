@@ -201,5 +201,18 @@ namespace Puzzle.NPersist.Framework.Remoting
 
         public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
 
+		#region Dispose
+
+		private bool isDisposed = false;
+		public virtual void Dispose()
+		{
+			if (isDisposed)
+				return;
+
+			isDisposed = true;
+		}
+
+		#endregion
+
 	}
 }

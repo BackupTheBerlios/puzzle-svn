@@ -10,6 +10,7 @@ using Puzzle.NPersist.Framework.Interfaces;
 using Puzzle.NPersist.Framework.Mapping;
 using Puzzle.NPersist.Framework.Querying;
 using Puzzle.NPersist.Framework.EventArguments;
+using Puzzle.NPersist.Framework.Delegates;
 // *
 // * Copyright (C) 2005 Mats Helander : http://www.puzzleframework.com
 // *
@@ -111,11 +112,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 				listUpdate.Clear() ;
 				listRemove.Clear() ;
 
-				//if (recursive)
-				//	UpdateIdentities();
-				//else
-				//	AddIdentityObservers();
-
 				hashInserted.Clear() ;
 
 			}
@@ -145,41 +141,42 @@ namespace Puzzle.NPersist.Framework.Persistence
 			hashInserted.Clear() ;
 		}
 
-		public virtual void UpdateIdentities()
-		{
-			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
-
-			try
-			{
-				IObjectManager om = this.Context.ObjectManager;
-				IObjectManager sourceOm = this.sourceContext.ObjectManager;
-				foreach (object obj in hashInserted.Keys)
-				{
-					IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
-					if (classMap.HasIdAssignedBySource())
-					{
-						object sourceObject = hashInserted[obj];
-						string prevId = om.GetObjectIdentity(obj);
-						foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps() )
-						{
-							if (propertyMap.GetIsAssignedBySource())
-							{
-								IPropertyMap sourcePropertyMap = propertyMap.GetSourcePropertyMapOrSelf() ;	
-								om.SetPropertyValue(obj, propertyMap.Name,  sourceOm.GetPropertyValue(sourceObject, sourcePropertyMap.Name) ) ;	
-								om.SetOriginalPropertyValue(obj, propertyMap.Name,  sourceOm.GetPropertyValue(sourceObject, sourcePropertyMap.Name) ) ;	
-								om.SetNullValueStatus(obj, propertyMap.Name, false) ;	
-							}
-						}
-						this.Context.IdentityMap.UpdateIdentity(obj, prevId, om.GetObjectIdentity(obj));
-					} 
-				}	
-			}
-			finally
-			{
-				Monitor.Exit(sourceContext);			
-			}	
-		}
+		//not used any more...
+//		public virtual void UpdateIdentities()
+//		{
+//			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
+//				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+//
+//			try
+//			{
+//				IObjectManager om = this.Context.ObjectManager;
+//				IObjectManager sourceOm = this.sourceContext.ObjectManager;
+//				foreach (object obj in hashInserted.Keys)
+//				{
+//					IClassMap classMap = this.Context.DomainMap.MustGetClassMap(obj.GetType() );
+//					if (classMap.HasIdAssignedBySource())
+//					{
+//						object sourceObject = hashInserted[obj];
+//						string prevId = om.GetObjectIdentity(obj);
+//						foreach (IPropertyMap propertyMap in classMap.GetIdentityPropertyMaps() )
+//						{
+//							if (propertyMap.GetIsAssignedBySource())
+//							{
+//								IPropertyMap sourcePropertyMap = propertyMap.GetSourcePropertyMapOrSelf() ;	
+//								om.SetPropertyValue(obj, propertyMap.Name,  sourceOm.GetPropertyValue(sourceObject, sourcePropertyMap.Name) ) ;	
+//								om.SetOriginalPropertyValue(obj, propertyMap.Name,  sourceOm.GetPropertyValue(sourceObject, sourcePropertyMap.Name) ) ;	
+//								om.SetNullValueStatus(obj, propertyMap.Name, false) ;	
+//							}
+//						}
+//						this.Context.IdentityMap.UpdateIdentity(obj, prevId, om.GetObjectIdentity(obj));
+//					} 
+//				}	
+//			}
+//			finally
+//			{
+//				Monitor.Exit(sourceContext);			
+//			}	
+//		}
 
 		public virtual void LoadObject(ref object obj)
 		{
@@ -1248,5 +1245,22 @@ namespace Puzzle.NPersist.Framework.Persistence
 				}
 			}
 		}
+
+		#region Dispose
+
+		private bool isDisposed = false;
+		public virtual void Dispose()
+		{
+			if (isDisposed)
+				return;
+
+			isDisposed = true;
+
+			if (this.SourceContext != null)
+				this.SourceContext.AquiredSourceAssignedIdentity -= new AquiredSourceAssignedIdentityEventHandler(this.OnAquiredSourceAssignedIdentity);
+		}
+
+		#endregion
+
     }
 }

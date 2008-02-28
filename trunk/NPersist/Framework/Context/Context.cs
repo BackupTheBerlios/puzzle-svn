@@ -1447,6 +1447,12 @@ namespace Puzzle.NPersist.Framework
 			if (m_DataSourceManager != null)
 				m_DataSourceManager.Dispose();
 
+			if (m_PersistenceEngineManager != null)
+				m_PersistenceEngineManager.Dispose();
+
+			if (m_PersistenceEngine != null)
+				m_PersistenceEngine.Dispose();
+
 			GC.SuppressFinalize(this);
 		}
 

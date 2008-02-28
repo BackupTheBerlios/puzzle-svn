@@ -323,5 +323,34 @@ namespace Puzzle.NPersist.Framework.Persistence
 			return this.Context.DomainMap.MustGetClassMap(obj.GetType()).MustGetPropertyMap(propertyName).GetSourceMap();
 		}
 
+		#region Dispose
+
+		private bool isDisposed = false;
+		public virtual void Dispose()
+		{
+			if (isDisposed)
+				return;
+
+			isDisposed = true;
+
+			if (defaultPersistenceEngine != null)
+				defaultPersistenceEngine.Dispose();
+
+			if (objectRelationalPersistenceEngine != null)
+				objectRelationalPersistenceEngine.Dispose();
+
+			if (objectDocumentPersistenceEngine != null)
+				objectDocumentPersistenceEngine.Dispose();
+
+			if (objectObjectPersistenceEngine != null)
+				objectObjectPersistenceEngine.Dispose();
+
+			if (objectServicePersistenceEngine != null)
+				objectServicePersistenceEngine.Dispose();
+
+		}
+
+		#endregion
+
 	}
 }
