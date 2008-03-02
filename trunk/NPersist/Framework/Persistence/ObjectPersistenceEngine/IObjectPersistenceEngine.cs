@@ -24,6 +24,6 @@ namespace Puzzle.NPersist.Framework.Persistence
 {
 	public interface IObjectPersistenceEngine : IPersistenceEngine
 	{
-		void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e);
+		void OnAcquiredIdentity(object sender, ObjectEventArgs e);
 	}
 }

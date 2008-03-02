@@ -49,7 +49,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public void Begin()
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -67,7 +67,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public void Commit(bool recursive)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -145,7 +145,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 //		public virtual void UpdateIdentities()
 //		{
 //			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-//				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+//				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 //
 //			try
 //			{
@@ -181,7 +181,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void LoadObject(ref object obj)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -210,7 +210,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void LoadObjectByKey(ref object obj, string keyPropertyName, object keyValue)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -230,7 +230,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void DoInsertObject(object obj)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -250,7 +250,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void DoSaveInsertedObject(object obj)
         {
             if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-                throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
+                throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
 
             try
             {
@@ -276,7 +276,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void DoRemoveObject(object obj)
         {
             if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-                throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
+                throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms");
 
             try
             {
@@ -296,7 +296,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void DoSaveRemovedObject(object obj)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -322,7 +322,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void DoUpdateObject(object obj)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -344,7 +344,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual void LoadProperty(object obj, string propertyName)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -373,7 +373,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void LoadProperty(object obj, object source, string propertyName)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -405,7 +405,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual IList LoadObjects(IQuery query, IList listToFill)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -444,7 +444,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual DataTable LoadDataTable(IQuery query)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -459,7 +459,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		public virtual IList GetObjectsBySql(string sqlQuery, Type type, IList idColumns, IList typeColumns, Hashtable propertyColumnMap, IList parameters, RefreshBehaviorType refreshBehavior, IList listToFill)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -506,7 +506,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         protected virtual void LoadObject(object obj, object source, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -555,7 +555,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         private void LoadProperty(object obj, IPropertyMap propertyMap, IObjectManager om, object source, IPropertyMap sourcePropertyMap, IObjectManager sourceOm, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -657,7 +657,7 @@ namespace Puzzle.NPersist.Framework.Persistence
         public virtual void LoadReferenceList(IList list, IList orgList, RefreshBehaviorType refreshBehavior)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -699,7 +699,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private void SaveReferenceList(IList list, IList sourceList)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -778,7 +778,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		private void SaveList(IList list, IList sourceList)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -860,7 +860,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		protected virtual void SaveObject(object obj, object source, bool creating)
 		{
 			if (!Monitor.TryEnter(sourceContext, this.Context.Timeout))
-				throw new NPersistTimeoutException("Could not aquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
+				throw new NPersistTimeoutException("Could not acquire exclusive lock on root context before timeout: " + this.Context.Timeout.ToString() + " ms" );
 
 			try
 			{
@@ -1187,7 +1187,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
         public virtual void TouchTable(ITableMap tableMap, int exceptionLimit) { ; }
 
-		public virtual void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+		public virtual void OnAcquiredIdentity(object sender, ObjectEventArgs e)
 		{
 			if (e.EventObject == null)
 				return;
@@ -1241,7 +1241,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 					//raise the event for further child contexts
 					ObjectEventArgs e2 = new ObjectEventArgs(obj);
-					this.Context.EventManager.OnAquiredSourceAssignedIdentity(this, e2);
+					this.Context.EventManager.OnAcquiredIdentity(this, e2);
 				}
 			}
 		}
@@ -1257,7 +1257,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 			isDisposed = true;
 
 			if (this.SourceContext != null)
-				this.SourceContext.AquiredSourceAssignedIdentity -= new AquiredSourceAssignedIdentityEventHandler(this.OnAquiredSourceAssignedIdentity);
+				this.SourceContext.AcquiredIdentity -= new AcquiredIdentityEventHandler(this.OnAcquiredIdentity);
 		}
 
 		#endregion

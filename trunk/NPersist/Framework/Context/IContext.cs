@@ -67,7 +67,7 @@ namespace Puzzle.NPersist.Framework
 		event WrotePropertyEventHandler WroteProperty;
 		event LoadingPropertyEventHandler LoadingProperty;
 		event LoadedPropertyEventHandler LoadedProperty;
-		event AquiredSourceAssignedIdentityEventHandler AquiredSourceAssignedIdentity;
+		event AcquiredIdentityEventHandler AcquiredIdentity;
 
         /// <summary>
         /// Gets or sets the interceptor.

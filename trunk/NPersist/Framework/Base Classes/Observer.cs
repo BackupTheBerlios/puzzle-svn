@@ -169,7 +169,7 @@ namespace Puzzle.NPersist.Framework.BaseClasses
 		{
 		}
 
-        public virtual void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+        public virtual void OnAcquiredIdentity(object sender, ObjectEventArgs e)
         {
         }
 

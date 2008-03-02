@@ -119,7 +119,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 
 		void OnInstantiatedObject(object sender, ObjectEventArgs e);
 
-        void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e);
+        void OnAcquiredIdentity(object sender, ObjectEventArgs e);
 
 
 		void AddObserver(IObserver observer);

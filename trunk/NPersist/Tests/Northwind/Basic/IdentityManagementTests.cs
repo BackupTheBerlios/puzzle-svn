@@ -19,13 +19,13 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		}
 
 		[Test]
-		public void TestGetAquiredIdentityEvent()
+		public void TestGetAcquiredIdentityEvent()
 		{
 			string tmpProdId = ""; 
 			using (IContext context = GetContext() )
 			{
-				hashAquiredSourceAssignedIdentities.Clear();
-				context.AquiredSourceAssignedIdentity += new AquiredSourceAssignedIdentityEventHandler(Context_CountOnAquiredSourceAssignedIdentity) ;
+				hashAcquiredIdentities.Clear();
+				context.AcquiredIdentity += new AcquiredIdentityEventHandler(Context_CountOnAcquiredIdentity) ;
 
 				ITransaction tx = context.BeginTransaction();
 				try
@@ -42,12 +42,12 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 					Assert.AreEqual(36, tmpProdId.Length);
 
-					Assert.AreEqual(0, hashAquiredSourceAssignedIdentities.Count);
+					Assert.AreEqual(0, hashAcquiredIdentities.Count);
 
 					context.Commit();
 
-					Assert.AreEqual(1, hashAquiredSourceAssignedIdentities.Count);
-					Assert.IsTrue(hashAquiredSourceAssignedIdentities.ContainsKey(product));
+					Assert.AreEqual(1, hashAcquiredIdentities.Count);
+					Assert.IsTrue(hashAcquiredIdentities.ContainsKey(product));
 
 					context.DeleteObject(product);
 
@@ -64,15 +64,15 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 		}
 
 		[Test]
-		public void TestGetAquiredIdentityEventForDetail()
+		public void TestGetAcquiredIdentityEventForDetail()
 		{
 			DeleteTestCustomer("TESTC");
 
 			string tmpProdId = ""; 
 			using (IContext context = GetContext() )
 			{
-				hashAquiredSourceAssignedIdentities.Clear();
-				context.AquiredSourceAssignedIdentity += new AquiredSourceAssignedIdentityEventHandler(Context_CountOnAquiredSourceAssignedIdentity) ;
+				hashAcquiredIdentities.Clear();
+				context.AcquiredIdentity += new AcquiredIdentityEventHandler(Context_CountOnAcquiredIdentity) ;
 
 				ITransaction tx = context.BeginTransaction();
 				try
@@ -100,14 +100,14 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 
 					Assert.AreEqual(36, tmpProdId.Length);
 
-					Assert.AreEqual(0, hashAquiredSourceAssignedIdentities.Count);
+					Assert.AreEqual(0, hashAcquiredIdentities.Count);
 
 					context.Commit();
 
-					Assert.AreEqual(3, hashAquiredSourceAssignedIdentities.Count);
-					Assert.IsTrue(hashAquiredSourceAssignedIdentities.ContainsKey(product));
-					Assert.IsTrue(hashAquiredSourceAssignedIdentities.ContainsKey(order));
-					Assert.IsTrue(hashAquiredSourceAssignedIdentities.ContainsKey(orderDetail));
+					Assert.AreEqual(3, hashAcquiredIdentities.Count);
+					Assert.IsTrue(hashAcquiredIdentities.ContainsKey(product));
+					Assert.IsTrue(hashAcquiredIdentities.ContainsKey(order));
+					Assert.IsTrue(hashAcquiredIdentities.ContainsKey(orderDetail));
 
 					tx.Commit();
 				}
@@ -254,11 +254,11 @@ namespace Puzzle.NPersist.Tests.Northwind.Basic
 			}			
 		}
 
-		private Hashtable hashAquiredSourceAssignedIdentities = new Hashtable();
+		private Hashtable hashAcquiredIdentities = new Hashtable();
 
-		private void Context_CountOnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+		private void Context_CountOnAcquiredIdentity(object sender, ObjectEventArgs e)
 		{
-			hashAquiredSourceAssignedIdentities[e.EventObject] = e.EventObject;
+			hashAcquiredIdentities[e.EventObject] = e.EventObject;
 		}
 
 	}

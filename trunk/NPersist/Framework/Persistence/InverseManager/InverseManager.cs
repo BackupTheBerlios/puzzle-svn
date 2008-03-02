@@ -579,7 +579,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IInterceptableList mList;
 			bool stackMute = false;
 
-			if (value != null)
+            if (value == null && oldValue == null)
+                return;
+
+            if (value == oldValue)
+                return;
+
+            if (value != null)
 			{
 				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);
 				if (propStatus == PropertyStatus.NotLoaded)
@@ -645,6 +651,13 @@ namespace Puzzle.NPersist.Framework.Persistence
 			IPropertyMap invPropertyMap = propertyMap.GetInversePropertyMap();
 			if ( invPropertyMap == null) { return ;}
 			IObjectManager om = this.Context.ObjectManager;
+
+            if (value == null && oldValue == null)
+                return;
+
+            if (value == oldValue)
+                return;
+
 			if (value != null)
 			{
 				propStatus = om.GetPropertyStatus(value, invPropertyMap.Name);

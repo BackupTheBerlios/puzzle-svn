@@ -1542,7 +1542,7 @@ namespace Puzzle.NPersist.Framework.Persistence
 		}
 
 
-        public virtual void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+        public virtual void OnAcquiredIdentity(object sender, ObjectEventArgs e)
         {
             if (!(m_RaiseEvents))
             {
@@ -1558,31 +1558,31 @@ namespace Puzzle.NPersist.Framework.Persistence
             }
             foreach (IObserver observer in m_Observers)
             {
-                observer.OnAquiredSourceAssignedIdentity(sender, e);
+                observer.OnAcquiredIdentity(sender, e);
             }
             foreach (IObserver observer in m_AllTypeObservers)
             {
-                observer.OnAquiredSourceAssignedIdentity(sender, e);
+                observer.OnAcquiredIdentity(sender, e);
             }
             foreach (IObserver observer in GetTypeObservers(e.EventObject))
             {
-                observer.OnAquiredSourceAssignedIdentity(sender, e);
+                observer.OnAcquiredIdentity(sender, e);
             }
             foreach (IObserver observer in GetObjectObservers(e.EventObject))
             {
-                observer.OnAquiredSourceAssignedIdentity(sender, e);
+                observer.OnAcquiredIdentity(sender, e);
             }
             if (e.EventObject is IObservable)
             {
                 foreach (IEventListener eventListener in ((IObservable)(e.EventObject)).GetEventListeners())
                 {
-                    eventListener.OnAquiredSourceAssignedIdentity(sender, e);
+                    eventListener.OnAcquiredIdentity(sender, e);
                 }
             }
-            this.Observer.OnAquiredSourceAssignedIdentity(sender, e);
+            this.Observer.OnAcquiredIdentity(sender, e);
             if (e.EventObject is IEventListener)
             {
-                ((IEventListener)(e.EventObject)).OnAquiredSourceAssignedIdentity(sender, e);
+                ((IEventListener)(e.EventObject)).OnAcquiredIdentity(sender, e);
             }
         }
 

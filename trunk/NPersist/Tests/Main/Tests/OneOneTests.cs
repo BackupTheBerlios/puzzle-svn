@@ -16,6 +16,48 @@ namespace Puzzle.NPersist.Tests.Main
 	{
 
 		[Test()]
+		public void TestSetOneOneInverseSynch()
+		{
+			using (IContext context = GetContext())
+			{
+				//Encapsulate our whole test in a transaction,
+				//so that any changes to the database are rolled back in case
+				//of a test failure
+				ITransaction tx = context.BeginTransaction();
+
+				try
+				{
+					Book b = (Book) context.CreateObject(typeof(Book));
+
+					b.Name = "Moby Dick";
+					b.Cover.Color = "Brown";
+					b.BookInfo.ISBN = "123456";
+
+					BookInfo bi = b.BookInfo;;
+
+					Assert.AreEqual(b, bi.Book);
+					Assert.AreEqual(bi, b.BookInfo);
+
+					bi.Book = b;
+
+					Assert.AreEqual(b, bi.Book);
+					Assert.AreEqual(bi, b.BookInfo);
+
+					tx.Rollback();
+				}
+				catch (Exception ex)
+				{
+					//Something went wrong!
+					//Rollback the transaction and retheow the exception
+					tx.Rollback();
+
+					throw ex;
+				}				
+			}
+		}
+
+
+		[Test()]
 		public void TestLazyLoadOneOne()
 		{
 			long bookId = 0;

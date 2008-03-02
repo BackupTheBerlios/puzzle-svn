@@ -63,6 +63,6 @@ namespace Puzzle.NPersist.Framework.Interfaces
 		void OnInstantiatedObject(object sender, ObjectEventArgs e);
 
 
-		void OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e);
+		void OnAcquiredIdentity(object sender, ObjectEventArgs e);
 	}
 }

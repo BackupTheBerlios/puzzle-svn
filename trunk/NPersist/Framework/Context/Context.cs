@@ -119,7 +119,7 @@ namespace Puzzle.NPersist.Framework
 		public event LoadedPropertyEventHandler LoadedProperty;
 		public event InstantiatingObjectEventHandler InstantiatingObject;
 		public event InstantiatedObjectEventHandler InstantiatedObject;
-        public event AquiredSourceAssignedIdentityEventHandler AquiredSourceAssignedIdentity;
+        public event AcquiredIdentityEventHandler AcquiredIdentity;
 
 		#endregion
 
@@ -165,7 +165,7 @@ namespace Puzzle.NPersist.Framework
 			m_PersistenceEngine = objectPersistenceEngine;
 			m_PersistenceEngine.Context = this;
 
-			rootContext.AquiredSourceAssignedIdentity += new AquiredSourceAssignedIdentityEventHandler(objectPersistenceEngine.OnAquiredSourceAssignedIdentity);
+			rootContext.AcquiredIdentity += new AcquiredIdentityEventHandler(objectPersistenceEngine.OnAcquiredIdentity);
  
 			InitManagers(true);
 		}
@@ -2822,11 +2822,11 @@ namespace Puzzle.NPersist.Framework
 		}
 
 
-        void IEventListener.OnAquiredSourceAssignedIdentity(object sender, ObjectEventArgs e)
+        void IEventListener.OnAcquiredIdentity(object sender, ObjectEventArgs e)
         {
-            if (AquiredSourceAssignedIdentity != null)
+            if (AcquiredIdentity != null)
             {
-                AquiredSourceAssignedIdentity(sender, e);
+                AcquiredIdentity(sender, e);
             }
         }
 

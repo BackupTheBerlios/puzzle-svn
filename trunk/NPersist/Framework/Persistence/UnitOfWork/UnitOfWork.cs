@@ -396,7 +396,7 @@ namespace Puzzle.NPersist.Framework.Persistence
             foreach (object obj in m_listPromoted)
             {
                 ObjectEventArgs e = new ObjectEventArgs(obj);
-                this.Context.EventManager.OnAquiredSourceAssignedIdentity(this, e);
+                this.Context.EventManager.OnAcquiredIdentity(this, e);
             }
 
 			m_listInserted.Clear() ;

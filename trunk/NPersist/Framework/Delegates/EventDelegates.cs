@@ -88,5 +88,5 @@ namespace Puzzle.NPersist.Framework.Delegates
 
 	public delegate void InstantiatedObjectEventHandler(Object sender, ObjectEventArgs e);
 
-    public delegate void AquiredSourceAssignedIdentityEventHandler(Object sender, ObjectEventArgs e);
+    public delegate void AcquiredIdentityEventHandler(Object sender, ObjectEventArgs e);
 }
