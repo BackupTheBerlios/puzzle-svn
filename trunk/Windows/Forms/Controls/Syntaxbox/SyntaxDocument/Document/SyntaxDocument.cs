@@ -1808,6 +1808,45 @@ namespace Puzzle.SourceCode
 		{
 		}
 
+        /// <summary>
+        /// Sets a syntax file, from an embedded resource.
+        /// </summary>
+        /// <param name="assembly">The assembly which contains the embedded resource.</param>
+        /// <param name="resourceName">The name of the resource.</param>
+        public void SetSyntaxFromEmbeddedResource(Assembly assembly, String resourceName)
+        {
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (String.IsNullOrEmpty(resourceName)) throw new ArgumentNullException("resourceName");
+
+            //
+            // Get the xml from an embedded resource. Load the stream.
+            //
+
+            Stream stream = assembly.GetManifestResourceStream(resourceName);
+            stream.Seek(0, SeekOrigin.Begin)
+            
+            //
+            // Read stream.
+            //
+
+            StreamReader reader = new StreamReader(stream);
+            String xml = reader.ReadToEnd();
+
+            //
+            // Clean up stream.
+            //
+
+            stream.Close();
+
+            //
+            // Initialize.
+            //
+
+            this.Parser.Init(Language.FromSyntaxXml(xml));             
+            this.Text = this.Text;
+        }
+
+
 		protected internal void OnApplyFormatRanges(Row row)
 		{
 			if (this.FormatRanges == null)
