@@ -9,9 +9,9 @@ namespace Puzzle.NContext.Framework
 {
     public partial class Context : IContext
     {
-        protected IList<IObjectFactory> objectFactories = new List<IObjectFactory>();
-        protected IDictionary<string, ObjectConfiguration> namedConfigurations = new Dictionary<string, ObjectConfiguration>();
-        protected IDictionary<Type, ObjectConfiguration> typedConfigurations = new Dictionary<Type, ObjectConfiguration>();
+        protected IList<IObjectInitializer> objectFactories = new List<IObjectInitializer>();
+        protected IDictionary<string, ObjectFactoryInfo> namedObjectFactories = new Dictionary<string, ObjectFactoryInfo>();
+        protected IDictionary<Type, ObjectFactoryInfo> typedObjectFactories = new Dictionary<Type, ObjectFactoryInfo>();
 
         protected Context()
         {
@@ -20,7 +20,7 @@ namespace Puzzle.NContext.Framework
         public T GetObject<T>(FactoryDelegate<T> factoryMethod)
         {
             MethodInfo method = factoryMethod.Method;
-            IObjectFactory factory = factoryMethod.Target as IObjectFactory;
+            IObjectInitializer factory = factoryMethod.Target as IObjectInitializer;
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
@@ -32,9 +32,9 @@ namespace Puzzle.NContext.Framework
             if (attrib == null)
                 throw new Exception("Method is not a factory method");
 
-            if (attrib.ConfigId != null)
+            if (attrib.FactoryId != null)
             {
-                return GetObject<T>(attrib.ConfigId);
+                return GetObject<T>(attrib.FactoryId);
             }
             else if (attrib.DefaultForType != null)
             {
@@ -42,8 +42,8 @@ namespace Puzzle.NContext.Framework
             }
             else
             {
-                string configId = method.Name;
-                return GetObject<T>(configId);
+                string factoryId = method.Name;
+                return GetObject<T>(factoryId);
             }
         }
 
@@ -54,28 +54,28 @@ namespace Puzzle.NContext.Framework
             return res;
         }
 
-        public T GetObject<T>(string configId)
+        public T GetObject<T>(string factoryId)
         {
-            if (namedConfigurations.ContainsKey(configId))
+            if (namedObjectFactories.ContainsKey(factoryId))
             {
-                ObjectConfiguration config = namedConfigurations[configId];
+                ObjectFactoryInfo config = namedObjectFactories[factoryId];
                 object res = config.FactoryDelegate();
                 return (T)res;
             }
 
-            throw new Exception(string.Format("Named configuraton '{0}' was not found", configId));
+            throw new Exception(string.Format("Named configuraton '{0}' was not found", factoryId));
         }
 
-        public T GetObject<T>(Type configType)
+        public T GetObject<T>(Type factoryType)
         {
-            if (typedConfigurations.ContainsKey(configType))
+            if (typedObjectFactories.ContainsKey(factoryType))
             {
-                ObjectConfiguration config = typedConfigurations[configType];
+                ObjectFactoryInfo config = typedObjectFactories[factoryType];
                 object res = config.FactoryDelegate();
                 return (T)res;
             }
 
-            throw new Exception(string.Format("Typed configuraton '{0}' was not found", configType.Name));
+            throw new Exception(string.Format("Typed configuraton '{0}' was not found", factoryType.Name));
         }
 
         public T GetObject<T>()
@@ -95,7 +95,7 @@ namespace Puzzle.NContext.Framework
 
         }
 
-        public void RegisterObjectFactory(IObjectFactory factory)
+        public void RegisterObjectFactory(IObjectInitializer factory)
         {
             factory.Context = this;
             objectFactories.Add(factory);
@@ -111,17 +111,17 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private void RegisterObjectFactoryMethod(IObjectFactory factory, MethodInfo method, FactoryMethodAttribute attrib)
+        private void RegisterObjectFactoryMethod(IObjectInitializer factory, MethodInfo method, FactoryMethodAttribute attrib)
         {
             Type objectType = method.ReturnType;
 
             if (method.GetParameters().Length > 0)
                 throw new NotSupportedException("Factory methods may not have any parameters");
 
-            if (attrib.ConfigId != null)
+            if (attrib.FactoryId != null)
             {
                 FactoryDelegate<object> factoryDelegate = CreateMethodFactoryDelegate(factory, method);
-                RegisterObjectFactoryMethod(attrib.ConfigId, factoryDelegate, attrib.InstanceMode);
+                RegisterObjectFactoryMethod(attrib.FactoryId, factoryDelegate, attrib.InstanceMode);
             }
             else if (attrib.DefaultForType != null)
             {
@@ -136,7 +136,7 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private FactoryDelegate<object> CreateMethodFactoryDelegate(IObjectFactory factory, MethodInfo method)
+        private FactoryDelegate<object> CreateMethodFactoryDelegate(IObjectInitializer factory, MethodInfo method)
         {
             ConstantExpression instance = Expression.Constant(factory);
             MethodCallExpression call = Expression.Call(instance, method);
@@ -148,19 +148,19 @@ namespace Puzzle.NContext.Framework
 
         public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectConfiguration config = CreateObjectConfiguration(factoryDelegate, instanceMode);
-            typedConfigurations.Add(objectType, config);
+            ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
+            typedObjectFactories.Add(objectType, config);
         }
 
         public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectConfiguration config = CreateObjectConfiguration(factoryDelegate, instanceMode);
-            namedConfigurations.Add(objectId, config);
+            ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
+            namedObjectFactories.Add(objectId, config);
         }
 
-        private static ObjectConfiguration CreateObjectConfiguration(FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
+        private static ObjectFactoryInfo CreateObjectConfiguration(FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectConfiguration config = new ObjectConfiguration();
+            ObjectFactoryInfo config = new ObjectFactoryInfo();
             config.FactoryDelegate = factoryDelegate;
             config.InstanceMode = instanceMode;
             return config;
@@ -179,7 +179,7 @@ namespace Puzzle.NContext.Framework
         public void ConfigureObject<T>(ConfigureDelegate<T> configMethod, T item)
         {
             MethodInfo method = configMethod.Method;
-            IObjectFactory factory = configMethod.Target as IObjectFactory;
+            IObjectInitializer factory = configMethod.Target as IObjectInitializer;
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 

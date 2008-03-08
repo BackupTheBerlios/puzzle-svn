@@ -8,7 +8,7 @@ namespace Puzzle.NContext.Framework
     [AttributeUsage(AttributeTargets.Method)]
     public class FactoryMethodAttribute : Attribute
     {
-        public string ConfigId { get; set; }
+        public string FactoryId { get; set; }
         public Type DefaultForType { get; set; }
         public ObjectInstanceMode InstanceMode { get; set; }
 

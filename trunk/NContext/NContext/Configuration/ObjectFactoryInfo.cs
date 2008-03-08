@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public class ObjectConfiguration 
+    public class ObjectFactoryInfo 
     {
         public FactoryDelegate<object> FactoryDelegate { get; set; }
         public ObjectInstanceMode InstanceMode { get; set; }
