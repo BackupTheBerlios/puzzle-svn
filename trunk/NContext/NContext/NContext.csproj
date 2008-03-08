@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\Context.cs" />
+    <Compile Include="Context\IContextBound.cs" />
+    <Compile Include="Delegates\Delegates.cs" />
+    <Compile Include="ObjectFactory\ConfigureMethodAttribute.cs" />
     <Compile Include="TypeBuilder\DefaultTypeBuilder.cs" />
     <Compile Include="ObjectFactory\FactoryMethodAttribute.cs" />
     <Compile Include="Context\IContext.cs" />

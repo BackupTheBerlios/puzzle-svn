@@ -5,8 +5,12 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public interface IObjectFactory : IContextBound
+    public interface IContextBound
     {
-        
+        IContext Context
+        {
+            get;
+            set;
+        }
     }
 }

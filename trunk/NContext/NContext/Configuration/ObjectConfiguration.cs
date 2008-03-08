@@ -7,7 +7,7 @@ namespace Puzzle.NContext.Framework
 {
     public class ObjectConfiguration 
     {
-        public Func<object> FactoryDelegate { get; set; }
+        public FactoryDelegate<object> FactoryDelegate { get; set; }
         public ObjectInstanceMode InstanceMode { get; set; }
     }
 }

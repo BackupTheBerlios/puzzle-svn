@@ -5,8 +5,6 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public interface IObjectFactory : IContextBound
-    {
-        
-    }
+    public delegate T FactoryDelegate <T>();
+    public delegate void ConfigureDelegate<T>(T item);
 }

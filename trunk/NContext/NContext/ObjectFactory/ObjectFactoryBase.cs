@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Puzzle.NContext.Framework
 {
@@ -13,19 +15,39 @@ namespace Puzzle.NContext.Framework
             return Context.CreateObject<T>(args);
         }
 
-        protected virtual T GetObject<T>(string objectId)
+        protected virtual T GetObject<T>(string configId)
         {
-            return Context.GetObject<T>(objectId);
+            return Context.GetObject<T>(configId);
         }
 
-        protected virtual T GetObject<T>(Type objectType)
+        protected virtual T GetObject<T>(Type configType)
         {
-            return Context.GetObject<T>(objectType);
+            return Context.GetObject<T>(configType);
         }
 
         protected virtual T GetObject<T>()
         {
             return Context.GetObject<T>();
+        }
+
+        protected virtual T GetObject<T>(FactoryDelegate<T> factoryMethod)
+        {
+            return Context.GetObject (factoryMethod);
+        }
+
+        protected virtual void ConfigureObject<T>(string configId, T item)
+        {
+            Context.ConfigureObject(configId, item);
+        }
+
+        protected virtual void ConfigureObject<T>(Type configType, T item)
+        {
+            Context.ConfigureObject(configType, item);
+        }
+
+        protected virtual void ConfigureObject<T>(ConfigureDelegate<T> configMethod, T item)
+        {
+            Context.ConfigureObject(configMethod, item);
         }
     }
 }
