@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public delegate object FactoryDelegate();
-    public delegate void ConfigureDelegate(object item);
+    public class ObjectConfigurationInfo
+    {
+        public ConfigureDelegate ConfigureDelegate { get; set; }
+    }
 }

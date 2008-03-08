@@ -10,14 +10,18 @@ namespace Puzzle.NContext.Framework
     public partial class Context : IContext
     {
         protected IList<IObjectInitializer> objectFactories = new List<IObjectInitializer>();
+        
         protected IDictionary<string, ObjectFactoryInfo> namedObjectFactories = new Dictionary<string, ObjectFactoryInfo>();
         protected IDictionary<Type, ObjectFactoryInfo> typedObjectFactories = new Dictionary<Type, ObjectFactoryInfo>();
+
+        protected IDictionary<string, ObjectConfigurationInfo> namedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();
+        protected IDictionary<Type, ObjectConfigurationInfo> typedObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
 
         protected Context()
         {
         }
         
-        public T GetObject<T>(FactoryDelegate<T> factoryMethod)
+        public T GetObject<T>(Func<T> factoryMethod)
         {
             MethodInfo method = factoryMethod.Method;
             IObjectInitializer factory = factoryMethod.Target as IObjectInitializer;
@@ -103,67 +107,34 @@ namespace Puzzle.NContext.Framework
             foreach (MethodInfo method in factory.GetType().GetMethods())
             {
                 FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
-
+                
                 if (attrib == null)
                     continue; //not a factory method
 
                 RegisterObjectFactoryMethod(factory, method, attrib);
             }
-        }
 
-        private void RegisterObjectFactoryMethod(IObjectInitializer factory, MethodInfo method, FactoryMethodAttribute attrib)
-        {
-            Type objectType = method.ReturnType;
+            foreach (MethodInfo method in factory.GetType().GetMethods())
+            {
+                ConfigureMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigureMethodAttribute), true).FirstOrDefault() as ConfigureMethodAttribute;
 
-            if (method.GetParameters().Length > 0)
-                throw new NotSupportedException("Factory methods may not have any parameters");
+                if (attrib == null)
+                    continue; //not a configuration method
 
-            if (attrib.FactoryId != null)
-            {
-                FactoryDelegate<object> factoryDelegate = CreateMethodFactoryDelegate(factory, method);
-                RegisterObjectFactoryMethod(attrib.FactoryId, factoryDelegate, attrib.InstanceMode);
-            }
-            else if (attrib.DefaultForType != null)
-            {
-                FactoryDelegate<object> factoryDelegate = CreateMethodFactoryDelegate(factory, method);
-                RegisterObjectFactoryMethod(attrib.DefaultForType, factoryDelegate, attrib.InstanceMode);
-            }
-            else
-            {
-                string objectId = method.Name;
-                FactoryDelegate<object> factoryDelegate = CreateMethodFactoryDelegate(factory, method);
-                RegisterObjectFactoryMethod(objectId, factoryDelegate, attrib.InstanceMode);
+                RegisterObjectConfigurationMethod(factory, method, attrib);
             }
         }
 
-        private FactoryDelegate<object> CreateMethodFactoryDelegate(IObjectInitializer factory, MethodInfo method)
-        {
-            ConstantExpression instance = Expression.Constant(factory);
-            MethodCallExpression call = Expression.Call(instance, method);
-            Expression body = Expression.TypeAs(call, typeof(object));
-            LambdaExpression lambda = Expression.Lambda(typeof(FactoryDelegate<object>), body);
-            FactoryDelegate<object> factoryDelegate = (FactoryDelegate<object>)lambda.Compile();
-            return factoryDelegate;
-        }
-
-        public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
+        public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
         {
             ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
             typedObjectFactories.Add(objectType, config);
         }
 
-        public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
+        public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
         {
             ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
             namedObjectFactories.Add(objectId, config);
-        }
-
-        private static ObjectFactoryInfo CreateObjectConfiguration(FactoryDelegate<object> factoryDelegate, ObjectInstanceMode instanceMode)
-        {
-            ObjectFactoryInfo config = new ObjectFactoryInfo();
-            config.FactoryDelegate = factoryDelegate;
-            config.InstanceMode = instanceMode;
-            return config;
         }
 
         public void ConfigureObject<T>(string configId, T item)
@@ -176,7 +147,7 @@ namespace Puzzle.NContext.Framework
             throw new NotImplementedException();
         }
 
-        public void ConfigureObject<T>(ConfigureDelegate<T> configMethod, T item)
+        public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
             MethodInfo method = configMethod.Method;
             IObjectInitializer factory = configMethod.Target as IObjectInitializer;
@@ -205,5 +176,86 @@ namespace Puzzle.NContext.Framework
                 ConfigureObject<T>(configId, item);
             }
         }
+
+        private void RegisterObjectConfigurationMethod(IObjectInitializer factory, MethodInfo method, ConfigureMethodAttribute attrib)
+        {
+            Type objectType = method.ReturnType;
+
+            if (method.GetParameters().Length != 1)
+                throw new NotSupportedException("Configuration methods must have only 1 parameter");
+
+            if (attrib.ConfigId != null)
+            {
+                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+              //  RegisterObjectFactoryMethod(attrib.ConfigId, factoryDelegate, attrib.InstanceMode);
+            }
+            else if (attrib.DefaultForType != null)
+            {
+                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+            //    RegisterObjectFactoryMethod(attrib.DefaultForType, factoryDelegate, attrib.InstanceMode);
+            }
+            else
+            {
+                string objectId = method.Name;
+                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+            //    RegisterObjectFactoryMethod(objectId, factoryDelegate, attrib.InstanceMode);
+            }
+        }
+
+        private ConfigureDelegate CreateMethodConfigurationDelegate(IObjectInitializer factory, MethodInfo method)
+        {
+            ParameterInfo param = method.GetParameters().First();
+            ParameterExpression paramExpression = Expression.Parameter(typeof(object), "arg");
+            Expression castExpression = Expression.TypeAs(paramExpression, param.ParameterType);
+            Expression factoryInstanceExpression = Expression.Constant(factory);
+            Expression callExpression = Expression.Call(factoryInstanceExpression, method,castExpression);
+            LambdaExpression lambda = Expression.Lambda(typeof(ConfigureDelegate), callExpression, paramExpression);
+            ConfigureDelegate del = (ConfigureDelegate)lambda.Compile();
+            return del;
+        }
+
+        private void RegisterObjectFactoryMethod(IObjectInitializer factory, MethodInfo method, FactoryMethodAttribute attrib)
+        {
+            Type objectType = method.ReturnType;
+
+            if (method.GetParameters().Length != 0)
+                throw new NotSupportedException("Factory methods may not have any parameters");
+
+            if (attrib.FactoryId != null)
+            {
+                FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
+                RegisterObjectFactoryMethod(attrib.FactoryId, factoryDelegate, attrib.InstanceMode);
+            }
+            else if (attrib.DefaultForType != null)
+            {
+                FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
+                RegisterObjectFactoryMethod(attrib.DefaultForType, factoryDelegate, attrib.InstanceMode);
+            }
+            else
+            {
+                string objectId = method.Name;
+                FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
+                RegisterObjectFactoryMethod(objectId, factoryDelegate, attrib.InstanceMode);
+            }
+        }
+
+        private FactoryDelegate CreateMethodFactoryDelegate(IObjectInitializer factory, MethodInfo method)
+        {
+            ConstantExpression instance = Expression.Constant(factory);
+            MethodCallExpression call = Expression.Call(instance, method);
+            Expression body = Expression.TypeAs(call, typeof(object));
+            LambdaExpression lambda = Expression.Lambda(typeof(FactoryDelegate), body);
+            FactoryDelegate factoryDelegate = (FactoryDelegate)lambda.Compile();
+            return factoryDelegate;
+        }
+
+        private static ObjectFactoryInfo CreateObjectConfiguration(FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
+        {
+            ObjectFactoryInfo config = new ObjectFactoryInfo();
+            config.FactoryDelegate = factoryDelegate;
+            config.InstanceMode = instanceMode;
+            return config;
+        }
+
     }
 }

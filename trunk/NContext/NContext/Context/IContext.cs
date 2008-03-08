@@ -8,17 +8,17 @@ namespace Puzzle.NContext.Framework
         T GetObject<T>(Type factoryType);
         T GetObject<T>(); //objectType == T
         T GetObject<T>(string factoryId);
-        T GetObject<T>(FactoryDelegate<T> factoryMethod);
+        T GetObject<T>(Func<T> factoryMethod);
 
         void ConfigureObject<T>(string configId, T item);
         void ConfigureObject<T>(Type configType, T item);
-        void ConfigureObject<T>(ConfigureDelegate<T> configMethod, T item);
+        void ConfigureObject<T>(ConfigureDelegate configMethod, T item);
 
         void RegisterObject<T>(Type objectType, T item);
         void RegisterObject<T>(string objectId, T item);
 
-        void RegisterObjectFactoryMethod(Type factoryType, FactoryDelegate<object> factoryMethod, ObjectInstanceMode instanceMode);
-        void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate<object> factoryMethod, ObjectInstanceMode instanceMode);
+        void RegisterObjectFactoryMethod(Type factoryType, FactoryDelegate factoryMethod, ObjectInstanceMode instanceMode);
+        void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate factoryMethod, ObjectInstanceMode instanceMode);
 
         void RegisterObjectFactory(IObjectInitializer factory);
 

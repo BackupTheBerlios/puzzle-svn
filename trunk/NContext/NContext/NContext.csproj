@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ObjectConfigurationInfo.cs" />
     <Compile Include="Context\Context.cs" />
     <Compile Include="Context\IContextBound.cs" />
     <Compile Include="Delegates\Delegates.cs" />

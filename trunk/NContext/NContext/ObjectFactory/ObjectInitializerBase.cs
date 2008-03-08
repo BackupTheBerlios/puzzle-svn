@@ -30,7 +30,7 @@ namespace Puzzle.NContext.Framework
             return Context.GetObject<T>();
         }
 
-        protected virtual T GetObject<T>(FactoryDelegate<T> factoryMethod)
+        protected virtual T GetObject<T>(Func<T> factoryMethod)
         {
             return Context.GetObject (factoryMethod);
         }
@@ -45,7 +45,7 @@ namespace Puzzle.NContext.Framework
             Context.ConfigureObject(configType, item);
         }
 
-        protected virtual void ConfigureObject<T>(ConfigureDelegate<T> configMethod, T item)
+        protected virtual void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
             Context.ConfigureObject(configMethod, item);
         }
