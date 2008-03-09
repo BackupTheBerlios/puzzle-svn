@@ -7,6 +7,8 @@ namespace Puzzle.NContext.Framework
 {
     public class DefaultTypeBuilder : ITypeBuilder
     {
+
+
         public virtual Type BuildType(Type baseType)
         {
             return baseType;

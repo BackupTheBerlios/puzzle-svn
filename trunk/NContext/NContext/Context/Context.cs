@@ -17,8 +17,15 @@ namespace Puzzle.NContext.Framework
         protected IDictionary<string, ObjectConfigurationInfo> namedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();
         protected IDictionary<Type, ObjectConfigurationInfo> typedObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
 
+        protected IDictionary<Type, Type> typeSubstitutes = new Dictionary<Type, Type>();
+        
         protected Context()
         {
+        }
+
+        public virtual void SubstituteType<T, S>()
+        {
+            typeSubstitutes.Add(typeof(T), typeof(S));
         }
         
         public T GetObject<T>(Func<T> factoryMethod)
@@ -55,7 +62,11 @@ namespace Puzzle.NContext.Framework
 
         public T CreateObject<T>(params object[] args)
         {
-            T res = (T)Activator.CreateInstance(typeof(T), args);
+            Type typeToCreate = null;
+            if (!typeSubstitutes.TryGetValue(typeof(T), out typeToCreate))
+                typeToCreate = typeof(T);
+
+            T res = (T)Activator.CreateInstance(typeToCreate, args);
             return res;
         }
 

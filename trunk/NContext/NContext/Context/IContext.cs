@@ -3,6 +3,7 @@ namespace Puzzle.NContext.Framework
 {
     public interface IContext
     {
+        void SubstituteType<T, S>();
         T CreateObject<T>(params object[] args);
 
         T GetObject<T>(Type factoryType);
