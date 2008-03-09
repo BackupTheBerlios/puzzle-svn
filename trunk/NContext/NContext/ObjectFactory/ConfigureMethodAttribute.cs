@@ -5,10 +5,26 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
+    public enum ConfigurationType
+    {
+        NamedConfiguration,
+        DefaultForType,
+        AppliesToAll,
+    }
+
     [AttributeUsage(AttributeTargets.Method)]
-    public class ConfigureMethodAttribute : Attribute
+    public class ConfigurationMethodAttribute : Attribute
     {
         public string ConfigId { get; set; }
-        public Type DefaultForType { get; set; }
+        public ConfigurationType RegisterAs { get; set; }
+
+        public ConfigurationMethodAttribute()
+        {
+        }
+
+        public ConfigurationMethodAttribute(ConfigurationType registerAs)
+        {
+            RegisterAs = registerAs;
+        }
     }
 }

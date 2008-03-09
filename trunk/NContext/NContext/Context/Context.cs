@@ -16,6 +16,7 @@ namespace Puzzle.NContext.Framework
 
         protected IDictionary<string, ObjectConfigurationInfo> namedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();
         protected IDictionary<Type, ObjectConfigurationInfo> typedObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
+        protected IDictionary<Type, ObjectConfigurationInfo> applyToAllObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
 
         protected IDictionary<Type, Type> typeSubstitutes = new Dictionary<Type, Type>();
         
@@ -25,6 +26,9 @@ namespace Puzzle.NContext.Framework
 
         public virtual void SubstituteType<T, S>()
         {
+            if (!typeof(T).IsAssignableFrom (typeof(S)))
+                throw new Exception (string.Format ("Type '{0}' is not substitutable with type '{1}'",typeof(T).Name,typeof(S).Name));
+
             typeSubstitutes.Add(typeof(T), typeof(S));
         }
         
@@ -67,6 +71,7 @@ namespace Puzzle.NContext.Framework
                 typeToCreate = typeof(T);
 
             T res = (T)Activator.CreateInstance(typeToCreate, args);
+            ConfigureObjectWithTemplates(res);
             return res;
         }
 
@@ -76,6 +81,7 @@ namespace Puzzle.NContext.Framework
             {
                 ObjectFactoryInfo config = namedObjectFactories[factoryId];
                 object res = config.FactoryDelegate();
+                ConfigureObjectWithTemplates((T)res);
                 return (T)res;
             }
 
@@ -88,6 +94,7 @@ namespace Puzzle.NContext.Framework
             {
                 ObjectFactoryInfo config = typedObjectFactories[factoryType];
                 object res = config.FactoryDelegate();
+                ConfigureObjectWithTemplates((T)res);
                 return (T)res;
             }
 
@@ -128,7 +135,7 @@ namespace Puzzle.NContext.Framework
 
             foreach (MethodInfo method in factory.GetType().GetMethods())
             {
-                ConfigureMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigureMethodAttribute), true).FirstOrDefault() as ConfigureMethodAttribute;
+                ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
 
                 if (attrib == null)
                     continue; //not a configuration method
@@ -155,6 +162,7 @@ namespace Puzzle.NContext.Framework
             {
                 ObjectConfigurationInfo config = namedObjectConfigurations[configId];
                 config.ConfigureDelegate(item);
+                ConfigureObjectWithTemplates(item);
                 return;
             }
 
@@ -167,11 +175,24 @@ namespace Puzzle.NContext.Framework
             {
                 ObjectConfigurationInfo config = typedObjectConfigurations[configType];
                 config.ConfigureDelegate(item);
+                ConfigureObjectWithTemplates(item);
                 return;
             }
 
             throw new Exception(string.Format("Typed configuration '{0}' was not found", configType.Name));
         }
+
+        protected virtual void ConfigureObjectWithTemplates<T>(T item)
+        {
+            foreach (var entry in this.applyToAllObjectConfigurations)
+            {
+                if (entry.Key.IsAssignableFrom(typeof(T)))
+                {
+                    entry.Value.ConfigureDelegate(item);
+                }
+            }
+        }
+
 
         public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
@@ -180,21 +201,22 @@ namespace Puzzle.NContext.Framework
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
-            ConfigureMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigureMethodAttribute), true).FirstOrDefault() as ConfigureMethodAttribute;
+            ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
 
             if (!objectFactories.Contains(factory))
                 RegisterObjectFactory(factory);
 
             if (attrib == null)
-                throw new Exception("Method is not a factory method");
+                throw new Exception("Method is not a configuration method");
 
             if (attrib.ConfigId != null)
             {
                 ConfigureObject<T>(attrib.ConfigId,item);
             }
-            else if (attrib.DefaultForType != null)
+            else if (attrib.RegisterAs == ConfigurationType.DefaultForType)
             {
-                ConfigureObject<T>(attrib.DefaultForType,item);
+                Type defaultType = method.GetParameters().First().ParameterType;
+                ConfigureObject<T>(defaultType, item);
             }
             else
             {
@@ -203,7 +225,7 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private void RegisterObjectConfigurationMethod(IObjectInitializer factory, MethodInfo method, ConfigureMethodAttribute attrib)
+        private void RegisterObjectConfigurationMethod(IObjectInitializer factory, MethodInfo method, ConfigurationMethodAttribute attrib)
         {
             Type objectType = method.ReturnType;
 
@@ -215,10 +237,18 @@ namespace Puzzle.NContext.Framework
                 ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
                 RegisterObjectConfigurationMethod(attrib.ConfigId, configDelegate);
             }
-            else if (attrib.DefaultForType != null)
+            else if (attrib.RegisterAs == ConfigurationType.DefaultForType)
             {
+                Type defaultType = method.GetParameters().First().ParameterType;
                 ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
-                RegisterObjectConfigurationMethod(attrib.DefaultForType, configDelegate);
+                RegisterObjectConfigurationMethod(defaultType, configDelegate);
+            }
+            else if (attrib.RegisterAs == ConfigurationType.AppliesToAll)
+            {
+                Type defaultType = method.GetParameters().First().ParameterType;
+                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+                RegisterObjectTemplateConfigurationMethod(defaultType, configDelegate);
+                
             }
             else
             {
@@ -301,6 +331,12 @@ namespace Puzzle.NContext.Framework
         {
             ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
             typedObjectConfigurations.Add(configType, config);
+        }
+
+        public void RegisterObjectTemplateConfigurationMethod(Type configType, ConfigureDelegate configMethod)
+        {
+            ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
+            applyToAllObjectConfigurations.Add(configType, config);
         }
     }
 }
