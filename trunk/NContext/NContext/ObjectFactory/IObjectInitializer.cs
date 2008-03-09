@@ -7,6 +7,6 @@ namespace Puzzle.NContext.Framework
 {
     public interface IObjectInitializer : IContextBound
     {
-        
+        void Initialize();
     }
 }
