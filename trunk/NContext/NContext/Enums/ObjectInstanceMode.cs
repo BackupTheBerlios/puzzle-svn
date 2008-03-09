@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public enum ObjectInstanceMode
+    public enum InstanceMode
     {
         PerCall,
         PerGraph,

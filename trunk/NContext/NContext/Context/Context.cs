@@ -40,7 +40,7 @@ namespace Puzzle.NContext.Framework
             {
                 return GetObject<T>(attrib.FactoryId);
             }
-            else if (attrib.DefaultForType == true)
+            else if (attrib.RegisterAs == FactoryType.DefaultForType)
             {
                 Type defaultType = method.ReturnType;
                 return GetObject<T>(defaultType);
@@ -126,13 +126,13 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
+        public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
             typedObjectFactories.Add(objectType, factory);
         }
 
-        public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
+        public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
             namedObjectFactories.Add(objectId, factory);
@@ -241,7 +241,7 @@ namespace Puzzle.NContext.Framework
                 FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
                 RegisterObjectFactoryMethod(attrib.FactoryId, factoryDelegate, attrib.InstanceMode);
             }
-            else if (attrib.DefaultForType == true)
+            else if (attrib.RegisterAs == FactoryType.DefaultForType)
             {
                 FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
                 Type defaultType = method.ReturnType;
@@ -265,7 +265,7 @@ namespace Puzzle.NContext.Framework
             return factoryDelegate;
         }
 
-        private static ObjectFactoryInfo CreateObjectFactory(FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
+        private static ObjectFactoryInfo CreateObjectFactory(FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = new ObjectFactoryInfo();
             factory.FactoryDelegate = factoryDelegate;

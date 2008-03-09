@@ -8,6 +8,6 @@ namespace Puzzle.NContext.Framework
     public class ObjectFactoryInfo 
     {
         public FactoryDelegate FactoryDelegate { get; set; }
-        public ObjectInstanceMode InstanceMode { get; set; }
+        public InstanceMode InstanceMode { get; set; }
     }
 }
