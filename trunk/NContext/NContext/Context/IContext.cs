@@ -20,6 +20,10 @@ namespace Puzzle.NContext.Framework
         void RegisterObjectFactoryMethod(Type factoryType, FactoryDelegate factoryMethod, ObjectInstanceMode instanceMode);
         void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate factoryMethod, ObjectInstanceMode instanceMode);
 
+        void RegisterObjectConfigurationMethod(string configId, ConfigureDelegate configMethod);
+        void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod);
+
+
         void RegisterObjectFactory(IObjectInitializer factory);
 
 

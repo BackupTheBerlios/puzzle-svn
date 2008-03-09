@@ -67,7 +67,7 @@ namespace Puzzle.NContext.Framework
                 return (T)res;
             }
 
-            throw new Exception(string.Format("Named configuraton '{0}' was not found", factoryId));
+            throw new Exception(string.Format("Named factory '{0}' was not found", factoryId));
         }
 
         public T GetObject<T>(Type factoryType)
@@ -79,7 +79,7 @@ namespace Puzzle.NContext.Framework
                 return (T)res;
             }
 
-            throw new Exception(string.Format("Typed configuraton '{0}' was not found", factoryType.Name));
+            throw new Exception(string.Format("Typed factory '{0}' was not found", factoryType.Name));
         }
 
         public T GetObject<T>()
@@ -127,24 +127,38 @@ namespace Puzzle.NContext.Framework
 
         public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
-            typedObjectFactories.Add(objectType, config);
+            ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
+            typedObjectFactories.Add(objectType, factory);
         }
 
         public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectFactoryInfo config = CreateObjectConfiguration(factoryDelegate, instanceMode);
-            namedObjectFactories.Add(objectId, config);
+            ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
+            namedObjectFactories.Add(objectId, factory);
         }
 
         public void ConfigureObject<T>(string configId, T item)
         {
-            throw new NotImplementedException();
+            if (namedObjectConfigurations.ContainsKey(configId))
+            {
+                ObjectConfigurationInfo config = namedObjectConfigurations[configId];
+                config.ConfigureDelegate(item);
+                return;
+            }
+
+            throw new Exception(string.Format("Named configuration '{0}' was not found", configId));
         }
 
         public void ConfigureObject<T>(Type configType, T item)
         {
-            throw new NotImplementedException();
+            if (typedObjectConfigurations.ContainsKey(configType))
+            {
+                ObjectConfigurationInfo config = typedObjectConfigurations[configType];
+                config.ConfigureDelegate(item);
+                return;
+            }
+
+            throw new Exception(string.Format("Typed configuration '{0}' was not found", configType.Name));
         }
 
         public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
@@ -187,18 +201,18 @@ namespace Puzzle.NContext.Framework
             if (attrib.ConfigId != null)
             {
                 ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
-              //  RegisterObjectFactoryMethod(attrib.ConfigId, factoryDelegate, attrib.InstanceMode);
+                RegisterObjectConfigurationMethod(attrib.ConfigId, configDelegate);
             }
             else if (attrib.DefaultForType != null)
             {
                 ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
-            //    RegisterObjectFactoryMethod(attrib.DefaultForType, factoryDelegate, attrib.InstanceMode);
+                RegisterObjectConfigurationMethod(attrib.DefaultForType, configDelegate);
             }
             else
             {
                 string objectId = method.Name;
                 ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
-            //    RegisterObjectFactoryMethod(objectId, factoryDelegate, attrib.InstanceMode);
+                RegisterObjectConfigurationMethod(objectId, configDelegate);
             }
         }
 
@@ -249,13 +263,31 @@ namespace Puzzle.NContext.Framework
             return factoryDelegate;
         }
 
-        private static ObjectFactoryInfo CreateObjectConfiguration(FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
+        private static ObjectFactoryInfo CreateObjectFactory(FactoryDelegate factoryDelegate, ObjectInstanceMode instanceMode)
         {
-            ObjectFactoryInfo config = new ObjectFactoryInfo();
-            config.FactoryDelegate = factoryDelegate;
-            config.InstanceMode = instanceMode;
+            ObjectFactoryInfo factory = new ObjectFactoryInfo();
+            factory.FactoryDelegate = factoryDelegate;
+            factory.InstanceMode = instanceMode;
+            return factory;
+        }
+
+        public void RegisterObjectConfigurationMethod(string configId, ConfigureDelegate configMethod)
+        {
+            ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
+            namedObjectConfigurations.Add(configId, config);
+        }
+
+        private ObjectConfigurationInfo CreateObjectConfiguration(ConfigureDelegate configMethod)
+        {
+            ObjectConfigurationInfo config = new ObjectConfigurationInfo();
+            config.ConfigureDelegate = configMethod;
             return config;
         }
 
+        public void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod)
+        {
+            ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
+            typedObjectConfigurations.Add(configType, config);
+        }
     }
 }
