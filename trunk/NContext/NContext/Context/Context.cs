@@ -40,9 +40,10 @@ namespace Puzzle.NContext.Framework
             {
                 return GetObject<T>(attrib.FactoryId);
             }
-            else if (attrib.DefaultForType != null)
+            else if (attrib.DefaultForType == true)
             {
-                return GetObject<T>(attrib.DefaultForType);
+                Type defaultType = method.ReturnType;
+                return GetObject<T>(defaultType);
             }
             else
             {
@@ -240,10 +241,11 @@ namespace Puzzle.NContext.Framework
                 FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
                 RegisterObjectFactoryMethod(attrib.FactoryId, factoryDelegate, attrib.InstanceMode);
             }
-            else if (attrib.DefaultForType != null)
+            else if (attrib.DefaultForType == true)
             {
                 FactoryDelegate factoryDelegate = CreateMethodFactoryDelegate(factory, method);
-                RegisterObjectFactoryMethod(attrib.DefaultForType, factoryDelegate, attrib.InstanceMode);
+                Type defaultType = method.ReturnType;
+                RegisterObjectFactoryMethod(defaultType, factoryDelegate, attrib.InstanceMode);
             }
             else
             {
