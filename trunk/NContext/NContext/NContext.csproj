@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Configuration\ObjectConfigurationInfo.cs" />
     <Compile Include="Context\Context.cs" />
+    <Compile Include="Context\ContextState.cs" />
+    <Compile Include="Context\ExceptionHelper.cs" />
     <Compile Include="Context\IContextBound.cs" />
     <Compile Include="Delegates\Delegates.cs" />
     <Compile Include="ObjectFactory\ConfigureMethodAttribute.cs" />
