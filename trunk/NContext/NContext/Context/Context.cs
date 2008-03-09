@@ -121,6 +121,7 @@ namespace Puzzle.NContext.Framework
         public void RegisterObjectFactory(IObjectInitializer factory)
         {
             factory.Context = this;
+            factory.Initialize();
             objectFactories.Add(factory);
 
             foreach (MethodInfo method in factory.GetType().GetMethods())
