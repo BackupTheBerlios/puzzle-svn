@@ -98,7 +98,7 @@ namespace Puzzle.NAspect.Framework
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
-              //  assemblyName.Version = new Version(1, 0, 0, 0);
+                assemblyName.Version = new Version(3, 0, 0, 4);
                 StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
                 assemblyName.KeyPair = kp;
 
@@ -143,7 +143,7 @@ namespace Puzzle.NAspect.Framework
                 {
                     //ignore pure interfaces
                 }
-                else if (mixinType.IsAssignableFrom (typeof(IProxyAware)) && mixinType.GetInterfaces().Length == 1)
+                else if (mixinType.IsAssignableFrom(typeof(IProxyAware)) && mixinType.GetInterfaces().Length == 1)
                 {
                     //ignore interface less mixins
                 }
@@ -158,19 +158,19 @@ namespace Puzzle.NAspect.Framework
 
             Type proxyType = typeBuilder.CreateType();
 
-            BuildLookupTables(proxyType, aspects, mixins);
+
 
             if (typeof(ServicedComponent).IsAssignableFrom(baseType))
-            {                
-                string fileName = Path.GetFullPath(".") + @"\" + assemblyBuilder.GetName().Name;
-                assemblyBuilder.Save(assemblyBuilder.GetName().Name);
-                Assembly asm = Assembly.LoadFile(fileName);
-                return asm.GetTypes()[0];
-            }
-            else
             {
-                return proxyType;
+                string fileName = assemblyBuilder.GetName().Name;
+                string fullPath = Path.GetFullPath(".") + @"\" + fileName;
+                assemblyBuilder.Save(fileName);
+                Assembly asm = Assembly.LoadFile(fullPath);
+                proxyType = asm.GetTypes()[0];
             }
+
+            BuildLookupTables(proxyType, aspects, mixins);
+            return proxyType;
         }
 
         private void BuildLookupTables(Type proxyType, IList aspects, IList mixins)
