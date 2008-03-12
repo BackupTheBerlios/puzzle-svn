@@ -17,8 +17,8 @@ namespace Puzzle.NContext.Framework
 
         public virtual void SubstituteType<T, S>()
         {
-            if (!typeof(T).IsAssignableFrom (typeof(S)))
-                throw new Exception (string.Format ("Type '{0}' is not substitutable with type '{1}'",typeof(T).Name,typeof(S).Name));
+            if (!typeof(T).IsAssignableFrom(typeof(S)))
+                throw ExceptionHelper.TypeSubstitutionException<T,S>();
 
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }

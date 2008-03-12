@@ -89,6 +89,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -231,16 +232,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj">
-      <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
-      <Name>Puzzle.NCore.Framework NET 3.5</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="PuzzleKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj">
+      <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
+      <Name>Puzzle.NCore.Framework NET 3.5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

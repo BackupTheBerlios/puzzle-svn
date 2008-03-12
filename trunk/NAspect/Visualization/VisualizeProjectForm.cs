@@ -1133,8 +1133,8 @@ namespace Puzzle.NAspect.Visualization
 
         private void VisualizeProjectForm_Load(object sender, EventArgs e)
         {
-            //TreeViewPainter.AttachTreeView(assemblyTreeView,2);
-            //TreeViewPainter.AttachTreeView(configTreeView,1);
+            TreeViewPainter.AttachTreeView(assemblyTreeView,2);
+            TreeViewPainter.AttachTreeView(configTreeView,1);
         }
     }
 }

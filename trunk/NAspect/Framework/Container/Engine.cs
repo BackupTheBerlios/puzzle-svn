@@ -14,6 +14,7 @@ using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NAspect.Framework.Interception;
+using System.EnterpriseServices;
 #if NET2
 #endif
 
@@ -212,7 +213,12 @@ namespace Puzzle.NAspect.Framework
 
             object[] proxyArgs;
 			
-            if (typeInfo.IsProxied)
+            if (typeof(ServicedComponent).IsAssignableFrom (type))
+            {
+                //proxies of servicedcomponent does not support state params
+                proxyArgs = args;
+            }
+            else if (typeInfo.IsProxied)
             {
                 proxyArgs = AddStateToCtorParams(state, args);
             }

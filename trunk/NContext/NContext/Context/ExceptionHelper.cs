@@ -46,5 +46,10 @@ namespace Puzzle.NContext.Framework
         {
             return new NotSupportedException("Factory methods may not have any parameters");
         }
+
+        public static Exception TypeSubstitutionException<T,S>()
+        {
+            return new Exception(string.Format("Type '{0}' is not substitutable with type '{1}'", typeof(T).Name, typeof(S).Name));
+        }
     }
 }
