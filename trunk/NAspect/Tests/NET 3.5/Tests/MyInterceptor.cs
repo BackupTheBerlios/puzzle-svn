@@ -10,7 +10,10 @@ namespace Tests
     {
         public object HandleCall(Puzzle.NAspect.Framework.MethodInvocation call)
         {
-            return call.Proceed();
+            Console.WriteLine("Enter");
+            object res= call.Proceed();
+            Console.WriteLine("Exit");
+            return res;
         }
     }
 }

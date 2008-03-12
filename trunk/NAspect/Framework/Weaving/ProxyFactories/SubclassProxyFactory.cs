@@ -98,7 +98,8 @@ namespace Puzzle.NAspect.Framework
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
-                assemblyName.Version = new Version(5, 0, 0, 4);
+                assemblyName.Version = new Version(1, 0, 0, 0);
+                //assemblyName.VersionCompatibility = System.Configuration.Assemblies.AssemblyVersionCompatibility.SameProcess;
                 StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
                 assemblyName.KeyPair = kp;
 
@@ -119,7 +120,18 @@ namespace Puzzle.NAspect.Framework
         {
             mixinsForType[baseType] = mixins;
 
-            string typeName = baseType.Name + "AopProxy";
+            string typeName = null;
+            if (typeof(ServicedComponent).IsAssignableFrom (baseType))
+            {
+                //HACK: ugly hack to avoid com+ versioning problems
+                //does com+ get filled with crap?
+                typeName = baseType.Name + "AopProxy" + Guid.NewGuid().ToString();
+            }
+            else
+            {
+                typeName = baseType.Name + "AopProxy";
+            }
+
             string moduleName = "Puzzle.NAspect.Runtime.Proxy";
 
             AssemblyBuilder assemblyBuilder = GetAssemblyBuilder(baseType);
