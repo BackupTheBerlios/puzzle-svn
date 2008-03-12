@@ -20,6 +20,8 @@ using Puzzle.NAspect.Framework.Interception;
 
 #if NET2
 using System.Collections.Generic;
+using System.EnterpriseServices;
+using System.IO;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -87,14 +89,33 @@ namespace Puzzle.NAspect.Framework
         }
 
 
-        private AssemblyBuilder GetAssemblyBuilder()
+        private AssemblyBuilder GetAssemblyBuilder(Type baseType)
         {
             AppDomain domain = Thread.GetDomain();
             AssemblyName assemblyName = new AssemblyName();
-            assemblyName.Name = Guid.NewGuid().ToString();
-            assemblyName.Version = new Version(1, 0, 0, 0);
-            AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-            return assemblyBuilder;
+            
+
+            if (typeof(ServicedComponent).IsAssignableFrom (baseType))
+            {
+                assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
+                assemblyName.Version = new Version(1, 0, 0, 0);
+                // Load a strong name key pair needed for serviced component assemblies
+
+
+                StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
+                assemblyName.KeyPair = kp;
+
+                // Set up the assembly
+                AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave);
+                return assemblyBuilder;
+            }
+            else
+            {
+                assemblyName.Name = Guid.NewGuid().ToString();
+                assemblyName.Version = new Version(1, 0, 0, 0);
+                AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+                return assemblyBuilder;
+            }
         }
 
         private Type CreateType(Type baseType, IList aspects, IList mixins, bool useCtorState)
@@ -104,7 +125,7 @@ namespace Puzzle.NAspect.Framework
             string typeName = baseType.Name + "AopProxy";
             string moduleName = "Puzzle.NAspect.Runtime.Proxy";
 
-            AssemblyBuilder assemblyBuilder = GetAssemblyBuilder();
+            AssemblyBuilder assemblyBuilder = GetAssemblyBuilder(baseType);
 
             Type[] interfaces = GetInterfaces(baseType, mixins);
 
@@ -575,6 +596,9 @@ namespace Puzzle.NAspect.Framework
         {
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
             TypeAttributes typeAttributes = TypeAttributes.Class | TypeAttributes.Public;
+
+
+
             return moduleBuilder.DefineType(typeName, typeAttributes, baseType, interfaces);
         }
 
@@ -800,17 +824,24 @@ namespace Puzzle.NAspect.Framework
 
         private void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins,bool useCtorState)
         {
-            ConstructorInfo[] constructors = baseType.GetConstructors();
-            foreach (ConstructorInfo constructor in constructors)
+            if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
-                BuildConstructor(constructor, typeBuilder, mixins, useCtorState);
+                typeBuilder.DefineDefaultConstructor (MethodAttributes.Public);
             }
-            if (constructors.Length == 0)
+            else
             {
-                constructors = typeof (object).GetConstructors();
+                ConstructorInfo[] constructors = baseType.GetConstructors();
                 foreach (ConstructorInfo constructor in constructors)
                 {
-                    BuildConstructor(constructor, typeBuilder, mixins,useCtorState);
+                    BuildConstructor(constructor, typeBuilder, mixins, useCtorState);
+                }
+                if (constructors.Length == 0)
+                {
+                    constructors = typeof (object).GetConstructors();
+                    foreach (ConstructorInfo constructor in constructors)
+                    {
+                        BuildConstructor(constructor, typeBuilder, mixins,useCtorState);
+                    }
                 }
             }
         }

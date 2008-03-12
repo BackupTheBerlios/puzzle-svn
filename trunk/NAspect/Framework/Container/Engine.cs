@@ -15,6 +15,7 @@ using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NAspect.Framework.Interception;
 using System.EnterpriseServices;
+using System.Reflection;
 #if NET2
 #endif
 
@@ -232,10 +233,20 @@ namespace Puzzle.NAspect.Framework
             else //base or non proxied type
             {
                 proxyArgs = args;
-            }            		
+            }
 
-            object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
-            return proxyObject;
+            if (typeof(ServicedComponent).IsAssignableFrom(type))
+            {
+                Type[] types = new Type[0];
+                ConstructorInfo ci = proxyType.GetConstructor(types);
+                object proxyObject = ci.Invoke(null);
+                return proxyObject;
+            }
+            else
+            {
+                object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
+                return proxyObject;
+            }            
         }
 
         /// <summary>

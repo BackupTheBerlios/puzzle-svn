@@ -181,6 +181,11 @@
     </Compile>
     <Compile Include="Enumerations\AspectTargetType.cs" />
     <Compile Include="Enumerations\PointcutTargetType.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TypeExtender\ExtendedMember.cs" />
     <Compile Include="TypeExtender\ExtendedProperty.cs" />
     <Compile Include="TypeExtender\ITypeExtender.cs" />
@@ -242,6 +247,13 @@
       <Project>{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}</Project>
       <Name>Puzzle.NCore.Framework NET 3.5</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
