@@ -140,8 +140,6 @@ namespace Puzzle.NAspect.Framework
 
             BuildConstructors(baseType, typeBuilder, mixins, useCtorState);
 
-//            BuildDebugProperty(typeBuilder,baseType);
-
             foreach (Type mixinType in mixins)
             {
                 if (mixinType.IsInterface)
@@ -594,7 +592,8 @@ namespace Puzzle.NAspect.Framework
         private static TypeBuilder GetTypeBuilder(AssemblyBuilder assemblyBuilder, string moduleName, string typeName,
                                                   Type baseType, Type[] interfaces)
         {
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
+            string fileName = string.Format ("{0}.mod",typeName);
+            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName,fileName,true);
             TypeAttributes typeAttributes = TypeAttributes.Class | TypeAttributes.Public;
 
 
