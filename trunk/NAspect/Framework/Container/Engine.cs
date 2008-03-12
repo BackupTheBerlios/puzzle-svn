@@ -237,7 +237,6 @@ namespace Puzzle.NAspect.Framework
 
             object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
             return proxyObject;
-
         }
 
         /// <summary>
