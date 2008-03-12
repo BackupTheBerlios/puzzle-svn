@@ -534,6 +534,14 @@ namespace Puzzle.NAspect.Framework
         {
             Type[] mixinInterfaces = GetMixinInterfaces(mixins);
             Type[] baseInterfaces = baseType.GetInterfaces();
+            ArrayList arr = new ArrayList();
+            foreach (Type iface in baseInterfaces)
+            {
+                if (iface.IsPublic)
+                    arr.Add(iface);
+            }
+            baseInterfaces = new Type[arr.Count];
+            arr.CopyTo(baseInterfaces);
 
             Type[] interfaces = new Type[mixinInterfaces.Length + baseInterfaces.Length];
             Array.Copy(mixinInterfaces, 0, interfaces, 0, mixinInterfaces.Length);
