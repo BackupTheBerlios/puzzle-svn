@@ -98,7 +98,7 @@ namespace Puzzle.NAspect.Framework
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
-                assemblyName.Version = new Version(3, 0, 0, 4);
+                assemblyName.Version = new Version(5, 0, 0, 4);
                 StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
                 assemblyName.KeyPair = kp;
 
@@ -830,12 +830,12 @@ namespace Puzzle.NAspect.Framework
 
         private void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins,bool useCtorState)
         {
-            if (typeof(ServicedComponent).IsAssignableFrom (baseType))
-            {
-                typeBuilder.DefineDefaultConstructor (MethodAttributes.Public);
-            }
-            else
-            {
+            //if (typeof(ServicedComponent).IsAssignableFrom (baseType))
+            //{
+            //    typeBuilder.DefineDefaultConstructor (MethodAttributes.Public);
+            //}
+            //else
+            //{
                 ConstructorInfo[] constructors = baseType.GetConstructors();
                 foreach (ConstructorInfo constructor in constructors)
                 {
@@ -849,7 +849,7 @@ namespace Puzzle.NAspect.Framework
                         BuildConstructor(constructor, typeBuilder, mixins,useCtorState);
                     }
                 }
-            }
+            //}
         }
 
 #if NET2
