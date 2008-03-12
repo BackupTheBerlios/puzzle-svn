@@ -57,10 +57,7 @@ namespace Puzzle.NAspect.Framework
 				return baseType;
 #endif
 
-
             SubclassProxyFactory factory = new SubclassProxyFactory(engine);
-
-
             return factory.CreateType(baseType, aspects, mixins,useCtorState);
         }
 
