@@ -160,7 +160,17 @@ namespace Puzzle.NAspect.Framework
 
             BuildLookupTables(proxyType, aspects, mixins);
 
-            return proxyType;
+            if (typeof(ServicedComponent).IsAssignableFrom(baseType))
+            {                
+                string fileName = Path.GetFullPath(".") + @"\" + assemblyBuilder.GetName().Name;
+                assemblyBuilder.Save(fileName);
+                Assembly asm = Assembly.LoadFile(fileName);
+                return asm.GetTypes()[0];
+            }
+            else
+            {
+                return proxyType;
+            }
         }
 
         private void BuildLookupTables(Type proxyType, IList aspects, IList mixins)

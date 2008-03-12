@@ -225,7 +225,7 @@ namespace Puzzle.NAspect.Framework
             Type proxyType = typeInfo.Type;
 
             object[] proxyArgs;
-			
+
             if (typeInfo.IsProxied && useCtorState)
             {
                 proxyArgs = AddStateToCtorParams(state, args);
@@ -235,18 +235,9 @@ namespace Puzzle.NAspect.Framework
                 proxyArgs = args;
             }
 
-            if (typeof(ServicedComponent).IsAssignableFrom(type))
-            {
-                Type[] types = new Type[0];
-                ConstructorInfo ci = proxyType.GetConstructor(types);
-                object proxyObject = ci.Invoke(null);
-                return proxyObject;
-            }
-            else
-            {
-                object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
-                return proxyObject;
-            }            
+            object proxyObject = Activator.CreateInstance(proxyType, proxyArgs);
+            return proxyObject;
+
         }
 
         /// <summary>
