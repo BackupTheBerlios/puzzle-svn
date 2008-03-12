@@ -206,19 +206,26 @@ namespace Puzzle.NAspect.Framework
             if (args == null)
                 args = new object[] { null };
 
+            bool useCtorState = true;
+            if (typeof(ServicedComponent).IsAssignableFrom(type))
+            {
+                if (args.Length > 0)
+                    throw new NotSupportedException("Types inheriting ServicedComponent may not have ctor args");
+
+                if (state != null)
+                    throw new NotSupportedException("Types inheriting ServicedComponent can not use state args");
+
+                useCtorState = false;
+            }
+
             LogMessage message = new LogMessage("Creating context bound wrapper for type {0}", type.FullName);
             LogManager.Info(this, message);
-            ProxyTypeInfo typeInfo = CreateProxyTypeInfo(type);
+            ProxyTypeInfo typeInfo = CreateProxyTypeInfo(type, useCtorState);
             Type proxyType = typeInfo.Type;
 
             object[] proxyArgs;
 			
-            if (typeof(ServicedComponent).IsAssignableFrom (type))
-            {
-                //proxies of servicedcomponent does not support state params
-                proxyArgs = args;
-            }
-            else if (typeInfo.IsProxied)
+            if (typeInfo.IsProxied && useCtorState)
             {
                 proxyArgs = AddStateToCtorParams(state, args);
             }
@@ -238,9 +245,15 @@ namespace Puzzle.NAspect.Framework
         /// <returns>The proxy type</returns>
         public Type CreateProxyType(Type type)
         {
-            return CreateProxyTypeInfo(type).Type;
+            return CreateProxyTypeInfo(type, true).Type;
         }
-        private ProxyTypeInfo CreateProxyTypeInfo(Type type)
+
+        public Type CreateProxyType(Type type, bool useCtorState)
+        {
+            return CreateProxyTypeInfo(type, useCtorState).Type;
+        }
+
+        private ProxyTypeInfo CreateProxyTypeInfo(Type type, bool useCtorState)
         {
             bool wasProxied = false;
             bool wasExtended = false;
@@ -252,11 +265,6 @@ namespace Puzzle.NAspect.Framework
                 if (proxyLookup[type] == null)
                 {
                     Type extendedType = type;
-                    //foreach (ITypeExtender typeExtender in configuration.TypeExtenders)
-                    //{
-                    //    extendedType = typeExtender.Extend(extendedType);
-                    //    wasExtended = true;
-                    //}
                     
                     IList typeAspects = AspectMatcher.MatchAspectsForType(type, Configuration.Aspects);
 
@@ -285,7 +293,7 @@ namespace Puzzle.NAspect.Framework
                     }
 
 
-                    proxyType = SubclassProxyFactory.CreateProxyType(extendedType, typeAspects, typeMixins, this);
+                    proxyType = SubclassProxyFactory.CreateProxyType(extendedType, typeAspects, typeMixins, this,useCtorState);
 
 
                     if (proxyType == null)

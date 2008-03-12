@@ -242,27 +242,27 @@
   <data name="openToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAANOQAA
-        DTkBrps/6AAAAHZJREFUOE/VkksOwCAIRDkeG67pNWmJweIHEXclIUZkJg8iwC+CiFgzDSxCK9L7WE8Z
-        TzQZxKkXEZmZ3pT4ZrWN2/mrQRXvTnfmkcAzCQx6ghW+V4PVDkohjrIR2R1IMRLKezeOElyJ5feIwbXY
-        GpwsLvVdT5sfkxlAae5LhT4AAAAASUVORK5CYII=
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAHZJREFUOE/VkksO
+        wCAIRDkeG67pNWmJweIHEXclIUZkJg8iwC+CiFgzDSxCK9L7WE8ZTzQZxKkXEZmZ3pT4ZrWN2/mrQRXv
+        TnfmkcAzCQx6ghW+V4PVDkohjrIR2R1IMRLKezeOElyJ5feIwbXYGpwsLvVdT5sfkxlAae5LhT4AAAAA
+        SUVORK5CYII=
 </value>
   </data>
   <data name="saveToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAANOQAA
-        DTkBrps/6AAAAFRJREFUOE9jYBgUwNfX9z85GO54kOZlyyCGXL58GS+GqQHRZBsAcy3ZBsBcOxwNgPkN
-        X5SC1OAMA5gkMTTWaCTGBchpBiMW8BkAS2CD1ACQX8jNTAA8OOMMcDs3LQAAAABJRU5ErkJggg==
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAFRJREFUOE9jYBgU
+        wNfX9z85GO54kOZlyyCGXL58GS+GqQHRZBsAcy3ZBsBcOxwNgPkNX5SC1OAMA5gkMTTWaCTGBchpBiMW
+        8BkAS2CD1ACQX8jNTAA8OOMMcDs3LQAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="saveAllToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAANOQAA
-        DTkBrps/6AAAAHdJREFUOE+1k4EJwDAIBLOga2YhB2qx5YuNCm9oAxIQvTdqxvj6iMjBWqptyXPeEFUN
-        Br/dLwCr6uMCgFVG3AXYUQ6ArnIbgCqR2Aasif8AQF2ban6qAgRWt18wiDxj9CrZWNPmYYtAzp5gq1wq
-        7wDKj8tuYwY4ARMp0U7Gj6vlAAAAAElFTkSuQmCC
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAHdJREFUOE+1k4EJ
+        wDAIBLOga2YhB2qx5YuNCm9oAxIQvTdqxvj6iMjBWqptyXPeEFUNBr/dLwCr6uMCgFVG3AXYUQ6ArnIb
+        gCqR2Aasif8AQF2ban6qAgRWt18wiDxj9CrZWNPmYYtAzp5gq1wq7wDKj8tuYwY4ARMp0U7Gj6vlAAAA
+        AElFTkSuQmCC
 </value>
   </data>
   <metadata name="assemblyContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

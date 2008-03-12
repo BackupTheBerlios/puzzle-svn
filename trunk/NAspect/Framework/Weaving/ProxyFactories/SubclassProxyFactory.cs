@@ -37,7 +37,7 @@ namespace Puzzle.NAspect.Framework
         /// <param name="mixins">Untyped list of <c>System.Type</c>s that will be mixed in.</param>
         /// <param name="engine">The AopEngine requesting the proxy type</param>
         /// <returns></returns>
-        public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine)
+        public static Type CreateProxyType(Type baseType, IList aspects, IList mixins, Engine engine, bool useCtorState)
         {
 #if NET2 
 
@@ -61,7 +61,7 @@ namespace Puzzle.NAspect.Framework
             SubclassProxyFactory factory = new SubclassProxyFactory(engine);
 
 
-            return factory.CreateType(baseType, aspects, mixins);
+            return factory.CreateType(baseType, aspects, mixins,useCtorState);
         }
 
         private static long guid = 0;
@@ -100,7 +100,7 @@ namespace Puzzle.NAspect.Framework
             return assemblyBuilder;
         }
 
-        private Type CreateType(Type baseType, IList aspects, IList mixins)
+        private Type CreateType(Type baseType, IList aspects, IList mixins, bool useCtorState)
         {
             mixinsForType[baseType] = mixins;
 
@@ -120,7 +120,7 @@ namespace Puzzle.NAspect.Framework
 
             BuildMixinFields(typeBuilder, mixins);
 
-            BuildConstructors(baseType, typeBuilder, mixins);
+            BuildConstructors(baseType, typeBuilder, mixins, useCtorState);
 
 //            BuildDebugProperty(typeBuilder,baseType);
 
@@ -793,19 +793,19 @@ namespace Puzzle.NAspect.Framework
             il.Emit(OpCodes.Ret);
         }
 
-        private void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins)
+        private void BuildConstructors(Type baseType, TypeBuilder typeBuilder, IList mixins,bool useCtorState)
         {
             ConstructorInfo[] constructors = baseType.GetConstructors();
             foreach (ConstructorInfo constructor in constructors)
             {
-                BuildConstructor(constructor, typeBuilder, mixins);
+                BuildConstructor(constructor, typeBuilder, mixins, useCtorState);
             }
             if (constructors.Length == 0)
             {
                 constructors = typeof (object).GetConstructors();
                 foreach (ConstructorInfo constructor in constructors)
                 {
-                    BuildConstructor(constructor, typeBuilder, mixins);
+                    BuildConstructor(constructor, typeBuilder, mixins,useCtorState);
                 }
             }
         }
@@ -849,7 +849,7 @@ namespace Puzzle.NAspect.Framework
             return cb;
         }
 
-        private void BuildConstructor(ConstructorInfo constructor, TypeBuilder typeBuilder, IList mixins)
+        private void BuildConstructor(ConstructorInfo constructor, TypeBuilder typeBuilder, IList mixins,bool useCtorState)
         {
             string wrapperName = GetMethodId(constructor.Name);
             wrapperMethods.Add(wrapperName);
@@ -858,14 +858,29 @@ namespace Puzzle.NAspect.Framework
             ParameterInfo[] parameterInfos = constructor.GetParameters();
 
             //make proxy ctor param count same as superclass
-            Type[] parameterTypes = new Type[parameterInfos.Length + 1];
+            Type[] parameterTypes = null;
 
-            //copy super ctor param types
-            for (int i = 0; i <= parameterInfos.Length - 1; i++)
+            if (useCtorState)
             {
-                parameterTypes[i + 1] = parameterInfos[i].ParameterType;
+                //use ctor state
+                parameterTypes= new Type[parameterInfos.Length + 1];
+                //copy super ctor param types
+                for (int i = 0; i <= parameterInfos.Length - 1; i++)
+                {
+                    parameterTypes[i + 1] = parameterInfos[i].ParameterType;
+                }
+                parameterTypes[0] = typeof(object);
             }
-            parameterTypes[0] = typeof (object);
+            else
+            {
+                //no ctor state
+                parameterTypes = new Type[parameterInfos.Length];
+                //copy super ctor param types
+                for (int i = 0; i <= parameterInfos.Length - 1; i++)
+                {
+                    parameterTypes[i ] = parameterInfos[i].ParameterType;
+                }
+            }
 
 
             ConstructorBuilder proxyConstructor =

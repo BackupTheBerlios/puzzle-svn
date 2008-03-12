@@ -120,13 +120,13 @@ namespace Puzzle.NAspect.Visualization
             this.assemblyTreeView.SelectedImageIndex = 0;
             this.assemblyTreeView.Size = new System.Drawing.Size(200, 519);
             this.assemblyTreeView.TabIndex = 2;
-            this.assemblyTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragDrop);
-            this.assemblyTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragOver);
             this.assemblyTreeView.DragLeave += new System.EventHandler(this.assemblyTreeView_DragLeave);
-            this.assemblyTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.assemblyTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
+            this.assemblyTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragDrop);
+            this.assemblyTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.assemblyTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragEnter);
             this.assemblyTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.assemblyTreeView_ItemDrag);
+            this.assemblyTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.assemblyTreeView_DragOver);
             // 
             // imageList1
             // 
@@ -158,13 +158,13 @@ namespace Puzzle.NAspect.Visualization
             this.configTreeView.SelectedImageIndex = 0;
             this.configTreeView.Size = new System.Drawing.Size(182, 245);
             this.configTreeView.TabIndex = 5;
-            this.configTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragDrop);
-            this.configTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragOver);
             this.configTreeView.DragLeave += new System.EventHandler(this.configTreeView_DragLeave);
-            this.configTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView2_AfterSelect);
             this.configTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView2_MouseUp);
+            this.configTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragDrop);
+            this.configTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView2_AfterSelect);
             this.configTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragEnter);
             this.configTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.configTreeView_ItemDrag);
+            this.configTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.configTreeView_DragOver);
             // 
             // propertyGrid
             // 
@@ -429,14 +429,14 @@ namespace Puzzle.NAspect.Visualization
             // openProjectToolStripMenuItem
             // 
             this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
-            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.openProjectToolStripMenuItem.Text = "Project";
             this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
             // 
             // openConfigurationToolStripMenuItem
             // 
             this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
-            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.openConfigurationToolStripMenuItem.Text = "Configuration";
             this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
             // 
