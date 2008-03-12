@@ -98,10 +98,7 @@ namespace Puzzle.NAspect.Framework
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
-                assemblyName.Version = new Version(1, 0, 0, 0);
-                // Load a strong name key pair needed for serviced component assemblies
-
-
+              //  assemblyName.Version = new Version(1, 0, 0, 0);
                 StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
                 assemblyName.KeyPair = kp;
 
