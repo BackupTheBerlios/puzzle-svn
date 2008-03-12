@@ -163,7 +163,7 @@ namespace Puzzle.NAspect.Framework
             if (typeof(ServicedComponent).IsAssignableFrom(baseType))
             {                
                 string fileName = Path.GetFullPath(".") + @"\" + assemblyBuilder.GetName().Name;
-                assemblyBuilder.Save(fileName);
+                assemblyBuilder.Save(assemblyBuilder.GetName().Name);
                 Assembly asm = Assembly.LoadFile(fileName);
                 return asm.GetTypes()[0];
             }
