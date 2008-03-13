@@ -624,7 +624,11 @@ namespace Puzzle.NAspect.Framework
         {
             string fileName = string.Format ("{0}.mod",typeName);
 #if NET2
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName,fileName,true);
+            ModuleBuilder moduleBuilder = null;
+            if (typeof(ServicedComponent).IsAssignableFrom (baseType))
+                 moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName,fileName,true);
+            else
+                 moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
 #else
 			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
 #endif
