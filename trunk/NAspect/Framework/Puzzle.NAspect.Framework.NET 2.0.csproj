@@ -85,6 +85,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -176,6 +177,7 @@
     </Compile>
     <Compile Include="Enumerations\AspectTargetType.cs" />
     <Compile Include="Enumerations\PointcutTargetType.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="TypeExtender\ExtendedMember.cs" />
     <Compile Include="TypeExtender\ExtendedProperty.cs" />
     <Compile Include="TypeExtender\ITypeExtender.cs" />
@@ -237,6 +239,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

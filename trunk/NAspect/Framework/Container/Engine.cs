@@ -14,9 +14,9 @@ using Puzzle.NAspect.Framework.Aop;
 using Puzzle.NAspect.Framework.ConfigurationElements;
 using Puzzle.NCore.Framework.Logging;
 using Puzzle.NAspect.Framework.Interception;
-using System.EnterpriseServices;
 using System.Reflection;
 #if NET2
+using System.EnterpriseServices;
 #endif
 
 namespace Puzzle.NAspect.Framework
@@ -208,6 +208,7 @@ namespace Puzzle.NAspect.Framework
                 args = new object[] { null };
 
             bool useCtorState = true;
+#if NET2
             if (typeof(ServicedComponent).IsAssignableFrom(type))
             {
                 if (args.Length > 0)
@@ -218,6 +219,7 @@ namespace Puzzle.NAspect.Framework
 
                 useCtorState = false;
             }
+#endif
 
             LogMessage message = new LogMessage("Creating context bound wrapper for type {0}", type.FullName);
             LogManager.Info(this, message);

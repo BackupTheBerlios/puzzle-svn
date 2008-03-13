@@ -89,18 +89,19 @@ namespace Puzzle.NAspect.Framework
         }
 
 
-        private AssemblyBuilder GetAssemblyBuilder(Type baseType)
-        {
-            AppDomain domain = Thread.GetDomain();
-            AssemblyName assemblyName = new AssemblyName();
+		private AssemblyBuilder GetAssemblyBuilder(Type baseType)
+		{
+			AppDomain domain = Thread.GetDomain();
+			AssemblyName assemblyName = new AssemblyName();
             
-
+#if NET2
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 assemblyName.Name = string.Format("ServicedProxy{0}.dll", baseType.Name);
                 assemblyName.Version = new Version(1, 0, 0, 0);
                 //assemblyName.VersionCompatibility = System.Configuration.Assemblies.AssemblyVersionCompatibility.SameProcess;
-                StrongNameKeyPair kp = new StrongNameKeyPair(Properties.Resources.PuzzleKey);
+            
+                StrongNameKeyPair kp = new StrongNameKeyPair(global::Properties.Resources.PuzzleKey);
                 assemblyName.KeyPair = kp;
 
                 // Set up the assembly
@@ -109,18 +110,23 @@ namespace Puzzle.NAspect.Framework
             }
             else
             {
-                assemblyName.Name = Guid.NewGuid().ToString();
-                assemblyName.Version = new Version(1, 0, 0, 0);
-                AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-                return assemblyBuilder;
-            }
-        }
+#endif
+			assemblyName.Name = Guid.NewGuid().ToString();
+			assemblyName.Version = new Version(1, 0, 0, 0);
+			AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+
+			return assemblyBuilder;
+#if NET2
+			}
+#endif
+		}
 
         private Type CreateType(Type baseType, IList aspects, IList mixins, bool useCtorState)
         {
             mixinsForType[baseType] = mixins;
 
             string typeName = null;
+#if NET2
             if (typeof(ServicedComponent).IsAssignableFrom (baseType))
             {
                 //HACK: ugly hack to avoid com+ versioning problems
@@ -129,8 +135,12 @@ namespace Puzzle.NAspect.Framework
             }
             else
             {
+
                 typeName = baseType.Name + "AopProxy";
-            }
+			}
+#else
+			typeName = baseType.Name + "AopProxy";
+#endif
 
             string moduleName = "Puzzle.NAspect.Runtime.Proxy";
 
@@ -171,7 +181,7 @@ namespace Puzzle.NAspect.Framework
             Type proxyType = typeBuilder.CreateType();
 
 
-
+#if NET2
             if (typeof(ServicedComponent).IsAssignableFrom(baseType))
             {
                 string fileName = assemblyBuilder.GetName().Name;
@@ -180,6 +190,7 @@ namespace Puzzle.NAspect.Framework
                 Assembly asm = Assembly.LoadFile(fullPath);
                 proxyType = asm.GetTypes()[0];
             }
+#endif
 
             BuildLookupTables(proxyType, aspects, mixins);
             return proxyType;
@@ -612,7 +623,11 @@ namespace Puzzle.NAspect.Framework
                                                   Type baseType, Type[] interfaces)
         {
             string fileName = string.Format ("{0}.mod",typeName);
+#if NET2
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName,fileName,true);
+#else
+			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
+#endif
             TypeAttributes typeAttributes = TypeAttributes.Class | TypeAttributes.Public;
 
 
