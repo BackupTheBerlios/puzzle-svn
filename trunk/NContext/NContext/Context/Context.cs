@@ -68,13 +68,49 @@ namespace Puzzle.NContext.Framework
             return res;
         }
 
+        private void ClearPerGraphCache()
+        {
+            state.namedPerGraphObjects.Clear();
+            state.typedPerGraphObjects.Clear();
+        }
+
+        private bool inGraphCall = false;
         public T GetObject<T>(string factoryId)
+        {
+            bool inGraphStack = inGraphCall;
+            
+            if (!inGraphCall)
+                ClearPerGraphCache();
+
+            inGraphCall = true;
+
+            T res = InternalGetObject<T>(factoryId);
+
+            inGraphCall = inGraphStack;
+            return res;
+        }
+
+        private T InternalGetObject<T>(string factoryId)
         {
             if (state.NamedObjectFactories.ContainsKey(factoryId))
             {
                 ObjectFactoryInfo config = state.NamedObjectFactories[factoryId];
+
+                if (config.InstanceMode == InstanceMode.PerContext && state.namedPerContextObjects.ContainsKey(factoryId))
+                    return (T)state.namedPerContextObjects[factoryId];
+
+                if (config.InstanceMode == InstanceMode.PerGraph && state.namedPerGraphObjects.ContainsKey(factoryId))
+                    return (T)state.namedPerGraphObjects[factoryId];
+
                 object res = config.FactoryDelegate();
                 ConfigureObjectWithTemplates((T)res);
+
+                if (config.InstanceMode == InstanceMode.PerContext)
+                    state.namedPerContextObjects.Add(factoryId, res);
+
+                if (config.InstanceMode == InstanceMode.PerGraph)
+                    state.namedPerGraphObjects.Add(factoryId, res);
+
                 return (T)res;
             }
 
@@ -85,11 +121,40 @@ namespace Puzzle.NContext.Framework
 
         public T GetObject<T>(Type factoryType)
         {
+            bool inGraphStack = inGraphCall;
+
+            if (!inGraphCall)
+                ClearPerGraphCache();
+
+            inGraphCall = true;
+
+            T res = InternalGetObject<T>(factoryType);
+
+            inGraphCall = inGraphStack;
+            return res;
+        }
+
+        private T InternalGetObject<T>(Type factoryType)
+        {
             if (state.TypedObjectFactories.ContainsKey(factoryType))
             {
                 ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
+                
+                if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
+                    return (T)state.typedPerContextObjects[factoryType];
+
+                if (config.InstanceMode == InstanceMode.PerGraph && state.typedPerGraphObjects.ContainsKey(factoryType))
+                    return (T)state.typedPerGraphObjects[factoryType];
+
                 object res = config.FactoryDelegate();
                 ConfigureObjectWithTemplates((T)res);
+
+                if (config.InstanceMode == InstanceMode.PerContext)
+                    state.typedPerContextObjects.Add(factoryType, res);
+
+                if (config.InstanceMode == InstanceMode.PerGraph)
+                    state.typedPerGraphObjects.Add(factoryType, res);
+
                 return (T)res;
             }
 
