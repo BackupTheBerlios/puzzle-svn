@@ -23,6 +23,17 @@ namespace Puzzle.NContext.Framework
         [ThreadStatic]
         private static readonly IDictionary<Type, object> _typedPerGraphObjects = new Dictionary<Type, object>();
 
+        [ThreadStatic]
+        private static readonly Stack<ObjectFactoryInfo> _configStack = new Stack<ObjectFactoryInfo>();
+
+        public Stack<ObjectFactoryInfo> configStack
+        {
+            get
+            {
+                return _configStack;
+            }
+        }
+
         public IDictionary<string, object> namedPerGraphObjects
         {
             get

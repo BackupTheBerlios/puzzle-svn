@@ -7,8 +7,8 @@ namespace Puzzle.NContext.Framework
 {
     public enum InstanceMode
     {
-        PerCall,
-        PerGraph,
-        PerContext,
+        PerCall=0,
+        PerGraph=1,
+        PerContext=2,
     }
 }

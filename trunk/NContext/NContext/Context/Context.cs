@@ -77,16 +77,17 @@ namespace Puzzle.NContext.Framework
         private bool inGraphCall = false;
         public T GetObject<T>(string factoryId)
         {
-            bool inGraphStack = inGraphCall;
-            
-            if (!inGraphCall)
-                ClearPerGraphCache();
+            bool inGraphStack = inGraphCall;            
 
             inGraphCall = true;
 
             T res = InternalGetObject<T>(factoryId);
 
             inGraphCall = inGraphStack;
+
+            if (!inGraphCall)
+                ClearPerGraphCache();
+
             return res;
         }
 
@@ -95,6 +96,8 @@ namespace Puzzle.NContext.Framework
             if (state.NamedObjectFactories.ContainsKey(factoryId))
             {
                 ObjectFactoryInfo config = state.NamedObjectFactories[factoryId];
+                VerifyInstanceModeIntegrity(config);
+                state.configStack.Push(config);
 
                 if (config.InstanceMode == InstanceMode.PerContext && state.namedPerContextObjects.ContainsKey(factoryId))
                     return (T)state.namedPerContextObjects[factoryId];
@@ -111,26 +114,27 @@ namespace Puzzle.NContext.Framework
                 if (config.InstanceMode == InstanceMode.PerGraph)
                     state.namedPerGraphObjects.Add(factoryId, res);
 
+                state.configStack.Pop();
+
                 return (T)res;
             }
 
             throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
         }
 
-
-
         public T GetObject<T>(Type factoryType)
         {
             bool inGraphStack = inGraphCall;
-
-            if (!inGraphCall)
-                ClearPerGraphCache();
-
+          
             inGraphCall = true;
 
             T res = InternalGetObject<T>(factoryType);
 
             inGraphCall = inGraphStack;
+
+            if (!inGraphCall)
+                ClearPerGraphCache();
+
             return res;
         }
 
@@ -139,6 +143,8 @@ namespace Puzzle.NContext.Framework
             if (state.TypedObjectFactories.ContainsKey(factoryType))
             {
                 ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
+                VerifyInstanceModeIntegrity(config);
+                state.configStack.Push(config);
                 
                 if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
                     return (T)state.typedPerContextObjects[factoryType];
@@ -155,10 +161,23 @@ namespace Puzzle.NContext.Framework
                 if (config.InstanceMode == InstanceMode.PerGraph)
                     state.typedPerGraphObjects.Add(factoryType, res);
 
+                state.configStack.Pop();
+
                 return (T)res;
             }
 
             throw ExceptionHelper.TypedFactoryNotFoundException(factoryType);
+        }
+
+        private void VerifyInstanceModeIntegrity(ObjectFactoryInfo nextConfig)
+        {
+            if (state.configStack.Count == 0)
+                return;
+
+            ObjectFactoryInfo prevConfig = state.configStack.Peek();
+
+            if (prevConfig.InstanceMode > nextConfig.InstanceMode)
+                throw new Exception(string.Format("Object '{0}' with InstanceMode '{1}' is referencing object '{2}' with InstanceMode '{3}'", prevConfig.DisplayName,prevConfig.InstanceMode,nextConfig.DisplayName ,nextConfig.InstanceMode));
         }
 
 
@@ -211,14 +230,14 @@ namespace Puzzle.NContext.Framework
 
         public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
-            ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
+            ObjectFactoryInfo factory = CreateObjectFactory("DefaultFor:" + objectType.Name,factoryDelegate, instanceMode);
             state.TypedObjectFactories.Add(objectType, factory);
         }
 
-        public void RegisterObjectFactoryMethod(string objectId, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
+        public void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
-            ObjectFactoryInfo factory = CreateObjectFactory(factoryDelegate, instanceMode);
-            state.NamedObjectFactories.Add(objectId, factory);
+            ObjectFactoryInfo factory = CreateObjectFactory(factoryId,factoryDelegate, instanceMode);
+            state.NamedObjectFactories.Add(factoryId, factory);
         }
 
         public void ConfigureObject<T>(string configId, T item)
@@ -377,11 +396,12 @@ namespace Puzzle.NContext.Framework
             return factoryDelegate;
         }
 
-        private static ObjectFactoryInfo CreateObjectFactory(FactoryDelegate factoryDelegate, InstanceMode instanceMode)
+        private ObjectFactoryInfo CreateObjectFactory(string displayName,FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = new ObjectFactoryInfo();
             factory.FactoryDelegate = factoryDelegate;
             factory.InstanceMode = instanceMode;
+            factory.DisplayName = displayName;
             return factory;
         }
 
