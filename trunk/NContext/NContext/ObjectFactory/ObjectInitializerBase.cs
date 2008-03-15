@@ -14,7 +14,6 @@ namespace Puzzle.NContext.Framework
 
         public virtual void Initialize()
         {
-            throw new NotImplementedException();
         }
 
         public virtual T CreateObject<T>(params object[] args)
