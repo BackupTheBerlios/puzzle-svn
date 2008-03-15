@@ -22,6 +22,20 @@ namespace Logging.Factories
             return car;
         }
 
+        //register an object that will
+        //change each time you fetch it from the context
+        private Random rnd = new Random();
+        private int crazyId = 0;
+        [FactoryMethod(InstanceMode.PerCall)]
+        public Car CrazyCar()
+        {
+            Car car = CreateObject<Car>();
+            car.NumberOfWheels = rnd.Next (3,10);
+            car.Name = "CrazyCar" + crazyId.ToString();
+            crazyId++;
+            return car;
+        }
+
         //create a concrete logger and register it as the
         //default object for ILogger
         //only one instance per context should be created

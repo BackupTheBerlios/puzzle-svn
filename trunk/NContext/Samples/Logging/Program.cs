@@ -31,6 +31,17 @@ namespace Logging
             else
                 Console.WriteLine("volvo and volvoAgain are not the same object");
 
+
+            //get a crazy car (instancemode = PerCall = a new instance each time)
+            Car crazyCar1 = ctx.GetObject<Car>("CrazyCar");
+            crazyCar1.Drive();
+
+            if (volvo.Logger == crazyCar1.Logger)
+                Console.WriteLine("volvo and crazyCar1 uses the same logger");
+            else
+                Console.WriteLine("volvo and crazyCar1 do not use the same logger");
+
+
             
 
             Console.ReadLine();

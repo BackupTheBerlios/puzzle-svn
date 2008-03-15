@@ -224,10 +224,10 @@ namespace Puzzle.NContext.Framework
             if (state.configStack.Count == 0)
                 return;
 
-            ObjectFactoryInfo prevConfig = state.configStack.Peek();
+            //ObjectFactoryInfo prevConfig = state.configStack.Peek();
 
-            if (prevConfig.InstanceMode > nextConfig.InstanceMode)
-                throw new Exception(string.Format("Object '{0}' with InstanceMode '{1}' is referencing object '{2}' with InstanceMode '{3}'", prevConfig.DisplayName,prevConfig.InstanceMode,nextConfig.DisplayName ,nextConfig.InstanceMode));
+            //if (prevConfig.InstanceMode > nextConfig.InstanceMode)
+            //    throw new Exception(string.Format("Object '{0}' with InstanceMode '{1}' is referencing object '{2}' with InstanceMode '{3}'", prevConfig.DisplayName,prevConfig.InstanceMode,nextConfig.DisplayName ,nextConfig.InstanceMode));
         }
 
 
