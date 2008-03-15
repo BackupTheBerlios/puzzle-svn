@@ -5,11 +5,8 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public enum InstanceMode
+    public interface IRunnable
     {
-        PerCall=0,
-        PerGraph=1,
-        PerThread=2,
-        PerContext=3,
+        void Run();
     }
 }

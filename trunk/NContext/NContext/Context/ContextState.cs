@@ -19,17 +19,24 @@ namespace Puzzle.NContext.Framework
         public readonly IDictionary<Type, object> typedPerContextObjects = new Dictionary<Type, object>();
 
         [ThreadStatic]
-        private static readonly IDictionary<string, object> _namedPerGraphObjects = new Dictionary<string, object>();
+        private static IDictionary<string, object> _namedPerGraphObjects = new Dictionary<string, object>();
         [ThreadStatic]
-        private static readonly IDictionary<Type, object> _typedPerGraphObjects = new Dictionary<Type, object>();
+        private static IDictionary<Type, object> _typedPerGraphObjects = new Dictionary<Type, object>();
+        [ThreadStatic]
+        private static IDictionary<string, object> _namedPerThreadObjects = new Dictionary<string, object>();
+        [ThreadStatic]
+        private static IDictionary<Type, object> _typedPerThreadObjects = new Dictionary<Type, object>();
 
         [ThreadStatic]
-        private static readonly Stack<ObjectFactoryInfo> _configStack = new Stack<ObjectFactoryInfo>();
+        private static Stack<ObjectFactoryInfo> _configStack = new Stack<ObjectFactoryInfo>();
 
         public Stack<ObjectFactoryInfo> configStack
         {
             get
             {
+                if (ContextState._configStack == null)
+                    ContextState._configStack = new Stack<ObjectFactoryInfo>();
+
                 return _configStack;
             }
         }
@@ -38,6 +45,9 @@ namespace Puzzle.NContext.Framework
         {
             get
             {
+                if (ContextState._namedPerGraphObjects == null)
+                    ContextState._namedPerGraphObjects = new Dictionary<string, object>();
+
                 return ContextState._namedPerGraphObjects;
             }
         }
@@ -46,7 +56,32 @@ namespace Puzzle.NContext.Framework
         {
             get
             {
+                if (ContextState._typedPerGraphObjects == null)
+                    ContextState._typedPerGraphObjects = new Dictionary<Type, object>();
+
                 return ContextState._typedPerGraphObjects;
+            }
+        }
+
+        public IDictionary<string, object> namedPerThreadObjects
+        {
+            get
+            {
+                if (ContextState._namedPerThreadObjects == null)
+                    ContextState._namedPerThreadObjects = new Dictionary<string, object>();
+
+                return ContextState._namedPerThreadObjects;
+            }
+        }
+
+        public IDictionary<Type, object> typedPerThreadObjects
+        {
+            get
+            {
+                if (ContextState._typedPerThreadObjects == null)
+                    ContextState._typedPerThreadObjects = new Dictionary<Type, object>();
+
+                return ContextState._typedPerThreadObjects;
             }
         }
     }

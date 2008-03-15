@@ -99,36 +99,49 @@ namespace Puzzle.NContext.Framework
             }
         }
 
+        private object syncRoot = new object();
         private T InternalGetObject<T>(string factoryId)
         {
-            if (state.NamedObjectFactories.ContainsKey(factoryId))
+            lock (syncRoot)
             {
-                ObjectFactoryInfo config = state.NamedObjectFactories[factoryId];
-                VerifyInstanceModeIntegrity(config);
-
-                state.configStack.Push(config);
-                try
+                if (state.NamedObjectFactories.ContainsKey(factoryId))
                 {
-                    if (config.InstanceMode == InstanceMode.PerContext && state.namedPerContextObjects.ContainsKey(factoryId))
-                        return (T)state.namedPerContextObjects[factoryId];
+                    ObjectFactoryInfo config = state.NamedObjectFactories[factoryId];
+                    VerifyInstanceModeIntegrity(config);
 
-                    if (config.InstanceMode == InstanceMode.PerGraph && state.namedPerGraphObjects.ContainsKey(factoryId))
-                        return (T)state.namedPerGraphObjects[factoryId];
+                    state.configStack.Push(config);
+                    try
+                    {
+                        if (config.InstanceMode == InstanceMode.PerContext && state.namedPerContextObjects.ContainsKey(factoryId))
+                            return (T)state.namedPerContextObjects[factoryId];
 
-                    object res = config.FactoryDelegate();
-                    ConfigureObjectWithTemplates((T)res);
+                        if (config.InstanceMode == InstanceMode.PerGraph && state.namedPerGraphObjects.ContainsKey(factoryId))
+                            return (T)state.namedPerGraphObjects[factoryId];
 
-                    if (config.InstanceMode == InstanceMode.PerContext)
-                        state.namedPerContextObjects.Add(factoryId, res);
+                        if (config.InstanceMode == InstanceMode.PerThread && state.namedPerThreadObjects.ContainsKey(factoryId))
+                            return (T)state.namedPerThreadObjects[factoryId];
 
-                    if (config.InstanceMode == InstanceMode.PerGraph)
-                        state.namedPerGraphObjects.Add(factoryId, res);
+                        object res = config.FactoryDelegate();
+                        ConfigureObjectWithTemplates((T)res);
 
-                    return (T)res;
-                }
-                finally
-                {
-                    state.configStack.Pop();
+                        if (res is IRunnable)
+                            RunnableEngine.RunRunnable(res as IRunnable);
+
+                        if (config.InstanceMode == InstanceMode.PerContext)
+                            state.namedPerContextObjects.Add(factoryId, res);
+
+                        if (config.InstanceMode == InstanceMode.PerGraph)
+                            state.namedPerGraphObjects.Add(factoryId, res);
+
+                        if (config.InstanceMode == InstanceMode.PerThread)
+                            state.namedPerThreadObjects.Add(factoryId, res);
+
+                        return (T)res;
+                    }
+                    finally
+                    {
+                        state.configStack.Pop();
+                    }
                 }
             }
 
@@ -157,34 +170,46 @@ namespace Puzzle.NContext.Framework
 
         private T InternalGetObject<T>(Type factoryType)
         {
-            if (state.TypedObjectFactories.ContainsKey(factoryType))
+            lock (syncRoot)
             {
-                ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
-                VerifyInstanceModeIntegrity(config);
-                state.configStack.Push(config);
-
-                try
+                if (state.TypedObjectFactories.ContainsKey(factoryType))
                 {
-                    if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
-                        return (T)state.typedPerContextObjects[factoryType];
+                    ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
+                    VerifyInstanceModeIntegrity(config);
+                    state.configStack.Push(config);
 
-                    if (config.InstanceMode == InstanceMode.PerGraph && state.typedPerGraphObjects.ContainsKey(factoryType))
-                        return (T)state.typedPerGraphObjects[factoryType];
+                    try
+                    {
+                        if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
+                            return (T)state.typedPerContextObjects[factoryType];
 
-                    object res = config.FactoryDelegate();
-                    ConfigureObjectWithTemplates((T)res);
+                        if (config.InstanceMode == InstanceMode.PerGraph && state.typedPerGraphObjects.ContainsKey(factoryType))
+                            return (T)state.typedPerGraphObjects[factoryType];
 
-                    if (config.InstanceMode == InstanceMode.PerContext)
-                        state.typedPerContextObjects.Add(factoryType, res);
+                        if (config.InstanceMode == InstanceMode.PerThread && state.typedPerThreadObjects.ContainsKey(factoryType))
+                            return (T)state.typedPerThreadObjects[factoryType];
 
-                    if (config.InstanceMode == InstanceMode.PerGraph)
-                        state.typedPerGraphObjects.Add(factoryType, res);
+                        object res = config.FactoryDelegate();
+                        ConfigureObjectWithTemplates((T)res);
 
-                    return (T)res;
-                }
-                finally
-                {
-                    state.configStack.Pop();                    
+                        if (res is IRunnable)
+                            RunnableEngine.RunRunnable(res as IRunnable);
+
+                        if (config.InstanceMode == InstanceMode.PerContext)
+                            state.typedPerContextObjects.Add(factoryType, res);
+
+                        if (config.InstanceMode == InstanceMode.PerGraph)
+                            state.typedPerGraphObjects.Add(factoryType, res);
+
+                        if (config.InstanceMode == InstanceMode.PerThread)
+                            state.typedPerThreadObjects.Add(factoryType, res);
+
+                        return (T)res;
+                    }
+                    finally
+                    {
+                        state.configStack.Pop();
+                    }
                 }
             }
 
