@@ -2,14 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
+using System.Configuration;
 
 namespace Puzzle.NContext.Framework
 {
     public partial class Context
     {
-        public static Context Configure()
-        {
-            return new Context();
+        public static IContext Configure()
+        {            
+            XmlElement xmlRoot = (XmlElement)ConfigurationManager.GetSection("ncontext");
+
+            IContext context = new Context();
+            foreach (XmlNode node in xmlRoot)
+            {
+                if (node.Name == "objectFactory")
+                {
+                    Type factoryType = Type.GetType(node.Attributes["type"].Value);
+                    IObjectInitializer factory = (IObjectInitializer)Activator.CreateInstance(factoryType);
+                    context.RegisterObjectFactory (factory);
+                }
+            }
+
+            
+            return context;
         }
     }
 }

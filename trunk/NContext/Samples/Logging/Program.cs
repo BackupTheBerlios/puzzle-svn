@@ -13,7 +13,6 @@ namespace Logging
         static void Main(string[] args)
         {
             IContext ctx = Context.Configure();
-            ctx.RegisterObjectFactory(new DemoFactory());
 
             //get an object from the container
             Car volvo = ctx.GetObject<Car>("Volvo");
