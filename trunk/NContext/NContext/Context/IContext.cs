@@ -3,6 +3,8 @@ namespace Puzzle.NContext.Framework
 {
     public interface IContext
     {
+        IContext ParentContext { get; set; }
+
         void SubstituteType<T, S>();
         T CreateObject<T>(params object[] args);
 

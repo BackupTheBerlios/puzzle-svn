@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Linq.Expressions;
+using System.ComponentModel;
 
 namespace Puzzle.NContext.Framework
 {
-    public partial class Context : IContext
+    public partial class Context :  IContext
     {
         protected ContextState state = new ContextState();
 
         protected Context()
-        {
+        {            
         }
+
+        public virtual IContext ParentContext {get;set;}
 
         public virtual void SubstituteType<T, S>()
         {
@@ -54,9 +57,6 @@ namespace Puzzle.NContext.Framework
             }
         }
 
- 
-
-
         public T CreateObject<T>(params object[] args)
         {
             Type typeToCreate = null;
@@ -64,6 +64,13 @@ namespace Puzzle.NContext.Framework
                 typeToCreate = typeof(T);
 
             T res = (T)Activator.CreateInstance(typeToCreate, args);
+
+            //assign countextbound objects to this context
+            if (res is IContextBound)
+            {
+                ((IContextBound)res).Context = this;
+            }
+
             ConfigureObjectWithTemplates(res);
             return res;
         }
@@ -125,7 +132,10 @@ namespace Puzzle.NContext.Framework
                 }
             }
 
-            throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
+            if (ParentContext != null)
+                return ParentContext.GetObject<T>(factoryId);
+            else
+                throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
         }
 
         public T GetObject<T>(Type factoryType)
@@ -178,7 +188,10 @@ namespace Puzzle.NContext.Framework
                 }
             }
 
-            throw ExceptionHelper.TypedFactoryNotFoundException(factoryType);
+            if (ParentContext != null)
+                return ParentContext.GetObject<T>(factoryType);
+            else
+                throw ExceptionHelper.TypedFactoryNotFoundException(factoryType);
         }
 
         private void VerifyInstanceModeIntegrity(ObjectFactoryInfo nextConfig)
@@ -280,8 +293,6 @@ namespace Puzzle.NContext.Framework
             throw ExceptionHelper.TypedConfigurationNotFoundException(configType);
         }
 
- 
-
         protected virtual void ConfigureObjectWithTemplates<T>(T item)
         {
             foreach (var entry in state.ApplyToAllObjectConfigurations)
@@ -292,7 +303,6 @@ namespace Puzzle.NContext.Framework
                 }
             }
         }
-
 
         public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
