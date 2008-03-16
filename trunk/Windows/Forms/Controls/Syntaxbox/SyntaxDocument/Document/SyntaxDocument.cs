@@ -14,6 +14,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using Puzzle.SourceCode.SyntaxDocumentParsers;
+using System.Reflection;
+using System.IO;
 
 namespace Puzzle.SourceCode
 {
@@ -1823,7 +1825,7 @@ namespace Puzzle.SourceCode
             //
 
             Stream stream = assembly.GetManifestResourceStream(resourceName);
-            stream.Seek(0, SeekOrigin.Begin)
+            stream.Seek(0, SeekOrigin.Begin);
             
             //
             // Read stream.
