@@ -12,10 +12,11 @@ namespace Logging
     {
         static void Main(string[] args)
         {
+            
             IContext ctx = Context.Configure();
 
             //get an object from the container
-            Car volvo = ctx.GetObject<Car>("Volvo");
+            Car volvo = ctx.GetObject<Car, DemoFactory>(df => df.Volvo());
             
             //see if the logging works
             volvo.Drive();
@@ -39,9 +40,6 @@ namespace Logging
                 Console.WriteLine("volvo and crazyCar1 uses the same logger");
             else
                 Console.WriteLine("volvo and crazyCar1 do not use the same logger");
-
-
-            
 
             Console.ReadLine();
         }

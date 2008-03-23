@@ -25,19 +25,30 @@ namespace Puzzle.NContext.Framework
 
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
+
+        public T GetObject<T, F>(Expression<Func<F,T>> factoryMethod) where F : IObjectInitializer
+        {
+            LambdaExpression lambda = factoryMethod as LambdaExpression;
+            MethodCallExpression call = lambda.Body as MethodCallExpression;
+            return GetObjectFromMethodInfo<T>(call.Method);
+        }
         
         public T GetObject<T>(Func<T> factoryMethod)
         {
-            MethodInfo method = factoryMethod.Method;
             IObjectInitializer factory = factoryMethod.Target as IObjectInitializer;
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
-            FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
-
             if (!state.ObjectFactories.Contains(factory))
                 RegisterObjectFactory(factory);
 
+            MethodInfo method = factoryMethod.Method;
+            return GetObjectFromMethodInfo<T>(method);
+        }
+
+        private T GetObjectFromMethodInfo<T>(MethodInfo method)
+        {
+            FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
             if (attrib == null)
                 throw ExceptionHelper.NotFactoryMethodException();
 

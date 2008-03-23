@@ -14,10 +14,8 @@ namespace Puzzle.NContext.Framework
         public readonly IDictionary<Type, ObjectConfigurationInfo> TypedObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
         public readonly IDictionary<Type, ObjectConfigurationInfo> ApplyToAllObjectConfigurations = new Dictionary<Type, ObjectConfigurationInfo>();
         public readonly IDictionary<Type, Type> TypeSubstitutes = new Dictionary<Type, Type>();
-
         public readonly IDictionary<string, object> namedPerContextObjects = new Dictionary<string, object>();
         public readonly IDictionary<Type, object> typedPerContextObjects = new Dictionary<Type, object>();
-
         [ThreadStatic]
         private static IDictionary<string, object> _namedPerGraphObjects = new Dictionary<string, object>();
         [ThreadStatic]
