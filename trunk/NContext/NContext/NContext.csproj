@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AoP\Mixin.cs" />
+    <Compile Include="AoP\SubclassProxySpecification.cs" />
+    <Compile Include="AoP\TypeExtender.cs" />
     <Compile Include="Configuration\NContextConfigurationHandler.cs" />
     <Compile Include="Configuration\ObjectConfigurationInfo.cs" />
     <Compile Include="Context\Context.cs">

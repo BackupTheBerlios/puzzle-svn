@@ -13,7 +13,7 @@ namespace Logging.Factories
         //register an object on the name "Volvo"
         //custom names can also be used
         //but default is the method name
-        [FactoryMethod (InstanceMode.PerContext)]
+        [FactoryMethod(InstanceMode.PerContext)]
         public Car Volvo()
         {
             Car car = CreateObject<Car>();
@@ -30,7 +30,7 @@ namespace Logging.Factories
         public Car CrazyCar()
         {
             Car car = CreateObject<Car>();
-            car.NumberOfWheels = rnd.Next (3,10);
+            car.NumberOfWheels = rnd.Next(3, 10);
             car.Name = "CrazyCar" + crazyId.ToString();
             crazyId++;
             return car;
