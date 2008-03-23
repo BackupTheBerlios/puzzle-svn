@@ -16,7 +16,7 @@ namespace Logging
             IContext ctx = Context.Configure();
 
             //get an object from the container
-            Car volvo = ctx.GetObject<Car, DemoFactory>(df => df.Volvo());
+            Car volvo = ctx.GetObject<Car, DemoFactory>(df => df.Volvo);
             
             //see if the logging works
             volvo.Drive();

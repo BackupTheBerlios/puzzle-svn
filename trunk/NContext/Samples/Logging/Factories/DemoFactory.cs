@@ -13,6 +13,11 @@ namespace Logging.Factories
         //register an object on the name "Volvo"
         //custom names can also be used
         //but default is the method name
+        /// <summary>
+        /// Creates a nice Volvo for you
+        /// Intellisense test
+        /// </summary>
+        /// <returns></returns>
         [FactoryMethod(InstanceMode.PerContext)]
         public Car Volvo()
         {

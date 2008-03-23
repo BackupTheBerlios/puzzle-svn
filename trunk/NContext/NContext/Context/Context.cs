@@ -26,11 +26,14 @@ namespace Puzzle.NContext.Framework
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
 
-        public T GetObject<T, F>(Expression<Func<F,T>> factoryMethod) where F : IObjectInitializer
+        public T GetObject<T, F>(Expression<Func<F,Func<T>>> factoryMethod) where F : IObjectInitializer
         {
             LambdaExpression lambda = factoryMethod as LambdaExpression;
-            MethodCallExpression call = lambda.Body as MethodCallExpression;
-            return GetObjectFromMethodInfo<T>(call.Method);
+            UnaryExpression u = lambda.Body as UnaryExpression;
+            MethodCallExpression call = u.Operand as MethodCallExpression;
+            ConstantExpression methodExpression = call.Arguments[2] as ConstantExpression;
+            MethodInfo method = methodExpression.Value as MethodInfo;
+            return GetObjectFromMethodInfo<T>(method);
         }
         
         public T GetObject<T>(Func<T> factoryMethod)

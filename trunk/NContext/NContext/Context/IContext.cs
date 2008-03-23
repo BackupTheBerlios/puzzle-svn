@@ -13,7 +13,7 @@ namespace Puzzle.NContext.Framework
         T GetObject<T>(); //objectType == T
         T GetObject<T>(string factoryId);
         T GetObject<T>(Func<T> factoryMethod);
-        T GetObject<T, F>(Expression<Func<F, T>> factoryMethod) where F : IObjectInitializer;
+        T GetObject<T, F>(Expression<Func<F, Func<T>>> factoryMethod) where F : IObjectInitializer;
 
         void ConfigureObject<T>(string configId, T item);
         void ConfigureObject<T>(Type configType, T item);
