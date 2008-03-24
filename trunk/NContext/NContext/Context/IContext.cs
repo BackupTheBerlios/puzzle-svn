@@ -15,7 +15,7 @@ namespace Puzzle.NContext.Framework
         T GetObject<T>(string factoryId);
         T GetObject<T>(Func<T> factoryMethod);
 
-        F Template<F>() where F : ITemplate;
+        F GetFrom<F>() where F : ITemplate;
 
         void ConfigureObject<T>(string configId, T item);
         void ConfigureObject<T>(Type configType, T item);

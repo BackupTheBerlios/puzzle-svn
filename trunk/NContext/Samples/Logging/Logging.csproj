@@ -49,7 +49,7 @@
     <Compile Include="Classes\ILoggable.cs" />
     <Compile Include="Classes\ILogger.cs" />
     <Compile Include="Classes\MyLogger.cs" />
-    <Compile Include="Factories\DemoFactory.cs" />
+    <Compile Include="Factories\DemoTemplate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -31,7 +31,7 @@ namespace Puzzle.NContext.Framework
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
 
-        public F Template<F>() where F : ITemplate
+        public F GetFrom<F>() where F : ITemplate
         {
             foreach (ITemplate initializer in state.Templates)
             {
