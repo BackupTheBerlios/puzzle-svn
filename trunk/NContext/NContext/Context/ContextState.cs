@@ -13,7 +13,7 @@ namespace Puzzle.NContext.Framework
         private static IEngine GetAopEngine()
         {
             Engine engine = new Engine("NContextEngine");
-            engine.Configuration.Aspects.Add(new NContextAspect());
+            engine.Configuration.Aspects.Add(new TemplateAspect());
             return engine;
         }
 

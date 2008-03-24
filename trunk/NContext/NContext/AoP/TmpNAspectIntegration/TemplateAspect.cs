@@ -8,9 +8,9 @@ using System.Collections;
 
 namespace Puzzle.NContext.Framework
 {
-    public class NContextAspect : GenericAspect
+    public class TemplateAspect : GenericAspect
     {
-        public NContextAspect() : base ("NContextAspect")
+        public TemplateAspect() : base ("NContextAspect")
         {
             //target all classes implementing ITemplate
             Targets.Add(new AspectTarget(typeof(ITemplate), AspectTargetType.Interface));
