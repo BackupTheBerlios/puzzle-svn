@@ -38,7 +38,7 @@ namespace Puzzle.NContext.Framework
 
         public F Template<F>() where F : ITemplate
         {
-            foreach (ITemplate initializer in state.ObjectFactories)
+            foreach (ITemplate initializer in state.Templates)
             {
                 if (initializer is F)
                     return (F)initializer;
@@ -49,12 +49,12 @@ namespace Puzzle.NContext.Framework
 
         public T GetObject<T>(Func<T> factoryMethod)
         {
-            ITemplate factory = factoryMethod.Target as ITemplate;
-            if (factory == null)
+            ITemplate template = factoryMethod.Target as ITemplate;
+            if (template == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
-            if (!state.ObjectFactories.Contains(factory))
-                RegisterTemplate(factory);
+            if (!state.Templates.Contains(template))
+                throw new Exception(string.Format("The template is not registered in the Context"));
 
             MethodInfo method = factoryMethod.Method;
             return GetObjectFromMethodInfo<T>(method);
@@ -276,36 +276,9 @@ namespace Puzzle.NContext.Framework
 
 
 
-        public void RegisterTemplate(ITemplate template)
+        public void RegisterTemplate<F>() where F:ITemplate
         {
-            template.Context = this;
-            template.Initialize();
-            state.ObjectFactories.Add(template);
-
-            foreach (MethodInfo method in template.GetType().GetMethods())
-            {
-                FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
-                
-                if (attrib == null)
-                    continue; //not a factory method
-
-                if (!method.IsVirtual)
-                {
-                    throw new Exception(string.Format("Factory method '{0}.{1}' must be marked as virtual", template.GetType().Name, method.Name));
-                }
-
-                RegisterObjectFactoryMethod(template, method, attrib);
-            }
-
-            foreach (MethodInfo method in template.GetType().GetMethods())
-            {
-                ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
-
-                if (attrib == null)
-                    continue; //not a configuration method
-
-                RegisterObjectConfigurationMethod(template, method, attrib);
-            }
+            RegisterTemplate(typeof(F));
         }
 
         public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
@@ -362,14 +335,14 @@ namespace Puzzle.NContext.Framework
         public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
             MethodInfo method = configMethod.Method;
-            ITemplate factory = configMethod.Target as ITemplate;
-            if (factory == null)
+            ITemplate template = configMethod.Target as ITemplate;
+            if (template == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
             ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
 
-            if (!state.ObjectFactories.Contains(factory))
-                RegisterTemplate(factory);
+            if (!state.Templates.Contains(template))
+                throw new Exception(string.Format("The template is not registered in the Context")); ;
 
             if (attrib == null)
                 throw ExceptionHelper.NotConfigurationMethod();
@@ -505,6 +478,40 @@ namespace Puzzle.NContext.Framework
         {
             ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
             state.ApplyToAllObjectConfigurations.Add(configType, config);
+        }
+
+        public void RegisterTemplate(Type templateType)
+        {
+            ITemplate template = (ITemplate)state.aopEngine.CreateProxy(templateType);
+
+            template.Context = this;
+            template.Initialize();
+            state.Templates.Add(template);
+
+            foreach (MethodInfo method in template.GetType().GetMethods())
+            {
+                FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
+
+                if (attrib == null)
+                    continue; //not a factory method
+
+                if (!method.IsVirtual)
+                {
+                    throw new Exception(string.Format("Factory method '{0}.{1}' must be marked as virtual", template.GetType().Name, method.Name));
+                }
+
+                RegisterObjectFactoryMethod(template, method, attrib);
+            }
+
+            foreach (MethodInfo method in template.GetType().GetMethods())
+            {
+                ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
+
+                if (attrib == null)
+                    continue; //not a configuration method
+
+                RegisterObjectConfigurationMethod(template, method, attrib);
+            }
         }
     }
 }

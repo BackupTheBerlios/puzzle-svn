@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="AoP\Mixin.cs" />
     <Compile Include="AoP\SubclassProxySpecification.cs" />
+    <Compile Include="AoP\TmpNAspectIntegration\FactoryMethodInterceptor.cs" />
+    <Compile Include="AoP\TmpNAspectIntegration\NContextAspect.cs" />
     <Compile Include="AoP\TypeExtender.cs" />
     <Compile Include="Configuration\NContextConfigurationHandler.cs" />
     <Compile Include="Configuration\ObjectConfigurationInfo.cs" />

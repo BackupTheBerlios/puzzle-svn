@@ -8,7 +8,12 @@ namespace Puzzle.NAspect.Framework.Aop
     /// The standard aspect representation
     /// </summary>
 	public class GenericAspect : GenericAspectBase
-	{       
+	{
+        public GenericAspect(string name)
+        {
+            Mixins = new ArrayList();
+            Pointcuts = new ArrayList();
+        }
         /// <summary>
         /// Attribute aspect Ctor.
         /// </summary>

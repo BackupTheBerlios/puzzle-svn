@@ -31,6 +31,8 @@ namespace Puzzle.NContext.Framework
         void RegisterObjectConfigurationMethod(string configId, ConfigureDelegate configMethod);
         void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod);
 
-        void RegisterTemplate(ITemplate template);
+        void RegisterTemplate<F>() where F:ITemplate;
+
+        void RegisterTemplate(Type templateType);
     }
 }

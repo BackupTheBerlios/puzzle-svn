@@ -2,12 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Puzzle.NAspect.Framework;
 
 namespace Puzzle.NContext.Framework
 {
     public class ContextState
     {
-        public readonly IList<ITemplate> ObjectFactories = new List<ITemplate>();
+        public readonly IEngine aopEngine = GetAopEngine();
+
+        private static IEngine GetAopEngine()
+        {
+            Engine engine = new Engine("NContextEngine");
+            engine.Configuration.Aspects.Add(new NContextAspect());
+            return engine;
+        }
+
+        public readonly IList<ITemplate> Templates = new List<ITemplate>();
         public readonly IDictionary<string, ObjectFactoryInfo> NamedObjectFactories = new Dictionary<string, ObjectFactoryInfo>();
         public readonly IDictionary<Type, ObjectFactoryInfo> TypedObjectFactories = new Dictionary<Type, ObjectFactoryInfo>();
         public readonly IDictionary<string, ObjectConfigurationInfo> NamedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();
