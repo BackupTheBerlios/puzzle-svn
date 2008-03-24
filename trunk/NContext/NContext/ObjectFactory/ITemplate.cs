@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Puzzle.NContext.Framework
 {
-    public interface IObjectInitializer : IContextBound
+    public interface ITemplate : IContextBound
     {
         void Initialize();
     }

@@ -26,24 +26,35 @@ namespace Puzzle.NContext.Framework
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
 
-        public T GetObject<T, F>(Expression<Func<F,Func<T>>> factoryMethod) where F : IObjectInitializer
+        //public T GetObject<T, F>(Expression<Func<F,Func<T>>> factoryMethod) where F : IObjectInitializer
+        //{
+        //    LambdaExpression lambda = factoryMethod as LambdaExpression;
+        //    UnaryExpression u = lambda.Body as UnaryExpression;
+        //    MethodCallExpression call = u.Operand as MethodCallExpression;
+        //    ConstantExpression methodExpression = call.Arguments[2] as ConstantExpression;
+        //    MethodInfo method = methodExpression.Value as MethodInfo;
+        //    return GetObjectFromMethodInfo<T>(method);
+        //}
+
+        public F Template<F>() where F : ITemplate
         {
-            LambdaExpression lambda = factoryMethod as LambdaExpression;
-            UnaryExpression u = lambda.Body as UnaryExpression;
-            MethodCallExpression call = u.Operand as MethodCallExpression;
-            ConstantExpression methodExpression = call.Arguments[2] as ConstantExpression;
-            MethodInfo method = methodExpression.Value as MethodInfo;
-            return GetObjectFromMethodInfo<T>(method);
+            foreach (ITemplate initializer in state.ObjectFactories)
+            {
+                if (initializer is F)
+                    return (F)initializer;
+            }
+
+            throw new Exception("Factory type was not found");
         }
-        
+
         public T GetObject<T>(Func<T> factoryMethod)
         {
-            IObjectInitializer factory = factoryMethod.Target as IObjectInitializer;
+            ITemplate factory = factoryMethod.Target as ITemplate;
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
             if (!state.ObjectFactories.Contains(factory))
-                RegisterObjectFactory(factory);
+                RegisterTemplate(factory);
 
             MethodInfo method = factoryMethod.Method;
             return GetObjectFromMethodInfo<T>(method);
@@ -265,30 +276,35 @@ namespace Puzzle.NContext.Framework
 
 
 
-        public void RegisterObjectFactory(IObjectInitializer factory)
+        public void RegisterTemplate(ITemplate template)
         {
-            factory.Context = this;
-            factory.Initialize();
-            state.ObjectFactories.Add(factory);
+            template.Context = this;
+            template.Initialize();
+            state.ObjectFactories.Add(template);
 
-            foreach (MethodInfo method in factory.GetType().GetMethods())
+            foreach (MethodInfo method in template.GetType().GetMethods())
             {
                 FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
                 
                 if (attrib == null)
                     continue; //not a factory method
 
-                RegisterObjectFactoryMethod(factory, method, attrib);
+                if (!method.IsVirtual)
+                {
+                    throw new Exception(string.Format("Factory method '{0}.{1}' must be marked as virtual", template.GetType().Name, method.Name));
+                }
+
+                RegisterObjectFactoryMethod(template, method, attrib);
             }
 
-            foreach (MethodInfo method in factory.GetType().GetMethods())
+            foreach (MethodInfo method in template.GetType().GetMethods())
             {
                 ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
 
                 if (attrib == null)
                     continue; //not a configuration method
 
-                RegisterObjectConfigurationMethod(factory, method, attrib);
+                RegisterObjectConfigurationMethod(template, method, attrib);
             }
         }
 
@@ -346,14 +362,14 @@ namespace Puzzle.NContext.Framework
         public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
         {
             MethodInfo method = configMethod.Method;
-            IObjectInitializer factory = configMethod.Target as IObjectInitializer;
+            ITemplate factory = configMethod.Target as ITemplate;
             if (factory == null)
                 throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
 
             ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
 
             if (!state.ObjectFactories.Contains(factory))
-                RegisterObjectFactory(factory);
+                RegisterTemplate(factory);
 
             if (attrib == null)
                 throw ExceptionHelper.NotConfigurationMethod();
@@ -376,7 +392,7 @@ namespace Puzzle.NContext.Framework
 
 
 
-        private void RegisterObjectConfigurationMethod(IObjectInitializer factory, MethodInfo method, ConfigurationMethodAttribute attrib)
+        private void RegisterObjectConfigurationMethod(ITemplate factory, MethodInfo method, ConfigurationMethodAttribute attrib)
         {
             Type objectType = method.ReturnType;
 
@@ -409,7 +425,7 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private ConfigureDelegate CreateMethodConfigurationDelegate(IObjectInitializer factory, MethodInfo method)
+        private ConfigureDelegate CreateMethodConfigurationDelegate(ITemplate factory, MethodInfo method)
         {
             ParameterInfo param = method.GetParameters().First();
             ParameterExpression paramExpression = Expression.Parameter(typeof(object), "arg");
@@ -421,7 +437,7 @@ namespace Puzzle.NContext.Framework
             return del;
         }
 
-        private void RegisterObjectFactoryMethod(IObjectInitializer factory, MethodInfo method, FactoryMethodAttribute attrib)
+        private void RegisterObjectFactoryMethod(ITemplate factory, MethodInfo method, FactoryMethodAttribute attrib)
         {
             Type objectType = method.ReturnType;
 
@@ -447,7 +463,7 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private FactoryDelegate CreateMethodFactoryDelegate(IObjectInitializer factory, MethodInfo method)
+        private FactoryDelegate CreateMethodFactoryDelegate(ITemplate factory, MethodInfo method)
         {
             ConstantExpression instance = Expression.Constant(factory);
             MethodCallExpression call = Expression.Call(instance, method);

@@ -19,8 +19,8 @@ namespace Puzzle.NContext.Framework
                 if (node.Name == "objectFactory")
                 {
                     Type factoryType = Type.GetType(node.Attributes["type"].Value);
-                    IObjectInitializer factory = (IObjectInitializer)Activator.CreateInstance(factoryType);
-                    context.RegisterObjectFactory (factory);
+                    ITemplate factory = (ITemplate)Activator.CreateInstance(factoryType);
+                    context.RegisterTemplate (factory);
                 }
             }
 

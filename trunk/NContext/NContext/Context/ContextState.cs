@@ -7,7 +7,7 @@ namespace Puzzle.NContext.Framework
 {
     public class ContextState
     {
-        public readonly IList<IObjectInitializer> ObjectFactories = new List<IObjectInitializer>();
+        public readonly IList<ITemplate> ObjectFactories = new List<ITemplate>();
         public readonly IDictionary<string, ObjectFactoryInfo> NamedObjectFactories = new Dictionary<string, ObjectFactoryInfo>();
         public readonly IDictionary<Type, ObjectFactoryInfo> TypedObjectFactories = new Dictionary<Type, ObjectFactoryInfo>();
         public readonly IDictionary<string, ObjectConfigurationInfo> NamedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();

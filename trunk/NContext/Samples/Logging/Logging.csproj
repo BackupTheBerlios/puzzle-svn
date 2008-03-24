@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NContext\NContext.csproj">
+    <ProjectReference Include="..\..\NContext\Puzzle.NContext.Framework.NET 3.5.csproj">
       <Project>{2468BEF9-5D09-4CFF-8EC1-1BFECC4A1736}</Project>
-      <Name>NContext</Name>
+      <Name>Puzzle.NContext.Framework.NET 3.5</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

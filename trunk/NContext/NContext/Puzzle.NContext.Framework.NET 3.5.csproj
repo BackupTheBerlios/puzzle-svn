@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NContext</RootNamespace>
-    <AssemblyName>NContext</AssemblyName>
+    <AssemblyName>Puzzle.NContext.Framework.NET3.5</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -63,13 +63,19 @@
     <Compile Include="TypeBuilder\DefaultTypeBuilder.cs" />
     <Compile Include="ObjectFactory\FactoryMethodAttribute.cs" />
     <Compile Include="Context\IContext.cs" />
-    <Compile Include="ObjectFactory\IObjectInitializer.cs" />
+    <Compile Include="ObjectFactory\ITemplate.cs" />
     <Compile Include="TypeBuilder\ITypeBuilder.cs" />
     <Compile Include="Configuration\ObjectFactoryInfo.cs" />
-    <Compile Include="ObjectFactory\ObjectInitializerBase.cs" />
+    <Compile Include="ObjectFactory\TemplateBase.cs" />
     <Compile Include="Enums\ObjectInstanceMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\StaticContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 3.5.csproj">
+      <Project>{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}</Project>
+      <Name>Puzzle.NAspect.Framework.NET 3.5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
