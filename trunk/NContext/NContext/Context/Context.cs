@@ -12,6 +12,11 @@ namespace Puzzle.NContext.Framework
     {
         protected ContextState state = new ContextState();
 
+        public ContextState State
+        {
+            get { return state; }
+        }
+
         protected Context()
         {            
         }
@@ -26,16 +31,6 @@ namespace Puzzle.NContext.Framework
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
 
-        //public T GetObject<T, F>(Expression<Func<F,Func<T>>> factoryMethod) where F : IObjectInitializer
-        //{
-        //    LambdaExpression lambda = factoryMethod as LambdaExpression;
-        //    UnaryExpression u = lambda.Body as UnaryExpression;
-        //    MethodCallExpression call = u.Operand as MethodCallExpression;
-        //    ConstantExpression methodExpression = call.Arguments[2] as ConstantExpression;
-        //    MethodInfo method = methodExpression.Value as MethodInfo;
-        //    return GetObjectFromMethodInfo<T>(method);
-        //}
-
         public F Template<F>() where F : ITemplate
         {
             foreach (ITemplate initializer in state.Templates)
@@ -44,7 +39,7 @@ namespace Puzzle.NContext.Framework
                     return (F)initializer;
             }
 
-            throw new Exception("Factory type was not found");
+            throw new Exception("Template type was not found");
         }
 
         public T GetObject<T>(Func<T> factoryMethod)
@@ -118,6 +113,7 @@ namespace Puzzle.NContext.Framework
             }
             finally
             {
+                //if something blows up make sure to clear the graph cache
                 inGraphCall = inGraphStack;
                 if (!inGraphCall)
                     ClearPerGraphCache();
@@ -137,27 +133,32 @@ namespace Puzzle.NContext.Framework
                     state.configStack.Push(config);
                     try
                     {
+                        //get from context cache
                         if (config.InstanceMode == InstanceMode.PerContext && state.namedPerContextObjects.ContainsKey(factoryId))
                             return (T)state.namedPerContextObjects[factoryId];
 
+                        //get from graph cache
                         if (config.InstanceMode == InstanceMode.PerGraph && state.namedPerGraphObjects.ContainsKey(factoryId))
                             return (T)state.namedPerGraphObjects[factoryId];
 
+                        //get from thread cache
                         if (config.InstanceMode == InstanceMode.PerThread && state.namedPerThreadObjects.ContainsKey(factoryId))
                             return (T)state.namedPerThreadObjects[factoryId];
 
                         object res = config.FactoryDelegate();
-                        ConfigureObjectWithTemplates((T)res);
 
                         if (res is IRunnable)
                             RunnableEngine.RunRunnable(res as IRunnable);
 
+                        //add to context cache
                         if (config.InstanceMode == InstanceMode.PerContext)
                             state.namedPerContextObjects.Add(factoryId, res);
 
+                        //add to graph cache
                         if (config.InstanceMode == InstanceMode.PerGraph)
                             state.namedPerGraphObjects.Add(factoryId, res);
 
+                        //add to thread cache
                         if (config.InstanceMode == InstanceMode.PerThread)
                             state.namedPerThreadObjects.Add(factoryId, res);
 
@@ -165,6 +166,7 @@ namespace Puzzle.NContext.Framework
                     }
                     finally
                     {
+                        //remove the last config from config stack
                         state.configStack.Pop();
                     }
                 }
@@ -205,27 +207,32 @@ namespace Puzzle.NContext.Framework
 
                     try
                     {
+                        //get from context cache
                         if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
                             return (T)state.typedPerContextObjects[factoryType];
 
+                        //get from graph cache
                         if (config.InstanceMode == InstanceMode.PerGraph && state.typedPerGraphObjects.ContainsKey(factoryType))
                             return (T)state.typedPerGraphObjects[factoryType];
 
+                        //get from thread cache
                         if (config.InstanceMode == InstanceMode.PerThread && state.typedPerThreadObjects.ContainsKey(factoryType))
                             return (T)state.typedPerThreadObjects[factoryType];
 
                         object res = config.FactoryDelegate();
-                        ConfigureObjectWithTemplates((T)res);
 
                         if (res is IRunnable)
                             RunnableEngine.RunRunnable(res as IRunnable);
 
+                        //add to context cache
                         if (config.InstanceMode == InstanceMode.PerContext)
                             state.typedPerContextObjects.Add(factoryType, res);
 
+                        //add to graph cache
                         if (config.InstanceMode == InstanceMode.PerGraph)
                             state.typedPerGraphObjects.Add(factoryType, res);
 
+                        //add to thread cache
                         if (config.InstanceMode == InstanceMode.PerThread)
                             state.typedPerThreadObjects.Add(factoryType, res);
 
@@ -233,6 +240,7 @@ namespace Puzzle.NContext.Framework
                     }
                     finally
                     {
+                        //remove the last config from config stack
                         state.configStack.Pop();
                     }
                 }
@@ -264,17 +272,15 @@ namespace Puzzle.NContext.Framework
 
         public void RegisterObject<T>(string objectId, T item)
         {
-
+            //TODO: add code
         }
 
         public void RegisterObject<T>(Type objectType, T item)
         {
             if (!objectType.IsAssignableFrom(typeof(T)))
                 throw ExceptionHelper.RegisterObjectTypeMismatchException();
-
+            //TODO: add code
         }
-
-
 
         public void RegisterTemplate<F>() where F:ITemplate
         {

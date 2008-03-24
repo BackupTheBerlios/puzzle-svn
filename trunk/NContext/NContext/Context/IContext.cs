@@ -5,7 +5,7 @@ namespace Puzzle.NContext.Framework
     public interface IContext
     {
         IContext ParentContext { get; set; }
-
+        ContextState State { get; }
         void SubstituteType<T, S>();
 
         T CreateObject<T>(params object[] args);
@@ -14,7 +14,6 @@ namespace Puzzle.NContext.Framework
         T GetObject<T>(); //objectType == T
         T GetObject<T>(string factoryId);
         T GetObject<T>(Func<T> factoryMethod);
-     //   T GetObject<T, F>(Expression<Func<F, Func<T>>> factoryMethod) where F : IObjectInitializer;
 
         F Template<F>() where F : ITemplate;
 
@@ -32,7 +31,6 @@ namespace Puzzle.NContext.Framework
         void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod);
 
         void RegisterTemplate<F>() where F:ITemplate;
-
         void RegisterTemplate(Type templateType);
     }
 }

@@ -12,7 +12,12 @@ namespace Puzzle.NContext.Framework
         public object HandleCall(MethodInvocation call)
         {
             ITemplate template = call.Target as ITemplate;
-            return call.Proceed();
+            IContext context = template.Context;
+
+            lock (context.State)
+            {
+                return call.Proceed();
+            }
         }
     }
 }
