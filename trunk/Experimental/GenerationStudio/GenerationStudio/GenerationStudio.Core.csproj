@@ -86,6 +86,7 @@
     <Compile Include="Elements\OO\TypeMemberElement.cs" />
     <Compile Include="Elements\Templates\TemplateElement.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Graphics\Utils.cs" />
     <Compile Include="Gui\IHost.cs" />
     <Compile Include="Gui\TableDataView.cs">
       <SubType>UserControl</SubType>

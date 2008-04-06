@@ -126,6 +126,7 @@ namespace GenerationStudio.Elements
                         DataTable tableSchema = reader.GetSchemaTable();
                         reader.Close();
 
+                        table.ClearChildren();
                         foreach (DataRow columnRow in tableSchema.Rows)
                         {
                             ColumnElement column = new ColumnElement();

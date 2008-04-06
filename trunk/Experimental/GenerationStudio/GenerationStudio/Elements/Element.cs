@@ -121,9 +121,10 @@ namespace GenerationStudio.Elements
                 {
                     stream = typeof(Element).Assembly.GetManifestResourceStream("GenerationStudio.Images.exclude.gif");
                     Image exclude = Image.FromStream(stream);
+                    Image bw = GenerationStudio.Drawing.Utils.MakeGrayscale((Bitmap)img);
                     Image tmp = new Bitmap(16, 16);
                     Graphics g = Graphics.FromImage(tmp);
-                    g.DrawImage(img, 0, 0);
+                    g.DrawImage(bw, 0, 0);
                     g.DrawImage(exclude, 0, 0);
                     return tmp;
                 }
