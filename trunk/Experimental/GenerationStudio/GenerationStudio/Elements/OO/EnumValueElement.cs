@@ -9,7 +9,7 @@ namespace GenerationStudio.Elements
     [Serializable]
     [ElementParent(typeof(EnumElement))]
     [ElementName("Enumeration Value")]
-    [ElementIcon("GenerationStudio.Images.enum.bmp")]
+    [ElementIcon("GenerationStudio.Images.enumvalue.gif")]
     public class EnumValueElement : NamedElement
     {
         public int Value { get; set; }

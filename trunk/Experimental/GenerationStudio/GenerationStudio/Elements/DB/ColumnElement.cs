@@ -15,7 +15,20 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.column.gif")]
     public class ColumnElement : NamedElement
     {
-        public string DbType { get; set; }
+        [OptionalField]
+        private string dbType;
+        public string DbType
+        {
+            get
+            {
+                return dbType;
+            }
+            set
+            {
+                dbType = value;
+                OnNotifyChange();
+            }
+        }
 
 
 
@@ -178,6 +191,15 @@ namespace GenerationStudio.Elements
         public override int GetSortPriority()
         {
             return this.Ordinal;
+        }
+
+        public override IList<ElementError> GetErrors()
+        {
+            List<ElementError> errors = new List<ElementError>();
+            if (DbType.Trim() == "")
+                errors.Add (new ElementError (this, string.Format ("Column {0} is missing DbType",Parent.GetDisplayName ())));
+
+            return errors;
         }
     }
 }

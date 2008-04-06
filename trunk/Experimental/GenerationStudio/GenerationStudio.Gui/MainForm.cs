@@ -63,9 +63,11 @@ namespace GenerationStudio.Gui
             DataTable dt = new DataTable();
             dt.Columns.Add("Owner", typeof(string));
             dt.Columns.Add("Message", typeof(string));
+            dt.Columns.Add("Item", typeof(Element));
+            ErrorGrid.AutoGenerateColumns = false;
             foreach (ElementError error in allErrors)
             {
-                dt.Rows.Add(error.Owner.GetDisplayName (), error.Message);
+                dt.Rows.Add(error.Owner.GetDisplayName (), error.Message,error.Owner);
             }
             ErrorGrid.DataSource = dt;
         }
@@ -399,5 +401,27 @@ namespace GenerationStudio.Gui
 
             InvokeVerb(currentElement, defaultVerb);
         }
+
+        private void ErrorGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataRowView rowView = (DataRowView)ErrorGrid.Rows[e.RowIndex].DataBoundItem;
+            DataRow row = rowView.Row;
+            Element errorElement = (Element)row["Item"];
+
+            SelectElementInProjectTree(errorElement,ProjectTree.Nodes[0]);
+        }
+
+        private void SelectElementInProjectTree(Element errorElement,TreeNode node)
+        {
+            if (node.GetElement() == errorElement)
+            {
+                ProjectTree.SelectedNode = node;
+                return;
+            }
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                SelectElementInProjectTree(errorElement, childNode);
+            }
+        }        
     }
 }

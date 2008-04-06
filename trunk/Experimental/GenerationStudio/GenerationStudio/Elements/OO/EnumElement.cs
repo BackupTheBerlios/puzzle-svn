@@ -8,7 +8,7 @@ namespace GenerationStudio.Elements
 {
     [Serializable]
     [ElementName("Enumeration")]
-    [ElementIcon("GenerationStudio.Images.enum.bmp")]
+    [ElementIcon("GenerationStudio.Images.enum.gif")]
     public class EnumElement : TypeElement
     {
     }

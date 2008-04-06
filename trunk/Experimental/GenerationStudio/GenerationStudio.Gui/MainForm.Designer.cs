@@ -39,6 +39,10 @@
             this.ProjectToolStrip = new System.Windows.Forms.ToolStrip();
             this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
             this.ElementProperties = new System.Windows.Forms.PropertyGrid();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.DocumentPanel = new System.Windows.Forms.Panel();
+            this.ErrorPanel = new System.Windows.Forms.Panel();
+            this.ErrorGrid = new System.Windows.Forms.DataGridView();
             this.ProjectContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,10 +67,8 @@
             this.NormalFont = new System.Windows.Forms.Label();
             this.ItalicFont = new System.Windows.Forms.Label();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.DocumentPanel = new System.Windows.Forms.Panel();
-            this.ErrorPanel = new System.Windows.Forms.Panel();
-            this.ErrorGrid = new System.Windows.Forms.DataGridView();
+            this.OwnerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MessageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -75,6 +77,11 @@
             this.splitContainer2.SuspendLayout();
             this.ProjectTopPanel.SuspendLayout();
             this.ProjectToolStrip.SuspendLayout();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
+            this.ErrorPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).BeginInit();
             this.MainMenu.SuspendLayout();
             this.MainToolStrip.SuspendLayout();
             this.ToolStripContainer.BottomToolStripPanel.SuspendLayout();
@@ -82,11 +89,6 @@
             this.ToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.ToolStripContainer.SuspendLayout();
             this.FontPanel.SuspendLayout();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
-            this.ErrorPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -193,6 +195,69 @@
             this.ElementProperties.Name = "ElementProperties";
             this.ElementProperties.Size = new System.Drawing.Size(182, 244);
             this.ElementProperties.TabIndex = 3;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(5, 5);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.DocumentPanel);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.ErrorPanel);
+            this.splitContainer3.Size = new System.Drawing.Size(536, 462);
+            this.splitContainer3.SplitterDistance = 358;
+            this.splitContainer3.TabIndex = 0;
+            // 
+            // DocumentPanel
+            // 
+            this.DocumentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DocumentPanel.Location = new System.Drawing.Point(0, 0);
+            this.DocumentPanel.Name = "DocumentPanel";
+            this.DocumentPanel.Size = new System.Drawing.Size(536, 358);
+            this.DocumentPanel.TabIndex = 1;
+            // 
+            // ErrorPanel
+            // 
+            this.ErrorPanel.Controls.Add(this.ErrorGrid);
+            this.ErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ErrorPanel.Location = new System.Drawing.Point(0, 0);
+            this.ErrorPanel.Name = "ErrorPanel";
+            this.ErrorPanel.Size = new System.Drawing.Size(536, 100);
+            this.ErrorPanel.TabIndex = 2;
+            // 
+            // ErrorGrid
+            // 
+            this.ErrorGrid.AllowUserToAddRows = false;
+            this.ErrorGrid.AllowUserToDeleteRows = false;
+            this.ErrorGrid.AllowUserToResizeRows = false;
+            this.ErrorGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ErrorGrid.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.ErrorGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ErrorGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.ErrorGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ErrorGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.OwnerColumn,
+            this.MessageColumn});
+            this.ErrorGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ErrorGrid.GridColor = System.Drawing.SystemColors.Window;
+            this.ErrorGrid.Location = new System.Drawing.Point(0, 0);
+            this.ErrorGrid.Name = "ErrorGrid";
+            this.ErrorGrid.ReadOnly = true;
+            this.ErrorGrid.RowHeadersVisible = false;
+            this.ErrorGrid.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Empty;
+            this.ErrorGrid.RowTemplate.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Empty;
+            this.ErrorGrid.RowTemplate.Height = 18;
+            this.ErrorGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ErrorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ErrorGrid.Size = new System.Drawing.Size(536, 100);
+            this.ErrorGrid.TabIndex = 0;
+            this.ErrorGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ErrorGrid_CellDoubleClick);
             // 
             // ProjectContextMenu
             // 
@@ -401,60 +466,19 @@
             // 
             this.OpenFileDialog.FileName = "openFileDialog1";
             // 
-            // splitContainer3
+            // OwnerColumn
             // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(5, 5);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.OwnerColumn.DataPropertyName = "Owner";
+            this.OwnerColumn.HeaderText = "Owner";
+            this.OwnerColumn.Name = "OwnerColumn";
+            this.OwnerColumn.ReadOnly = true;
             // 
-            // splitContainer3.Panel1
+            // MessageColumn
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.DocumentPanel);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.ErrorPanel);
-            this.splitContainer3.Size = new System.Drawing.Size(536, 462);
-            this.splitContainer3.SplitterDistance = 358;
-            this.splitContainer3.TabIndex = 0;
-            // 
-            // DocumentPanel
-            // 
-            this.DocumentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DocumentPanel.Location = new System.Drawing.Point(0, 0);
-            this.DocumentPanel.Name = "DocumentPanel";
-            this.DocumentPanel.Size = new System.Drawing.Size(536, 358);
-            this.DocumentPanel.TabIndex = 1;
-            // 
-            // ErrorPanel
-            // 
-            this.ErrorPanel.Controls.Add(this.ErrorGrid);
-            this.ErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorPanel.Location = new System.Drawing.Point(0, 0);
-            this.ErrorPanel.Name = "ErrorPanel";
-            this.ErrorPanel.Size = new System.Drawing.Size(536, 100);
-            this.ErrorPanel.TabIndex = 2;
-            // 
-            // ErrorGrid
-            // 
-            this.ErrorGrid.AllowUserToAddRows = false;
-            this.ErrorGrid.AllowUserToDeleteRows = false;
-            this.ErrorGrid.AllowUserToResizeRows = false;
-            this.ErrorGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.ErrorGrid.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.ErrorGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ErrorGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ErrorGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorGrid.GridColor = System.Drawing.SystemColors.Window;
-            this.ErrorGrid.Location = new System.Drawing.Point(0, 0);
-            this.ErrorGrid.Name = "ErrorGrid";
-            this.ErrorGrid.ReadOnly = true;
-            this.ErrorGrid.RowHeadersVisible = false;
-            this.ErrorGrid.RowTemplate.Height = 18;
-            this.ErrorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ErrorGrid.Size = new System.Drawing.Size(536, 100);
-            this.ErrorGrid.TabIndex = 0;
+            this.MessageColumn.DataPropertyName = "Message";
+            this.MessageColumn.HeaderText = "Message";
+            this.MessageColumn.Name = "MessageColumn";
+            this.MessageColumn.ReadOnly = true;
             // 
             // MainForm
             // 
@@ -478,6 +502,11 @@
             this.ProjectTopPanel.PerformLayout();
             this.ProjectToolStrip.ResumeLayout(false);
             this.ProjectToolStrip.PerformLayout();
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            this.splitContainer3.ResumeLayout(false);
+            this.ErrorPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).EndInit();
             this.MainMenu.ResumeLayout(false);
             this.MainMenu.PerformLayout();
             this.MainToolStrip.ResumeLayout(false);
@@ -491,11 +520,6 @@
             this.ToolStripContainer.PerformLayout();
             this.FontPanel.ResumeLayout(false);
             this.FontPanel.PerformLayout();
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            this.splitContainer3.ResumeLayout(false);
-            this.ErrorPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -538,6 +562,8 @@
         private System.Windows.Forms.Panel DocumentPanel;
         private System.Windows.Forms.Panel ErrorPanel;
         private System.Windows.Forms.DataGridView ErrorGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OwnerColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MessageColumn;
     }
 }
 

@@ -103,7 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\entity.bmp" />
-    <EmbeddedResource Include="Images\enum.bmp" />
     <EmbeddedResource Include="Images\field.bmp" />
     <EmbeddedResource Include="Images\fk.bmp" />
     <EmbeddedResource Include="Images\interface.bmp" />
@@ -148,6 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\error.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\enumvalue.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\enum.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
