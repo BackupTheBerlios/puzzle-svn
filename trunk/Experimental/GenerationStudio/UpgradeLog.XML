@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="GenerationStudio">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\roal\Mina dokument\Visual Studio 2008\Projects\GenerationStudio\GenerationStudio.sln">
+</Property><Property Name="Date" Value="den 4 april 2008">
+</Property><Property Name="Time" Value="23:17:08">
+</Property></Properties><Event ErrorLevel="0" Project="Renderers" Source="..\..\..\..\Skrivbord\VistaRenderer\Renderers\Renderers.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Renderers" Source="..\..\..\..\Skrivbord\VistaRenderer\Renderers\Renderers.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Renderers" Source="..\..\..\..\Skrivbord\VistaRenderer\Renderers\Renderers.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
