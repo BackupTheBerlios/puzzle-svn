@@ -197,7 +197,7 @@ namespace GenerationStudio.Elements
         {
             List<ElementError> errors = new List<ElementError>();
             if (DbType.Trim() == "")
-                errors.Add (new ElementError (this, string.Format ("Column {0} is missing DbType",Parent.GetDisplayName ())));
+                errors.Add (new ElementError (this, string.Format ("Column {0}.{1} is missing DbType",Parent.GetDisplayName (),GetDisplayName ())));
 
             return errors;
         }

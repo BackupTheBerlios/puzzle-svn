@@ -155,12 +155,17 @@ namespace GenerationStudio.Elements
 
         public IList<ElementError> GetErrorsRecursive()
         {
+            
             List<ElementError> allErrors = new List<ElementError>();
-
+            
             allErrors.AddRange(GetErrors());
 
             foreach (Element child in Children)
             {
+                //ignore excluded items
+                if (child.Excluded)
+                    continue;
+
                 allErrors.AddRange(child.GetErrorsRecursive());
             }
 
