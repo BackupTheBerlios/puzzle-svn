@@ -36,5 +36,10 @@ namespace GenerationStudio.Elements
 
             return errors;
         }
+
+        public override int GetSortPriority()
+        {
+            return -1;
+        }
     }
 }

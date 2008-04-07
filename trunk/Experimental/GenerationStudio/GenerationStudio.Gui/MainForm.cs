@@ -118,10 +118,10 @@ namespace GenerationStudio.Gui
 
             parentNode.Nodes.Add(node);
 
-            element.Children
-                .OrderBy(childElement => childElement.GetType().Name)
-                .ThenBy(childElement => childElement.Excluded)
-                .ThenBy(childElement => childElement.GetSortPriority ())
+            element.Children                
+                .OrderBy(childElement => childElement.Excluded)
+                .ThenBy(childElement => childElement.GetSortPriority())
+                .ThenBy(childElement => childElement.GetType().Name)                
                 .ThenBy(childElement => childElement.GetDisplayName ())
                 .ToList()
                 .ForEach(childElement => FillTree(childElement, node));
