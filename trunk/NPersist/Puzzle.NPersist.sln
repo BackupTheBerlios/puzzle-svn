@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPersistWebService", "http:
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework", "..\NAspect\Framework\Puzzle.NAspect.Framework.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -39,10 +41,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NCore.Framework", ".
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.CoreLib", "..\Windows\Forms\Controls\Syntaxbox\CoreLib\Puzzle.CoreLib.csproj", "{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NPersist.Framework.TransactionalCache", "Framework\TransactionalCache\Puzzle.NPersist.Framework.TransactionalCache.csproj", "{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -53,6 +51,8 @@ Global
 		NPDebug = NPDebug
 		Release = Release
 		TEST = TEST
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{E6C03D2A-D150-4473-9439-D300746A1390}.Debug.ActiveCfg = Debug|.NET
@@ -119,14 +119,6 @@ Global
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.Release.Build.0 = Release|.NET
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.TEST.ActiveCfg = Release|.NET
 		{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}.TEST.Build.0 = Release|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.Debug.ActiveCfg = Debug|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.Debug.Build.0 = Debug|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.NPDebug.ActiveCfg = Debug|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.NPDebug.Build.0 = Debug|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.Release.ActiveCfg = Release|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.Release.Build.0 = Release|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.TEST.ActiveCfg = TEST|.NET
-		{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}.TEST.Build.0 = TEST|.NET
 		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Debug.ActiveCfg = Debug|.NET
 		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.Debug.Build.0 = Debug|.NET
 		{3FC3548A-1039-429F-AADE-E82BF4B5D2D9}.NPDebug.ActiveCfg = Debug|.NET

@@ -5,16 +5,27 @@
 </FileTypes>
 
 
+  <Block Name="Text" Style="Text" EscapeChar="" IsMultiline="true">
+    <ChildBlocks>      
+      <Child Name="CS Directive" />
+      <Child Name="CS Code" />
+    </ChildBlocks>
+  </Block>
 
-	<Block Name="Text" Style="Text" EscapeChar="" IsMultiline="true">
-		<ChildBlocks>
-			<Child Name="CS Code" />
-		</ChildBlocks>
+	<Block Name="CS Directive" Style="CS Directive Code" EscapeChar="" IsMultiline="true">
+    <Scope Start="&lt;%@" End="%&gt;" Style="CS Scope" Text="&lt;%@...%&gt;" />
+    <Keywords>
+      <PatternGroup Name="Keywords" Style="CS Directive Keyword" CaseSensitive="true">
+      <Patterns>
+        using
+      </Patterns>
+    </PatternGroup>
+    </Keywords>
 	</Block>
 
 
 	<Block Name="CS Code" Style="CS Code" EscapeChar="" IsMultiline="true">
-		<Scope Start="&lt;%" End="%&gt;" Style="CS Scope" Text="{...}" CauseIndent="true" />
+		<Scope Start="&lt;%" End="%&gt;" Style="CS Scope" Text="&lt;%...%&gt;" CauseIndent="true" />
 		<Bracket Start="{" End="}" Style="CS Code" />
 		<Bracket Start="(" End=")" Style="CS Code" />
 		<Bracket Start="[" End="]" Style="CS Code" />
@@ -133,21 +144,23 @@
 
 	<Block Name="CS Literal Char" Style="CS String" EscapeChar="" IsMultiline="false">
 		<Scope Start="@'" End="'" Style="CS String" />
-	</Block>
-	<Style Name="Text" ForeColor="Black" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Code" ForeColor="" BackColor="" Bold="false" Italic="false" Underline="false" />
+  </Block>
+	<Style Name="Text" ForeColor="Teal" BackColor="White" Bold="false" Italic="false" Underline="false" />
+  <Style Name="CS Directive Code" ForeColor="Black" BackColor="LightYellow" Bold="false" Italic="false" Underline="false" />
+  <Style Name="CS Directive Keyword" ForeColor="Blue" BackColor="LightYellow" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS Code" ForeColor="" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS Scope" ForeColor="Black" BackColor="Yellow" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Region" ForeColor="blue" BackColor="" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS XML Comment" ForeColor="gray" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Tag" ForeColor="gray" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Tag Text" ForeColor="gray" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Attrib" ForeColor="gray" BackColor="" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Region" ForeColor="blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS XML Comment" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS XML Tag" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS XML Tag Text" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS XML Attrib" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS XML String" ForeColor="gray" BackColor="lightyellow" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Comment" ForeColor="Green" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS String" ForeColor="SteelBlue" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Number" ForeColor="Teal" BackColor="" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS Operator" ForeColor="Red" BackColor="" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Keyword" ForeColor="Blue" BackColor="" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS Datatype" ForeColor="DarkBlue" BackColor="" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS URL" ForeColor="Blue" BackColor="" Bold="false" Italic="false" Underline="true" />
+	<Style Name="CS Comment" ForeColor="Green" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS String" ForeColor="SteelBlue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Number" ForeColor="Teal" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS Operator" ForeColor="Red" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Keyword" ForeColor="Blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS Datatype" ForeColor="DarkBlue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS URL" ForeColor="Blue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="true" />
 </Language>
