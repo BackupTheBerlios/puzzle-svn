@@ -722,6 +722,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
                 if (RowIndex == Control.Caret.Position.Y && Control.HighLightActiveLine)
                     bbuff.Clear(GFX.HighLightLineBrush);
+
                 else if (RowIndex >= 0 && RowIndex < Control.Document.Count)
                 {
                     if (Control.Document[RowIndex].IsCollapsed)
@@ -760,7 +761,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                         RenderSelectedText(RowIndex);
                     }
                 }
-
+                
 
                 if (this.Control.ContainsFocus || Control.View.Action ==
                     XTextAction.xtDragText)
@@ -772,6 +773,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 RenderMargin(RowIndex);
                 if (Control.Document.Folding)
                     RenderExpansion(RowIndex);
+
+                //if (xtr.Expansion_EndRow != null && xtr.Expansion_EndRow.EndSegment != null && xtr.Expansion_EndRow.EndSegment.BlockType != null && xtr.Expansion_EndRow.EndSegment.BlockType.Style != null)
+                //{
+                //    bbuff.FillRect(xtr.Expansion_EndRow.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                //}
+                //else if (xtr.EndSegment != null && xtr.EndSegment.BlockType != null && xtr.EndSegment.BlockType.Style != null)
+                //{
+                //    bbuff.FillRect(xtr.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                //}
 
                 RowPaintEventArgs e = new RowPaintEventArgs();
 
@@ -1166,6 +1176,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     xtr.Expansion_EndChar += w.Text.Length;
                 }
 
+                
+                if (xtr.IsCollapsed)
+                {                   
+                }
+                else if (xtr.EndSegment != null && xtr.EndSegment.BlockType != null && xtr.EndSegment.BlockType.Style != null)
+                {
+                    bbuff.FillRect(xtr.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                }
+
                 if (this.Control._SyntaxBox.ShowEOLMarker && !HasExpansion)
                 {
                     bbuff.Font = GFX.FontNormal;
@@ -1307,6 +1326,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
                     xtr.Expansion_EndChar += w.Text.Length;
                 }
+
+                if (xtr.IsCollapsed)
+                {
+                }
+                else if (xtr.EndSegment != null && xtr.EndSegment.BlockType != null && xtr.EndSegment.BlockType.Style != null)
+                {
+                    GFX.BackBuffer.FillRect(xtr.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                }
+
                 if (this.Control._SyntaxBox.ShowEOLMarker && !HasExpansion)
                 {
                     bbuff.Font = GFX.FontNormal;
