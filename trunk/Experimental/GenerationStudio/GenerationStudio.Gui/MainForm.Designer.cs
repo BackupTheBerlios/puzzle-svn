@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node0");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -43,6 +43,8 @@
             this.DocumentPanel = new System.Windows.Forms.Panel();
             this.ErrorPanel = new System.Windows.Forms.Panel();
             this.ErrorGrid = new System.Windows.Forms.DataGridView();
+            this.OwnerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MessageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProjectContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,8 +69,6 @@
             this.NormalFont = new System.Windows.Forms.Label();
             this.ItalicFont = new System.Windows.Forms.Label();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.OwnerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MessageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -100,12 +100,12 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(5);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(5);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
             this.splitContainer1.Size = new System.Drawing.Size(742, 472);
             this.splitContainer1.SplitterDistance = 192;
             this.splitContainer1.TabIndex = 0;
@@ -113,7 +113,7 @@
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(5, 5);
+            this.splitContainer2.Location = new System.Drawing.Point(6, 0);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -125,8 +125,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.ElementProperties);
-            this.splitContainer2.Size = new System.Drawing.Size(182, 462);
-            this.splitContainer2.SplitterDistance = 214;
+            this.splitContainer2.Size = new System.Drawing.Size(186, 472);
+            this.splitContainer2.SplitterDistance = 218;
             this.splitContainer2.TabIndex = 0;
             // 
             // ProjectTree
@@ -138,13 +138,13 @@
             this.ProjectTree.LabelEdit = true;
             this.ProjectTree.Location = new System.Drawing.Point(0, 26);
             this.ProjectTree.Name = "ProjectTree";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Node0";
             this.ProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.ProjectTree.SelectedImageIndex = 0;
             this.ProjectTree.ShowNodeToolTips = true;
-            this.ProjectTree.Size = new System.Drawing.Size(182, 188);
+            this.ProjectTree.Size = new System.Drawing.Size(186, 192);
             this.ProjectTree.TabIndex = 3;
             this.ProjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.ProjectTree_AfterLabelEdit);
             this.ProjectTree.DoubleClick += new System.EventHandler(this.ProjectTree_DoubleClick);
@@ -165,7 +165,7 @@
             this.ProjectTopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.ProjectTopPanel.Location = new System.Drawing.Point(0, 0);
             this.ProjectTopPanel.Name = "ProjectTopPanel";
-            this.ProjectTopPanel.Size = new System.Drawing.Size(182, 26);
+            this.ProjectTopPanel.Size = new System.Drawing.Size(186, 26);
             this.ProjectTopPanel.TabIndex = 4;
             // 
             // ProjectToolStrip
@@ -174,7 +174,7 @@
             this.RefreshProjectTreeButton});
             this.ProjectToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ProjectToolStrip.Name = "ProjectToolStrip";
-            this.ProjectToolStrip.Size = new System.Drawing.Size(182, 25);
+            this.ProjectToolStrip.Size = new System.Drawing.Size(186, 25);
             this.ProjectToolStrip.TabIndex = 1;
             // 
             // RefreshProjectTreeButton
@@ -193,13 +193,13 @@
             this.ElementProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ElementProperties.Location = new System.Drawing.Point(0, 0);
             this.ElementProperties.Name = "ElementProperties";
-            this.ElementProperties.Size = new System.Drawing.Size(182, 244);
+            this.ElementProperties.Size = new System.Drawing.Size(186, 250);
             this.ElementProperties.TabIndex = 3;
             // 
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(5, 5);
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
             this.splitContainer3.Name = "splitContainer3";
             this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -210,8 +210,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.ErrorPanel);
-            this.splitContainer3.Size = new System.Drawing.Size(536, 462);
-            this.splitContainer3.SplitterDistance = 358;
+            this.splitContainer3.Size = new System.Drawing.Size(540, 472);
+            this.splitContainer3.SplitterDistance = 365;
             this.splitContainer3.TabIndex = 0;
             // 
             // DocumentPanel
@@ -219,7 +219,7 @@
             this.DocumentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DocumentPanel.Location = new System.Drawing.Point(0, 0);
             this.DocumentPanel.Name = "DocumentPanel";
-            this.DocumentPanel.Size = new System.Drawing.Size(536, 358);
+            this.DocumentPanel.Size = new System.Drawing.Size(540, 365);
             this.DocumentPanel.TabIndex = 1;
             // 
             // ErrorPanel
@@ -228,7 +228,7 @@
             this.ErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ErrorPanel.Location = new System.Drawing.Point(0, 0);
             this.ErrorPanel.Name = "ErrorPanel";
-            this.ErrorPanel.Size = new System.Drawing.Size(536, 100);
+            this.ErrorPanel.Size = new System.Drawing.Size(540, 103);
             this.ErrorPanel.TabIndex = 2;
             // 
             // ErrorGrid
@@ -250,14 +250,26 @@
             this.ErrorGrid.Name = "ErrorGrid";
             this.ErrorGrid.ReadOnly = true;
             this.ErrorGrid.RowHeadersVisible = false;
-            this.ErrorGrid.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Empty;
-            this.ErrorGrid.RowTemplate.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Empty;
             this.ErrorGrid.RowTemplate.Height = 18;
             this.ErrorGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ErrorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ErrorGrid.Size = new System.Drawing.Size(536, 100);
+            this.ErrorGrid.Size = new System.Drawing.Size(540, 103);
             this.ErrorGrid.TabIndex = 0;
             this.ErrorGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ErrorGrid_CellDoubleClick);
+            // 
+            // OwnerColumn
+            // 
+            this.OwnerColumn.DataPropertyName = "Owner";
+            this.OwnerColumn.HeaderText = "Owner";
+            this.OwnerColumn.Name = "OwnerColumn";
+            this.OwnerColumn.ReadOnly = true;
+            // 
+            // MessageColumn
+            // 
+            this.MessageColumn.DataPropertyName = "Message";
+            this.MessageColumn.HeaderText = "Message";
+            this.MessageColumn.Name = "MessageColumn";
+            this.MessageColumn.ReadOnly = true;
             // 
             // ProjectContextMenu
             // 
@@ -465,20 +477,6 @@
             // OpenFileDialog
             // 
             this.OpenFileDialog.FileName = "openFileDialog1";
-            // 
-            // OwnerColumn
-            // 
-            this.OwnerColumn.DataPropertyName = "Owner";
-            this.OwnerColumn.HeaderText = "Owner";
-            this.OwnerColumn.Name = "OwnerColumn";
-            this.OwnerColumn.ReadOnly = true;
-            // 
-            // MessageColumn
-            // 
-            this.MessageColumn.DataPropertyName = "Message";
-            this.MessageColumn.HeaderText = "Message";
-            this.MessageColumn.Name = "MessageColumn";
-            this.MessageColumn.ReadOnly = true;
             // 
             // MainForm
             // 

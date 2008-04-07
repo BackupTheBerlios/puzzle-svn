@@ -1083,7 +1083,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 								                             Control.PixelTabSize).Width;
 								if (Control.BracketBorderColor != Color.Transparent)
 								{
-									bbuff.DrawRect(Control.BracketBorderColor, xpos, 0, wdh,
+									bbuff.DrawRect(Control.BracketBorderColor, xpos-1, 0, wdh+1,
 									               Control.View.RowHeight - 1);
 								}
 							}
