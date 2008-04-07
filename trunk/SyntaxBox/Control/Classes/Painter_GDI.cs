@@ -1342,7 +1342,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     bbuff.FontTransparent = true;
                     bbuff.DrawTabbedString("¶", xpos, 0, taborig, Control.PixelTabSize);
                 }
-            }
+            } 
             else
             {
                 //bbuff.TextForeColor =Color.Red;

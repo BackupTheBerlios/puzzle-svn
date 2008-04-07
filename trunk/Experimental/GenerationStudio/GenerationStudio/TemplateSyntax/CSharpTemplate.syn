@@ -14,10 +14,29 @@
 
 	<Block Name="CS Directive" Style="CS Directive Code" EscapeChar="" IsMultiline="true">
     <Scope Start="&lt;%@" End="%&gt;" Style="CS Scope" Text="&lt;%@...%&gt;" />
+    <Bracket Start="{" End="}" Style="CS Directive Code" />
+    <Bracket Start="(" End=")" Style="CS Directive Code" />
+    <Bracket Start="[" End="]" Style="CS Directive Code" />
     <Keywords>
       <PatternGroup Name="Keywords" Style="CS Directive Keyword" CaseSensitive="true">
       <Patterns>
-        using
+        abstract base break byte case catch checked class const continue
+        default delegate do value
+        else enum event exdouble explicit extern
+        false finally fixed for foreach
+        get goto
+        if implicit in interface internal is
+        lock
+        namespace new null
+        object operator out override
+        private protected public
+        readonly ref return
+        sealed set sizeof static struct switch
+        this throw true try typeof
+        unchecked unsafe using
+        virtual
+        while
+        string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
       </Patterns>
     </PatternGroup>
     </Keywords>
@@ -33,35 +52,26 @@
 		<Keywords>
 			<PatternGroup Name="Keywords" Style="CS Keyword" CaseSensitive="true">
 				<Patterns>
-				abstract base break byte case catch checked class const continue 
-				default delegate do value
-				else enum event exdouble explicit extern
-				false finally fixed for foreach 
-				get goto
-				if implicit in interface internal is
-				lock
-				namespace new null
-				object operator out override
-				private protected public 
-				readonly ref return
-				sealed set sizeof static struct switch
-				this throw true try typeof
-				unchecked unsafe using 
-				virtual
-				while
-				</Patterns>
+          abstract base break byte case catch checked class const continue
+          default delegate do value
+          else enum event exdouble explicit extern
+          false finally fixed for foreach
+          get goto
+          if implicit in interface internal is
+          lock
+          namespace new null
+          object operator out override
+          private protected public
+          readonly ref return
+          sealed set sizeof static struct switch
+          this throw true try typeof
+          unchecked unsafe using
+          virtual
+          while
+          string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
+        </Patterns>
 			</PatternGroup>
-			<PatternGroup Name="Numbers" Style="CS Number">
-				<Pattern Text="(0x[0-9a-fA-F]+)" IsComplex="true" />
-				<Pattern Text="([0-9]+)" IsComplex="true" />
-			</PatternGroup>
-				
-			<!-- Datatypes for c# -->
-			<PatternGroup Name="DataTypes" Style="CS Datatype" CaseSensitive="true">
-				<Patterns>
-	string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
-				</Patterns>
-			</PatternGroup>
+      			
 		</Keywords>
 		<!-- Operators that can exist inside this block -->
 		<Operators>
@@ -81,8 +91,7 @@
 			</PatternGroup>
 		</Operators>
 		<!-- Blocks that can exist inside this block -->
-		<ChildBlocks>
-			<Child Name="CS XML Comment" />
+		<ChildBlocks>			
 			<Child Name="CS Multiline Comment" />
 			<Child Name="CS Singleline Comment" />
 			<Child Name="CS String" />
@@ -91,29 +100,10 @@
 			<Child Name="CS Literal Char" />
 		</ChildBlocks>
 	</Block>
-	<Block Name="CS XML Comment" Style="CS Comment" EscapeChar="" IsMultiline="false">
-		<Scope Start="///" End="" Style="CS XML Comment" />
-		<!-- this block can contain xml tags -->
-		<ChildBlocks>
-			<Child Name="CS XML Comment Tag" />
-		</ChildBlocks>
-	</Block>
+
 	<!-- this block is the xml tags in xml comments-->
-	<Block Name="CS XML Comment Tag" Style="CS XML Tag Text" EscapeChar="" IsMultiline="false">
-		<Scope Start="&lt;" End="&gt;" Style="CS XML Tag" />
-		<Operators>
-			<PatternGroup name="CS XML Attrib" Style="CS XML Attrib">
-				<!-- operator is the attributes that can exist within xml tags-->
-				<Pattern Text="( [a-z,A-Z,:]+)" IsComplex="true" />
-			</PatternGroup>
-		</Operators>
-		<ChildBlocks>
-			<Child Name="XML String" />
-		</ChildBlocks>
-	</Block>
-	<Block Name="XML String" Style="CS XML String" EscapeChar="" IsMultiline="false">
-		<Scope Start="&quot;" End="&quot;" Style="CS XML String" />
-	</Block>
+	
+	
 	<Block Name="CS Multiline Comment" Style="CS Comment" EscapeChar="" IsMultiline="true">
 		<Scope Start="/*" End="*/" Style="CS Comment" Text="/*...*/"/>
 		<Operators>
@@ -145,22 +135,15 @@
 	<Block Name="CS Literal Char" Style="CS String" EscapeChar="" IsMultiline="false">
 		<Scope Start="@'" End="'" Style="CS String" />
   </Block>
-	<Style Name="Text" ForeColor="Teal" BackColor="White" Bold="false" Italic="false" Underline="false" />
+	<Style Name="Text" ForeColor="SteelBlue" BackColor="White" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Code" ForeColor="Black" BackColor="LightYellow" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Keyword" ForeColor="Blue" BackColor="LightYellow" Bold="true" Italic="false" Underline="false" />
 	<Style Name="CS Code" ForeColor="" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS Scope" ForeColor="Black" BackColor="Yellow" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Region" ForeColor="blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS XML Comment" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Tag" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Tag Text" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML Attrib" ForeColor="gray" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS XML String" ForeColor="gray" BackColor="lightyellow" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Region" ForeColor="blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />	
 	<Style Name="CS Comment" ForeColor="Green" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS String" ForeColor="SteelBlue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Number" ForeColor="Teal" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
 	<Style Name="CS Operator" ForeColor="Red" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS Keyword" ForeColor="Blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS Datatype" ForeColor="DarkBlue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
 	<Style Name="CS URL" ForeColor="Blue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="true" />
 </Language>
