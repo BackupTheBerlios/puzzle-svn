@@ -1,0 +1,26 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.SyntaxBox", "Control\Puzzle.SyntaxBox.csproj", "{19EF75B2-B414-4EB0-9486-160FAF93E62C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+		TEST = TEST
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.Debug.ActiveCfg = Debug|.NET
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.Debug.Build.0 = Debug|.NET
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.Release.ActiveCfg = Release|.NET
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.Release.Build.0 = Release|.NET
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.TEST.ActiveCfg = Release|.NET
+		{19EF75B2-B414-4EB0-9486-160FAF93E62C}.TEST.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

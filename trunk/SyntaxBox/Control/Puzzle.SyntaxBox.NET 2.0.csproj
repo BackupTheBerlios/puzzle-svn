@@ -1,0 +1,352 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19EF75B2-B414-4EB0-9486-160FAF93E62C}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Puzzle.SyntaxBox.NET2</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>
+    </RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>Compona.Syntaxbox.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BlockType\BlockType.cs" />
+    <Compile Include="BlockType\BlockTypeCollection.cs" />
+    <Compile Include="Classes\Caret.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\KeyboadActionList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\KeyboardAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\Painter_GDI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\Selection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\Structs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collections\CollectionBase.cs" />
+    <Compile Include="Controls\Autolist\AutoListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Autolist\TabListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseControls\BaseControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseControls\BaseListBoxControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseControls\BasePanelControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseControls\BorderControl.cs" />
+    <Compile Include="Controls\EditView\EditViewControl.cs">
+    </Compile>
+    <Compile Include="Controls\FormatLabel\Element.cs" />
+    <Compile Include="Controls\FormatLabel\Events.cs" />
+    <Compile Include="Controls\FormatLabel\FormatLabelControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\FormatLabel\Row.cs" />
+    <Compile Include="Controls\FormatLabel\Word.cs" />
+    <Compile Include="Controls\InfoTip\InfoTipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\IntelliMouse\Events.cs" />
+    <Compile Include="Controls\IntelliMouse\IntelliMouse.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RegionHandler\RegionHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SplitView\SplitViewChildControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SplitView\SplitViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SplitView\SplitViewParentControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\Dialogs\FindReplace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\Dialogs\GotoLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\Dialogs\Settings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\Events.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\SyntaxBoxControl.cs">
+    </Compile>
+    <Compile Include="Controls\Syntaxbox\SyntaxBoxDesigner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\ThumbControl\ThumbControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Weaktimer\WeakTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Design\CollectionEditorGui.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\ComponaCollectionEditor.cs" />
+    <Compile Include="Design\FilteredTypeConverter.cs" />
+    <Compile Include="Design\Int32AutoConverter.cs" />
+    <Compile Include="Design\Int32DefaultConverter.cs" />
+    <Compile Include="Document\Export\HTMLExporter.cs" />
+    <Compile Include="Document\Export\HTMLExporter2.cs" />
+    <Compile Include="Document\Formatting\FormatRange.cs" />
+    <Compile Include="Document\Formatting\FormatRangeCollection.cs" />
+    <Compile Include="Document\IntCollection.cs" />
+    <Compile Include="Document\Language\Language.cs" />
+    <Compile Include="Document\Language\LanguageList.cs" />
+    <Compile Include="Document\Language\LanguageReader.cs" />
+    <Compile Include="Document\Parser\DefaultParser.cs" />
+    <Compile Include="Document\Parser\IParser.cs" />
+    <Compile Include="Document\Parser\ParseTools.cs" />
+    <Compile Include="Document\Pattern\Pattern.cs" />
+    <Compile Include="Document\Pattern\PatternCollection.cs" />
+    <Compile Include="Document\Pattern\PatternList.cs" />
+    <Compile Include="Document\Pattern\PatternListList.cs" />
+    <Compile Include="Document\Print\SourceCodePrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Document\Row\Row.cs" />
+    <Compile Include="Document\Row\RowCollection.cs" />
+    <Compile Include="Document\Scope\Scope.cs" />
+    <Compile Include="Document\Scope\ScopeCollection.cs" />
+    <Compile Include="Document\Segment\Segment.cs" />
+    <Compile Include="Document\Segment\SegmentCollection.cs" />
+    <Compile Include="Document\Structs.cs" />
+    <Compile Include="Document\SyntaxDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Document\TextRange.cs" />
+    <Compile Include="Document\TextStyle\TextStyle.cs" />
+    <Compile Include="Document\TextStyle\TextStyleDesignerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Document\TextStyle\TextStyleUIEditor.cs" />
+    <Compile Include="Document\Undo\UndoBlock.cs" />
+    <Compile Include="Document\Undo\UndoBlockCollection.cs" />
+    <Compile Include="Document\Undo\UndoBuffer.cs" />
+    <Compile Include="Document\Word\Word.cs" />
+    <Compile Include="Document\Word\WordCollection.cs" />
+    <Compile Include="Drawing\DrawingTools.cs" />
+    <Compile Include="Drawing\GDI32\FontEnum.cs" />
+    <Compile Include="Drawing\GDI32\GDIBrushes.cs" />
+    <Compile Include="Drawing\GDI32\GDIFont.cs" />
+    <Compile Include="Drawing\GDI32\GDIObject.cs" />
+    <Compile Include="Drawing\GDI32\GDIPens.cs" />
+    <Compile Include="Drawing\GDI32\GDISurface.cs" />
+    <Compile Include="Drawing\GDI32\MemHandler.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Globalization\IMEWindow.cs" />
+    <Compile Include="Interfaces\IPainter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Win32\Enums.cs" />
+    <Compile Include="Win32\NativeMethods.cs" />
+    <Compile Include="Win32\NativeSubclasser.cs" />
+    <EmbeddedResource Include="Controls\Autolist\AutoListForm.resx">
+      <DependentUpon>AutoListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Autolist\TabListBox.resx">
+      <DependentUpon>TabListBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BaseControls\BaseControl.resx">
+      <DependentUpon>BaseControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BaseControls\BaseListBoxControl.resx">
+      <DependentUpon>BaseListBoxControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BaseControls\BasePanelControl.resx">
+      <DependentUpon>BasePanelControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\EditView\EditViewControl.resx">
+      <DependentUpon>EditViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FormatLabel\FormatLabelControl.resx">
+      <DependentUpon>FormatLabelControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoTip\InfoTipForm.resx">
+      <DependentUpon>InfoTipForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\IntelliMouse\IntelliMouse.resx">
+      <DependentUpon>IntelliMouse.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RegionHandler\RegionHandler.resx">
+      <DependentUpon>RegionHandler.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SplitView\SplitViewChildControl.resx">
+      <DependentUpon>SplitViewChildControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SplitView\SplitViewControl.resx">
+      <DependentUpon>SplitViewControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SplitView\SplitViewParentControl.resx">
+      <DependentUpon>SplitViewParentControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Syntaxbox\Dialogs\FindReplace.resx">
+      <DependentUpon>FindReplace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Syntaxbox\Dialogs\GotoLine.resx">
+      <DependentUpon>GotoLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Syntaxbox\Dialogs\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Syntaxbox\SyntaxBoxControl.resx">
+      <DependentUpon>SyntaxBoxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ThumbControl\ThumbControl.resx">
+      <DependentUpon>ThumbControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Weaktimer\WeakTimer.resx">
+      <DependentUpon>WeakTimer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\CollectionEditorGui.resx">
+      <DependentUpon>CollectionEditorGui.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Document\Print\SourceCodePrintDocument.resx">
+      <DependentUpon>SourceCodePrintDocument.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Document\SyntaxDocument.resx">
+      <DependentUpon>SyntaxDocument.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Document\TextStyle\TextStyleDesignerDialog.resx">
+      <DependentUpon>TextStyleDesignerDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlippedCursor.cur" />
+    <EmbeddedResource Include="Puzzle.Windows.Forms.SyntaxBoxControl.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MoveDown.cur" />
+    <Content Include="MoveUp.cur" />
+    <Content Include="MoveUpDown.cur" />
+    <Content Include="Puzzle.SourceCode.SourceCodePrintDocument.bmp" />
+    <Content Include="Puzzle.SourceCode.SyntaxDocument.bmp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
