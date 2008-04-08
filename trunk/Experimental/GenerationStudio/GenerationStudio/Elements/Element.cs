@@ -36,6 +36,27 @@ namespace GenerationStudio.Elements
             }
         }
 
+        public IList<T> GetChildren<T>() where T : Element
+        {
+            List<T> tmp = new List<T> ();
+            foreach (Element element in children)
+            {
+                if (element is T)
+                    tmp.Add((T)element);
+            }
+            return tmp;
+        }
+
+        public T GetChild<T>() where T : Element
+        {
+            foreach (Element element in children)
+            {
+                if (element is T)
+                    return (T)element;
+            }
+            return null;
+        }
+
         [OptionalField]
         [field: NonSerialized]
         private Element parent;

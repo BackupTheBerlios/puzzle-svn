@@ -27,6 +27,8 @@ namespace GenerationStudio.Elements
         public void Edit(IHost host)
         {
             TemplateEditor editor = host.GetEditor<TemplateEditor>(this, "Edit template");
+            editor.Node = this;
+            editor.OpenFile(this.FilePath);
             host.ShowEditor(editor);
         }
     }

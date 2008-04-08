@@ -37,7 +37,6 @@
             this.Icons = new System.Windows.Forms.ImageList(this.components);
             this.ProjectTopPanel = new System.Windows.Forms.Panel();
             this.ProjectToolStrip = new System.Windows.Forms.ToolStrip();
-            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
             this.ElementProperties = new System.Windows.Forms.PropertyGrid();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.DocumentPanel = new System.Windows.Forms.Panel();
@@ -49,14 +48,9 @@
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -69,6 +63,12 @@
             this.NormalFont = new System.Windows.Forms.Label();
             this.ItalicFont = new System.Windows.Forms.Label();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
+            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -176,17 +176,6 @@
             this.ProjectToolStrip.Name = "ProjectToolStrip";
             this.ProjectToolStrip.Size = new System.Drawing.Size(186, 25);
             this.ProjectToolStrip.TabIndex = 1;
-            // 
-            // RefreshProjectTreeButton
-            // 
-            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
-            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
-            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
-            this.RefreshProjectTreeButton.Text = "toolStripButton1";
-            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
-            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
             // 
             // ElementProperties
             // 
@@ -300,28 +289,15 @@
             // 
             // newToolStripMenuItem
             // 
+            this.newToolStripMenuItem.Image = global::GenerationStudio.Properties.Resources.newproject;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "&New";
-            // 
-            // MainMenuFileOpenProject
-            // 
-            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
-            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(111, 22);
-            this.MainMenuFileOpenProject.Text = "&Open";
-            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(108, 6);
-            // 
-            // MainMenuFileSaveProject
-            // 
-            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
-            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(111, 22);
-            this.MainMenuFileSaveProject.Text = "&Save";
-            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // MainToolStrip
             // 
@@ -339,30 +315,6 @@
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(48, 22);
             this.toolStripLabel1.Text = "test test";
-            // 
-            // toolStripSplitButton1
-            // 
-            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem,
-            this.test2ToolStripMenuItem});
-            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 22);
-            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.testToolStripMenuItem.Text = "test";
-            // 
-            // test2ToolStripMenuItem
-            // 
-            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
-            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.test2ToolStripMenuItem.Text = "test2";
             // 
             // BottomToolStripPanel
             // 
@@ -477,6 +429,57 @@
             // OpenFileDialog
             // 
             this.OpenFileDialog.FileName = "openFileDialog1";
+            // 
+            // RefreshProjectTreeButton
+            // 
+            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
+            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
+            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
+            this.RefreshProjectTreeButton.Text = "toolStripButton1";
+            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
+            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
+            // 
+            // MainMenuFileOpenProject
+            // 
+            this.MainMenuFileOpenProject.Image = global::GenerationStudio.Properties.Resources.open;
+            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
+            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(152, 22);
+            this.MainMenuFileOpenProject.Text = "&Open";
+            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
+            // 
+            // MainMenuFileSaveProject
+            // 
+            this.MainMenuFileSaveProject.Image = global::GenerationStudio.Properties.Resources.save;
+            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
+            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(152, 22);
+            this.MainMenuFileSaveProject.Text = "&Save";
+            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
+            // 
+            // toolStripSplitButton1
+            // 
+            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem,
+            this.test2ToolStripMenuItem});
+            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
+            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 22);
+            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.testToolStripMenuItem.Text = "test";
+            // 
+            // test2ToolStripMenuItem
+            // 
+            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
+            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.test2ToolStripMenuItem.Text = "test2";
             // 
             // MainForm
             // 

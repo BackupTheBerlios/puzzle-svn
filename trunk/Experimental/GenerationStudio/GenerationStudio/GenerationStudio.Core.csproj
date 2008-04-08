@@ -108,6 +108,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Renderers\Toolbars\Office2007ColorTable.cs" />
+    <Compile Include="Renderers\Toolbars\Office2007Helpers.cs" />
+    <Compile Include="Renderers\Toolbars\Office2007Renderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\entity.bmp" />
@@ -130,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="TemplateSyntax\CSharp.syn" />
     <None Include="TemplateSyntax\CSharpTemplate.syn" />
   </ItemGroup>
   <ItemGroup>

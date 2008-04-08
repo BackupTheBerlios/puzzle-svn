@@ -36,6 +36,7 @@
         unchecked unsafe using
         virtual
         while
+        var
         string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
       </Patterns>
     </PatternGroup>
@@ -68,6 +69,7 @@
           unchecked unsafe using
           virtual
           while
+          var
           string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
         </Patterns>
 			</PatternGroup>

@@ -62,23 +62,43 @@ namespace GenerationStudio.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;Language Name=&quot;Visual C#&quot; Startblock=&quot;CS Code&quot;&gt;
+        ///&lt;FileTypes&gt;
+        ///	&lt;FileType Extension=&quot;.cs&quot; Name=&quot;C# code file&quot;/&gt;
+        ///&lt;/FileTypes&gt;
+        ///
+        ///
+        ///
+        ///
+        ///	&lt;Block Name=&quot;CS Code&quot; Style=&quot;CS Code&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
+        ///		&lt;Scope Start=&quot;{&quot; End=&quot;}&quot; Style=&quot;CS Scope&quot; Text=&quot;{...}&quot; CauseIndent=&quot;true&quot; /&gt;
+        ///		&lt;Scope Start=&quot;#if&quot; End=&quot;#endif&quot; Style=&quot;CS Region&quot; Text=&quot;#if...endif&quot;  /&gt;
+        ///		&lt;Scope Start=&quot;#region&quot; End=&quot;#endregion&quot; Style=&quot;CS Region&quot; Text=&quot;&quot; DefaultExpanded=&quot;false&quot; /&gt;
+        ///		&lt;Bracket [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CSharp {
+            get {
+                return ResourceManager.GetString("CSharp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;Language Name=&quot;C# template&quot; Startblock=&quot;Text&quot;&gt;
         ///&lt;FileTypes&gt;
         ///	&lt;FileType Extension=&quot;.cst&quot; Name=&quot;C# template file&quot;/&gt;
         ///&lt;/FileTypes&gt;
         ///
         ///
+        ///  &lt;Block Name=&quot;Text&quot; Style=&quot;Text&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
+        ///    &lt;ChildBlocks&gt;      
+        ///      &lt;Child Name=&quot;CS Directive&quot; /&gt;
+        ///      &lt;Child Name=&quot;CS Code&quot; /&gt;
+        ///    &lt;/ChildBlocks&gt;
+        ///  &lt;/Block&gt;
         ///
-        ///	&lt;Block Name=&quot;Text&quot; Style=&quot;CS Code&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
-        ///		&lt;ChildBlocks&gt;
-        ///			&lt;Child Name=&quot;CS Code&quot; /&gt;
-        ///		&lt;/ChildBlocks&gt;
-        ///	&lt;/Block&gt;
-        ///
-        ///
-        ///	&lt;Block Name=&quot;CS Code&quot; Style=&quot;CS Code&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
-        ///		&lt;Scope Start=&quot;&amp;lt;+&quot; End=&quot;+&amp;gt;&quot; Style=&quot;CS Scope&quot; Text=&quot;{...}&quot; CauseIndent=&quot;true&quot; /&gt;
-        ///		&lt;Scope Start=&quot;#if&quot; E [rest of string was truncated]&quot;;.
+        ///	&lt;Block Name=&quot;CS Directive&quot; Style=&quot;CS Directive Code&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
+        ///    &lt;Scope Start=&quot;&amp;lt;%@&quot; End=&quot;%&amp;gt;&quot; Style=&quot;CS Sc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CSharpTemplate {
             get {

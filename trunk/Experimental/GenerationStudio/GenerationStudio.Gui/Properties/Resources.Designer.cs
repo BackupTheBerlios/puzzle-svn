@@ -59,5 +59,26 @@ namespace GenerationStudio.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap newproject {
+            get {
+                object obj = ResourceManager.GetObject("newproject", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap open {
+            get {
+                object obj = ResourceManager.GetObject("open", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap save {
+            get {
+                object obj = ResourceManager.GetObject("save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
