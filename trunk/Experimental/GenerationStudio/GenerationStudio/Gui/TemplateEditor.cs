@@ -90,6 +90,7 @@ namespace GenerationStudio.Gui
             TemplateSyntaxBox.Document.ParseAll(true);
 
             StringBuilder sbHeader = new StringBuilder();
+            StringBuilder sbCode = new StringBuilder();
 
             foreach (Row row in TemplateSyntaxBox.Document)
             {
@@ -107,12 +108,85 @@ namespace GenerationStudio.Gui
                     sbHeader.AppendLine();
             }
 
+            sbCode.Append("output.Write(@\"");
+            bool special = false;
+            foreach (Row row in TemplateSyntaxBox.Document)
+            {
+                foreach (Word word in row)
+                {
+                    if (word.Segment.BlockType.Name != "CS Directive")
+                    {
+                        if (word.Style.Name == "CS Scope")
+                        {
+                            if (word.Text == "%>")
+                            {
+                                if (special)
+                                {
+                                    sbCode.Append(");");
+                                    special = false;
+                                }
+                                sbCode.AppendLine();
+                                sbCode.Append("output.Write(\"");
+                            }
+
+                            if (word.Text == "<%")
+                            {
+                                sbCode.Append("\");");
+                                special = false;
+                            }
+
+                            if (word.Text == "<%=")
+                            {
+                                sbCode.Append("\");");
+                                sbCode.AppendLine();
+                                sbCode.Append("output.Write(");
+                                special = true;
+                            }
+                        }
+                        else
+                        {
+                            if (word.Segment.BlockType.Name == "Text")
+                            {
+                                string text = word.Text;
+                                text = text.Replace("\\", "\\\\");
+                                text = text.Replace("\"", "\\\"");
+                                sbCode.Append(text);
+                            }
+                            else
+                            {
+                                sbCode.Append(word.Text);
+                            }
+                        }
+                    }                    
+                }
+                if (row.EndSegment.BlockType.Name == "Text")
+                {
+                    sbCode.Append("\\r\\n");
+                }
+                else if (row.EndSegment.BlockType.Name == "CS Directive")
+                {
+                }
+                else
+                {
+                    sbCode.AppendLine();
+                }
+            }
+            sbCode.Append("\");");
+
+            sbHeader.AppendLine("using System;");
+            sbHeader.AppendLine("using System.Collections.Generic;");
+            sbHeader.AppendLine("using System.Linq;");
+            sbHeader.AppendLine("using System.Text;");
+            sbHeader.AppendLine("using System.IO;");
+            sbHeader.AppendLine("using GenerationStudio.Elements;");
+            sbHeader.AppendLine("using GenerationStudio.TemplateEngine;");
             sbHeader.AppendLine("namespace Runtime.Code");
             sbHeader.AppendLine("{");
             sbHeader.AppendLine("   public class MyTemplate : ITemplate");
             sbHeader.AppendLine("   {");
-            sbHeader.AppendLine("       public void Render()");
+            sbHeader.AppendLine("       public void Render(StreamWriter output, RootElement root)");
             sbHeader.AppendLine("       {");
+            sbHeader.AppendLine("       " + sbCode.ToString ());
             sbHeader.AppendLine("       }");
             sbHeader.AppendLine("   }");
             sbHeader.AppendLine("}");

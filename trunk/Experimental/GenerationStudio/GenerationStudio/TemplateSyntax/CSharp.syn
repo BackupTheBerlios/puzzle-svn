@@ -33,6 +33,7 @@
 				unchecked unsafe using 
 				virtual
 				while
+        var
 				</Patterns>
 			</PatternGroup>
 			<PatternGroup Name="Numbers" Style="CS Number">
@@ -44,6 +45,7 @@
 			<PatternGroup Name="DataTypes" Style="CS Datatype" CaseSensitive="true">
 				<Patterns>
 	string exfloat float int long sbyte short uint ulong void double decimal bool char ushort
+  output
 				</Patterns>
 			</PatternGroup>
 		</Keywords>

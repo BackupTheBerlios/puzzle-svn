@@ -21,7 +21,7 @@ namespace GenerationStudio.Elements
         private ArrayList children = new ArrayList();
 
         [Browsable(false)]
-        public IList<Element> Children
+        public IList<Element> AllChildren
         {
             get
             {
@@ -36,11 +36,33 @@ namespace GenerationStudio.Elements
             }
         }
 
+        [Browsable(false)]
+        public IList<Element> Children
+        {
+            get
+            {
+                List<Element> tmp = new List<Element>();
+                foreach (Element element in children)
+                {
+                    element.Parent = this;
+                    if (!element.Excluded)
+                    {
+                        tmp.Add(element);
+                    }
+                }
+
+                return tmp;
+            }
+        }
+
         public IList<T> GetChildren<T>() where T : Element
         {
             List<T> tmp = new List<T> ();
             foreach (Element element in children)
             {
+                if (element.Excluded)
+                    continue;
+
                 if (element is T)
                     tmp.Add((T)element);
             }
@@ -51,6 +73,9 @@ namespace GenerationStudio.Elements
         {
             foreach (Element element in children)
             {
+                if (element.Excluded)
+                    continue;
+
                 if (element is T)
                     return (T)element;
             }
@@ -182,7 +207,7 @@ namespace GenerationStudio.Elements
             
             allErrors.AddRange(GetErrors());
 
-            foreach (Element child in Children)
+            foreach (Element child in AllChildren)
             {
                 //ignore excluded items
                 if (child.Excluded)

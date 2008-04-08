@@ -118,7 +118,7 @@ namespace GenerationStudio.Gui
 
             parentNode.Nodes.Add(node);
 
-            element.Children                
+            element.AllChildren                
                 .OrderBy(childElement => childElement.Excluded)
                 .ThenBy(childElement => childElement.GetSortPriority())
                 .ThenBy(childElement => childElement.GetType().Name)                
@@ -190,7 +190,7 @@ namespace GenerationStudio.Gui
                 AllowMultipleAttribute allowMultipleAttrib = childType.GetAttribute<AllowMultipleAttribute>();
                 if (allowMultipleAttrib != null && allowMultipleAttrib.Allow == false)
                 {
-                    foreach (Element childElement in currentElement.Children)
+                    foreach (Element childElement in currentElement.AllChildren)
                     {
                         if (childElement.GetType() == childType)
                         {

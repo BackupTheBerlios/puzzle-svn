@@ -41,8 +41,8 @@
             this.Tabs = new System.Windows.Forms.TabControl();
             this.TemplateTabPage = new System.Windows.Forms.TabPage();
             this.CompiledTabPage = new System.Windows.Forms.TabPage();
-            this.OutputTabPage = new System.Windows.Forms.TabPage();
             this.SourceSyntaxBox = new Puzzle.Windows.Forms.SyntaxBoxControl();
+            this.OutputTabPage = new System.Windows.Forms.TabPage();
             this.OutputSyntaxBox = new Puzzle.Windows.Forms.SyntaxBoxControl();
             this.MainToolStrip.SuspendLayout();
             this.Tabs.SuspendLayout();
@@ -167,17 +167,6 @@
             this.CompiledTabPage.Text = "Source";
             this.CompiledTabPage.UseVisualStyleBackColor = true;
             // 
-            // OutputTabPage
-            // 
-            this.OutputTabPage.Controls.Add(this.OutputSyntaxBox);
-            this.OutputTabPage.Location = new System.Drawing.Point(4, 22);
-            this.OutputTabPage.Name = "OutputTabPage";
-            this.OutputTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.OutputTabPage.Size = new System.Drawing.Size(345, 334);
-            this.OutputTabPage.TabIndex = 2;
-            this.OutputTabPage.Text = "Output";
-            this.OutputTabPage.UseVisualStyleBackColor = true;
-            // 
             // SourceSyntaxBox
             // 
             this.SourceSyntaxBox.ActiveView = Puzzle.Windows.Forms.ActiveView.BottomRight;
@@ -197,7 +186,9 @@
             this.SourceSyntaxBox.Location = new System.Drawing.Point(3, 3);
             this.SourceSyntaxBox.LockCursorUpdate = false;
             this.SourceSyntaxBox.Name = "SourceSyntaxBox";
+            this.SourceSyntaxBox.ReadOnly = true;
             this.SourceSyntaxBox.ShowScopeIndicator = false;
+            this.SourceSyntaxBox.ShowWhitespace = true;
             this.SourceSyntaxBox.Size = new System.Drawing.Size(339, 328);
             this.SourceSyntaxBox.SmoothScroll = false;
             this.SourceSyntaxBox.SplitviewH = -4;
@@ -206,6 +197,17 @@
             this.SourceSyntaxBox.TabIndex = 5;
             this.SourceSyntaxBox.Text = "syntaxBoxControl1";
             this.SourceSyntaxBox.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
+            // 
+            // OutputTabPage
+            // 
+            this.OutputTabPage.Controls.Add(this.OutputSyntaxBox);
+            this.OutputTabPage.Location = new System.Drawing.Point(4, 22);
+            this.OutputTabPage.Name = "OutputTabPage";
+            this.OutputTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.OutputTabPage.Size = new System.Drawing.Size(345, 334);
+            this.OutputTabPage.TabIndex = 2;
+            this.OutputTabPage.Text = "Output";
+            this.OutputTabPage.UseVisualStyleBackColor = true;
             // 
             // OutputSyntaxBox
             // 
@@ -226,6 +228,7 @@
             this.OutputSyntaxBox.Location = new System.Drawing.Point(3, 3);
             this.OutputSyntaxBox.LockCursorUpdate = false;
             this.OutputSyntaxBox.Name = "OutputSyntaxBox";
+            this.OutputSyntaxBox.ReadOnly = true;
             this.OutputSyntaxBox.ShowScopeIndicator = false;
             this.OutputSyntaxBox.Size = new System.Drawing.Size(339, 328);
             this.OutputSyntaxBox.SmoothScroll = false;

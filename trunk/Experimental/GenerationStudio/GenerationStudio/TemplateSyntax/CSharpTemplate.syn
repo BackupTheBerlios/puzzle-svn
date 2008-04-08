@@ -45,6 +45,7 @@
 
 
 	<Block Name="CS Code" Style="CS Code" EscapeChar="" IsMultiline="true">
+    <Scope Start="&lt;%=" End="%&gt;" Style="CS Scope" Text="&lt;%=...%&gt;" CauseIndent="true" />
 		<Scope Start="&lt;%" End="%&gt;" Style="CS Scope" Text="&lt;%...%&gt;" CauseIndent="true" />
 		<Bracket Start="{" End="}" Style="CS Code" />
 		<Bracket Start="(" End=")" Style="CS Code" />

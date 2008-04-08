@@ -93,7 +93,7 @@ namespace GenerationStudio.Elements
                     DataTable columns = GetSchema(connection,"columns");
 
                     Dictionary<string, TableElement> tableElements = new Dictionary<string, TableElement>();
-                    foreach (TableElement child in Children)
+                    foreach (TableElement child in AllChildren)
                     {
                         string key = child.GetDisplayName ();
                         tableElements.Add(key, child);
