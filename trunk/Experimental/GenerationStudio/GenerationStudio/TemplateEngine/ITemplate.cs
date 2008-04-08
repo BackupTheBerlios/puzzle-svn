@@ -9,6 +9,6 @@ namespace GenerationStudio.TemplateEngine
 {
     public interface ITemplate
     {
-        void Render(StreamWriter output, RootElement root);
+        void Render(TextWriter output, RootElement root);
     }
 }

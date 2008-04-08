@@ -10,6 +10,8 @@ using Puzzle.SourceCode;
 using GenerationStudio.Elements;
 using System.IO;
 using GenerationStudio.AppCore;
+using My.Scripting;
+using GenerationStudio.TemplateEngine;
 
 namespace GenerationStudio.Gui
 {
@@ -108,7 +110,7 @@ namespace GenerationStudio.Gui
                     sbHeader.AppendLine();
             }
 
-            sbCode.Append("output.Write(@\"");
+            sbCode.Append("output.Write(\"");
             bool special = false;
             foreach (Row row in TemplateSyntaxBox.Document)
             {
@@ -184,7 +186,7 @@ namespace GenerationStudio.Gui
             sbHeader.AppendLine("{");
             sbHeader.AppendLine("   public class MyTemplate : ITemplate");
             sbHeader.AppendLine("   {");
-            sbHeader.AppendLine("       public void Render(StreamWriter output, RootElement root)");
+            sbHeader.AppendLine("       public void Render(TextWriter output, RootElement root)");
             sbHeader.AppendLine("       {");
             sbHeader.AppendLine("       " + sbCode.ToString ());
             sbHeader.AppendLine("       }");
@@ -192,6 +194,24 @@ namespace GenerationStudio.Gui
             sbHeader.AppendLine("}");
             SourceSyntaxBox.Document.Text = sbHeader.ToString();
 
+            ScriptCompiler compiler = new ScriptCompiler();
+            try
+            {
+                ITemplate templateObj = compiler.Compile(sbHeader.ToString());
+
+                StringBuilder sbOutput = new StringBuilder();
+                StringWriter sw = new StringWriter(sbOutput);
+                             
+                templateObj.Render(sw, Node.Root);
+//                MyTemplate d = new MyTemplate();
+//                d.Render(sw, Node.Root);
+                sw.Flush();
+                OutputSyntaxBox.Document.Text = sbOutput.ToString();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x);
+            }
         }
     }
 }

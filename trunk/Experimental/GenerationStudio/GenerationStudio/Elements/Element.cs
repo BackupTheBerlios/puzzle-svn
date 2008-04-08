@@ -235,5 +235,17 @@ namespace GenerationStudio.Elements
             this.children.Remove(child);
             OnNotifyChange();
         }
+
+        public RootElement Root
+        {
+            get
+            {
+                Element current = this;
+                while (current.Parent != null)
+                    current = current.Parent;
+
+                return (RootElement)current;
+            }
+        }
     }
 }

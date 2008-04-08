@@ -188,7 +188,6 @@
             this.SourceSyntaxBox.Name = "SourceSyntaxBox";
             this.SourceSyntaxBox.ReadOnly = true;
             this.SourceSyntaxBox.ShowScopeIndicator = false;
-            this.SourceSyntaxBox.ShowWhitespace = true;
             this.SourceSyntaxBox.Size = new System.Drawing.Size(339, 328);
             this.SourceSyntaxBox.SmoothScroll = false;
             this.SourceSyntaxBox.SplitviewH = -4;
