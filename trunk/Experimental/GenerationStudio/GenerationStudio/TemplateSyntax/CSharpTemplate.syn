@@ -141,12 +141,12 @@
 	<Style Name="Text" ForeColor="SteelBlue" BackColor="White" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Code" ForeColor="Black" BackColor="LightYellow" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Keyword" ForeColor="Blue" BackColor="LightYellow" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS Code" ForeColor="" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Code" ForeColor="" BackColor="GhostWhite" Bold="false" Italic="false" Underline="false" />
 	<Style Name="CS Scope" ForeColor="Black" BackColor="Yellow" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Region" ForeColor="blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />	
-	<Style Name="CS Comment" ForeColor="Green" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS String" ForeColor="SteelBlue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Operator" ForeColor="Red" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="false" />
-	<Style Name="CS Keyword" ForeColor="Blue" BackColor="WhiteSmoke" Bold="true" Italic="false" Underline="false" />
-	<Style Name="CS URL" ForeColor="Blue" BackColor="WhiteSmoke" Bold="false" Italic="false" Underline="true" />
+	<Style Name="CS Region" ForeColor="blue" BackColor="GhostWhite" Bold="true" Italic="false" Underline="false" />	
+	<Style Name="CS Comment" ForeColor="Green" BackColor="GhostWhite" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS String" ForeColor="SteelBlue" BackColor="GhostWhite" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Operator" ForeColor="Red" BackColor="GhostWhite" Bold="false" Italic="false" Underline="false" />
+	<Style Name="CS Keyword" ForeColor="Blue" BackColor="GhostWhite" Bold="true" Italic="false" Underline="false" />
+	<Style Name="CS URL" ForeColor="Blue" BackColor="GhostWhite" Bold="false" Italic="false" Underline="true" />
 </Language>

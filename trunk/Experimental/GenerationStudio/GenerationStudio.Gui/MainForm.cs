@@ -29,7 +29,7 @@ namespace GenerationStudio.Gui
         private void Form1_Load(object sender, EventArgs e)
         {
             MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            MainToolStrip.Renderer = new Office2007Renderer.Office2007Renderer();
+        //    MainToolStrip.Renderer = new Office2007Renderer.Office2007Renderer();
             ToolStripContainer.TopToolStripPanel.Renderer = new Office2007Renderer.Office2007Renderer();
             ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
             StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();

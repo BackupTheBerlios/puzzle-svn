@@ -192,7 +192,6 @@
             this.SourceSyntaxBox.SmoothScroll = false;
             this.SourceSyntaxBox.SplitviewH = -4;
             this.SourceSyntaxBox.SplitviewV = -4;
-            this.SourceSyntaxBox.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(234)))));
             this.SourceSyntaxBox.TabIndex = 5;
             this.SourceSyntaxBox.Text = "syntaxBoxControl1";
             this.SourceSyntaxBox.WhitespaceColor = System.Drawing.SystemColors.ControlDark;

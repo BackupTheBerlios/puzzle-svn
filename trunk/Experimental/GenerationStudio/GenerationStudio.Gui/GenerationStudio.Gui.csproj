@@ -87,9 +87,6 @@
     <Compile Include="MainFormIHost.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Renderers\Toolbars\Office2007ColorTable.cs" />
-    <Compile Include="Renderers\Toolbars\Office2007Helpers.cs" />
-    <Compile Include="Renderers\Toolbars\Office2007Renderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenerationStudio\GenerationStudio.Core.csproj">

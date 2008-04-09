@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node0");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -37,6 +37,7 @@
             this.Icons = new System.Windows.Forms.ImageList(this.components);
             this.ProjectTopPanel = new System.Windows.Forms.Panel();
             this.ProjectToolStrip = new System.Windows.Forms.ToolStrip();
+            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
             this.ElementProperties = new System.Windows.Forms.PropertyGrid();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.DocumentPanel = new System.Windows.Forms.Panel();
@@ -48,9 +49,9 @@
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.MainToolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -63,12 +64,6 @@
             this.NormalFont = new System.Windows.Forms.Label();
             this.ItalicFont = new System.Windows.Forms.Label();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
-            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -83,7 +78,6 @@
             this.ErrorPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).BeginInit();
             this.MainMenu.SuspendLayout();
-            this.MainToolStrip.SuspendLayout();
             this.ToolStripContainer.BottomToolStripPanel.SuspendLayout();
             this.ToolStripContainer.ContentPanel.SuspendLayout();
             this.ToolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -106,7 +100,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.splitContainer1.Size = new System.Drawing.Size(742, 472);
+            this.splitContainer1.Size = new System.Drawing.Size(742, 497);
             this.splitContainer1.SplitterDistance = 192;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -125,8 +119,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.ElementProperties);
-            this.splitContainer2.Size = new System.Drawing.Size(186, 472);
-            this.splitContainer2.SplitterDistance = 218;
+            this.splitContainer2.Size = new System.Drawing.Size(186, 497);
+            this.splitContainer2.SplitterDistance = 229;
             this.splitContainer2.TabIndex = 0;
             // 
             // ProjectTree
@@ -138,13 +132,13 @@
             this.ProjectTree.LabelEdit = true;
             this.ProjectTree.Location = new System.Drawing.Point(0, 26);
             this.ProjectTree.Name = "ProjectTree";
-            treeNode1.Name = "Node0";
-            treeNode1.Text = "Node0";
+            treeNode2.Name = "Node0";
+            treeNode2.Text = "Node0";
             this.ProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.ProjectTree.SelectedImageIndex = 0;
             this.ProjectTree.ShowNodeToolTips = true;
-            this.ProjectTree.Size = new System.Drawing.Size(186, 192);
+            this.ProjectTree.Size = new System.Drawing.Size(186, 203);
             this.ProjectTree.TabIndex = 3;
             this.ProjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.ProjectTree_AfterLabelEdit);
             this.ProjectTree.DoubleClick += new System.EventHandler(this.ProjectTree_DoubleClick);
@@ -177,12 +171,23 @@
             this.ProjectToolStrip.Size = new System.Drawing.Size(186, 25);
             this.ProjectToolStrip.TabIndex = 1;
             // 
+            // RefreshProjectTreeButton
+            // 
+            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
+            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
+            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
+            this.RefreshProjectTreeButton.Text = "toolStripButton1";
+            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
+            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
+            // 
             // ElementProperties
             // 
             this.ElementProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ElementProperties.Location = new System.Drawing.Point(0, 0);
             this.ElementProperties.Name = "ElementProperties";
-            this.ElementProperties.Size = new System.Drawing.Size(186, 250);
+            this.ElementProperties.Size = new System.Drawing.Size(186, 264);
             this.ElementProperties.TabIndex = 3;
             // 
             // splitContainer3
@@ -199,8 +204,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.ErrorPanel);
-            this.splitContainer3.Size = new System.Drawing.Size(540, 472);
-            this.splitContainer3.SplitterDistance = 365;
+            this.splitContainer3.Size = new System.Drawing.Size(540, 497);
+            this.splitContainer3.SplitterDistance = 384;
             this.splitContainer3.TabIndex = 0;
             // 
             // DocumentPanel
@@ -208,7 +213,7 @@
             this.DocumentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DocumentPanel.Location = new System.Drawing.Point(0, 0);
             this.DocumentPanel.Name = "DocumentPanel";
-            this.DocumentPanel.Size = new System.Drawing.Size(540, 365);
+            this.DocumentPanel.Size = new System.Drawing.Size(540, 384);
             this.DocumentPanel.TabIndex = 1;
             // 
             // ErrorPanel
@@ -217,7 +222,7 @@
             this.ErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ErrorPanel.Location = new System.Drawing.Point(0, 0);
             this.ErrorPanel.Name = "ErrorPanel";
-            this.ErrorPanel.Size = new System.Drawing.Size(540, 103);
+            this.ErrorPanel.Size = new System.Drawing.Size(540, 109);
             this.ErrorPanel.TabIndex = 2;
             // 
             // ErrorGrid
@@ -242,7 +247,7 @@
             this.ErrorGrid.RowTemplate.Height = 18;
             this.ErrorGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ErrorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ErrorGrid.Size = new System.Drawing.Size(540, 103);
+            this.ErrorGrid.Size = new System.Drawing.Size(540, 109);
             this.ErrorGrid.TabIndex = 0;
             this.ErrorGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ErrorGrid_CellDoubleClick);
             // 
@@ -291,30 +296,29 @@
             // 
             this.newToolStripMenuItem.Image = global::GenerationStudio.Properties.Resources.newproject;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.newToolStripMenuItem.Text = "&New";
+            // 
+            // MainMenuFileOpenProject
+            // 
+            this.MainMenuFileOpenProject.Image = global::GenerationStudio.Properties.Resources.open;
+            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
+            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(111, 22);
+            this.MainMenuFileOpenProject.Text = "&Open";
+            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(108, 6);
             // 
-            // MainToolStrip
+            // MainMenuFileSaveProject
             // 
-            this.MainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel1,
-            this.toolStripSplitButton1});
-            this.MainToolStrip.Location = new System.Drawing.Point(6, 24);
-            this.MainToolStrip.Name = "MainToolStrip";
-            this.MainToolStrip.Size = new System.Drawing.Size(92, 25);
-            this.MainToolStrip.TabIndex = 0;
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(48, 22);
-            this.toolStripLabel1.Text = "test test";
+            this.MainMenuFileSaveProject.Image = global::GenerationStudio.Properties.Resources.save;
+            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
+            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(111, 22);
+            this.MainMenuFileSaveProject.Text = "&Save";
+            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
             // 
             // BottomToolStripPanel
             // 
@@ -362,7 +366,7 @@
             // ToolStripContainer.ContentPanel
             // 
             this.ToolStripContainer.ContentPanel.Controls.Add(this.splitContainer1);
-            this.ToolStripContainer.ContentPanel.Size = new System.Drawing.Size(742, 472);
+            this.ToolStripContainer.ContentPanel.Size = new System.Drawing.Size(742, 497);
             this.ToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolStripContainer.Location = new System.Drawing.Point(0, 34);
             this.ToolStripContainer.Name = "ToolStripContainer";
@@ -373,7 +377,6 @@
             // ToolStripContainer.TopToolStripPanel
             // 
             this.ToolStripContainer.TopToolStripPanel.Controls.Add(this.MainMenu);
-            this.ToolStripContainer.TopToolStripPanel.Controls.Add(this.MainToolStrip);
             // 
             // StatusBar
             // 
@@ -430,57 +433,6 @@
             // 
             this.OpenFileDialog.FileName = "openFileDialog1";
             // 
-            // RefreshProjectTreeButton
-            // 
-            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
-            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
-            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
-            this.RefreshProjectTreeButton.Text = "toolStripButton1";
-            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
-            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
-            // 
-            // MainMenuFileOpenProject
-            // 
-            this.MainMenuFileOpenProject.Image = global::GenerationStudio.Properties.Resources.open;
-            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
-            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(152, 22);
-            this.MainMenuFileOpenProject.Text = "&Open";
-            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
-            // 
-            // MainMenuFileSaveProject
-            // 
-            this.MainMenuFileSaveProject.Image = global::GenerationStudio.Properties.Resources.save;
-            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
-            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(152, 22);
-            this.MainMenuFileSaveProject.Text = "&Save";
-            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
-            // 
-            // toolStripSplitButton1
-            // 
-            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem,
-            this.test2ToolStripMenuItem});
-            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 22);
-            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.testToolStripMenuItem.Text = "test";
-            // 
-            // test2ToolStripMenuItem
-            // 
-            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
-            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.test2ToolStripMenuItem.Text = "test2";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,7 +442,7 @@
             this.Controls.Add(this.FontPanel);
             this.MainMenuStrip = this.MainMenu;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Caramel - Code Generator";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -510,8 +462,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.ErrorGrid)).EndInit();
             this.MainMenu.ResumeLayout(false);
             this.MainMenu.PerformLayout();
-            this.MainToolStrip.ResumeLayout(false);
-            this.MainToolStrip.PerformLayout();
             this.ToolStripContainer.BottomToolStripPanel.ResumeLayout(false);
             this.ToolStripContainer.BottomToolStripPanel.PerformLayout();
             this.ToolStripContainer.ContentPanel.ResumeLayout(false);
@@ -532,13 +482,8 @@
         private System.Windows.Forms.TreeView ProjectTree;
         private System.Windows.Forms.PropertyGrid ElementProperties;
         private System.Windows.Forms.ContextMenuStrip ProjectContextMenu;
-        private System.Windows.Forms.ToolStrip MainToolStrip;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.MenuStrip MainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem test2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
         private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;

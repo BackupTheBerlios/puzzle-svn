@@ -196,7 +196,7 @@ namespace GenerationStudio.Elements
         public override IList<ElementError> GetErrors()
         {
             List<ElementError> errors = new List<ElementError>();
-            if (DbType.Trim() == "")
+            if (string.IsNullOrEmpty (DbType))
                 errors.Add (new ElementError (this, string.Format ("Column {0}.{1} is missing DbType",Parent.GetDisplayName (),GetDisplayName ())));
 
             return errors;
