@@ -197,5 +197,14 @@ namespace GenerationStudio.Elements
         public void SyncTableModelToDataSource(IHost host)
         {
         }
+
+        public override IList<ElementError> GetErrors()
+        {
+            List<ElementError> errors = new List<ElementError>();
+            if (string.IsNullOrEmpty(ConnectionString))
+                errors.Add(new ElementError(this, string.Format("DataBase {0} is missing connectionstring", GetDisplayName())));
+
+            return errors;
+        }
     }
 }

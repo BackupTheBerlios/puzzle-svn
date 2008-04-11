@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="Controls\BaseControls\BorderControl.cs" />
     <Compile Include="Controls\EditView\EditViewControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\FormatLabel\Element.cs" />
     <Compile Include="Controls\FormatLabel\Events.cs" />
@@ -176,6 +177,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Syntaxbox\SyntaxBoxControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Syntaxbox\SyntaxBoxDesigner.cs">
       <SubType>Code</SubType>

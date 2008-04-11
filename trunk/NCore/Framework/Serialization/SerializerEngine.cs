@@ -39,7 +39,6 @@ namespace Puzzle.NCore.Runtime.Serialization
             xml.WriteEndElement();
             xml.WriteEndElement();
             xml.Flush();
-            xml.Close();
         }
 
 
@@ -62,9 +61,13 @@ namespace Puzzle.NCore.Runtime.Serialization
             {
                 return BuildValueObject(item);
             }
+            else if (item is IList)
+            {
+                return BuildIListObject((IList)item);
+            }
             else if (item.GetType().IsArray)
             {
-                return BuildArrayObject((Array) item);
+                return BuildArrayObject((Array)item);
             }
             else
             {
@@ -82,9 +85,15 @@ namespace Puzzle.NCore.Runtime.Serialization
         {
             ArrayObject current = new ArrayObject();
             RegisterObject(current, item);
-
             current.Build(this, item);
+            return current;
+        }
 
+        private IListObject BuildIListObject(IList item)
+        {
+            IListObject current = new IListObject();
+            RegisterObject(current, item);
+            current.Build(this, item);
             return current;
         }
 
@@ -106,18 +115,22 @@ namespace Puzzle.NCore.Runtime.Serialization
             if (item is IEnumerable)
                 current.IsEnumerable = true;
 
-            FieldInfo[] fields =
-                item.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (FieldInfo field in fields)
+            Type currentType = item.GetType();
+            while (currentType != null)
             {
-                if (IsNonSerialized(field))
-                    continue;
+                FieldInfo[] fields = currentType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                foreach (FieldInfo fieldInfo in fields)
+                {
+                    if (IsNonSerialized(fieldInfo))
+                        continue;
 
-                Field property = new Field();
-                current.Fields.Add(property);
-                property.Name = field.Name;
-                object fieldValue = field.GetValue(item);
-                property.Value = GetObject(fieldValue);
+                    Field field = new Field();
+                    current.Fields.Add(field);
+                    field.Name = fieldInfo.Name;
+                    object fieldValue = fieldInfo.GetValue(item);
+                    field.Value = GetObject(fieldValue);
+                }
+                currentType = currentType.BaseType;
             }
 
             return current;

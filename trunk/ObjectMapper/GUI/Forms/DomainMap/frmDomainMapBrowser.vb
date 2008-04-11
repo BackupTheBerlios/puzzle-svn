@@ -769,7 +769,7 @@ Public Class frmDomainMapBrowser
     Friend WithEvents dockPanel As WeifenLuo.WinFormsUI.DockPanel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmDomainMapBrowser))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmDomainMapBrowser))
         Me.panelStatus = New System.Windows.Forms.Panel
         Me.StatusBar1 = New System.Windows.Forms.StatusBar
         Me.statusMain = New System.Windows.Forms.StatusBarPanel
@@ -839,7 +839,7 @@ Public Class frmDomainMapBrowser
         Me.tabToolsPreview = New System.Windows.Forms.TabPage
         Me.treePreviewClassesToCode = New Puzzle.ObjectMapper.GUI.MapTreeView
         Me.mapTreeViewPreview = New Puzzle.ObjectMapper.GUI.MapTreeView
-        Me.MainMenu1 = New System.Windows.Forms.MainMenu
+        Me.MainMenu1 = New System.Windows.Forms.MainMenu(Me.components)
         Me.menuFile = New System.Windows.Forms.MenuItem
         Me.MenuItem6 = New System.Windows.Forms.MenuItem
         Me.menuFileNewMap = New System.Windows.Forms.MenuItem
@@ -1422,13 +1422,15 @@ Public Class frmDomainMapBrowser
         '
         'statusMain
         '
+        Me.statusMain.Name = "statusMain"
         Me.statusMain.Text = "Ready"
         Me.statusMain.Width = 250
         '
         'statusMessage
         '
         Me.statusMessage.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
-        Me.statusMessage.Width = 582
+        Me.statusMessage.Name = "statusMessage"
+        Me.statusMessage.Width = 581
         '
         'menuNew
         '
@@ -1664,16 +1666,134 @@ Public Class frmDomainMapBrowser
         '
         'imageListSmall
         '
-        Me.imageListSmall.ImageSize = New System.Drawing.Size(16, 16)
         Me.imageListSmall.ImageStream = CType(resources.GetObject("imageListSmall.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.imageListSmall.TransparentColor = System.Drawing.Color.Transparent
+        Me.imageListSmall.Images.SetKeyName(0, "")
+        Me.imageListSmall.Images.SetKeyName(1, "")
+        Me.imageListSmall.Images.SetKeyName(2, "")
+        Me.imageListSmall.Images.SetKeyName(3, "")
+        Me.imageListSmall.Images.SetKeyName(4, "")
+        Me.imageListSmall.Images.SetKeyName(5, "")
+        Me.imageListSmall.Images.SetKeyName(6, "")
+        Me.imageListSmall.Images.SetKeyName(7, "")
+        Me.imageListSmall.Images.SetKeyName(8, "")
+        Me.imageListSmall.Images.SetKeyName(9, "")
+        Me.imageListSmall.Images.SetKeyName(10, "")
+        Me.imageListSmall.Images.SetKeyName(11, "")
+        Me.imageListSmall.Images.SetKeyName(12, "")
+        Me.imageListSmall.Images.SetKeyName(13, "")
+        Me.imageListSmall.Images.SetKeyName(14, "")
+        Me.imageListSmall.Images.SetKeyName(15, "")
+        Me.imageListSmall.Images.SetKeyName(16, "")
+        Me.imageListSmall.Images.SetKeyName(17, "")
+        Me.imageListSmall.Images.SetKeyName(18, "")
+        Me.imageListSmall.Images.SetKeyName(19, "")
+        Me.imageListSmall.Images.SetKeyName(20, "")
+        Me.imageListSmall.Images.SetKeyName(21, "")
+        Me.imageListSmall.Images.SetKeyName(22, "")
+        Me.imageListSmall.Images.SetKeyName(23, "")
+        Me.imageListSmall.Images.SetKeyName(24, "")
+        Me.imageListSmall.Images.SetKeyName(25, "")
+        Me.imageListSmall.Images.SetKeyName(26, "")
+        Me.imageListSmall.Images.SetKeyName(27, "")
+        Me.imageListSmall.Images.SetKeyName(28, "")
+        Me.imageListSmall.Images.SetKeyName(29, "")
+        Me.imageListSmall.Images.SetKeyName(30, "")
+        Me.imageListSmall.Images.SetKeyName(31, "")
+        Me.imageListSmall.Images.SetKeyName(32, "")
+        Me.imageListSmall.Images.SetKeyName(33, "")
+        Me.imageListSmall.Images.SetKeyName(34, "")
+        Me.imageListSmall.Images.SetKeyName(35, "")
+        Me.imageListSmall.Images.SetKeyName(36, "")
+        Me.imageListSmall.Images.SetKeyName(37, "")
+        Me.imageListSmall.Images.SetKeyName(38, "")
+        Me.imageListSmall.Images.SetKeyName(39, "")
+        Me.imageListSmall.Images.SetKeyName(40, "")
+        Me.imageListSmall.Images.SetKeyName(41, "")
+        Me.imageListSmall.Images.SetKeyName(42, "")
+        Me.imageListSmall.Images.SetKeyName(43, "")
+        Me.imageListSmall.Images.SetKeyName(44, "")
+        Me.imageListSmall.Images.SetKeyName(45, "")
+        Me.imageListSmall.Images.SetKeyName(46, "")
+        Me.imageListSmall.Images.SetKeyName(47, "")
+        Me.imageListSmall.Images.SetKeyName(48, "")
+        Me.imageListSmall.Images.SetKeyName(49, "")
+        Me.imageListSmall.Images.SetKeyName(50, "")
+        Me.imageListSmall.Images.SetKeyName(51, "")
+        Me.imageListSmall.Images.SetKeyName(52, "")
+        Me.imageListSmall.Images.SetKeyName(53, "")
+        Me.imageListSmall.Images.SetKeyName(54, "")
+        Me.imageListSmall.Images.SetKeyName(55, "")
+        Me.imageListSmall.Images.SetKeyName(56, "")
+        Me.imageListSmall.Images.SetKeyName(57, "")
+        Me.imageListSmall.Images.SetKeyName(58, "")
+        Me.imageListSmall.Images.SetKeyName(59, "")
+        Me.imageListSmall.Images.SetKeyName(60, "")
+        Me.imageListSmall.Images.SetKeyName(61, "")
+        Me.imageListSmall.Images.SetKeyName(62, "")
+        Me.imageListSmall.Images.SetKeyName(63, "")
+        Me.imageListSmall.Images.SetKeyName(64, "")
+        Me.imageListSmall.Images.SetKeyName(65, "")
+        Me.imageListSmall.Images.SetKeyName(66, "")
+        Me.imageListSmall.Images.SetKeyName(67, "")
+        Me.imageListSmall.Images.SetKeyName(68, "")
+        Me.imageListSmall.Images.SetKeyName(69, "")
+        Me.imageListSmall.Images.SetKeyName(70, "")
+        Me.imageListSmall.Images.SetKeyName(71, "")
+        Me.imageListSmall.Images.SetKeyName(72, "")
+        Me.imageListSmall.Images.SetKeyName(73, "")
+        Me.imageListSmall.Images.SetKeyName(74, "")
+        Me.imageListSmall.Images.SetKeyName(75, "")
+        Me.imageListSmall.Images.SetKeyName(76, "")
+        Me.imageListSmall.Images.SetKeyName(77, "")
+        Me.imageListSmall.Images.SetKeyName(78, "")
+        Me.imageListSmall.Images.SetKeyName(79, "")
+        Me.imageListSmall.Images.SetKeyName(80, "")
+        Me.imageListSmall.Images.SetKeyName(81, "")
+        Me.imageListSmall.Images.SetKeyName(82, "")
+        Me.imageListSmall.Images.SetKeyName(83, "")
+        Me.imageListSmall.Images.SetKeyName(84, "")
+        Me.imageListSmall.Images.SetKeyName(85, "")
+        Me.imageListSmall.Images.SetKeyName(86, "")
+        Me.imageListSmall.Images.SetKeyName(87, "")
+        Me.imageListSmall.Images.SetKeyName(88, "")
+        Me.imageListSmall.Images.SetKeyName(89, "")
+        Me.imageListSmall.Images.SetKeyName(90, "")
+        Me.imageListSmall.Images.SetKeyName(91, "")
+        Me.imageListSmall.Images.SetKeyName(92, "")
+        Me.imageListSmall.Images.SetKeyName(93, "")
+        Me.imageListSmall.Images.SetKeyName(94, "")
+        Me.imageListSmall.Images.SetKeyName(95, "")
+        Me.imageListSmall.Images.SetKeyName(96, "")
+        Me.imageListSmall.Images.SetKeyName(97, "")
+        Me.imageListSmall.Images.SetKeyName(98, "")
+        Me.imageListSmall.Images.SetKeyName(99, "")
+        Me.imageListSmall.Images.SetKeyName(100, "")
+        Me.imageListSmall.Images.SetKeyName(101, "")
+        Me.imageListSmall.Images.SetKeyName(102, "")
+        Me.imageListSmall.Images.SetKeyName(103, "")
+        Me.imageListSmall.Images.SetKeyName(104, "")
+        Me.imageListSmall.Images.SetKeyName(105, "")
+        Me.imageListSmall.Images.SetKeyName(106, "")
+        Me.imageListSmall.Images.SetKeyName(107, "")
+        Me.imageListSmall.Images.SetKeyName(108, "")
+        Me.imageListSmall.Images.SetKeyName(109, "")
+        Me.imageListSmall.Images.SetKeyName(110, "")
+        Me.imageListSmall.Images.SetKeyName(111, "")
+        Me.imageListSmall.Images.SetKeyName(112, "")
+        Me.imageListSmall.Images.SetKeyName(113, "")
+        Me.imageListSmall.Images.SetKeyName(114, "")
+        Me.imageListSmall.Images.SetKeyName(115, "")
+        Me.imageListSmall.Images.SetKeyName(116, "")
+        Me.imageListSmall.Images.SetKeyName(117, "")
+        Me.imageListSmall.Images.SetKeyName(118, "")
         '
         'panelLeft
         '
         Me.panelLeft.Controls.Add(Me.panelPropGridMap)
-        Me.panelLeft.DockPadding.All = 6
         Me.panelLeft.Location = New System.Drawing.Point(176, 8)
         Me.panelLeft.Name = "panelLeft"
+        Me.panelLeft.Padding = New System.Windows.Forms.Padding(6)
         Me.panelLeft.Size = New System.Drawing.Size(160, 160)
         Me.panelLeft.TabIndex = 2
         '
@@ -1693,28 +1813,42 @@ Public Class frmDomainMapBrowser
         Me.mapTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.mapTreeView.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.mapTreeView.HideSelection = False
+        Me.mapTreeView.ImageIndex = 0
         Me.mapTreeView.ImageList = Me.imageListSmall
         Me.mapTreeView.IsPreviewTree = False
         Me.mapTreeView.IsVerifyTree = False
         Me.mapTreeView.LabelEdit = True
+        Me.mapTreeView.ListExceptions = CType(resources.GetObject("mapTreeView.ListExceptions"), System.Collections.ArrayList)
         Me.mapTreeView.Location = New System.Drawing.Point(0, 0)
         Me.mapTreeView.Name = "mapTreeView"
+        Me.mapTreeView.SelectedImageIndex = 0
         Me.mapTreeView.ShowRootLines = False
         Me.mapTreeView.Size = New System.Drawing.Size(148, 148)
         Me.mapTreeView.TabIndex = 1
         '
         'imageListSmallButtons
         '
-        Me.imageListSmallButtons.ImageSize = New System.Drawing.Size(9, 9)
         Me.imageListSmallButtons.ImageStream = CType(resources.GetObject("imageListSmallButtons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.imageListSmallButtons.TransparentColor = System.Drawing.Color.Transparent
+        Me.imageListSmallButtons.Images.SetKeyName(0, "")
+        Me.imageListSmallButtons.Images.SetKeyName(1, "")
+        Me.imageListSmallButtons.Images.SetKeyName(2, "")
+        Me.imageListSmallButtons.Images.SetKeyName(3, "")
+        Me.imageListSmallButtons.Images.SetKeyName(4, "")
+        Me.imageListSmallButtons.Images.SetKeyName(5, "")
+        Me.imageListSmallButtons.Images.SetKeyName(6, "")
+        Me.imageListSmallButtons.Images.SetKeyName(7, "")
+        Me.imageListSmallButtons.Images.SetKeyName(8, "")
+        Me.imageListSmallButtons.Images.SetKeyName(9, "")
+        Me.imageListSmallButtons.Images.SetKeyName(10, "")
+        Me.imageListSmallButtons.Images.SetKeyName(11, "")
         '
         'panelBottom
         '
         Me.panelBottom.Controls.Add(Me.tabControlMessages)
-        Me.panelBottom.DockPadding.All = 6
         Me.panelBottom.Location = New System.Drawing.Point(8, 176)
         Me.panelBottom.Name = "panelBottom"
+        Me.panelBottom.Padding = New System.Windows.Forms.Padding(6)
         Me.panelBottom.Size = New System.Drawing.Size(480, 88)
         Me.panelBottom.TabIndex = 3
         '
@@ -1752,6 +1886,7 @@ Public Class frmDomainMapBrowser
         Me.mapListView.Size = New System.Drawing.Size(460, 50)
         Me.mapListView.SmallImageList = Me.imageListSmall
         Me.mapListView.TabIndex = 0
+        Me.mapListView.UseCompatibleStateImageBehavior = False
         Me.mapListView.View = System.Windows.Forms.View.Details
         '
         'tabPageErrors
@@ -1772,6 +1907,7 @@ Public Class frmDomainMapBrowser
         Me.listViewExceptions.Size = New System.Drawing.Size(460, 50)
         Me.listViewExceptions.SmallImageList = Me.imageListSmall
         Me.listViewExceptions.TabIndex = 4
+        Me.listViewExceptions.UseCompatibleStateImageBehavior = False
         Me.listViewExceptions.View = System.Windows.Forms.View.Details
         '
         'tabPagePreviewList
@@ -1792,6 +1928,7 @@ Public Class frmDomainMapBrowser
         Me.listViewPreviewMsgs.Size = New System.Drawing.Size(460, 50)
         Me.listViewPreviewMsgs.SmallImageList = Me.imageListSmall
         Me.listViewPreviewMsgs.TabIndex = 6
+        Me.listViewPreviewMsgs.UseCompatibleStateImageBehavior = False
         Me.listViewPreviewMsgs.View = System.Windows.Forms.View.Details
         '
         'tabPageMessageList
@@ -1812,14 +1949,15 @@ Public Class frmDomainMapBrowser
         Me.listViewMsgs.Name = "listViewMsgs"
         Me.listViewMsgs.Size = New System.Drawing.Size(460, 50)
         Me.listViewMsgs.TabIndex = 6
+        Me.listViewMsgs.UseCompatibleStateImageBehavior = False
         Me.listViewMsgs.View = System.Windows.Forms.View.Details
         '
         'panelRight
         '
         Me.panelRight.Controls.Add(Me.panelSecondTree)
-        Me.panelRight.DockPadding.All = 6
         Me.panelRight.Location = New System.Drawing.Point(344, 8)
         Me.panelRight.Name = "panelRight"
+        Me.panelRight.Padding = New System.Windows.Forms.Padding(6)
         Me.panelRight.Size = New System.Drawing.Size(144, 160)
         Me.panelRight.TabIndex = 6
         '
@@ -1859,11 +1997,14 @@ Public Class frmDomainMapBrowser
         Me.treePreviewClassesToCode.CheckBoxes = True
         Me.treePreviewClassesToCode.Dock = System.Windows.Forms.DockStyle.Fill
         Me.treePreviewClassesToCode.HideSelection = False
+        Me.treePreviewClassesToCode.ImageIndex = 0
         Me.treePreviewClassesToCode.ImageList = Me.imageListSmall
         Me.treePreviewClassesToCode.IsPreviewTree = False
         Me.treePreviewClassesToCode.IsVerifyTree = False
+        Me.treePreviewClassesToCode.ListExceptions = CType(resources.GetObject("treePreviewClassesToCode.ListExceptions"), System.Collections.ArrayList)
         Me.treePreviewClassesToCode.Location = New System.Drawing.Point(0, 0)
         Me.treePreviewClassesToCode.Name = "treePreviewClassesToCode"
+        Me.treePreviewClassesToCode.SelectedImageIndex = 0
         Me.treePreviewClassesToCode.Size = New System.Drawing.Size(124, 122)
         Me.treePreviewClassesToCode.TabIndex = 1
         Me.treePreviewClassesToCode.Visible = False
@@ -1874,11 +2015,14 @@ Public Class frmDomainMapBrowser
         Me.mapTreeViewPreview.CheckBoxes = True
         Me.mapTreeViewPreview.Dock = System.Windows.Forms.DockStyle.Fill
         Me.mapTreeViewPreview.HideSelection = False
+        Me.mapTreeViewPreview.ImageIndex = 0
         Me.mapTreeViewPreview.ImageList = Me.imageListSmall
         Me.mapTreeViewPreview.IsPreviewTree = True
         Me.mapTreeViewPreview.IsVerifyTree = False
+        Me.mapTreeViewPreview.ListExceptions = CType(resources.GetObject("mapTreeViewPreview.ListExceptions"), System.Collections.ArrayList)
         Me.mapTreeViewPreview.Location = New System.Drawing.Point(0, 0)
         Me.mapTreeViewPreview.Name = "mapTreeViewPreview"
+        Me.mapTreeViewPreview.SelectedImageIndex = 0
         Me.mapTreeViewPreview.Size = New System.Drawing.Size(124, 122)
         Me.mapTreeViewPreview.TabIndex = 0
         '
@@ -2415,9 +2559,9 @@ Public Class frmDomainMapBrowser
         'panelMain
         '
         Me.panelMain.Controls.Add(Me.panelDocuments)
-        Me.panelMain.DockPadding.All = 6
         Me.panelMain.Location = New System.Drawing.Point(496, 8)
         Me.panelMain.Name = "panelMain"
+        Me.panelMain.Padding = New System.Windows.Forms.Padding(6)
         Me.panelMain.Size = New System.Drawing.Size(264, 240)
         Me.panelMain.TabIndex = 7
         '
@@ -2446,9 +2590,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlDocuments.SelectedIndex = 0
         Me.tabControlDocuments.Size = New System.Drawing.Size(252, 212)
         Me.tabControlDocuments.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.tabControlDocuments, "When you have generated source code documents with ObjectMapper, you can find the" & _
-        "m under the Files node under your Synch Config in the tree view, and edit them h" & _
-        "ere by double-clicking their nodes in the tree view")
+        Me.ToolTip1.SetToolTip(Me.tabControlDocuments, resources.GetString("tabControlDocuments.ToolTip"))
         '
         'tabPageMainUml
         '
@@ -2480,7 +2622,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUmlDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUmlDoc.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.tabControlUmlDoc, "To create a UML document, mark your domain in the tree view and then press the re" & _
-        "d UML button in the toolbar")
+                "d UML button in the toolbar")
         '
         'panelUmlTitle
         '
@@ -2516,6 +2658,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevUmlDoc.Name = "buttonPrevUmlDoc"
         Me.buttonPrevUmlDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevUmlDoc.TabIndex = 3
+        Me.buttonPrevUmlDoc.UseVisualStyleBackColor = False
         '
         'buttonNextUmlDoc
         '
@@ -2529,6 +2672,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextUmlDoc.Name = "buttonNextUmlDoc"
         Me.buttonNextUmlDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextUmlDoc.TabIndex = 2
+        Me.buttonNextUmlDoc.UseVisualStyleBackColor = False
         '
         'buttonCloseUmlDoc
         '
@@ -2541,6 +2685,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseUmlDoc.Name = "buttonCloseUmlDoc"
         Me.buttonCloseUmlDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseUmlDoc.TabIndex = 1
+        Me.buttonCloseUmlDoc.UseVisualStyleBackColor = False
         '
         'tabPageMainCustom
         '
@@ -2562,9 +2707,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlUserDoc.Size = New System.Drawing.Size(244, 170)
         Me.tabControlUserDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlUserDoc.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.tabControlUserDoc, "When you have generated source code documents with ObjectMapper, you can find the" & _
-        "m under the Files node under your Synch Config in the tree view, and edit them h" & _
-        "ere by double-clicking their nodes in the tree view")
+        Me.ToolTip1.SetToolTip(Me.tabControlUserDoc, resources.GetString("tabControlUserDoc.ToolTip"))
         '
         'panelDocTitle
         '
@@ -2600,6 +2743,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevUserDoc.Name = "buttonPrevUserDoc"
         Me.buttonPrevUserDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevUserDoc.TabIndex = 5
+        Me.buttonPrevUserDoc.UseVisualStyleBackColor = False
         '
         'buttonNextUserDoc
         '
@@ -2613,6 +2757,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextUserDoc.Name = "buttonNextUserDoc"
         Me.buttonNextUserDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextUserDoc.TabIndex = 4
+        Me.buttonNextUserDoc.UseVisualStyleBackColor = False
         '
         'buttonCloseUserDoc
         '
@@ -2625,6 +2770,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseUserDoc.Name = "buttonCloseUserDoc"
         Me.buttonCloseUserDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseUserDoc.TabIndex = 1
+        Me.buttonCloseUserDoc.UseVisualStyleBackColor = False
         '
         'tabPageMainPreview
         '
@@ -2647,8 +2793,8 @@ Public Class frmDomainMapBrowser
         Me.tabControlPreviewDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlPreviewDoc.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.tabControlPreviewDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
-        "with the current settings by selecting an option from the Preview menu in the me" & _
-        "nubar")
+                "with the current settings by selecting an option from the Preview menu in the me" & _
+                "nubar")
         '
         'panelPreviewDocTitle
         '
@@ -2684,6 +2830,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevPreviewDoc.Name = "buttonPrevPreviewDoc"
         Me.buttonPrevPreviewDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevPreviewDoc.TabIndex = 3
+        Me.buttonPrevPreviewDoc.UseVisualStyleBackColor = False
         '
         'buttonNextPreviewDoc
         '
@@ -2697,6 +2844,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextPreviewDoc.Name = "buttonNextPreviewDoc"
         Me.buttonNextPreviewDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextPreviewDoc.TabIndex = 2
+        Me.buttonNextPreviewDoc.UseVisualStyleBackColor = False
         '
         'buttonClosePreviewDoc
         '
@@ -2709,6 +2857,7 @@ Public Class frmDomainMapBrowser
         Me.buttonClosePreviewDoc.Name = "buttonClosePreviewDoc"
         Me.buttonClosePreviewDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonClosePreviewDoc.TabIndex = 1
+        Me.buttonClosePreviewDoc.UseVisualStyleBackColor = False
         '
         'tabPageMainXmlBehind
         '
@@ -2731,7 +2880,7 @@ Public Class frmDomainMapBrowser
         Me.tabControlXmlBehind.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlXmlBehind.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.tabControlXmlBehind, "To edit the XML behind for a domain model, mark your domain in the tree view and " & _
-        "then press the blue XML button in the toolbar")
+                "then press the blue XML button in the toolbar")
         '
         'panelXmlBehindTitle
         '
@@ -2768,6 +2917,7 @@ Public Class frmDomainMapBrowser
         Me.buttonApplyXmlBehind.Name = "buttonApplyXmlBehind"
         Me.buttonApplyXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonApplyXmlBehind.TabIndex = 3
+        Me.buttonApplyXmlBehind.UseVisualStyleBackColor = False
         '
         'buttonDiscardXmlBehind
         '
@@ -2780,6 +2930,7 @@ Public Class frmDomainMapBrowser
         Me.buttonDiscardXmlBehind.Name = "buttonDiscardXmlBehind"
         Me.buttonDiscardXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonDiscardXmlBehind.TabIndex = 2
+        Me.buttonDiscardXmlBehind.UseVisualStyleBackColor = False
         '
         'buttonPrevXmlBehind
         '
@@ -2793,6 +2944,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevXmlBehind.Name = "buttonPrevXmlBehind"
         Me.buttonPrevXmlBehind.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevXmlBehind.TabIndex = 5
+        Me.buttonPrevXmlBehind.UseVisualStyleBackColor = False
         '
         'buttonNextXmlBehind
         '
@@ -2806,6 +2958,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextXmlBehind.Name = "buttonNextXmlBehind"
         Me.buttonNextXmlBehind.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextXmlBehind.TabIndex = 4
+        Me.buttonNextXmlBehind.UseVisualStyleBackColor = False
         '
         'buttonCloseXmlBehind
         '
@@ -2818,6 +2971,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseXmlBehind.Name = "buttonCloseXmlBehind"
         Me.buttonCloseXmlBehind.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseXmlBehind.TabIndex = 1
+        Me.buttonCloseXmlBehind.UseVisualStyleBackColor = False
         '
         'tabPageMainCodeMap
         '
@@ -2840,8 +2994,8 @@ Public Class frmDomainMapBrowser
         Me.tabControlCodeMapDoc.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         Me.tabControlCodeMapDoc.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.tabControlCodeMapDoc, "You can preview the source code and xml that ObjectMapper would generate for you " & _
-        "with the current settings by selecting an option from the Preview menu in the me" & _
-        "nubar")
+                "with the current settings by selecting an option from the Preview menu in the me" & _
+                "nubar")
         '
         'Panel1
         '
@@ -2877,6 +3031,7 @@ Public Class frmDomainMapBrowser
         Me.buttonPrevCodeMapDoc.Name = "buttonPrevCodeMapDoc"
         Me.buttonPrevCodeMapDoc.Size = New System.Drawing.Size(16, 14)
         Me.buttonPrevCodeMapDoc.TabIndex = 3
+        Me.buttonPrevCodeMapDoc.UseVisualStyleBackColor = False
         '
         'buttonNextCodeMapDoc
         '
@@ -2890,6 +3045,7 @@ Public Class frmDomainMapBrowser
         Me.buttonNextCodeMapDoc.Name = "buttonNextCodeMapDoc"
         Me.buttonNextCodeMapDoc.Size = New System.Drawing.Size(17, 14)
         Me.buttonNextCodeMapDoc.TabIndex = 2
+        Me.buttonNextCodeMapDoc.UseVisualStyleBackColor = False
         '
         'buttonCloseCodeMapDoc
         '
@@ -2902,6 +3058,7 @@ Public Class frmDomainMapBrowser
         Me.buttonCloseCodeMapDoc.Name = "buttonCloseCodeMapDoc"
         Me.buttonCloseCodeMapDoc.Size = New System.Drawing.Size(15, 14)
         Me.buttonCloseCodeMapDoc.TabIndex = 1
+        Me.buttonCloseCodeMapDoc.UseVisualStyleBackColor = False
         '
         'panelMainTitle
         '
@@ -4346,6 +4503,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonBack.Enabled = False
         Me.toolBarButtonBack.ImageIndex = 92
+        Me.toolBarButtonBack.Name = "toolBarButtonBack"
         Me.toolBarButtonBack.Tag = "Back"
         Me.toolBarButtonBack.ToolTipText = "Back"
         '
@@ -4353,6 +4511,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonForward.Enabled = False
         Me.toolBarButtonForward.ImageIndex = 93
+        Me.toolBarButtonForward.Name = "toolBarButtonForward"
         Me.toolBarButtonForward.Tag = "Forward"
         Me.toolBarButtonForward.ToolTipText = "Forward"
         '
@@ -4360,17 +4519,20 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonUp.Enabled = False
         Me.toolBarButtonUp.ImageIndex = 94
+        Me.toolBarButtonUp.Name = "toolBarButtonUp"
         Me.toolBarButtonUp.Tag = "Up"
         Me.toolBarButtonUp.ToolTipText = "Up"
         '
         'ToolBarButton4
         '
+        Me.ToolBarButton4.Name = "ToolBarButton4"
         Me.ToolBarButton4.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonNew
         '
         Me.toolBarButtonNew.DropDownMenu = Me.menuNew
         Me.toolBarButtonNew.ImageIndex = 28
+        Me.toolBarButtonNew.Name = "toolBarButtonNew"
         Me.toolBarButtonNew.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton
         Me.toolBarButtonNew.Tag = "New"
         Me.toolBarButtonNew.ToolTipText = "New Domain Model"
@@ -4380,6 +4542,7 @@ Public Class frmDomainMapBrowser
         Me.toolBarButtonNewItem.DropDownMenu = Me.menuNewItem
         Me.toolBarButtonNewItem.Enabled = False
         Me.toolBarButtonNewItem.ImageIndex = 36
+        Me.toolBarButtonNewItem.Name = "toolBarButtonNewItem"
         Me.toolBarButtonNewItem.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton
         Me.toolBarButtonNewItem.Tag = "NewItem"
         Me.toolBarButtonNewItem.ToolTipText = "Add New Item"
@@ -4387,6 +4550,7 @@ Public Class frmDomainMapBrowser
         'toolBarButtonOpen
         '
         Me.toolBarButtonOpen.ImageIndex = 29
+        Me.toolBarButtonOpen.Name = "toolBarButtonOpen"
         Me.toolBarButtonOpen.Tag = "Open"
         Me.toolBarButtonOpen.ToolTipText = "Open File"
         '
@@ -4394,6 +4558,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonSave.Enabled = False
         Me.toolBarButtonSave.ImageIndex = 30
+        Me.toolBarButtonSave.Name = "toolBarButtonSave"
         Me.toolBarButtonSave.Tag = "Save"
         Me.toolBarButtonSave.ToolTipText = "Save"
         '
@@ -4401,17 +4566,20 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonSaveAll.Enabled = False
         Me.toolBarButtonSaveAll.ImageIndex = 31
+        Me.toolBarButtonSaveAll.Name = "toolBarButtonSaveAll"
         Me.toolBarButtonSaveAll.Tag = "SaveAll"
         Me.toolBarButtonSaveAll.ToolTipText = "Save All"
         '
         'ToolBarButton1
         '
+        Me.ToolBarButton1.Name = "ToolBarButton1"
         Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonPrint
         '
         Me.toolBarButtonPrint.Enabled = False
         Me.toolBarButtonPrint.ImageIndex = 110
+        Me.toolBarButtonPrint.Name = "toolBarButtonPrint"
         Me.toolBarButtonPrint.Tag = "Print"
         Me.toolBarButtonPrint.ToolTipText = "Print"
         '
@@ -4419,17 +4587,20 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonPrintPreview.Enabled = False
         Me.toolBarButtonPrintPreview.ImageIndex = 111
+        Me.toolBarButtonPrintPreview.Name = "toolBarButtonPrintPreview"
         Me.toolBarButtonPrintPreview.Tag = "PrintPreview"
         Me.toolBarButtonPrintPreview.ToolTipText = "Print Preview"
         '
         'ToolBarButton7
         '
+        Me.ToolBarButton7.Name = "ToolBarButton7"
         Me.ToolBarButton7.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonCut
         '
         Me.toolBarButtonCut.Enabled = False
         Me.toolBarButtonCut.ImageIndex = 89
+        Me.toolBarButtonCut.Name = "toolBarButtonCut"
         Me.toolBarButtonCut.Tag = "Cut"
         Me.toolBarButtonCut.ToolTipText = "Cut"
         '
@@ -4437,6 +4608,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonCopy.Enabled = False
         Me.toolBarButtonCopy.ImageIndex = 90
+        Me.toolBarButtonCopy.Name = "toolBarButtonCopy"
         Me.toolBarButtonCopy.Tag = "Copy"
         Me.toolBarButtonCopy.ToolTipText = "Copy"
         '
@@ -4444,6 +4616,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonPaste.Enabled = False
         Me.toolBarButtonPaste.ImageIndex = 91
+        Me.toolBarButtonPaste.Name = "toolBarButtonPaste"
         Me.toolBarButtonPaste.Tag = "Paste"
         Me.toolBarButtonPaste.ToolTipText = "Paste"
         '
@@ -4451,22 +4624,26 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonFind.Enabled = False
         Me.toolBarButtonFind.ImageIndex = 95
+        Me.toolBarButtonFind.Name = "toolBarButtonFind"
         Me.toolBarButtonFind.Tag = "Find"
         Me.toolBarButtonFind.ToolTipText = "Find"
         '
         'ToolBarButton2
         '
+        Me.ToolBarButton2.Name = "ToolBarButton2"
         Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonRun
         '
         Me.toolBarButtonRun.Enabled = False
         Me.toolBarButtonRun.ImageIndex = 38
+        Me.toolBarButtonRun.Name = "toolBarButtonRun"
         Me.toolBarButtonRun.Tag = "Run"
         Me.toolBarButtonRun.ToolTipText = "Run Model in Domain Explorer"
         '
         'ToolBarButton6
         '
+        Me.ToolBarButton6.Name = "ToolBarButton6"
         Me.ToolBarButton6.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonSynch
@@ -4474,6 +4651,7 @@ Public Class frmDomainMapBrowser
         Me.toolBarButtonSynch.DropDownMenu = Me.menuSynch
         Me.toolBarButtonSynch.Enabled = False
         Me.toolBarButtonSynch.ImageIndex = 37
+        Me.toolBarButtonSynch.Name = "toolBarButtonSynch"
         Me.toolBarButtonSynch.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton
         Me.toolBarButtonSynch.Tag = "Commit"
         Me.toolBarButtonSynch.ToolTipText = "Commit Synchronization"
@@ -4482,6 +4660,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonDiscard.Enabled = False
         Me.toolBarButtonDiscard.ImageIndex = 112
+        Me.toolBarButtonDiscard.Name = "toolBarButtonDiscard"
         Me.toolBarButtonDiscard.Tag = "Discard"
         Me.toolBarButtonDiscard.ToolTipText = "Discard Synchronization"
         '
@@ -4489,6 +4668,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonClassesToCode.Enabled = False
         Me.toolBarButtonClassesToCode.ImageIndex = 108
+        Me.toolBarButtonClassesToCode.Name = "toolBarButtonClassesToCode"
         Me.toolBarButtonClassesToCode.Tag = "ClassesToCode"
         Me.toolBarButtonClassesToCode.ToolTipText = "From Model To Code Synchronization"
         '
@@ -4496,6 +4676,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonCodeToClasses.Enabled = False
         Me.toolBarButtonCodeToClasses.ImageIndex = 109
+        Me.toolBarButtonCodeToClasses.Name = "toolBarButtonCodeToClasses"
         Me.toolBarButtonCodeToClasses.Tag = "CodeToClasses"
         Me.toolBarButtonCodeToClasses.ToolTipText = "From Code To Model Synchronization"
         '
@@ -4503,6 +4684,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonTablesToClasses.Enabled = False
         Me.toolBarButtonTablesToClasses.ImageIndex = 107
+        Me.toolBarButtonTablesToClasses.Name = "toolBarButtonTablesToClasses"
         Me.toolBarButtonTablesToClasses.Tag = "TablesToClasses"
         Me.toolBarButtonTablesToClasses.ToolTipText = "From Tables To Classes Synchronization"
         '
@@ -4510,6 +4692,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonClassesToTables.Enabled = False
         Me.toolBarButtonClassesToTables.ImageIndex = 106
+        Me.toolBarButtonClassesToTables.Name = "toolBarButtonClassesToTables"
         Me.toolBarButtonClassesToTables.Tag = "ClassesToTables"
         Me.toolBarButtonClassesToTables.ToolTipText = "From Classes To Tables Synchronization"
         '
@@ -4517,6 +4700,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonTablesToSource.Enabled = False
         Me.toolBarButtonTablesToSource.ImageIndex = 104
+        Me.toolBarButtonTablesToSource.Name = "toolBarButtonTablesToSource"
         Me.toolBarButtonTablesToSource.Tag = "TablesToSource"
         Me.toolBarButtonTablesToSource.ToolTipText = "From Model To Data Source Synchronization"
         '
@@ -4524,17 +4708,20 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonSourceToTables.Enabled = False
         Me.toolBarButtonSourceToTables.ImageIndex = 105
+        Me.toolBarButtonSourceToTables.Name = "toolBarButtonSourceToTables"
         Me.toolBarButtonSourceToTables.Tag = "SourceToTables"
         Me.toolBarButtonSourceToTables.ToolTipText = "From Data Source To Model Synchronization"
         '
         'ToolBarButton3
         '
+        Me.ToolBarButton3.Name = "ToolBarButton3"
         Me.ToolBarButton3.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonExplorer
         '
         Me.toolBarButtonExplorer.Enabled = False
         Me.toolBarButtonExplorer.ImageIndex = 46
+        Me.toolBarButtonExplorer.Name = "toolBarButtonExplorer"
         Me.toolBarButtonExplorer.Tag = "Explorer"
         Me.toolBarButtonExplorer.ToolTipText = "Project Explorer"
         '
@@ -4542,6 +4729,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonProperties.Enabled = False
         Me.toolBarButtonProperties.ImageIndex = 88
+        Me.toolBarButtonProperties.Name = "toolBarButtonProperties"
         Me.toolBarButtonProperties.Tag = "Properties"
         Me.toolBarButtonProperties.ToolTipText = "Properties"
         '
@@ -4549,6 +4737,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonTools.Enabled = False
         Me.toolBarButtonTools.ImageIndex = 97
+        Me.toolBarButtonTools.Name = "toolBarButtonTools"
         Me.toolBarButtonTools.Tag = "Tools"
         Me.toolBarButtonTools.ToolTipText = "Tools"
         '
@@ -4556,6 +4745,7 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonList.Enabled = False
         Me.toolBarButtonList.ImageIndex = 98
+        Me.toolBarButtonList.Name = "toolBarButtonList"
         Me.toolBarButtonList.Tag = "List"
         Me.toolBarButtonList.ToolTipText = "List View"
         '
@@ -4564,6 +4754,7 @@ Public Class frmDomainMapBrowser
         Me.toolBarButtonXmlBehind.DropDownMenu = Me.menuXmlBehind
         Me.toolBarButtonXmlBehind.Enabled = False
         Me.toolBarButtonXmlBehind.ImageIndex = 86
+        Me.toolBarButtonXmlBehind.Name = "toolBarButtonXmlBehind"
         Me.toolBarButtonXmlBehind.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton
         Me.toolBarButtonXmlBehind.Tag = "Xml"
         Me.toolBarButtonXmlBehind.ToolTipText = "Xml Behind"
@@ -4572,17 +4763,20 @@ Public Class frmDomainMapBrowser
         '
         Me.toolBarButtonUml.Enabled = False
         Me.toolBarButtonUml.ImageIndex = 99
+        Me.toolBarButtonUml.Name = "toolBarButtonUml"
         Me.toolBarButtonUml.Tag = "Uml"
         Me.toolBarButtonUml.ToolTipText = "Uml Diagram"
         '
         'ToolBarButton5
         '
+        Me.ToolBarButton5.Name = "ToolBarButton5"
         Me.ToolBarButton5.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
         'toolBarButtonWizards
         '
         Me.toolBarButtonWizards.DropDownMenu = Me.menuWizards
         Me.toolBarButtonWizards.ImageIndex = 84
+        Me.toolBarButtonWizards.Name = "toolBarButtonWizards"
         Me.toolBarButtonWizards.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton
         Me.toolBarButtonWizards.Tag = "Wizard"
         Me.toolBarButtonWizards.ToolTipText = "Wizards"
@@ -4901,9 +5095,9 @@ Public Class frmDomainMapBrowser
         'panelProperties
         '
         Me.panelProperties.Controls.Add(Me.mapPropertyGrid)
-        Me.panelProperties.DockPadding.All = 6
         Me.panelProperties.Location = New System.Drawing.Point(8, 8)
         Me.panelProperties.Name = "panelProperties"
+        Me.panelProperties.Padding = New System.Windows.Forms.Padding(6)
         Me.panelProperties.Size = New System.Drawing.Size(157, 160)
         Me.panelProperties.TabIndex = 11
         '
@@ -4914,10 +5108,7 @@ Public Class frmDomainMapBrowser
         Me.PrintPreviewDialog1.ClientSize = New System.Drawing.Size(400, 300)
         Me.PrintPreviewDialog1.Enabled = True
         Me.PrintPreviewDialog1.Icon = CType(resources.GetObject("PrintPreviewDialog1.Icon"), System.Drawing.Icon)
-        Me.PrintPreviewDialog1.Location = New System.Drawing.Point(118, 17)
-        Me.PrintPreviewDialog1.MinimumSize = New System.Drawing.Size(375, 250)
         Me.PrintPreviewDialog1.Name = "PrintPreviewDialog1"
-        Me.PrintPreviewDialog1.TransparencyKey = System.Drawing.Color.Empty
         Me.PrintPreviewDialog1.Visible = False
         '
         'enumValueMenu
@@ -4999,6 +5190,7 @@ Public Class frmDomainMapBrowser
         Me.panelProperties.ResumeLayout(False)
         Me.DockPanelContainer.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 

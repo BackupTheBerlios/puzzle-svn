@@ -13,8 +13,7 @@ namespace Puzzle.NCore.Runtime.Serialization
 
         public override void Serialize(XmlTextWriter xml)
         {
-            //xml.WriteStartElement ("null");
-            //xml.WriteEndElement ();
+
         }
 
         public override void SerializeReference(XmlTextWriter xml)

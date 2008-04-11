@@ -18,21 +18,17 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.dummy.bmp")]
     public abstract class Element
     {
-        private ArrayList children = new ArrayList();
+        private IList<Element> children = new List<Element>();
 
         [Browsable(false)]
         public IList<Element> AllChildren
         {
             get
             {
-                List<Element> tmp = new List<Element>();
-                foreach (Element element in children)
-                {
-                    element.Parent = this;
-                    tmp.Add(element);
-                }
+                var res = from child in children
+                          select child;
 
-                return tmp;
+                return res.ToList();
             }
         }
 
@@ -41,49 +37,35 @@ namespace GenerationStudio.Elements
         {
             get
             {
-                List<Element> tmp = new List<Element>();
-                foreach (Element element in children)
-                {
-                    element.Parent = this;
-                    if (!element.Excluded)
-                    {
-                        tmp.Add(element);
-                    }
-                }
+                
+                var res = from child in children
+                          where !child.Excluded
+                          select child;
 
-                return tmp;
+                return res.ToList();
             }
         }
 
         public IList<T> GetChildren<T>() where T : Element
         {
-            List<T> tmp = new List<T> ();
-            foreach (Element element in children)
-            {
-                if (element.Excluded)
-                    continue;
+            var res = from child in children
+                      where !child.Excluded &&
+                      child is T
+                      select child;
 
-                if (element is T)
-                    tmp.Add((T)element);
-            }
-            return tmp;
+            return res.Cast<T>().ToList();
         }
 
         public T GetChild<T>() where T : Element
         {
-            foreach (Element element in children)
-            {
-                if (element.Excluded)
-                    continue;
+            var res = from child in children
+                      where !child.Excluded &&
+                      child is T
+                      select child;
 
-                if (element is T)
-                    return (T)element;
-            }
-            return null;
+            return res.Cast<T>().FirstOrDefault();
         }
 
-        [OptionalField]
-        [field: NonSerialized]
         private Element parent;
         [Browsable(false)]
         public Element Parent
@@ -98,7 +80,6 @@ namespace GenerationStudio.Elements
             }
         }
 
-        [OptionalField]
         private bool excluded;
         [Browsable(false)]
         public bool Excluded
@@ -118,18 +99,8 @@ namespace GenerationStudio.Elements
         {
             return 0;
         }
-        
-        public void AddChild(Element child)
-        {
-            children.Add(child);
-            child.parent = this;
-            OnNotifyChange();
-        }
 
-        public void ClearChildren()
-        {
-            children.Clear();
-        }
+        
 
 
         public Element()
@@ -229,6 +200,17 @@ namespace GenerationStudio.Elements
             return string.Format("{0}|{1}|{2}", GetIconName(), Excluded, GetErrorsRecursive().Count > 0);
         }
 
+        public void ClearChildren()
+        {
+            children.Clear();
+        }
+
+        public void AddChild(Element child)
+        {
+            children.Add(child);
+            child.parent = this;
+            OnNotifyChange();
+        }
 
         public void RemoveChild(Element child)
         {
@@ -236,6 +218,7 @@ namespace GenerationStudio.Elements
             OnNotifyChange();
         }
 
+        [Browsable(false)]
         public RootElement Root
         {
             get

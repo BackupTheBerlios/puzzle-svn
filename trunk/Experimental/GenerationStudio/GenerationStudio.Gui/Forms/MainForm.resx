@@ -126,22 +126,6 @@
   <metadata name="ProjectToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>548, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="RefreshProjectTreeButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAeZJREFUOE+lkstr
-        E1EUh+c/Ehcu3IgrQRcuxY0uWroREcyiglJEKHVRaIuPiBUtptSiQS1WW2qxPrIwCPVRNQ02Tdq8ZiaN
-        bTFNOjOZzNe5dzqkmaCIDvy4XGa+79xz7ijK/z79j0oE0/egxOX7Ot13NM7eUOkYKHLyaoHjV/IcuZTn
-        UHdO5mAoiyLgyDtkRt44DL9qEJ6xGXpRp3/Cojdq0jNucCFS4/zdKmduV+m6WZHZ3zXvCfamd0zn4ojO
-        uVte5RN9BY715Di8W1FU9bOvI44y+iyO4/DXsW0Hs+6QyZc5cLQT5d6T2B/h09eU3fcOlo2Ea0aDqbdf
-        PMHww7k2gVr9SmLtKe9zAwiBiGWBYSLhSs1uCoItCNiH/LUz7EmqBi7cYKOyRxBsQXwoqou5qJWmbGsb
-        NrbcuHB50/p9C9PpkIT9Y4tVwNHFEOVfuHAdbd1sCsJjL9tm4B89Xf4u4YT+TQq1ddB+WuRLJtGZz94Q
-        r0emWwTB/v39XGqCbAkJr2oGo88/tQvEHYurEtCpIYWppUEmk4PMFxMSTq/BimqQKm4HBQ52A3lV3qQ9
-        SWnTHaR7bAFndPihwnLBIJmttQrEX5VMrbKwuMKHhQyxjxlm48tMxlI8fr3E+Gx7WloQw/jX7AA5sPNn
-        acSUZwAAAABJRU5ErkJggg==
-</value>
-  </data>
   <metadata name="OwnerColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -166,6 +150,22 @@
   <metadata name="OpenFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 54</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="RefreshProjectTreeButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAeZJREFUOE+lkstr
+        E1EUh+c/Ehcu3IgrQRcuxY0uWroREcyiglJEKHVRaIuPiBUtptSiQS1WW2qxPrIwCPVRNQ02Tdq8ZiaN
+        bTFNOjOZzNe5dzqkmaCIDvy4XGa+79xz7ijK/z79j0oE0/egxOX7Ot13NM7eUOkYKHLyaoHjV/IcuZTn
+        UHdO5mAoiyLgyDtkRt44DL9qEJ6xGXpRp3/Cojdq0jNucCFS4/zdKmduV+m6WZHZ3zXvCfamd0zn4ojO
+        uVte5RN9BY715Di8W1FU9bOvI44y+iyO4/DXsW0Hs+6QyZc5cLQT5d6T2B/h09eU3fcOlo2Ea0aDqbdf
+        PMHww7k2gVr9SmLtKe9zAwiBiGWBYSLhSs1uCoItCNiH/LUz7EmqBi7cYKOyRxBsQXwoqou5qJWmbGsb
+        NrbcuHB50/p9C9PpkIT9Y4tVwNHFEOVfuHAdbd1sCsJjL9tm4B89Xf4u4YT+TQq1ddB+WuRLJtGZz94Q
+        r0emWwTB/v39XGqCbAkJr2oGo88/tQvEHYurEtCpIYWppUEmk4PMFxMSTq/BimqQKm4HBQ52A3lV3qQ9
+        SWnTHaR7bAFndPihwnLBIJmttQrEX5VMrbKwuMKHhQyxjxlm48tMxlI8fr3E+Gx7WloQw/jX7AA5sPNn
+        acSUZwAAAABJRU5ErkJggg==
+</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>79</value>
   </metadata>

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GenerationStudio.Elements;
+using GenerationStudio.Forms.Docking;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace GenerationStudio.Gui
 {
@@ -25,9 +27,9 @@ namespace GenerationStudio.Gui
 
         public void ShowEditor(Control editor)
         {
-            DocumentPanel.Controls.Clear();
-            DocumentPanel.Controls.Add(editor);
-            editor.Dock = DockStyle.Fill;
+            DockingForm form = new DockingForm();
+            form.SetContent(editor, "Blah");            
+            form.Show(DockPanel,DockState.Document);
         }
 
         public void RefreshProjectTree()

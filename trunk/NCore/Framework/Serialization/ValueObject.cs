@@ -24,7 +24,7 @@ namespace Puzzle.NCore.Runtime.Serialization
         public override void SerializeReference(XmlTextWriter xml)
         {
             xml.WriteAttributeString("value", Value);
-            xml.WriteAttributeString("type", Type.FullName);
+            xml.WriteAttributeString("type", Type.AssemblyQualifiedName);
         }
 
         public override object GetValue()

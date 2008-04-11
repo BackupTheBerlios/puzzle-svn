@@ -19,7 +19,7 @@ namespace Puzzle.NCore.Runtime.Serialization
         {
             xml.WriteStartElement("object");
             xml.WriteAttributeString("id", ID.ToString());
-            xml.WriteAttributeString("type", Type.FullName);
+            xml.WriteAttributeString("type", Type.AssemblyQualifiedName);
 
             foreach (Field property in Fields)
             {

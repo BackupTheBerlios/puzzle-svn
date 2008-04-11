@@ -108,21 +108,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Windows\Forms\Controls\Syntaxbox\CoreLib\Puzzle.CoreLib.NET 2.0.csproj">
-      <Project>{7858FB56-9BB3-40CE-BA9C-5FB9F04E79DE}</Project>
-      <Name>Puzzle.CoreLib.NET 2.0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Windows\Forms\Controls\Syntaxbox\Puzzle.Syntaxbox.DefaultSyntaxFiles\Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0.csproj">
-      <Project>{F2D0D973-95A3-47EE-AF0C-2336192CB264}</Project>
-      <Name>Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Windows\Forms\Controls\Syntaxbox\SyntaxBox\Puzzle.SyntaxBox.NET 2.0.csproj">
+    <ProjectReference Include="..\..\..\..\SyntaxBox\Control\Puzzle.SyntaxBox.NET 2.0.csproj">
       <Project>{19EF75B2-B414-4EB0-9486-160FAF93E62C}</Project>
       <Name>Puzzle.SyntaxBox.NET 2.0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Windows\Forms\Controls\Syntaxbox\SyntaxDocument\Puzzle.SyntaxDocument.NET 2.0.csproj">
-      <Project>{55D040D8-B8F2-4C15-8FCD-A73F82A3882C}</Project>
-      <Name>Puzzle.SyntaxDocument.NET 2.0</Name>
+    <ProjectReference Include="..\..\..\..\SyntaxBox\Puzzle.Syntaxbox.DefaultSyntaxFiles\Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0.csproj">
+      <Project>{F2D0D973-95A3-47EE-AF0C-2336192CB264}</Project>
+      <Name>Puzzle.Syntaxbox.DefaultSyntaxFiles.NET 2.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

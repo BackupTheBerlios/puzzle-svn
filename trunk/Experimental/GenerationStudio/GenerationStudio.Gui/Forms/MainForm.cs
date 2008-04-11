@@ -15,6 +15,10 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Soap;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Remoting.Messaging;
+using GenerationStudio.Forms.Docking;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace GenerationStudio.Gui
 {
@@ -25,19 +29,25 @@ namespace GenerationStudio.Gui
             InitializeComponent();
         }
 
-        RootElement root;
+        private RootElement root;
+        private ErrorDockingForm ErrorDockingForm = new ErrorDockingForm();
+        private ProjectDockingForm ProjectDockingForm = new ProjectDockingForm();
+        private PropertiesDockingForm PropertiesDockingForm = new PropertiesDockingForm();
+
         private void Form1_Load(object sender, EventArgs e)
         {
             MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-        //    MainToolStrip.Renderer = new Office2007Renderer.Office2007Renderer();
-            ToolStripContainer.TopToolStripPanel.Renderer = new Office2007Renderer.Office2007Renderer();
             ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
             StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
 
+            ErrorDockingForm.SetContent(ErrorPanel, "Error List");
+            ProjectDockingForm.SetContent(ProjectPanel, "Solution Explorer");
+            PropertiesDockingForm.SetContent(PropertyPanel, "Properties");
 
-            
 
-            
+            ErrorDockingForm.Show(DockPanel, DockState.DockBottomAutoHide);
+            ProjectDockingForm.Show(DockPanel,DockState.DockLeft);
+            PropertiesDockingForm.Show(DockPanel, DockState.DockLeft);
 
             NewProject();
             Engine.RegisterAllElementTypes(root.GetType().Assembly);
@@ -339,18 +349,27 @@ namespace GenerationStudio.Gui
 
         private void MainMenuFileSaveProject_Click(object sender, EventArgs e)
         {
-            
-            FileStream fs = new FileStream("c:\\productobjectsoapformatted.Data", FileMode.Create);
-            SoapFormatter sf = new SoapFormatter();
-            sf.AssemblyFormat = FormatterAssemblyStyle.Simple;
-            sf.FilterLevel = TypeFilterLevel.Low;
-            sf.TypeFormat = FormatterTypeStyle.TypesWhenNeeded;
-            SurrogateSelector selector = new SurrogateSelector();
-            sf.SurrogateSelector = selector;     
 
+            SaveProject();
+
+            //SerializerEngine se = new SerializerEngine();
+            //using (FileStream fs = new FileStream(@"c:\labb.txt", FileMode.Create))
+            //{
+            //    se.Serialize(fs, root);
+            //    fs.Flush();
+            //}
+
+        }
+
+        private void SaveProject()
+        {
+            FileStream fs = new FileStream("c:\\productobjectsoapformatted.Data", FileMode.Create);
+            BinaryFormatter sf = new BinaryFormatter();
+            sf.AssemblyFormat = FormatterAssemblyStyle.Simple;
+            sf.FilterLevel = TypeFilterLevel.Full;
+            sf.TypeFormat = FormatterTypeStyle.TypesAlways;
             sf.Serialize(fs, root);
             fs.Close();
-
         }
 
         private void MainMenuFileOpenProject_Click(object sender, EventArgs e)
@@ -365,13 +384,10 @@ namespace GenerationStudio.Gui
         {
             NewProject();
             FileStream fs = new FileStream(fileName, FileMode.Open);
-            SoapFormatter sf = new SoapFormatter();
+            BinaryFormatter sf = new BinaryFormatter();
             sf.AssemblyFormat = FormatterAssemblyStyle.Simple;
-            sf.FilterLevel = TypeFilterLevel.Low;
-            sf.TypeFormat = FormatterTypeStyle.TypesWhenNeeded;
-            SurrogateSelector selector = new SurrogateSelector();
-            sf.SurrogateSelector = selector;            
-            
+            sf.FilterLevel = TypeFilterLevel.Full;
+            sf.TypeFormat = FormatterTypeStyle.TypesAlways;
             root = (RootElement)sf.Deserialize(fs);
             fs.Close();
             FillTreeView();
