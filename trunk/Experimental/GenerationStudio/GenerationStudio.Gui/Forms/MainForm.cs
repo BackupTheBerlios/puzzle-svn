@@ -438,6 +438,6 @@ namespace GenerationStudio.Gui
             {
                 SelectElementInProjectTree(errorElement, childNode);
             }
-        }        
+        }       
     }
 }

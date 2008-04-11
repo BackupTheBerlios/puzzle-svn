@@ -27,9 +27,11 @@ namespace GenerationStudio.Gui
 
         public void ShowEditor(Control editor)
         {
+
             DockingForm form = new DockingForm();
-            form.SetContent(editor, "Blah");            
-            form.Show(DockPanel,DockState.Document);
+            form.SetContent(editor, "Blah");
+            form.Show(DockPanel);
+            MainMenu.SendToBack();
         }
 
         public void RefreshProjectTree()

@@ -16,7 +16,7 @@ namespace GenerationStudio.Forms.Docking
         public DockingForm()
         {
             HideOnClose = true;
-            base.DockAreas = DockAreas.DockBottom | DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockTop | DockAreas.Document | DockAreas.Float; 
+            base.DockAreas = DockAreas.DockBottom | DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockTop | DockAreas.Document | DockAreas.Float;             
         }
 
         public void SetContent(Control content, string title)
