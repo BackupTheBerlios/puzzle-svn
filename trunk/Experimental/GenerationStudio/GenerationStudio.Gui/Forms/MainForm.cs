@@ -33,7 +33,7 @@ namespace GenerationStudio.Gui
         private ErrorDockingForm ErrorDockingForm = new ErrorDockingForm();
         private ProjectDockingForm ProjectDockingForm = new ProjectDockingForm();
         private PropertiesDockingForm PropertiesDockingForm = new PropertiesDockingForm();
-
+        private StartDockingForm StartDockingForm = new StartDockingForm();
         private void Form1_Load(object sender, EventArgs e)
         {
             MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
@@ -45,14 +45,19 @@ namespace GenerationStudio.Gui
             PropertiesDockingForm.SetContent(PropertyPanel, "Properties");
 
 
-            ErrorDockingForm.Show(DockPanel, DockState.DockBottomAutoHide);
+            ErrorDockingForm.Show(DockPanel, DockState.DockBottom);
             ProjectDockingForm.Show(DockPanel,DockState.DockLeft);
-            PropertiesDockingForm.Show(DockPanel, DockState.DockLeft);
+            PropertiesDockingForm.Show(ProjectDockingForm.Pane, DockAlignment.Bottom, 0.5);
+            StartDockingForm.Show(DockPanel, DockState.Document);
 
             NewProject();
             Engine.RegisterAllElementTypes(root.GetType().Assembly);
 
             Engine.NotifyChange += new EventHandler(Engine_NotifyChange);
+
+            MainToolStrip.SendToBack();
+            MainMenu.SendToBack();
+            
         }
 
         void Engine_NotifyChange(object sender, EventArgs e)
@@ -71,13 +76,14 @@ namespace GenerationStudio.Gui
         {
             IList<ElementError> allErrors = root.GetErrorsRecursive();
             DataTable dt = new DataTable();
-            dt.Columns.Add("Owner", typeof(string));
+            dt.Columns.Add("OwnerType", typeof(string));
+            dt.Columns.Add("Owner", typeof(string));            
             dt.Columns.Add("Message", typeof(string));
             dt.Columns.Add("Item", typeof(Element));
             ErrorGrid.AutoGenerateColumns = false;
             foreach (ElementError error in allErrors)
             {
-                dt.Rows.Add(error.Owner.GetDisplayName (), error.Message,error.Owner);
+                dt.Rows.Add(error.Owner.GetType().GetElementName(), error.Owner.GetDisplayName (), error.Message,error.Owner);
             }
             ErrorGrid.DataSource = dt;
         }
@@ -399,7 +405,6 @@ namespace GenerationStudio.Gui
         {
             root = new RootElement();
             FillTreeView();
-            DocumentPanel.Controls.Clear();
             elementEditors = new Dictionary<Element, Dictionary<string, Control>>();
         }
 

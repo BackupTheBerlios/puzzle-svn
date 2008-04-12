@@ -260,7 +260,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 			{
 				Row r = this.CurrentRow;
 				Row r2 = r.NextVisibleRow;
-				this.Position.Y = r2.Index;
+                if (r2 == null)
+                    return;
+
+                this.Position.Y = r2.Index;
 				if (this.CurrentRow.IsCollapsed)
 				{
 					x = 0;

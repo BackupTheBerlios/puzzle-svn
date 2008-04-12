@@ -138,7 +138,7 @@
 	<Block Name="CS Literal Char" Style="CS String" EscapeChar="" IsMultiline="false">
 		<Scope Start="@'" End="'" Style="CS String" />
   </Block>
-	<Style Name="Text" ForeColor="SteelBlue" BackColor="White" Bold="false" Italic="false" Underline="false" />
+	<Style Name="Text" ForeColor="SteelBlue" BackColor="" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Code" ForeColor="Black" BackColor="LightYellow" Bold="false" Italic="false" Underline="false" />
   <Style Name="CS Directive Keyword" ForeColor="Blue" BackColor="LightYellow" Bold="true" Italic="false" Underline="false" />
 	<Style Name="CS Code" ForeColor="" BackColor="GhostWhite" Bold="false" Italic="false" Underline="false" />

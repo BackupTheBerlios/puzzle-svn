@@ -213,5 +213,35 @@ namespace GenerationStudio.Gui
                 Console.WriteLine(x);
             }
         }
+
+        private void CodePage_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowEditors();
+        }
+
+        private void ShowEditors()
+        {
+            if (TemplateButton.Checked)
+            {
+                TemplateSyntaxBox.Visible = true;
+                SourceSyntaxBox.Visible = false;
+                OutputSyntaxBox.Visible = false;
+            }
+
+            if (SourceButton.Checked)
+            {
+                TemplateSyntaxBox.Visible = false;
+                SourceSyntaxBox.Visible = true;
+                OutputSyntaxBox.Visible = false;
+            }
+
+            if (OutputButton.Checked)
+            {
+                TemplateSyntaxBox.Visible = false;
+                SourceSyntaxBox.Visible = false;
+                OutputSyntaxBox.Visible = true;
+            }
+
+        }
     }
 }

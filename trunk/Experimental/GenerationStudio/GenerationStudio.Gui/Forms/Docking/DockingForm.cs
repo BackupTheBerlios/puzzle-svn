@@ -9,17 +9,17 @@ namespace GenerationStudio.Forms.Docking
 {
     public class DockingForm : DockContent
     {
-        private Control content;
-        private ToolStripContainer Container;
-        private Control oldParent;
+        protected Control content;
+        protected ToolStripContainer Container;
+        protected Control oldParent;
 
         public DockingForm()
         {
             HideOnClose = true;
-            base.DockAreas = DockAreas.DockBottom | DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockTop | DockAreas.Document | DockAreas.Float;             
+            base.DockAreas = DockAreas.DockBottom | DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockTop | DockAreas.Document | DockAreas.Float;
         }
 
-        public void SetContent(Control content, string title)
+        public virtual void SetContent(Control content, string title)
         {
             this.HideOnClose = true;
             this.content = content;

@@ -60,6 +60,13 @@ namespace GenerationStudio.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap _class {
+            get {
+                object obj = ResourceManager.GetObject("class", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;Language Name=&quot;Visual C#&quot; Startblock=&quot;CS Code&quot;&gt;
@@ -103,6 +110,20 @@ namespace GenerationStudio.Properties {
         internal static string CSharpTemplate {
             get {
                 return ResourceManager.GetString("CSharpTemplate", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap project {
+            get {
+                object obj = ResourceManager.GetObject("project", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap template {
+            get {
+                object obj = ResourceManager.GetObject("template", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

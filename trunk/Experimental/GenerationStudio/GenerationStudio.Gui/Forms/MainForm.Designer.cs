@@ -29,26 +29,22 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node0");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ProjectTree = new System.Windows.Forms.TreeView();
             this.Icons = new System.Windows.Forms.ImageList(this.components);
             this.ProjectTopPanel = new System.Windows.Forms.Panel();
             this.ProjectToolStrip = new System.Windows.Forms.ToolStrip();
-            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
             this.ElementProperties = new System.Windows.Forms.PropertyGrid();
-            this.DocumentPanel = new System.Windows.Forms.Panel();
             this.ErrorPanel = new System.Windows.Forms.Panel();
             this.ErrorGrid = new System.Windows.Forms.DataGridView();
+            this.OwnerTypeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OwnerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MessageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProjectContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenuViewSolutionExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenuViewErrorList = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +64,14 @@
             this.ProjectPanel = new System.Windows.Forms.Panel();
             this.PropertyPanel = new System.Windows.Forms.Panel();
             this.DesignTimeContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.MainToolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainMenuFileOpenProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainMenuFileSaveProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.RefreshProjectTreeButton = new System.Windows.Forms.ToolStripButton();
             this.ProjectTopPanel.SuspendLayout();
             this.ProjectToolStrip.SuspendLayout();
             this.ErrorPanel.SuspendLayout();
@@ -77,6 +81,7 @@
             this.ProjectPanel.SuspendLayout();
             this.PropertyPanel.SuspendLayout();
             this.DesignTimeContainer.SuspendLayout();
+            this.MainToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // ProjectTree
@@ -86,15 +91,15 @@
             this.ProjectTree.ImageIndex = 0;
             this.ProjectTree.ImageList = this.Icons;
             this.ProjectTree.LabelEdit = true;
-            this.ProjectTree.Location = new System.Drawing.Point(5, 31);
+            this.ProjectTree.Location = new System.Drawing.Point(0, 26);
             this.ProjectTree.Name = "ProjectTree";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Node0";
             this.ProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.ProjectTree.SelectedImageIndex = 0;
             this.ProjectTree.ShowNodeToolTips = true;
-            this.ProjectTree.Size = new System.Drawing.Size(161, 107);
+            this.ProjectTree.Size = new System.Drawing.Size(171, 117);
             this.ProjectTree.TabIndex = 3;
             this.ProjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.ProjectTree_AfterLabelEdit);
             this.ProjectTree.DoubleClick += new System.EventHandler(this.ProjectTree_DoubleClick);
@@ -113,9 +118,9 @@
             // 
             this.ProjectTopPanel.Controls.Add(this.ProjectToolStrip);
             this.ProjectTopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ProjectTopPanel.Location = new System.Drawing.Point(5, 5);
+            this.ProjectTopPanel.Location = new System.Drawing.Point(0, 0);
             this.ProjectTopPanel.Name = "ProjectTopPanel";
-            this.ProjectTopPanel.Size = new System.Drawing.Size(161, 26);
+            this.ProjectTopPanel.Size = new System.Drawing.Size(171, 26);
             this.ProjectTopPanel.TabIndex = 4;
             // 
             // ProjectToolStrip
@@ -124,42 +129,23 @@
             this.RefreshProjectTreeButton});
             this.ProjectToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ProjectToolStrip.Name = "ProjectToolStrip";
-            this.ProjectToolStrip.Size = new System.Drawing.Size(161, 25);
+            this.ProjectToolStrip.Size = new System.Drawing.Size(171, 25);
             this.ProjectToolStrip.TabIndex = 1;
-            // 
-            // RefreshProjectTreeButton
-            // 
-            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
-            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
-            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
-            this.RefreshProjectTreeButton.Text = "toolStripButton1";
-            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
-            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
             // 
             // ElementProperties
             // 
             this.ElementProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ElementProperties.Location = new System.Drawing.Point(5, 5);
+            this.ElementProperties.Location = new System.Drawing.Point(0, 0);
             this.ElementProperties.Name = "ElementProperties";
-            this.ElementProperties.Size = new System.Drawing.Size(161, 133);
+            this.ElementProperties.Size = new System.Drawing.Size(171, 143);
             this.ElementProperties.TabIndex = 3;
-            // 
-            // DocumentPanel
-            // 
-            this.DocumentPanel.Location = new System.Drawing.Point(534, 3);
-            this.DocumentPanel.Name = "DocumentPanel";
-            this.DocumentPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.DocumentPanel.Size = new System.Drawing.Size(171, 143);
-            this.DocumentPanel.TabIndex = 1;
             // 
             // ErrorPanel
             // 
+            this.ErrorPanel.BackColor = System.Drawing.Color.Transparent;
             this.ErrorPanel.Controls.Add(this.ErrorGrid);
             this.ErrorPanel.Location = new System.Drawing.Point(3, 3);
             this.ErrorPanel.Name = "ErrorPanel";
-            this.ErrorPanel.Padding = new System.Windows.Forms.Padding(5);
             this.ErrorPanel.Size = new System.Drawing.Size(171, 143);
             this.ErrorPanel.TabIndex = 2;
             // 
@@ -174,25 +160,33 @@
             this.ErrorGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.ErrorGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ErrorGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.OwnerTypeColumn,
             this.OwnerColumn,
             this.MessageColumn});
             this.ErrorGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ErrorGrid.GridColor = System.Drawing.SystemColors.Window;
-            this.ErrorGrid.Location = new System.Drawing.Point(5, 5);
+            this.ErrorGrid.Location = new System.Drawing.Point(0, 0);
             this.ErrorGrid.Name = "ErrorGrid";
             this.ErrorGrid.ReadOnly = true;
             this.ErrorGrid.RowHeadersVisible = false;
             this.ErrorGrid.RowTemplate.Height = 18;
             this.ErrorGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ErrorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ErrorGrid.Size = new System.Drawing.Size(161, 133);
+            this.ErrorGrid.Size = new System.Drawing.Size(171, 143);
             this.ErrorGrid.TabIndex = 0;
             this.ErrorGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ErrorGrid_CellDoubleClick);
+            // 
+            // OwnerTypeColumn
+            // 
+            this.OwnerTypeColumn.DataPropertyName = "OwnerType";
+            this.OwnerTypeColumn.HeaderText = "Type";
+            this.OwnerTypeColumn.Name = "OwnerTypeColumn";
+            this.OwnerTypeColumn.ReadOnly = true;
             // 
             // OwnerColumn
             // 
             this.OwnerColumn.DataPropertyName = "Owner";
-            this.OwnerColumn.HeaderText = "Owner";
+            this.OwnerColumn.HeaderText = "Element";
             this.OwnerColumn.Name = "OwnerColumn";
             this.OwnerColumn.ReadOnly = true;
             // 
@@ -230,33 +224,10 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Image = global::GenerationStudio.Properties.Resources.newproject;
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-            this.newToolStripMenuItem.Text = "&New";
-            // 
-            // MainMenuFileOpenProject
-            // 
-            this.MainMenuFileOpenProject.Image = global::GenerationStudio.Properties.Resources.open;
-            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
-            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(111, 22);
-            this.MainMenuFileOpenProject.Text = "&Open";
-            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
-            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(108, 6);
-            // 
-            // MainMenuFileSaveProject
-            // 
-            this.MainMenuFileSaveProject.Image = global::GenerationStudio.Properties.Resources.save;
-            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
-            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(111, 22);
-            this.MainMenuFileSaveProject.Text = "&Save";
-            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -336,7 +307,6 @@
             this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DockPanel.Location = new System.Drawing.Point(0, 0);
             this.DockPanel.Name = "DockPanel";
-            this.DockPanel.ShowDocumentIcon = true;
             this.DockPanel.Size = new System.Drawing.Size(1033, 363);
             this.DockPanel.TabIndex = 0;
             // 
@@ -389,20 +359,20 @@
             // 
             // ProjectPanel
             // 
+            this.ProjectPanel.BackColor = System.Drawing.Color.Transparent;
             this.ProjectPanel.Controls.Add(this.ProjectTree);
             this.ProjectPanel.Controls.Add(this.ProjectTopPanel);
             this.ProjectPanel.Location = new System.Drawing.Point(357, 3);
             this.ProjectPanel.Name = "ProjectPanel";
-            this.ProjectPanel.Padding = new System.Windows.Forms.Padding(5);
             this.ProjectPanel.Size = new System.Drawing.Size(171, 143);
             this.ProjectPanel.TabIndex = 1;
             // 
             // PropertyPanel
             // 
+            this.PropertyPanel.BackColor = System.Drawing.Color.Transparent;
             this.PropertyPanel.Controls.Add(this.ElementProperties);
             this.PropertyPanel.Location = new System.Drawing.Point(180, 3);
             this.PropertyPanel.Name = "PropertyPanel";
-            this.PropertyPanel.Padding = new System.Windows.Forms.Padding(5);
             this.PropertyPanel.Size = new System.Drawing.Size(171, 143);
             this.PropertyPanel.TabIndex = 1;
             // 
@@ -412,7 +382,6 @@
             this.DesignTimeContainer.Controls.Add(this.ErrorPanel);
             this.DesignTimeContainer.Controls.Add(this.PropertyPanel);
             this.DesignTimeContainer.Controls.Add(this.ProjectPanel);
-            this.DesignTimeContainer.Controls.Add(this.DocumentPanel);
             this.DesignTimeContainer.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.DesignTimeContainer.Location = new System.Drawing.Point(0, 397);
             this.DesignTimeContainer.Name = "DesignTimeContainer";
@@ -420,16 +389,91 @@
             this.DesignTimeContainer.TabIndex = 3;
             this.DesignTimeContainer.Visible = false;
             // 
+            // MainToolStrip
+            // 
+            this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3});
+            this.MainToolStrip.Location = new System.Drawing.Point(0, 24);
+            this.MainToolStrip.Name = "MainToolStrip";
+            this.MainToolStrip.Size = new System.Drawing.Size(1033, 25);
+            this.MainToolStrip.TabIndex = 5;
+            this.MainToolStrip.Text = "toolStrip1";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Image = global::GenerationStudio.Properties.Resources.newproject;
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.newToolStripMenuItem.Text = "&New";
+            // 
+            // MainMenuFileOpenProject
+            // 
+            this.MainMenuFileOpenProject.Image = global::GenerationStudio.Properties.Resources.open;
+            this.MainMenuFileOpenProject.Name = "MainMenuFileOpenProject";
+            this.MainMenuFileOpenProject.Size = new System.Drawing.Size(111, 22);
+            this.MainMenuFileOpenProject.Text = "&Open";
+            this.MainMenuFileOpenProject.Click += new System.EventHandler(this.MainMenuFileOpenProject_Click);
+            // 
+            // MainMenuFileSaveProject
+            // 
+            this.MainMenuFileSaveProject.Image = global::GenerationStudio.Properties.Resources.save;
+            this.MainMenuFileSaveProject.Name = "MainMenuFileSaveProject";
+            this.MainMenuFileSaveProject.Size = new System.Drawing.Size(111, 22);
+            this.MainMenuFileSaveProject.Text = "&Save";
+            this.MainMenuFileSaveProject.Click += new System.EventHandler(this.MainMenuFileSaveProject_Click);
+            // 
+            // RefreshProjectTreeButton
+            // 
+            this.RefreshProjectTreeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.RefreshProjectTreeButton.Image = ((System.Drawing.Image)(resources.GetObject("RefreshProjectTreeButton.Image")));
+            this.RefreshProjectTreeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RefreshProjectTreeButton.Name = "RefreshProjectTreeButton";
+            this.RefreshProjectTreeButton.Size = new System.Drawing.Size(23, 22);
+            this.RefreshProjectTreeButton.Text = "toolStripButton1";
+            this.RefreshProjectTreeButton.ToolTipText = "Refresh project tree";
+            this.RefreshProjectTreeButton.Click += new System.EventHandler(this.RefreshProjectTreeButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 577);
+            this.Controls.Add(this.MainToolStrip);
             this.Controls.Add(this.MainMenu);
             this.Controls.Add(this.DockPanel);
             this.Controls.Add(this.FontPanel);
             this.Controls.Add(this.DesignTimeContainer);
             this.Controls.Add(this.StatusBar);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.MainMenu;
             this.Name = "MainForm";
@@ -449,6 +493,8 @@
             this.ProjectPanel.ResumeLayout(false);
             this.PropertyPanel.ResumeLayout(false);
             this.DesignTimeContainer.ResumeLayout(false);
+            this.MainToolStrip.ResumeLayout(false);
+            this.MainToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -475,11 +521,8 @@
         private System.Windows.Forms.ToolStrip ProjectToolStrip;
         private System.Windows.Forms.ToolStripButton RefreshProjectTreeButton;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
-        private System.Windows.Forms.Panel DocumentPanel;
         private System.Windows.Forms.Panel ErrorPanel;
         private System.Windows.Forms.DataGridView ErrorGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn OwnerColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MessageColumn;
         private System.Windows.Forms.Panel ProjectPanel;
         private System.Windows.Forms.Panel PropertyPanel;
         private System.Windows.Forms.FlowLayoutPanel DesignTimeContainer;
@@ -493,6 +536,13 @@
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OwnerTypeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OwnerColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MessageColumn;
+        private System.Windows.Forms.ToolStrip MainToolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
     }
 }
 

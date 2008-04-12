@@ -38,27 +38,28 @@
             this.ExecuteButton = new System.Windows.Forms.ToolStripButton();
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
-            this.Tabs = new System.Windows.Forms.TabControl();
-            this.TemplateTabPage = new System.Windows.Forms.TabPage();
-            this.CompiledTabPage = new System.Windows.Forms.TabPage();
             this.SourceSyntaxBox = new Puzzle.Windows.Forms.SyntaxBoxControl();
-            this.OutputTabPage = new System.Windows.Forms.TabPage();
             this.OutputSyntaxBox = new Puzzle.Windows.Forms.SyntaxBoxControl();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.TemplateButton = new System.Windows.Forms.RadioButton();
+            this.SourceButton = new System.Windows.Forms.RadioButton();
+            this.OutputButton = new System.Windows.Forms.RadioButton();
             this.MainToolStrip.SuspendLayout();
-            this.Tabs.SuspendLayout();
-            this.TemplateTabPage.SuspendLayout();
-            this.CompiledTabPage.SuspendLayout();
-            this.OutputTabPage.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TemplateSyntaxBox
             // 
             this.TemplateSyntaxBox.ActiveView = Puzzle.Windows.Forms.ActiveView.BottomRight;
+            this.TemplateSyntaxBox.AllowBreakPoints = false;
             this.TemplateSyntaxBox.AutoListPosition = null;
             this.TemplateSyntaxBox.AutoListSelectedText = "a123";
             this.TemplateSyntaxBox.AutoListVisible = false;
             this.TemplateSyntaxBox.BackColor = System.Drawing.Color.White;
             this.TemplateSyntaxBox.BorderStyle = Puzzle.Windows.Forms.BorderStyle.None;
+            this.TemplateSyntaxBox.BracketMatching = false;
             this.TemplateSyntaxBox.CopyAsRTF = false;
             this.TemplateSyntaxBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TemplateSyntaxBox.FontName = "Courier new";
@@ -67,11 +68,13 @@
             this.TemplateSyntaxBox.InfoTipPosition = null;
             this.TemplateSyntaxBox.InfoTipSelectedIndex = 1;
             this.TemplateSyntaxBox.InfoTipVisible = false;
-            this.TemplateSyntaxBox.Location = new System.Drawing.Point(3, 3);
+            this.TemplateSyntaxBox.Location = new System.Drawing.Point(0, 25);
             this.TemplateSyntaxBox.LockCursorUpdate = false;
             this.TemplateSyntaxBox.Name = "TemplateSyntaxBox";
+            this.TemplateSyntaxBox.ShowLineNumbers = false;
             this.TemplateSyntaxBox.ShowScopeIndicator = false;
-            this.TemplateSyntaxBox.Size = new System.Drawing.Size(339, 328);
+            this.TemplateSyntaxBox.ShowTabGuides = true;
+            this.TemplateSyntaxBox.Size = new System.Drawing.Size(353, 327);
             this.TemplateSyntaxBox.SmoothScroll = false;
             this.TemplateSyntaxBox.SplitviewH = -4;
             this.TemplateSyntaxBox.SplitviewV = -4;
@@ -132,41 +135,6 @@
             // 
             this.OpenDialog.FileName = "openFileDialog1";
             // 
-            // Tabs
-            // 
-            this.Tabs.Controls.Add(this.TemplateTabPage);
-            this.Tabs.Controls.Add(this.CompiledTabPage);
-            this.Tabs.Controls.Add(this.OutputTabPage);
-            this.Tabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Tabs.Location = new System.Drawing.Point(0, 25);
-            this.Tabs.Multiline = true;
-            this.Tabs.Name = "Tabs";
-            this.Tabs.SelectedIndex = 0;
-            this.Tabs.Size = new System.Drawing.Size(353, 360);
-            this.Tabs.TabIndex = 5;
-            // 
-            // TemplateTabPage
-            // 
-            this.TemplateTabPage.Controls.Add(this.TemplateSyntaxBox);
-            this.TemplateTabPage.Location = new System.Drawing.Point(4, 22);
-            this.TemplateTabPage.Name = "TemplateTabPage";
-            this.TemplateTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.TemplateTabPage.Size = new System.Drawing.Size(345, 334);
-            this.TemplateTabPage.TabIndex = 0;
-            this.TemplateTabPage.Text = "Template";
-            this.TemplateTabPage.UseVisualStyleBackColor = true;
-            // 
-            // CompiledTabPage
-            // 
-            this.CompiledTabPage.Controls.Add(this.SourceSyntaxBox);
-            this.CompiledTabPage.Location = new System.Drawing.Point(4, 22);
-            this.CompiledTabPage.Name = "CompiledTabPage";
-            this.CompiledTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.CompiledTabPage.Size = new System.Drawing.Size(345, 334);
-            this.CompiledTabPage.TabIndex = 1;
-            this.CompiledTabPage.Text = "Source";
-            this.CompiledTabPage.UseVisualStyleBackColor = true;
-            // 
             // SourceSyntaxBox
             // 
             this.SourceSyntaxBox.ActiveView = Puzzle.Windows.Forms.ActiveView.BottomRight;
@@ -183,29 +151,20 @@
             this.SourceSyntaxBox.InfoTipPosition = null;
             this.SourceSyntaxBox.InfoTipSelectedIndex = 1;
             this.SourceSyntaxBox.InfoTipVisible = false;
-            this.SourceSyntaxBox.Location = new System.Drawing.Point(3, 3);
+            this.SourceSyntaxBox.Location = new System.Drawing.Point(0, 25);
             this.SourceSyntaxBox.LockCursorUpdate = false;
             this.SourceSyntaxBox.Name = "SourceSyntaxBox";
             this.SourceSyntaxBox.ReadOnly = true;
             this.SourceSyntaxBox.ShowScopeIndicator = false;
-            this.SourceSyntaxBox.Size = new System.Drawing.Size(339, 328);
+            this.SourceSyntaxBox.ShowTabGuides = true;
+            this.SourceSyntaxBox.Size = new System.Drawing.Size(353, 327);
             this.SourceSyntaxBox.SmoothScroll = false;
             this.SourceSyntaxBox.SplitviewH = -4;
             this.SourceSyntaxBox.SplitviewV = -4;
+            this.SourceSyntaxBox.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(234)))));
             this.SourceSyntaxBox.TabIndex = 5;
             this.SourceSyntaxBox.Text = "syntaxBoxControl1";
             this.SourceSyntaxBox.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
-            // 
-            // OutputTabPage
-            // 
-            this.OutputTabPage.Controls.Add(this.OutputSyntaxBox);
-            this.OutputTabPage.Location = new System.Drawing.Point(4, 22);
-            this.OutputTabPage.Name = "OutputTabPage";
-            this.OutputTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.OutputTabPage.Size = new System.Drawing.Size(345, 334);
-            this.OutputTabPage.TabIndex = 2;
-            this.OutputTabPage.Text = "Output";
-            this.OutputTabPage.UseVisualStyleBackColor = true;
             // 
             // OutputSyntaxBox
             // 
@@ -223,12 +182,13 @@
             this.OutputSyntaxBox.InfoTipPosition = null;
             this.OutputSyntaxBox.InfoTipSelectedIndex = 1;
             this.OutputSyntaxBox.InfoTipVisible = false;
-            this.OutputSyntaxBox.Location = new System.Drawing.Point(3, 3);
+            this.OutputSyntaxBox.Location = new System.Drawing.Point(0, 25);
             this.OutputSyntaxBox.LockCursorUpdate = false;
             this.OutputSyntaxBox.Name = "OutputSyntaxBox";
             this.OutputSyntaxBox.ReadOnly = true;
             this.OutputSyntaxBox.ShowScopeIndicator = false;
-            this.OutputSyntaxBox.Size = new System.Drawing.Size(339, 328);
+            this.OutputSyntaxBox.ShowTabGuides = true;
+            this.OutputSyntaxBox.Size = new System.Drawing.Size(353, 327);
             this.OutputSyntaxBox.SmoothScroll = false;
             this.OutputSyntaxBox.SplitviewH = -4;
             this.OutputSyntaxBox.SplitviewV = -4;
@@ -237,21 +197,106 @@
             this.OutputSyntaxBox.Text = "syntaxBoxControl1";
             this.OutputSyntaxBox.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 352);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(353, 33);
+            this.panel1.TabIndex = 6;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.TemplateButton);
+            this.flowLayoutPanel1.Controls.Add(this.SourceButton);
+            this.flowLayoutPanel1.Controls.Add(this.OutputButton);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(16, 0, 0, 0);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(353, 33);
+            this.flowLayoutPanel1.TabIndex = 0;
+            // 
+            // TemplateButton
+            // 
+            this.TemplateButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.TemplateButton.AutoSize = true;
+            this.TemplateButton.Checked = true;
+            this.TemplateButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.TemplateButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+            this.TemplateButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.TemplateButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.TemplateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.TemplateButton.Image = global::GenerationStudio.Properties.Resources.template;
+            this.TemplateButton.Location = new System.Drawing.Point(19, 3);
+            this.TemplateButton.Name = "TemplateButton";
+            this.TemplateButton.Size = new System.Drawing.Size(79, 25);
+            this.TemplateButton.TabIndex = 5;
+            this.TemplateButton.TabStop = true;
+            this.TemplateButton.Text = "Template";
+            this.TemplateButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TemplateButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.TemplateButton.UseVisualStyleBackColor = true;
+            this.TemplateButton.CheckedChanged += new System.EventHandler(this.CodePage_CheckedChanged);
+            // 
+            // SourceButton
+            // 
+            this.SourceButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.SourceButton.AutoSize = true;
+            this.SourceButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.SourceButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+            this.SourceButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.SourceButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.SourceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SourceButton.Image = global::GenerationStudio.Properties.Resources._class;
+            this.SourceButton.Location = new System.Drawing.Point(104, 3);
+            this.SourceButton.Name = "SourceButton";
+            this.SourceButton.Size = new System.Drawing.Size(69, 25);
+            this.SourceButton.TabIndex = 4;
+            this.SourceButton.Text = "Source";
+            this.SourceButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SourceButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.SourceButton.UseVisualStyleBackColor = true;
+            this.SourceButton.CheckedChanged += new System.EventHandler(this.CodePage_CheckedChanged);
+            // 
+            // OutputButton
+            // 
+            this.OutputButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.OutputButton.AutoSize = true;
+            this.OutputButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.OutputButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+            this.OutputButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.OutputButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.OutputButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OutputButton.Image = global::GenerationStudio.Properties.Resources.project;
+            this.OutputButton.Location = new System.Drawing.Point(179, 3);
+            this.OutputButton.Name = "OutputButton";
+            this.OutputButton.Size = new System.Drawing.Size(67, 25);
+            this.OutputButton.TabIndex = 3;
+            this.OutputButton.Text = "Output";
+            this.OutputButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.OutputButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.OutputButton.UseVisualStyleBackColor = true;
+            this.OutputButton.CheckedChanged += new System.EventHandler(this.CodePage_CheckedChanged);
+            // 
             // TemplateEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.Tabs);
+            this.Controls.Add(this.TemplateSyntaxBox);
+            this.Controls.Add(this.SourceSyntaxBox);
+            this.Controls.Add(this.OutputSyntaxBox);
             this.Controls.Add(this.MainToolStrip);
+            this.Controls.Add(this.panel1);
             this.Name = "TemplateEditor";
             this.Size = new System.Drawing.Size(353, 385);
             this.Load += new System.EventHandler(this.TemplateEditor_Load);
             this.MainToolStrip.ResumeLayout(false);
             this.MainToolStrip.PerformLayout();
-            this.Tabs.ResumeLayout(false);
-            this.TemplateTabPage.ResumeLayout(false);
-            this.CompiledTabPage.ResumeLayout(false);
-            this.OutputTabPage.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,12 +312,13 @@
         private System.Windows.Forms.ToolStripButton ExecuteButton;
         private System.Windows.Forms.OpenFileDialog OpenDialog;
         private System.Windows.Forms.SaveFileDialog SaveDialog;
-        private System.Windows.Forms.TabControl Tabs;
-        private System.Windows.Forms.TabPage TemplateTabPage;
-        private System.Windows.Forms.TabPage CompiledTabPage;
-        private System.Windows.Forms.TabPage OutputTabPage;
         private Puzzle.Windows.Forms.SyntaxBoxControl SourceSyntaxBox;
         private Puzzle.Windows.Forms.SyntaxBoxControl OutputSyntaxBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.RadioButton TemplateButton;
+        private System.Windows.Forms.RadioButton SourceButton;
+        private System.Windows.Forms.RadioButton OutputButton;
 
 
     }
