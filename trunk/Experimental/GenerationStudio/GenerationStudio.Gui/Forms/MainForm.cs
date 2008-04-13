@@ -213,6 +213,8 @@ namespace GenerationStudio.Gui
                 dt.Rows.Add(child.GetIcon(), child.GetType().GetElementName(), child.GetDisplayName(), child);
             }
             SummaryGridView.DataSource = dt;
+
+            SummaryChildCountLabel.Text = string.Format("{0} Item(s)",currentElement.AllChildren.Count);
         }
 
         private void trvProject_MouseUp(object sender, MouseEventArgs e)

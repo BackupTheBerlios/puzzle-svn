@@ -85,6 +85,8 @@
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SummaryChildCountLabel = new System.Windows.Forms.Label();
+            this.basePanelControl1 = new Puzzle.Windows.Forms.BasePanelControl();
             this.ProjectTopPanel.SuspendLayout();
             this.ProjectToolStrip.SuspendLayout();
             this.ErrorPanel.SuspendLayout();
@@ -567,29 +569,31 @@
             this.SummaryGridView.RowTemplate.Height = 18;
             this.SummaryGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.SummaryGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SummaryGridView.Size = new System.Drawing.Size(374, 229);
+            this.SummaryGridView.Size = new System.Drawing.Size(374, 211);
             this.SummaryGridView.TabIndex = 7;
             // 
             // SummaryTitlePanel
             // 
+            this.SummaryTitlePanel.Controls.Add(this.basePanelControl1);
+            this.SummaryTitlePanel.Controls.Add(this.SummaryChildCountLabel);
             this.SummaryTitlePanel.Controls.Add(this.SummaryIcon);
             this.SummaryTitlePanel.Controls.Add(this.SummaryPathLabel);
             this.SummaryTitlePanel.Controls.Add(this.SummaryTitleLabel);
             this.SummaryTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.SummaryTitlePanel.Location = new System.Drawing.Point(0, 26);
             this.SummaryTitlePanel.Name = "SummaryTitlePanel";
-            this.SummaryTitlePanel.Padding = new System.Windows.Forms.Padding(20, 10, 0, 0);
-            this.SummaryTitlePanel.Size = new System.Drawing.Size(414, 62);
+            this.SummaryTitlePanel.Padding = new System.Windows.Forms.Padding(20, 10, 20, 20);
+            this.SummaryTitlePanel.Size = new System.Drawing.Size(414, 80);
             this.SummaryTitlePanel.TabIndex = 8;
             // 
             // SummaryContentPanel
             // 
             this.SummaryContentPanel.Controls.Add(this.SummaryGridView);
             this.SummaryContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SummaryContentPanel.Location = new System.Drawing.Point(0, 88);
+            this.SummaryContentPanel.Location = new System.Drawing.Point(0, 106);
             this.SummaryContentPanel.Name = "SummaryContentPanel";
             this.SummaryContentPanel.Padding = new System.Windows.Forms.Padding(20, 0, 20, 20);
-            this.SummaryContentPanel.Size = new System.Drawing.Size(414, 249);
+            this.SummaryContentPanel.Size = new System.Drawing.Size(414, 231);
             this.SummaryContentPanel.TabIndex = 9;
             // 
             // SummaryIcon
@@ -627,6 +631,26 @@
             this.dataGridViewTextBoxColumn2.HeaderText = "Element";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // SummaryChildCountLabel
+            // 
+            this.SummaryChildCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SummaryChildCountLabel.Location = new System.Drawing.Point(303, 35);
+            this.SummaryChildCountLabel.Name = "SummaryChildCountLabel";
+            this.SummaryChildCountLabel.Size = new System.Drawing.Size(88, 13);
+            this.SummaryChildCountLabel.TabIndex = 8;
+            this.SummaryChildCountLabel.Text = "Path";
+            this.SummaryChildCountLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // basePanelControl1
+            // 
+            this.basePanelControl1.BorderColor = System.Drawing.Color.Black;
+            this.basePanelControl1.BorderStyle = Puzzle.Windows.Forms.BorderStyle.SunkenThin;
+            this.basePanelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.basePanelControl1.Location = new System.Drawing.Point(20, 58);
+            this.basePanelControl1.Name = "basePanelControl1";
+            this.basePanelControl1.Size = new System.Drawing.Size(374, 2);
+            this.basePanelControl1.TabIndex = 9;
             // 
             // MainForm
             // 
@@ -730,6 +754,8 @@
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.Label SummaryChildCountLabel;
+        private Puzzle.Windows.Forms.BasePanelControl basePanelControl1;
     }
 }
 
