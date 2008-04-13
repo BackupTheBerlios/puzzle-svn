@@ -56,6 +56,12 @@
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.2864.18696, Culture=neutral, PublicKeyToken=d481317c817cec47, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ContentSeparator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ContentSeparator.Designer.cs">
+      <DependentUpon>ContentSeparator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FooSelector.cs" />
     <Compile Include="Forms\Docking\DockingForm.cs">

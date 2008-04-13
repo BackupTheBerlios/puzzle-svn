@@ -10,7 +10,6 @@ using GenerationStudio.Elements;
 using GenerationStudio.AppCore;
 using GenerationStudio.Attributes;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Soap;
 using System.Runtime.Serialization.Formatters;
@@ -38,9 +37,9 @@ namespace GenerationStudio.Gui
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            //ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            //StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
+            MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
+            ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
+            StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
 
             ErrorDockingForm.SetContent(ErrorPanel, "Error List");
             ProjectDockingForm.SetContent(ProjectPanel, "Solution Explorer");
@@ -191,13 +190,35 @@ namespace GenerationStudio.Gui
             SummaryTitleLabel.Text = currentElement.GetDisplayName();
 
             Element pathElement = currentElement;
-            string path = "";
+            SummaryPathPanel.SuspendLayout();
+            SummaryPathPanel.Controls.Clear();
             while (pathElement != null)
             {
-                path = pathElement.GetDisplayName () + "\\" + path;
+                if (pathElement == currentElement)
+                {
+                    Label pathLabel = new Label();
+                    pathLabel.AutoSize = true;
+                    pathLabel.Margin = new Padding(0);
+                    pathLabel.Text = pathElement.GetDisplayName();
+                    pathLabel.Font = BoldFont.Font;
+                    
+                    SummaryPathPanel.Controls.Add(pathLabel);
+                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);                 
+                }
+                else
+                {
+                    LinkLabel pathLabel = new LinkLabel();
+                    pathLabel.AutoSize = true;
+                    pathLabel.Margin = new Padding(0);
+                    pathLabel.Text = pathElement.GetDisplayName();
+                    pathLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(SummaryPath_LinkClicked);
+                    pathLabel.Tag = pathElement;
+                    SummaryPathPanel.Controls.Add(pathLabel);
+                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);                 
+                }
                 pathElement = pathElement.Parent;
             }
-            SummaryPathLabel.Text = path;
+            SummaryPathPanel.ResumeLayout();
             SummaryIcon.Image = currentElement.GetIcon();
 
 
@@ -215,6 +236,13 @@ namespace GenerationStudio.Gui
             SummaryGridView.DataSource = dt;
 
             SummaryChildCountLabel.Text = string.Format("{0} Item(s)",currentElement.AllChildren.Count);
+        }
+
+        private void SummaryPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Element element = ((LinkLabel)sender).Tag as Element;
+            SelectElementInProjectTree(element);
+            
         }
 
         private void trvProject_MouseUp(object sender, MouseEventArgs e)
@@ -478,6 +506,13 @@ namespace GenerationStudio.Gui
             Element errorElement = (Element)row["Item"];
 
             SelectElementInProjectTree(errorElement,ProjectTree.Nodes[0]);
+        }
+
+
+        
+        private void SelectElementInProjectTree(Element errorElement)
+        {
+            SelectElementInProjectTree(errorElement, ProjectTree.Nodes[0]);
         }
 
         private void SelectElementInProjectTree(Element errorElement,TreeNode node)

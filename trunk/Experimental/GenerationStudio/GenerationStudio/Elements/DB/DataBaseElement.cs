@@ -142,7 +142,7 @@ namespace GenerationStudio.Elements
                         DataTable tableSchema = reader.GetSchemaTable();
                         reader.Close();
 
-                        table.ClearChildren();
+                        table.Columns.ClearChildren();
                         foreach (DataRow columnRow in tableSchema.Rows)
                         {
                             ColumnElement column = new ColumnElement();
@@ -156,7 +156,7 @@ namespace GenerationStudio.Elements
                             column.Ordinal = (int)columnRow["ColumnOrdinal"];
                             column.DbType = (string)columnRow["DataTypeName"];
                             column.MaxLength = (int)columnRow["ColumnSize"];
-                            table.AddChild(column);
+                            table.Columns.AddChild(column);
                         }
                     }
 

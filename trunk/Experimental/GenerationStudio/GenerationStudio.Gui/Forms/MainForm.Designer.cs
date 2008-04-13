@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node0");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ProjectTree = new System.Windows.Forms.TreeView();
             this.Icons = new System.Windows.Forms.ImageList(this.components);
@@ -77,7 +77,6 @@
             this.SummaryTitleLabel = new System.Windows.Forms.Label();
             this.SummaryTopPanel = new System.Windows.Forms.Panel();
             this.SummaryToolStrip = new System.Windows.Forms.ToolStrip();
-            this.SummaryPathLabel = new System.Windows.Forms.Label();
             this.SummaryGridView = new System.Windows.Forms.DataGridView();
             this.SummaryTitlePanel = new System.Windows.Forms.Panel();
             this.SummaryContentPanel = new System.Windows.Forms.Panel();
@@ -86,7 +85,8 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SummaryChildCountLabel = new System.Windows.Forms.Label();
-            this.basePanelControl1 = new Puzzle.Windows.Forms.BasePanelControl();
+            this.SummaryPathPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.contentSeparator1 = new GenerationStudio.Controls.ContentSeparator();
             this.ProjectTopPanel.SuspendLayout();
             this.ProjectToolStrip.SuspendLayout();
             this.ErrorPanel.SuspendLayout();
@@ -114,10 +114,10 @@
             this.ProjectTree.LabelEdit = true;
             this.ProjectTree.Location = new System.Drawing.Point(0, 26);
             this.ProjectTree.Name = "ProjectTree";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Node0";
             this.ProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.ProjectTree.SelectedImageIndex = 0;
             this.ProjectTree.ShowNodeToolTips = true;
             this.ProjectTree.Size = new System.Drawing.Size(171, 117);
@@ -537,15 +537,6 @@
             this.SummaryToolStrip.Size = new System.Drawing.Size(414, 25);
             this.SummaryToolStrip.TabIndex = 1;
             // 
-            // SummaryPathLabel
-            // 
-            this.SummaryPathLabel.AutoSize = true;
-            this.SummaryPathLabel.Location = new System.Drawing.Point(56, 35);
-            this.SummaryPathLabel.Name = "SummaryPathLabel";
-            this.SummaryPathLabel.Size = new System.Drawing.Size(29, 13);
-            this.SummaryPathLabel.TabIndex = 6;
-            this.SummaryPathLabel.Text = "Path";
-            // 
             // SummaryGridView
             // 
             this.SummaryGridView.AllowUserToAddRows = false;
@@ -574,10 +565,10 @@
             // 
             // SummaryTitlePanel
             // 
-            this.SummaryTitlePanel.Controls.Add(this.basePanelControl1);
+            this.SummaryTitlePanel.Controls.Add(this.SummaryPathPanel);
+            this.SummaryTitlePanel.Controls.Add(this.contentSeparator1);
             this.SummaryTitlePanel.Controls.Add(this.SummaryChildCountLabel);
             this.SummaryTitlePanel.Controls.Add(this.SummaryIcon);
-            this.SummaryTitlePanel.Controls.Add(this.SummaryPathLabel);
             this.SummaryTitlePanel.Controls.Add(this.SummaryTitleLabel);
             this.SummaryTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.SummaryTitlePanel.Location = new System.Drawing.Point(0, 26);
@@ -598,6 +589,7 @@
             // 
             // SummaryIcon
             // 
+            this.SummaryIcon.Image = global::GenerationStudio.Properties.Resources.newproject;
             this.SummaryIcon.Location = new System.Drawing.Point(36, 16);
             this.SummaryIcon.Name = "SummaryIcon";
             this.SummaryIcon.Size = new System.Drawing.Size(16, 16);
@@ -642,15 +634,22 @@
             this.SummaryChildCountLabel.Text = "Path";
             this.SummaryChildCountLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // basePanelControl1
+            // SummaryPathPanel
             // 
-            this.basePanelControl1.BorderColor = System.Drawing.Color.Black;
-            this.basePanelControl1.BorderStyle = Puzzle.Windows.Forms.BorderStyle.SunkenThin;
-            this.basePanelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.basePanelControl1.Location = new System.Drawing.Point(20, 58);
-            this.basePanelControl1.Name = "basePanelControl1";
-            this.basePanelControl1.Size = new System.Drawing.Size(374, 2);
-            this.basePanelControl1.TabIndex = 9;
+            this.SummaryPathPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.SummaryPathPanel.Location = new System.Drawing.Point(59, 36);
+            this.SummaryPathPanel.Name = "SummaryPathPanel";
+            this.SummaryPathPanel.Size = new System.Drawing.Size(238, 21);
+            this.SummaryPathPanel.TabIndex = 10;
+            // 
+            // contentSeparator1
+            // 
+            this.contentSeparator1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.contentSeparator1.Location = new System.Drawing.Point(20, 58);
+            this.contentSeparator1.Name = "contentSeparator1";
+            this.contentSeparator1.Size = new System.Drawing.Size(374, 2);
+            this.contentSeparator1.TabIndex = 9;
             // 
             // MainForm
             // 
@@ -747,7 +746,6 @@
         private System.Windows.Forms.Panel SummaryTopPanel;
         private System.Windows.Forms.ToolStrip SummaryToolStrip;
         private System.Windows.Forms.Panel SummaryTitlePanel;
-        private System.Windows.Forms.Label SummaryPathLabel;
         private System.Windows.Forms.DataGridView SummaryGridView;
         private System.Windows.Forms.Panel SummaryContentPanel;
         private System.Windows.Forms.PictureBox SummaryIcon;
@@ -755,7 +753,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.Label SummaryChildCountLabel;
-        private Puzzle.Windows.Forms.BasePanelControl basePanelControl1;
+        private GenerationStudio.Controls.ContentSeparator contentSeparator1;
+        private System.Windows.Forms.FlowLayoutPanel SummaryPathPanel;
     }
 }
 
