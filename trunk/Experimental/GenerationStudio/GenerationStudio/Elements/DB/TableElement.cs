@@ -15,6 +15,19 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.table.gif")]
     public class TableElement : NamedElement
     {
+        public TableElement()
+        {
+            Columns = new ColumnsElement();
+            AddChild(Columns);
+
+            Keys = new KeysElement();
+            AddChild(Keys);
+        }
+
+        public ColumnsElement Columns { get; set; }
+        public KeysElement Keys { get; set; }
+
+
         [ElementVerb("View table data")]
         public void ViewTableContent(IHost host)
         {

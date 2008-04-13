@@ -10,7 +10,7 @@ using GenerationStudio.Gui;
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(TableElement))]
+    [ElementParent(typeof(ColumnsElement))]
     [ElementName("Column")]
     [ElementIcon("GenerationStudio.Images.column.gif")]
     public class ColumnElement : NamedElement

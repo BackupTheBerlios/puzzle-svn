@@ -34,21 +34,24 @@ namespace GenerationStudio.Gui
         private ProjectDockingForm ProjectDockingForm = new ProjectDockingForm();
         private PropertiesDockingForm PropertiesDockingForm = new PropertiesDockingForm();
         private StartDockingForm StartDockingForm = new StartDockingForm();
+        private SummaryDockingForm SummaryDockingForm = new SummaryDockingForm();
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
+            //MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
+            //ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
+            //StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
 
             ErrorDockingForm.SetContent(ErrorPanel, "Error List");
             ProjectDockingForm.SetContent(ProjectPanel, "Solution Explorer");
             PropertiesDockingForm.SetContent(PropertyPanel, "Properties");
-
+            SummaryDockingForm.SetContent(SummaryPanel, "Summary");
 
             ErrorDockingForm.Show(DockPanel, DockState.DockBottom);
             ProjectDockingForm.Show(DockPanel,DockState.DockLeft);
             PropertiesDockingForm.Show(ProjectDockingForm.Pane, DockAlignment.Bottom, 0.5);
             StartDockingForm.Show(DockPanel, DockState.Document);
+            SummaryDockingForm.Show(DockPanel, DockState.Document);
 
             NewProject();
             Engine.RegisterAllElementTypes(root.GetType().Assembly);
@@ -76,6 +79,7 @@ namespace GenerationStudio.Gui
         {
             IList<ElementError> allErrors = root.GetErrorsRecursive();
             DataTable dt = new DataTable();
+            dt.Columns.Add("Image", typeof(Image));
             dt.Columns.Add("OwnerType", typeof(string));
             dt.Columns.Add("Owner", typeof(string));            
             dt.Columns.Add("Message", typeof(string));
@@ -83,7 +87,7 @@ namespace GenerationStudio.Gui
             ErrorGrid.AutoGenerateColumns = false;
             foreach (ElementError error in allErrors)
             {
-                dt.Rows.Add(error.Owner.GetType().GetElementName(), error.Owner.GetDisplayName (), error.Message,error.Owner);
+                dt.Rows.Add(error.Owner.GetIcon (), error.Owner.GetType().GetElementName(), error.Owner.GetDisplayName (), error.Message,error.Owner);
             }
             ErrorGrid.DataSource = dt;
         }
@@ -167,14 +171,48 @@ namespace GenerationStudio.Gui
 
         private void trvProject_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            TreeNode selectedNode = e.Node;
+            ShowSelectedElement();
+        }
+
+        private void ShowSelectedElement()
+        {
+            TreeNode selectedNode = ProjectTree.SelectedNode;
             if (selectedNode == null)
             {
                 ElementProperties.SelectedObject = null;
                 return;
             }
 
-            ElementProperties.SelectedObject = selectedNode.Tag;
+            Element currentElement =  selectedNode.GetElement ();
+            if (currentElement == null)
+                return;
+
+            ElementProperties.SelectedObject = currentElement;
+            SummaryTitleLabel.Text = currentElement.GetDisplayName();
+
+            Element pathElement = currentElement;
+            string path = "";
+            while (pathElement != null)
+            {
+                path = pathElement.GetDisplayName () + "\\" + path;
+                pathElement = pathElement.Parent;
+            }
+            SummaryPathLabel.Text = path;
+            SummaryIcon.Image = currentElement.GetIcon();
+
+
+            IList<Element> allChildren = currentElement.AllChildren;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Image", typeof(Image));
+            dt.Columns.Add("OwnerType", typeof(string));
+            dt.Columns.Add("Owner", typeof(string));            
+            dt.Columns.Add("Item", typeof(Element));
+            SummaryGridView.AutoGenerateColumns = false;
+            foreach (Element child in allChildren)
+            {
+                dt.Rows.Add(child.GetIcon(), child.GetType().GetElementName(), child.GetDisplayName(), child);
+            }
+            SummaryGridView.DataSource = dt;
         }
 
         private void trvProject_MouseUp(object sender, MouseEventArgs e)
@@ -338,14 +376,22 @@ namespace GenerationStudio.Gui
         {
             if (e.KeyCode == Keys.Delete)
             {
-                TreeNode selectedNode = ProjectTree.SelectedNode;
-                Element currentElement = selectedNode.GetElement();
-                currentElement.Parent.RemoveChild(currentElement);
-                TreeNode parentNode = selectedNode.Parent;
-                selectedNode.Parent.Nodes.Remove(selectedNode);
-                UpdateNode(parentNode);
+                DeleteSelectedElement();
                 
             }
+        }
+
+        private void DeleteSelectedElement()
+        {
+            TreeNode selectedNode = ProjectTree.SelectedNode;
+            Element currentElement = selectedNode.GetElement();
+            if (!currentElement.AllowDelete())
+                return; //ignore
+
+            currentElement.Parent.RemoveChild(currentElement);
+            TreeNode parentNode = selectedNode.Parent;
+            selectedNode.Parent.Nodes.Remove(selectedNode);
+            UpdateNode(parentNode);
         }
 
         private void ProjectTree_KeyPress(object sender, KeyPressEventArgs e)

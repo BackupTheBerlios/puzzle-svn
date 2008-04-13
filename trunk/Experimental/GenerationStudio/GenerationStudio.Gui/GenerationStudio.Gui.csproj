@@ -74,6 +74,9 @@
     <Compile Include="Forms\Docking\StartDockingForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Docking\SummaryDockingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

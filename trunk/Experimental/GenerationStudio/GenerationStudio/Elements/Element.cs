@@ -214,6 +214,9 @@ namespace GenerationStudio.Elements
 
         public void RemoveChild(Element child)
         {
+            if (!child.AllowDelete())
+                return;
+
             this.children.Remove(child);
             OnNotifyChange();
         }
@@ -229,6 +232,11 @@ namespace GenerationStudio.Elements
 
                 return (RootElement)current;
             }
+        }
+
+        public virtual bool AllowDelete()
+        {
+            return true;
         }
     }
 }

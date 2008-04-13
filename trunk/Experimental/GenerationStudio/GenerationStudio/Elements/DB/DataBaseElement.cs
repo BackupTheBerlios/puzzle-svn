@@ -32,7 +32,23 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.database.gif")]
     public class DataBaseElement : NamedElement
     {
-        public string ConnectionString { get; set; }
+        
+
+
+        private string connectionString;
+        public string ConnectionString 
+        {
+            get
+            {
+                return connectionString;
+            }
+
+            set
+            {
+                connectionString = value;
+                OnNotifyChange();
+            }
+        }
 
         [OptionalField]
         private ProviderType providerType = ProviderType.SqlServer;
