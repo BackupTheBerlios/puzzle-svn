@@ -13,9 +13,13 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.classdiagram.gif")]
     public class ClassDiagramElement : NamedElement
     {
+        
+
         [ElementVerb("Edit diagram", Default = true)]
         public void Edit(IHost host)
         {
+            ClassDiagramEditor editor = host.GetEditor<ClassDiagramEditor>(this, "Edit diagram");
+            host.ShowEditor(editor);
         }
     }
 }

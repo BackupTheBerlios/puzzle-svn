@@ -92,6 +92,12 @@
     <Compile Include="Elements\Templates\TemplateElement.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graphics\Utils.cs" />
+    <Compile Include="Gui\ClassDiagramEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\ClassDiagramEditor.Designer.cs">
+      <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gui\IHost.cs" />
     <Compile Include="Gui\TableDataView.cs">
       <SubType>UserControl</SubType>
@@ -135,7 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\class.gif" />
-    <EmbeddedResource Include="Images\classdiagram.gif" />
     <EmbeddedResource Include="Images\column.gif" />
     <EmbeddedResource Include="Images\database.gif" />
     <EmbeddedResource Include="Images\dummy.bmp" />
@@ -167,6 +172,10 @@
       <Project>{19EF75B2-B414-4EB0-9486-160FAF93E62C}</Project>
       <Name>Puzzle.SyntaxBox.NET 3.5</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\AlbinoHorse\ClassEditor\ClassEditor.csproj">
+      <Project>{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}</Project>
+      <Name>ClassEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\template.gif" />
@@ -179,6 +188,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\Folder.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Gui\ClassDiagramEditor.resx">
+      <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\classdiagram.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

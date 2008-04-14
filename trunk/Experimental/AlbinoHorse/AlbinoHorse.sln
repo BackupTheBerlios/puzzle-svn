@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassEditor", "ClassEditor\ClassEditor.csproj", "{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabbGui", "LabbGui\LabbGui.csproj", "{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		NPDebug|Any CPU = NPDebug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.NPDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.NPDebug|Any CPU.Build.0 = Debug|Any CPU
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51A905DD-8FCD-4EDB-B24D-A708CD5C9158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.NPDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.NPDebug|Any CPU.Build.0 = Debug|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8886FFB0-CDF0-4A5E-BAF1-B504481E7E99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
