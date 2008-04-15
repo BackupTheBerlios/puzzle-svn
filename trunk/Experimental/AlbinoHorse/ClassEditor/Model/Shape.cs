@@ -23,21 +23,6 @@ namespace AlbinoHorse.Model
         }                        
         #endregion
 
-        //#region Property ScreenBounds 
-        //private Rectangle screenBounds;
-        //public virtual Rectangle ScreenBounds
-        //{
-        //    get
-        //    {
-        //        return this.screenBounds;
-        //    }
-        //    set
-        //    {
-        //        this.screenBounds = value;
-        //    }
-        //}                        
-        //#endregion
-
         #region Property Selected
         private bool selected;
         public virtual bool Selected

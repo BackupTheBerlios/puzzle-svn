@@ -58,6 +58,8 @@
     <Compile Include="Infrastructure\BoundingBox.cs" />
     <Compile Include="Infrastructure\ShapeCancelEventArgs.cs" />
     <Compile Include="Infrastructure\ShapeKeyEventArgs.cs" />
+    <Compile Include="Model\DefaultUmlTypeData.cs" />
+    <Compile Include="Model\IUmlTypeData.cs" />
     <Compile Include="Model\UmlTypeMember.cs" />
     <Compile Include="Model\UmlTypeMemberGroup.cs" />
     <Compile Include="Windows\Forms\Canvas.cs">

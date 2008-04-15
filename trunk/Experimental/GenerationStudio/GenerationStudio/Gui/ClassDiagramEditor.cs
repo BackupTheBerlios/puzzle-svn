@@ -21,7 +21,7 @@ namespace GenerationStudio.Gui
         {
             UmlType newClass = new UmlType();
             newClass.Bounds = new Rectangle(1 * 21, 1 * 21, 7 * 21, 2 * 21);
-            newClass.TypeName = "SomeClass";
+            newClass.DataSource.TypeName = "SomeClass";
 
             UmlDesigner.Diagram.Shapes.Add(newClass);
             UmlDesigner.Refresh();

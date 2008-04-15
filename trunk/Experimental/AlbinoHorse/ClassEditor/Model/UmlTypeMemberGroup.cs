@@ -6,6 +6,7 @@ namespace AlbinoHorse.Model
 {
     public class UmlTypeMemberGroup<T>  where T:UmlTypeMember 
     {
+        protected UmlType owner;
         public string Name { get; set; }
         public bool Expanded { get; set; }
         internal readonly object AddNewIdentifier = new object();
@@ -18,8 +19,11 @@ namespace AlbinoHorse.Model
                 return members;
             }
         }
-        public UmlTypeMemberGroup()
+
+
+        public UmlTypeMemberGroup(UmlType owner)
         {
+            this.owner = owner;
             members = new List<T>();
             Expanded = true;
         }
