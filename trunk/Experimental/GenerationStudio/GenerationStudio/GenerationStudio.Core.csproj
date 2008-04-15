@@ -92,12 +92,14 @@
     <Compile Include="Elements\Templates\TemplateElement.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graphics\Utils.cs" />
-    <Compile Include="Gui\ClassDiagramEditor.cs">
+    <Compile Include="Gui\ClassDiagram\ClassDiagramEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\ClassDiagramEditor.Designer.cs">
+    <Compile Include="Gui\ClassDiagram\ClassDiagramEditor.Designer.cs">
       <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\ClassDiagram\UmlPropertyData.cs" />
+    <Compile Include="Gui\ClassDiagram\UmlTypeData.cs" />
     <Compile Include="Gui\IHost.cs" />
     <Compile Include="Gui\TableDataView.cs">
       <SubType>UserControl</SubType>
@@ -190,7 +192,7 @@
     <EmbeddedResource Include="Images\Folder.gif" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Gui\ClassDiagramEditor.resx">
+    <EmbeddedResource Include="Gui\ClassDiagram\ClassDiagramEditor.resx">
       <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

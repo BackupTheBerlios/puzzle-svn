@@ -17,6 +17,12 @@ namespace GenerationStudio.Gui
         public ClassDiagramEditor()
         {
             InitializeComponent();
+            Engine.NotifyChange += new EventHandler(Engine_NotifyChange);
+        }
+
+        void Engine_NotifyChange(object sender, EventArgs e)
+        {
+            UmlDesigner.Refresh();
         }
 
         private void UmlToolbox_DoubleClick(object sender, EventArgs e)
@@ -41,7 +47,15 @@ namespace GenerationStudio.Gui
         {
             if (e.Data.GetDataPresent(typeof(string)))
             {
-                Element element = Engine.DragDropElement;
+                ClassElement element = (ClassElement)Engine.DragDropElement;
+                UmlType t = new UmlType();
+                UmlTypeData data = new UmlTypeData();
+                data.Owner = element;
+                t.DataSource = data;
+                t.Bounds = new Rectangle(1 * 21, 1 * 21, 7 * 21, 2 * 21);
+                t.Expanded = true;
+                UmlDesigner.Diagram.Shapes.Add(t);
+                UmlDesigner.Refresh();
             }
         }
 
