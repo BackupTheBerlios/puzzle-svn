@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlbinoHorse.Model
 {
-    public class UmlMethod : UmlTypeMember
+    public class UmlMethod 
     {
         #region Property ReturnType
         private string returnType;
@@ -20,5 +20,7 @@ namespace AlbinoHorse.Model
             }
         }
         #endregion
+
+        public string Name { get; set; }
     }
 }

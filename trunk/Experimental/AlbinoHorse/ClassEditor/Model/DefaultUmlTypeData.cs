@@ -33,6 +33,13 @@ namespace AlbinoHorse.Model
                 yield return property;
         }
 
+        public UmlProperty CreateProperty()
+        {
+            UmlProperty property = new UmlProperty();
+            property.DataSource = new DefaultUmlPropertyData();
+            return property;
+        }
+
         private List<UmlMethod> methods = new List<UmlMethod>();
         public void AddMethod(UmlMethod method)
         {
@@ -53,6 +60,11 @@ namespace AlbinoHorse.Model
         {
             foreach (var method in methods)
                 yield return method;
+        }
+
+        public UmlMethod CreateMethod()
+        {
+            return new UmlMethod();
         }
     }
 }

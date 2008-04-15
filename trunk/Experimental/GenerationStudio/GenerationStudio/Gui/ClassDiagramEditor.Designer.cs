@@ -28,105 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClassDiagramEditor));
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.UmlToolbox = new System.Windows.Forms.ListBox();
             this.UmlDesigner = new AlbinoHorse.Windows.Forms.UmlDesigner();
-            this.MainToolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.SaveButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.ClassButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.MainToolStrip.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.UmlToolbox);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(5);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.splitContainer1.Panel2.Controls.Add(this.UmlDesigner);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.splitContainer1.Size = new System.Drawing.Size(555, 515);
+            this.splitContainer1.SplitterDistance = 90;
+            this.splitContainer1.TabIndex = 5;
+            // 
+            // UmlToolbox
+            // 
+            this.UmlToolbox.BackColor = System.Drawing.SystemColors.Control;
+            this.UmlToolbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.UmlToolbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UmlToolbox.FormattingEnabled = true;
+            this.UmlToolbox.Items.AddRange(new object[] {
+            "Class",
+            "Interface",
+            "Enum",
+            "Comment"});
+            this.UmlToolbox.Location = new System.Drawing.Point(5, 5);
+            this.UmlToolbox.Name = "UmlToolbox";
+            this.UmlToolbox.Size = new System.Drawing.Size(80, 494);
+            this.UmlToolbox.TabIndex = 0;
+            this.UmlToolbox.DoubleClick += new System.EventHandler(this.UmlToolbox_DoubleClick);
             // 
             // UmlDesigner
             // 
+            this.UmlDesigner.AllowDrop = true;
             this.UmlDesigner.BackColor = System.Drawing.Color.White;
             this.UmlDesigner.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UmlDesigner.GridSize = 21;
-            this.UmlDesigner.Location = new System.Drawing.Point(0, 25);
+            this.UmlDesigner.Location = new System.Drawing.Point(1, 0);
             this.UmlDesigner.Name = "UmlDesigner";
             this.UmlDesigner.ShowGrid = false;
-            this.UmlDesigner.Size = new System.Drawing.Size(555, 490);
+            this.UmlDesigner.Size = new System.Drawing.Size(460, 515);
             this.UmlDesigner.SnapToGrid = true;
             this.UmlDesigner.TabIndex = 0;
             this.UmlDesigner.Text = "umlDesigner1";
             this.UmlDesigner.Zoom = 1;
-            // 
-            // MainToolStrip
-            // 
-            this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripSeparator1,
-            this.SaveButton,
-            this.toolStripSeparator2,
-            this.ClassButton});
-            this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.MainToolStrip.Name = "MainToolStrip";
-            this.MainToolStrip.Size = new System.Drawing.Size(555, 25);
-            this.MainToolStrip.TabIndex = 4;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // SaveButton
-            // 
-            this.SaveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.SaveButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveButton.Image")));
-            this.SaveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(23, 22);
-            this.SaveButton.Text = "toolStripButton1";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            // 
-            // ClassButton
-            // 
-            this.ClassButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ClassButton.Image = ((System.Drawing.Image)(resources.GetObject("ClassButton.Image")));
-            this.ClassButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ClassButton.Name = "ClassButton";
-            this.ClassButton.Size = new System.Drawing.Size(23, 22);
-            this.ClassButton.Text = "toolStripButton2";
-            this.ClassButton.Click += new System.EventHandler(this.ClassButton_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.UmlDesigner.DragOver += new System.Windows.Forms.DragEventHandler(this.UmlDesigner_DragOver);
+            this.UmlDesigner.DragDrop += new System.Windows.Forms.DragEventHandler(this.UmlDesigner_DragDrop);
             // 
             // ClassDiagramEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.UmlDesigner);
-            this.Controls.Add(this.MainToolStrip);
+            this.Controls.Add(this.splitContainer1);
             this.Name = "ClassDiagramEditor";
             this.Size = new System.Drawing.Size(555, 515);
-            this.MainToolStrip.ResumeLayout(false);
-            this.MainToolStrip.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private AlbinoHorse.Windows.Forms.UmlDesigner UmlDesigner;
-        private System.Windows.Forms.ToolStrip MainToolStrip;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton SaveButton;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton ClassButton;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ListBox UmlToolbox;
     }
 }

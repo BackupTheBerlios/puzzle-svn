@@ -13,11 +13,13 @@ namespace AlbinoHorse.Model
         void RemoveProperty(UmlProperty property);
         int GetPropertyCount();
         IEnumerable<UmlProperty> GetProperties();
+        UmlProperty CreateProperty();
 
         void AddMethod(UmlMethod method);
         void RemoveMethod(UmlMethod method);
         int GetMethodCount();
         IEnumerable<UmlMethod> GetMethods();
+        UmlMethod CreateMethod();
 
     }
 }

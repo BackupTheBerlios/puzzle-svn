@@ -526,6 +526,20 @@ namespace GenerationStudio.Gui
             {
                 SelectElementInProjectTree(errorElement, childNode);
             }
+        }
+
+        private void ProjectTree_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ProjectTree_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            TreeNode sourceNode = (TreeNode)e.Item;
+            Element currentElement = sourceNode.GetElement();
+            Engine.DragDropElement = currentElement;
+            DoDragDrop("idiot!", DragDropEffects.Move | DragDropEffects.Copy);
+
         }       
     }
 }

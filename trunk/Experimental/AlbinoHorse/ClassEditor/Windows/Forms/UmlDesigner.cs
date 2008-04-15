@@ -382,6 +382,7 @@ namespace AlbinoHorse.Windows.Forms
             int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
             Cursor = System.Windows.Forms.Cursors.Default;
             currentBoundingBox = null;
+            isPanning = false;
             for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
             {
                 BoundingBox bbox = BoundingBoxes[i];
@@ -410,6 +411,7 @@ namespace AlbinoHorse.Windows.Forms
 
         private Point mouseDownPoint;
         private Point mouseDownAutoscrollPoint;
+        private bool isPanning = false;
         void MainCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             EndInput();
@@ -445,6 +447,7 @@ namespace AlbinoHorse.Windows.Forms
                     return;
                 }
             }
+            isPanning = true;
         }
 
         void MainCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -455,14 +458,17 @@ namespace AlbinoHorse.Windows.Forms
 
             if (e.Button != MouseButtons.None)
             {
-                if (currentBoundingBox == null)
+                if (currentBoundingBox == null )
                 {
-                    int dx = mouseDownPoint.X - e.X;
-                    int dy = mouseDownPoint.Y - e.Y;
+                    if (isPanning)
+                    {
+                        int dx = mouseDownPoint.X - e.X;
+                        int dy = mouseDownPoint.Y - e.Y;
 
-                    Point newPos = new Point(mouseDownAutoscrollPoint.X + dx, mouseDownAutoscrollPoint.Y + dy);
-                    MainCanvas.AutoScrollPosition = newPos;
-                    Cursor = System.Windows.Forms.Cursors.SizeAll;
+                        Point newPos = new Point(mouseDownAutoscrollPoint.X + dx, mouseDownAutoscrollPoint.Y + dy);
+                        MainCanvas.AutoScrollPosition = newPos;
+                        Cursor = System.Windows.Forms.Cursors.SizeAll;
+                    }
                 }
                 else
                 {

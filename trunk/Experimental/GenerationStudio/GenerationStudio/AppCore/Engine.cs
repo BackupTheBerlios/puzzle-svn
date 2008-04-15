@@ -14,6 +14,7 @@ namespace GenerationStudio.AppCore
 
         private static readonly IList<Type> ElementTypes = new List<Type>();
         private static readonly IDictionary<Type, IList<Type>> ChildElements = new Dictionary<Type, IList<Type>>();
+        public static Element DragDropElement = null;
 
         public static void RegisterElementType(Type elementType)
         {

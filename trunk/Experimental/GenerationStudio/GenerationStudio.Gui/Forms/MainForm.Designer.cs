@@ -69,24 +69,24 @@
             this.ProjectPanel = new System.Windows.Forms.Panel();
             this.PropertyPanel = new System.Windows.Forms.Panel();
             this.DesignTimeContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.SummaryPanel = new System.Windows.Forms.Panel();
+            this.SummaryContentPanel = new System.Windows.Forms.Panel();
+            this.SummaryGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SummaryTitlePanel = new System.Windows.Forms.Panel();
+            this.SummaryPathPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.contentSeparator1 = new GenerationStudio.Controls.ContentSeparator();
+            this.SummaryChildCountLabel = new System.Windows.Forms.Label();
+            this.SummaryIcon = new System.Windows.Forms.PictureBox();
+            this.SummaryTitleLabel = new System.Windows.Forms.Label();
+            this.SummaryTopPanel = new System.Windows.Forms.Panel();
+            this.SummaryToolStrip = new System.Windows.Forms.ToolStrip();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.SummaryPanel = new System.Windows.Forms.Panel();
-            this.SummaryTitleLabel = new System.Windows.Forms.Label();
-            this.SummaryTopPanel = new System.Windows.Forms.Panel();
-            this.SummaryToolStrip = new System.Windows.Forms.ToolStrip();
-            this.SummaryGridView = new System.Windows.Forms.DataGridView();
-            this.SummaryTitlePanel = new System.Windows.Forms.Panel();
-            this.SummaryContentPanel = new System.Windows.Forms.Panel();
-            this.SummaryIcon = new System.Windows.Forms.PictureBox();
-            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SummaryChildCountLabel = new System.Windows.Forms.Label();
-            this.SummaryPathPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.contentSeparator1 = new GenerationStudio.Controls.ContentSeparator();
             this.ProjectTopPanel.SuspendLayout();
             this.ProjectToolStrip.SuspendLayout();
             this.ErrorPanel.SuspendLayout();
@@ -96,13 +96,13 @@
             this.ProjectPanel.SuspendLayout();
             this.PropertyPanel.SuspendLayout();
             this.DesignTimeContainer.SuspendLayout();
-            this.MainToolStrip.SuspendLayout();
             this.SummaryPanel.SuspendLayout();
-            this.SummaryTopPanel.SuspendLayout();
+            this.SummaryContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SummaryGridView)).BeginInit();
             this.SummaryTitlePanel.SuspendLayout();
-            this.SummaryContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SummaryIcon)).BeginInit();
+            this.SummaryTopPanel.SuspendLayout();
+            this.MainToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // ProjectTree
@@ -126,8 +126,10 @@
             this.ProjectTree.DoubleClick += new System.EventHandler(this.ProjectTree_DoubleClick);
             this.ProjectTree.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trvProject_MouseUp);
             this.ProjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvProject_AfterSelect);
+            this.ProjectTree.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ProjectTree_MouseMove);
             this.ProjectTree.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProjectTree_KeyPress);
             this.ProjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ProjectTree_KeyDown);
+            this.ProjectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.ProjectTree_ItemDrag);
             // 
             // Icons
             // 
@@ -461,6 +463,157 @@
             this.DesignTimeContainer.TabIndex = 3;
             this.DesignTimeContainer.Visible = false;
             // 
+            // SummaryPanel
+            // 
+            this.SummaryPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.SummaryPanel.Controls.Add(this.SummaryContentPanel);
+            this.SummaryPanel.Controls.Add(this.SummaryTitlePanel);
+            this.SummaryPanel.Controls.Add(this.SummaryTopPanel);
+            this.SummaryPanel.Location = new System.Drawing.Point(534, 3);
+            this.SummaryPanel.Name = "SummaryPanel";
+            this.SummaryPanel.Size = new System.Drawing.Size(414, 337);
+            this.SummaryPanel.TabIndex = 3;
+            // 
+            // SummaryContentPanel
+            // 
+            this.SummaryContentPanel.Controls.Add(this.SummaryGridView);
+            this.SummaryContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SummaryContentPanel.Location = new System.Drawing.Point(0, 106);
+            this.SummaryContentPanel.Name = "SummaryContentPanel";
+            this.SummaryContentPanel.Padding = new System.Windows.Forms.Padding(20, 0, 20, 20);
+            this.SummaryContentPanel.Size = new System.Drawing.Size(414, 231);
+            this.SummaryContentPanel.TabIndex = 9;
+            // 
+            // SummaryGridView
+            // 
+            this.SummaryGridView.AllowUserToAddRows = false;
+            this.SummaryGridView.AllowUserToDeleteRows = false;
+            this.SummaryGridView.AllowUserToResizeRows = false;
+            this.SummaryGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.SummaryGridView.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.SummaryGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SummaryGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.SummaryGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SummaryGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewImageColumn1,
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.SummaryGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SummaryGridView.GridColor = System.Drawing.SystemColors.Control;
+            this.SummaryGridView.Location = new System.Drawing.Point(20, 0);
+            this.SummaryGridView.Name = "SummaryGridView";
+            this.SummaryGridView.ReadOnly = true;
+            this.SummaryGridView.RowHeadersVisible = false;
+            this.SummaryGridView.RowTemplate.Height = 18;
+            this.SummaryGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.SummaryGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.SummaryGridView.Size = new System.Drawing.Size(374, 211);
+            this.SummaryGridView.TabIndex = 7;
+            // 
+            // dataGridViewImageColumn1
+            // 
+            this.dataGridViewImageColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewImageColumn1.DataPropertyName = "Image";
+            this.dataGridViewImageColumn1.Frozen = true;
+            this.dataGridViewImageColumn1.HeaderText = "";
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.ReadOnly = true;
+            this.dataGridViewImageColumn1.Width = 25;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "OwnerType";
+            this.dataGridViewTextBoxColumn1.Frozen = true;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Type";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "Owner";
+            this.dataGridViewTextBoxColumn2.FillWeight = 150F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Element";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // SummaryTitlePanel
+            // 
+            this.SummaryTitlePanel.Controls.Add(this.SummaryPathPanel);
+            this.SummaryTitlePanel.Controls.Add(this.contentSeparator1);
+            this.SummaryTitlePanel.Controls.Add(this.SummaryChildCountLabel);
+            this.SummaryTitlePanel.Controls.Add(this.SummaryIcon);
+            this.SummaryTitlePanel.Controls.Add(this.SummaryTitleLabel);
+            this.SummaryTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SummaryTitlePanel.Location = new System.Drawing.Point(0, 26);
+            this.SummaryTitlePanel.Name = "SummaryTitlePanel";
+            this.SummaryTitlePanel.Padding = new System.Windows.Forms.Padding(20, 10, 20, 20);
+            this.SummaryTitlePanel.Size = new System.Drawing.Size(414, 80);
+            this.SummaryTitlePanel.TabIndex = 8;
+            // 
+            // SummaryPathPanel
+            // 
+            this.SummaryPathPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.SummaryPathPanel.Location = new System.Drawing.Point(59, 36);
+            this.SummaryPathPanel.Name = "SummaryPathPanel";
+            this.SummaryPathPanel.Size = new System.Drawing.Size(238, 21);
+            this.SummaryPathPanel.TabIndex = 10;
+            // 
+            // contentSeparator1
+            // 
+            this.contentSeparator1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.contentSeparator1.Location = new System.Drawing.Point(20, 58);
+            this.contentSeparator1.Name = "contentSeparator1";
+            this.contentSeparator1.Size = new System.Drawing.Size(374, 2);
+            this.contentSeparator1.TabIndex = 9;
+            // 
+            // SummaryChildCountLabel
+            // 
+            this.SummaryChildCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SummaryChildCountLabel.Location = new System.Drawing.Point(303, 35);
+            this.SummaryChildCountLabel.Name = "SummaryChildCountLabel";
+            this.SummaryChildCountLabel.Size = new System.Drawing.Size(88, 13);
+            this.SummaryChildCountLabel.TabIndex = 8;
+            this.SummaryChildCountLabel.Text = "Path";
+            this.SummaryChildCountLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // SummaryIcon
+            // 
+            this.SummaryIcon.Image = global::GenerationStudio.Properties.Resources.newproject;
+            this.SummaryIcon.Location = new System.Drawing.Point(36, 16);
+            this.SummaryIcon.Name = "SummaryIcon";
+            this.SummaryIcon.Size = new System.Drawing.Size(16, 16);
+            this.SummaryIcon.TabIndex = 7;
+            this.SummaryIcon.TabStop = false;
+            // 
+            // SummaryTitleLabel
+            // 
+            this.SummaryTitleLabel.AutoSize = true;
+            this.SummaryTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SummaryTitleLabel.Location = new System.Drawing.Point(54, 10);
+            this.SummaryTitleLabel.Name = "SummaryTitleLabel";
+            this.SummaryTitleLabel.Size = new System.Drawing.Size(102, 25);
+            this.SummaryTitleLabel.TabIndex = 0;
+            this.SummaryTitleLabel.Text = "Summary";
+            // 
+            // SummaryTopPanel
+            // 
+            this.SummaryTopPanel.Controls.Add(this.SummaryToolStrip);
+            this.SummaryTopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SummaryTopPanel.Location = new System.Drawing.Point(0, 0);
+            this.SummaryTopPanel.Name = "SummaryTopPanel";
+            this.SummaryTopPanel.Size = new System.Drawing.Size(414, 26);
+            this.SummaryTopPanel.TabIndex = 5;
+            // 
+            // SummaryToolStrip
+            // 
+            this.SummaryToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.SummaryToolStrip.Name = "SummaryToolStrip";
+            this.SummaryToolStrip.Size = new System.Drawing.Size(414, 25);
+            this.SummaryToolStrip.TabIndex = 1;
+            // 
             // MainToolStrip
             // 
             this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -500,157 +653,6 @@
             this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton3.Text = "toolStripButton3";
             // 
-            // SummaryPanel
-            // 
-            this.SummaryPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.SummaryPanel.Controls.Add(this.SummaryContentPanel);
-            this.SummaryPanel.Controls.Add(this.SummaryTitlePanel);
-            this.SummaryPanel.Controls.Add(this.SummaryTopPanel);
-            this.SummaryPanel.Location = new System.Drawing.Point(534, 3);
-            this.SummaryPanel.Name = "SummaryPanel";
-            this.SummaryPanel.Size = new System.Drawing.Size(414, 337);
-            this.SummaryPanel.TabIndex = 3;
-            // 
-            // SummaryTitleLabel
-            // 
-            this.SummaryTitleLabel.AutoSize = true;
-            this.SummaryTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SummaryTitleLabel.Location = new System.Drawing.Point(54, 10);
-            this.SummaryTitleLabel.Name = "SummaryTitleLabel";
-            this.SummaryTitleLabel.Size = new System.Drawing.Size(102, 25);
-            this.SummaryTitleLabel.TabIndex = 0;
-            this.SummaryTitleLabel.Text = "Summary";
-            // 
-            // SummaryTopPanel
-            // 
-            this.SummaryTopPanel.Controls.Add(this.SummaryToolStrip);
-            this.SummaryTopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SummaryTopPanel.Location = new System.Drawing.Point(0, 0);
-            this.SummaryTopPanel.Name = "SummaryTopPanel";
-            this.SummaryTopPanel.Size = new System.Drawing.Size(414, 26);
-            this.SummaryTopPanel.TabIndex = 5;
-            // 
-            // SummaryToolStrip
-            // 
-            this.SummaryToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.SummaryToolStrip.Name = "SummaryToolStrip";
-            this.SummaryToolStrip.Size = new System.Drawing.Size(414, 25);
-            this.SummaryToolStrip.TabIndex = 1;
-            // 
-            // SummaryGridView
-            // 
-            this.SummaryGridView.AllowUserToAddRows = false;
-            this.SummaryGridView.AllowUserToDeleteRows = false;
-            this.SummaryGridView.AllowUserToResizeRows = false;
-            this.SummaryGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.SummaryGridView.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.SummaryGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.SummaryGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.SummaryGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SummaryGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewImageColumn1,
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
-            this.SummaryGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SummaryGridView.GridColor = System.Drawing.SystemColors.Control;
-            this.SummaryGridView.Location = new System.Drawing.Point(20, 0);
-            this.SummaryGridView.Name = "SummaryGridView";
-            this.SummaryGridView.ReadOnly = true;
-            this.SummaryGridView.RowHeadersVisible = false;
-            this.SummaryGridView.RowTemplate.Height = 18;
-            this.SummaryGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.SummaryGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SummaryGridView.Size = new System.Drawing.Size(374, 211);
-            this.SummaryGridView.TabIndex = 7;
-            // 
-            // SummaryTitlePanel
-            // 
-            this.SummaryTitlePanel.Controls.Add(this.SummaryPathPanel);
-            this.SummaryTitlePanel.Controls.Add(this.contentSeparator1);
-            this.SummaryTitlePanel.Controls.Add(this.SummaryChildCountLabel);
-            this.SummaryTitlePanel.Controls.Add(this.SummaryIcon);
-            this.SummaryTitlePanel.Controls.Add(this.SummaryTitleLabel);
-            this.SummaryTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SummaryTitlePanel.Location = new System.Drawing.Point(0, 26);
-            this.SummaryTitlePanel.Name = "SummaryTitlePanel";
-            this.SummaryTitlePanel.Padding = new System.Windows.Forms.Padding(20, 10, 20, 20);
-            this.SummaryTitlePanel.Size = new System.Drawing.Size(414, 80);
-            this.SummaryTitlePanel.TabIndex = 8;
-            // 
-            // SummaryContentPanel
-            // 
-            this.SummaryContentPanel.Controls.Add(this.SummaryGridView);
-            this.SummaryContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SummaryContentPanel.Location = new System.Drawing.Point(0, 106);
-            this.SummaryContentPanel.Name = "SummaryContentPanel";
-            this.SummaryContentPanel.Padding = new System.Windows.Forms.Padding(20, 0, 20, 20);
-            this.SummaryContentPanel.Size = new System.Drawing.Size(414, 231);
-            this.SummaryContentPanel.TabIndex = 9;
-            // 
-            // SummaryIcon
-            // 
-            this.SummaryIcon.Image = global::GenerationStudio.Properties.Resources.newproject;
-            this.SummaryIcon.Location = new System.Drawing.Point(36, 16);
-            this.SummaryIcon.Name = "SummaryIcon";
-            this.SummaryIcon.Size = new System.Drawing.Size(16, 16);
-            this.SummaryIcon.TabIndex = 7;
-            this.SummaryIcon.TabStop = false;
-            // 
-            // dataGridViewImageColumn1
-            // 
-            this.dataGridViewImageColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewImageColumn1.DataPropertyName = "Image";
-            this.dataGridViewImageColumn1.Frozen = true;
-            this.dataGridViewImageColumn1.HeaderText = "";
-            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
-            this.dataGridViewImageColumn1.ReadOnly = true;
-            this.dataGridViewImageColumn1.Width = 25;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "OwnerType";
-            this.dataGridViewTextBoxColumn1.Frozen = true;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Type";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "Owner";
-            this.dataGridViewTextBoxColumn2.FillWeight = 150F;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Element";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // SummaryChildCountLabel
-            // 
-            this.SummaryChildCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SummaryChildCountLabel.Location = new System.Drawing.Point(303, 35);
-            this.SummaryChildCountLabel.Name = "SummaryChildCountLabel";
-            this.SummaryChildCountLabel.Size = new System.Drawing.Size(88, 13);
-            this.SummaryChildCountLabel.TabIndex = 8;
-            this.SummaryChildCountLabel.Text = "Path";
-            this.SummaryChildCountLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // SummaryPathPanel
-            // 
-            this.SummaryPathPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.SummaryPathPanel.Location = new System.Drawing.Point(59, 36);
-            this.SummaryPathPanel.Name = "SummaryPathPanel";
-            this.SummaryPathPanel.Size = new System.Drawing.Size(238, 21);
-            this.SummaryPathPanel.TabIndex = 10;
-            // 
-            // contentSeparator1
-            // 
-            this.contentSeparator1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.contentSeparator1.Location = new System.Drawing.Point(20, 58);
-            this.contentSeparator1.Name = "contentSeparator1";
-            this.contentSeparator1.Size = new System.Drawing.Size(374, 2);
-            this.contentSeparator1.TabIndex = 9;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -682,16 +684,16 @@
             this.ProjectPanel.ResumeLayout(false);
             this.PropertyPanel.ResumeLayout(false);
             this.DesignTimeContainer.ResumeLayout(false);
-            this.MainToolStrip.ResumeLayout(false);
-            this.MainToolStrip.PerformLayout();
             this.SummaryPanel.ResumeLayout(false);
-            this.SummaryTopPanel.ResumeLayout(false);
-            this.SummaryTopPanel.PerformLayout();
+            this.SummaryContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SummaryGridView)).EndInit();
             this.SummaryTitlePanel.ResumeLayout(false);
             this.SummaryTitlePanel.PerformLayout();
-            this.SummaryContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SummaryIcon)).EndInit();
+            this.SummaryTopPanel.ResumeLayout(false);
+            this.SummaryTopPanel.PerformLayout();
+            this.MainToolStrip.ResumeLayout(false);
+            this.MainToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
