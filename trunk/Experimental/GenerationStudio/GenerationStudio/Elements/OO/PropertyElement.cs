@@ -6,6 +6,14 @@ using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
 {
+    public enum CollectionType
+    {
+        None,
+        Array,
+        List,
+        Set,        
+    }
+
     [Serializable]
     [ElementName("Property")]
     [ElementIcon("GenerationStudio.Images.property.gif")]
@@ -20,6 +28,20 @@ namespace GenerationStudio.Elements
             set
             {
                 type = value;
+                OnNotifyChange();
+            }
+        }
+
+        private CollectionType collectionType = CollectionType.None;
+        public CollectionType CollectionType 
+        {
+            get
+            {
+                return collectionType;
+            }
+            set
+            {
+                collectionType = value;
                 OnNotifyChange();
             }
         }

@@ -238,5 +238,10 @@ namespace GenerationStudio.Elements
         {
             return true;
         }
+
+        public virtual bool HideChildren()
+        {
+            return false;
+        }
     }
 }

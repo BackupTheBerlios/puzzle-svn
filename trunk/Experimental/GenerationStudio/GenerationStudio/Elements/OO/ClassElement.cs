@@ -11,7 +11,7 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.class.gif")]
     public class ClassElement : InstanceTypeElement
     {
-        public ClassElement Inherits { get; set; }
+        public string Inherits { get; set; }
         public bool IsAbstract { get; set; }
     }
 }

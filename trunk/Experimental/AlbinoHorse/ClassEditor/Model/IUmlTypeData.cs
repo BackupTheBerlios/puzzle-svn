@@ -12,6 +12,7 @@ namespace AlbinoHorse.Model
         int Y { get; set; }
         int Width { get; set; }
         bool Expanded { get; set; }
+        bool IsAbstract { get; set; }
 
         void AddProperty(UmlProperty property);
         void RemoveProperty(UmlProperty property);

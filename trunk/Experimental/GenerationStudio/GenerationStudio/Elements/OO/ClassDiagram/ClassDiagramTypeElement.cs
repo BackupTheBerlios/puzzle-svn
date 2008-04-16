@@ -13,7 +13,7 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.class.gif")]
     public class ClassDiagramTypeElement : ClassDiagramMemberElement
     {
-        public TypeElement Type { get; set; }
+        public ClassElement Type { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }

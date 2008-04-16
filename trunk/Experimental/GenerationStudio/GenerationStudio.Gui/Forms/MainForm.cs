@@ -137,13 +137,16 @@ namespace GenerationStudio.Gui
 
             parentNode.Nodes.Add(node);
 
-            element.AllChildren                
-                .OrderBy(childElement => childElement.Excluded)
-                .ThenBy(childElement => childElement.GetSortPriority())
-                .ThenBy(childElement => childElement.GetType().Name)                
-                .ThenBy(childElement => childElement.GetDisplayName ())
-                .ToList()
-                .ForEach(childElement => FillTree(childElement, node));
+            if (!element.HideChildren())
+            {
+                element.AllChildren
+                    .OrderBy(childElement => childElement.Excluded)
+                    .ThenBy(childElement => childElement.GetSortPriority())
+                    .ThenBy(childElement => childElement.GetType().Name)
+                    .ThenBy(childElement => childElement.GetDisplayName())
+                    .ToList()
+                    .ForEach(childElement => FillTree(childElement, node));
+            }
 
             if (element.GetDefaultExpanded())
                 node.Expand ();

@@ -12,6 +12,7 @@ namespace AlbinoHorse.Model
         public bool Expanded { get; set; }
         public string TypeName { get; set; }
         public string InheritsType { get; set; }
+        public bool IsAbstract { get; set; }
 
         private List<UmlProperty> properties = new List<UmlProperty>(); 
         public void AddProperty(UmlProperty property)

@@ -31,5 +31,11 @@ namespace GenerationStudio.Elements
             editor.OpenFile(this.FilePath);
             host.ShowEditor(editor);
         }
+
+        [ElementVerb("Execute")]
+        public void Execute(IHost host)
+        {
+            
+        }
     }
 }

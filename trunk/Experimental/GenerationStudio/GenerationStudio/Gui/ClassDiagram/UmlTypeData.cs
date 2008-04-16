@@ -24,6 +24,19 @@ namespace GenerationStudio.Gui
             }
         }
 
+        public bool IsAbstract
+        {
+            get
+            {
+                return Owner.Type.IsAbstract;
+            }
+            set
+            {
+                Owner.Type.IsAbstract = value;
+            }
+        }
+
+
         public int X
         {
             get

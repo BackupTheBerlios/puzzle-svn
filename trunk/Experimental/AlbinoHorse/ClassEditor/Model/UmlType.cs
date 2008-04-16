@@ -97,7 +97,8 @@ namespace AlbinoHorse.Model
             public const int typeBoxSideMargin = 10;
             public const int memberNameIndent = 30;
 
-            public static Font typeNameFont = new Font(fontName, 8f, FontStyle.Bold);
+            public static Font normalTypeNameFont = new Font(fontName, 8f, FontStyle.Bold);
+            public static Font abstractTypeNameFont = new Font(fontName, 8f, FontStyle.Bold | FontStyle.Italic);
             public static Font typeKindFont = new Font(fontName, 7f, FontStyle.Regular);
             public static Font typeInheritsFont = new Font(fontName, 7f, FontStyle.Regular);
             public static Font sectionCaptionFont = new Font(fontName, 8f, FontStyle.Regular);
@@ -105,7 +106,8 @@ namespace AlbinoHorse.Model
             public static Font newMemberFont = new Font(fontName, 8f, FontStyle.Underline);
             public static SolidBrush sectionCaptionBrush = new SolidBrush(Color.FromArgb(240, 242, 249));
             public static SolidBrush selectedMemberBrush = new SolidBrush(SystemColors.Highlight);
-            public static Pen borderPen = new Pen(Color.FromArgb(100, 100, 100), 1);
+            public static Pen normalBorderPen = new Pen(Color.FromArgb(100, 100, 100), 1);
+            public static Pen abstractBorderPen = MakeAbstractBorderPen();
             public static Pen selectionPen1 = MakeSelectonPen();
             public static Pen selectionPen2 = new Pen(Color.FromArgb(220, 220, 220), 1);
 
@@ -113,6 +115,14 @@ namespace AlbinoHorse.Model
             {
                 Pen pen = new Pen(Color.Gray, 1);
                 pen.DashStyle = DashStyle.Dash;
+                return pen;
+            }
+
+            private static Pen MakeAbstractBorderPen()
+            {
+                Pen pen = new Pen(Color.Black, 1);
+                pen.DashStyle = DashStyle.Dash;
+                pen.Alignment = PenAlignment.Center;
                 return pen;
             }
         }
@@ -170,7 +180,12 @@ namespace AlbinoHorse.Model
 
             Pen borderPen = null;
             if (BorderPen == null)
-                borderPen = Settings.borderPen;
+            {
+                if (DataSource.IsAbstract)
+                    borderPen = Settings.abstractBorderPen;
+                else
+                    borderPen = Settings.normalBorderPen;
+            }
             else
                 borderPen = BorderPen;
 
@@ -188,8 +203,21 @@ namespace AlbinoHorse.Model
             Rectangle typeNameBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4, width - Settings.typeBoxSideMargin * 2, 10);
             Rectangle typeKindBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4 + 15, width - Settings.typeBoxSideMargin * 2, 10);
 
-            info.Graphics.DrawString(DataSource.TypeName, Settings.typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
-            info.Graphics.DrawString("Class", Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
+            Font typeNameFont = null;
+            string kind = "";
+            if (DataSource.IsAbstract)
+            {
+                typeNameFont = Settings.abstractTypeNameFont;
+                kind = "Abstract class";
+            }
+            else
+            {
+                typeNameFont = Settings.normalTypeNameFont;
+                kind = "Class";
+            }
+
+            info.Graphics.DrawString(DataSource.TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
+            info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
 
             Rectangle typeExpanderBounds = new Rectangle(x + width - 20, y + 6, 13, 13);
 
@@ -766,7 +794,7 @@ namespace AlbinoHorse.Model
                     DataSource.TypeName = owner.GetInput();
                 };
 
-            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.typeNameFont, endRenameType);
+            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.normalTypeNameFont, endRenameType);
         }
 
         
