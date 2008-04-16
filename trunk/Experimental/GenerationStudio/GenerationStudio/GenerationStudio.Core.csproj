@@ -69,7 +69,9 @@
     <Compile Include="Elements\DB\TableElement.cs" />
     <Compile Include="Elements\ElementError.cs" />
     <Compile Include="Elements\NamedElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagramElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramMemberElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramTypeElement.cs" />
     <Compile Include="Elements\OO\ClassElement.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\OO\EnumElement.cs" />

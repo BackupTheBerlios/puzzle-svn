@@ -6,9 +6,11 @@ namespace AlbinoHorse.Model
 {
     public class DefaultUmlTypeData : IUmlTypeData
     {
-
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; set; }
+        public bool Expanded { get; set; }
         public string TypeName { get; set; }
-
         public string InheritsType { get; set; }
 
         private List<UmlProperty> properties = new List<UmlProperty>(); 

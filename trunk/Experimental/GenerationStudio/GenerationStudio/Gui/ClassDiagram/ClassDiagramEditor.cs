@@ -33,6 +33,9 @@ namespace GenerationStudio.Gui
             }
         }
 
+        public ClassDiagramElement ClassDiagramNode { get; set; }
+
+
         private void AddClass()
         {
             UmlType newClass = new UmlType();
@@ -48,15 +51,32 @@ namespace GenerationStudio.Gui
             if (e.Data.GetDataPresent(typeof(string)))
             {
                 ClassElement element = (ClassElement)Engine.DragDropElement;
-                UmlType t = new UmlType();
-                UmlTypeData data = new UmlTypeData();
-                data.Owner = element;
-                t.DataSource = data;
-                t.Bounds = new Rectangle(1 * 21, 1 * 21, 7 * 21, 2 * 21);
-                t.Expanded = true;
-                UmlDesigner.Diagram.Shapes.Add(t);
+                
+                
+                ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
+                diagramElement.Type = element;
+                diagramElement.Expanded = true;
+                Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
+                diagramElement.X = cp.X;
+                diagramElement.Y = cp.Y;
+                diagramElement.Width = 21 * 4;
+                ClassDiagramNode.AddChild(diagramElement);
+
+
+                AddUmlTypeFromTypeElement(diagramElement);
+                
                 UmlDesigner.Refresh();
             }
+        }
+
+        private void AddUmlTypeFromTypeElement(ClassDiagramTypeElement diagramElement)
+        {
+            UmlTypeData data = new UmlTypeData();
+            data.Owner = diagramElement;
+            UmlType t = new UmlType();
+            t.DataSource = data;
+
+            UmlDesigner.Diagram.Shapes.Add(t);
         }
 
         private void UmlDesigner_DragOver(object sender, DragEventArgs e)
@@ -69,6 +89,16 @@ namespace GenerationStudio.Gui
             {
                 e.Effect = DragDropEffects.None;
             }
+        }
+
+        public void LoadData()
+        {
+            UmlDesigner.Diagram.Shapes.Clear();
+            foreach (var diagramElement in ClassDiagramNode.GetChildren<ClassDiagramTypeElement>())
+            {
+                AddUmlTypeFromTypeElement(diagramElement);
+            }
+            UmlDesigner.Refresh();
         }
     }
 }

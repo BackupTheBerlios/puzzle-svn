@@ -19,6 +19,8 @@ namespace GenerationStudio.Elements
         public void Edit(IHost host)
         {
             ClassDiagramEditor editor = host.GetEditor<ClassDiagramEditor>(this, "Edit diagram");
+            editor.ClassDiagramNode = this;
+            editor.LoadData();
             host.ShowEditor(editor);
         }
     }

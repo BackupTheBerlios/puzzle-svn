@@ -21,15 +21,19 @@ namespace AlbinoHorse.Model
                 {
                     int propertiesHeight = ((DataSource.GetPropertyCount () + 1) * (PropertiesExpanded ? 1 : 0)) * 16 + 20;
                     int methodsHeight = ((DataSource.GetMethodCount() + 1) * (MethodsExpanded ? 1 : 0)) * 16 + 20;
-                    return new Rectangle(base.Bounds.X, base.Bounds.Y, base.Bounds.Width, 55 + propertiesHeight + methodsHeight);
+                    return new Rectangle(DataSource.X, DataSource.Y, DataSource.Width, 55 + propertiesHeight + methodsHeight);
                 }
                 else
                 {
-                    return new Rectangle(base.Bounds.X, base.Bounds.Y, base.Bounds.Width, 63 - 3);
+                    return new Rectangle(DataSource.X,DataSource.Y, DataSource.Width, 63 - 3);
                 }
             }
             set
             {
+                DataSource.X = value.X;
+                DataSource.Y = value.Y;
+                DataSource.Width = value.Width;
+
                 base.Bounds = value;
             }
         }
@@ -66,7 +70,18 @@ namespace AlbinoHorse.Model
         protected readonly object AddNewMethodIdentifier = new object();
 
 
-        public bool Expanded { get; set; }        
+        public bool Expanded 
+        {
+            get
+            {
+                return DataSource.Expanded;
+            }
+            set
+            {
+                DataSource.Expanded = value;
+            }
+        }       
+ 
         public bool PropertiesExpanded { get; set; }
         public bool MethodsExpanded { get; set; }
 
@@ -677,7 +692,6 @@ namespace AlbinoHorse.Model
 
             if (this.SelectedObject == null && args.Key == Keys.Delete)
             {
-                MessageBox.Show("Begin delete type");
                 args.Sender.Diagram.Shapes.Remove(this);
                 args.Redraw = true;
             }

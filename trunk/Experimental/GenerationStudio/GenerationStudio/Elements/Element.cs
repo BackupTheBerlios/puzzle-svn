@@ -21,19 +21,19 @@ namespace GenerationStudio.Elements
         private IList<Element> children = new List<Element>();
 
         [Browsable(false)]
-        public IList<Element> AllChildren
+        public IEnumerable<Element> AllChildren
         {
             get
             {
                 var res = from child in children
                           select child;
 
-                return res.ToList();
+                return res;
             }
         }
 
         [Browsable(false)]
-        public IList<Element> Children
+        public IEnumerable<Element> Children
         {
             get
             {
@@ -42,7 +42,7 @@ namespace GenerationStudio.Elements
                           where !child.Excluded
                           select child;
 
-                return res.ToList();
+                return res;
             }
         }
 

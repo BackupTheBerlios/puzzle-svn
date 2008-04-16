@@ -222,7 +222,7 @@ namespace GenerationStudio.Gui
             SummaryIcon.Image = currentElement.GetIcon();
 
 
-            IList<Element> allChildren = currentElement.AllChildren;
+            IList<Element> allChildren = currentElement.AllChildren.ToList ();
             DataTable dt = new DataTable();
             dt.Columns.Add("Image", typeof(Image));
             dt.Columns.Add("OwnerType", typeof(string));
@@ -235,7 +235,7 @@ namespace GenerationStudio.Gui
             }
             SummaryGridView.DataSource = dt;
 
-            SummaryChildCountLabel.Text = string.Format("{0} Item(s)",currentElement.AllChildren.Count);
+            SummaryChildCountLabel.Text = string.Format("{0} Item(s)",currentElement.AllChildren.ToList().Count);
         }
 
         private void SummaryPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

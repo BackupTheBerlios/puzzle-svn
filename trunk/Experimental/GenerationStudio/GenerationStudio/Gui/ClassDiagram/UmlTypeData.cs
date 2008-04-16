@@ -10,17 +10,65 @@ namespace GenerationStudio.Gui
     public class UmlTypeData : IUmlTypeData
     {
 
-        public ClassElement Owner { get; set; }
+        public ClassDiagramTypeElement Owner { get; set; }
+
+        public bool Expanded
+        {
+            get
+            {
+                return Owner.Expanded;
+            }
+            set
+            {
+                Owner.Expanded = value;
+            }
+        }
+
+        public int X
+        {
+            get
+            {
+                return Owner.X;
+            }
+            set
+            {
+                Owner.X = value;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return Owner.Y;
+            }
+            set
+            {
+                Owner.Y = value;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return Owner.Width;
+            }
+            set
+            {
+                Owner.Width = value;
+            }
+        }
 
         public string TypeName
         {
             get
             {
-                return Owner.Name;
+                return Owner.Type.Name;
             }
             set
             {
-                Owner.Name = value;
+                Owner.Type.Name = value;
             }
         }
 
@@ -28,10 +76,11 @@ namespace GenerationStudio.Gui
         {
             get
             {
-                if (Owner.Inherits != null)
-                    return Owner.Inherits.Name;
-                else
-                    return null;
+                return null;
+                //if (Owner.Type.Inherits != null)
+                //    return Owner.Type.Inherits.Name;
+                //else
+                //    return null;
             }
             set
             {
@@ -54,18 +103,22 @@ namespace GenerationStudio.Gui
 
         public int GetPropertyCount()
         {
-            return Owner.GetChildren<PropertyElement>().Count;
+            return Owner.Type.GetChildren<PropertyElement>().Count;
         }
 
         private Dictionary<PropertyElement, UmlProperty> propertyLookup = new Dictionary<PropertyElement, UmlProperty>();
 
         public IEnumerable<UmlProperty> GetProperties()
         {
-            foreach (PropertyElement pe in Owner.GetChildren<PropertyElement>())
-            {
-                UmlProperty property = GetProperty(pe);
-                yield return property;
-            }
+            var res = from e in Owner.Type.AllChildren
+
+                      where !e.Excluded &&
+                            e is PropertyElement
+                      orderby e.GetDisplayName()
+                      select e;
+
+            foreach (PropertyElement pe in res)
+                yield return GetProperty(pe);
         }
 
         private UmlProperty GetProperty(PropertyElement pe)
