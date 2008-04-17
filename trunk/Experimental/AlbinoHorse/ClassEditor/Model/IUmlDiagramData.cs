@@ -7,13 +7,13 @@ namespace AlbinoHorse.Model
 {
     public interface IUmlDiagramData
     {
-        UmlType CreateClass();
-        UmlType CreateInterface();
-        UmlType CreateEnum();
+        UmlInstanceType CreateClass();
+        UmlInstanceType CreateInterface();
+        UmlInstanceType CreateEnum();
 
-        void RemoveClass(UmlType item);
-        void RemoveInterface(UmlType item);
-        void RemoveEnum(UmlType item);
+        void RemoveClass(UmlInstanceType item);
+        void RemoveInterface(UmlInstanceType item);
+        void RemoveEnum(UmlInstanceType item);
 
 
         IEnumerable<Shape> GetShapes();

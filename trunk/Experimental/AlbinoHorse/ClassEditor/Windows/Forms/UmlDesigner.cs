@@ -76,7 +76,7 @@ namespace AlbinoHorse.Windows.Forms
             float height = 0;
             foreach (Shape type in diagram.Shapes)
             {
-                if (type is UmlType)
+                if (type is UmlInstanceType)
                 {
                     width = Math.Max(type.Bounds.Right, width);
                     height = Math.Max(type.Bounds.Bottom, height);
@@ -265,7 +265,7 @@ namespace AlbinoHorse.Windows.Forms
             float height=0;
             foreach (Shape type in diagram.Shapes)
             {
-                if (type is UmlType)
+                if (type is UmlInstanceType)
                 {
                     width = Math.Max(type.Bounds.Right, width);
                     height = Math.Max(type.Bounds.Bottom, height);

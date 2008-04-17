@@ -40,7 +40,7 @@ namespace AlbinoHorse.Model
 
         public virtual void Draw(RenderInfo info) { }
         public virtual void DrawBackground(RenderInfo info) { }
-        public virtual void PreviewDraw(RenderInfo info) { }
+        public virtual void DrawPreview(RenderInfo info) { }
         public virtual void PreviewDrawBackground(RenderInfo info) { }
 
 

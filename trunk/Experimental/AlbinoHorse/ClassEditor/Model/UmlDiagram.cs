@@ -24,7 +24,7 @@ namespace AlbinoHorse.Model
             int scaleFactor = 7;
             foreach (Shape shape in Shapes)
             {
-                if (shape is UmlType)
+                if (shape is UmlInstanceType)
                 {
                     Node node = new Node();
                     node.Bounds = new RectangleF(shape.Bounds.Left, shape.Bounds.Top, shape.Bounds.Width / scaleFactor, shape.Bounds.Height / scaleFactor);
@@ -60,7 +60,7 @@ namespace AlbinoHorse.Model
 
             foreach (Node node in graph.Nodes)
             {
-                UmlType umlType = (UmlType)nodeLookup[node];
+                UmlInstanceType umlType = (UmlInstanceType)nodeLookup[node];
                 umlType.Bounds = new Rectangle((int)(node.Bounds.X * scaleFactor), (int)(node.Bounds.Y * scaleFactor), umlType.Bounds.Width, umlType.Bounds.Height);
             }
         }
@@ -113,7 +113,7 @@ namespace AlbinoHorse.Model
             foreach (Shape shape in Shapes)
             {
                 if (info.Preview)
-                    shape.PreviewDraw(info);
+                    shape.DrawPreview(info);
                 else
                     shape.Draw(info);
 
