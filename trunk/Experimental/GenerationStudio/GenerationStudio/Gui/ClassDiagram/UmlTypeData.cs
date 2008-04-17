@@ -7,7 +7,7 @@ using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
 {
-    public class UmlTypeData : IUmlTypeData
+    public class UmlTypeData : IUmlInstanceTypeData
     {
 
         public ClassDiagramTypeElement Owner { get; set; }

@@ -12,5 +12,33 @@ namespace AlbinoHorse.Model
 {
     public class UmlType : Shape
     {
+        protected Point mouseDownPos;
+        protected Point mouseDownShapePos;
+
+        #region Properties
+
+        #region SelectedObject property
+        private object selectedObject;
+        public object SelectedObject
+        {
+            get
+            {
+                return selectedObject;
+            }
+
+            set
+            {
+                selectedObject = value;
+                OnSelectedObjectChanged(EventArgs.Empty);
+            }
+        }
+        #endregion
+
+        #endregion
+
+        protected virtual void OnSelectedObjectChanged(EventArgs eventArgs)
+        {
+
+        }
     }
 }

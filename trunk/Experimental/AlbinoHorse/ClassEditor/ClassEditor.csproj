@@ -60,9 +60,11 @@
     <Compile Include="Infrastructure\ShapeKeyEventArgs.cs" />
     <Compile Include="Model\DefaultUmlPropertyData.cs" />
     <Compile Include="Model\DefaultUmlTypeData.cs" />
-    <Compile Include="Model\IUmlDiagramData.cs" />
-    <Compile Include="Model\IUmlPropertyData.cs" />
-    <Compile Include="Model\IUmlTypeData.cs" />
+    <Compile Include="Model\Interfaces\IUmlRenderer.cs" />
+    <Compile Include="Model\Interfaces\IUmlDiagramData.cs" />
+    <Compile Include="Model\Interfaces\IUmlPropertyData.cs" />
+    <Compile Include="Model\Interfaces\IUmlInstanceTypeData.cs" />
+    <Compile Include="Model\Interfaces\IUmlTypeData.cs" />
     <Compile Include="Model\UmlType.cs" />
     <Compile Include="Windows\Forms\Canvas.cs">
       <SubType>UserControl</SubType>

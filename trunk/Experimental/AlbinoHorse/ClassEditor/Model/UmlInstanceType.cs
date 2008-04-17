@@ -12,9 +12,6 @@ namespace AlbinoHorse.Model
 {
     public class UmlInstanceType : UmlType
     {
-        private Point mouseDownPos;
-        private Point mouseDownShapePos;
-
         #region Properties (+ fields)
 
         #region Bounds property
@@ -40,23 +37,6 @@ namespace AlbinoHorse.Model
                 DataSource.Width = value.Width;
 
                 base.Bounds = value;
-            }
-        }
-        #endregion
-
-        #region SelectedObject property
-        private object selectedObject;
-        public object SelectedObject
-        {
-            get
-            {
-                return selectedObject;
-            }
-
-            set
-            {
-                selectedObject = value;
-                OnSelectedObjectChanged(EventArgs.Empty);
             }
         }
         #endregion
@@ -127,7 +107,7 @@ namespace AlbinoHorse.Model
         #endregion
 
         #region DataSource property
-        public IUmlTypeData DataSource { get; set; }
+        public IUmlInstanceTypeData DataSource { get; set; }
         #endregion
 
         #endregion
@@ -746,10 +726,7 @@ namespace AlbinoHorse.Model
         }
         #endregion
 
-        private void OnSelectedObjectChanged(EventArgs eventArgs)
-        {
-
-        }
+        
 
         public override void OnKeyPress(ShapeKeyEventArgs args)
         {

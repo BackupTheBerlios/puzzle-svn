@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlbinoHorse.Model
 {
-    public class DefaultUmlTypeData : IUmlTypeData
+    public class DefaultUmlTypeData : IUmlInstanceTypeData
     {
         public int X { get; set; }
         public int Y { get; set; }
