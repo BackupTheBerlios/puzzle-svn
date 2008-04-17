@@ -123,6 +123,69 @@ namespace AlbinoHorse.Model
 
             return path;
         }
+        
+        protected void DrawTypeExpander(RenderInfo info, int x, int y, int width)
+        {
+            Rectangle typeExpanderBounds = new Rectangle(x + width - 20, y + 6, 13, 13);
+
+            #region add type expander bbox
+            BoundingBox bboxTypeExpander = new BoundingBox();
+            bboxTypeExpander.Target = this;
+            bboxTypeExpander.Bounds = typeExpanderBounds;
+            bboxTypeExpander.Data = this.TypeExpanderIdentifier;
+            info.BoundingBoxes.Add(bboxTypeExpander);
+            #endregion
+
+            if (Expanded)
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Collapse, typeExpanderBounds);
+            else
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Expand, typeExpanderBounds);
+        }
+
+        protected virtual void DrawExpanded(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, LinearGradientBrush captionBrush, Pen borderPen)
+        {
+            int currentY = y + DrawExpandedCaption(info, path, x, y, width, height, captionBrush);
+
+            currentY = DrawExpandedBody(info, x, width, currentY);
+
+            info.Graphics.DrawPath(borderPen, path);
+        }
+
+        protected abstract int DrawExpandedBody(RenderInfo info, int x, int width, int currentY);        
+
+        protected int DrawExpandedCaption(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, Brush captionBrush)
+        {
+            int captionHeight = 48;
+            Rectangle captionBounds = new Rectangle(x, y, width, captionHeight);
+            #region add caption bbox
+            BoundingBox bboxCaption = new BoundingBox();
+            bboxCaption.Bounds = captionBounds;
+            bboxCaption.Target = this;
+            bboxCaption.Data = this.CaptionIdentifier;
+            info.BoundingBoxes.Add(bboxCaption);
+            #endregion
+
+            info.Graphics.SetClip(path);
+            info.Graphics.FillRectangle(captionBrush, captionBounds);
+            info.Graphics.FillRectangle(Brushes.White, x, y + captionHeight, width, height - captionHeight);
+            info.Graphics.DrawLine(Pens.LightGray, x, y + captionHeight, x + width, y + captionHeight);
+            info.Graphics.ResetClip();
+            return captionHeight;
+        }
+
+        protected void DrawCollapsed(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, Brush captionBrush, Pen borderPen)
+        {
+            Rectangle captionBounds = new Rectangle(x, y, width, height);
+
+            BoundingBox bboxCaption = new BoundingBox();
+            bboxCaption.Bounds = captionBounds;
+            bboxCaption.Target = this;
+            bboxCaption.Data = this.CaptionIdentifier;
+            info.BoundingBoxes.Add(bboxCaption);
+
+            info.Graphics.FillPath(captionBrush, path);
+            info.Graphics.DrawPath(borderPen, path);
+        }
 
         protected void DrawSelection(RenderInfo info)
         {

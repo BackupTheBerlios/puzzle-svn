@@ -121,8 +121,6 @@ namespace AlbinoHorse.Model
             bboxThis.Data = this.BodyIdentifier;
             info.BoundingBoxes.Add(bboxThis);
 
-            
-
             int x = renderBounds.X;
             int y = renderBounds.Y;
             int radius = 16;
@@ -155,6 +153,8 @@ namespace AlbinoHorse.Model
             }
 
 
+            DrawTypeExpander(info, x, y, width);
+            DrawSelection(info);
 
             Rectangle typeNameBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4, width - Settings.typeBoxSideMargin * 2, 10);
             Rectangle typeKindBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4 + 15, width - Settings.typeBoxSideMargin * 2, 10);
@@ -175,20 +175,7 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawString(DataSource.TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
             info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
 
-            Rectangle typeExpanderBounds = new Rectangle(x + width - 20, y + 6, 13, 13);
-
-            #region add type expander bbox
-            BoundingBox bboxTypeExpander = new BoundingBox();
-            bboxTypeExpander.Target = this;
-            bboxTypeExpander.Bounds = typeExpanderBounds;
-            bboxTypeExpander.Data = this.TypeExpanderIdentifier;
-            info.BoundingBoxes.Add(bboxTypeExpander);
-            #endregion
-
-            if (Expanded)
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Collapse, typeExpanderBounds);
-            else
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Expand, typeExpanderBounds);
+            
 
             if (InheritsTypeName != null)
             {
@@ -198,65 +185,20 @@ namespace AlbinoHorse.Model
             }
 
 
-            DrawSelection(info);
+            
 
         }
 
-        
-        
 
-        private void DrawCollapsed(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, LinearGradientBrush captionBrush, Pen borderPen)
+
+        protected override int DrawExpandedBody(RenderInfo info, int x, int width, int currentY)
         {
-            Rectangle captionBounds = new Rectangle(x, y, width, height);
-
-            BoundingBox bboxCaption = new BoundingBox();
-            bboxCaption.Bounds = captionBounds;
-            bboxCaption.Target = this;
-            bboxCaption.Data = this.CaptionIdentifier;
-            info.BoundingBoxes.Add(bboxCaption);
-
-            info.Graphics.FillPath(captionBrush, path);
-            info.Graphics.DrawPath(borderPen, path);
-        }
-
-        private void DrawExpanded(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, LinearGradientBrush captionBrush, Pen borderPen)
-        {
-            int currentY = y + DrawCaption(info, path, x, y, width, height, captionBrush);
-
             currentY = DrawProperties(info, x, currentY, width);
             currentY = DrawMethods(info, x, currentY, width);
-
-
-
-            info.Graphics.ResetClip();
-
-            //  info.Graphics.FillPath(captionBrush, path);
-            info.Graphics.DrawPath(borderPen, path);
+            return currentY;
         }
 
-        private int DrawCaption(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, LinearGradientBrush captionBrush)
-        {
-            int captionHeight = 48;
-            Rectangle captionBounds = new Rectangle(x, y, width, captionHeight);
-            #region add caption bbox
-            BoundingBox bboxCaption = new BoundingBox();
-            bboxCaption.Bounds = captionBounds;
-            bboxCaption.Target = this;
-            bboxCaption.Data = this.CaptionIdentifier;
-            info.BoundingBoxes.Add(bboxCaption);
-            #endregion
-
-            //GraphicsPath captionPath = (GraphicsPath)path.Clone();
-            info.Graphics.SetClip(path);
-            info.Graphics.FillRectangle(captionBrush, captionBounds);
-            info.Graphics.FillRectangle(Brushes.White, x, y + captionHeight, width, height - captionHeight);
-            info.Graphics.DrawLine(Pens.LightGray, x, y + captionHeight, x + width, y + captionHeight);
-
-
-
-
-            return captionHeight;
-        }
+        
 
         private int DrawProperties(RenderInfo info, int x, int y, int width)
         {
