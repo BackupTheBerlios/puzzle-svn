@@ -11,14 +11,10 @@ namespace AlbinoHorse.Model
         public int Width { get; set; }
         public bool Expanded { get; set; }
         public string TypeName { get; set; }
-        public string InheritsType { get; set; }
+        public string InheritsTypeName { get; set; }
         public bool IsAbstract { get; set; }
 
         private List<UmlProperty> properties = new List<UmlProperty>(); 
-        public void AddProperty(UmlProperty property)
-        {
-            properties.Add(property);
-        }
 
         public void RemoveProperty(UmlProperty property)
         {
@@ -40,6 +36,7 @@ namespace AlbinoHorse.Model
         {
             UmlProperty property = new UmlProperty();
             property.DataSource = new DefaultUmlPropertyData();
+            properties.Add(property);
             return property;
         }
 

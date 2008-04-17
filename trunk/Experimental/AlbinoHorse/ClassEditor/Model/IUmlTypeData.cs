@@ -7,18 +7,18 @@ namespace AlbinoHorse.Model
     public interface IUmlTypeData
     {
         string TypeName { get; set; }
-        string InheritsType { get; set; }
+        string InheritsTypeName { get; set; }
         int X { get; set; }
         int Y { get; set; }
         int Width { get; set; }
         bool Expanded { get; set; }
         bool IsAbstract { get; set; }
 
-        void AddProperty(UmlProperty property);
+        UmlProperty CreateProperty();
         void RemoveProperty(UmlProperty property);
         int GetPropertyCount();
         IEnumerable<UmlProperty> GetProperties();
-        UmlProperty CreateProperty();
+        
 
         void AddMethod(UmlMethod method);
         void RemoveMethod(UmlMethod method);

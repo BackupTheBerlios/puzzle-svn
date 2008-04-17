@@ -85,50 +85,51 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public string InheritsType
+        public string InheritsTypeName
         {
             get
             {
-                return null;
-                //if (Owner.Type.Inherits != null)
-                //    return Owner.Type.Inherits.Name;
-                //else
-                //    return null;
+                return Owner.Type.Inherits;
             }
             set
             {
-               // Owner.Inherits = value;
+                Owner.Type.Inherits = value;
             }
         }
 
         
-
-        public void AddProperty(UmlProperty property)
-        {
-        
-        }
 
         public void RemoveProperty(UmlProperty property)
         {
             PropertyElement pe = (PropertyElement)property.DataSource.DataObject;
             pe.Parent.RemoveChild(pe);
+            propertyLookup.Remove(pe);
         }
 
         public int GetPropertyCount()
         {
-            return Owner.Type.GetChildren<PropertyElement>().Count;
+            var res = GetValidProperties();
+
+            return res.ToList().Count();
+        }
+
+        private IOrderedEnumerable<Element> GetValidProperties()
+        {
+            var res = from e in Owner.Type.AllChildren
+
+                      where !e.Excluded &&
+                            e is PropertyElement &&
+                            e.GetDisplayName() != ""
+                      orderby e.GetDisplayName()
+                      select e;
+            return res;
         }
 
         private Dictionary<PropertyElement, UmlProperty> propertyLookup = new Dictionary<PropertyElement, UmlProperty>();
 
         public IEnumerable<UmlProperty> GetProperties()
         {
-            var res = from e in Owner.Type.AllChildren
-
-                      where !e.Excluded &&
-                            e is PropertyElement
-                      orderby e.GetDisplayName()
-                      select e;
+            var res = GetValidProperties();
 
             foreach (PropertyElement pe in res)
                 yield return GetProperty(pe);
@@ -155,7 +156,16 @@ namespace GenerationStudio.Gui
         public UmlProperty CreateProperty()
         {
             UmlProperty property = new UmlProperty();
-            property.DataSource = new DefaultUmlPropertyData();
+            UmlPropertyData data = new UmlPropertyData();
+            PropertyElement pe = new PropertyElement();
+            data.Owner = pe;
+            property.DataSource = data;
+            property.DataSource.Name = "";
+            property.DataSource.Type = "string";
+
+            propertyLookup.Add(pe, property);
+            Owner.Type.AddChild(pe);
+
             return property;
         }
 

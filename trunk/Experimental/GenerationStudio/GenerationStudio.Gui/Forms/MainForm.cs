@@ -47,8 +47,8 @@ namespace GenerationStudio.Gui
             SummaryDockingForm.SetContent(SummaryPanel, "Summary");
 
             ErrorDockingForm.Show(DockPanel, DockState.DockBottom);
-            ProjectDockingForm.Show(DockPanel,DockState.DockLeft);
-            PropertiesDockingForm.Show(ProjectDockingForm.Pane, DockAlignment.Bottom, 0.5);
+            ProjectDockingForm.Show(DockPanel,DockState.DockRight);
+            PropertiesDockingForm.Show(ProjectDockingForm.Pane, DockAlignment.Bottom, 0.3);
             StartDockingForm.Show(DockPanel, DockState.Document);
             SummaryDockingForm.Show(DockPanel, DockState.Document);
 
