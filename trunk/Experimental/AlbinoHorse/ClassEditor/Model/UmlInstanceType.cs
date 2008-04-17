@@ -21,8 +21,8 @@ namespace AlbinoHorse.Model
             {
                 if (Expanded)
                 {
-                    int propertiesHeight = ((DataSource.GetPropertyCount() + 1) * (PropertiesExpanded ? 1 : 0)) * 16 + 20;
-                    int methodsHeight = ((DataSource.GetMethodCount() + 1) * (MethodsExpanded ? 1 : 0)) * 16 + 20;
+                    int propertiesHeight = ((TypedDataSource.GetPropertyCount() + 1) * (PropertiesExpanded ? 1 : 0)) * 16 + 20;
+                    int methodsHeight = ((TypedDataSource.GetMethodCount() + 1) * (MethodsExpanded ? 1 : 0)) * 16 + 20;
                     return new Rectangle(DataSource.X, DataSource.Y, DataSource.Width, 55 + propertiesHeight + methodsHeight);
                 }
                 else
@@ -41,45 +41,16 @@ namespace AlbinoHorse.Model
         }
         #endregion
 
-        #region Expanded property
-        public bool Expanded
-        {
-            get
-            {
-                return DataSource.Expanded;
-            }
-            set
-            {
-                DataSource.Expanded = value;
-            }
-        }
-        #endregion
-
-        #region TypeName property
-        public string TypeName
-        {
-            get
-            {
-                return DataSource.TypeName;
-            }
-            set
-            {
-                DataSource.TypeName = value;
-            }
-        }
-
-        #endregion
-
         #region InheritsTypeName property
         public string InheritsTypeName
         {
             get
             {
-                return DataSource.InheritsTypeName;
+                return TypedDataSource.InheritsTypeName;
             }
             set
             {
-                DataSource.InheritsTypeName = value;
+                TypedDataSource.InheritsTypeName = value;
             }
         }
         #endregion
@@ -89,11 +60,11 @@ namespace AlbinoHorse.Model
         {
             get
             {
-                return DataSource.IsAbstract;
+                return TypedDataSource.IsAbstract;
             }
             set
             {
-                DataSource.IsAbstract = value;
+                TypedDataSource.IsAbstract = value;
             }
         }
         #endregion
@@ -106,19 +77,18 @@ namespace AlbinoHorse.Model
         public bool MethodsExpanded { get; set; }
         #endregion
 
-        #region DataSource property
-        public IUmlInstanceTypeData DataSource { get; set; }
-        #endregion
+        public IUmlInstanceTypeData TypedDataSource
+        {
+            get
+            {
+                return DataSource as IUmlInstanceTypeData;
+            }
+        }
 
         #endregion
 
         #region Identifiers
-        //bounding box identifiers
-        protected readonly object CaptionIdentifier = new object();
-        protected readonly object TypeExpanderIdentifier = new object();
-        protected readonly object LeftResizeIdentifier = new object();
-        protected readonly object RightResizeIdentifier = new object();
-        protected readonly object BodyIdentifier = new object();
+        //bounding box identifiers        
         protected readonly object PropertiesIdentifier = new object();
         protected readonly object MethodsIdentifier = new object();
         protected readonly object AddNewPropertyIdentifier = new object();
@@ -175,11 +145,7 @@ namespace AlbinoHorse.Model
 
         #region Draw
 
-        public override void DrawPreview(RenderInfo info)
-        {
-            info.Graphics.FillRectangle(Brushes.White, this.Bounds);
-            info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
-        }
+        
 
         public override void Draw(RenderInfo info)
         {
@@ -192,7 +158,7 @@ namespace AlbinoHorse.Model
             bboxThis.Data = this.BodyIdentifier;
             info.BoundingBoxes.Add(bboxThis);
 
-            GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            
 
             int x = renderBounds.X;
             int y = renderBounds.Y;
@@ -200,16 +166,7 @@ namespace AlbinoHorse.Model
             int width = renderBounds.Width;
             int height = renderBounds.Height;
 
-            path.AddLine(x + radius, y, x + width - radius, y);
-            path.AddArc(x + width - radius, y, radius, radius, 270, 90);
-            path.AddLine(x + width, y + radius, x + width, y + height - radius);
-            path.AddArc(x + width - radius, y + height - radius, radius, radius, 0, 90);
-            path.AddLine(x + width - radius, y + height, x + radius, y + height);
-            path.AddArc(x, y + height - radius, radius, radius, 90, 90);
-            path.AddLine(x, y + height - radius, x, y + radius);
-            path.AddArc(x, y, radius, radius, 180, 90);
-
-            path.CloseFigure();
+            GraphicsPath path =  GetOutlinePath(radius, x, y, width, height);
 
             LinearGradientBrush captionBrush = null;
             if (Selected)
@@ -219,7 +176,7 @@ namespace AlbinoHorse.Model
 
             Pen borderPen = null;
 
-            if (DataSource.IsAbstract)
+            if (IsAbstract)
                 borderPen = Settings.abstractBorderPen;
             else
                 borderPen = Settings.normalBorderPen;
@@ -241,7 +198,7 @@ namespace AlbinoHorse.Model
 
             Font typeNameFont = null;
             string kind = "";
-            if (DataSource.IsAbstract)
+            if (IsAbstract)
             {
                 typeNameFont = Settings.abstractTypeNameFont;
                 kind = "Abstract class";
@@ -270,11 +227,11 @@ namespace AlbinoHorse.Model
             else
                 info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Expand, typeExpanderBounds);
 
-            if (DataSource.InheritsTypeName != null)
+            if (InheritsTypeName != null)
             {
                 info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.typeBoxSideMargin, y + 35);
                 Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
-                info.Graphics.DrawString(DataSource.InheritsTypeName, Settings.typeInheritsFont, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
+                info.Graphics.DrawString(InheritsTypeName, Settings.typeInheritsFont, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
             }
 
 
@@ -282,6 +239,7 @@ namespace AlbinoHorse.Model
 
         }
 
+        
         private void DrawSelection(RenderInfo info)
         {
             if (Selected && SelectedObject == null)
@@ -408,7 +366,7 @@ namespace AlbinoHorse.Model
             {
                 StringFormat sf = StringFormat.GenericTypographic;
                 sf.Trimming = StringTrimming.EllipsisCharacter;
-                foreach (UmlProperty member in DataSource.GetProperties())
+                foreach (UmlProperty member in TypedDataSource.GetProperties())
                 {
                     Rectangle memberBounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
                     #region add property bbox
@@ -488,7 +446,7 @@ namespace AlbinoHorse.Model
             {
                 StringFormat sf = StringFormat.GenericTypographic;
                 sf.Trimming = StringTrimming.EllipsisCharacter;
-                foreach (UmlMethod member in DataSource.GetMethods())
+                foreach (UmlMethod member in TypedDataSource.GetMethods())
                 {
                     Rectangle memberBounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
                     #region add method bbox
@@ -621,7 +579,7 @@ namespace AlbinoHorse.Model
         {
             if (args.BoundingBox.Data == AddNewPropertyIdentifier)
             {
-                UmlProperty newProperty = DataSource.CreateProperty();
+                UmlProperty newProperty = TypedDataSource.CreateProperty();
                 this.SelectedObject = newProperty;
 
                 BeginRenameProperty(args.Sender, newProperty);
@@ -771,7 +729,7 @@ namespace AlbinoHorse.Model
             //delete property
             if (this.SelectedObject is UmlProperty)
             {
-                DataSource.RemoveProperty((UmlProperty)this.SelectedObject);
+                TypedDataSource.RemoveProperty((UmlProperty)this.SelectedObject);
                 this.SelectedObject = null;
             }
 
@@ -779,7 +737,7 @@ namespace AlbinoHorse.Model
             if (this.SelectedObject is UmlMethod)
             {
                 MessageBox.Show("Begin delete method");
-                DataSource.RemoveMethod((UmlMethod)this.SelectedObject);
+                TypedDataSource.RemoveMethod((UmlMethod)this.SelectedObject);
                 this.SelectedObject = null;
             }
         }
