@@ -66,6 +66,7 @@
     <Compile Include="Model\Interfaces\IUmlInstanceTypeData.cs" />
     <Compile Include="Model\Interfaces\IUmlTypeData.cs" />
     <Compile Include="Model\UmlType.cs" />
+    <Compile Include="Model\UmlTypeGfxSettings.cs" />
     <Compile Include="Windows\Forms\Canvas.cs">
       <SubType>UserControl</SubType>
     </Compile>

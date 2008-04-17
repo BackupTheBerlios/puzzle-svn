@@ -101,6 +101,41 @@ namespace AlbinoHorse.Model
 
             return path;
         }
+
+        protected void DrawSelection(RenderInfo info)
+        {
+            if (Selected && SelectedObject == null)
+            {
+                Rectangle outerBounds = this.Bounds;
+                outerBounds.Inflate(4, 4);
+                outerBounds.Offset(1, 0);
+                info.Graphics.DrawRectangle(Settings.selectionPen2, outerBounds);
+                outerBounds.Offset(-1, 1);
+                info.Graphics.DrawRectangle(Settings.selectionPen1, outerBounds);
+
+                Rectangle leftHandle = new Rectangle(outerBounds.X - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
+                info.Graphics.FillRectangle(Brushes.Gray, leftHandle);
+                leftHandle.Inflate(-1, -1);
+                info.Graphics.FillRectangle(Brushes.White, leftHandle);
+
+                BoundingBox leftResizeHandle = new BoundingBox();
+                leftResizeHandle.Bounds = leftHandle;
+                leftResizeHandle.Data = this.LeftResizeIdentifier;
+                leftResizeHandle.Target = this;
+                info.BoundingBoxes.Add(leftResizeHandle);
+
+                Rectangle rightHandle = new Rectangle(outerBounds.Right - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
+                info.Graphics.FillRectangle(Brushes.Gray, rightHandle);
+                rightHandle.Inflate(-1, -1);
+                info.Graphics.FillRectangle(Brushes.White, rightHandle);
+
+                BoundingBox rightResizeHandle = new BoundingBox();
+                rightResizeHandle.Bounds = rightHandle;
+                rightResizeHandle.Data = this.RightResizeIdentifier;
+                rightResizeHandle.Target = this;
+                info.BoundingBoxes.Add(rightResizeHandle);
+            }
+        }
         #endregion
 
         protected virtual void OnSelectedObjectChanged(EventArgs eventArgs)
