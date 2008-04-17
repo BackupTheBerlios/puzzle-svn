@@ -85,6 +85,41 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
         }
 
+        public override void Draw(RenderInfo info)
+        {
+            int grid = info.GridSize;
+            Rectangle renderBounds = Bounds;
+
+            BoundingBox bboxThis = new BoundingBox();
+            bboxThis.Bounds = renderBounds;
+            bboxThis.Target = this;
+            bboxThis.Data = this.BodyIdentifier;
+            info.BoundingBoxes.Add(bboxThis);
+
+            int x = renderBounds.X;
+            int y = renderBounds.Y;
+            int radius = 16;
+            int width = renderBounds.Width;
+            int height = renderBounds.Height;
+
+            GraphicsPath path = GetOutlinePath(radius, x, y, width, height);
+            Pen borderPen = GetBorderPen();
+
+            using (Brush captionBrush = GetCaptionBrush(renderBounds))
+            {
+                if (Expanded)
+                    DrawExpanded(info, path, x, y, width, height, captionBrush, borderPen);
+                else
+                    DrawCollapsed(info, path, x, y, width, height, captionBrush, borderPen);
+            }
+
+            DrawTypeExpander(info, x, y, width);
+            DrawSelection(info);
+            DrawTypeName(info, x, y, width);
+            DrawTypeKind(info, x, y, width);
+            DrawCustomCaptionInfo(info, x, y, width);
+        }
+
         public override void DrawBackground(RenderInfo info)
         {
             int grid = info.GridSize;
@@ -142,7 +177,7 @@ namespace AlbinoHorse.Model
                 info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Expand, typeExpanderBounds);
         }
 
-        protected virtual void DrawExpanded(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, LinearGradientBrush captionBrush, Pen borderPen)
+        protected virtual void DrawExpanded(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, Brush captionBrush, Pen borderPen)
         {
             int currentY = y + DrawExpandedCaption(info, path, x, y, width, height, captionBrush);
 
@@ -187,6 +222,25 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawPath(borderPen, path);
         }
 
+        protected virtual void DrawTypeKind(RenderInfo info, int x, int y, int width)
+        {
+            Rectangle typeKindBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4 + 15, width - Settings.typeBoxSideMargin * 2, 10);
+            string kind = GetTypeKind();
+            info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
+        }
+
+        protected virtual void DrawTypeName(RenderInfo info, int x, int y, int width)
+        {
+            Rectangle typeNameBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4, width - Settings.typeBoxSideMargin * 2, 10);
+            Font typeNameFont = GetTypeNameFont();
+            info.Graphics.DrawString(TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
+        }
+
+        protected virtual void DrawCustomCaptionInfo(RenderInfo info, int x, int y, int width)
+        {            
+        }
+
+
         protected void DrawSelection(RenderInfo info)
         {
             if (Selected && SelectedObject == null)
@@ -222,6 +276,14 @@ namespace AlbinoHorse.Model
             }
         }
         #endregion
+
+        protected abstract Brush GetCaptionBrush(Rectangle renderBounds);
+        protected abstract string GetTypeKind();
+        protected abstract Font GetTypeNameFont();
+        protected virtual Pen GetBorderPen()
+        {
+            return Settings.normalBorderPen;
+        }
 
         protected virtual void OnSelectedObjectChanged(EventArgs eventArgs)
         {

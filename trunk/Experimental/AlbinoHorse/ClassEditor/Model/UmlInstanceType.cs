@@ -110,83 +110,50 @@ namespace AlbinoHorse.Model
 
         
 
-        public override void Draw(RenderInfo info)
+
+
+        protected override void DrawCustomCaptionInfo(RenderInfo info, int x, int y, int width)
         {
-            int grid = info.GridSize;
-            Rectangle renderBounds = Bounds;
-
-            BoundingBox bboxThis = new BoundingBox();
-            bboxThis.Bounds = renderBounds;
-            bboxThis.Target = this;
-            bboxThis.Data = this.BodyIdentifier;
-            info.BoundingBoxes.Add(bboxThis);
-
-            int x = renderBounds.X;
-            int y = renderBounds.Y;
-            int radius = 16;
-            int width = renderBounds.Width;
-            int height = renderBounds.Height;
-
-            GraphicsPath path =  GetOutlinePath(radius, x, y, width, height);
-
-            LinearGradientBrush captionBrush = null;
-            if (Selected)
-                captionBrush = new LinearGradientBrush(renderBounds, Color.FromArgb(190, 202, 230), Color.White, 0, true);
-            else
-                captionBrush = new LinearGradientBrush(renderBounds, Color.FromArgb(210, 222, 240), Color.White, 0, true);
-
-            Pen borderPen = null;
-
-            if (IsAbstract)
-                borderPen = Settings.abstractBorderPen;
-            else
-                borderPen = Settings.normalBorderPen;
-
-
-            if (Expanded)
-            {
-                DrawExpanded(info, path, x, y, width, height, captionBrush, borderPen);
-            }
-            else
-            {
-                DrawCollapsed(info, path, x, y, width, height, captionBrush, borderPen);
-            }
-
-
-            DrawTypeExpander(info, x, y, width);
-            DrawSelection(info);
-
-            Rectangle typeNameBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4, width - Settings.typeBoxSideMargin * 2, 10);
-            Rectangle typeKindBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4 + 15, width - Settings.typeBoxSideMargin * 2, 10);
-
-            Font typeNameFont = null;
-            string kind = "";
-            if (IsAbstract)
-            {
-                typeNameFont = Settings.abstractTypeNameFont;
-                kind = "Abstract class";
-            }
-            else
-            {
-                typeNameFont = Settings.normalTypeNameFont;
-                kind = "Class";
-            }
-
-            info.Graphics.DrawString(TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
-            info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
-
-            
-
             if (InheritsTypeName != null)
             {
                 info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.typeBoxSideMargin, y + 35);
                 Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
                 info.Graphics.DrawString(InheritsTypeName, Settings.typeInheritsFont, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
             }
+        }
 
+        
 
-            
+        protected override Brush GetCaptionBrush(Rectangle renderBounds)
+        {
+            if (Selected)
+                return new LinearGradientBrush(renderBounds, Color.FromArgb(190, 202, 230), Color.White, 0, true);
+            else
+                return new LinearGradientBrush(renderBounds, Color.FromArgb(210, 222, 240), Color.White, 0, true);
+        }
 
+        protected override string GetTypeKind()
+        {
+            if (IsAbstract)
+                return "Abstract class";
+            else
+                return "Class";
+        }
+
+        protected override Font GetTypeNameFont()
+        {
+            if (IsAbstract)
+                return Settings.abstractTypeNameFont;
+            else
+                return Settings.normalTypeNameFont;
+        }
+
+        protected override Pen GetBorderPen()
+        {
+            if (IsAbstract)
+                return Settings.abstractBorderPen;
+            else
+                return Settings.normalBorderPen;
         }
 
 
