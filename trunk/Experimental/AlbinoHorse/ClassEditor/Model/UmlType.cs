@@ -289,5 +289,17 @@ namespace AlbinoHorse.Model
         {
 
         }
+
+        protected void BeginRenameType(UmlDesigner owner)
+        {
+            Rectangle inputBounds = new Rectangle(Bounds.Left + Settings.typeBoxSideMargin, Bounds.Top + 4, Bounds.Width - 25 - Settings.typeBoxSideMargin, 20);
+
+            Action endRenameType = () =>
+            {
+                DataSource.TypeName = owner.GetInput();
+            };
+
+            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.normalTypeNameFont, endRenameType);
+        }
     }
 }

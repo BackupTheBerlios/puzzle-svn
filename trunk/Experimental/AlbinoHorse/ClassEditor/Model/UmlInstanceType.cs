@@ -77,13 +77,15 @@ namespace AlbinoHorse.Model
         public bool MethodsExpanded { get; set; }
         #endregion
 
-        public IUmlInstanceTypeData TypedDataSource
+        #region TypedDataSource property
+        private IUmlInstanceTypeData TypedDataSource
         {
             get
             {
                 return DataSource as IUmlInstanceTypeData;
             }
         }
+        #endregion
 
         #endregion
 
@@ -108,10 +110,6 @@ namespace AlbinoHorse.Model
 
         #region Draw
 
-        
-
-
-
         protected override void DrawCustomCaptionInfo(RenderInfo info, int x, int y, int width)
         {
             if (InheritsTypeName != null)
@@ -121,8 +119,6 @@ namespace AlbinoHorse.Model
                 info.Graphics.DrawString(InheritsTypeName, Settings.typeInheritsFont, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
             }
         }
-
-        
 
         protected override Brush GetCaptionBrush(Rectangle renderBounds)
         {
@@ -156,16 +152,12 @@ namespace AlbinoHorse.Model
                 return Settings.normalBorderPen;
         }
 
-
-
         protected override int DrawExpandedBody(RenderInfo info, int x, int width, int currentY)
         {
             currentY = DrawProperties(info, x, currentY, width);
             currentY = DrawMethods(info, x, currentY, width);
             return currentY;
         }
-
-        
 
         private int DrawProperties(RenderInfo info, int x, int y, int width)
         {
@@ -194,11 +186,6 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.Y += 3;
                 info.Graphics.DrawString("Properties", Settings.sectionCaptionFont, Brushes.Black, memberCaptionBounds);
             }
-
-
-
-
-
 
             int currentY = y + 20;
             if (PropertiesExpanded)
@@ -275,11 +262,6 @@ namespace AlbinoHorse.Model
                 info.Graphics.DrawString("Methods", Settings.sectionCaptionFont, Brushes.Black, memberCaptionBounds);
             }
 
-
-
-
-
-
             int currentY = y + 20;
             if (MethodsExpanded)
             {
@@ -326,9 +308,6 @@ namespace AlbinoHorse.Model
             }
             return currentY;
         }
-
-        
-
 
         #endregion
 
@@ -574,17 +553,7 @@ namespace AlbinoHorse.Model
             owner.BeginInput(inputBounds, property.DataSource.Name, Settings.memberFont, endRenameProperty);
         }
 
-        private void BeginRenameType(UmlDesigner owner)
-        {
-            Rectangle inputBounds = new Rectangle(Bounds.Left + Settings.typeBoxSideMargin, Bounds.Top + 4, Bounds.Width - 25 - Settings.typeBoxSideMargin, 20);
-
-            Action endRenameType = () =>
-                {
-                    DataSource.TypeName = owner.GetInput();
-                };
-
-            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.normalTypeNameFont, endRenameType);
-        }
+        
 
 
     }
