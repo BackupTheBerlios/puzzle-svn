@@ -85,6 +85,28 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
         }
 
+        public override void DrawBackground(RenderInfo info)
+        {
+            int grid = info.GridSize;
+            Rectangle renderBounds = Bounds;
+           
+            int x = renderBounds.X + 4;
+            int y = renderBounds.Y + 3;
+            int radius = 16;
+            int width = renderBounds.Width;
+            int height = renderBounds.Height;
+
+            GraphicsPath shadowPath = GetOutlinePath(radius, x, y, width, height); 
+
+            try
+            {
+                info.Graphics.FillPath(Brushes.LightGray, shadowPath);
+            }
+            catch
+            {
+            }
+        }
+
         protected GraphicsPath GetOutlinePath(int radius, int x, int y, int width, int height)
         {
             GraphicsPath path = new GraphicsPath();

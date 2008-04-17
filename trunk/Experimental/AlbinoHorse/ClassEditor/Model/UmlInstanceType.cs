@@ -418,40 +418,7 @@ namespace AlbinoHorse.Model
             return currentY;
         }
 
-        public override void DrawBackground(RenderInfo info)
-        {
-            int grid = info.GridSize;
-            Rectangle renderBounds = Bounds;
-
-            GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-
-            int x = renderBounds.X + 4;
-            int y = renderBounds.Y + 3;
-            int radius = 16;
-            int width = renderBounds.Width;
-            int height = renderBounds.Height;
-
-            path.AddLine(x + radius, y, x + width - radius, y);
-            path.AddArc(x + width - radius, y, radius, radius, 270, 90);
-            path.AddLine(x + width, y + radius, x + width, y + height - radius);
-            path.AddArc(x + width - radius, y + height - radius, radius, radius, 0, 90);
-            path.AddLine(x + width - radius, y + height, x + radius, y + height);
-            path.AddArc(x, y + height - radius, radius, radius, 90, 90);
-            path.AddLine(x, y + height - radius, x, y + radius);
-            path.AddArc(x, y, radius, radius, 180, 90);
-
-            path.CloseFigure();
-
-            GraphicsPath shadowPath = path;
-
-            try
-            {
-                info.Graphics.FillPath(Brushes.LightGray, shadowPath);
-            }
-            catch
-            {
-            }
-        }
+        
 
 
         #endregion
