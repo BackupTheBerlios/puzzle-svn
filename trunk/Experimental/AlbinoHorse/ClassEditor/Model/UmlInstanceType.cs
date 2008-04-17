@@ -172,7 +172,7 @@ namespace AlbinoHorse.Model
                 kind = "Class";
             }
 
-            info.Graphics.DrawString(DataSource.TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
+            info.Graphics.DrawString(TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
             info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
 
             
