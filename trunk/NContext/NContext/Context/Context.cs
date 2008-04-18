@@ -202,47 +202,8 @@ namespace Puzzle.NContext.Framework
                 if (state.TypedObjectFactories.ContainsKey(factoryType))
                 {
                     ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
-                    VerifyInstanceModeIntegrity(config);
-                    state.configStack.Push(config);
-
-                    try
-                    {
-                        //get from context cache
-                        if (config.InstanceMode == InstanceMode.PerContext && state.typedPerContextObjects.ContainsKey(factoryType))
-                            return (T)state.typedPerContextObjects[factoryType];
-
-                        //get from graph cache
-                        if (config.InstanceMode == InstanceMode.PerGraph && state.typedPerGraphObjects.ContainsKey(factoryType))
-                            return (T)state.typedPerGraphObjects[factoryType];
-
-                        //get from thread cache
-                        if (config.InstanceMode == InstanceMode.PerThread && state.typedPerThreadObjects.ContainsKey(factoryType))
-                            return (T)state.typedPerThreadObjects[factoryType];
-
-                        object res = config.FactoryDelegate();
-
-                        if (res is IRunnable)
-                            RunnableEngine.RunRunnable(res as IRunnable);
-
-                        //add to context cache
-                        if (config.InstanceMode == InstanceMode.PerContext)
-                            state.typedPerContextObjects.Add(factoryType, res);
-
-                        //add to graph cache
-                        if (config.InstanceMode == InstanceMode.PerGraph)
-                            state.typedPerGraphObjects.Add(factoryType, res);
-
-                        //add to thread cache
-                        if (config.InstanceMode == InstanceMode.PerThread)
-                            state.typedPerThreadObjects.Add(factoryType, res);
-
-                        return (T)res;
-                    }
-                    finally
-                    {
-                        //remove the last config from config stack
-                        state.configStack.Pop();
-                    }
+                    object res = config.FactoryDelegate();
+                    return (T)res;
                 }
             }
 
