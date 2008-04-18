@@ -152,19 +152,19 @@ namespace AlbinoHorse.Model
 
         protected override int DrawExpandedBody(RenderInfo info, int x, int width, int currentY)
         {
-            currentY = DrawProperties(info, x, currentY, width);
+            currentY = DrawProperties(info, x, currentY, width,PropertiesIdentifier,AddNewPropertyIdentifier,"Properties",PropertiesExpanded);
             currentY = DrawMethods(info, x, currentY, width);
             return currentY;
         }
 
-        private int DrawProperties(RenderInfo info, int x, int y, int width)
+        private int DrawProperties(RenderInfo info, int x, int y, int width,object headerIdentifier,object addNewIdentifier,string sectionName,bool expanded)
         {
             Rectangle memberCaptionBounds = new Rectangle(x, y, width, 20);
             #region add properties header bbox
             BoundingBox bboxGroup = new BoundingBox();
             bboxGroup.Bounds = memberCaptionBounds;
             bboxGroup.Target = this;
-            bboxGroup.Data = PropertiesIdentifier;
+            bboxGroup.Data = headerIdentifier;
             info.BoundingBoxes.Add(bboxGroup);
             #endregion
 
@@ -174,7 +174,7 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Properties", Settings.Fonts.SectionCaption, SystemBrushes.HighlightText, memberCaptionBounds);
+                info.Graphics.DrawString(sectionName, Settings.Fonts.SectionCaption, SystemBrushes.HighlightText, memberCaptionBounds);
             }
             else
             {
@@ -182,11 +182,17 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Properties", Settings.Fonts.SectionCaption, Brushes.Black, memberCaptionBounds);
+                info.Graphics.DrawString(sectionName, Settings.Fonts.SectionCaption, Brushes.Black, memberCaptionBounds);
             }
 
+            if (expanded)
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.CollapseSection, x+3, y+3);
+            else
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.ExpandSection, x+3, y+3);
+
+
             int currentY = y + 20;
-            if (PropertiesExpanded)
+            if (expanded)
             {
                 StringFormat sf = StringFormat.GenericTypographic;
                 sf.Trimming = StringTrimming.EllipsisCharacter;
@@ -224,7 +230,7 @@ namespace AlbinoHorse.Model
                 BoundingBox newMemberBBox = new BoundingBox();
                 newMemberBBox.Target = this;
                 newMemberBBox.Bounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, currentY, width - 20, 16);
-                newMemberBBox.Data = AddNewPropertyIdentifier;
+                newMemberBBox.Data = addNewIdentifier;
                 info.BoundingBoxes.Add(newMemberBBox);
 
                 currentY += 16;

@@ -60,16 +60,30 @@ namespace AlbinoHorse.ClassDesigner.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Collapse {
+        internal static System.Drawing.Bitmap CollapseSection {
             get {
-                object obj = ResourceManager.GetObject("Collapse", resourceCulture);
+                object obj = ResourceManager.GetObject("CollapseSection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap Expand {
+        internal static System.Drawing.Bitmap CollapseType {
             get {
-                object obj = ResourceManager.GetObject("Expand", resourceCulture);
+                object obj = ResourceManager.GetObject("CollapseType", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ExpandSection {
+            get {
+                object obj = ResourceManager.GetObject("ExpandSection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ExpandType {
+            get {
+                object obj = ResourceManager.GetObject("ExpandType", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -172,9 +172,9 @@ namespace AlbinoHorse.Model
             #endregion
 
             if (Expanded)
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Collapse, typeExpanderBounds);
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.CollapseType, typeExpanderBounds);
             else
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Expand, typeExpanderBounds);
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.ExpandType, typeExpanderBounds);
         }
 
         protected virtual void DrawExpanded(RenderInfo info, GraphicsPath path, int x, int y, int width, int height, Brush captionBrush, Pen borderPen)
@@ -192,6 +192,7 @@ namespace AlbinoHorse.Model
         {
             int captionHeight = 48;
             Rectangle captionBounds = new Rectangle(x, y, width, captionHeight);
+            
             #region add caption bbox
             BoundingBox bboxCaption = new BoundingBox();
             bboxCaption.Bounds = captionBounds;
@@ -203,7 +204,7 @@ namespace AlbinoHorse.Model
             info.Graphics.SetClip(path);
             info.Graphics.FillRectangle(captionBrush, captionBounds);
             info.Graphics.FillRectangle(Brushes.White, x, y + captionHeight, width, height - captionHeight);
-            info.Graphics.DrawLine(Pens.LightGray, x, y + captionHeight, x + width, y + captionHeight);
+            info.Graphics.DrawLine(Pens.LightGray, x, y + captionHeight, x + width, y + captionHeight);            
             info.Graphics.ResetClip();
             return captionHeight;
         }
@@ -279,7 +280,12 @@ namespace AlbinoHorse.Model
 
         protected abstract Brush GetCaptionBrush(Rectangle renderBounds);
         protected abstract string GetTypeKind();
-        protected abstract Font GetTypeNameFont();
+
+        protected virtual Font GetTypeNameFont()
+        {
+            return Settings.Fonts.DefaultTypeName;
+        }
+
         protected virtual Pen GetBorderPen()
         {
             return Settings.Pens.DefaultBorder;

@@ -20,7 +20,5 @@ namespace AlbinoHorse.Model
         {
             return AlbinoHorse.ClassDesigner.Properties.Resources.Property;
         }
-
-        
     }
 }

@@ -41,7 +41,7 @@ namespace AlbinoHorse.Model.Settings
 
     public static class Pens
     {
-        public static Pen DefaultBorder = new Pen(Color.FromArgb(100, 100, 100), 1);
+        public static Pen DefaultBorder = new Pen(Color.FromArgb(90, 90, 90), 1f);
         public static Pen AbstractBorder = MakeAbstractBorderPen();
         public static Pen SelectionOuter = MakeSelectonPen();
         public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
@@ -55,9 +55,9 @@ namespace AlbinoHorse.Model.Settings
 
         private static Pen MakeAbstractBorderPen()
         {
-            Pen pen = new Pen(Color.Black, 1);
+
+            Pen pen = new Pen(Color.FromArgb(90, 90, 90), 1.3f);
             pen.DashStyle = DashStyle.Dash;
-            pen.Width = 1.3f;
             pen.Alignment = PenAlignment.Center;
             return pen;
         }
