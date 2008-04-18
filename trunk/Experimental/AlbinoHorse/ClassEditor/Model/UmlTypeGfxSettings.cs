@@ -57,7 +57,7 @@ namespace AlbinoHorse.Model.Settings
         {
             Pen pen = new Pen(Color.Black, 1);
             pen.DashStyle = DashStyle.Dash;
-            pen.Width = 2;
+            pen.Width = 1.3f;
             pen.Alignment = PenAlignment.Center;
             return pen;
         }
