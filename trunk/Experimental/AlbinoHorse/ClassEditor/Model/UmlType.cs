@@ -135,7 +135,7 @@ namespace AlbinoHorse.Model
 
             try
             {
-                info.Graphics.FillPath(Brushes.LightGray, shadowPath);
+                info.Graphics.FillPath(Settings.Brushes.Shadow, shadowPath);
             }
             catch
             {
@@ -224,14 +224,14 @@ namespace AlbinoHorse.Model
 
         protected virtual void DrawTypeKind(RenderInfo info, int x, int y, int width)
         {
-            Rectangle typeKindBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4 + 15, width - Settings.typeBoxSideMargin * 2, 10);
+            Rectangle typeKindBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, y + 4 + 15, width - Settings.Margins.typeBoxSideMargin * 2, 10);
             string kind = GetTypeKind();
-            info.Graphics.DrawString(kind, Settings.typeKindFont, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
+            info.Graphics.DrawString(kind, Settings.Fonts.TypeKind, Brushes.Black, typeKindBounds, StringFormat.GenericTypographic);
         }
 
         protected virtual void DrawTypeName(RenderInfo info, int x, int y, int width)
         {
-            Rectangle typeNameBounds = new Rectangle(x + Settings.typeBoxSideMargin, y + 4, width - Settings.typeBoxSideMargin * 2, 10);
+            Rectangle typeNameBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, y + 4, width - Settings.Margins.typeBoxSideMargin * 2, 10);
             Font typeNameFont = GetTypeNameFont();
             info.Graphics.DrawString(TypeName, typeNameFont, Brushes.Black, typeNameBounds, StringFormat.GenericTypographic);
         }
@@ -248,9 +248,9 @@ namespace AlbinoHorse.Model
                 Rectangle outerBounds = this.Bounds;
                 outerBounds.Inflate(4, 4);
                 outerBounds.Offset(1, 0);
-                info.Graphics.DrawRectangle(Settings.selectionPen2, outerBounds);
+                info.Graphics.DrawRectangle(Settings.Pens.SelectionInner, outerBounds);
                 outerBounds.Offset(-1, 1);
-                info.Graphics.DrawRectangle(Settings.selectionPen1, outerBounds);
+                info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
 
                 Rectangle leftHandle = new Rectangle(outerBounds.X - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
                 info.Graphics.FillRectangle(Brushes.Gray, leftHandle);
@@ -282,7 +282,7 @@ namespace AlbinoHorse.Model
         protected abstract Font GetTypeNameFont();
         protected virtual Pen GetBorderPen()
         {
-            return Settings.normalBorderPen;
+            return Settings.Pens.DefaultBorder;
         }
 
         protected virtual void OnSelectedObjectChanged(EventArgs eventArgs)
@@ -292,14 +292,14 @@ namespace AlbinoHorse.Model
 
         protected void BeginRenameType(UmlDesigner owner)
         {
-            Rectangle inputBounds = new Rectangle(Bounds.Left + Settings.typeBoxSideMargin, Bounds.Top + 4, Bounds.Width - 25 - Settings.typeBoxSideMargin, 20);
+            Rectangle inputBounds = new Rectangle(Bounds.Left + Settings.Margins.typeBoxSideMargin, Bounds.Top + 4, Bounds.Width - 25 - Settings.Margins.typeBoxSideMargin, 20);
 
             Action endRenameType = () =>
             {
                 DataSource.TypeName = owner.GetInput();
             };
 
-            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.normalTypeNameFont, endRenameType);
+            owner.BeginInput(inputBounds, DataSource.TypeName, Settings.Fonts.DefaultTypeName, endRenameType);
         }
     }
 }

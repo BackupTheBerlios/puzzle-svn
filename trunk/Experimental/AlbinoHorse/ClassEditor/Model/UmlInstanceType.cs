@@ -97,8 +97,6 @@ namespace AlbinoHorse.Model
         protected readonly object AddNewMethodIdentifier = new object();
         #endregion
 
-        
-
         #region Ctor
         public UmlInstanceType()
         {
@@ -114,9 +112,9 @@ namespace AlbinoHorse.Model
         {
             if (InheritsTypeName != null)
             {
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.typeBoxSideMargin, y + 35);
+                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.Margins.typeBoxSideMargin, y + 35);
                 Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
-                info.Graphics.DrawString(InheritsTypeName, Settings.typeInheritsFont, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
+                info.Graphics.DrawString(InheritsTypeName, Settings.Fonts.InheritsTypeName, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
             }
         }
 
@@ -139,17 +137,17 @@ namespace AlbinoHorse.Model
         protected override Font GetTypeNameFont()
         {
             if (IsAbstract)
-                return Settings.abstractTypeNameFont;
+                return Settings.Fonts.AbstractTypeName;
             else
-                return Settings.normalTypeNameFont;
+                return Settings.Fonts.DefaultTypeName;
         }
 
         protected override Pen GetBorderPen()
         {
             if (IsAbstract)
-                return Settings.abstractBorderPen;
+                return Settings.Pens.AbstractBorder;
             else
-                return Settings.normalBorderPen;
+                return Settings.Pens.DefaultBorder;
         }
 
         protected override int DrawExpandedBody(RenderInfo info, int x, int width, int currentY)
@@ -176,15 +174,15 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Properties", Settings.sectionCaptionFont, SystemBrushes.HighlightText, memberCaptionBounds);
+                info.Graphics.DrawString("Properties", Settings.Fonts.SectionCaption, SystemBrushes.HighlightText, memberCaptionBounds);
             }
             else
             {
-                info.Graphics.FillRectangle(Settings.sectionCaptionBrush, memberCaptionBounds);
+                info.Graphics.FillRectangle(Settings.Brushes.SectionCaption, memberCaptionBounds);
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Properties", Settings.sectionCaptionFont, Brushes.Black, memberCaptionBounds);
+                info.Graphics.DrawString("Properties", Settings.Fonts.SectionCaption, Brushes.Black, memberCaptionBounds);
             }
 
             int currentY = y + 20;
@@ -194,7 +192,7 @@ namespace AlbinoHorse.Model
                 sf.Trimming = StringTrimming.EllipsisCharacter;
                 foreach (UmlProperty member in TypedDataSource.GetProperties())
                 {
-                    Rectangle memberBounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
+                    Rectangle memberBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, currentY, width - 20, 16);
                     #region add property bbox
                     BoundingBox memberBBox = new BoundingBox();
                     memberBBox.Target = this;
@@ -203,29 +201,29 @@ namespace AlbinoHorse.Model
                     info.BoundingBoxes.Add(memberBBox);
                     #endregion
 
-                    Rectangle layoutBounds = new Rectangle(x + Settings.typeBoxSideMargin + Settings.memberNameIndent, currentY, width - 5 - Settings.memberNameIndent, 16);
+                    Rectangle layoutBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin + Settings.Margins.TypeMemberNameIndent, currentY, width - 5 - Settings.Margins.TypeMemberNameIndent, 16);
 
 
                     if (member == SelectedObject && this.Selected)
                     {
                         Rectangle selectionBounds = new Rectangle(x, currentY, width, 16);
                         info.Graphics.FillRectangle(SystemBrushes.Highlight, selectionBounds);
-                        info.Graphics.DrawString(member.DataSource.Name, Settings.memberFont, SystemBrushes.HighlightText, layoutBounds, sf);
+                        info.Graphics.DrawString(member.DataSource.Name, Settings.Fonts.TypeMember, SystemBrushes.HighlightText, layoutBounds, sf);
                     }
                     else
                     {
-                        info.Graphics.DrawString(member.DataSource.Name, Settings.memberFont, Brushes.Black, layoutBounds, sf);
+                        info.Graphics.DrawString(member.DataSource.Name, Settings.Fonts.TypeMember, Brushes.Black, layoutBounds, sf);
                     }
                     info.Graphics.DrawImage(member.DataSource.GetImage(), x + 13, currentY);
                     currentY += 16;
                 }
 
-                Rectangle newLayoutBounds = new Rectangle(x + Settings.typeBoxSideMargin + Settings.memberNameIndent, currentY, width - 5 - Settings.memberNameIndent, 16);
-                info.Graphics.DrawString("Add new", Settings.newMemberFont, Brushes.Blue, newLayoutBounds, sf);
+                Rectangle newLayoutBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin + Settings.Margins.TypeMemberNameIndent, currentY, width - 5 - Settings.Margins.TypeMemberNameIndent, 16);
+                info.Graphics.DrawString("Add new", Settings.Fonts.NewTypeMember, Brushes.Blue, newLayoutBounds, sf);
 
                 BoundingBox newMemberBBox = new BoundingBox();
                 newMemberBBox.Target = this;
-                newMemberBBox.Bounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
+                newMemberBBox.Bounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, currentY, width - 20, 16);
                 newMemberBBox.Data = AddNewPropertyIdentifier;
                 info.BoundingBoxes.Add(newMemberBBox);
 
@@ -251,15 +249,15 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Methods", Settings.sectionCaptionFont, SystemBrushes.HighlightText, memberCaptionBounds);
+                info.Graphics.DrawString("Methods", Settings.Fonts.SectionCaption, SystemBrushes.HighlightText, memberCaptionBounds);
             }
             else
             {
-                info.Graphics.FillRectangle(Settings.sectionCaptionBrush, memberCaptionBounds);
+                info.Graphics.FillRectangle(Settings.Brushes.SectionCaption, memberCaptionBounds);
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
-                info.Graphics.DrawString("Methods", Settings.sectionCaptionFont, Brushes.Black, memberCaptionBounds);
+                info.Graphics.DrawString("Methods", Settings.Fonts.SectionCaption, Brushes.Black, memberCaptionBounds);
             }
 
             int currentY = y + 20;
@@ -269,7 +267,7 @@ namespace AlbinoHorse.Model
                 sf.Trimming = StringTrimming.EllipsisCharacter;
                 foreach (UmlMethod member in TypedDataSource.GetMethods())
                 {
-                    Rectangle memberBounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
+                    Rectangle memberBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, currentY, width - 20, 16);
                     #region add method bbox
                     BoundingBox memberBBox = new BoundingBox();
                     memberBBox.Target = this;
@@ -278,29 +276,29 @@ namespace AlbinoHorse.Model
                     info.BoundingBoxes.Add(memberBBox);
                     #endregion
 
-                    Rectangle layoutBounds = new Rectangle(x + Settings.typeBoxSideMargin + Settings.memberNameIndent, currentY, width - 5 - Settings.memberNameIndent, 16);
+                    Rectangle layoutBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin + Settings.Margins.TypeMemberNameIndent, currentY, width - 5 - Settings.Margins.TypeMemberNameIndent, 16);
 
 
                     if (member == SelectedObject && this.Selected)
                     {
                         Rectangle selectionBounds = new Rectangle(x, currentY, width, 16);
                         info.Graphics.FillRectangle(SystemBrushes.Highlight, selectionBounds);
-                        info.Graphics.DrawString(member.Name, Settings.memberFont, SystemBrushes.HighlightText, layoutBounds, sf);
+                        info.Graphics.DrawString(member.Name, Settings.Fonts.TypeMember, SystemBrushes.HighlightText, layoutBounds, sf);
                     }
                     else
                     {
-                        info.Graphics.DrawString(member.Name, Settings.memberFont, Brushes.Black, layoutBounds, sf);
+                        info.Graphics.DrawString(member.Name, Settings.Fonts.TypeMember, Brushes.Black, layoutBounds, sf);
                     }
                     info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.Property, x + 13, currentY);
                     currentY += 16;
                 }
 
-                Rectangle newLayoutBounds = new Rectangle(x + Settings.typeBoxSideMargin + Settings.memberNameIndent, currentY, width - 5 - Settings.memberNameIndent, 16);
-                info.Graphics.DrawString("Add new", Settings.newMemberFont, Brushes.Blue, newLayoutBounds, sf);
+                Rectangle newLayoutBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin + Settings.Margins.TypeMemberNameIndent, currentY, width - 5 - Settings.Margins.TypeMemberNameIndent, 16);
+                info.Graphics.DrawString("Add new", Settings.Fonts.NewTypeMember, Brushes.Blue, newLayoutBounds, sf);
 
                 BoundingBox newMemberBBox = new BoundingBox();
                 newMemberBBox.Target = this;
-                newMemberBBox.Bounds = new Rectangle(x + Settings.typeBoxSideMargin, currentY, width - 20, 16);
+                newMemberBBox.Bounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin, currentY, width - 20, 16);
                 newMemberBBox.Data = AddNewMethodIdentifier;
                 info.BoundingBoxes.Add(newMemberBBox);
 
@@ -468,9 +466,7 @@ namespace AlbinoHorse.Model
 
         }
         #endregion
-
-        
-
+       
         public override void OnKeyPress(ShapeKeyEventArgs args)
         {
             if (SelectedObject == null && args.Key == Keys.Enter)
@@ -485,7 +481,6 @@ namespace AlbinoHorse.Model
                     BeginRenameProperty(args.Sender, (UmlProperty)SelectedObject);
                 }
             }
-
 
             if (this.SelectedObject == null && args.Key == Keys.Delete)
             {
@@ -533,7 +528,7 @@ namespace AlbinoHorse.Model
             if (bounds == Rectangle.Empty)
                 bounds = owner.GetItemBounds(AddNewPropertyIdentifier);
 
-            Rectangle inputBounds = new Rectangle(bounds.X + Settings.memberNameIndent, bounds.Y, bounds.Width - Settings.memberNameIndent, bounds.Height);
+            Rectangle inputBounds = new Rectangle(bounds.X + Settings.Margins.TypeMemberNameIndent, bounds.Y, bounds.Width - Settings.Margins.TypeMemberNameIndent, bounds.Height);
             object oldSelectedObject = SelectedObject;
             SelectedObject = null;
             Action endRenameProperty = () =>
@@ -550,11 +545,7 @@ namespace AlbinoHorse.Model
                 }
             };
 
-            owner.BeginInput(inputBounds, property.DataSource.Name, Settings.memberFont, endRenameProperty);
+            owner.BeginInput(inputBounds, property.DataSource.Name, Settings.Fonts.TypeMember, endRenameProperty);
         }
-
-        
-
-
     }
 }

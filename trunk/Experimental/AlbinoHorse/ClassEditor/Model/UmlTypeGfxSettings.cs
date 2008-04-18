@@ -8,28 +8,43 @@ using AlbinoHorse.Infrastructure;
 using AlbinoHorse.Windows.Forms;
 
 
-namespace AlbinoHorse.Model
+namespace AlbinoHorse.Model.Settings
 {
     #region GFX Settings
-    public static class Settings
+
+    public static class Margins
+    {
+        public const int typeBoxSideMargin = 10;
+        public const int TypeMemberNameIndent = 30;
+    }
+
+    public static class Brushes
+    {
+        public static SolidBrush SectionCaption = new SolidBrush(Color.FromArgb(240, 242, 249));
+        public static SolidBrush SelectedTypeMember = new SolidBrush(SystemColors.Highlight);
+        public static SolidBrush Shadow = new SolidBrush(Color.LightGray);
+    }
+
+    public static class Fonts
     {
         private const string fontName = "Tahoma";
-        public const int typeBoxSideMargin = 10;
-        public const int memberNameIndent = 30;
 
-        public static Font normalTypeNameFont = new Font(fontName, 8f, FontStyle.Bold);
-        public static Font abstractTypeNameFont = new Font(fontName, 8f, FontStyle.Bold | FontStyle.Italic);
-        public static Font typeKindFont = new Font(fontName, 7f, FontStyle.Regular);
-        public static Font typeInheritsFont = new Font(fontName, 7f, FontStyle.Regular);
-        public static Font sectionCaptionFont = new Font(fontName, 8f, FontStyle.Regular);
-        public static Font memberFont = new Font(fontName, 8f, FontStyle.Regular);
-        public static Font newMemberFont = new Font(fontName, 8f, FontStyle.Underline);
-        public static SolidBrush sectionCaptionBrush = new SolidBrush(Color.FromArgb(240, 242, 249));
-        public static SolidBrush selectedMemberBrush = new SolidBrush(SystemColors.Highlight);
-        public static Pen normalBorderPen = new Pen(Color.FromArgb(100, 100, 100), 1);
-        public static Pen abstractBorderPen = MakeAbstractBorderPen();
-        public static Pen selectionPen1 = MakeSelectonPen();
-        public static Pen selectionPen2 = new Pen(Color.FromArgb(220, 220, 220), 1);
+        public static Font DefaultTypeName = new Font(fontName, 8f, FontStyle.Bold);
+        public static Font AbstractTypeName = new Font(fontName, 8f, FontStyle.Bold | FontStyle.Italic);
+        public static Font TypeKind = new Font(fontName, 7f, FontStyle.Regular);
+        public static Font InheritsTypeName = new Font(fontName, 7f, FontStyle.Regular);
+        public static Font SectionCaption = new Font(fontName, 8f, FontStyle.Regular);
+        public static Font TypeMember = new Font(fontName, 8f, FontStyle.Regular);
+        public static Font NewTypeMember = new Font(fontName, 8f, FontStyle.Underline);
+    }
+
+
+    public static class Pens
+    {
+        public static Pen DefaultBorder = new Pen(Color.FromArgb(100, 100, 100), 1);
+        public static Pen AbstractBorder = MakeAbstractBorderPen();
+        public static Pen SelectionOuter = MakeSelectonPen();
+        public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
 
         private static Pen MakeSelectonPen()
         {
