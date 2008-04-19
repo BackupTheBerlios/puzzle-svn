@@ -99,7 +99,7 @@ namespace GenerationStudio.Gui
 
         
 
-        public void RemoveProperty(UmlProperty property)
+        public void RemoveProperty(UmlTypeMember property)
         {
             PropertyElement pe = (PropertyElement)property.DataSource.DataObject;
             pe.Parent.RemoveChild(pe);
@@ -125,9 +125,9 @@ namespace GenerationStudio.Gui
             return res;
         }
 
-        private Dictionary<PropertyElement, UmlProperty> propertyLookup = new Dictionary<PropertyElement, UmlProperty>();
+        private Dictionary<PropertyElement, UmlTypeMember> propertyLookup = new Dictionary<PropertyElement, UmlTypeMember>();
 
-        public IEnumerable<UmlProperty> GetProperties()
+        public IEnumerable<UmlTypeMember> GetProperties()
         {
             var res = GetValidProperties();
 
@@ -135,15 +135,15 @@ namespace GenerationStudio.Gui
                 yield return GetProperty(pe);
         }
 
-        private UmlProperty GetProperty(PropertyElement pe)
+        private UmlTypeMember GetProperty(PropertyElement pe)
         {
-            UmlProperty property = null;
+            UmlTypeMember property = null;
             if (propertyLookup.TryGetValue (pe,out property))
             {
                 return property;
             }
 
-            property = new UmlProperty();
+            property = new UmlTypeMember();
             UmlPropertyData data = new UmlPropertyData();
             data.Owner = pe;
             property.DataSource = data;
@@ -153,45 +153,20 @@ namespace GenerationStudio.Gui
             return property;
         }
 
-        public UmlProperty CreateProperty()
+        public UmlTypeMember CreateProperty()
         {
-            UmlProperty property = new UmlProperty();
+            UmlTypeMember property = new UmlTypeMember();
             UmlPropertyData data = new UmlPropertyData();
             PropertyElement pe = new PropertyElement();
+            pe.Type = "string";
+            pe.Name = "";
             data.Owner = pe;
             property.DataSource = data;
-            property.DataSource.Name = "";
-            property.DataSource.Type = "string";
 
             propertyLookup.Add(pe, property);
             Owner.Type.AddChild(pe);
 
             return property;
-        }
-
-        public void AddMethod(UmlMethod method)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveMethod(UmlMethod method)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetMethodCount()
-        {
-            return 0;
-        }
-
-        public IEnumerable<UmlMethod> GetMethods()
-        {
-            return Enumerable.Empty<UmlMethod>();
-        }
-
-        public UmlMethod CreateMethod()
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 }

@@ -5,10 +5,9 @@ using System.Drawing;
 
 namespace AlbinoHorse.Model
 {
-    public interface IUmlPropertyData
+    public interface IUmlTypeMemberData
     {
         string Name { get; set; }
-        string Type { get; set; }
         Image GetImage();
         object DataObject { get; }
     }

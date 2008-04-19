@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlbinoHorse.Model
 {
-    public class DefaultUmlTypeData : IUmlInstanceTypeData
+    public class DefaultUmlInstanceTypeData : IUmlInstanceTypeData
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -14,9 +14,9 @@ namespace AlbinoHorse.Model
         public string InheritsTypeName { get; set; }
         public bool IsAbstract { get; set; }
 
-        private List<UmlProperty> properties = new List<UmlProperty>(); 
+        private List<UmlTypeMember> properties = new List<UmlTypeMember>(); 
 
-        public void RemoveProperty(UmlProperty property)
+        public void RemoveProperty(UmlTypeMember property)
         {
             properties.Remove(property);
         }
@@ -26,45 +26,18 @@ namespace AlbinoHorse.Model
             return properties.Count;
         }
 
-        public IEnumerable<UmlProperty> GetProperties()
+        public IEnumerable<UmlTypeMember> GetProperties()
         {
             foreach (var property in properties)
                 yield return property;
         }
 
-        public UmlProperty CreateProperty()
+        public UmlTypeMember CreateProperty()
         {
-            UmlProperty property = new UmlProperty();
-            property.DataSource = new DefaultUmlPropertyData();
+            UmlTypeMember property = new UmlTypeMember();
+            property.DataSource = new DefaultUmlTypeMemberData();
             properties.Add(property);
             return property;
-        }
-
-        private List<UmlMethod> methods = new List<UmlMethod>();
-        public void AddMethod(UmlMethod method)
-        {
-            methods.Add(method);
-        }
-
-        public void RemoveMethod(UmlMethod method)
-        {
-            methods.Remove(method);
-        }
-
-        public int GetMethodCount()
-        {
-            return methods.Count;
-        }
-
-        public IEnumerable<UmlMethod> GetMethods()
-        {
-            foreach (var method in methods)
-                yield return method;
-        }
-
-        public UmlMethod CreateMethod()
-        {
-            return new UmlMethod();
-        }
+        }       
     }
 }

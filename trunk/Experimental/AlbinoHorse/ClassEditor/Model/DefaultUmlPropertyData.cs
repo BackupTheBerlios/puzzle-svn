@@ -5,10 +5,10 @@ using System.Drawing;
 
 namespace AlbinoHorse.Model
 {
-    public class DefaultUmlPropertyData : IUmlPropertyData
+    public class DefaultUmlTypeMemberData : IUmlTypeMemberData
     {
         public string Name { get; set; }
-        public string Type { get; set; }
+
         public object DataObject
         {
             get
