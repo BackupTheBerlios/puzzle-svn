@@ -7,7 +7,7 @@ using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
 {
-    public class UmlInterfaceData : IUmlInterfaceData
+    public class UmlEnumData : IUmlEnumData
     {
 
         public ClassDiagramTypeElement Owner { get; set; }
@@ -84,7 +84,7 @@ namespace GenerationStudio.Gui
             var res = from e in Owner.Type.AllChildren
 
                       where !e.Excluded &&
-                            (e is PropertyElement || e is MethodElement) &&
+                            (e is EnumValueElement) &&
                             e.GetDisplayName() != ""
                       orderby e.GetDisplayName()
                       select e;
@@ -124,32 +124,18 @@ namespace GenerationStudio.Gui
 
         public UmlTypeMember CreateTypeMember(string sectionName)
         {
-            UmlTypeMember property = new UmlTypeMember();
+            UmlTypeMember enumValue = new UmlTypeMember();
             UmlTypeMemberData data = new UmlTypeMemberData();
-            if (sectionName == "Properties")
-            {
-                PropertyElement pe = new PropertyElement();
-                pe.Type = "string";
-                pe.Name = "";
-                data.Owner = pe;
-                property.DataSource = data;
+            EnumValueElement pe = new EnumValueElement();
+            pe.Value = 0;
+            pe.Name = "";
+            data.Owner = pe;
+            enumValue.DataSource = data;
 
-                typeMemberLookup.Add(pe, property);
-                Owner.Type.AddChild(pe);
-            }
+            typeMemberLookup.Add(pe, enumValue);
+            Owner.Type.AddChild(pe);
 
-            if (sectionName == "Methods")
-            {
-                MethodElement pe = new MethodElement();
-                pe.Name = "";
-                data.Owner = pe;
-                property.DataSource = data;
-
-                typeMemberLookup.Add(pe, property);
-                Owner.Type.AddChild(pe);
-            }
-
-            return property;
+            return enumValue;
         }
     }
 }

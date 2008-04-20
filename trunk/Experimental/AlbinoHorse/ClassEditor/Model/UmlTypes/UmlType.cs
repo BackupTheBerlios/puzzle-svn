@@ -98,7 +98,7 @@ namespace AlbinoHorse.Model
 
             int x = renderBounds.X;
             int y = renderBounds.Y;
-            int radius = 16;
+            int radius = GetRadius();
             int width = renderBounds.Width;
             int height = renderBounds.Height;
 
@@ -120,6 +120,11 @@ namespace AlbinoHorse.Model
             DrawCustomCaptionInfo(info, x, y, width);
         }
 
+        protected virtual int GetRadius()
+        {
+            return 16;
+        }
+
         public override void DrawBackground(RenderInfo info)
         {
             int grid = info.GridSize;
@@ -127,7 +132,7 @@ namespace AlbinoHorse.Model
            
             int x = renderBounds.X + 4;
             int y = renderBounds.Y + 3;
-            int radius = 16;
+            int radius = GetRadius();
             int width = renderBounds.Width;
             int height = renderBounds.Height;
 

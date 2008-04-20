@@ -33,6 +33,9 @@ namespace GenerationStudio.Gui
                 if (Owner is MethodElement)
                     return "Methods";
 
+                if (Owner is EnumValueElement)
+                    return "Values";
+
                 return "";
             }
         }

@@ -17,6 +17,7 @@ namespace GenerationStudio.Elements
     [Serializable]
     [ElementName("Property")]
     [ElementIcon("GenerationStudio.Images.property.gif")]
+    [ElementParent(typeof(InstanceTypeElement))]
     public class PropertyElement : TypeMemberElement
     {
         private string type;

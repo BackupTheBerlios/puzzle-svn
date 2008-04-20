@@ -154,14 +154,28 @@ namespace GenerationStudio.Gui
         {
             UmlTypeMember property = new UmlTypeMember();
             UmlTypeMemberData data = new UmlTypeMemberData();
-            PropertyElement pe = new PropertyElement();
-            pe.Type = "string";
-            pe.Name = "";
-            data.Owner = pe;
-            property.DataSource = data;
+            if (sectionName == "Properties")
+            {
+                PropertyElement pe = new PropertyElement();
+                pe.Type = "string";
+                pe.Name = "";
+                data.Owner = pe;
+                property.DataSource = data;
 
-            typeMemberLookup.Add(pe, property);
-            Owner.Type.AddChild(pe);
+                typeMemberLookup.Add(pe, property);
+                Owner.Type.AddChild(pe);
+            }
+
+            if (sectionName == "Methods")
+            {
+                MethodElement pe = new MethodElement();
+                pe.Name = "";
+                data.Owner = pe;
+                property.DataSource = data;
+
+                typeMemberLookup.Add(pe, property);
+                Owner.Type.AddChild(pe);
+            }
 
             return property;
         }        

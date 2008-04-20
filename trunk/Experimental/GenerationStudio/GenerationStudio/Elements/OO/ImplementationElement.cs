@@ -12,22 +12,23 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.implementation.bmp")]
     public class ImplementationElement : Element
     {
-        public InterfaceElement Implements { get; set; }
+        public string InterfaceName { get; set; }
 
         public override IList<ElementError> GetErrors()
         {
             List<ElementError> errors = new List<ElementError>();
-            if (Implements == null)
+            if (string.IsNullOrEmpty (InterfaceName))
                 errors.Add(new ElementError(this, string.Format("Class {0} is missing an interface", Parent.GetDisplayName())));
-
+            
             return errors;
         }
 
         public override string GetDisplayName()
         {
-            string interfaceName = "*missing*";
-            if (Implements != null)
-                interfaceName = Implements.Name;
+            string interfaceName = InterfaceName;
+
+            if (string.IsNullOrEmpty(InterfaceName))
+                interfaceName = "*missing*";
 
             return string.Format("Implements: {0}", interfaceName);
         }

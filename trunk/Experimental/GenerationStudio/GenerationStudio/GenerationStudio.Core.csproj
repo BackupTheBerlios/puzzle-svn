@@ -100,6 +100,7 @@
     <Compile Include="Gui\ClassDiagram\ClassDiagramEditor.Designer.cs">
       <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\ClassDiagram\UmlEnumData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlInterfaceData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlTypeMemberData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlClassData.cs" />
@@ -200,6 +201,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\classdiagram.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\method.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -61,6 +61,10 @@ namespace GenerationStudio.Gui
                     {
                         CreateUmlType(e);
                     }
+                    if (Engine.DragDropElement is EnumElement )
+                    {
+                        CreateUmlType(e);
+                    }
 
                 }
             }
@@ -102,6 +106,14 @@ namespace GenerationStudio.Gui
             {
                 t = new UmlClass();
                 UmlClassData data = new UmlClassData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
+
+            if (diagramElement.Type is EnumElement)
+            {
+                t = new UmlEnum();
+                UmlEnumData data = new UmlEnumData();
                 data.Owner = diagramElement;
                 t.DataSource = data;
             }

@@ -20,6 +20,7 @@ namespace AlbinoHorse.Model.Settings
 
     public static class Brushes
     {
+        public static SolidBrush EnumSectionCaption = new SolidBrush(Color.FromArgb(237, 233, 246));
         public static SolidBrush InterfaceSectionCaption = new SolidBrush(Color.FromArgb(243, 247, 240));
         public static SolidBrush ClassSectionCaption = new SolidBrush(Color.FromArgb(240, 242, 249));
         public static SolidBrush SelectedTypeMember = new SolidBrush(SystemColors.Highlight);

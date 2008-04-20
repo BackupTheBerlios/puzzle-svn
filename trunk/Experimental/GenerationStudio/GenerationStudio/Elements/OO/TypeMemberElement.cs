@@ -6,8 +6,7 @@ using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
 {
-    [Serializable]
-    [ElementParent(typeof(InstanceTypeElement))]
+    [Serializable]    
     public abstract class TypeMemberElement : NamedElement
     {
     }

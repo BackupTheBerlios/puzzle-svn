@@ -62,6 +62,7 @@
     <Compile Include="Model\DefaultUmlTypeMemberData.cs" />
     <Compile Include="Model\DefaultUmlTypeData.cs" />
     <Compile Include="Model\Interfaces\IUmlClassData.cs" />
+    <Compile Include="Model\Interfaces\IUmlEnumData.cs" />
     <Compile Include="Model\Interfaces\IUmlInterfaceData.cs" />
     <Compile Include="Model\Interfaces\IUmlRenderer.cs" />
     <Compile Include="Model\Interfaces\IUmlPropertyData.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Model\Interfaces\IUmlTypeData.cs" />
     <Compile Include="Model\UmlTypeMembers\UmlTypeMemberSection.cs" />
     <Compile Include="Model\UmlTypes\UmlClass.cs" />
+    <Compile Include="Model\UmlTypes\UmlEnum.cs" />
     <Compile Include="Model\UmlTypes\UmlInterface.cs" />
     <Compile Include="Model\UmlTypes\UmlType.cs" />
     <Compile Include="Model\UmlTypeGfxSettings.cs" />
