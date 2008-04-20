@@ -6,8 +6,7 @@ namespace AlbinoHorse.Model
 {
     public interface IUmlInstanceTypeData : IUmlTypeData
     {
-        string InheritsTypeName { get; set; }
-        bool IsAbstract { get; set; }
+        
 
         UmlTypeMember CreateTypeMember(string sectionName);
         void RemoveTypeMember(UmlTypeMember member);

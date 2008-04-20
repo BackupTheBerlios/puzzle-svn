@@ -12,6 +12,16 @@ namespace AlbinoHorse.Model
 {
     public class UmlInterface : UmlInstanceType
     {
+        #region TypedDataSource property
+        private IUmlInterfaceData TypedDataSource
+        {
+            get
+            {
+                return DataSource as IUmlInterfaceData;
+            }
+        }
+        #endregion
+
         public UmlInterface()
         {
 
@@ -29,9 +39,9 @@ namespace AlbinoHorse.Model
         protected override Brush GetCaptionBrush(Rectangle renderBounds)
         {
             if (Selected)
-                return new LinearGradientBrush(renderBounds, Color.FromArgb(190, 230, 202), Color.White, 0, true);
+                return new LinearGradientBrush(renderBounds, Color.FromArgb(220, 230, 209), Color.White, 0, true);
             else
-                return new LinearGradientBrush(renderBounds, Color.FromArgb(210, 240, 222), Color.White, 0, true);
+                return new LinearGradientBrush(renderBounds, Color.FromArgb(230, 240, 219), Color.White, 0, true);
         }
 
         protected override string GetTypeKind()
@@ -47,6 +57,11 @@ namespace AlbinoHorse.Model
         protected override Pen GetBorderPen()
         {
              return Settings.Pens.DefaultBorder;
+        }
+
+        protected override Brush GetSectionCaptionBrush()
+        {
+            return Settings.Brushes.InterfaceSectionCaption;
         }
     }
 }

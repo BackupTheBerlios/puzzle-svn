@@ -47,33 +47,9 @@ namespace AlbinoHorse.Model
         }
         #endregion
 
-        #region InheritsTypeName property
-        public string InheritsTypeName
-        {
-            get
-            {
-                return TypedDataSource.InheritsTypeName;
-            }
-            set
-            {
-                TypedDataSource.InheritsTypeName = value;
-            }
-        }
-        #endregion
 
-        #region IsAbstract property
-        public bool IsAbstract
-        {
-            get
-            {
-                return TypedDataSource.IsAbstract;
-            }
-            set
-            {
-                TypedDataSource.IsAbstract = value;
-            }
-        }
-        #endregion
+
+
 
         #region PropertiesExpanded
         public bool PropertiesExpanded { get; set; }
@@ -127,15 +103,7 @@ namespace AlbinoHorse.Model
             base.Draw(info);
         }
 
-        protected override void DrawCustomCaptionInfo(RenderInfo info, int x, int y, int width)
-        {
-            if (InheritsTypeName != null)
-            {
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.Margins.typeBoxSideMargin, y + 35);
-                Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
-                info.Graphics.DrawString(InheritsTypeName, Settings.Fonts.InheritsTypeName, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
-            }
-        }
+        
 
         
 
@@ -169,7 +137,9 @@ namespace AlbinoHorse.Model
             }
             else
             {
-                info.Graphics.FillRectangle(Settings.Brushes.SectionCaption, memberCaptionBounds);
+                Brush sectionCaptionBrush = GetSectionCaptionBrush();                
+                info.Graphics.FillRectangle(sectionCaptionBrush, memberCaptionBounds);
+                
                 memberCaptionBounds.X += 20;
                 memberCaptionBounds.Width -= 30;
                 memberCaptionBounds.Y += 3;
@@ -228,6 +198,8 @@ namespace AlbinoHorse.Model
             }
             return currentY;
         }
+
+        protected abstract Brush GetSectionCaptionBrush();        
 
         #endregion
 

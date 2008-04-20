@@ -541,7 +541,7 @@ namespace GenerationStudio.Gui
             TreeNode sourceNode = (TreeNode)e.Item;
             Element currentElement = sourceNode.GetElement();
             Engine.DragDropElement = currentElement;
-            DoDragDrop("idiot!", DragDropEffects.Move | DragDropEffects.Copy);
+            DoDragDrop("DragElement", DragDropEffects.Move | DragDropEffects.Copy);
 
         }       
     }

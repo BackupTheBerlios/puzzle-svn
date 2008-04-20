@@ -7,7 +7,7 @@ using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
 {
-    public class UmlTypeData : IUmlInstanceTypeData
+    public class UmlInterfaceData : IUmlInterfaceData
     {
 
         public ClassDiagramTypeElement Owner { get; set; }
@@ -23,19 +23,6 @@ namespace GenerationStudio.Gui
                 Owner.Expanded = value;
             }
         }
-
-        public bool IsAbstract
-        {
-            get
-            {
-                return Owner.Type.IsAbstract;
-            }
-            set
-            {
-                Owner.Type.IsAbstract = value;
-            }
-        }
-
 
         public int X
         {
@@ -85,27 +72,12 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public string InheritsTypeName
-        {
-            get
-            {
-                return Owner.Type.Inherits;
-            }
-            set
-            {
-                Owner.Type.Inherits = value;
-            }
-        }
-
-        
-
         public void RemoveTypeMember(UmlTypeMember property)
         {
             TypeMemberElement pe = (TypeMemberElement)property.DataSource.DataObject;
             pe.Parent.RemoveChild(pe);
             typeMemberLookup.Remove(pe);
         }
-
 
         private IOrderedEnumerable<Element> GetValidProperties()
         {
@@ -135,7 +107,7 @@ namespace GenerationStudio.Gui
         private UmlTypeMember GetTypeMember(TypeMemberElement pe)
         {
             UmlTypeMember typeMember = null;
-            if (typeMemberLookup.TryGetValue (pe,out typeMember))
+            if (typeMemberLookup.TryGetValue(pe, out typeMember))
             {
                 return typeMember;
             }
@@ -164,6 +136,6 @@ namespace GenerationStudio.Gui
             Owner.Type.AddChild(pe);
 
             return property;
-        }        
+        }
     }
 }

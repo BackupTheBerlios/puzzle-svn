@@ -11,8 +11,6 @@ namespace AlbinoHorse.Model
         public int Width { get; set; }
         public bool Expanded { get; set; }
         public string TypeName { get; set; }
-        public string InheritsTypeName { get; set; }
-        public bool IsAbstract { get; set; }
 
         private List<UmlTypeMember> members = new List<UmlTypeMember>(); 
 

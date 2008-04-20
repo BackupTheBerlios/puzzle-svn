@@ -50,38 +50,61 @@ namespace GenerationStudio.Gui
         {
             if (e.Data.GetDataPresent(typeof(string)))
             {
-                ClassElement element = (ClassElement)Engine.DragDropElement;
-                
-                
-                ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
-                diagramElement.Type = element;
-                diagramElement.Expanded = true;
-                Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
-                diagramElement.X = cp.X;
-                diagramElement.Y = cp.Y;
-                diagramElement.Width = 21 * 4;
-                ClassDiagramNode.AddChild(diagramElement);
+                string data = (string)e.Data.GetData(typeof(string));
+                if (data == "DragElement")
+                {
+                    if (Engine.DragDropElement is ClassElement)
+                    {
+                        CreateUmlType(e);
+                    }
+                    if (Engine.DragDropElement is InterfaceElement)
+                    {
+                        CreateUmlType(e);
+                    }
 
-
-                AddUmlTypeFromTypeElement(diagramElement);
-                
-                UmlDesigner.Refresh();
+                }
             }
         }
 
-        private void AddUmlTypeFromTypeElement(ClassDiagramTypeElement diagramElement)
-        {
-            UmlTypeData data = new UmlTypeData();
-            data.Owner = diagramElement;
 
+
+        private void CreateUmlType(DragEventArgs e)
+        {
+            TypeElement element = (TypeElement)Engine.DragDropElement;
+
+            ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
+            diagramElement.Type = element;
+            diagramElement.Expanded = true;
+            Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
+            diagramElement.X = cp.X;
+            diagramElement.Y = cp.Y;
+            diagramElement.Width = 21 * 4;
+            ClassDiagramNode.AddChild(diagramElement);
+
+
+            AddUmlTypeFromTypeElement(diagramElement);
+
+            UmlDesigner.Refresh();
+        }
+
+        private void AddUmlTypeFromTypeElement(ClassDiagramTypeElement diagramElement)
+        {           
             UmlInstanceType t = null;
             if (diagramElement.Type is InterfaceElement)
+            {
                 t = new UmlInterface();
+                UmlInterfaceData data = new UmlInterfaceData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
 
             if (diagramElement.Type is ClassElement)
+            {
                 t = new UmlClass();
-
-            t.DataSource = data;
+                UmlClassData data = new UmlClassData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
 
             UmlDesigner.Diagram.Shapes.Add(t);
         }
