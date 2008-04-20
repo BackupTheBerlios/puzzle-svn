@@ -38,7 +38,7 @@ namespace GenerationStudio.Gui
 
         private void AddClass()
         {
-            UmlInstanceType newClass = new UmlInstanceType();
+            UmlInstanceType newClass = new UmlClass();
             newClass.Bounds = new Rectangle(1 * 21, 1 * 21, 7 * 21, 2 * 21);
             newClass.DataSource.TypeName = "SomeClass";
 
@@ -73,7 +73,14 @@ namespace GenerationStudio.Gui
         {
             UmlTypeData data = new UmlTypeData();
             data.Owner = diagramElement;
-            UmlInstanceType t = new UmlInstanceType();
+
+            UmlInstanceType t = null;
+            if (diagramElement.Type is InterfaceElement)
+                t = new UmlInterface();
+
+            if (diagramElement.Type is ClassElement)
+                t = new UmlClass();
+
             t.DataSource = data;
 
             UmlDesigner.Diagram.Shapes.Add(t);

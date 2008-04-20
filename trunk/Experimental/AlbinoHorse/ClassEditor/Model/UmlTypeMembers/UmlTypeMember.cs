@@ -20,5 +20,13 @@ namespace AlbinoHorse.Model
                 DataSource.Name = value;
             }
         }
+
+        public string SectionName
+        {
+            get
+            {
+                return DataSource.SectionName;
+            }
+        }
     }
 }

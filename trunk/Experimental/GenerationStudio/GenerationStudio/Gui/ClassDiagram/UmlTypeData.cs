@@ -99,71 +99,68 @@ namespace GenerationStudio.Gui
 
         
 
-        public void RemoveProperty(UmlTypeMember property)
+        public void RemoveTypeMember(UmlTypeMember property)
         {
-            PropertyElement pe = (PropertyElement)property.DataSource.DataObject;
+            TypeMemberElement pe = (TypeMemberElement)property.DataSource.DataObject;
             pe.Parent.RemoveChild(pe);
-            propertyLookup.Remove(pe);
+            typeMemberLookup.Remove(pe);
         }
 
-        public int GetPropertyCount()
-        {
-            var res = GetValidProperties();
-
-            return res.ToList().Count();
-        }
 
         private IOrderedEnumerable<Element> GetValidProperties()
         {
             var res = from e in Owner.Type.AllChildren
 
                       where !e.Excluded &&
-                            e is PropertyElement &&
+                            (e is PropertyElement || e is MethodElement) &&
                             e.GetDisplayName() != ""
                       orderby e.GetDisplayName()
                       select e;
             return res;
         }
 
-        private Dictionary<PropertyElement, UmlTypeMember> propertyLookup = new Dictionary<PropertyElement, UmlTypeMember>();
+        private Dictionary<TypeMemberElement, UmlTypeMember> typeMemberLookup = new Dictionary<TypeMemberElement, UmlTypeMember>();
 
-        public IEnumerable<UmlTypeMember> GetProperties()
+        public IList<UmlTypeMember> GetTypeMembers()
         {
             var res = GetValidProperties();
 
-            foreach (PropertyElement pe in res)
-                yield return GetProperty(pe);
+            List<UmlTypeMember> members = new List<UmlTypeMember>();
+            foreach (TypeMemberElement pe in res)
+                members.Add(GetTypeMember(pe));
+
+            return members;
         }
 
-        private UmlTypeMember GetProperty(PropertyElement pe)
+        private UmlTypeMember GetTypeMember(TypeMemberElement pe)
         {
-            UmlTypeMember property = null;
-            if (propertyLookup.TryGetValue (pe,out property))
+            UmlTypeMember typeMember = null;
+            if (typeMemberLookup.TryGetValue (pe,out typeMember))
             {
-                return property;
+                return typeMember;
             }
 
-            property = new UmlTypeMember();
-            UmlPropertyData data = new UmlPropertyData();
+            typeMember = new UmlTypeMember();
+            UmlTypeMemberData data = new UmlTypeMemberData();
             data.Owner = pe;
-            property.DataSource = data;
+            typeMember.DataSource = data;
 
-            propertyLookup.Add(pe, property);
+            typeMemberLookup.Add(pe, typeMember);
 
-            return property;
+            return typeMember;
         }
 
-        public UmlTypeMember CreateProperty()
+        public UmlTypeMember CreateTypeMember(string sectionName)
         {
             UmlTypeMember property = new UmlTypeMember();
-            UmlPropertyData data = new UmlPropertyData();
+            UmlTypeMemberData data = new UmlTypeMemberData();
             PropertyElement pe = new PropertyElement();
             pe.Type = "string";
             pe.Name = "";
             data.Owner = pe;
             property.DataSource = data;
 
-            propertyLookup.Add(pe, property);
+            typeMemberLookup.Add(pe, property);
             Owner.Type.AddChild(pe);
 
             return property;

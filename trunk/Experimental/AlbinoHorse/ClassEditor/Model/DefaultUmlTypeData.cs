@@ -14,30 +14,26 @@ namespace AlbinoHorse.Model
         public string InheritsTypeName { get; set; }
         public bool IsAbstract { get; set; }
 
-        private List<UmlTypeMember> properties = new List<UmlTypeMember>(); 
+        private List<UmlTypeMember> members = new List<UmlTypeMember>(); 
 
-        public void RemoveProperty(UmlTypeMember property)
+        public void RemoveTypeMember(UmlTypeMember property)
         {
-            properties.Remove(property);
+            members.Remove(property);
         }
 
-        public int GetPropertyCount()
+        public IList<UmlTypeMember> GetTypeMembers()
         {
-            return properties.Count;
+            return members;
         }
 
-        public IEnumerable<UmlTypeMember> GetProperties()
+        public UmlTypeMember CreateTypeMember(string sectionName)
         {
-            foreach (var property in properties)
-                yield return property;
-        }
-
-        public UmlTypeMember CreateProperty()
-        {
-            UmlTypeMember property = new UmlTypeMember();
-            property.DataSource = new DefaultUmlTypeMemberData();
-            properties.Add(property);
-            return property;
+            UmlTypeMember member = new UmlTypeMember();
+            DefaultUmlTypeMemberData data = new DefaultUmlTypeMemberData();
+            data.SectionName = sectionName;
+            member.DataSource = data;            
+            members.Add(member);
+            return member;
         }       
     }
 }

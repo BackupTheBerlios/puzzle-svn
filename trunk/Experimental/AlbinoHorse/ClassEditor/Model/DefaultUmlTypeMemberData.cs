@@ -8,6 +8,7 @@ namespace AlbinoHorse.Model
     public class DefaultUmlTypeMemberData : IUmlTypeMemberData
     {
         public string Name { get; set; }
+        public string SectionName { get; set; }
 
         public object DataObject
         {

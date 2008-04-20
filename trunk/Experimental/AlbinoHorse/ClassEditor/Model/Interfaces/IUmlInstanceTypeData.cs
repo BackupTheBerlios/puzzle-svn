@@ -9,9 +9,8 @@ namespace AlbinoHorse.Model
         string InheritsTypeName { get; set; }
         bool IsAbstract { get; set; }
 
-        UmlTypeMember CreateProperty();
-        void RemoveProperty(UmlTypeMember property);
-        int GetPropertyCount();
-        IEnumerable<UmlTypeMember> GetProperties();
+        UmlTypeMember CreateTypeMember(string sectionName);
+        void RemoveTypeMember(UmlTypeMember member);
+        IList<UmlTypeMember> GetTypeMembers();
     }
 }

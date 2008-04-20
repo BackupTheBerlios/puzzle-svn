@@ -8,6 +8,7 @@ namespace AlbinoHorse.Model
     public interface IUmlTypeMemberData
     {
         string Name { get; set; }
+        string SectionName { get; }
         Image GetImage();
         object DataObject { get; }
     }

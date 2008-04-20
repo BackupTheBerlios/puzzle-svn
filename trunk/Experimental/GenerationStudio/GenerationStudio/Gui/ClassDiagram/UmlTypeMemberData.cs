@@ -7,9 +7,9 @@ using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
 {
-    public class UmlPropertyData : IUmlTypeMemberData
+    public class UmlTypeMemberData : IUmlTypeMemberData
     {
-        public PropertyElement Owner { get; set; }
+        public TypeMemberElement Owner { get; set; }
 
         public string Name
         {
@@ -23,15 +23,17 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public string Type
+        public string SectionName
         {
             get
             {
-                return Owner.Type;
-            }
-            set
-            {
-                Owner.Type = value;
+                if (Owner is PropertyElement)
+                    return "Properties";
+
+                if (Owner is MethodElement)
+                    return "Methods";
+
+                return "";
             }
         }
 

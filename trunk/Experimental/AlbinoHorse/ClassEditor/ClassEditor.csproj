@@ -58,14 +58,15 @@
     <Compile Include="Infrastructure\BoundingBox.cs" />
     <Compile Include="Infrastructure\ShapeCancelEventArgs.cs" />
     <Compile Include="Infrastructure\ShapeKeyEventArgs.cs" />
-    <Compile Include="Model\DefaultUmlPropertyData.cs" />
+    <Compile Include="Model\DefaultUmlTypeMemberData.cs" />
     <Compile Include="Model\DefaultUmlTypeData.cs" />
     <Compile Include="Model\Interfaces\IUmlRenderer.cs" />
-    <Compile Include="Model\Interfaces\IUmlDiagramData.cs" />
     <Compile Include="Model\Interfaces\IUmlPropertyData.cs" />
     <Compile Include="Model\Interfaces\IUmlInstanceTypeData.cs" />
     <Compile Include="Model\Interfaces\IUmlTypeData.cs" />
     <Compile Include="Model\UmlTypeMembers\UmlTypeMemberSection.cs" />
+    <Compile Include="Model\UmlTypes\UmlClass.cs" />
+    <Compile Include="Model\UmlTypes\UmlInterface.cs" />
     <Compile Include="Model\UmlTypes\UmlType.cs" />
     <Compile Include="Model\UmlTypeGfxSettings.cs" />
     <Compile Include="Windows\Forms\Canvas.cs">
