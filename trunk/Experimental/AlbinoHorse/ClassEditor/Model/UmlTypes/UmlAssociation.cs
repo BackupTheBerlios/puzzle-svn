@@ -55,33 +55,35 @@ namespace AlbinoHorse.Model
             float x2 = end.Bounds.X + end.Bounds.Width / 2;
             float y2 = end.Bounds.Y + end.Bounds.Height / 2;
 
-            Pen currentPen = Settings.Pens.DefaultBorder;
+            Pen pen = Settings.Pens.AssociationLine;
 
-            if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
-            {
-                float x3 = (x1 + x2) / 2;
+            info.Graphics.DrawLine(pen, x1, y1, x2, y2);
 
-                info.Graphics.DrawLine(currentPen, x1, y1, x3, y1);
-                info.Graphics.DrawLine(currentPen, x2, y2, x3, y2);
-                info.Graphics.DrawLine(currentPen, x3, y1, x3, y2);
-            }
-            else
-            {
-                float y3 = (y1 + y2) / 2;
+            //if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
+            //{
+            //    float x3 = (x1 + x2) / 2;
 
-                if (start.Bounds.Top < end.Bounds.Top)
-                {
-                    y3 = (start.Bounds.Bottom + end.Bounds.Top) / 2;
-                }
-                else
-                {
-                    y3 = (end.Bounds.Bottom + start.Bounds.Top) / 2;
-                }
+            //    info.Graphics.DrawLine(currentPen, x1, y1, x3, y1);
+            //    info.Graphics.DrawLine(currentPen, x2, y2, x3, y2);
+            //    info.Graphics.DrawLine(currentPen, x3, y1, x3, y2);
+            //}
+            //else
+            //{
+            //    float y3 = (y1 + y2) / 2;
 
-                info.Graphics.DrawLine(currentPen, x1, y1, x1, y3);
-                info.Graphics.DrawLine(currentPen, x2, y2, x2, y3);
-                info.Graphics.DrawLine(currentPen, x1, y3, x2, y3);
-            }
+            //    if (start.Bounds.Top < end.Bounds.Top)
+            //    {
+            //        y3 = (start.Bounds.Bottom + end.Bounds.Top) / 2;
+            //    }
+            //    else
+            //    {
+            //        y3 = (end.Bounds.Bottom + start.Bounds.Top) / 2;
+            //    }
+
+            //    info.Graphics.DrawLine(currentPen, x1, y1, x1, y3);
+            //    info.Graphics.DrawLine(currentPen, x2, y2, x2, y3);
+            //    info.Graphics.DrawLine(currentPen, x1, y3, x2, y3);
+            //}
 
             //    info.Graphics.DrawLine(Pens.Gray, x1, y1, x2, y2);
         }

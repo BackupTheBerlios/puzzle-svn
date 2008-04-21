@@ -48,23 +48,39 @@ namespace GenerationStudio.Gui
             if (start == null || end == null)
                 return;
 
-            if (start is UmlComment)
+
+            ClassDiagramMemberElement startElement = GetTypeElement(start);
+            ClassDiagramMemberElement endElement = GetTypeElement(end);
+
+            ClassDiagramAssociationElement association = new ClassDiagramAssociationElement();
+            association.Start = startElement;
+            association.End = endElement;
+
+            ClassDiagramNode.AddChild(association);
+
+        }
+
+        private static ClassDiagramMemberElement GetTypeElement( Shape shape)
+        {
+            if (shape is UmlClass)
             {
-                UmlComment startComment = start as UmlComment;
-                ClassDiagramCommentElement startElement = (startComment.DataSource as UmlCommentData).Owner;
-
-                if (end is UmlClass)
-                {
-                    UmlClass endClass = end as UmlClass;
-                    ClassDiagramTypeElement endElement = (endClass.DataSource as UmlClassData).Owner;
-
-                    ClassDiagramAssociationElement association = new ClassDiagramAssociationElement();
-                    association.Start = startElement;
-                    association.End = endElement;
-
-                    ClassDiagramNode.AddChild(association);
-                }
+                UmlClass endClass = shape as UmlClass;
+                return (endClass.DataSource as UmlClassData).Owner;
             }
+
+            if (shape is UmlInterface)
+            {
+                UmlInterface endClass = shape as UmlInterface;
+                return (endClass.DataSource as UmlInterfaceData).Owner;
+            }
+
+            if (shape is UmlEnum)
+            {
+                UmlEnum endClass = shape as UmlEnum;
+                return (endClass.DataSource as UmlEnumData).Owner;
+            }
+
+            return null;
         }
 
         private void EndDrawInheritance(Shape start, Shape end)
