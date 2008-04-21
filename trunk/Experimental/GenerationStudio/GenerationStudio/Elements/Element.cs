@@ -20,6 +20,15 @@ namespace GenerationStudio.Elements
     {
         private IList<Element> children = new List<Element>();
 
+        //if the node does not have a parent, it is considered invalid
+        public virtual bool IsValid
+        {
+            get
+            {
+                return Parent != null;
+            }
+        }
+
         [Browsable(false)]
         public IEnumerable<Element> AllChildren
         {
@@ -208,7 +217,7 @@ namespace GenerationStudio.Elements
         public void AddChild(Element child)
         {
             children.Add(child);
-            child.parent = this;
+            child.Parent = this;
             OnNotifyChange();
         }
 
@@ -218,6 +227,7 @@ namespace GenerationStudio.Elements
                 return;
 
             this.children.Remove(child);
+            child.Parent = null;
             OnNotifyChange();
         }
 

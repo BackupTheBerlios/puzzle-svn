@@ -63,5 +63,10 @@ namespace AlbinoHorse.Model
         {
             return Settings.Brushes.InterfaceSectionCaption;
         }
+
+        protected override Font GetTypeMemberFont()
+        {
+            return Settings.Fonts.InterfaceTypeMember;
+        }
     }
 }

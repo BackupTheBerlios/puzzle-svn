@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AlbinoHorse.Model;
 using GenerationStudio.Elements;
+using System.Drawing;
 
 namespace GenerationStudio.Gui
 {
@@ -40,9 +41,19 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public System.Drawing.Image GetImage()
+        private static Dictionary<string, Image> imageLookup = new Dictionary<string, Image>();
+        public Image GetImage()
         {
-            return Owner.GetIcon ();
+            string iconKey = Owner.GetIconKey ();
+
+            Image res = null;
+            if (!imageLookup.TryGetValue(iconKey, out res))
+            {
+                res = Owner.GetIcon();
+                imageLookup.Add(iconKey, res);
+            }
+
+            return res;
         }
 
         public object DataObject

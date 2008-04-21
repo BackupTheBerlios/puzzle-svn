@@ -110,7 +110,6 @@ namespace GenerationStudio.Gui
         private IOrderedEnumerable<Element> GetValidProperties()
         {
             var res = from e in Owner.Type.AllChildren
-
                       where !e.Excluded &&
                             (e is PropertyElement || e is MethodElement) &&
                             e.GetDisplayName() != ""
@@ -178,6 +177,15 @@ namespace GenerationStudio.Gui
             }
 
             return property;
-        }        
+        }
+
+        public IList<string> GetImplementedInterfaces()
+        {
+            List<string> interfaces = new List<string>();
+            foreach (var element in Owner.Type.GetChildren<ImplementationElement>().OrderBy(e=>e.InterfaceName))
+                interfaces.Add(element.InterfaceName);
+
+            return interfaces;
+        }
     }
 }

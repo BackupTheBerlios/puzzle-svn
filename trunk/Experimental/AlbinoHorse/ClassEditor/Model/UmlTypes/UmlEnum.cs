@@ -68,5 +68,10 @@ namespace AlbinoHorse.Model
         {
             return 1;
         }
+
+        protected override Font GetTypeMemberFont()
+        {
+            return Settings.Fonts.ClassTypeMember;
+        }
     }
 }

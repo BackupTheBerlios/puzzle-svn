@@ -106,11 +106,32 @@ namespace AlbinoHorse.Model
                 Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
                 info.Graphics.DrawString(InheritsTypeName, Settings.Fonts.InheritsTypeName, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
             }
+
+            IList<string> implementedInterfaces = TypedDataSource.GetImplementedInterfaces();
+            if (implementedInterfaces.Count > 0)
+            {
+                int offsetX = 20;
+                int offsetY = 20 + (16 * (implementedInterfaces.Count - 1));
+                info.Graphics.DrawEllipse(Settings.Pens.Lolipop, x + offsetX, y - offsetY, 12, 12);
+                info.Graphics.DrawLine(Settings.Pens.Lolipop, x + offsetX + 6, y - offsetY + 12, x + offsetX + 6, y);
+
+                int yy = y - offsetY;
+                foreach (string interfaceName in implementedInterfaces)
+                {
+                    info.Graphics.DrawString(interfaceName, Settings.Fonts.ImplementedInterfaces, Brushes.Black, x + offsetX+16, yy);
+                    yy += 16;
+                }
+            }
         }
 
         protected override Brush GetSectionCaptionBrush()
         {
             return Settings.Brushes.ClassSectionCaption;
+        }
+
+        protected override Font GetTypeMemberFont()
+        {
+            return Settings.Fonts.InterfaceTypeMember;
         }
     }
 }

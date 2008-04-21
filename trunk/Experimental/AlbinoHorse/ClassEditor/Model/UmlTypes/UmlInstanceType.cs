@@ -170,16 +170,16 @@ namespace AlbinoHorse.Model
 
                     Rectangle layoutBounds = new Rectangle(x + Settings.Margins.typeBoxSideMargin + Settings.Margins.TypeMemberNameIndent, currentY, width - 5 - Settings.Margins.TypeMemberNameIndent, 16);
 
-
+                    Font font = GetTypeMemberFont();
                     if (member == SelectedObject && this.Selected)
                     {
                         Rectangle selectionBounds = new Rectangle(x, currentY, width, 16);
-                        info.Graphics.FillRectangle(SystemBrushes.Highlight, selectionBounds);
-                        info.Graphics.DrawString(member.DataSource.Name, Settings.Fonts.TypeMember, SystemBrushes.HighlightText, layoutBounds, sf);
+                        info.Graphics.FillRectangle(SystemBrushes.Highlight, selectionBounds);                        
+                        info.Graphics.DrawString(member.DataSource.Name, font, SystemBrushes.HighlightText, layoutBounds, sf);
                     }
                     else
                     {
-                        info.Graphics.DrawString(member.DataSource.Name, Settings.Fonts.TypeMember, Brushes.Black, layoutBounds, sf);
+                        info.Graphics.DrawString(member.DataSource.Name, font, Brushes.Black, layoutBounds, sf);
                     }
                     info.Graphics.DrawImage(member.DataSource.GetImage(), x + 13, currentY);
                     currentY += 16;
@@ -199,6 +199,7 @@ namespace AlbinoHorse.Model
             return currentY;
         }
 
+        protected abstract Font GetTypeMemberFont();
         protected abstract Brush GetSectionCaptionBrush();        
 
         #endregion
@@ -405,7 +406,8 @@ namespace AlbinoHorse.Model
                 }
             };
 
-            owner.BeginInput(inputBounds, property.DataSource.Name, Settings.Fonts.TypeMember, endRenameProperty);
+            Font font = GetTypeMemberFont();
+            owner.BeginInput(inputBounds, property.DataSource.Name, font, endRenameProperty);
         }
 
         protected abstract IList<UmlTypeMemberSection> GetTypeMemberSections();        

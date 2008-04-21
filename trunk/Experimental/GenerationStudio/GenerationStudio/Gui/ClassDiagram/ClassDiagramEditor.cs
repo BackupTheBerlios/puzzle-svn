@@ -82,7 +82,7 @@ namespace GenerationStudio.Gui
             Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
             diagramElement.X = cp.X;
             diagramElement.Y = cp.Y;
-            diagramElement.Width = 21 * 4;
+            diagramElement.Width = 21 * 7;
             ClassDiagramNode.AddChild(diagramElement);
 
 
@@ -141,6 +141,12 @@ namespace GenerationStudio.Gui
                 AddUmlTypeFromTypeElement(diagramElement);
             }
             UmlDesigner.Refresh();
+        }
+
+        private void ZoomLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            double zoomLevel = double.Parse(ZoomLevelComboBox.Text) / 100;
+            UmlDesigner.Zoom = zoomLevel;
         }
     }
 }

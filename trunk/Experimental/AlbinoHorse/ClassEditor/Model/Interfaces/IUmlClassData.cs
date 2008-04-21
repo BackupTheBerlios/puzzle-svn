@@ -8,5 +8,6 @@ namespace AlbinoHorse.Model
     {
         string InheritsTypeName { get; set; }
         bool IsAbstract { get; set; }
+        IList<string> GetImplementedInterfaces();
     }
 }

@@ -70,8 +70,10 @@
     <Compile Include="Model\Interfaces\IUmlTypeData.cs" />
     <Compile Include="Model\UmlTypeMembers\UmlTypeMemberSection.cs" />
     <Compile Include="Model\UmlTypes\UmlClass.cs" />
+    <Compile Include="Model\UmlTypes\UmlComment.cs" />
     <Compile Include="Model\UmlTypes\UmlEnum.cs" />
     <Compile Include="Model\UmlTypes\UmlInterface.cs" />
+    <Compile Include="Model\UmlTypes\UmlShape.cs" />
     <Compile Include="Model\UmlTypes\UmlType.cs" />
     <Compile Include="Model\UmlTypeGfxSettings.cs" />
     <Compile Include="Windows\Forms\Canvas.cs">

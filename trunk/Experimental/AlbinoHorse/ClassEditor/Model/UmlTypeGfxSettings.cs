@@ -31,19 +31,22 @@ namespace AlbinoHorse.Model.Settings
     {
         private const string fontName = "Tahoma";
 
+        public static Font ImplementedInterfaces = new Font(fontName, 8f, FontStyle.Regular);
         public static Font DefaultTypeName = new Font(fontName, 8f, FontStyle.Bold);
         public static Font AbstractTypeName = new Font(fontName, 8f, FontStyle.Bold | FontStyle.Italic);
         public static Font TypeKind = new Font(fontName, 7f, FontStyle.Regular);
         public static Font InheritsTypeName = new Font(fontName, 7f, FontStyle.Regular);
         public static Font SectionCaption = new Font(fontName, 8f, FontStyle.Regular);
-        public static Font TypeMember = new Font(fontName, 8f, FontStyle.Regular);
+        public static Font ClassTypeMember = new Font(fontName, 8f, FontStyle.Regular);
+        public static Font InterfaceTypeMember = new Font(fontName, 8f, FontStyle.Italic);
         public static Font NewTypeMember = new Font(fontName, 8f, FontStyle.Underline);
     }
 
 
     public static class Pens
     {
-        public static Pen DefaultBorder = new Pen(Color.FromArgb(90, 90, 90), 1f);
+        public static Pen Lolipop = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
+        public static Pen DefaultBorder = new Pen(Color.FromArgb(130, 130, 130), 1f);
         public static Pen AbstractBorder = MakeAbstractBorderPen();
         public static Pen SelectionOuter = MakeSelectonPen();
         public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
@@ -58,7 +61,7 @@ namespace AlbinoHorse.Model.Settings
         private static Pen MakeAbstractBorderPen()
         {
 
-            Pen pen = new Pen(Color.FromArgb(90, 90, 90), 1.3f);
+            Pen pen = new Pen(Color.FromArgb(130, 130, 130), 1.3f);
             pen.DashStyle = DashStyle.Dash;
             pen.Alignment = PenAlignment.Center;
             return pen;
