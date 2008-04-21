@@ -41,7 +41,7 @@ namespace GenerationStudio.Gui
 
         private Dictionary<ClassDiagramMemberElement, Shape> shapeLookup = new Dictionary<ClassDiagramMemberElement, Shape>();
 
-        private Shape GetShape(ClassDiagramMemberElement member)
+        public Shape GetShape(ClassDiagramMemberElement member)
         {
             Shape shape = null;
             if (shapeLookup.TryGetValue(member, out shape))
