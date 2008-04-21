@@ -1,58 +1,52 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 using AlbinoHorse.Infrastructure;
+using AlbinoHorse.Windows.Forms;
+
 
 namespace AlbinoHorse.Model
 {
-    public class UmlConnection : Shape
+    public class UmlAssociation : Shape
     {
-        private static class Settings
-        {
-            public static Pen DefaultPen = new Pen(Color.Gray, 1);
-        }
+        public IUmlAssociationData DataSource { get; set; }
 
         #region Property Start
-        private Shape start;
         public Shape Start
         {
             get
             {
-                return this.start;
-            }
-            set
-            {
-                this.start = value;
-            }
+                return DataSource.Start;
+            }            
         }
         #endregion
 
         #region Property End
-        private Shape end;
         public Shape End
         {
             get
             {
-                return this.end;
-            }
-            set
-            {
-                this.end = value;
+                return DataSource.End;
             }
         }
         #endregion
 
         public override void Draw(RenderInfo info)
         {
-            
+
         }
 
         public override void DrawBackground(RenderInfo info)
         {
+            Shape start = Start;
+            Shape end = End;
+
             if (start == null || end == null)
                 return;
-            
+
 
             float x1 = start.Bounds.X + start.Bounds.Width / 2;
             float y1 = start.Bounds.Y + start.Bounds.Height / 2;
@@ -61,7 +55,7 @@ namespace AlbinoHorse.Model
             float x2 = end.Bounds.X + end.Bounds.Width / 2;
             float y2 = end.Bounds.Y + end.Bounds.Height / 2;
 
-            Pen currentPen = Settings.DefaultPen;
+            Pen currentPen = Settings.Pens.DefaultBorder;
 
             if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
             {
@@ -89,11 +83,14 @@ namespace AlbinoHorse.Model
                 info.Graphics.DrawLine(currentPen, x1, y3, x2, y3);
             }
 
-        //    info.Graphics.DrawLine(Pens.Gray, x1, y1, x2, y2);
+            //    info.Graphics.DrawLine(Pens.Gray, x1, y1, x2, y2);
         }
 
         public override void PreviewDrawBackground(RenderInfo info)
         {
+            Shape start = Start;
+            Shape end = End;
+
             if (start == null || end == null)
                 return;
 

@@ -48,6 +48,23 @@ namespace GenerationStudio.Gui
             if (start == null || end == null)
                 return;
 
+            if (start is UmlComment)
+            {
+                UmlComment startComment = start as UmlComment;
+                ClassDiagramCommentElement startElement = (startComment.DataSource as UmlCommentData).Owner;
+
+                if (end is UmlClass)
+                {
+                    UmlClass endClass = end as UmlClass;
+                    ClassDiagramTypeElement endElement = (endClass.DataSource as UmlClassData).Owner;
+
+                    ClassDiagramAssociationElement association = new ClassDiagramAssociationElement();
+                    association.Start = startElement;
+                    association.End = endElement;
+
+                    ClassDiagramNode.AddChild(association);
+                }
+            }
         }
 
         private void EndDrawInheritance(Shape start, Shape end)
@@ -62,35 +79,46 @@ namespace GenerationStudio.Gui
 
                 if (end is UmlClass)
                 {
-                    UmlClass endClass = end as UmlClass;
-                    ClassElement endElement = (endClass.DataSource as UmlClassData).Owner.Type as ClassElement;
-
-                    startElement.Inherits = endElement.Name;
+                    ApplyBaseClassToClass(end, startElement);
                 }
 
                 if (end is UmlInterface)
                 {
-                    UmlInterface endInterface = end as UmlInterface;
-                    InterfaceElement endElement = (endInterface.DataSource as UmlInterfaceData).Owner.Type as InterfaceElement;
-
-                    bool exists = false;
-
-                    foreach (var existingImpl in startElement.GetChildren<ImplementationElement>())
-                    {
-                        if (existingImpl.InterfaceName == endElement.Name)
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
-
-                    if (!exists)
-                    {
-                        ImplementationElement implementation = new ImplementationElement();
-                        implementation.InterfaceName = endElement.Name;
-                        startElement.AddChild(implementation);
-                    }
+                    ApplyInterfaceToClass(end, startElement);
                 }
+            }
+            
+        }
+
+        private static void ApplyBaseClassToClass(Shape end, ClassElement startElement)
+        {
+            UmlClass endClass = end as UmlClass;
+            ClassElement endElement = (endClass.DataSource as UmlClassData).Owner.Type as ClassElement;
+
+            startElement.Inherits = endElement.Name;
+        }
+
+        private static void ApplyInterfaceToClass(Shape end, ClassElement startElement)
+        {
+            UmlInterface endInterface = end as UmlInterface;
+            InterfaceElement endElement = (endInterface.DataSource as UmlInterfaceData).Owner.Type as InterfaceElement;
+
+            bool exists = false;
+
+            foreach (var existingImpl in startElement.GetChildren<ImplementationElement>())
+            {
+                if (existingImpl.InterfaceName == endElement.Name)
+                {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists)
+            {
+                ImplementationElement implementation = new ImplementationElement();
+                implementation.InterfaceName = endElement.Name;
+                startElement.AddChild(implementation);
             }
         }
 

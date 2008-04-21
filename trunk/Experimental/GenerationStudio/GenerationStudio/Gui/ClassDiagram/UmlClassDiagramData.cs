@@ -57,10 +57,25 @@ namespace GenerationStudio.Gui
             {
                 shape = GetUmlComment(member as ClassDiagramCommentElement);
             }
+            if (member is ClassDiagramAssociationElement)
+            {
+                shape = GetUmlAssociation(member as ClassDiagramAssociationElement);
+            }
 
             shapeLookup.Add(member, shape);
 
             return shape;
+        }
+
+        private Shape GetUmlAssociation(ClassDiagramAssociationElement associationElement)
+        {
+            UmlAssociation association = new UmlAssociation();
+            UmlAssociationData data = new UmlAssociationData();
+            data.Owner = associationElement;
+            data.DiagramData = this;
+            association.DataSource = data;
+
+            return association;
         }
 
         private UmlInstanceType GetUmlType(ClassDiagramTypeElement diagramElement)

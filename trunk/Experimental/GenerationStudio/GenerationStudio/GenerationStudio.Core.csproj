@@ -69,7 +69,8 @@
     <Compile Include="Elements\DB\TableElement.cs" />
     <Compile Include="Elements\ElementError.cs" />
     <Compile Include="Elements\NamedElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramComment.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramAssociationElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramCommentElement.cs" />
     <Compile Include="Elements\OO\ClassDiagram\ClassDiagramElement.cs" />
     <Compile Include="Elements\OO\ClassDiagram\ClassDiagramMemberElement.cs" />
     <Compile Include="Elements\OO\ClassDiagram\ClassDiagramTypeElement.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Gui\ClassDiagram\ClassDiagramEditor.Designer.cs">
       <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\ClassDiagram\UmlAssociationData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlClassDiagramData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlCommentData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlEnumData.cs" />
@@ -211,6 +213,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Images\comment.gif" />
     <EmbeddedResource Include="Images\type.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\association.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
