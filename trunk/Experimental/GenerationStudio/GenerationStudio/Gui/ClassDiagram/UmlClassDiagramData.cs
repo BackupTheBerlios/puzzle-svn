@@ -49,13 +49,57 @@ namespace GenerationStudio.Gui
                 return shape;
             }
 
-            
-
-            
+            if (member is ClassDiagramTypeElement)
+            {
+                shape = GetUmlType(member as ClassDiagramTypeElement);
+            }
+            if (member is ClassDiagramCommentElement)
+            {
+                shape = GetUmlComment(member as ClassDiagramCommentElement);
+            }
 
             shapeLookup.Add(member, shape);
 
             return shape;
+        }
+
+        private UmlInstanceType GetUmlType(ClassDiagramTypeElement diagramElement)
+        {
+            UmlInstanceType t = null;
+            if (diagramElement.Type is InterfaceElement)
+            {
+                t = new UmlInterface();
+                UmlInterfaceData data = new UmlInterfaceData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
+
+            if (diagramElement.Type is ClassElement)
+            {
+                t = new UmlClass();
+                UmlClassData data = new UmlClassData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
+
+            if (diagramElement.Type is EnumElement)
+            {
+                t = new UmlEnum();
+                UmlEnumData data = new UmlEnumData();
+                data.Owner = diagramElement;
+                t.DataSource = data;
+            }
+
+            return t;
+        }
+
+        private UmlComment GetUmlComment(ClassDiagramCommentElement diagramElement)
+        {
+            UmlComment comment = new UmlComment();
+            UmlCommentData data = new UmlCommentData();
+            data.Owner = diagramElement;
+            comment.DataSource = data;
+            return comment;
         }
     }
 }

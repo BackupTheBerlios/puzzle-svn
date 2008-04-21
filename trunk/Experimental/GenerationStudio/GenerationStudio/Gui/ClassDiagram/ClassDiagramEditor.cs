@@ -134,54 +134,23 @@ namespace GenerationStudio.Gui
 
         private void CreateUmlType(DragEventArgs e)
         {
-            TypeElement element = (TypeElement)Engine.DragDropElement;
+            //TypeElement element = (TypeElement)Engine.DragDropElement;
 
-            ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
-            diagramElement.Type = element;
-            diagramElement.Expanded = true;
-            Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
-            diagramElement.X = cp.X;
-            diagramElement.Y = cp.Y;
-            diagramElement.Width = 21 * 7;
-            ClassDiagramNode.AddChild(diagramElement);
+            //ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
+            //diagramElement.Type = element;
+            //diagramElement.Expanded = true;
+            //Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
+            //diagramElement.X = cp.X;
+            //diagramElement.Y = cp.Y;
+            //diagramElement.Width = 21 * 7;
+            //ClassDiagramNode.AddChild(diagramElement);
 
 
-            AddUmlTypeFromTypeElement(diagramElement);
+            //AddUmlTypeFromTypeElement(diagramElement);
 
-            UmlDesigner.Refresh();
+            //UmlDesigner.Refresh();
         }
 
-        
-
-        private void AddUmlTypeFromTypeElement(ClassDiagramTypeElement diagramElement)
-        {           
-            UmlInstanceType t = null;
-            if (diagramElement.Type is InterfaceElement)
-            {
-                t = new UmlInterface();
-                UmlInterfaceData data = new UmlInterfaceData();
-                data.Owner = diagramElement;
-                t.DataSource = data;
-            }
-
-            if (diagramElement.Type is ClassElement)
-            {
-                t = new UmlClass();
-                UmlClassData data = new UmlClassData();
-                data.Owner = diagramElement;
-                t.DataSource = data;
-            }
-
-            if (diagramElement.Type is EnumElement)
-            {
-                t = new UmlEnum();
-                UmlEnumData data = new UmlEnumData();
-                data.Owner = diagramElement;
-                t.DataSource = data;
-            }
-
-            UmlDesigner.Diagram.Shapes.Add(t);
-        }
 
         private void UmlDesigner_DragOver(object sender, DragEventArgs e)
         {
@@ -197,25 +166,12 @@ namespace GenerationStudio.Gui
 
         public void LoadData()
         {
-            UmlDesigner.Diagram.Shapes.Clear();
-            foreach (var diagramElement in ClassDiagramNode.GetChildren<ClassDiagramMemberElement>())
-            {
-                if (diagramElement is ClassDiagramTypeElement)
-                    AddUmlTypeFromTypeElement(diagramElement as ClassDiagramTypeElement);
-                if (diagramElement is ClassDiagramCommentElement)
-                    AddUmlComment(diagramElement as ClassDiagramCommentElement);
-            }
-            UmlDesigner.Refresh();
+            UmlClassDiagramData data = new UmlClassDiagramData();
+            data.Owner = ClassDiagramNode;
+            UmlDesigner.Diagram.DataSource = data;
         }
 
-        private void AddUmlComment(ClassDiagramCommentElement diagramElement)
-        {
-            UmlComment comment = new UmlComment();
-            UmlCommentData data = new UmlCommentData();
-            data.Owner = diagramElement;
-            comment.DataSource = data;
-            UmlDesigner.Diagram.Shapes.Add(comment);
-        }
+        
 
         private void ZoomLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
