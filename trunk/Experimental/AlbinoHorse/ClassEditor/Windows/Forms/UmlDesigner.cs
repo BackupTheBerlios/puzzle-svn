@@ -18,7 +18,6 @@ namespace AlbinoHorse.Windows.Forms
         {
             public static Font inputFont = new Font("Arial", 10f);
             public static Pen DrawRelation = MakeDrawRelationPen();
-            public static Pen DrawRelationBackground = new Pen(Brushes.White, 5);
 
             private static Pen MakeDrawRelationPen()
             {
@@ -388,8 +387,7 @@ namespace AlbinoHorse.Windows.Forms
             BoundingBoxes = renderInfo.BoundingBoxes;
 
             if (EditMode == EditMode.DrawRelation)
-            {
-                e.Graphics.DrawLine(Settings.DrawRelationBackground, mouseDownPoint, mouseCurrentPoint);
+            {                
                 e.Graphics.DrawLine(Settings.DrawRelation, mouseDownPoint, mouseCurrentPoint);
             }
 

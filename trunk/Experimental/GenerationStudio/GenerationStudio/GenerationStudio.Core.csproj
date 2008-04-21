@@ -101,6 +101,7 @@
     <Compile Include="Gui\ClassDiagram\ClassDiagramEditor.Designer.cs">
       <DependentUpon>ClassDiagramEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\ClassDiagram\UmlClassDiagramData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlCommentData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlEnumData.cs" />
     <Compile Include="Gui\ClassDiagram\UmlInterfaceData.cs" />

@@ -11,9 +11,12 @@ namespace AlbinoHorse.Model
 {
     public class UmlDiagram
     {
+
+        public IUmlDiagramData DataSource { get; set; }
+
         public UmlDiagram()
         {
-            Shapes = new List<Shape>();
+            DataSource = new DefaultUmlDiagramData();
         }
 
         public void AutoLayout()
@@ -65,17 +68,12 @@ namespace AlbinoHorse.Model
             }
         }
 
-        #region Property Shapes
-        private List<Shape> shapes;
-        public List<Shape> Shapes
+        #region Property Shapes        
+        public IList<Shape> Shapes
         {
             get
             {
-                return this.shapes;
-            }
-            set
-            {
-                this.shapes = value;
+                return DataSource.GetShapes();
             }
         }
         #endregion
