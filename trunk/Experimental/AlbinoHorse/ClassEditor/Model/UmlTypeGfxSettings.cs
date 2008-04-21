@@ -52,7 +52,7 @@ namespace AlbinoHorse.Model.Settings
         public static Pen AbstractBorder = MakeAbstractBorderPen();
         public static Pen SelectionOuter = MakeSelectonPen();
         public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
-
+        
         private static Pen MakeSelectonPen()
         {
             Pen pen = new Pen(Color.Gray, 1);

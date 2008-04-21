@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Infrastructure\RenderInfo.cs" />
     <Compile Include="Infrastructure\ShapeMouseEventArgs.cs" />
+    <Compile Include="Windows\Forms\EditMode.cs" />
     <Compile Include="Windows\Forms\UmlDesigner.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -11,7 +11,7 @@ namespace GenerationStudio.Elements
     [Serializable]
     [ElementParent(typeof(ClassDiagramElement))]
     [ElementName("Type element")]
-    [ElementIcon("GenerationStudio.Images.class.gif")]
+    [ElementIcon("GenerationStudio.Images.type.gif")]
     public class ClassDiagramTypeElement : ClassDiagramMemberElement
     {
         [Browsable(false)]

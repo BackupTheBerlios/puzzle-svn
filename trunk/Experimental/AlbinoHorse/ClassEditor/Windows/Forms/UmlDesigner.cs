@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using AlbinoHorse.Model;
 using AlbinoHorse.Infrastructure;
+using System.Drawing.Drawing2D;
 
 
 namespace AlbinoHorse.Windows.Forms
@@ -16,6 +17,16 @@ namespace AlbinoHorse.Windows.Forms
         private static class Settings
         {
             public static Font inputFont = new Font("Arial", 10f);
+            public static Pen DrawRelation = MakeDrawRelationPen();
+            public static Pen DrawRelationBackground = new Pen(Brushes.White, 5);
+
+            private static Pen MakeDrawRelationPen()
+            {
+                Pen pen = new Pen(Color.Gray, 3);
+
+                pen.DashStyle = DashStyle.Dash;
+                return pen;
+            }
         }
 
 
@@ -42,30 +53,36 @@ namespace AlbinoHorse.Windows.Forms
             GridSize = 21;
             ShowGrid = true;
             SnapToGrid = true;
+            EditMode = EditMode.Normal;
         }
 
         void MainCanvas_KeyDown(object sender, KeyEventArgs e)
         {
-            
-            if (currentShape != null)
+            if (EditMode == EditMode.Normal)
             {
-                Shape shape = currentShape;
-                ShapeKeyEventArgs args = new ShapeKeyEventArgs();
-                args.SnapToGrid = this.SnapToGrid;
-                args.Sender = this;
-                args.GridSize = this.GridSize;
-                args.Key = e.KeyCode;
+                if (currentShape != null)
+                {
+                    Shape shape = currentShape;
+                    ShapeKeyEventArgs args = new ShapeKeyEventArgs();
+                    args.SnapToGrid = this.SnapToGrid;
+                    args.Sender = this;
+                    args.GridSize = this.GridSize;
+                    args.Key = e.KeyCode;
 
-                shape.OnKeyPress(args);
+                    shape.OnKeyPress(args);
 
-                if (args.Redraw)
-                    this.Refresh();
+                    if (args.Redraw)
+                        this.Refresh();
+                }
             }
         }
 
         void MainCanvas_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+            if (EditMode == EditMode.Normal)
+            {
+
+            }
         }
 
         private void SetViewPort(int x, int y)
@@ -172,6 +189,7 @@ namespace AlbinoHorse.Windows.Forms
         public int GridSize { get; set; }
         public bool ShowGrid { get; set; }
         public bool SnapToGrid { get; set; }
+        public EditMode EditMode { get; set; }
 
         public Rectangle GetItemBounds(object item)
         {
@@ -199,6 +217,15 @@ namespace AlbinoHorse.Windows.Forms
             double xx = x;
             xx *= Zoom;
             return (float)xx;
+        }
+
+        private DrawRelation endDrawRelation = null;
+        private Shape relationStart = null;
+        private Shape relationEnd = null;
+        public void BeginDrawRelation(DrawRelation endDrawRelation)
+        {
+            this.endDrawRelation = endDrawRelation;
+            this.EditMode = EditMode.BeginDrawRelation;
         }
 
         private Action endInputAction = null;
@@ -360,6 +387,12 @@ namespace AlbinoHorse.Windows.Forms
             Diagram.Draw(renderInfo);
             BoundingBoxes = renderInfo.BoundingBoxes;
 
+            if (EditMode == EditMode.DrawRelation)
+            {
+                e.Graphics.DrawLine(Settings.DrawRelationBackground, mouseDownPoint, mouseCurrentPoint);
+                e.Graphics.DrawLine(Settings.DrawRelation, mouseDownPoint, mouseCurrentPoint);
+            }
+
             SetCanvasScrollSize(renderInfo);
         }
 
@@ -419,115 +452,38 @@ namespace AlbinoHorse.Windows.Forms
         {
             int x = (int)((double)(e.X - MainCanvas.AutoScrollPosition.X) / Zoom);
             int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
-            Cursor = System.Windows.Forms.Cursors.Default;
-            currentBoundingBox = null;
-            isPanning = false;
-            for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
+
+            if (EditMode == EditMode.DrawRelation)
             {
-                BoundingBox bbox = BoundingBoxes[i];
-                if (bbox.Bounds.Contains(x, y))
+
+
+
+                relationEnd = null;
+
+
+                for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
                 {
-                    if (bbox.Target is Shape)
+                    BoundingBox bbox = BoundingBoxes[i];
+                    if (bbox.Bounds.Contains(x, y))
                     {
-                        Shape shape = (Shape)bbox.Target;
-                        ShapeMouseEventArgs args = new ShapeMouseEventArgs();
-                        args.BoundingBox = bbox;
-                        args.X = x;
-                        args.Y = y;
-                        args.Button = e.Button;
-                        args.Sender = this;
-                        args.GridSize = GridSize;
-                        args.SnapToGrid = SnapToGrid;
-                        shape.OnMouseUp(args);
-                        if (args.Redraw)
-                            this.Refresh();
-                    }
-
-                    return;
-                }
-            }
-        }
-
-        private Point mouseDownPoint;
-        private Point mouseDownAutoscrollPoint;
-        private bool isPanning = false;
-        void MainCanvas_MouseDown(object sender, MouseEventArgs e)
-        {
-            EndInput();
-            mouseDownPoint = new Point(e.X, e.Y);
-            mouseDownAutoscrollPoint = new Point(-MainCanvas.AutoScrollPosition.X, -MainCanvas.AutoScrollPosition.Y);
-
-            int x = (int)((double)(e.X - MainCanvas.AutoScrollPosition.X) / Zoom);
-            int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
-
-            for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
-            {
-                BoundingBox bbox = BoundingBoxes[i];
-                if (bbox.Bounds.Contains(x, y))
-                {
-                    if (bbox.Target is Shape)
-                    {
-                        currentBoundingBox = bbox;
-                        Shape shape = (Shape)bbox.Target;
-                        currentShape = shape;
-                        ShapeMouseEventArgs args = new ShapeMouseEventArgs();
-                        args.BoundingBox = bbox;
-                        args.X = x;
-                        args.Y = y;
-                        args.Button = e.Button;
-                        args.Sender = this;
-                        args.GridSize = GridSize;
-                        args.SnapToGrid = SnapToGrid;
-                        shape.OnMouseDown(args);
-                        if (args.Redraw)
-                            this.Refresh();
-                    }
-
-                    return;
-                }
-            }
-            isPanning = true;
-        }
-
-        void MainCanvas_MouseMove(object sender, MouseEventArgs e)
-        {
-
-            int x = (int)((double)(e.X - MainCanvas.AutoScrollPosition.X) / Zoom);
-            int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
-
-            if (e.Button != MouseButtons.None)
-            {
-                if (currentBoundingBox == null )
-                {
-                    if (isPanning)
-                    {
-                        int dx = mouseDownPoint.X - e.X;
-                        int dy = mouseDownPoint.Y - e.Y;
-
-                        Point newPos = new Point(mouseDownAutoscrollPoint.X + dx, mouseDownAutoscrollPoint.Y + dy);
-                        MainCanvas.AutoScrollPosition = newPos;
-                        Cursor = System.Windows.Forms.Cursors.SizeAll;
+                        if (bbox.Target is Shape)
+                        {
+                            relationEnd = bbox.Target as Shape;
+                        }
                     }
                 }
-                else
-                {
 
-                    Shape shape = (Shape)currentBoundingBox.Target;
-                    ShapeMouseEventArgs args = new ShapeMouseEventArgs();
-                    args.BoundingBox = currentBoundingBox;
-                    args.X = x;
-                    args.Y = y;
-                    args.Button = e.Button;
-                    args.Sender = this;
-                    args.GridSize = GridSize;
-                    args.SnapToGrid = SnapToGrid;
-                    shape.OnMouseMove(args);
-                    if (args.Redraw)
-                        MainCanvas.Refresh();
-                }
+                endDrawRelation(relationStart, relationEnd);
+
+                //end drawing
+                EditMode = EditMode.Normal;
+                MainCanvas.Refresh();
             }
-            else
+            else if (EditMode == EditMode.Normal)
             {
+                Cursor = System.Windows.Forms.Cursors.Default;
+                currentBoundingBox = null;
+                isPanning = false;
                 for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
                 {
                     BoundingBox bbox = BoundingBoxes[i];
@@ -542,12 +498,149 @@ namespace AlbinoHorse.Windows.Forms
                             args.Y = y;
                             args.Button = e.Button;
                             args.Sender = this;
-                            shape.OnMouseMove(args);
+                            args.GridSize = GridSize;
+                            args.SnapToGrid = SnapToGrid;
+                            shape.OnMouseUp(args);
                             if (args.Redraw)
-                                MainCanvas.Refresh();
+                                this.Refresh();
                         }
 
                         return;
+                    }
+                }
+            }
+        }
+
+        private Point mouseDownPoint;
+        private Point mouseCurrentPoint;
+        private Point mouseDownAutoscrollPoint;
+        private bool isPanning = false;
+        void MainCanvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            EndInput();
+            int x = (int)((double)(e.X - MainCanvas.AutoScrollPosition.X) / Zoom);
+            int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
+
+            if (EditMode == EditMode.BeginDrawRelation)
+            {
+                mouseDownPoint = new Point(e.X, e.Y);
+                EditMode = EditMode.DrawRelation;
+                relationStart = null;
+
+                for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
+                {
+                    BoundingBox bbox = BoundingBoxes[i];
+                    if (bbox.Bounds.Contains(x, y))
+                    {
+                        if (bbox.Target is Shape)
+                        {
+                            relationStart = bbox.Target as Shape;
+                        }
+                    }
+                }
+
+            }
+            else if (EditMode == EditMode.Normal)
+            {
+                mouseDownPoint = new Point(e.X, e.Y);
+                mouseDownAutoscrollPoint = new Point(-MainCanvas.AutoScrollPosition.X, -MainCanvas.AutoScrollPosition.Y);
+
+                for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
+                {
+                    BoundingBox bbox = BoundingBoxes[i];
+                    if (bbox.Bounds.Contains(x, y))
+                    {
+                        if (bbox.Target is Shape)
+                        {
+                            currentBoundingBox = bbox;
+                            Shape shape = (Shape)bbox.Target;
+                            currentShape = shape;
+                            ShapeMouseEventArgs args = new ShapeMouseEventArgs();
+                            args.BoundingBox = bbox;
+                            args.X = x;
+                            args.Y = y;
+                            args.Button = e.Button;
+                            args.Sender = this;
+                            args.GridSize = GridSize;
+                            args.SnapToGrid = SnapToGrid;
+                            shape.OnMouseDown(args);
+                            if (args.Redraw)
+                                this.Refresh();
+                        }
+
+                        return;
+                    }
+                }
+                isPanning = true;
+            }
+        }
+
+        void MainCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (EditMode == EditMode.DrawRelation)
+            {
+                mouseCurrentPoint = new Point(e.X, e.Y);
+                MainCanvas.Refresh();
+            }
+            else if (EditMode == EditMode.Normal)
+            {
+                int x = (int)((double)(e.X - MainCanvas.AutoScrollPosition.X) / Zoom);
+                int y = (int)((double)(e.Y - MainCanvas.AutoScrollPosition.Y) / Zoom);
+
+                if (e.Button != MouseButtons.None)
+                {
+                    if (currentBoundingBox == null)
+                    {
+                        if (isPanning)
+                        {
+                            int dx = mouseDownPoint.X - e.X;
+                            int dy = mouseDownPoint.Y - e.Y;
+
+                            Point newPos = new Point(mouseDownAutoscrollPoint.X + dx, mouseDownAutoscrollPoint.Y + dy);
+                            MainCanvas.AutoScrollPosition = newPos;
+                            Cursor = System.Windows.Forms.Cursors.SizeAll;
+                        }
+                    }
+                    else
+                    {
+
+                        Shape shape = (Shape)currentBoundingBox.Target;
+                        ShapeMouseEventArgs args = new ShapeMouseEventArgs();
+                        args.BoundingBox = currentBoundingBox;
+                        args.X = x;
+                        args.Y = y;
+                        args.Button = e.Button;
+                        args.Sender = this;
+                        args.GridSize = GridSize;
+                        args.SnapToGrid = SnapToGrid;
+                        shape.OnMouseMove(args);
+                        if (args.Redraw)
+                            MainCanvas.Refresh();
+                    }
+                }
+                else
+                {
+                    for (int i = BoundingBoxes.Count - 1; i >= 0; i--)
+                    {
+                        BoundingBox bbox = BoundingBoxes[i];
+                        if (bbox.Bounds.Contains(x, y))
+                        {
+                            if (bbox.Target is Shape)
+                            {
+                                Shape shape = (Shape)bbox.Target;
+                                ShapeMouseEventArgs args = new ShapeMouseEventArgs();
+                                args.BoundingBox = bbox;
+                                args.X = x;
+                                args.Y = y;
+                                args.Button = e.Button;
+                                args.Sender = this;
+                                shape.OnMouseMove(args);
+                                if (args.Redraw)
+                                    MainCanvas.Refresh();
+                            }
+
+                            return;
+                        }
                     }
                 }
             }

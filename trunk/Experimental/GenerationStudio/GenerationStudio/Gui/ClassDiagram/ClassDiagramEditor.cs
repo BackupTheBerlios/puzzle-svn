@@ -31,6 +31,67 @@ namespace GenerationStudio.Gui
             {
                 AddClass();
             }
+
+            if (UmlToolbox.SelectedItem.ToString() == "Association")
+            {
+                UmlDesigner.BeginDrawRelation(EndDrawAssociation);
+            }
+
+            if (UmlToolbox.SelectedItem.ToString() == "Inheritance")
+            {
+                UmlDesigner.BeginDrawRelation(EndDrawInheritance);
+            }
+        }
+
+        private void EndDrawAssociation(Shape start, Shape end)
+        {
+            if (start == null || end == null)
+                return;
+
+        }
+
+        private void EndDrawInheritance(Shape start, Shape end)
+        {
+            if (start == null || end == null)
+                return;
+
+            if (start is UmlClass)
+            {                
+                UmlClass startClass = start as UmlClass;
+                ClassElement startElement = (startClass.DataSource as UmlClassData).Owner.Type as ClassElement;
+
+                if (end is UmlClass)
+                {
+                    UmlClass endClass = end as UmlClass;
+                    ClassElement endElement = (endClass.DataSource as UmlClassData).Owner.Type as ClassElement;
+
+                    startElement.Inherits = endElement.Name;
+                }
+
+                if (end is UmlInterface)
+                {
+                    UmlInterface endInterface = end as UmlInterface;
+                    InterfaceElement endElement = (endInterface.DataSource as UmlInterfaceData).Owner.Type as InterfaceElement;
+
+                    bool exists = false;
+
+                    foreach (var existingImpl in startElement.GetChildren<ImplementationElement>())
+                    {
+                        if (existingImpl.InterfaceName == endElement.Name)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                    {
+                        ImplementationElement implementation = new ImplementationElement();
+                        implementation.InterfaceName = endElement.Name;
+                        startElement.AddChild(implementation);
+                    }
+                }
+            }
         }
 
         public ClassDiagramElement ClassDiagramNode { get; set; }
@@ -160,6 +221,11 @@ namespace GenerationStudio.Gui
         {
             double zoomLevel = double.Parse(ZoomLevelComboBox.Text) / 100;
             UmlDesigner.Zoom = zoomLevel;
+        }
+
+        private void UmlToolbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

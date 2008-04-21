@@ -11,7 +11,7 @@ namespace GenerationStudio.Elements
     [Serializable]
     [ElementParent(typeof(ClassDiagramElement))]
     [ElementName("Comment")]
-    [ElementIcon("GenerationStudio.Images.class.gif")]
+    [ElementIcon("GenerationStudio.Images.comment.gif")]
     public class ClassDiagramCommentElement : ClassDiagramMemberElement
     {        
         [Browsable(false)]

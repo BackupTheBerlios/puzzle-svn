@@ -70,11 +70,14 @@
             "Class",
             "Interface",
             "Enum",
-            "Comment"});
+            "Comment",
+            "Association",
+            "Inheritance"});
             this.UmlToolbox.Location = new System.Drawing.Point(5, 5);
             this.UmlToolbox.Name = "UmlToolbox";
             this.UmlToolbox.Size = new System.Drawing.Size(80, 468);
             this.UmlToolbox.TabIndex = 0;
+            this.UmlToolbox.SelectedIndexChanged += new System.EventHandler(this.UmlToolbox_SelectedIndexChanged);
             this.UmlToolbox.DoubleClick += new System.EventHandler(this.UmlToolbox_DoubleClick);
             // 
             // UmlDesigner
@@ -82,6 +85,7 @@
             this.UmlDesigner.AllowDrop = true;
             this.UmlDesigner.BackColor = System.Drawing.Color.White;
             this.UmlDesigner.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UmlDesigner.EditMode = AlbinoHorse.Windows.Forms.EditMode.Normal;
             this.UmlDesigner.GridSize = 21;
             this.UmlDesigner.Location = new System.Drawing.Point(1, 0);
             this.UmlDesigner.Name = "UmlDesigner";
