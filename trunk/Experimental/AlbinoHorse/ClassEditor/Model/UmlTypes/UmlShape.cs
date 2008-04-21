@@ -40,8 +40,17 @@ namespace AlbinoHorse.Model
         //bounding box identifiers
         protected readonly object CaptionIdentifier = new object();
         protected readonly object TypeExpanderIdentifier = new object();
+        
         protected readonly object LeftResizeIdentifier = new object();
         protected readonly object RightResizeIdentifier = new object();
+        protected readonly object TopResizeIdentifier = new object();
+        protected readonly object BottomResizeIdentifier = new object();
+
+        protected readonly object TopLeftResizeIdentifier = new object();
+        protected readonly object TopRightResizeIdentifier = new object();
+        protected readonly object BottomLeftResizeIdentifier = new object();
+        protected readonly object BottomRightResizeIdentifier = new object();
+
         protected readonly object BodyIdentifier = new object();
         #endregion
 
@@ -51,6 +60,62 @@ namespace AlbinoHorse.Model
         {
             info.Graphics.FillRectangle(Brushes.White, this.Bounds);
             info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
+        }
+
+        protected void DrawSelection(RenderInfo info)
+        {
+            if (Selected && SelectedObject == null)
+            {
+                Rectangle outerBounds = this.Bounds;
+                outerBounds.Inflate(4, 4);
+                outerBounds.Offset(1, 0);
+                info.Graphics.DrawRectangle(Settings.Pens.SelectionInner, outerBounds);
+                outerBounds.Offset(-1, 1);
+                info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
+
+                Rectangle leftHandle = new Rectangle(outerBounds.X - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
+                info.Graphics.FillRectangle(Brushes.Gray, leftHandle);
+                leftHandle.Inflate(-1, -1);
+                info.Graphics.FillRectangle(Brushes.White, leftHandle);
+
+                BoundingBox leftResizeHandle = new BoundingBox();
+                leftResizeHandle.Bounds = leftHandle;
+                leftResizeHandle.Data = this.LeftResizeIdentifier;
+                leftResizeHandle.Target = this;
+                info.BoundingBoxes.Add(leftResizeHandle);
+
+                Rectangle rightHandle = new Rectangle(outerBounds.Right - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
+                info.Graphics.FillRectangle(Brushes.Gray, rightHandle);
+                rightHandle.Inflate(-1, -1);
+                info.Graphics.FillRectangle(Brushes.White, rightHandle);
+
+                BoundingBox rightResizeHandle = new BoundingBox();
+                rightResizeHandle.Bounds = rightHandle;
+                rightResizeHandle.Data = this.RightResizeIdentifier;
+                rightResizeHandle.Target = this;
+                info.BoundingBoxes.Add(rightResizeHandle);
+            }
+        }
+
+        public override void DrawBackground(RenderInfo info)
+        {
+            int grid = info.GridSize;
+            Rectangle renderBounds = Bounds;
+
+            int x = renderBounds.X + 4;
+            int y = renderBounds.Y + 3;
+            int width = renderBounds.Width;
+            int height = renderBounds.Height;
+
+            GraphicsPath shadowPath = GetOutlinePath(x, y, width, height);
+
+            try
+            {
+                info.Graphics.FillPath(Settings.Brushes.Shadow, shadowPath);
+            }
+            catch
+            {
+            }
         }
 
         #endregion
