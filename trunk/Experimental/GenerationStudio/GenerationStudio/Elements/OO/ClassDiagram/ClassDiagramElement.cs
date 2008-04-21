@@ -24,9 +24,9 @@ namespace GenerationStudio.Elements
             host.ShowEditor(editor);
         }
 
-        public override bool HideChildren()
-        {
-            return true;
-        }
+        //public override bool HideChildren()
+        //{
+        //    return true;
+        //}
     }
 }

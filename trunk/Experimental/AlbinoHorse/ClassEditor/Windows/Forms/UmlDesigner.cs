@@ -254,6 +254,7 @@ namespace AlbinoHorse.Windows.Forms
             x = TransformToZoom(x) ;
             y = TransformToZoom(y) ;
             width = TransformToZoom(width);
+            height = TransformToZoom(height);
 
             x += MainCanvas.AutoScrollPosition.X;
             y += MainCanvas.AutoScrollPosition.Y;

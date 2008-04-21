@@ -123,6 +123,11 @@ namespace AlbinoHorse.Model
             return 5;
         }
 
+        protected override Pen GetBorderPen()
+        {
+            return Settings.Pens.CommentBorder;
+        }
+
         #region Mouse Events
         public override void OnMouseDown(ShapeMouseEventArgs args)
         {

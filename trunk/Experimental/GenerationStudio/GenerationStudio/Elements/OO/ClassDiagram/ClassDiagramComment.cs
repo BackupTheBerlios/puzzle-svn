@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GenerationStudio.Attributes;
 using GenerationStudio.Gui;
+using System.ComponentModel;
 
 namespace GenerationStudio.Elements
 {
@@ -13,9 +14,13 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.class.gif")]
     public class ClassDiagramCommentElement : ClassDiagramMemberElement
     {        
+        [Browsable(false)]
         public int X { get; set; }
+        [Browsable(false)]
         public int Y { get; set; }
+        [Browsable(false)]
         public int Width { get; set; }
+        [Browsable(false)]
         public int Height { get; set; }
         public string Text { get; set; }
 

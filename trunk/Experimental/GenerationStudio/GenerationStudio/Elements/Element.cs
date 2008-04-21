@@ -21,6 +21,7 @@ namespace GenerationStudio.Elements
         private IList<Element> children = new List<Element>();
 
         //if the node does not have a parent, it is considered invalid
+        [Browsable(false)]
         public virtual bool IsValid
         {
             get
