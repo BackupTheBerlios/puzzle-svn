@@ -65,7 +65,6 @@ namespace GenerationStudio.Gui
                     {
                         CreateUmlType(e);
                     }
-
                 }
             }
         }
@@ -90,6 +89,8 @@ namespace GenerationStudio.Gui
 
             UmlDesigner.Refresh();
         }
+
+        
 
         private void AddUmlTypeFromTypeElement(ClassDiagramTypeElement diagramElement)
         {           
@@ -136,11 +137,23 @@ namespace GenerationStudio.Gui
         public void LoadData()
         {
             UmlDesigner.Diagram.Shapes.Clear();
-            foreach (var diagramElement in ClassDiagramNode.GetChildren<ClassDiagramTypeElement>())
+            foreach (var diagramElement in ClassDiagramNode.GetChildren<ClassDiagramMemberElement>())
             {
-                AddUmlTypeFromTypeElement(diagramElement);
+                if (diagramElement is ClassDiagramTypeElement)
+                    AddUmlTypeFromTypeElement(diagramElement as ClassDiagramTypeElement);
+                if (diagramElement is ClassDiagramCommentElement)
+                    AddUmlComment(diagramElement as ClassDiagramCommentElement);
             }
             UmlDesigner.Refresh();
+        }
+
+        private void AddUmlComment(ClassDiagramCommentElement diagramElement)
+        {
+            UmlComment comment = new UmlComment();
+            UmlCommentData data = new UmlCommentData();
+            data.Owner = diagramElement;
+            comment.DataSource = data;
+            UmlDesigner.Diagram.Shapes.Add(comment);
         }
 
         private void ZoomLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)

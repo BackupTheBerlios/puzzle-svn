@@ -208,6 +208,8 @@ namespace AlbinoHorse.Windows.Forms
             originalText = text;
             this.endInputAction = endInputAction;
             txtInput.Visible = false;
+            txtInput.Multiline = false;
+            txtInput.ScrollBars = ScrollBars.None;
             int x = bounds.Left;
             int y = bounds.Top;
             int width = bounds.Width;
@@ -228,8 +230,44 @@ namespace AlbinoHorse.Windows.Forms
             txtInput.Left = x;
             txtInput.Top = y;
             txtInput.Width = width;
+            txtInput.Height = 1;
             txtInput.Text = text;
             txtInput.Font = newFont;            
+            txtInput.Visible = true;
+            txtInput.SelectAll();
+            txtInput.Focus();
+        }
+
+        public void BeginInputMultiLine(Rectangle bounds, string text, Font font, Action endInputAction)
+        {
+            originalText = text;
+            this.endInputAction = endInputAction;
+            txtInput.Visible = false;
+            txtInput.Multiline = true;
+            txtInput.ScrollBars = ScrollBars.None;
+            int x = bounds.Left;
+            int y = bounds.Top;
+            int width = bounds.Width;
+            int height = bounds.Height;
+
+
+            x = TransformToZoom(x) ;
+            y = TransformToZoom(y) ;
+            width = TransformToZoom(width);
+
+            x += MainCanvas.AutoScrollPosition.X;
+            y += MainCanvas.AutoScrollPosition.Y;
+
+            float newFontSize = TransformToZoom(font.Size);
+            Font newFont = new Font(font.Name, newFontSize, font.Style);
+
+
+            txtInput.Left = x;
+            txtInput.Top = y;
+            txtInput.Width = width;
+            txtInput.Height = height;
+            txtInput.Text = text;
+            txtInput.Font = newFont;
             txtInput.Visible = true;
             txtInput.SelectAll();
             txtInput.Focus();
@@ -521,22 +559,40 @@ namespace AlbinoHorse.Windows.Forms
 
         private void txtInput_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '\r')
-                e.Handled = true;
+            if (!txtInput.Multiline)
+            {
+                if (e.KeyChar == '\r')
+                    e.Handled = true;
+            }
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
-                txtInput.Text = originalText;
-                EndInput();
+                if (!txtInput.Multiline)
+                {
+                    txtInput.Text = originalText;
+                    EndInput();
+                }
+                else
+                {
+                    EndInput();
+                }
             }
 
             if (e.KeyCode == Keys.Enter)
             {
-                e.Handled = true;
-                EndInput();
+                if (!txtInput.Multiline)
+                {
+                    e.Handled = true;
+                    EndInput();
+                }  
+                else if (e.Control && txtInput.Multiline)
+                {
+                    e.Handled = true;
+                    EndInput();
+                }                              
             }
         }
 

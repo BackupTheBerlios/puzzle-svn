@@ -20,6 +20,11 @@ namespace AlbinoHorse.Model
         public IUmlTypeData DataSource { get; set; }
         #endregion
 
+        #region Identifiers
+        //bounding box identifiers
+        protected readonly object CaptionIdentifier = new object();
+        #endregion
+
         #region TypeName property
         public string TypeName
         {

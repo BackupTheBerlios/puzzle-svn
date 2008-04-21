@@ -38,7 +38,6 @@ namespace AlbinoHorse.Model
 
         #region Identifiers
         //bounding box identifiers
-        protected readonly object CaptionIdentifier = new object();
         protected readonly object TypeExpanderIdentifier = new object();
         
         protected readonly object LeftResizeIdentifier = new object();
@@ -62,7 +61,7 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
         }
 
-        protected void DrawSelection(RenderInfo info)
+        protected virtual void DrawSelection(RenderInfo info)
         {
             if (Selected && SelectedObject == null)
             {
@@ -94,7 +93,13 @@ namespace AlbinoHorse.Model
                 rightResizeHandle.Data = this.RightResizeIdentifier;
                 rightResizeHandle.Target = this;
                 info.BoundingBoxes.Add(rightResizeHandle);
+
+                DrawCustomSelection(info);
             }
+        }
+
+        protected virtual void DrawCustomSelection(RenderInfo info)
+        {            
         }
 
         public override void DrawBackground(RenderInfo info)

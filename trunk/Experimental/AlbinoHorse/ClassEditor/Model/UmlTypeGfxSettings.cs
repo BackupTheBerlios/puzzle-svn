@@ -31,6 +31,7 @@ namespace AlbinoHorse.Model.Settings
     {
         private const string fontName = "Tahoma";
 
+        public static Font CommentText = new Font(fontName, 8f, FontStyle.Regular);
         public static Font ImplementedInterfaces = new Font(fontName, 8f, FontStyle.Regular);
         public static Font DefaultTypeName = new Font(fontName, 8f, FontStyle.Bold);
         public static Font AbstractTypeName = new Font(fontName, 8f, FontStyle.Bold | FontStyle.Italic);

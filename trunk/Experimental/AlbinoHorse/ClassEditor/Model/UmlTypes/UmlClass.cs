@@ -131,7 +131,7 @@ namespace AlbinoHorse.Model
 
         protected override Font GetTypeMemberFont()
         {
-            return Settings.Fonts.InterfaceTypeMember;
+            return Settings.Fonts.ClassTypeMember;
         }
     }
 }

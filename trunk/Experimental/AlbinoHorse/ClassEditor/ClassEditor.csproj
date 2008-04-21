@@ -62,6 +62,7 @@
     <Compile Include="Model\DefaultUmlTypeMemberData.cs" />
     <Compile Include="Model\DefaultUmlTypeData.cs" />
     <Compile Include="Model\Interfaces\IUmlClassData.cs" />
+    <Compile Include="Model\Interfaces\IUmlCommentData.cs" />
     <Compile Include="Model\Interfaces\IUmlEnumData.cs" />
     <Compile Include="Model\Interfaces\IUmlInterfaceData.cs" />
     <Compile Include="Model\Interfaces\IUmlRenderer.cs" />
