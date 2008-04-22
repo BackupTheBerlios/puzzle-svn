@@ -46,7 +46,7 @@ namespace AlbinoHorse.Model.Settings
 
     public static class Pens
     {
-        public static Pen AssociationLine = new Pen(Color.Brown, 1f);
+        public static Pen AssociationLine = new Pen(Color.Black, 1.8f);
         public static Pen CommentBorder = new Pen(Color.Gold, 1f);
         public static Pen Lolipop = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
         public static Pen DefaultBorder = new Pen(Color.FromArgb(130, 130, 130), 1f);

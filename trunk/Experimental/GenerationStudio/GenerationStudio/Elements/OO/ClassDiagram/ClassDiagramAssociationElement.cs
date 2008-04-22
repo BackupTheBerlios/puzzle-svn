@@ -8,6 +8,22 @@ using System.ComponentModel;
 
 namespace GenerationStudio.Elements
 {
+    public enum ClassDiagramPortSide
+    {
+        Top,
+        Right,
+        Bottom,
+        Left,
+    }
+
+    public enum ClassDiagramAssociationType
+    {
+        None,
+        Association,
+        Aggregation,
+        Inheritance,
+    }
+
     [Serializable]
     [ElementParent(typeof(ClassDiagramElement))]
     [ElementName("Association")]
@@ -15,7 +31,13 @@ namespace GenerationStudio.Elements
     public class ClassDiagramAssociationElement : ClassDiagramMemberElement
     {
         public ClassDiagramMemberElement Start { get; set; }
+        public int StartPortId { get; set; }
+        public ClassDiagramPortSide StartPortSide { get; set; }
+        public ClassDiagramAssociationType AssociationType { get; set; }
+
         public ClassDiagramMemberElement End { get; set; }
+        public int EndPortId { get; set; }
+        public ClassDiagramPortSide EndPortSide { get; set; }        
 
         public override string GetDisplayName()
         {

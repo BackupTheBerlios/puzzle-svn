@@ -112,16 +112,25 @@
             // 
             this.ZoomLevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ZoomLevelComboBox.Items.AddRange(new object[] {
-            "400",
             "300",
             "200",
             "150",
             "100",
+            "95",
+            "90",
+            "85",
+            "80",
             "75",
+            "70",
+            "65",
             "60",
+            "55",
             "50",
+            "45",
             "40",
+            "35",
             "30",
+            "25",
             "20"});
             this.ZoomLevelComboBox.Name = "ZoomLevelComboBox";
             this.ZoomLevelComboBox.Size = new System.Drawing.Size(75, 25);

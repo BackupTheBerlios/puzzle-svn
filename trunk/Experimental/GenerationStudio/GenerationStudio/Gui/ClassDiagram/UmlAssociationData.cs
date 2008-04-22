@@ -27,5 +27,33 @@ namespace GenerationStudio.Gui
                 return DiagramData.GetShape (Owner.End);
             }
         }
+
+        public int StartPortId
+        {
+            get { return Owner.StartPortId; }
+        }
+
+        public UmlPortSide StartPortSide
+        {
+            get { return (UmlPortSide)(int)Owner.StartPortSide; }
+        }
+
+        public UmlAssociationType AssociationType
+        {
+            get { return (UmlAssociationType)(int)Owner.AssociationType; }
+        }
+
+        public int EndPortId
+        {
+            get { return Owner.EndPortId; }
+        }
+
+        public UmlPortSide EndPortSide
+        {
+            get { return (UmlPortSide)(int)Owner.EndPortSide; }
+        }
+
+
+
     }
 }
