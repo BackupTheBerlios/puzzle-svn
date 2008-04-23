@@ -69,7 +69,7 @@ namespace GenerationStudio.Gui
 
         private Shape GetUmlAssociation(ClassDiagramAssociationElement associationElement)
         {
-            UmlAssociation association = new UmlAssociation();
+            UmlRelation association = new UmlRelation();
             UmlAssociationData data = new UmlAssociationData();
             data.Owner = associationElement;
             data.DiagramData = this;

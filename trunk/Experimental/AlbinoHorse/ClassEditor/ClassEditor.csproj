@@ -62,7 +62,7 @@
     <Compile Include="Model\DefaultUmlDiagramData.cs" />
     <Compile Include="Model\DefaultUmlTypeMemberData.cs" />
     <Compile Include="Model\DefaultUmlTypeData.cs" />
-    <Compile Include="Model\Interfaces\IUmlAssociationData.cs" />
+    <Compile Include="Model\Interfaces\IUmlRelationData.cs" />
     <Compile Include="Model\Interfaces\IUmlClassData.cs" />
     <Compile Include="Model\Interfaces\IUmlCommentData.cs" />
     <Compile Include="Model\Interfaces\IUmlDiagramData.cs" />
@@ -91,7 +91,6 @@
     <Compile Include="Layout\Graph.cs" />
     <Compile Include="Layout\Node.cs" />
     <Compile Include="Model\Shape.cs" />
-    <Compile Include="Model\UmlConnection.cs" />
     <Compile Include="Model\UmlDiagram.cs" />
     <Compile Include="Model\UmlTypeMembers\UmlTypeMember.cs" />
     <Compile Include="Model\UmlTypes\UmlInstanceType.cs" />

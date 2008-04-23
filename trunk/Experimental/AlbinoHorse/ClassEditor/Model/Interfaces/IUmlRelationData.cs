@@ -12,7 +12,7 @@ namespace AlbinoHorse.Model
         Left,
     }
 
-    public enum UmlAssociationType
+    public enum UmlRelationType
     {
         None,
         Association,
@@ -20,12 +20,12 @@ namespace AlbinoHorse.Model
         Inheritance,        
     }
 
-    public interface IUmlAssociationData
+    public interface IUmlRelationData
     {
         Shape Start { get; }
         int StartPortId { get; }
         UmlPortSide StartPortSide { get; }
-        UmlAssociationType AssociationType { get; }
+        UmlRelationType AssociationType { get; }
         
         Shape End { get; }
         int EndPortId { get; }

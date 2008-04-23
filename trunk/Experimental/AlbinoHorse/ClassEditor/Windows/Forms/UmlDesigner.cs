@@ -163,7 +163,7 @@ namespace AlbinoHorse.Windows.Forms
 
         public void AutoLayout()
         {
-            Diagram.AutoLayout();
+            //Diagram.AutoLayout();
             this.Refresh();
             this.Refresh();
         }

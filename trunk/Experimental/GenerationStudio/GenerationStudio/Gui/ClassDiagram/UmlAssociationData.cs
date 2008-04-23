@@ -7,7 +7,7 @@ using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
 {
-    public class UmlAssociationData : IUmlAssociationData
+    public class UmlAssociationData : IUmlRelationData
     {
         public UmlClassDiagramData DiagramData { get; set; }
         public ClassDiagramAssociationElement Owner { get; set; }
@@ -38,9 +38,9 @@ namespace GenerationStudio.Gui
             get { return (UmlPortSide)(int)Owner.StartPortSide; }
         }
 
-        public UmlAssociationType AssociationType
+        public UmlRelationType AssociationType
         {
-            get { return (UmlAssociationType)(int)Owner.AssociationType; }
+            get { return (UmlRelationType)(int)Owner.AssociationType; }
         }
 
         public int EndPortId

@@ -10,9 +10,9 @@ using AlbinoHorse.Windows.Forms;
 
 namespace AlbinoHorse.Model
 {
-    public class UmlAssociation : Shape
+    public class UmlRelation : Shape
     {
-        public IUmlAssociationData DataSource { get; set; }
+        public IUmlRelationData DataSource { get; set; }
         protected object StartPortIdentifier = new object();
         protected object EndPortIdentifier = new object();
 
@@ -61,31 +61,31 @@ namespace AlbinoHorse.Model
 
             Pen pen = null;
 
-            if (DataSource.AssociationType == UmlAssociationType.Inheritance)
+            if (DataSource.AssociationType == UmlRelationType.Inheritance)
                 pen = Settings.Pens.InheritanceLine;
-            else if (DataSource.AssociationType == UmlAssociationType.None)
+            else if (DataSource.AssociationType == UmlRelationType.None)
                 pen = Settings.Pens.FakeLine;
             else
                 pen = Settings.Pens.AssociationLine;
 
          //   DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
-            DrawAssociationBackground(info, startPoint, endPoint);
+            DrawRelationBackground(info, startPoint, endPoint);
             if (Selected)
             {
-                DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
+                DrawRelation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
             }
-            DrawAssociation(info, startPoint, endPoint, pen);
+            DrawRelation(info, startPoint, endPoint, pen);
             DrawPortSelectionHandles(info, DataSource.StartPortSide, startPoint);
             DrawPortSelectionHandles(info, DataSource.EndPortSide, endPoint);            
         }
         
 
-        private void DrawAssociation(RenderInfo info, PointF startPoint, PointF endPoint, Pen pen)
+        private void DrawRelation(RenderInfo info, PointF startPoint, PointF endPoint, Pen pen)
         {
             
 
             //start
-            if (DataSource.AssociationType == UmlAssociationType.Aggregation)
+            if (DataSource.AssociationType == UmlRelationType.Aggregation)
             {
                 DrawAggregatePort(info, DataSource.StartPortSide, startPoint, pen);
             }
@@ -98,17 +98,17 @@ namespace AlbinoHorse.Model
             DrawLine(info, pen, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
 
             //end
-            if (DataSource.AssociationType == UmlAssociationType.Association)
+            if (DataSource.AssociationType == UmlRelationType.Association)
                 DrawArrowPort(info, DataSource.EndPortSide, endPoint, pen);
-            if (DataSource.AssociationType == UmlAssociationType.Aggregation)
+            if (DataSource.AssociationType == UmlRelationType.Aggregation)
                 DrawArrowPort(info, DataSource.EndPortSide, endPoint, pen);
-            if (DataSource.AssociationType == UmlAssociationType.None)
+            if (DataSource.AssociationType == UmlRelationType.None)
                 DrawPort(info, DataSource.EndPortSide, endPoint, pen);
-            if (DataSource.AssociationType == UmlAssociationType.Inheritance)
+            if (DataSource.AssociationType == UmlRelationType.Inheritance)
                 DrawInheritancePort(info, DataSource.EndPortSide, endPoint, pen);
         }
 
-        private void DrawAssociationBackground(RenderInfo info, PointF startPoint, PointF endPoint)
+        private void DrawRelationBackground(RenderInfo info, PointF startPoint, PointF endPoint)
         {
             DrawPortBackground(info, DataSource.StartPortSide, startPoint,  StartPortIdentifier);
             DrawLineBackground(info, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
