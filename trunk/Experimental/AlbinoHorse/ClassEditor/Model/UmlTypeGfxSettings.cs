@@ -46,14 +46,26 @@ namespace AlbinoHorse.Model.Settings
 
     public static class Pens
     {
-        public static Pen AssociationLine = new Pen(Color.Black, 1.8f);
+        public static Pen FakeLine = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
+        public static Pen InheritanceLine = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
+        public static Pen AssociationLine = new Pen(Color.Goldenrod, 1.6f);
+        public static Pen AssociationBorder = MakeAssociationBorder();
         public static Pen CommentBorder = new Pen(Color.Gold, 1f);
         public static Pen Lolipop = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
         public static Pen DefaultBorder = new Pen(Color.FromArgb(130, 130, 130), 1f);
         public static Pen AbstractBorder = MakeAbstractBorderPen();
         public static Pen SelectionOuter = MakeSelectonPen();
         public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
-        
+
+        private static Pen MakeAssociationBorder()
+        {
+            Pen pen = new Pen(Color.Gray, 4f);
+            pen.StartCap = LineCap.Round;
+            pen.EndCap = LineCap.Round;
+            return pen;
+        }
+
+
         private static Pen MakeSelectonPen()
         {
             Pen pen = new Pen(Color.Gray, 1);

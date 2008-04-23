@@ -56,20 +56,35 @@ namespace AlbinoHorse.Model
             PointF endPoint = GetPoint(endBounds, DataSource.EndPortId, DataSource.EndPortSide);
 
 
-            Pen pen = Settings.Pens.AssociationLine;
+            Pen pen = null;
 
+            if (DataSource.AssociationType == UmlAssociationType.Inheritance)
+                pen = Settings.Pens.InheritanceLine;
+            else if (DataSource.AssociationType == UmlAssociationType.None)
+                pen = Settings.Pens.FakeLine;
+            else
+                pen = Settings.Pens.AssociationLine;
+
+         //   DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
+            DrawAssociation(info, startPoint, endPoint, pen);
+        }
+
+        private void DrawAssociation(RenderInfo info, PointF startPoint, PointF endPoint, Pen pen)
+        {
             //start
             if (DataSource.AssociationType == UmlAssociationType.Aggregation)
             {
-                DrawPort(info, DataSource.StartPortSide, startPoint, pen);            
+                DrawAggregatePort(info, DataSource.StartPortSide, startPoint, pen);
             }
             else
             {
-                DrawPort(info, DataSource.StartPortSide, startPoint, pen);            
+                DrawPort(info, DataSource.StartPortSide, startPoint, pen);
             }
-            
-            DrawLine(info, startPoint.X,startPoint.Y, endPoint.X,endPoint.Y);
 
+            //middle
+            DrawLine(info, pen, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+
+            //end
             if (DataSource.AssociationType == UmlAssociationType.Association)
                 DrawArrowPort(info, DataSource.EndPortSide, endPoint, pen);
             if (DataSource.AssociationType == UmlAssociationType.Aggregation)
@@ -78,8 +93,6 @@ namespace AlbinoHorse.Model
                 DrawPort(info, DataSource.EndPortSide, endPoint, pen);
             if (DataSource.AssociationType == UmlAssociationType.Inheritance)
                 DrawInheritancePort(info, DataSource.EndPortSide, endPoint, pen);
-
-
         }
 
         private void DrawPort(RenderInfo info, UmlPortSide portSide, PointF point, Pen pen)
@@ -182,6 +195,77 @@ namespace AlbinoHorse.Model
             }
         }
 
+        private void DrawAggregatePort(RenderInfo info, UmlPortSide portSide, PointF point, Pen pen)
+        {
+            int marginSize = 16;
+            int arrowSize = 16;
+            int x = (int)point.X;
+            int y = (int)point.Y;
+            if (portSide == UmlPortSide.Left)
+            {
+
+                info.Graphics.DrawLine(pen, point.X, point.Y, point.X + marginSize, point.Y);
+
+                Point[] points = new Point[] 
+                { 
+                    new Point(x + marginSize, y), 
+                    new Point(x + marginSize/2, y + 5), 
+                    new Point(x + 0, y), 
+                    new Point(x + marginSize/2, y - 5) 
+                };
+
+                info.Graphics.FillPolygon(Brushes.White, points);
+                info.Graphics.DrawPolygon(pen, points);
+            }
+
+            if (portSide == UmlPortSide.Right)
+            {
+                info.Graphics.DrawLine(pen, point.X, point.Y, point.X - marginSize, point.Y);
+
+                Point[] points = new Point[] 
+                { 
+                    new Point(x - marginSize, y), 
+                    new Point(x - marginSize/2, y + 5), 
+                    new Point(x - 0, y),
+                    new Point(x - marginSize/2, y - 5) 
+                };
+                info.Graphics.FillPolygon(Brushes.White, points);
+                info.Graphics.DrawPolygon(pen, points);
+            }
+
+            if (portSide == UmlPortSide.Top)
+            {
+                info.Graphics.DrawLine(pen, point.X, point.Y, point.X, point.Y + marginSize);
+
+                Point[] points = new Point[] 
+                { 
+                    new Point(x, y + marginSize), 
+                    new Point(x + 5, y + marginSize/2), 
+                    new Point(x, y ), 
+                    new Point(x - 5, y + marginSize/2) 
+                };
+
+                info.Graphics.FillPolygon(Brushes.White, points);
+                info.Graphics.DrawPolygon(pen, points);
+            }
+
+            if (portSide == UmlPortSide.Bottom)
+            {
+                info.Graphics.DrawLine(pen, point.X, point.Y, point.X, point.Y - marginSize);
+
+                Point[] points = new Point[] 
+                { 
+                    new Point(x, y - marginSize), 
+                    new Point(x + 5, y - marginSize/2), 
+                    new Point(x, y ), 
+                    new Point(x - 5, y - marginSize/2) 
+                };
+
+                info.Graphics.FillPolygon(Brushes.White, points);
+                info.Graphics.DrawPolygon(pen, points);
+            }
+        }
+
         //private static void DrawLine(RenderInfo info, PointF startPoint, PointF endPoint, Pen pen)
         //{
         //    info.Graphics.DrawLine(pen, startPoint, endPoint);
@@ -239,9 +323,8 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawLine(Pens.DarkGray, x1, y1, x2, y2);
         }
 
-        private void DrawLine(RenderInfo info, float x1,float y1,float x2,float y2)
+        private void DrawLine(RenderInfo info,Pen pen, float x1,float y1,float x2,float y2)
         {
-            Pen pen = Settings.Pens.AssociationLine;
             info.Graphics.DrawLine(pen, x1, y1, x2, y2);
             //if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
             //{

@@ -33,5 +33,10 @@ namespace GenerationStudio.Elements
 
             return string.Format("Type: {0}", typeName);
         }
+
+        public override string ToString()
+        {
+            return GetDisplayName();
+        }
     }
 }

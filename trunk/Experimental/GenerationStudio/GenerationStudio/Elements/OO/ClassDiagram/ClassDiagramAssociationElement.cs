@@ -41,7 +41,7 @@ namespace GenerationStudio.Elements
 
         public override string GetDisplayName()
         {
-            return string.Format("Association: {0} - {1}", Start.GetDisplayName(), End.GetDisplayName());
+            return string.Format("{0}: {1} - {2}",AssociationType, Start.GetDisplayName(), End.GetDisplayName());
         }
     }
 }
