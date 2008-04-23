@@ -75,6 +75,8 @@ namespace AlbinoHorse.Model
                 DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
             }
             DrawAssociation(info, startPoint, endPoint, pen);
+            DrawPortSelectionHandles(info, DataSource.StartPortSide, startPoint);
+            DrawPortSelectionHandles(info, DataSource.EndPortSide, endPoint);            
         }
         
 
@@ -111,6 +113,34 @@ namespace AlbinoHorse.Model
             DrawPortBackground(info, DataSource.StartPortSide, startPoint,  StartPortIdentifier);
             DrawLineBackground(info, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
             DrawPortBackground(info, DataSource.EndPortSide, endPoint,  EndPortIdentifier);
+        }
+
+        private void DrawPortSelectionHandles(RenderInfo info, UmlPortSide portSide, PointF point)
+        {
+            if (Selected)
+            {
+
+                int marginSize = 15;
+                if (portSide == UmlPortSide.Left)
+                {
+                    DrawSelectionHandle(info, new Point((int)point.X + marginSize, (int)point.Y));                    
+                }
+
+                if (portSide == UmlPortSide.Right)
+                {
+                    DrawSelectionHandle(info, new Point((int)point.X - marginSize, (int)point.Y));
+                }
+
+                if (portSide == UmlPortSide.Top)
+                {
+                    DrawSelectionHandle(info, new Point((int)point.X , (int)point.Y + marginSize));
+                }
+
+                if (portSide == UmlPortSide.Bottom)
+                {
+                    DrawSelectionHandle(info, new Point((int)point.X, (int)point.Y - marginSize));
+                }
+            }
         }
 
         private void DrawPortBackground(RenderInfo info, UmlPortSide portSide, PointF point, object EndPortIdentifier)
@@ -418,7 +448,7 @@ namespace AlbinoHorse.Model
             bbox.Data = this;
             Rectangle tmp = new Rectangle((int)Math.Min(x1, x2), (int)Math.Min(y1, y2), (int)Math.Abs(x2 - x1), (int)Math.Abs(y2 - y1));
 
-            tmp.Inflate(4, 4);
+            tmp.Inflate(6, 6);
 
             bbox.Bounds = tmp;
             info.BoundingBoxes.Add(bbox);
@@ -426,6 +456,7 @@ namespace AlbinoHorse.Model
 
             if (Selected)
             {
+                tmp.Inflate(-2, -2);
                 info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
             }
         }
@@ -437,13 +468,14 @@ namespace AlbinoHorse.Model
             bbox.Target = this;
             bbox.Data = this;
             Rectangle tmp = new Rectangle((int)Math.Min(x1, x2), (int)Math.Min(y1, y2), (int)Math.Abs(x2 - x1), (int)Math.Abs(y2 - y1));
-            tmp.Inflate(4, 4);
+            tmp.Inflate(6, 6);
             bbox.Bounds = tmp;
             info.BoundingBoxes.Add(bbox);
             #endregion
 
             if (Selected)
             {
+                tmp.Inflate(-2, -2);
                 info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
             }
         }

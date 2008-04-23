@@ -72,31 +72,15 @@ namespace AlbinoHorse.Model
                 outerBounds.Offset(-1, 1);
                 info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
 
-                Rectangle leftHandle = new Rectangle(outerBounds.X - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
-                info.Graphics.FillRectangle(Brushes.Gray, leftHandle);
-                leftHandle.Inflate(-1, -1);
-                info.Graphics.FillRectangle(Brushes.White, leftHandle);
-
-                BoundingBox leftResizeHandle = new BoundingBox();
-                leftResizeHandle.Bounds = leftHandle;
-                leftResizeHandle.Data = this.LeftResizeIdentifier;
-                leftResizeHandle.Target = this;
-                info.BoundingBoxes.Add(leftResizeHandle);
-
-                Rectangle rightHandle = new Rectangle(outerBounds.Right - 4, (outerBounds.Top + outerBounds.Bottom) / 2 - 4, 8, 8);
-                info.Graphics.FillRectangle(Brushes.Gray, rightHandle);
-                rightHandle.Inflate(-1, -1);
-                info.Graphics.FillRectangle(Brushes.White, rightHandle);
-
-                BoundingBox rightResizeHandle = new BoundingBox();
-                rightResizeHandle.Bounds = rightHandle;
-                rightResizeHandle.Data = this.RightResizeIdentifier;
-                rightResizeHandle.Target = this;
-                info.BoundingBoxes.Add(rightResizeHandle);
+                
+                DrawSelectionHandle(info,new Point (outerBounds.Left , (outerBounds.Top + outerBounds.Bottom) / 2 ), LeftResizeIdentifier);
+                DrawSelectionHandle(info, new Point(outerBounds.Right , (outerBounds.Top + outerBounds.Bottom) / 2), RightResizeIdentifier);                
 
                 DrawCustomSelection(info);
             }
         }
+
+        
 
         protected virtual void DrawCustomSelection(RenderInfo info)
         {            

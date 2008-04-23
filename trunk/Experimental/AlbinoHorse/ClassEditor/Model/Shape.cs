@@ -68,5 +68,25 @@ namespace AlbinoHorse.Model
         {
         }
 
+        protected void DrawSelectionHandle(RenderInfo info, Point point, object identifier)
+        {
+            DrawSelectionHandle(info, point);
+
+            Rectangle bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
+            BoundingBox bBox = new BoundingBox();
+            bBox.Bounds = bounds;
+            bBox.Data = identifier;
+            bBox.Target = this;
+            info.BoundingBoxes.Add(bBox);
+        }
+
+        protected void DrawSelectionHandle(RenderInfo info, Point point)
+        {
+            Rectangle bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
+            info.Graphics.FillRectangle(Brushes.Gray, bounds);
+            bounds.Inflate(-1, -1);
+            info.Graphics.FillRectangle(Brushes.White, bounds);
+        }
+
     }
 }
