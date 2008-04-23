@@ -13,6 +13,8 @@ namespace AlbinoHorse.Model
     public class UmlAssociation : Shape
     {
         public IUmlAssociationData DataSource { get; set; }
+        protected object StartPortIdentifier = new object();
+        protected object EndPortIdentifier = new object();
 
         #region Property Start
         public Shape Start
@@ -50,11 +52,12 @@ namespace AlbinoHorse.Model
             Rectangle startBounds = start.Bounds;
             Rectangle endBounds = end.Bounds;
 
+            
+
 
 
             PointF startPoint = GetPoint(startBounds, DataSource.StartPortId, DataSource.StartPortSide);
             PointF endPoint = GetPoint(endBounds, DataSource.EndPortId, DataSource.EndPortSide);
-
 
             Pen pen = null;
 
@@ -66,11 +69,16 @@ namespace AlbinoHorse.Model
                 pen = Settings.Pens.AssociationLine;
 
          //   DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
+            DrawAssociationBackground(info, startPoint, endPoint);
+            DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
             DrawAssociation(info, startPoint, endPoint, pen);
         }
+        
 
         private void DrawAssociation(RenderInfo info, PointF startPoint, PointF endPoint, Pen pen)
         {
+            
+
             //start
             if (DataSource.AssociationType == UmlAssociationType.Aggregation)
             {
@@ -81,7 +89,7 @@ namespace AlbinoHorse.Model
                 DrawPort(info, DataSource.StartPortSide, startPoint, pen);
             }
 
-            //middle
+            //middle            
             DrawLine(info, pen, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
 
             //end
@@ -94,6 +102,38 @@ namespace AlbinoHorse.Model
             if (DataSource.AssociationType == UmlAssociationType.Inheritance)
                 DrawInheritancePort(info, DataSource.EndPortSide, endPoint, pen);
         }
+
+        private void DrawAssociationBackground(RenderInfo info, PointF startPoint, PointF endPoint)
+        {
+            DrawPortBackground(info, DataSource.StartPortSide, startPoint,  StartPortIdentifier);
+            DrawLineBackground(info, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+            DrawPortBackground(info, DataSource.EndPortSide, endPoint,  EndPortIdentifier);
+        }
+
+        private void DrawPortBackground(RenderInfo info, UmlPortSide portSide, PointF point, object EndPortIdentifier)
+        {
+            int marginSize = 15;
+            if (portSide == UmlPortSide.Left)
+            {
+                DrawPortSelector(info, point.X, point.Y, point.X + marginSize, point.Y);                
+            }
+
+            if (portSide == UmlPortSide.Right)
+            {
+                DrawPortSelector(info, point.X, point.Y, point.X - marginSize, point.Y);                
+            }
+
+            if (portSide == UmlPortSide.Top)
+            {
+                DrawPortSelector(info, point.X, point.Y, point.X, point.Y + marginSize);
+            }
+
+            if (portSide == UmlPortSide.Bottom)
+            {
+                DrawPortSelector(info, point.X, point.Y, point.X, point.Y - marginSize);
+            }
+        }
+
 
         private void DrawPort(RenderInfo info, UmlPortSide portSide, PointF point, Pen pen)
         {
@@ -198,7 +238,6 @@ namespace AlbinoHorse.Model
         private void DrawAggregatePort(RenderInfo info, UmlPortSide portSide, PointF point, Pen pen)
         {
             int marginSize = 16;
-            int arrowSize = 16;
             int x = (int)point.X;
             int y = (int)point.Y;
             if (portSide == UmlPortSide.Left)
@@ -313,36 +352,96 @@ namespace AlbinoHorse.Model
             if (start == null || end == null)
                 return;
 
-            float x1 = start.Bounds.X + start.Bounds.Width / 2;
-            float y1 = start.Bounds.Y + start.Bounds.Height / 2;
+            Rectangle startBounds = start.Bounds;
+            Rectangle endBounds = end.Bounds;
+
+            float x1 = startBounds.X + startBounds.Width / 2;
+            float y1 = startBounds.Y + startBounds.Height / 2;
 
 
-            float x2 = end.Bounds.X + end.Bounds.Width / 2;
-            float y2 = end.Bounds.Y + end.Bounds.Height / 2;
+            float x2 = endBounds.X + endBounds.Width / 2;
+            float y2 = endBounds.Y + endBounds.Height / 2;
 
             info.Graphics.DrawLine(Pens.DarkGray, x1, y1, x2, y2);
         }
 
         private void DrawLine(RenderInfo info,Pen pen, float x1,float y1,float x2,float y2)
         {
+            //info.Graphics.DrawLine(pen, x1, y1, x2, y2);
+            if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
+            {
+                float x3 = (x1 + x2) / 2;
+
+                DrawStraightLine(info, pen, x1, y1, x3, y1);
+                DrawStraightLine(info, pen, x2, y2, x3, y2);
+                DrawStraightLine(info, pen, x3, y1, x3, y2);
+            }
+            else
+            {
+                float y3 = (y1 + y2) / 2;
+
+                DrawStraightLine(info,pen, x1, y1, x1, y3);
+                DrawStraightLine(info, pen, x2, y2, x2, y3);
+                DrawStraightLine(info, pen, x1, y3, x2, y3);
+            }
+        }
+
+        private void DrawLineBackground(RenderInfo info, float x1, float y1, float x2, float y2)
+        {
+            //info.Graphics.DrawLine(pen, x1, y1, x2, y2);
+            if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
+            {
+                float x3 = (x1 + x2) / 2;
+
+                DrawStraightLineSelector(info,  x1, y1, x3, y1);
+                DrawStraightLineSelector(info,  x2, y2, x3, y2);
+                DrawStraightLineSelector(info,  x3, y1, x3, y2);
+            }
+            else
+            {
+                float y3 = (y1 + y2) / 2;
+
+                DrawStraightLineSelector(info,  x1, y1, x1, y3);
+                DrawStraightLineSelector(info,  x2, y2, x2, y3);
+                DrawStraightLineSelector(info,  x1, y3, x2, y3);
+            }
+        }
+
+        private void DrawPortSelector(RenderInfo info, float x1, float y1, float x2, float y2)
+        {
+            #region Add BBox
+            BoundingBox bbox = new BoundingBox();
+            bbox.Target = this;
+            bbox.Data = this;
+            Rectangle tmp = new Rectangle((int)Math.Min(x1, x2), (int)Math.Min(y1, y2), (int)Math.Abs(x2 - x1), (int)Math.Abs(y2 - y1));
+
+            tmp.Inflate(4, 4);
+
+            bbox.Bounds = tmp;
+            info.BoundingBoxes.Add(bbox);
+            #endregion
+
+            info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+        }
+
+        private void DrawStraightLineSelector(RenderInfo info, float x1, float y1, float x2, float y2)
+        {
+            #region Add BBox
+            BoundingBox bbox = new BoundingBox();
+            bbox.Target = this;
+            bbox.Data = this;
+            Rectangle tmp = new Rectangle((int)Math.Min(x1, x2), (int)Math.Min(y1, y2), (int)Math.Abs(x2 - x1), (int)Math.Abs(y2 - y1));
+            tmp.Inflate(4, 4);
+            bbox.Bounds = tmp;
+            info.BoundingBoxes.Add(bbox);
+            #endregion
+
+            info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);            
+        }
+
+        private void DrawStraightLine(RenderInfo info,Pen pen, float x1, float y1, float x2, float y2)
+        {
             info.Graphics.DrawLine(pen, x1, y1, x2, y2);
-            //if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
-            //{
-            //    float x3 = (x1 + x2) / 2;
-
-            //    info.Graphics.DrawLine(pen, x1, y1, x3, y1);
-            //    info.Graphics.DrawLine(pen, x2, y2, x3, y2);
-            //    info.Graphics.DrawLine(pen, x3, y1, x3, y2);
-            //}
-            //else
-            //{
-            //    float y3 = (y1 + y2) / 2;
-
-            //    info.Graphics.DrawLine(pen, x1, y1, x1, y3);
-            //    info.Graphics.DrawLine(pen, x2, y2, x2, y3);
-            //    info.Graphics.DrawLine(pen, x1, y3, x2, y3);
-            //}
         }
     }
-
 }

@@ -52,6 +52,8 @@ namespace GenerationStudio.Gui
             ClassDiagramMemberElement startElement = GetTypeElement(start);
             ClassDiagramMemberElement endElement = GetTypeElement(end);
 
+
+
             ClassDiagramAssociationElement association = new ClassDiagramAssociationElement();
             association.Start = startElement;
             association.End = endElement;
@@ -78,6 +80,12 @@ namespace GenerationStudio.Gui
             {
                 UmlEnum endClass = shape as UmlEnum;
                 return (endClass.DataSource as UmlEnumData).Owner;
+            }
+
+            if (shape is UmlComment)
+            {
+                UmlComment endComment = shape as UmlComment;
+                return (endComment.DataSource as UmlCommentData).Owner;
             }
 
             return null;

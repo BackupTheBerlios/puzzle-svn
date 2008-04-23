@@ -31,7 +31,7 @@ namespace GenerationStudio.Elements
             if (Type != null)
                 typeName = Type.Name;
 
-            return string.Format("Type: {0}", typeName);
+            return string.Format("{0}", typeName);
         }
 
         public override string ToString()
