@@ -84,8 +84,7 @@ namespace GenerationStudio.Gui
             var res = from e in Owner.Type.AllChildren
 
                       where !e.Excluded &&
-                            (e is EnumValueElement) &&
-                            e.GetDisplayName() != ""
+                            (e is EnumValueElement)
                       orderby e.GetDisplayName()
                       select e;
             return res;

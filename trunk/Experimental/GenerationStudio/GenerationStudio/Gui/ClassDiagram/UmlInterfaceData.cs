@@ -84,9 +84,8 @@ namespace GenerationStudio.Gui
             var res = from e in Owner.Type.AllChildren
 
                       where !e.Excluded &&
-                            (e is PropertyElement || e is MethodElement) &&
-                            e.GetDisplayName() != ""
-                      orderby e.GetDisplayName()
+                            (e is PropertyElement || e is MethodElement)
+                        orderby e.GetDisplayName()
                       select e;
             return res;
         }

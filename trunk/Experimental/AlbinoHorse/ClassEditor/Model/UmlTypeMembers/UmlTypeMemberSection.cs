@@ -9,6 +9,7 @@ namespace AlbinoHorse.Model
     public class UmlTypeMemberSection
     {
         public readonly object CaptionIdentifier = new object();
+        public readonly object ExpanderIdentifier = new object();
         public readonly object AddNewIdentifier = new object();
         public UmlInstanceType Owner { get; set; }
         public string Name { get; set; }

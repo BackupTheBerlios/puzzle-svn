@@ -127,7 +127,7 @@ namespace AlbinoHorse.Model
             info.BoundingBoxes.Add(bboxGroup);
             #endregion
 
-            if (this.SelectedObject == PropertiesIdentifier && Selected)
+            if (this.SelectedObject == section.CaptionIdentifier && Selected)
             {
                 info.Graphics.FillRectangle(SystemBrushes.Highlight, memberCaptionBounds);
                 memberCaptionBounds.X += 20;
@@ -232,28 +232,49 @@ namespace AlbinoHorse.Model
                 this.SelectedObject = args.BoundingBox.Data as UmlTypeMember;
                 args.Redraw = true;
             }
-            else
+            else if (args.BoundingBox.Data == CaptionIdentifier)
             {
                 mouseDownPos = new Point(args.X, args.Y);
                 mouseDownShapePos = this.Bounds.Location;
                 this.SelectedObject = null;
 
-
                 args.Redraw = true;
+            }
+            else
+            {
+                foreach (UmlTypeMemberSection section in TypeMemberSections)
+                {
+                    if (args.BoundingBox.Data == section.CaptionIdentifier)
+                    {
+                        this.SelectedObject = section.CaptionIdentifier;
+                        args.Redraw = true;
+                    }
+                }
             }
         }
 
         public override void OnMouseUp(ShapeMouseEventArgs args)
         {
-            if (args.BoundingBox.Data == AddNewPropertyIdentifier)
+            foreach (UmlTypeMemberSection section in TypeMemberSections)
             {
-                UmlTypeMember newProperty = TypedDataSource.CreateTypeMember("Property");
-                this.SelectedObject = newProperty;
-
-                BeginRenameProperty(args.Sender, newProperty);
-
-                args.Redraw = true;
+                if (args.BoundingBox.Data == section.AddNewIdentifier)
+                {
+                    UmlTypeMember newMember = TypedDataSource.CreateTypeMember(section.Name);
+                    this.SelectedObject = newMember;
+                    BeginRenameProperty(args.Sender, newMember);
+                    args.Redraw = true;
+                }                
             }
+
+            //if (args.BoundingBox.Data == AddNewPropertyIdentifier)
+            //{
+            //    UmlTypeMember newProperty = TypedDataSource.CreateTypeMember("Property");
+            //    this.SelectedObject = newProperty;
+
+            //    BeginRenameProperty(args.Sender, newProperty);
+
+            //    args.Redraw = true;
+            //}
 
             if (args.BoundingBox.Data == TypeExpanderIdentifier)
             {
