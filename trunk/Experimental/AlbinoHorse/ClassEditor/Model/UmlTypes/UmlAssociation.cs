@@ -70,7 +70,10 @@ namespace AlbinoHorse.Model
 
          //   DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
             DrawAssociationBackground(info, startPoint, endPoint);
-            DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
+            if (Selected)
+            {
+                DrawAssociation(info, startPoint, endPoint, Settings.Pens.AssociationBorder);
+            }
             DrawAssociation(info, startPoint, endPoint, pen);
         }
         
@@ -421,7 +424,10 @@ namespace AlbinoHorse.Model
             info.BoundingBoxes.Add(bbox);
             #endregion
 
-            info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+            if (Selected)
+            {
+                info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+            }
         }
 
         private void DrawStraightLineSelector(RenderInfo info, float x1, float y1, float x2, float y2)
@@ -436,12 +442,22 @@ namespace AlbinoHorse.Model
             info.BoundingBoxes.Add(bbox);
             #endregion
 
-            info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);            
+            if (Selected)
+            {
+                info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+            }
         }
 
         private void DrawStraightLine(RenderInfo info,Pen pen, float x1, float y1, float x2, float y2)
         {
             info.Graphics.DrawLine(pen, x1, y1, x2, y2);
+        }
+
+        public override void OnMouseDown(ShapeMouseEventArgs args)
+        {
+            args.Sender.ClearSelection();
+            this.Selected = true;
+            args.Redraw = true;
         }
     }
 }

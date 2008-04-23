@@ -25,7 +25,7 @@ namespace AlbinoHorse.Model.Settings
         public static SolidBrush ClassSectionCaption = new SolidBrush(Color.FromArgb(240, 242, 249));
         public static SolidBrush SelectedTypeMember = new SolidBrush(SystemColors.Highlight);
         public static SolidBrush Shadow = new SolidBrush(Color.LightGray);
-        public static HatchBrush SelectedRelation = new HatchBrush(HatchStyle.Percent25, Color.Black, Color.WhiteSmoke);
+        public static HatchBrush SelectedRelation = new HatchBrush(HatchStyle.Percent50, Color.Black, Color.WhiteSmoke);
     }
 
     public static class Fonts
