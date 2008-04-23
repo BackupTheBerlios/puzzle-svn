@@ -47,14 +47,6 @@ namespace AlbinoHorse.Model
         }
         #endregion
 
-
-
-
-
-        #region PropertiesExpanded
-        public bool PropertiesExpanded { get; set; }
-        #endregion
-
         #region TypeMembers property
         public IList<UmlTypeMember> TypeMembers
         {
@@ -89,7 +81,6 @@ namespace AlbinoHorse.Model
             TypeMemberSections = GetTypeMemberSections();
 
             DataSource = new DefaultUmlInstanceTypeData();
-            PropertiesExpanded = true;
         }
 
         #endregion
@@ -119,7 +110,7 @@ namespace AlbinoHorse.Model
         private int DrawTypeMembers(RenderInfo info, int x, int y, int width,UmlTypeMemberSection section)
         {
             Rectangle memberCaptionBounds = new Rectangle(x, y, width, 20);
-            #region add properties header bbox
+            #region add section header bbox
             BoundingBox bboxGroup = new BoundingBox();
             bboxGroup.Bounds = memberCaptionBounds;
             bboxGroup.Target = this;
@@ -145,6 +136,15 @@ namespace AlbinoHorse.Model
                 memberCaptionBounds.Y += 3;
                 info.Graphics.DrawString(section.Name, Settings.Fonts.SectionCaption, Brushes.Black, memberCaptionBounds);
             }
+
+
+            #region add section expander bbox
+            BoundingBox bboxGroupExpander = new BoundingBox();
+            bboxGroupExpander.Bounds = new Rectangle(x + 4, y + 4, 13, 13);
+            bboxGroupExpander.Target = this;
+            bboxGroupExpander.Data = section.ExpanderIdentifier;
+            info.BoundingBoxes.Add(bboxGroupExpander);
+            #endregion
 
             if (section.Expanded)
                 info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.CollapseSection, x+3, y+3);
@@ -249,6 +249,13 @@ namespace AlbinoHorse.Model
                         this.SelectedObject = section.CaptionIdentifier;
                         args.Redraw = true;
                     }
+
+                    if (args.BoundingBox.Data == section.ExpanderIdentifier)
+                    {
+                        this.SelectedObject = section.CaptionIdentifier;
+                        section.Expanded = !section.Expanded;
+                        args.Redraw = true;
+                    }
                 }
             }
         }
@@ -341,10 +348,13 @@ namespace AlbinoHorse.Model
 
         public override void OnDoubleClick(ShapeMouseEventArgs args)
         {
-            if (args.BoundingBox.Data == PropertiesIdentifier)
+            foreach (UmlTypeMemberSection section in TypeMemberSections)
             {
-                PropertiesExpanded = !PropertiesExpanded;
-                args.Redraw = true;
+                if (args.BoundingBox.Data == section.CaptionIdentifier)
+                {
+                    section.Expanded = !section.Expanded;
+                    args.Redraw = true;
+                }
             }
 
             if (args.BoundingBox.Data == CaptionIdentifier)
