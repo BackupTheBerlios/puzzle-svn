@@ -75,7 +75,7 @@
     <Compile Include="Model\UmlTypeMembers\UmlTypeMemberSection.cs" />
     <Compile Include="Model\UmlTypes\UmlClass.cs" />
     <Compile Include="Model\UmlTypes\UmlComment.cs" />
-    <Compile Include="Model\UmlTypes\UmlAssociation.cs" />
+    <Compile Include="Model\UmlTypes\UmlRelation.cs" />
     <Compile Include="Model\UmlTypes\UmlEnum.cs" />
     <Compile Include="Model\UmlTypes\UmlInterface.cs" />
     <Compile Include="Model\UmlTypes\UmlShape.cs" />

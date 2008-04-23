@@ -49,12 +49,12 @@ namespace GenerationStudio.Gui
                 return;
 
 
-            ClassDiagramMemberElement startElement = GetTypeElement(start);
-            ClassDiagramMemberElement endElement = GetTypeElement(end);
+            DiagramMemberElement startElement = GetTypeElement(start);
+            DiagramMemberElement endElement = GetTypeElement(end);
 
 
 
-            ClassDiagramAssociationElement association = new ClassDiagramAssociationElement();
+            DiagramRelationElement association = new DiagramRelationElement();
             association.Start = startElement;
             association.End = endElement;
 
@@ -62,7 +62,7 @@ namespace GenerationStudio.Gui
 
         }
 
-        private static ClassDiagramMemberElement GetTypeElement( Shape shape)
+        private static DiagramMemberElement GetTypeElement( Shape shape)
         {
             if (shape is UmlClass)
             {
@@ -146,13 +146,13 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public ClassDiagramElement ClassDiagramNode { get; set; }
+        public DiagramElement ClassDiagramNode { get; set; }
 
 
         private void AddClass()
         {
             UmlInstanceType newClass = new UmlClass();
-            newClass.Bounds = new Rectangle(1 * 21, 1 * 21, 7 * 21, 2 * 21);
+            newClass.Bounds = new Rectangle(1 * 21, 1 * 21, 6 * 21, 2 * 21);
             newClass.DataSource.TypeName = "SomeClass";
 
             UmlDesigner.Diagram.Shapes.Add(newClass);
@@ -187,13 +187,13 @@ namespace GenerationStudio.Gui
         private void CreateUmlType(DragEventArgs e)
         {
             TypeElement element = (TypeElement)Engine.DragDropElement;
-            ClassDiagramTypeElement diagramElement = new ClassDiagramTypeElement();
+            DiagramTypeElement diagramElement = new DiagramTypeElement();
             diagramElement.Type = element;
             diagramElement.Expanded = true;
             Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
             diagramElement.X = cp.X;
             diagramElement.Y = cp.Y;
-            diagramElement.Width = 21 * 7;
+            diagramElement.Width = 21 * 6;
             
             ClassDiagramNode.AddChild(diagramElement);
 

@@ -9,7 +9,7 @@ namespace GenerationStudio.Gui
 {
     public class UmlCommentData : IUmlCommentData
     {
-        public ClassDiagramCommentElement Owner { get; set; }
+        public DiagramCommentElement Owner { get; set; }
 
         #region IUmlCommentData Members
 

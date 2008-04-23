@@ -11,7 +11,7 @@ namespace GenerationStudio.Elements
     [ElementParent(typeof(ProjectElement))]
     [ElementName("Class Diagram")]
     [ElementIcon("GenerationStudio.Images.classdiagram.gif")]
-    public class ClassDiagramElement : NamedElement
+    public class DiagramElement : NamedElement
     {
         
 

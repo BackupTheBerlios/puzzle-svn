@@ -9,10 +9,10 @@ using System.ComponentModel;
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(ClassDiagramElement))]
+    [ElementParent(typeof(DiagramElement))]
     [ElementName("Comment")]
     [ElementIcon("GenerationStudio.Images.comment.gif")]
-    public class ClassDiagramCommentElement : ClassDiagramMemberElement
+    public class DiagramCommentElement : DiagramMemberElement
     {        
         [Browsable(false)]
         public int X { get; set; }

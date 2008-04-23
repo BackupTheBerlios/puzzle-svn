@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace GenerationStudio.Elements
 {
-    public enum ClassDiagramPortSide
+    public enum DiagramPortSide
     {
         Top,
         Right,
@@ -16,7 +16,7 @@ namespace GenerationStudio.Elements
         Left,
     }
 
-    public enum ClassDiagramAssociationType
+    public enum DiagramRelationType
     {
         None,
         Association,
@@ -25,19 +25,19 @@ namespace GenerationStudio.Elements
     }
 
     [Serializable]
-    [ElementParent(typeof(ClassDiagramElement))]
+    [ElementParent(typeof(DiagramElement))]
     [ElementName("Association")]
     [ElementIcon("GenerationStudio.Images.association.gif")]
-    public class ClassDiagramAssociationElement : ClassDiagramMemberElement
+    public class DiagramRelationElement : DiagramMemberElement
     {
-        public ClassDiagramMemberElement Start { get; set; }
+        public DiagramMemberElement Start { get; set; }
         public int StartPortId { get; set; }
-        public ClassDiagramPortSide StartPortSide { get; set; }
-        public ClassDiagramAssociationType AssociationType { get; set; }
+        public DiagramPortSide StartPortSide { get; set; }
+        public DiagramRelationType AssociationType { get; set; }
 
-        public ClassDiagramMemberElement End { get; set; }
+        public DiagramMemberElement End { get; set; }
         public int EndPortId { get; set; }
-        public ClassDiagramPortSide EndPortSide { get; set; }        
+        public DiagramPortSide EndPortSide { get; set; }        
 
         public override string GetDisplayName()
         {

@@ -9,7 +9,7 @@ namespace GenerationStudio.Gui
 {
     public class UmlClassDiagramData : IUmlDiagramData
     {
-        public ClassDiagramElement Owner { get; set; }
+        public DiagramElement Owner { get; set; }
 
         public T CreateShape<T>() where T : Shape, new()
         {
@@ -27,21 +27,21 @@ namespace GenerationStudio.Gui
             var res = GetValidMembers();
 
             List<Shape> shapes = new List<Shape>();
-            foreach (ClassDiagramMemberElement member in res)
+            foreach (DiagramMemberElement member in res)
                 shapes.Add(GetShape(member));
 
             return shapes;
         }
 
-        private IList<ClassDiagramMemberElement> GetValidMembers()
+        private IList<DiagramMemberElement> GetValidMembers()
         {
-            var res = Owner.GetChildren<ClassDiagramMemberElement>();
+            var res = Owner.GetChildren<DiagramMemberElement>();
             return res;
         }
 
-        private Dictionary<ClassDiagramMemberElement, Shape> shapeLookup = new Dictionary<ClassDiagramMemberElement, Shape>();
+        private Dictionary<DiagramMemberElement, Shape> shapeLookup = new Dictionary<DiagramMemberElement, Shape>();
 
-        public Shape GetShape(ClassDiagramMemberElement member)
+        public Shape GetShape(DiagramMemberElement member)
         {
             Shape shape = null;
             if (shapeLookup.TryGetValue(member, out shape))
@@ -49,17 +49,17 @@ namespace GenerationStudio.Gui
                 return shape;
             }
 
-            if (member is ClassDiagramTypeElement)
+            if (member is DiagramTypeElement)
             {
-                shape = GetUmlType(member as ClassDiagramTypeElement);
+                shape = GetUmlType(member as DiagramTypeElement);
             }
-            if (member is ClassDiagramCommentElement)
+            if (member is DiagramCommentElement)
             {
-                shape = GetUmlComment(member as ClassDiagramCommentElement);
+                shape = GetUmlComment(member as DiagramCommentElement);
             }
-            if (member is ClassDiagramAssociationElement)
+            if (member is DiagramRelationElement)
             {
-                shape = GetUmlAssociation(member as ClassDiagramAssociationElement);
+                shape = GetUmlAssociation(member as DiagramRelationElement);
             }
 
             shapeLookup.Add(member, shape);
@@ -67,7 +67,7 @@ namespace GenerationStudio.Gui
             return shape;
         }
 
-        private Shape GetUmlAssociation(ClassDiagramAssociationElement associationElement)
+        private Shape GetUmlAssociation(DiagramRelationElement associationElement)
         {
             UmlRelation association = new UmlRelation();
             UmlAssociationData data = new UmlAssociationData();
@@ -78,7 +78,7 @@ namespace GenerationStudio.Gui
             return association;
         }
 
-        private UmlInstanceType GetUmlType(ClassDiagramTypeElement diagramElement)
+        private UmlInstanceType GetUmlType(DiagramTypeElement diagramElement)
         {
             UmlInstanceType t = null;
             if (diagramElement.Type is InterfaceElement)
@@ -108,7 +108,7 @@ namespace GenerationStudio.Gui
             return t;
         }
 
-        private UmlComment GetUmlComment(ClassDiagramCommentElement diagramElement)
+        private UmlComment GetUmlComment(DiagramCommentElement diagramElement)
         {
             UmlComment comment = new UmlComment();
             UmlCommentData data = new UmlCommentData();

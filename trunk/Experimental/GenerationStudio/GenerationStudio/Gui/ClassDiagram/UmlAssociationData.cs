@@ -10,7 +10,7 @@ namespace GenerationStudio.Gui
     public class UmlAssociationData : IUmlRelationData
     {
         public UmlClassDiagramData DiagramData { get; set; }
-        public ClassDiagramAssociationElement Owner { get; set; }
+        public DiagramRelationElement Owner { get; set; }
 
         public Shape Start
         {

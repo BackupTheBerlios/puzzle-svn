@@ -10,7 +10,7 @@ namespace GenerationStudio.Gui
     public class UmlClassData : IUmlClassData
     {
         
-        public ClassDiagramTypeElement Owner { get; set; }
+        public DiagramTypeElement Owner { get; set; }
 
         public bool Expanded
         {

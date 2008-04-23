@@ -8,8 +8,8 @@ using GenerationStudio.Gui;
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(ClassDiagramElement))]
-    public abstract class ClassDiagramMemberElement : Element
+    [ElementParent(typeof(DiagramElement))]
+    public abstract class DiagramMemberElement : Element
     {
 
     }

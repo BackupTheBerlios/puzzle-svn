@@ -69,11 +69,11 @@
     <Compile Include="Elements\DB\TableElement.cs" />
     <Compile Include="Elements\ElementError.cs" />
     <Compile Include="Elements\NamedElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramAssociationElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramCommentElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramMemberElement.cs" />
-    <Compile Include="Elements\OO\ClassDiagram\ClassDiagramTypeElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\DiagramRelationElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\DiagramCommentElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\DiagramElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\DiagramMemberElement.cs" />
+    <Compile Include="Elements\OO\ClassDiagram\DiagramTypeElement.cs" />
     <Compile Include="Elements\OO\ClassElement.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\OO\EnumElement.cs" />
