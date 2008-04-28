@@ -31,12 +31,12 @@ namespace GenerationStudio.Elements
     public class DiagramRelationElement : DiagramMemberElement
     {
         public DiagramMemberElement Start { get; set; }
-        public int StartPortId { get; set; }
+        public int StartPortOffset { get; set; }
         public DiagramPortSide StartPortSide { get; set; }
         public DiagramRelationType AssociationType { get; set; }
 
         public DiagramMemberElement End { get; set; }
-        public int EndPortId { get; set; }
+        public int EndPortOffset { get; set; }
         public DiagramPortSide EndPortSide { get; set; }        
 
         public override string GetDisplayName()

@@ -56,8 +56,8 @@ namespace AlbinoHorse.Model
 
 
 
-            PointF startPoint = GetPoint(startBounds, DataSource.StartPortId, DataSource.StartPortSide);
-            PointF endPoint = GetPoint(endBounds, DataSource.EndPortId, DataSource.EndPortSide);
+            PointF startPoint = GetPoint(startBounds, DataSource.StartPortOffset, DataSource.StartPortSide);
+            PointF endPoint = GetPoint(endBounds, DataSource.EndPortOffset, DataSource.EndPortSide);
 
             Pen pen = null;
 
@@ -143,27 +143,27 @@ namespace AlbinoHorse.Model
             }
         }
 
-        private void DrawPortBackground(RenderInfo info, UmlPortSide portSide, PointF point, object EndPortIdentifier)
+        private void DrawPortBackground(RenderInfo info, UmlPortSide portSide, PointF point, object portIdentifier)
         {
             int marginSize = 15;
             if (portSide == UmlPortSide.Left)
             {
-                DrawPortSelector(info, point.X, point.Y, point.X + marginSize, point.Y);                
+                DrawPortSelector(info, point.X, point.Y, point.X + marginSize, point.Y, portIdentifier);                
             }
 
             if (portSide == UmlPortSide.Right)
             {
-                DrawPortSelector(info, point.X, point.Y, point.X - marginSize, point.Y);                
+                DrawPortSelector(info, point.X, point.Y, point.X - marginSize, point.Y, portIdentifier);                
             }
 
             if (portSide == UmlPortSide.Top)
             {
-                DrawPortSelector(info, point.X, point.Y, point.X, point.Y + marginSize);
+                DrawPortSelector(info, point.X, point.Y, point.X, point.Y + marginSize, portIdentifier);
             }
 
             if (portSide == UmlPortSide.Bottom)
             {
-                DrawPortSelector(info, point.X, point.Y, point.X, point.Y - marginSize);
+                DrawPortSelector(info, point.X, point.Y, point.X, point.Y - marginSize,portIdentifier);
             }
         }
 
@@ -343,7 +343,7 @@ namespace AlbinoHorse.Model
         //    info.Graphics.DrawLine(pen, startPoint, endPoint);
         //}
 
-        private PointF GetPoint(Rectangle bounds, int portId, UmlPortSide portSide)
+        private PointF GetPoint(Rectangle bounds, int portOffset, UmlPortSide portSide)
         {
             int portCount = 4;
             int marginSize = 20;
@@ -352,21 +352,21 @@ namespace AlbinoHorse.Model
             if (portSide == UmlPortSide.Left)
             {
                 point.X = bounds.Left - marginSize;
-                point.Y = bounds.Top + ((bounds.Height / portCount) * portId);
+                point.Y = bounds.Top + portOffset;
             }
             else if (portSide == UmlPortSide.Right)
             {
                 point.X = bounds.Right + marginSize;
-                point.Y = bounds.Top + ((bounds.Height / portCount) * portId);
+                point.Y = bounds.Top + portOffset;
             }
             else if (portSide == UmlPortSide.Top)
             {
-                point.X = bounds.Left + ((bounds.Width / portCount) * portId);
+                point.X = bounds.Left + portOffset;
                 point.Y = bounds.Top - marginSize;
             }
             else if (portSide == UmlPortSide.Bottom)
             {
-                point.X = bounds.Left + ((bounds.Width / portCount) * portId);
+                point.X = bounds.Left + portOffset;
                 point.Y = bounds.Bottom + marginSize;
             }
             else
@@ -440,12 +440,12 @@ namespace AlbinoHorse.Model
             }
         }
 
-        private void DrawPortSelector(RenderInfo info, float x1, float y1, float x2, float y2)
+        private void DrawPortSelector(RenderInfo info, float x1, float y1, float x2, float y2,object portIdentifier)
         {
             #region Add BBox
             BoundingBox bbox = new BoundingBox();
             bbox.Target = this;
-            bbox.Data = this;
+            bbox.Data = portIdentifier;
             Rectangle tmp = new Rectangle((int)Math.Min(x1, x2), (int)Math.Min(y1, y2), (int)Math.Abs(x2 - x1), (int)Math.Abs(y2 - y1));
 
             tmp.Inflate(6, 6);
@@ -485,11 +485,104 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawLine(pen, x1, y1, x2, y2);
         }
 
+        Point mouseDownPoint;
         public override void OnMouseDown(ShapeMouseEventArgs args)
         {
             args.Sender.ClearSelection();
             this.Selected = true;
             args.Redraw = true;
+
+            mouseDownPoint = new Point(args.X, args.Y);
+            
+            
+        }
+
+        public override void OnMouseMove(ShapeMouseEventArgs args)
+        {
+            if (args.BoundingBox.Data == StartPortIdentifier && args.Button == MouseButtons.Left)
+            {
+                Rectangle bounds = DataSource.Start.Bounds;
+
+                int offset = 0;
+                UmlPortSide side = DataSource.StartPortSide;
+
+                MovePort(args, bounds, ref offset, ref side);
+
+                DataSource.StartPortSide = side;
+                DataSource.StartPortOffset = offset;
+                args.Redraw = true;
+            }  
+
+            if (args.BoundingBox.Data == EndPortIdentifier && args.Button == MouseButtons.Left)
+            {
+                Rectangle bounds = DataSource.End.Bounds;
+
+                int offset = 0;
+                UmlPortSide side = DataSource.EndPortSide;
+
+                MovePort(args, bounds, ref offset, ref side);
+
+                DataSource.EndPortSide = side;
+                DataSource.EndPortOffset = offset;
+                args.Redraw = true;
+            }            
+        }
+
+        private static void MovePort(ShapeMouseEventArgs args, Rectangle bounds, ref int offset, ref UmlPortSide side)
+        {
+            int topDist = Math.Abs(bounds.Top - args.Y);
+            int leftDist = Math.Abs(bounds.Left - args.X);
+            int bottomDist = Math.Abs(bounds.Bottom - args.Y);
+            int rightDist = Math.Abs(bounds.Right - args.X);
+
+            if (topDist <= leftDist && topDist <= rightDist && topDist <= bottomDist)
+            {
+                side = UmlPortSide.Top;
+                offset = args.X - bounds.Left;
+
+                if (args.X < bounds.Left)
+                    offset = 0;
+
+                if (args.X > bounds.Right)
+                    offset = bounds.Width;
+            }
+
+            if (leftDist <= topDist && leftDist <= rightDist && leftDist <= bottomDist)
+            {
+                side = UmlPortSide.Left;
+                offset = args.Y - bounds.Top;
+
+                if (args.Y < bounds.Top)
+                    offset = 0;
+
+                if (args.Y > bounds.Bottom)
+                    offset = bounds.Height;
+            }
+
+            if (bottomDist <= leftDist && bottomDist <= rightDist && bottomDist <= topDist)
+            {
+                side = UmlPortSide.Bottom;
+                offset = args.X - bounds.Left;
+
+                if (args.X < bounds.Left)
+                    offset = 0;
+
+                if (args.X > bounds.Right)
+                    offset = bounds.Width;
+            }
+
+
+            if (rightDist <= topDist && rightDist <= leftDist && rightDist <= bottomDist)
+            {
+                side = UmlPortSide.Right;
+                offset = args.Y - bounds.Top;
+
+                if (args.Y < bounds.Top)
+                    offset = 0;
+
+                if (args.Y > bounds.Bottom)
+                    offset = bounds.Height;
+            }
         }
     }
 }

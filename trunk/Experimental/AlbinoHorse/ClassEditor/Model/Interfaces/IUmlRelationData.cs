@@ -23,13 +23,13 @@ namespace AlbinoHorse.Model
     public interface IUmlRelationData
     {
         Shape Start { get; }
-        int StartPortId { get; }
-        UmlPortSide StartPortSide { get; }
+        int StartPortOffset { get; set; }
+        UmlPortSide StartPortSide { get; set; }
         UmlRelationType AssociationType { get; }
         
         Shape End { get; }
-        int EndPortId { get; }
-        UmlPortSide EndPortSide { get; }
+        int EndPortOffset { get; set; }
+        UmlPortSide EndPortSide { get; set; }
 
     }
 }

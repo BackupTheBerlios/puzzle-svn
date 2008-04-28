@@ -28,14 +28,16 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public int StartPortId
+        public int StartPortOffset
         {
-            get { return Owner.StartPortId; }
+            get { return Owner.StartPortOffset; }
+            set { Owner.StartPortOffset = value; }
         }
 
         public UmlPortSide StartPortSide
         {
             get { return (UmlPortSide)(int)Owner.StartPortSide; }
+            set { Owner.StartPortSide = (DiagramPortSide)(int)value; }
         }
 
         public UmlRelationType AssociationType
@@ -43,14 +45,16 @@ namespace GenerationStudio.Gui
             get { return (UmlRelationType)(int)Owner.AssociationType; }
         }
 
-        public int EndPortId
+        public int EndPortOffset
         {
-            get { return Owner.EndPortId; }
+            get { return Owner.EndPortOffset; }
+            set { Owner.EndPortOffset = value; }
         }
 
         public UmlPortSide EndPortSide
         {
             get { return (UmlPortSide)(int)Owner.EndPortSide; }
+            set { Owner.EndPortSide = (DiagramPortSide)(int)value; }
         }
 
 
