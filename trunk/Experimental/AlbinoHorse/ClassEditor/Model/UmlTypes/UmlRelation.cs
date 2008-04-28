@@ -506,7 +506,11 @@ namespace AlbinoHorse.Model
                 int offset = 0;
                 UmlPortSide side = DataSource.StartPortSide;
 
-                MovePort(args, bounds, ref offset, ref side);
+                int oppositeOffset = DataSource.EndPortOffset;
+                UmlPortSide oppositeSide = DataSource.EndPortSide;
+
+
+                MovePort(args, bounds, ref offset, ref side, oppositeOffset, oppositeSide);
 
                 DataSource.StartPortSide = side;
                 DataSource.StartPortOffset = offset;
@@ -520,7 +524,10 @@ namespace AlbinoHorse.Model
                 int offset = 0;
                 UmlPortSide side = DataSource.EndPortSide;
 
-                MovePort(args, bounds, ref offset, ref side);
+                int oppositeOffset = DataSource.StartPortOffset;
+                UmlPortSide oppositeSide = DataSource.StartPortSide;
+
+                MovePort(args, bounds, ref offset, ref side,oppositeOffset,oppositeSide);
 
                 DataSource.EndPortSide = side;
                 DataSource.EndPortOffset = offset;
@@ -528,40 +535,40 @@ namespace AlbinoHorse.Model
             }            
         }
 
-        private static void MovePort(ShapeMouseEventArgs args, Rectangle bounds, ref int offset, ref UmlPortSide side)
+        private static void MovePort(ShapeMouseEventArgs args, Rectangle bounds, ref int offset, ref UmlPortSide side, int oppositeOffset, UmlPortSide oppositeSide)
         {
-            int topDist = Math.Abs(bounds.Top - args.Y);
-            int leftDist = Math.Abs(bounds.Left - args.X);
-            int bottomDist = Math.Abs(bounds.Bottom - args.Y);
-            int rightDist = Math.Abs(bounds.Right - args.X);
+            int x = args.X;
+            int y = args.Y;
 
-            if (topDist <= leftDist && topDist <= rightDist && topDist <= bottomDist)
+            int half = bounds.Width / 2;
+            int center = bounds.X + half;
+            int xd = Math.Abs(x - center);
+            int top = bounds.Top + half - xd;
+            int bottom = bounds.Bottom - half + xd;
+
+
+
+
+            if (x < center)
             {
-                side = UmlPortSide.Top;
-                offset = args.X - bounds.Left;
-
-                if (args.X < bounds.Left)
-                    offset = 0;
-
-                if (args.X > bounds.Right)
-                    offset = bounds.Width;
-            }
-
-            if (leftDist <= topDist && leftDist <= rightDist && leftDist <= bottomDist)
-            {
+                //left of                
                 side = UmlPortSide.Left;
-                offset = args.Y - bounds.Top;
-
-                if (args.Y < bounds.Top)
-                    offset = 0;
-
-                if (args.Y > bounds.Bottom)
-                    offset = bounds.Height;
+            }
+            else
+            {
+                //right of
+                side = UmlPortSide.Right;
             }
 
-            if (bottomDist <= leftDist && bottomDist <= rightDist && bottomDist <= topDist)
-            {
+            if (y < top)
+                side = UmlPortSide.Top;
+
+            if (y > bottom)
                 side = UmlPortSide.Bottom;
+
+
+            if (side == UmlPortSide.Top || side == UmlPortSide.Bottom)
+            {
                 offset = args.X - bounds.Left;
 
                 if (args.X < bounds.Left)
@@ -571,17 +578,29 @@ namespace AlbinoHorse.Model
                     offset = bounds.Width;
             }
 
-
-            if (rightDist <= topDist && rightDist <= leftDist && rightDist <= bottomDist)
+            if (side == UmlPortSide.Left || side == UmlPortSide.Right)
             {
-                side = UmlPortSide.Right;
                 offset = args.Y - bounds.Top;
-
+                
                 if (args.Y < bounds.Top)
                     offset = 0;
 
                 if (args.Y > bounds.Bottom)
                     offset = bounds.Height;
+            }
+
+            if ((side == UmlPortSide.Left || side == UmlPortSide.Right) &&
+                 (oppositeSide == UmlPortSide.Left || oppositeSide == UmlPortSide.Right))
+            {
+                if (Math.Abs(offset - oppositeOffset) < 10)
+                    offset = oppositeOffset;
+            }
+
+            if ((side == UmlPortSide.Top || side == UmlPortSide.Bottom) &&
+                 (oppositeSide == UmlPortSide.Top || oppositeSide == UmlPortSide.Bottom))
+            {
+                if (Math.Abs(offset - oppositeOffset) < 10)
+                    offset = oppositeOffset;
             }
         }
     }
