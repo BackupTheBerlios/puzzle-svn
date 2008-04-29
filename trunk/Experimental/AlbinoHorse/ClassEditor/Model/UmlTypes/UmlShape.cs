@@ -66,11 +66,18 @@ namespace AlbinoHorse.Model
             if (Selected && SelectedObject == null)
             {
                 Rectangle outerBounds = this.Bounds;
-                outerBounds.Inflate(4, 4);
+                outerBounds.Inflate(6, 6);
                 outerBounds.Offset(1, 0);
-                info.Graphics.DrawRectangle(Settings.Pens.SelectionInner, outerBounds);
-                outerBounds.Offset(-1, 1);
-                info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
+                Rectangle innerBounds = outerBounds;
+                innerBounds.Inflate(-3, -3);
+
+                info.Graphics.SetClip(outerBounds, CombineMode.Replace);
+                info.Graphics.SetClip(innerBounds, CombineMode.Xor);
+                info.Graphics.FillRectangle(Settings.Brushes.Selection, outerBounds);
+                info.Graphics.ResetClip();
+                //info.Graphics.DrawRectangle(Settings.Pens.SelectionInner, outerBounds);
+                //outerBounds.Offset(-1, 1);
+                //info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
 
                 
                 DrawSelectionHandle(info,new Point (outerBounds.Left , (outerBounds.Top + outerBounds.Bottom) / 2 ), LeftResizeIdentifier);

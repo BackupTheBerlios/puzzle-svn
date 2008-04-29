@@ -110,8 +110,9 @@ namespace AlbinoHorse.Model
 
         private void DrawRelationBackground(RenderInfo info, PointF startPoint, PointF endPoint)
         {
-            DrawPortBackground(info, DataSource.StartPortSide, startPoint,  StartPortIdentifier);
+            
             DrawLineBackground(info, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+            DrawPortBackground(info, DataSource.StartPortSide, startPoint, StartPortIdentifier);
             DrawPortBackground(info, DataSource.EndPortSide, endPoint,  EndPortIdentifier);
         }
 
@@ -457,7 +458,7 @@ namespace AlbinoHorse.Model
             if (Selected)
             {
                 tmp.Inflate(-2, -2);
-                info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+                info.Graphics.FillRectangle(Settings.Brushes.Selection, tmp);
             }
         }
 
@@ -476,7 +477,7 @@ namespace AlbinoHorse.Model
             if (Selected)
             {
                 tmp.Inflate(-2, -2);
-                info.Graphics.FillRectangle(Settings.Brushes.SelectedRelation, tmp);
+                info.Graphics.FillRectangle(Settings.Brushes.Selection, tmp);
             }
         }
 
@@ -526,6 +527,7 @@ namespace AlbinoHorse.Model
 
                 int oppositeOffset = DataSource.StartPortOffset;
                 UmlPortSide oppositeSide = DataSource.StartPortSide;
+
 
                 MovePort(args, bounds, ref offset, ref side,oppositeOffset,oppositeSide);
 

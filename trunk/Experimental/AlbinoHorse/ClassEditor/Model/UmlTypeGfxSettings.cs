@@ -25,7 +25,7 @@ namespace AlbinoHorse.Model.Settings
         public static SolidBrush ClassSectionCaption = new SolidBrush(Color.FromArgb(240, 242, 249));
         public static SolidBrush SelectedTypeMember = new SolidBrush(SystemColors.Highlight);
         public static SolidBrush Shadow = new SolidBrush(Color.LightGray);
-        public static HatchBrush SelectedRelation = new HatchBrush(HatchStyle.Percent50, Color.Black, Color.WhiteSmoke);
+        public static HatchBrush Selection = new HatchBrush(HatchStyle.Percent50, Color.Black, Color.WhiteSmoke);
     }
 
     public static class Fonts
@@ -49,14 +49,23 @@ namespace AlbinoHorse.Model.Settings
     {
         public static Pen FakeLine = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
         public static Pen InheritanceLine = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
-        public static Pen AssociationLine = new Pen(Color.Goldenrod, 1.6f);
+        public static Pen AssociationLine = MakeAssociationLine();
+
         public static Pen AssociationBorder = MakeAssociationBorder();
         public static Pen CommentBorder = new Pen(Color.Gold, 1f);
         public static Pen Lolipop = new Pen(Color.FromArgb(130, 130, 130), 1.6f);
         public static Pen DefaultBorder = new Pen(Color.FromArgb(130, 130, 130), 1f);
-        public static Pen AbstractBorder = MakeAbstractBorderPen();
+        public static Pen AbstractBorder = MakeAbstractBorderPen();        
         public static Pen SelectionOuter = MakeSelectonPen();
         public static Pen SelectionInner = new Pen(Color.FromArgb(220, 220, 220), 1);
+
+        private static Pen MakeAssociationLine()
+        {
+            Pen pen = new Pen(Color.Goldenrod, 1.6f);
+            pen.StartCap = LineCap.Round;
+            pen.EndCap = LineCap.Round;
+            return pen;
+        }
 
         private static Pen MakeAssociationBorder()
         {
