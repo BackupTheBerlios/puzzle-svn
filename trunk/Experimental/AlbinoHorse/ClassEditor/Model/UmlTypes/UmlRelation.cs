@@ -10,6 +10,9 @@ using AlbinoHorse.Windows.Forms;
 
 namespace AlbinoHorse.Model
 {
+    public delegate void LineDrawer (float x1,float y1,float x2,float y2);
+
+
     public class UmlRelation : Shape
     {
         public IUmlRelationData DataSource { get; set; }
@@ -399,46 +402,36 @@ namespace AlbinoHorse.Model
             info.Graphics.DrawLine(Pens.DarkGray, x1, y1, x2, y2);
         }
 
-        private void DrawLine(RenderInfo info,Pen pen, float x1,float y1,float x2,float y2)
+        private void RouteLine(LineDrawer drawLine, float x1, float y1, float x2, float y2)
         {
-            //info.Graphics.DrawLine(pen, x1, y1, x2, y2);
             if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
             {
                 float x3 = (x1 + x2) / 2;
 
-                DrawStraightLine(info, pen, x1, y1, x3, y1);
-                DrawStraightLine(info, pen, x2, y2, x3, y2);
-                DrawStraightLine(info, pen, x3, y1, x3, y2);
+                drawLine(x1, y1, x3, y1);
+                drawLine(x2, y2, x3, y2);
+                drawLine(x3, y1, x3, y2);
             }
             else
             {
                 float y3 = (y1 + y2) / 2;
 
-                DrawStraightLine(info,pen, x1, y1, x1, y3);
-                DrawStraightLine(info, pen, x2, y2, x2, y3);
-                DrawStraightLine(info, pen, x1, y3, x2, y3);
+                drawLine(x1, y1, x1, y3);
+                drawLine(x2, y2, x2, y3);
+                drawLine(x1, y3, x2, y3);
             }
+        }
+
+        private void DrawLine(RenderInfo info,Pen pen, float x1,float y1,float x2,float y2)
+        {
+            LineDrawer drawLine = (float xx1, float yy1, float xx2, float yy2) => DrawStraightLine(info, pen, xx1, yy1, xx2, yy2);
+            RouteLine(drawLine, x1, y1, x2, y2);
         }
 
         private void DrawLineBackground(RenderInfo info, float x1, float y1, float x2, float y2)
         {
-            //info.Graphics.DrawLine(pen, x1, y1, x2, y2);
-            if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
-            {
-                float x3 = (x1 + x2) / 2;
-
-                DrawStraightLineSelector(info,  x1, y1, x3, y1);
-                DrawStraightLineSelector(info,  x2, y2, x3, y2);
-                DrawStraightLineSelector(info,  x3, y1, x3, y2);
-            }
-            else
-            {
-                float y3 = (y1 + y2) / 2;
-
-                DrawStraightLineSelector(info,  x1, y1, x1, y3);
-                DrawStraightLineSelector(info,  x2, y2, x2, y3);
-                DrawStraightLineSelector(info,  x1, y3, x2, y3);
-            }
+            LineDrawer drawLine = (float xx1, float yy1, float xx2, float yy2) => DrawStraightLineSelector(info, xx1, yy1, xx2, yy2);
+            RouteLine(drawLine, x1, y1, x2, y2);
         }
 
         private void DrawPortSelector(RenderInfo info, float x1, float y1, float x2, float y2,object portIdentifier)
