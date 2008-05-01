@@ -58,7 +58,7 @@ namespace GenerationStudio.Gui
             association.Start = startElement;
             association.End = endElement;
 
-            ClassDiagramNode.AddChild(association);
+            DiagramNode.AddChild(association);
 
         }
 
@@ -146,17 +146,16 @@ namespace GenerationStudio.Gui
             }
         }
 
-        public DiagramElement ClassDiagramNode { get; set; }
+        public DiagramElement DiagramNode { get; set; }
 
 
         private void AddClass()
         {
-            UmlInstanceType newClass = new UmlClass();
-            newClass.Bounds = new Rectangle(1 * 21, 1 * 21, 6 * 21, 2 * 21);
-            newClass.DataSource.TypeName = "SomeClass";
+            ClassElement element = new ClassElement();
+            element.Name = "New Class";
+            DiagramNode.Parent.GetChild<NamespaceElement>().AddChild(element);
 
-            UmlDesigner.Diagram.Shapes.Add(newClass);
-            UmlDesigner.Refresh();
+
         }
 
         private void UmlDesigner_DragDrop(object sender, DragEventArgs e)
@@ -168,15 +167,15 @@ namespace GenerationStudio.Gui
                 {
                     if (Engine.DragDropElement is ClassElement)
                     {
-                        CreateUmlType(e);
+                        AddUmlType(e);
                     }
                     if (Engine.DragDropElement is InterfaceElement)
                     {
-                        CreateUmlType(e);
+                        AddUmlType(e);
                     }
                     if (Engine.DragDropElement is EnumElement )
                     {
-                        CreateUmlType(e);
+                        AddUmlType(e);
                     }
                 }
             }
@@ -184,19 +183,25 @@ namespace GenerationStudio.Gui
 
 
 
-        private void CreateUmlType(DragEventArgs e)
+        private void AddUmlType(DragEventArgs e)
+        {
+            int x = e.X;
+            int y = e.Y;
+            AddUmlType(x, y);
+        }
+
+        private void AddUmlType(int x, int y)
         {
             TypeElement element = (TypeElement)Engine.DragDropElement;
             DiagramTypeElement diagramElement = new DiagramTypeElement();
             diagramElement.Type = element;
             diagramElement.Expanded = true;
-            Point cp = UmlDesigner.PointToClient(new Point(e.X, e.Y));
+            Point cp = UmlDesigner.PointToClient(new Point(x, y));
             diagramElement.X = cp.X;
             diagramElement.Y = cp.Y;
             diagramElement.Width = 21 * 6;
-            
-            ClassDiagramNode.AddChild(diagramElement);
 
+            DiagramNode.AddChild(diagramElement);
         }
 
 
@@ -215,7 +220,7 @@ namespace GenerationStudio.Gui
         private UmlClassDiagramData data = new UmlClassDiagramData();
         public void LoadData()
         {
-            data.Owner = ClassDiagramNode;
+            data.Owner = DiagramNode;
             UmlDesigner.Diagram.DataSource = data;
         }
 

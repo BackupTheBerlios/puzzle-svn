@@ -16,7 +16,7 @@ namespace Logging
             IContext ctx = Context.Configure();
 
             //get an object from the container
-            Car volvo = ctx.GetFrom<DemoTemplate>().Volvo();
+            Car volvo = ctx.GetTemplate<DemoTemplate>().Volvo();
            
             //see if the logging works
             volvo.Drive();
@@ -25,7 +25,7 @@ namespace Logging
             Console.WriteLine("The logger attached to volvo is: {0}", volvo.Logger.GetType().Name);
 
             //identity test
-            Car volvoAgain = ctx.GetFrom<DemoTemplate>().Volvo();
+            Car volvoAgain = ctx.GetTemplate<DemoTemplate>().Volvo();
             if (volvo == volvoAgain)
                 Console.WriteLine("volvo and volvoAgain are the same object");
             else
@@ -33,7 +33,7 @@ namespace Logging
 
 
             //get a crazy car (instancemode = PerCall = a new instance each time)
-            Car crazyCar1 = ctx.GetFrom<DemoTemplate>().CrazyCar();
+            Car crazyCar1 = ctx.GetTemplate<DemoTemplate>().CrazyCar();
             crazyCar1.Drive();
 
             if (volvo.Logger == crazyCar1.Logger)

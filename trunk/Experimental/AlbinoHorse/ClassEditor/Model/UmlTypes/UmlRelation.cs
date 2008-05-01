@@ -404,22 +404,35 @@ namespace AlbinoHorse.Model
 
         private void RouteLine(LineDrawer drawLine, float x1, float y1, float x2, float y2)
         {
+            UmlPortSide startSide = DataSource.StartPortSide;
+            UmlPortSide endSide =DataSource.EndPortSide;            
+
             if (Math.Abs(x2 - x1) > Math.Abs(y2 - y1))
             {
-                float x3 = (x1 + x2) / 2;
-
-                drawLine(x1, y1, x3, y1);
-                drawLine(x2, y2, x3, y2);
-                drawLine(x3, y1, x3, y2);
+                DrawHorizontal(drawLine, x1, y1, x2, y2);
             }
             else
             {
-                float y3 = (y1 + y2) / 2;
-
-                drawLine(x1, y1, x1, y3);
-                drawLine(x2, y2, x2, y3);
-                drawLine(x1, y3, x2, y3);
+                DrawVertical(drawLine, x1, y1, x2, y2);
             }
+        }
+
+        private static void DrawVertical(LineDrawer drawLine, float x1, float y1, float x2, float y2)
+        {
+            float y3 = (y1 + y2) / 2;
+
+            drawLine(x1, y1, x1, y3);
+            drawLine(x2, y2, x2, y3);
+            drawLine(x1, y3, x2, y3);
+        }
+
+        private static void DrawHorizontal(LineDrawer drawLine, float x1, float y1, float x2, float y2)
+        {
+            float x3 = (x1 + x2) / 2;
+
+            drawLine(x1, y1, x3, y1);
+            drawLine(x2, y2, x3, y2);
+            drawLine(x3, y1, x3, y2);
         }
 
         private void DrawLine(RenderInfo info,Pen pen, float x1,float y1,float x2,float y2)
