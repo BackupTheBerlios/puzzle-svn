@@ -7,7 +7,7 @@ using Logging.Classes;
 
 namespace Logging.Factories
 {
-    public class DemoTemplate : Template
+    public class DemoConfig : Template
     {
 
         //register an object on the name "Volvo"

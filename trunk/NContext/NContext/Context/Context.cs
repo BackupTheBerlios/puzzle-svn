@@ -10,7 +10,7 @@ namespace Puzzle.NContext.Framework
 {
 
 
-    public partial class Context<TEMPLATE> : IContext<TEMPLATE> where TEMPLATE : ITemplate , new()
+    public partial class Context<TEMPLATE> : IContext<TEMPLATE> where TEMPLATE : ITemplate 
     {
         protected ContextState state = new ContextState();
         protected TEMPLATE template;
@@ -20,6 +20,10 @@ namespace Puzzle.NContext.Framework
             get { return state; }
         }
 
+        public Context(Type implementationType)
+        {
+            RegisterTemplate(implementationType);
+        }
         public Context()
         {
             RegisterTemplate(typeof(TEMPLATE));

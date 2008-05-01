@@ -13,10 +13,9 @@ namespace Logging
         static void Main(string[] args)
         {
 
-            var ctx = new Context<DemoTemplate>();
+            var ctx = Context.Configure<DemoConfig>();               
             //get an object from the container
-            Car volvo = ctx.Template.Volvo();                           
-           
+            Car volvo = ctx.Template.Volvo();                                     
             //see if the logging works
             volvo.Drive();
 
