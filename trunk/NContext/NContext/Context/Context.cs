@@ -8,20 +8,21 @@ using System.ComponentModel;
 
 namespace Puzzle.NContext.Framework
 {
-    public partial class Context :  IContext
+    public partial class Context<TEMPLATE> : IContext where TEMPLATE : ITemplate
     {
         protected ContextState state = new ContextState();
+        protected TEMPLATE template;
 
         public ContextState State
         {
             get { return state; }
         }
 
-        protected Context()
-        {            
+        public Context()
+        {
+            RegisterTemplate(typeof(TEMPLATE));
         }
 
-        public virtual IContext ParentContext {get;set;}
 
         public virtual void SubstituteType<T, S>()
         {
@@ -31,16 +32,24 @@ namespace Puzzle.NContext.Framework
             state.TypeSubstitutes.Add(typeof(T), typeof(S));
         }
 
-        public F GetTemplate<F>() where F : ITemplate
+        public TEMPLATE Template
         {
-            foreach (ITemplate initializer in state.Templates)
+            get
             {
-                if (initializer is F)
-                    return (F)initializer;
+                return template;
             }
-
-            throw new Exception("Template type was not found");
         }
+
+        //public F GetTemplate<F>() where F : ITemplate
+        //{
+        //    foreach (ITemplate initializer in state.Templates)
+        //    {
+        //        if (initializer is F)
+        //            return (F)initializer;
+        //    }
+
+        //    throw new Exception("Template type was not found");
+        //}
 
         public T CreateObject<T>(params object[] args)
         {
@@ -137,10 +146,7 @@ namespace Puzzle.NContext.Framework
                 }
             }
 
-            if (ParentContext != null)
-                return ParentContext.GetObject<T>(factoryId);
-            else
-                throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
+            throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
         }
 
         public T GetObject<T>()
@@ -172,10 +178,7 @@ namespace Puzzle.NContext.Framework
                 }
             }
 
-            if (ParentContext != null)
-                return ParentContext.GetObject<T>();
-            else
-                throw ExceptionHelper.TypedFactoryNotFoundException(typeof(T));
+            throw ExceptionHelper.TypedFactoryNotFoundException(typeof(T));
         }
 
         private void VerifyInstanceModeIntegrity(ObjectFactoryInfo nextConfig)
@@ -194,28 +197,21 @@ namespace Puzzle.NContext.Framework
             //TODO: add code
         }
 
-        public void RegisterObject<T>(Type objectType, T item)
-        {
-            if (!objectType.IsAssignableFrom(typeof(T)))
-                throw ExceptionHelper.RegisterObjectTypeMismatchException();
-            //TODO: add code
+        public void RegisterObject<T>(object item)
+        {            
         }
 
-        public void RegisterTemplate<F>() where F:ITemplate
-        {
-            RegisterTemplate(typeof(F));
-        }
-
-        public void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
+        private void RegisterObjectFactoryMethod(Type objectType, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = CreateObjectFactory("DefaultFor:" + objectType.Name,factoryDelegate, instanceMode);
             state.TypedObjectFactories.Add(objectType, factory);
+
         }
 
-        public void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
+        private void RegisterObjectFactoryMethod(string factoryId, FactoryDelegate factoryDelegate, InstanceMode instanceMode)
         {
             ObjectFactoryInfo factory = CreateObjectFactory(factoryId,factoryDelegate, instanceMode);
-            state.NamedObjectFactories.Add(factoryId, factory);
+            state.NamedObjectFactories.Add(factoryId, factory);            
         }
 
         public void ConfigureObject<T>(string configId, T item)
@@ -233,17 +229,17 @@ namespace Puzzle.NContext.Framework
 
  
 
-        public void ConfigureObject<T>(Type configType, T item)
+        public void ConfigureObject<T>(object item)
         {
-            if (state.TypedObjectConfigurations.ContainsKey(configType))
+            if (state.TypedObjectConfigurations.ContainsKey(typeof(T)))
             {
-                ObjectConfigurationInfo config = state.TypedObjectConfigurations[configType];
+                ObjectConfigurationInfo config = state.TypedObjectConfigurations[typeof(T)];
                 config.ConfigureDelegate(item);
                 ConfigureObjectWithTemplates(item);
                 return;
             }
 
-            throw ExceptionHelper.TypedConfigurationNotFoundException(configType);
+            throw ExceptionHelper.TypedConfigurationNotFoundException(typeof(T));
         }
 
         protected virtual void ConfigureObjectWithTemplates<T>(T item)
@@ -257,39 +253,6 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        public void ConfigureObject<T>(ConfigureDelegate configMethod, T item)
-        {
-            MethodInfo method = configMethod.Method;
-            ITemplate template = configMethod.Target as ITemplate;
-            if (template == null)
-                throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
-
-            ConfigurationMethodAttribute attrib = method.GetCustomAttributes(typeof(ConfigurationMethodAttribute), true).FirstOrDefault() as ConfigurationMethodAttribute;
-
-            if (!state.Templates.Contains(template))
-                throw new Exception(string.Format("The template is not registered in the Context")); ;
-
-            if (attrib == null)
-                throw ExceptionHelper.NotConfigurationMethod();
-
-            if (attrib.ConfigId != null)
-            {
-                ConfigureObject<T>(attrib.ConfigId,item);
-            }
-            else if (attrib.RegisterAs == ConfigurationType.DefaultForType)
-            {
-                Type defaultType = method.GetParameters().First().ParameterType;
-                ConfigureObject<T>(defaultType, item);
-            }
-            else
-            {
-                string configId = method.Name;
-                ConfigureObject<T>(configId, item);
-            }
-        }
-
-
-
         private void RegisterObjectConfigurationMethod(ITemplate factory, MethodInfo method, ConfigurationMethodAttribute attrib)
         {
             Type objectType = method.ReturnType;
@@ -297,28 +260,24 @@ namespace Puzzle.NContext.Framework
             if (method.GetParameters().Length != 1)
                 throw new NotSupportedException("Configuration methods must have only 1 parameter");
 
+            ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+            Type defaultType = method.GetParameters().First().ParameterType;
+
             if (attrib.ConfigId != null)
-            {
-                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+            {                
                 RegisterObjectConfigurationMethod(attrib.ConfigId, configDelegate);
             }
             else if (attrib.RegisterAs == ConfigurationType.DefaultForType)
-            {
-                Type defaultType = method.GetParameters().First().ParameterType;
-                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
+            {               
                 RegisterObjectConfigurationMethod(defaultType, configDelegate);
             }
             else if (attrib.RegisterAs == ConfigurationType.AppliesToAll)
             {
-                Type defaultType = method.GetParameters().First().ParameterType;
-                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
                 RegisterObjectTemplateConfigurationMethod(defaultType, configDelegate);
-                
             }
             else
             {
                 string objectId = method.Name;
-                ConfigureDelegate configDelegate = CreateMethodConfigurationDelegate(factory, method);
                 RegisterObjectConfigurationMethod(objectId, configDelegate);
             }
         }
@@ -393,25 +352,25 @@ namespace Puzzle.NContext.Framework
             return config;
         }
 
-        public void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod)
+        private void RegisterObjectConfigurationMethod(Type configType, ConfigureDelegate configMethod)
         {
             ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
             state.TypedObjectConfigurations.Add(configType, config);
         }
 
-        public void RegisterObjectTemplateConfigurationMethod(Type configType, ConfigureDelegate configMethod)
+        private void RegisterObjectTemplateConfigurationMethod(Type configType, ConfigureDelegate configMethod)
         {
             ObjectConfigurationInfo config = CreateObjectConfiguration(configMethod);
             state.ApplyToAllObjectConfigurations.Add(configType, config);
         }
 
-        public void RegisterTemplate(Type templateType)
+        private void RegisterTemplate(Type templateType)
         {
             ITemplate template = (ITemplate)state.aopEngine.CreateProxy(templateType);
 
             template.Context = this;
             template.Initialize();
-            state.Templates.Add(template);
+            this.template = (TEMPLATE)template;
 
             foreach (MethodInfo method in template.GetType().GetMethods())
             {

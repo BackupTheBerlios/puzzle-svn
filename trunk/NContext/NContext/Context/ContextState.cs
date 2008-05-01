@@ -17,7 +17,6 @@ namespace Puzzle.NContext.Framework
             return engine;
         }
 
-        public readonly IList<ITemplate> Templates = new List<ITemplate>();
         public readonly IDictionary<string, ObjectFactoryInfo> NamedObjectFactories = new Dictionary<string, ObjectFactoryInfo>();
         public readonly IDictionary<Type, ObjectFactoryInfo> TypedObjectFactories = new Dictionary<Type, ObjectFactoryInfo>();
         public readonly IDictionary<string, ObjectConfigurationInfo> NamedObjectConfigurations = new Dictionary<string, ObjectConfigurationInfo>();

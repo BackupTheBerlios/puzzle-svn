@@ -9,36 +9,52 @@ namespace Puzzle.NContext.Framework
 {
     public class TemplateBase : ITemplate
     {
-        public virtual IContext Context { get; set; }
+        IContext IContextBound.Context
+        {
+            get;
+            set;
+        }
 
+        private IContext Context
+        {
+            get
+            {
+                return ((IContextBound)this).Context;
+            }
+        }
 
-        public virtual void Initialize()
+        void ITemplate.Initialize()
+        {
+            Initialize();
+        }
+
+        protected virtual void Initialize()
         {
         }
 
-        public virtual T CreateObject<T>(params object[] args)
+        protected virtual T CreateObject<T>(params object[] args)
         {
             return Context.CreateObject<T>(args);
         }
 
-        public virtual T GetObject<T>(string configId)
+        protected virtual T GetObject<T>(string configId)
         {
             return Context.GetObject<T>(configId);
         }
 
-        public virtual T GetObject<T>()
+        protected virtual T GetObject<T>()
         {
             return Context.GetObject<T>();
         }
 
-        public virtual void ConfigureObject<T>(string configId, T item)
+        protected virtual void ConfigureObject<T>(string configId, T item)
         {
             Context.ConfigureObject(configId, item);
         }
 
-        public virtual void ConfigureObject<T>(Type configType, T item)
+        protected virtual void ConfigureObject<T>(object item)
         {
-            Context.ConfigureObject(configType, item);
+            Context.ConfigureObject<T>(item);
         }
     }
 }
