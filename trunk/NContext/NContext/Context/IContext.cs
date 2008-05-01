@@ -11,7 +11,6 @@ namespace Puzzle.NContext.Framework
 
         T CreateObject<T>(params object[] args);
 
-        T GetObject<T>(Type factoryType);
         T GetObject<T>(); //objectType == T
         T GetObject<T>(string factoryId);
 

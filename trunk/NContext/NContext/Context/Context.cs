@@ -42,41 +42,6 @@ namespace Puzzle.NContext.Framework
             throw new Exception("Template type was not found");
         }
 
-        public T GetObject<T>(Func<T> factoryMethod)
-        {
-            ITemplate template = factoryMethod.Target as ITemplate;
-            if (template == null)
-                throw new Exception(string.Format("The method does not belong to an IObjectFactory"));
-
-            if (!state.Templates.Contains(template))
-                throw new Exception(string.Format("The template is not registered in the Context"));
-
-            MethodInfo method = factoryMethod.Method;
-            return GetObjectFromMethodInfo<T>(method);
-        }
-
-        private T GetObjectFromMethodInfo<T>(MethodInfo method)
-        {
-            FactoryMethodAttribute attrib = method.GetCustomAttributes(typeof(FactoryMethodAttribute), true).FirstOrDefault() as FactoryMethodAttribute;
-            if (attrib == null)
-                throw ExceptionHelper.NotFactoryMethodException();
-
-            if (attrib.FactoryId != null)
-            {
-                return GetObject<T>(attrib.FactoryId);
-            }
-            else if (attrib.RegisterAs == FactoryType.DefaultForType)
-            {
-                Type defaultType = method.ReturnType;
-                return GetObject<T>(defaultType);
-            }
-            else
-            {
-                string factoryId = method.Name;
-                return GetObject<T>(factoryId);
-            }
-        }
-
         public T CreateObject<T>(params object[] args)
         {
             Type typeToCreate = null;
@@ -178,13 +143,13 @@ namespace Puzzle.NContext.Framework
                 throw ExceptionHelper.NamedFactoryNotFoundException(factoryId);
         }
 
-        public T GetObject<T>(Type factoryType)
+        public T GetObject<T>()
         {
             bool inGraphStack = inGraphCall;
             try
             {
                 inGraphCall = true;
-                T res = InternalGetObject<T>(factoryType);
+                T res = InternalGetObject<T>();
                 return res;
             }
             finally
@@ -195,22 +160,22 @@ namespace Puzzle.NContext.Framework
             }
         }
 
-        private T InternalGetObject<T>(Type factoryType)
+        private T InternalGetObject<T>()
         {
             lock (syncRoot)
             {
-                if (state.TypedObjectFactories.ContainsKey(factoryType))
+                if (state.TypedObjectFactories.ContainsKey(typeof(T)))
                 {
-                    ObjectFactoryInfo config = state.TypedObjectFactories[factoryType];
+                    ObjectFactoryInfo config = state.TypedObjectFactories[typeof(T)];
                     object res = config.FactoryDelegate();
                     return (T)res;
                 }
             }
 
             if (ParentContext != null)
-                return ParentContext.GetObject<T>(factoryType);
+                return ParentContext.GetObject<T>();
             else
-                throw ExceptionHelper.TypedFactoryNotFoundException(factoryType);
+                throw ExceptionHelper.TypedFactoryNotFoundException(typeof(T));
         }
 
         private void VerifyInstanceModeIntegrity(ObjectFactoryInfo nextConfig)
@@ -222,13 +187,6 @@ namespace Puzzle.NContext.Framework
 
             //if (prevConfig.InstanceMode > nextConfig.InstanceMode)
             //    throw new Exception(string.Format("Object '{0}' with InstanceMode '{1}' is referencing object '{2}' with InstanceMode '{3}'", prevConfig.DisplayName,prevConfig.InstanceMode,nextConfig.DisplayName ,nextConfig.InstanceMode));
-        }
-
-
-
-        public T GetObject<T>()
-        {
-            return GetObject<T>(typeof(T));
         }
 
         public void RegisterObject<T>(string objectId, T item)

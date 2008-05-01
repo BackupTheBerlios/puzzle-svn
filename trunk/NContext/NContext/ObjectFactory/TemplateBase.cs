@@ -26,11 +26,6 @@ namespace Puzzle.NContext.Framework
             return Context.GetObject<T>(configId);
         }
 
-        public virtual T GetObject<T>(Type configType)
-        {
-            return Context.GetObject<T>(configType);
-        }
-
         public virtual T GetObject<T>()
         {
             return Context.GetObject<T>();
