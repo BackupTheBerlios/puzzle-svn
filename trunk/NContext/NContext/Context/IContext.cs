@@ -22,4 +22,9 @@ namespace Puzzle.NContext.Framework
         //void RegisterTemplate<F>() where F:ITemplate;
         //void RegisterTemplate(Type templateType);
     }
+
+    public interface IContext<TEMPLATE> : IContext
+    {
+        TEMPLATE Template { get; }
+    }
 }

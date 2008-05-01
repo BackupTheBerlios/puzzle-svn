@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Puzzle.NContext.Framework
 {
-    public class TemplateBase : ITemplate
+    public class Template : ITemplate
     {
         IContext IContextBound.Context
         {

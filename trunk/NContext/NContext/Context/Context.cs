@@ -8,7 +8,9 @@ using System.ComponentModel;
 
 namespace Puzzle.NContext.Framework
 {
-    public partial class Context<TEMPLATE> : IContext where TEMPLATE : ITemplate
+
+
+    public partial class Context<TEMPLATE> : IContext<TEMPLATE> where TEMPLATE : ITemplate , new()
     {
         protected ContextState state = new ContextState();
         protected TEMPLATE template;
@@ -39,17 +41,6 @@ namespace Puzzle.NContext.Framework
                 return template;
             }
         }
-
-        //public F GetTemplate<F>() where F : ITemplate
-        //{
-        //    foreach (ITemplate initializer in state.Templates)
-        //    {
-        //        if (initializer is F)
-        //            return (F)initializer;
-        //    }
-
-        //    throw new Exception("Template type was not found");
-        //}
 
         public T CreateObject<T>(params object[] args)
         {
@@ -102,9 +93,6 @@ namespace Puzzle.NContext.Framework
                 if (state.NamedObjectFactories.ContainsKey(factoryId))
                 {
                     ObjectFactoryInfo config = state.NamedObjectFactories[factoryId];
-                    VerifyInstanceModeIntegrity(config);
-
-                    state.configStack.Push(config);
                     try
                     {
                         //get from context cache
@@ -140,8 +128,6 @@ namespace Puzzle.NContext.Framework
                     }
                     finally
                     {
-                        //remove the last config from config stack
-                        state.configStack.Pop();
                     }
                 }
             }
@@ -179,17 +165,6 @@ namespace Puzzle.NContext.Framework
             }
 
             throw ExceptionHelper.TypedFactoryNotFoundException(typeof(T));
-        }
-
-        private void VerifyInstanceModeIntegrity(ObjectFactoryInfo nextConfig)
-        {
-            if (state.configStack.Count == 0)
-                return;
-
-            //ObjectFactoryInfo prevConfig = state.configStack.Peek();
-
-            //if (prevConfig.InstanceMode > nextConfig.InstanceMode)
-            //    throw new Exception(string.Format("Object '{0}' with InstanceMode '{1}' is referencing object '{2}' with InstanceMode '{3}'", prevConfig.DisplayName,prevConfig.InstanceMode,nextConfig.DisplayName ,nextConfig.InstanceMode));
         }
 
         public void RegisterObject<T>(string objectId, T item)
