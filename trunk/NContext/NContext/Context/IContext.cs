@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Linq.Expressions;
-namespace Puzzle.NContext.Framework
+namespace Mojo
 {
     public interface IContext 
     {
@@ -18,9 +17,6 @@ namespace Puzzle.NContext.Framework
 
         void RegisterObject<T>(object item);
         void RegisterObject<T>(string objectId, T item);
-
-        //void RegisterTemplate<F>() where F:ITemplate;
-        //void RegisterTemplate(Type templateType);
     }
 
     public interface IContext<TEMPLATE> : IContext

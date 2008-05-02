@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NContext.Framework.NET 3.5", "NContext\Puzzle.NContext.Framework.NET 3.5.csproj", "{2468BEF9-5D09-4CFF-8EC1-1BFECC4A1736}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mojo.Framework", "NContext\Mojo.Framework.csproj", "{2468BEF9-5D09-4CFF-8EC1-1BFECC4A1736}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Samples\Logging\Logging.csproj", "{A93975FF-42B3-4DBE-BF35-D90C93D0135B}"
 EndProject

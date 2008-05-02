@@ -1,16 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Configuration;
 
-namespace Puzzle.NContext.Framework
+namespace Mojo
 {
     public static class Context
     {
         public static IContext<T> Configure<T>() where T : ITemplate 
         {
+            XmlNode res = (XmlNode)ConfigurationManager.GetSection("mojo");
+            foreach (XmlNode child in res)
+            {
+                if (child.Name == "template")
+                {
+                    Type contractType = Type.GetType (child.Attributes["contract"].Value);
+                    Type implementationType = Type.GetType (child.Attributes["implementation"].Value);
+
+                    if (contractType == typeof(T))
+                    {
+                        return new Context<T>(implementationType);
+                    }
+                }
+            }
+
+            //return default
             Context<T> context = new Context<T> ();
             return context;
         }

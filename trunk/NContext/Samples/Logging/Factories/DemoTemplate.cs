@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Puzzle.NContext.Framework;
+using Mojo;
 using Logging.Classes;
 
 namespace Logging.Factories

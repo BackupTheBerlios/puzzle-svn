@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Puzzle.NAspect.Framework;
 
-namespace Puzzle.NContext.Framework
+namespace Mojo
 {
     public class ContextState
     {
@@ -12,7 +11,7 @@ namespace Puzzle.NContext.Framework
 
         private static IEngine GetAopEngine()
         {
-            Engine engine = new Engine("NContextEngine");
+            Engine engine = new Engine("Mojo.Aop.Engine");
             engine.Configuration.Aspects.Add(new TemplateAspect());
             return engine;
         }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Puzzle.NAspect.Framework.Interception;
 using Puzzle.NAspect.Framework;
 using System.Reflection;
+using System.Linq;
 
-namespace Puzzle.NContext.Framework
+namespace Mojo
 {
     public class FactoryMethodInterceptor : IAroundInterceptor
     {

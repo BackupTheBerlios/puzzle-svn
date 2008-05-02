@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
-using Puzzle.NContext.Framework;
+using Mojo;
 using System.Collections;
 
-namespace Puzzle.NContext.Framework
+namespace Mojo
 {
     public class TemplateAspect : GenericAspect
     {
-        public TemplateAspect() : base ("NContextAspect")
+        public TemplateAspect() : base ("Mojo.Aspect")
         {
             //target all classes implementing ITemplate
             Targets.Add(new AspectTarget(typeof(ITemplate), AspectTargetType.Interface));

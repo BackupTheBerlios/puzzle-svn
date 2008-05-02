@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NContext</RootNamespace>
-    <AssemblyName>Puzzle.NContext.Framework.NET3.5</AssemblyName>
+    <AssemblyName>Mojo.Framework</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
