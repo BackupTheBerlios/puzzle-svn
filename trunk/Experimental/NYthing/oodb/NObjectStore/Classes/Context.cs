@@ -4,6 +4,7 @@ using System.Text;
 using Puzzle.NAspect.Framework;
 using System.Collections;
 using System.Reflection;
+using System.Linq;
 
 namespace NObjectStore
 {
@@ -29,6 +30,16 @@ namespace NObjectStore
 
             engine = ApplicationContext.Configure ();
             uow = new UnitOfWork();
+        }
+
+        public IEnumerable<T> AllLoaded<T>()
+        {
+            var res = from wref in uow.Objects.Values
+                      let iper = wref.Target
+                      where wref.IsAlive && iper is T
+                      select iper;
+
+            return res.Cast<T>();
         }
 
         public void Unload(object instance)
@@ -80,14 +91,14 @@ namespace NObjectStore
         }
 
         public void Commit()
-        { 
-            ArrayList dirty = new ArrayList(uow.DirtyObjects.Values);
+        {
+            List<IPersistentObject> dirty = new List<IPersistentObject>(uow.DirtyObjects.Values);
             foreach (IPersistentObject instance in dirty)
             {
                 CommitObject(instance);                
             }
 
-            ArrayList deleted = new ArrayList (uow.DeletedObjects.Values);
+            List<IPersistentObject> deleted = new List<IPersistentObject>(uow.DeletedObjects.Values);
             foreach (PersistentId id in deleted)
             {
                 DeleteObject(id.Id);
@@ -145,12 +156,12 @@ namespace NObjectStore
             uow.DirtyObjects[managed.Id] = managed;
         }
 
-        public object Get(string id)
+        public IPersistentObject Get(string id)
         {
-            if (uow.Objects.Contains(id))
+            if (uow.Objects.ContainsKey(id))
             {
                 WeakReference reff = (WeakReference)uow.Objects[id];
-                object instance = reff.Target;
+                IPersistentObject instance = (IPersistentObject)reff.Target;
                 if (reff.IsAlive)
                 {
                    return instance; //return object if possible
@@ -170,31 +181,31 @@ namespace NObjectStore
                 string serializedData = sr.ReadToEnd();
                 sr.Close();
 
-                SerializedObject so = SerializedObject.DeSerialize(serializedData);
+                SerializedObject so = JSONSerializer.DeSerialize(serializedData);
                 IPersistentObject managed = (IPersistentObject)engine.CreateProxy(so.Type);
 
                 managed.Context = this;
                 managed.Id = id;                
                 RegisterObject(managed);                
                 managed.Initializing = true;
-                foreach (DictionaryEntry de in so.Data)
+                foreach (var entry in so.Data)
                 {
-                    string property = (string)de.Key;
+                    string property = (string)entry.Key;
                     PropertyInfo pi = so.Type.GetProperty(property);
-                    if (de.Value is PersistentId)
+                    if (entry.Value is PersistentId)
                     {
-                        managed.SetReference(property, de.Value);
+                        managed.SetReference(property, entry.Value);
                         managed.SetUnloaded(property, true);
                     }
                     else
                     {
-                        pi.SetValue(managed, de.Value, null);
+                        pi.SetValue(managed, entry.Value, null);
                         managed.SetUnloaded(property, false);
 
                         //setup list owner
-                        if (de.Value is IPersistentList)
+                        if (entry.Value is IPersistentList)
                         {
-                            IPersistentList list = de.Value as IPersistentList;
+                            IPersistentList list = entry.Value as IPersistentList;
                             list.Owner = managed;
                         }
                     }
@@ -214,9 +225,9 @@ namespace NObjectStore
         public void Delete(object instance)
         {
             IPersistentObject managed = (IPersistentObject)instance;
-            uow.DeletedObjects[instance] = instance;
+            uow.DeletedObjects[managed.Id] = managed;
             DropReferences(instance);
-            uow.DirtyObjects[instance] = null; //clear object from dirty list
+            uow.DirtyObjects[managed.Id] = null; //clear object from dirty list
             string filePath = dbPath + @"\" + managed.Id.ToString () +".txt";
             if (System.IO.File.Exists (filePath))
             {
@@ -226,7 +237,7 @@ namespace NObjectStore
 
         internal bool IsLoaded(string p)
         {
-            return uow.Objects.Contains (p);
+            return uow.Objects.ContainsKey (p);
         }
 
         internal static void NotifyUnload(string id)

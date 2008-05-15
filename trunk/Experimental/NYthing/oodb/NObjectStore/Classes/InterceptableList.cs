@@ -5,8 +5,7 @@ using System.Collections;
 
 namespace NObjectStore
 {
-    [Serializable]
-    public class InterceptableList<T> : IList<T> , IPersistentList
+    public class PersistentList<T> : IList<T> , IPersistentList
     {
 
         private ArrayList list = new ArrayList();
@@ -146,6 +145,11 @@ namespace NObjectStore
             {
                 owner = value;
             }
+        }
+
+        public IList GetRawData()
+        {
+            return list;
         }
 
         #endregion

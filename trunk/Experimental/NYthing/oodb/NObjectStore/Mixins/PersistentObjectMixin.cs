@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using Puzzle.NAspect.Framework.Aop;
 using System.Collections;
+using Puzzle.NAspect.Framework;
 
 namespace NObjectStore
 {
     public class PersistentObjectMixin : IPersistentObject , IProxyAware
     {
+
+        private IPersistentObject target;
+        public string Id { get; set; }
+        public Context Context { get; set; }
+
         public PersistentObjectMixin()
         {
         }
@@ -16,28 +22,16 @@ namespace NObjectStore
         {
             if (Context != null)
             {
-                Context.NotifyUnload(id);
+                Context.NotifyUnload(Id);
             }
+        }
+        
+        public void SetProxy(IAopProxy target)
+        {
+            this.target = (IPersistentObject)target;
         }
 
-        private object target;
-        public void SetProxy(Puzzle.NAspect.Framework.IAopProxy target)
-        {
-            this.target = target;
-        }
 
-        private string id;
-        public string Id
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-            }
-        }
 
         public object GetPropertyValue(string property)
         {
@@ -51,32 +45,35 @@ namespace NObjectStore
             return res;
         }
 
-        private Hashtable properties = new Hashtable();
+        private PropertyDictionary properties = new PropertyDictionary();
         public void SetReference(string property, object value)
         {
             if (Mute)
                 return;
 
             //drop old references
-            if (properties[property] is PersistentId)
+            object currentValue = null;
+            properties.TryGetValue(property, out currentValue);
+
+            if (currentValue is PersistentId)
             {
-                PersistentId id = (PersistentId)properties[property];
-                if (context.IsLoaded(id.Id))
+                PersistentId id = (PersistentId)currentValue;
+                if (Context.IsLoaded(id.Id))
                 {
-                    object oldRef = context.Get(id.Id);                    
+                    IPersistentObject oldRef = Context.Get(id.Id);                    
                     ObjectReference reference = new ObjectReference();
                     reference.Property = property;
-                    reference.ObjectId = ((IPersistentObject)target).Id;
+                    reference.ObjectId = target.Id;
                     ((IPersistentObject)oldRef).RemoveReference(reference);
                 }
             }
             
             //create new reference
             if (value is IPersistentObject)
-            {
+            {                
                 ObjectReference reference = new ObjectReference();
                 reference.Property = property;
-                reference.ObjectId = ((IPersistentObject)target).Id;
+                reference.ObjectId = target.Id;
                 ((IPersistentObject)value).AddReference(reference);
 
                 PersistentId id = new PersistentId();
@@ -87,18 +84,7 @@ namespace NObjectStore
             properties[property] = value;
         }
 
-        private Context context;
-        public Context Context
-        {
-            get
-            {
-                return context;
-            }
-            set
-            {
-                context = value;
-            }
-        }
+        
 
         private Hashtable unloadedProperties = new Hashtable();
         public bool IsUnloaded(string property)
@@ -160,45 +146,35 @@ namespace NObjectStore
 
         public string Serialize()
         {
-            Hashtable ht = new Hashtable();
-            foreach (DictionaryEntry de in properties)
+            var persistentProperties = new PropertyDictionary();
+            foreach (var entry in properties)
             {
-                if ((string)de.Key == "Initializing")
+                if ((string)entry.Key == "Initializing")
                     continue;
 
-                if ((string)de.Key == "Mute")
+                if ((string)entry.Key == "Mute")
                     continue;
 
-                if ((string)de.Key == "Context")
+                if ((string)entry.Key == "Context")
                     continue;
 
-                if ((string)de.Key == "Id")
+                if ((string)entry.Key == "Id")
                     continue;
 
-                ht.Add(de.Key, de.Value);
+                persistentProperties.Add(entry.Key, entry.Value);
             }
 
             SerializedObject so = new SerializedObject();
-            so.Data = ht;
+            so.Data = persistentProperties;
             so.Type = target.GetType().BaseType;
 
-            return SerializedObject.Serialize (so) ;
+            return JSONSerializer.Serialize (so) ;
         }
 
        
     }
 
-    [Serializable]
-    public class PersistentId
-    {
-        private string id;
-
-        public string Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
-    }
+    
 
     public class ObjectReference
     {

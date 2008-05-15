@@ -52,7 +52,7 @@ namespace NObjectStore
         private static void InjectInterceptableList(IPersistentObject target, PropertyInfo property, Type propertyType)
         {
             Type subType = propertyType.GetGenericArguments()[0];
-            Type genericType = typeof(InterceptableList<>).MakeGenericType(subType);
+            Type genericType = typeof(PersistentList<>).MakeGenericType(subType);
             Object instance = Activator.CreateInstance(genericType);
             property.SetValue(target, instance, null);
 

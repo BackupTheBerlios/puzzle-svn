@@ -5,40 +5,40 @@ using System.Collections;
 
 namespace NObjectStore
 {
-    class UnitOfWork
+    public class UnitOfWork
     {
         public UnitOfWork()
         {
-            deletedObjects = new Hashtable();
-            objects = new Hashtable();
-            newObjects = new ArrayList();
-            dirtyObjects = new Hashtable();
+            deletedObjects = new Dictionary<string, IPersistentObject>();
+            objects = new Dictionary<string, WeakReference>();
+            newObjects = new List<object>();
+            dirtyObjects = new Dictionary<string, IPersistentObject>();
         }
 
-        private Hashtable deletedObjects;
+        private IDictionary<string, IPersistentObject> deletedObjects;
 
-        public Hashtable DeletedObjects
+        public IDictionary<string, IPersistentObject> DeletedObjects
         {
             get { return deletedObjects; }
         }
 
-        private Hashtable dirtyObjects;
+        private IDictionary<string, IPersistentObject> dirtyObjects;
 
-        public Hashtable DirtyObjects
+        public IDictionary<string, IPersistentObject> DirtyObjects
         {
             get { return dirtyObjects; }
         }
 
-        private Hashtable objects;
+        private IDictionary<string, WeakReference> objects;
 
-        public Hashtable Objects
+        public IDictionary<string, WeakReference> Objects
         {
             get { return objects; }
         }
 
-        private ArrayList newObjects;
+        private IList<object> newObjects;
 
-        public ArrayList NewObjects
+        public IList<object> NewObjects
         {
             get { return newObjects; }
         }

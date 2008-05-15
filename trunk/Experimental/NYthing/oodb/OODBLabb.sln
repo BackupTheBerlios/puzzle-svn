@@ -1,17 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{926BE5AD-8518-4394-943B-269407C04F45}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OODBLabb", "OODBLabb\OODBLabb.csproj", "{974E83E9-1AAF-4EA0-96A3-DCCE5CECFE18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NObjectStore", "NObjectStore\NObjectStore.csproj", "{C790AA4A-AF55-42F5-B2DB-2672228B3B2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDM", "MyDM\MyDM.csproj", "{BC4D0C07-5F2D-487C-AA1D-8D5B71807A1A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{926BE5AD-8518-4394-943B-269407C04F45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework.NET 3.5", "..\..\..\NAspect\Framework\Puzzle.NAspect.Framework.NET 3.5.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NAspect.Framework.NET 2.0", "..\..\..\..\Puzzle\NAspect\Framework\Puzzle.NAspect.Framework.NET 2.0.csproj", "{D08F9A33-6D4E-43E9-86F2-8E79EC115B9E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NCore.Framework NET 2.0", "..\..\..\..\Puzzle\NCore\Framework\Puzzle.NCore.Framework NET 2.0.csproj", "{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle.NCore.Framework NET 3.5", "..\..\..\NCore\Framework\Puzzle.NCore.Framework NET 3.5.csproj", "{5FB1569E-253E-42A7-A4E8-B4651FC6DCA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NObjectStore;
 using MyDM;
+using System.Linq;
 
 namespace OODBLabb
 {
@@ -13,9 +14,26 @@ namespace OODBLabb
             Context ctx = new Context(@"\DbFiles");
 
 
-            Company company = ctx.Get<Company>("Company.Compona");
+            Company compona = ctx.CreateNamed<Company>("Company.Compona");
+            compona.Name = "Compona";
+
+            Employee roger = ctx.CreateNamed<Employee>("Employee.Roger");
+            compona.Employees.Add(roger);
+
+            var query = from c in ctx.AllLoaded<Company>()
+                        where c.Name.StartsWith ("C")
+                        select c;
+
+            foreach (Company c in query)
+            {
+                Console.WriteLine(c.Name);
+            }
+
+            ctx.Commit();
+
+            /*Company company = ctx.Get<Company>("Company.Compona");
                 
-                /*ctx.CreateNamed<Company>("Company.Compona");
+                
 
             company.Name = "gnupe";
 
@@ -29,14 +47,14 @@ namespace OODBLabb
 
                 */
 
-            for (int i=0;i<company.Employees.Count;i++)
-            {
-                Employee emp = company.Employees[i];            
-                Console.WriteLine("Name {0}", emp.Name);
-                emp.Name += i.ToString();
-            }
+            //for (int i=0;i<company.Employees.Count;i++)
+            //{
+            //    Employee emp = company.Employees[i];            
+            //    Console.WriteLine("Name {0}", emp.Name);
+            //    emp.Name += i.ToString();
+            //}
 
-            ctx.Commit();
+            //ctx.Commit();
 
 
 
