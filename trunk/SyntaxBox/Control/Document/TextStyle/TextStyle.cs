@@ -184,13 +184,16 @@ namespace Puzzle.SourceCode
 
         public object Clone()
         {
-            var ts = new TextStyle();
-            ts.BackColor = BackColor;
-            ts.Bold = Bold;
-            ts.ForeColor = ForeColor;
-            ts.Italic = Italic;
-            ts.Underline = Underline;
-            ts.Name = Name;
+            var ts = new TextStyle
+                     {
+                         //TODO: verify if this actually works
+                         BackColor = BackColor,
+                         Bold = Bold,
+                         ForeColor = ForeColor,
+                         Italic = Italic,
+                         Underline = Underline,
+                         Name = Name
+                     };
             return ts;
         }
 

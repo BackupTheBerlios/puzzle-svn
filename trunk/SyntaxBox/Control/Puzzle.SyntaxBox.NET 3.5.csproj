@@ -226,6 +226,8 @@
     <Compile Include="Document\Parser\IParser.cs" />
     <Compile Include="Document\Parser\ParserEventHandler.cs" />
     <Compile Include="Document\Parser\ParseTools.cs" />
+    <Compile Include="Document\Parser\ScanResultSegment.cs" />
+    <Compile Include="Document\Parser\ScanResultWord.cs" />
     <Compile Include="Document\Pattern\Pattern.cs" />
     <Compile Include="Document\Pattern\PatternCollection.cs" />
     <Compile Include="Document\Pattern\PatternList.cs" />

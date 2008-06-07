@@ -37,15 +37,15 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="SyntaxFile"></param>
-        /// <param name="Separators"></param>
-        void Init(string SyntaxFile, string Separators);
+        /// <param name="syntaxFile"></param>
+        /// <param name="separators"></param>
+        void Init(string syntaxFile, string separators);
 
         /// <summary>
-        /// Initializes the parser with a spcified SyntaxDefinition object
+        /// Initializes the parser with a spcified syntaxDefinition object
         /// </summary>
-        /// <param name="SyntaxDefinition">The Language object to assign to the parser</param>
-        void Init(SyntaxDefinition SyntaxDefinition);
+        /// <param name="syntaxDefinition">The Language object to assign to the parser</param>
+        void Init(SyntaxDefinition syntaxDefinition);
 
         /// <summary>
         /// Called by the SyntaxDocument object when a row should be parsed
