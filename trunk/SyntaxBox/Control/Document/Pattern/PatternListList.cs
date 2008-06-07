@@ -32,14 +32,14 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// 
         /// </summary>
-        public BlockType Parent;
+        public SpanDefinition Parent;
 
         /// <summary>
         /// 
         /// </summary>
         public PatternListList() {}
 
-        public PatternListList(BlockType parent)
+        public PatternListList(SpanDefinition parent)
         {
             Parent = parent;
         }

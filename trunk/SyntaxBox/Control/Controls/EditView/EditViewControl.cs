@@ -765,11 +765,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             Caret.MoveDown(false);
                             Caret.CurrentRow.Parse(false);
                             Caret.CurrentRow.Parse(true);
-                            Caret.CurrentRow.StartSegment.StartRow.Parse(false);
-                            Caret.CurrentRow.StartSegment.StartRow.Parse(true);
+                            Caret.CurrentRow.startSpan.StartRow.Parse(false);
+                            Caret.CurrentRow.startSpan.StartRow.Parse(true);
 
                             string prev = "\t" +
-                                          Caret.CurrentRow.StartSegment.StartRow.GetVirtualLeadingWhitespace();
+                                          Caret.CurrentRow.startSpan.StartRow.GetVirtualLeadingWhitespace();
 
                             string indent = Caret.CurrentRow.PrevRow.GetLeadingWhitespace();
                             if (indent.Length < prev.Length)
@@ -833,11 +833,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     Row xtr = Caret.CurrentRow;
 
-                    if (xtr.FirstNonWsWord == xtr.Expansion_EndSegment.EndWord)
+                    if (xtr.FirstNonWsWord == xtr.expansion_EndSpan.EndWord)
                     {
                         //int j=xtr.Expansion_StartRow.StartWordIndex;
                         string indent1 =
-                            xtr.StartSegment.StartWord.Row.GetVirtualLeadingWhitespace();
+                            xtr.startSpan.StartWord.Row.GetVirtualLeadingWhitespace();
                         var tr = new TextRange
                                  {
                                      FirstColumn = 0,
@@ -3083,11 +3083,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (e.X >= r2.Expansion_PixelEnd && r2.IsCollapsed)
                     {
-                        if (r2.Expansion_StartSegment != null)
+                        if (r2.expansion_StartSpan != null)
                         {
-                            if (r2.Expansion_StartSegment.StartRow != null &&
-                                r2.Expansion_StartSegment.EndRow != null &&
-                                r2.Expansion_StartSegment.Expanded == false)
+                            if (r2.expansion_StartSpan.StartRow != null &&
+                                r2.expansion_StartSpan.EndRow != null &&
+                                r2.expansion_StartSpan.Expanded == false)
                             {
                                 if (!IsOverSelection(e.X, e.Y))
                                 {
@@ -3169,7 +3169,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 else
                 {
                     if (row != null)
-                        if (row.Expansion_StartSegment != null)
+                        if (row.expansion_StartSpan != null)
                         {
                             Caret.SetPos(new TextPoint(0, pos.Y));
                             Selection.ClearSelection();
@@ -3287,17 +3287,17 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                 // ROB: Added check for Collapsed tooltips.
                                 if (CollapsedBlockTooltipsEnabled)
                                 {
-                                    if (r.Expansion_StartSegment != null)
+                                    if (r.expansion_StartSpan != null)
                                     {
-                                        if (r.Expansion_StartSegment.StartRow != null &&
-                                            r.Expansion_StartSegment.EndRow != null &&
-                                            r.Expansion_StartSegment.Expanded == false)
+                                        if (r.expansion_StartSpan.StartRow != null &&
+                                            r.expansion_StartSpan.EndRow != null &&
+                                            r.expansion_StartSpan.Expanded == false)
                                         {
                                             string t = "";
                                             int j = 0;
-                                            for (int i = r.Expansion_StartSegment.StartRow.Index;
+                                            for (int i = r.expansion_StartSpan.StartRow.Index;
                                                  i <=
-                                                 r.Expansion_StartSegment.EndRow.Index;
+                                                 r.expansion_StartSpan.EndRow.Index;
                                                  i++)
                                             {
                                                 if (j > 0)
@@ -3591,11 +3591,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (MouseX >= r2.Expansion_PixelEnd && r2.IsCollapsed)
                     {
-                        if (r2.Expansion_StartSegment != null)
+                        if (r2.expansion_StartSpan != null)
                         {
-                            if (r2.Expansion_StartSegment.StartRow != null &&
-                                r2.Expansion_StartSegment.EndRow != null &&
-                                r2.Expansion_StartSegment.Expanded == false)
+                            if (r2.expansion_StartSpan.StartRow != null &&
+                                r2.expansion_StartSpan.EndRow != null &&
+                                r2.expansion_StartSpan.Expanded == false)
                             {
                                 r2.Expanded = true;
                                 Document.ResetVisibleRows();

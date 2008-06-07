@@ -16,7 +16,7 @@
 //		/// Required designer variable.
 //		/// </summary>
 //		/// 
-//		private Hashtable						Blocks=new Hashtable ();
+//		private Hashtable						SpanDefinitions=new Hashtable ();
 //		private Hashtable						Styles=new Hashtable ();
 //
 //		private System.ComponentModel.Container components = null;
@@ -56,15 +56,15 @@
 //			mOwner=Owner;
 //			lstBlocks.Items.Clear ();
 //
-//			FillTree(Owner.Document.Parser.SyntaxDefinition.MainBlock);
+//			FillTree(Owner.Document.Parser.SyntaxDefinition.mainSpanDefinition);
 //		}
 //
-//		public void FillTree(BlockType Block)
+//		public void FillTree(spanDefinition Block)
 //		{
-//			if (Blocks[Block]!=null)
+//			if (SpanDefinitions[Block]!=null)
 //				return;
 //
-//			Blocks.Add (Block,Block);	
+//			SpanDefinitions.Add (Block,Block);	
 //			AddStyle(Block.Style);
 //			foreach (PatternList pl in Block.KeywordsList)
 //			{
@@ -76,7 +76,7 @@
 //			}
 //		
 //
-//			foreach (BlockType ChildBlock in Block.ChildBlocks)
+//			foreach (spanDefinition ChildBlock in Block.ChildBlocks)
 //			{
 //				FillTree(ChildBlock);
 //			}

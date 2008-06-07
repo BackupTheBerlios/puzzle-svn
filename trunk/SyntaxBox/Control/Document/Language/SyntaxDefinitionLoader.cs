@@ -20,10 +20,9 @@ namespace Puzzle.SourceCode
     /// </summary>
     public class SyntaxDefinitionLoader
     {
-        private Hashtable blocks = new Hashtable();
-        private Hashtable styles = new Hashtable();
+        private Hashtable spanDefinitionLookup = new Hashtable();
+        private Hashtable styleLookup = new Hashtable();
         private SyntaxDefinition syntaxDefinition = new SyntaxDefinition();
-        //protected BlockType		syntaxDefinition.MainBlock=null;
 
 
         /// <summary>
@@ -33,8 +32,8 @@ namespace Puzzle.SourceCode
         /// <returns>SyntaxDefinition object</returns>
         public SyntaxDefinition Load(string File)
         {
-            styles = new Hashtable();
-            blocks = new Hashtable();
+            styleLookup = new Hashtable();
+            spanDefinitionLookup = new Hashtable();
             syntaxDefinition = new SyntaxDefinition();
 
             var xmlDocument = new XmlDocument();
@@ -52,15 +51,15 @@ namespace Puzzle.SourceCode
         /// <returns></returns>
         public SyntaxDefinition Load(string File, string Separators)
         {
-            styles = new Hashtable();
-            blocks = new Hashtable();
+            styleLookup = new Hashtable();
+            spanDefinitionLookup = new Hashtable();
             syntaxDefinition = new SyntaxDefinition {Separators = Separators};
 
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(File);
             ReadLanguageDefinition(xmlDocument);
 
-            if (syntaxDefinition.MainBlock == null)
+            if (syntaxDefinition.mainSpanDefinition == null)
             {
                 throw new Exception("no main block found in syntax");
             }
@@ -75,15 +74,15 @@ namespace Puzzle.SourceCode
         /// <returns></returns>
         public SyntaxDefinition LoadXML(string XML)
         {
-            styles = new Hashtable();
-            blocks = new Hashtable();
+            styleLookup = new Hashtable();
+            spanDefinitionLookup = new Hashtable();
             syntaxDefinition = new SyntaxDefinition();
 
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(XML);
             ReadLanguageDefinition(xmlDocument);
 
-            if (syntaxDefinition.MainBlock == null)
+            if (syntaxDefinition.mainSpanDefinition == null)
             {
                 throw new Exception("no main block found in syntax");
             }
@@ -113,7 +112,7 @@ namespace Puzzle.SourceCode
             }
 
             syntaxDefinition.Name = Name;
-            syntaxDefinition.MainBlock = GetBlock(StartBlock);
+            syntaxDefinition.mainSpanDefinition = GetBlock(StartBlock);
 
             foreach (XmlNode n in node.ChildNodes)
             {
@@ -178,7 +177,7 @@ namespace Puzzle.SourceCode
             }
 
             //create block object here
-            BlockType bl = GetBlock(Name);
+            SpanDefinition bl = GetBlock(Name);
             bl.BackColor = BackColor;
             bl.Name = Name;
             bl.MultiLine = IsMultiline;
@@ -287,11 +286,11 @@ namespace Puzzle.SourceCode
                             bl.ScopePatterns.Add(scope);
                             if (spawnStart != "")
                             {
-                                scope.SpawnBlockOnStart = GetBlock(spawnStart);
+                                scope.spawnSpanOnStart = GetBlock(spawnStart);
                             }
                             if (spawnEnd != "")
                             {
-                                scope.SpawnBlockOnEnd = GetBlock(spawnEnd);
+                                scope.spawnSpanOnEnd = GetBlock(spawnEnd);
                             }
                         }
                     }
@@ -542,25 +541,25 @@ namespace Puzzle.SourceCode
         //done
         private TextStyle GetStyle(string Name)
         {
-            if (styles[Name] == null)
+            if (styleLookup[Name] == null)
             {
                 var s = new TextStyle();
-                styles.Add(Name, s);
+                styleLookup.Add(Name, s);
             }
 
-            return (TextStyle) styles[Name];
+            return (TextStyle) styleLookup[Name];
         }
 
         //done
-        private BlockType GetBlock(string Name)
+        private SpanDefinition GetBlock(string Name)
         {
-            if (blocks[Name] == null)
+            if (spanDefinitionLookup[Name] == null)
             {
-                var b = new BlockType(syntaxDefinition);
-                blocks.Add(Name, b);
+                var b = new SpanDefinition(syntaxDefinition);
+                spanDefinitionLookup.Add(Name, b);
             }
 
-            return (BlockType) blocks[Name];
+            return (SpanDefinition) spanDefinitionLookup[Name];
         }
 
         //done

@@ -20,9 +20,9 @@ namespace Puzzle.SourceCode
     /// </summary>
     public sealed class ScopeList : List<Scope>
     {
-        public BlockType Parent { get; private set; }
+        public SpanDefinition Parent { get; private set; }
 
-        public ScopeList(BlockType parent)
+        public ScopeList(SpanDefinition parent)
         {
             Parent = parent;
         }

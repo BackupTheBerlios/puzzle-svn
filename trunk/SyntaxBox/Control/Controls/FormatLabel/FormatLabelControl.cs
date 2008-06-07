@@ -26,7 +26,7 @@ namespace Puzzle.Windows.Forms.CoreLib
     /// </summary>
     public class FormatLabelControl : BaseControl
     {
-        private readonly Hashtable _Fonts = new Hashtable();
+        private readonly Dictionary<string, GDIFont> _Fonts = new Dictionary<string, GDIFont>();
         private Element _ActiveElement;
         private Element[] _Elements;
         private bool _HasImageError;
@@ -833,12 +833,13 @@ namespace Puzzle.Windows.Forms.CoreLib
 
         private GDIFont GetFont(Font font)
         {
-            var gf = (GDIFont) _Fonts[GetFontKey(font)];
-            if (gf == null)
+            GDIFont gf = null;
+            if (!_Fonts.TryGetValue(GetFontKey(font),out gf))            
             {
                 gf = new GDIFont(font.Name, font.Size, font.Bold, font.Italic, font.Underline, false);
                 _Fonts[GetFontKey(font)] = gf;
             }
+
             return gf;
         }
 

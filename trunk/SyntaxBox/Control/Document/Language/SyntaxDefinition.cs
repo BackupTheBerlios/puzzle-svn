@@ -8,7 +8,6 @@
 // *
 // *
 
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Puzzle.SourceCode
@@ -31,7 +30,7 @@ namespace Puzzle.SourceCode
 
     /// <summary>
     /// The SyntaxDefinition class describes a language.<br/>
-    /// It consists of a MainBlock , which is the start BlockType of the SyntaxDefinition<br/>
+    /// It consists of a mainSpanDefinition , which is the start spanDefinition of the SyntaxDefinition<br/>
     /// It also have a list of filetypes that is valid for this language<br/>
     /// </summary>
     /// <example>
@@ -66,8 +65,8 @@ namespace Puzzle.SourceCode
 
         #endregion
 
-        private readonly Hashtable _Blocks = new Hashtable();
-        private readonly Hashtable _Styles = new Hashtable();
+        private readonly Dictionary<SpanDefinition, SpanDefinition> spanDefinitionLookup = new Dictionary<SpanDefinition, SpanDefinition>();
+        private readonly Dictionary<TextStyle, TextStyle> styleLookup = new Dictionary<TextStyle, TextStyle>();
 
         /// <summary>
         /// List containing the valid filetypes for this language
@@ -75,9 +74,9 @@ namespace Puzzle.SourceCode
         public List<FileType> FileTypes = new List<FileType>();
 
         /// <summary>
-        /// The start BlockType for this language
+        /// The start spanDefinition for this language
         /// </summary>
-        public BlockType MainBlock;
+        public SpanDefinition mainSpanDefinition;
 
         /// <summary>
         /// Name of the SyntaxDefinition
@@ -87,20 +86,19 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// Gets all BlockTypes in a given language.
         /// </summary>
-        public BlockType[] Blocks
+        public SpanDefinition[] SpanDefinitions
         {
             get
             {
-                _Blocks.Clear();
-                FillBlocks(MainBlock);
-                var blocks = new BlockType[_Blocks.Values.Count];
+                spanDefinitionLookup.Clear();
+                FillBlocks(mainSpanDefinition);
+                var blocks = new SpanDefinition[spanDefinitionLookup.Values.Count];
                 int i = 0;
-                foreach (BlockType bt in _Blocks.Values)
+                foreach (SpanDefinition bt in spanDefinitionLookup.Values)
                 {
                     blocks[i] = bt;
                     i++;
                 }
-
 
                 return blocks;
             }
@@ -110,34 +108,34 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                _Styles.Clear();
-                BlockType[] blocks = Blocks;
-                foreach (BlockType bt in blocks)
+                styleLookup.Clear();
+                SpanDefinition[] spanDefinitions = SpanDefinitions;
+                foreach (SpanDefinition bt in spanDefinitions)
                 {
-                    _Styles[bt.Style] = bt.Style;
+                    styleLookup[bt.Style] = bt.Style;
 
                     foreach (Scope sc in bt.ScopePatterns)
                     {
                         if (sc.Style != null)
-                            _Styles[sc.Style] = sc.Style;
+                            styleLookup[sc.Style] = sc.Style;
                     }
 
                     foreach (PatternList pl in bt.KeywordsList)
                     {
                         if (pl.Style != null)
-                            _Styles[pl.Style] = pl.Style;
+                            styleLookup[pl.Style] = pl.Style;
                     }
 
                     foreach (PatternList pl in bt.OperatorsList)
                     {
                         if (pl.Style != null)
-                            _Styles[pl.Style] = pl.Style;
+                            styleLookup[pl.Style] = pl.Style;
                     }
                 }
 
-                var styles = new TextStyle[_Styles.Values.Count];
+                var styles = new TextStyle[styleLookup.Values.Count];
                 int i = 0;
-                foreach (TextStyle st in _Styles.Values)
+                foreach (TextStyle st in styleLookup.Values)
                 {
                     styles[i] = st;
                     i++;
@@ -148,8 +146,8 @@ namespace Puzzle.SourceCode
 
         public void UpdateLists()
         {
-            BlockType[] blocks = Blocks;
-            foreach (BlockType block in blocks)
+            SpanDefinition[] spanDefinitions = SpanDefinitions;
+            foreach (SpanDefinition block in spanDefinitions)
             {
                 block.Parent = this;
                 block.ResetLookupTable();
@@ -200,56 +198,46 @@ namespace Puzzle.SourceCode
 
         public void MergeByMainBlock(SyntaxDefinition Target)
         {
-            BlockType[] blocks = Blocks;
-            foreach (BlockType bt in blocks)
+            SpanDefinition[] spanDefinitions = SpanDefinitions;
+            foreach (SpanDefinition bt in spanDefinitions)
             {
-                bt.ChildBlocks.Insert(0, Target.MainBlock);
+                bt.ChildBlocks.Insert(0, Target.mainSpanDefinition);
             }
         }
 
         public void MergeByChildBlocks(SyntaxDefinition Target)
         {
-            BlockType[] blocks = Blocks;
-            foreach (BlockType bt in blocks)
+            SpanDefinition[] spanDefinitions = SpanDefinitions;
+            foreach (SpanDefinition bt in spanDefinitions)
             {
-                for (int i = Target.MainBlock.ChildBlocks.Count - 1; i >= 0; i--)
+                for (int i = Target.mainSpanDefinition.ChildBlocks.Count - 1; i >= 0; i--)
                 {
-                    BlockType child = Target.MainBlock.ChildBlocks[i];
+                    SpanDefinition child = Target.mainSpanDefinition.ChildBlocks[i];
                     bt.ChildBlocks.Insert(0, child);
                 }
             }
         }
 
 
-        private void FillBlocks(BlockType bt)
+        private void FillBlocks(SpanDefinition bt)
         {
             if (bt == null)
                 return;
 
-            if (_Blocks[bt] != null)
+            if (spanDefinitionLookup.ContainsKey(bt))
                 return;
 
-            _Blocks[bt] = bt;
+            spanDefinitionLookup.Add(bt, bt);
 
-            foreach (BlockType btc in bt.ChildBlocks)
+            foreach (SpanDefinition btc in bt.ChildBlocks)
             {
                 FillBlocks(btc);
             }
             foreach (Scope sc in bt.ScopePatterns)
             {
-                FillBlocks(sc.SpawnBlockOnEnd);
-                FillBlocks(sc.SpawnBlockOnStart);
+                FillBlocks(sc.spawnSpanOnEnd);
+                FillBlocks(sc.spawnSpanOnStart);
             }
         }
-
-
-        //		/// <summary>
-        //		/// Serializes the language object into an xml string.
-        //		/// </summary>
-        //		/// <returns></returns>
-        //		public string ToXML()
-        //		{
-        //			return "";
-        //		}
     }
 }

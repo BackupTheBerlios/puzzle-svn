@@ -55,12 +55,12 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// The first segment that terminates on this row.
         /// </summary>
-        public Segment EndSegment;
+        public Span endSpan;
 
         /// <summary>
         /// Segments that ends in this row
         /// </summary>
-        public SegmentList EndSegments = new SegmentList();
+        public SpanList endSpans = new SpanList();
 
         /// <summary>
         /// For public use only
@@ -70,7 +70,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// 
         /// </summary>
-        public Segment Expansion_EndSegment;
+        public Span expansion_EndSpan;
 
         /// <summary>
         /// For public use only
@@ -90,7 +90,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// 
         /// </summary>
-        public Segment Expansion_StartSegment;
+        public Span expansion_StartSpan;
 
         public WordList FormattedWords = new WordList();
 
@@ -129,12 +129,12 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// The first collapsable segment on this row.
         /// </summary>
-        public Segment StartSegment;
+        public Span startSpan;
 
         /// <summary>
         /// Segments that start on this row
         /// </summary>
-        public SegmentList StartSegments = new SegmentList();
+        public SpanList startSpans = new SpanList();
 
         /// <summary>
         /// Object tag for storage of custom user data..
@@ -189,7 +189,7 @@ namespace Puzzle.SourceCode
             get
             {
                 int i = 0;
-                Segment s = StartSegment;
+                Span s = startSpan;
                 while (s != null)
                 {
                     if (s.Scope != null && s.Scope.CauseIndent)
@@ -211,9 +211,9 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                if (StartSegment.EndRow == this)
+                if (startSpan.EndRow == this)
                 {
-                    if (StartSegment.Scope.CauseIndent)
+                    if (startSpan.Scope.CauseIndent)
                         return true;
                 }
 
@@ -353,13 +353,13 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                if (Expansion_StartSegment == null)
+                if (expansion_StartSpan == null)
                     return 0;
 
-                //				if (this.Expansion_StartSegment.StartRow != this)
+                //				if (this.expansion_StartSpan.StartRow != this)
                 //					return 0;
 
-                Word w = Expansion_StartSegment.StartWord;
+                Word w = expansion_StartSpan.StartWord;
 
                 int i = 0;
                 foreach (Word wo in this)
@@ -403,12 +403,12 @@ namespace Puzzle.SourceCode
                 int i = Document.VisibleRows.IndexOf(this);
                 if (i == -1)
                 {
-                    if (StartSegment != null)
+                    if (startSpan != null)
                     {
-                        if (StartSegment.StartRow != null)
+                        if (startSpan.StartRow != null)
                         {
-                            if (StartSegment.StartRow != this)
-                                return StartSegment.StartRow.VisibleIndex;
+                            if (startSpan.StartRow != this)
+                                return startSpan.StartRow.VisibleIndex;
                             else
                                 return Index;
                         }
@@ -483,8 +483,8 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                if (Expansion_StartSegment != null)
-                    if (Expansion_StartSegment.Expanded == false)
+                if (expansion_StartSpan != null)
+                    if (expansion_StartSpan.Expanded == false)
                         return true;
                 return false;
             }
@@ -497,8 +497,8 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                if (Expansion_EndSegment != null)
-                    if (Expansion_EndSegment.Expanded == false)
+                if (expansion_EndSpan != null)
+                    if (expansion_EndSpan.Expanded == false)
                         return true;
                 return false;
             }
@@ -512,8 +512,8 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                return (Expansion_StartSegment != null && Expansion_StartSegment.EndRow != null &&
-                        Document.IndexOf(Expansion_StartSegment.EndRow) != 0);
+                return (expansion_StartSpan != null && expansion_StartSpan.EndRow != null &&
+                        Document.IndexOf(expansion_StartSpan.EndRow) != 0);
             }
         }
 
@@ -526,7 +526,7 @@ namespace Puzzle.SourceCode
             {
                 if (CanFold)
                 {
-                    return (Expansion_StartSegment.Expanded);
+                    return (expansion_StartSpan.Expanded);
                 }
                 else
                 {
@@ -537,17 +537,17 @@ namespace Puzzle.SourceCode
             {
                 if (CanFold)
                 {
-                    Expansion_StartSegment.Expanded = value;
+                    expansion_StartSpan.Expanded = value;
                 }
             }
         }
 
         public string ExpansionText
         {
-            get { return Expansion_StartSegment.Scope.ExpansionText; }
+            get { return expansion_StartSpan.Scope.ExpansionText; }
             set
             {
-                Scope oScope = Expansion_StartSegment.Scope;
+                Scope oScope = expansion_StartSpan.Scope;
                 var oNewScope = new Scope();
                 oNewScope.CaseSensitive = oScope.CaseSensitive;
                 oNewScope.CauseIndent = oScope.CauseIndent;
@@ -555,12 +555,12 @@ namespace Puzzle.SourceCode
                 oNewScope.EndPatterns = oScope.EndPatterns;
                 oNewScope.NormalizeCase = oScope.NormalizeCase;
                 oNewScope.Parent = oScope.Parent;
-                oNewScope.SpawnBlockOnEnd = oScope.SpawnBlockOnEnd;
-                oNewScope.SpawnBlockOnStart = oScope.SpawnBlockOnStart;
+                oNewScope.spawnSpanOnEnd = oScope.spawnSpanOnEnd;
+                oNewScope.spawnSpanOnStart = oScope.spawnSpanOnStart;
                 oNewScope.Start = oScope.Start;
                 oNewScope.Style = oScope.Style;
                 oNewScope.ExpansionText = value;
-                Expansion_StartSegment.Scope = oNewScope;
+                expansion_StartSpan.Scope = oNewScope;
                 Document.InvokeChange();
             }
         }
@@ -570,7 +570,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public bool CanFoldEndPart
         {
-            get { return (Expansion_EndSegment != null); }
+            get { return (expansion_EndSpan != null); }
         }
 
         /// <summary>
@@ -578,7 +578,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public bool HasExpansionLine
         {
-            get { return (EndSegment.Parent != null); }
+            get { return (endSpan.Parent != null); }
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace Puzzle.SourceCode
             get
             {
                 if (CanFold)
-                    return Expansion_StartSegment.EndRow;
+                    return expansion_StartSpan.EndRow;
                 else
                     return this;
             }
@@ -605,7 +605,7 @@ namespace Puzzle.SourceCode
             get
             {
                 if (CanFoldEndPart)
-                    return Expansion_EndSegment.StartRow;
+                    return expansion_EndSpan.StartRow;
                 else
                     return this;
             }
@@ -622,7 +622,7 @@ namespace Puzzle.SourceCode
 
                 foreach (Word w in this)
                 {
-                    if (Expansion_StartSegment == w.Segment)
+                    if (expansion_StartSpan == w.span)
                         break;
                     r.Add(w);
                 }
@@ -640,7 +640,7 @@ namespace Puzzle.SourceCode
                     {
                         if (found)
                             r.Add(w);
-                        if (w == Expansion_EndRow.Expansion_EndSegment.EndWord)
+                        if (w == Expansion_EndRow.expansion_EndSpan.EndWord)
                             found = true;
                     }
                 }
@@ -660,14 +660,14 @@ namespace Puzzle.SourceCode
                 foreach (Word w in this)
                 {
                     pos += w.Text.Length;
-                    if (w.Segment == Expansion_StartSegment)
+                    if (w.span == expansion_StartSpan)
                     {
                         str = Text.Substring(pos).Trim();
                         break;
                     }
                 }
-                if (Expansion_StartSegment.Scope.ExpansionText != "")
-                    str = Expansion_StartSegment.Scope.ExpansionText.Replace("***", str);
+                if (expansion_StartSpan.Scope.ExpansionText != "")
+                    str = expansion_StartSpan.Scope.ExpansionText.Replace("***", str);
                 return str;
             }
         }
@@ -714,7 +714,7 @@ namespace Puzzle.SourceCode
             if (RowState == RowState.NotParsed)
                 return;
 
-            Segment seg = StartSegment;
+            Span seg = startSpan;
             while (seg != null)
             {
                 seg.Expanded = true;
@@ -815,28 +815,28 @@ namespace Puzzle.SourceCode
 
         public void SetExpansionSegment()
         {
-            Expansion_StartSegment = null;
-            Expansion_EndSegment = null;
-            foreach (Segment s in StartSegments)
+            expansion_StartSpan = null;
+            expansion_EndSpan = null;
+            foreach (Span s in startSpans)
             {
-                if (!EndSegments.Contains(s))
+                if (!endSpans.Contains(s))
                 {
-                    Expansion_StartSegment = s;
+                    expansion_StartSpan = s;
                     break;
                 }
             }
 
-            foreach (Segment s in EndSegments)
+            foreach (Span s in endSpans)
             {
-                if (!StartSegments.Contains(s))
+                if (!startSpans.Contains(s))
                 {
-                    Expansion_EndSegment = s;
+                    expansion_EndSpan = s;
                     break;
                 }
             }
 
-            if (Expansion_EndSegment != null)
-                Expansion_StartSegment = null;
+            if (expansion_EndSpan != null)
+                expansion_StartSpan = null;
         }
 
         /// <summary>
@@ -1027,11 +1027,11 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// For public use only
         /// </summary>
-        /// <param name="BlockType"></param>
+        /// <param name="spanDefinition"></param>
         /// <param name="StartWord"></param>
         /// <param name="IgnoreStartWord"></param>
         /// <returns></returns>
-        public Word FindLeftWordByBlockType(BlockType BlockType, Word StartWord, bool IgnoreStartWord)
+        public Word FindLeftWordByBlockType(SpanDefinition spanDefinition, Word StartWord, bool IgnoreStartWord)
         {
             int i = StartWord.Index;
             if (IgnoreStartWord)
@@ -1040,7 +1040,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 w = this[i];
-                if (w.Segment.BlockType == BlockType && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1052,11 +1052,11 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// For public use only
         /// </summary>
-        /// <param name="BlockType"></param>
+        /// <param name="spanDefinition"></param>
         /// <param name="StartWord"></param>
         /// <param name="IgnoreStartWord"></param>
         /// <returns></returns>
-        public Word FindRightWordByBlockType(BlockType BlockType, Word StartWord, bool IgnoreStartWord)
+        public Word FindRightWordByBlockType(SpanDefinition spanDefinition, Word StartWord, bool IgnoreStartWord)
         {
             int i = StartWord.Index;
             if (IgnoreStartWord)
@@ -1065,7 +1065,7 @@ namespace Puzzle.SourceCode
             while (i < mWords.Count)
             {
                 w = this[i];
-                if (w.Segment.BlockType == BlockType && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1090,7 +1090,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 w = this[i];
-                if (w.Segment.BlockType.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1115,7 +1115,7 @@ namespace Puzzle.SourceCode
             while (i < mWords.Count)
             {
                 w = this[i];
-                if (w.Segment.BlockType.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }

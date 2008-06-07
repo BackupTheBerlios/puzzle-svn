@@ -46,7 +46,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                 if (mSyntaxDefinition == null)
                 {
                     var l = new SyntaxDefinition();
-                    l.MainBlock = new BlockType(l) {MultiLine = true};
+                    l.mainSpanDefinition = new SpanDefinition(l) {MultiLine = true};
                     mSyntaxDefinition = l;
                 }
 
@@ -158,36 +158,36 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             Row row = Document[RowIndex];
 
             //copy back the old segments to this line...
-            Segment seg = row.EndSegment;
-            Segment seg2 = Document[RowIndex + 1].StartSegment;
+            Span seg = row.endSpan;
+            Span seg2 = Document[RowIndex + 1].startSpan;
             while (seg != null)
             {
                 foreach (Word w in row)
                 {
-                    if (w.Segment == seg)
+                    if (w.span == seg)
                     {
-                        if (w.Segment.StartWord == w)
+                        if (w.span.StartWord == w)
                             seg2.StartWord = w;
 
-                        if (w.Segment.EndWord == w)
+                        if (w.span.EndWord == w)
                             seg2.EndWord = w;
 
-                        w.Segment = seg2;
+                        w.span = seg2;
                     }
                 }
 
-                if (seg == row.StartSegment)
-                    row.StartSegment = seg2;
+                if (seg == row.startSpan)
+                    row.startSpan = seg2;
 
-                if (seg == row.EndSegment)
-                    row.EndSegment = seg2;
+                if (seg == row.endSpan)
+                    row.endSpan = seg2;
 
 
-                if (row.StartSegments.IndexOf(seg) >= 0)
-                    row.StartSegments[row.StartSegments.IndexOf(seg)] = seg2;
+                if (row.startSpans.IndexOf(seg) >= 0)
+                    row.startSpans[row.startSpans.IndexOf(seg)] = seg2;
 
-                if (row.EndSegments.IndexOf(seg) >= 0)
-                    row.EndSegments[row.EndSegments.IndexOf(seg)] = seg2;
+                if (row.endSpans.IndexOf(seg) >= 0)
+                    row.endSpans[row.endSpans.IndexOf(seg)] = seg2;
 
                 seg = seg.Parent;
                 seg2 = seg2.Parent;
@@ -197,16 +197,16 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
         //om denna är true
         // så ska INTE nästa rad parse'as , utan denna ska fixas så den blir som den förra... (kopiera segment)
-        private bool IsSameButDifferent(int RowIndex, Segment OldStartSegment)
+        private bool IsSameButDifferent(int RowIndex, Span oldStartSpan)
         {
             //is this the last row ? , if so , bailout
             if (RowIndex >= Document.Count - 1)
                 return false;
 
             Row row = Document[RowIndex];
-            Segment seg = row.EndSegment;
-            Segment OldEndSegment = Document[RowIndex + 1].StartSegment;
-            Segment oseg = OldEndSegment;
+            Span seg = row.endSpan;
+            Span oldEndSpan = Document[RowIndex + 1].startSpan;
+            Span oseg = oldEndSpan;
 
             bool diff = false;
 
@@ -218,8 +218,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                     break;
                 }
 
-                //Id1+=seg.BlockType.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture);
-                if (seg.BlockType != oseg.BlockType)
+                //Id1+=seg.spanDefinition.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture);
+                if (seg.spanDefinition != oseg.spanDefinition)
                 {
                     diff = true;
                     break;
@@ -236,7 +236,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             }
 
 
-            if (diff || row.StartSegment != OldStartSegment)
+            if (diff || row.startSpan != oldStartSpan)
                 return false;
 
             return true;
@@ -244,10 +244,10 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
         #endregion
 
-        private ScanResultWord GetNextWord(string Text, Segment CurrentSegment, int
+        private ScanResultWord GetNextWord(string Text, Span currentSpan, int
                                                                                     StartPos, ref bool HasComplex)
         {
-            BlockType block = CurrentSegment.BlockType;
+            SpanDefinition spanDefinition = currentSpan.spanDefinition;
 
             #region ComplexFind
 
@@ -257,7 +257,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             var complexword = new ScanResultWord();
             if (HasComplex)
             {
-                foreach (Pattern pattern in block.ComplexPatterns)
+                foreach (Pattern pattern in spanDefinition.ComplexPatterns)
                 {
                     PatternScanResult scanres = pattern.IndexIn(Text, StartPos,
                                                                 pattern.Parent.CaseSensitive, Separators);
@@ -305,7 +305,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                     string key = Text.Substring(i, 3).ToLower
                         (CultureInfo.InvariantCulture);
                     var patterns2 = (PatternCollection)
-                                    block.LookupTable[key];
+                                    spanDefinition.LookupTable[key];
                     //ok , there are patterns that start with this char
                     if (patterns2 != null)
                     {
@@ -372,7 +372,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                 #region single char pattern
 
                 char c = Text[i];
-                var patterns = (PatternCollection) block.LookupTable[c];
+                var patterns = (PatternCollection) spanDefinition.LookupTable[c];
                 if (patterns != null)
                 {
                     //ok , there are patterns that start with this char
@@ -475,26 +475,26 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         }
 
 
-        private void ParseText(Row Row, Segment CurrentSegment, string Text)
+        private void ParseText(Row Row, Span currentSpan, string Text)
         {
             int CurrentPosition = 0;
             bool HasComplex = true;
             while (true)
             {
-                ScanResultWord Word = GetNextWord(Text, CurrentSegment, CurrentPosition,
+                ScanResultWord Word = GetNextWord(Text, currentSpan, CurrentPosition,
                                                   ref HasComplex);
 
                 if (!Word.HasContent)
                 {
                     ParseTools.AddString(Text.Substring(CurrentPosition), Row,
-                                         CurrentSegment.BlockType.Style, CurrentSegment);
+                                         currentSpan.spanDefinition.Style, currentSpan);
                     break;
                 }
                 ParseTools.AddString(Text.Substring(CurrentPosition, Word.Position -
                                                                      CurrentPosition), Row,
-                                     CurrentSegment.BlockType.Style, CurrentSegment);
+                                     currentSpan.spanDefinition.Style, currentSpan);
                 ParseTools.AddPatternString(Word.Token, Row, Word.Pattern,
-                                            Word.ParentList.Style, CurrentSegment,
+                                            Word.ParentList.Style, currentSpan,
                                             false);
                 CurrentPosition = Word.Position + Word.Token.Length;
             }
@@ -511,47 +511,47 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             //			ParseKeywords=true;
             SyntaxDocument doc = Document;
             Row Row = doc[index];
-            Segment OldEndSegment = Row.EndSegment;
-            Segment OldStartSegment = Row.StartSegment;
+            Span oldEndSpan = Row.endSpan;
+            Span oldStartSpan = Row.startSpan;
             bool Fold = !Row.IsCollapsed;
 
 
             if (Row.IsCollapsedEndPart)
             {
-                //Row.Expansion_EndSegment.Expanded = true;
-                //Row.Expansion_EndSegment.EndRow = null;
-                Row.Expansion_EndSegment.EndWord = null;
+                //Row.expansion_EndSpan.Expanded = true;
+                //Row.expansion_EndSpan.EndRow = null;
+                Row.expansion_EndSpan.EndWord = null;
             }
 
 
             //set startsegment for this row
             if (index > 0)
             {
-                Row.StartSegment = Document[index - 1].EndSegment;
+                Row.startSpan = Document[index - 1].endSpan;
             }
             else
             {
-                if (Row.StartSegment == null)
+                if (Row.startSpan == null)
                 {
-                    Row.StartSegment = new Segment(Row) {BlockType = mSyntaxDefinition.MainBlock};
+                    Row.startSpan = new Span(Row) {spanDefinition = mSyntaxDefinition.mainSpanDefinition};
                 }
             }
 
             int CurrentPosition = 0;
-            Segment CurrentSegment = Row.StartSegment;
+            Span currentSpan = Row.startSpan;
 
 
             //kör tills vi kommit till slutet av raden..
-            Row.EndSegments.Clear();
-            Row.StartSegments.Clear();
+            Row.endSpans.Clear();
+            Row.startSpans.Clear();
             Row.Clear();
             //		bool HasEndSegment=false;
 
             while (true)
             {
                 ScanResultSegment ChildSegment = GetNextChildSegment(Row,
-                                                                     CurrentSegment, CurrentPosition);
-                ScanResultSegment EndSegment = GetEndSegment(Row, CurrentSegment,
+                                                                     currentSpan, CurrentPosition);
+                ScanResultSegment EndSegment = GetEndSegment(Row, currentSpan,
                                                              CurrentPosition);
 
                 if ((EndSegment.HasContent && ChildSegment.HasContent &&
@@ -564,34 +564,34 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                     {
                         string Text = Row.Text.Substring(CurrentPosition,
                                                          EndSegment.Position - CurrentPosition);
-                        ParseText(Row, CurrentSegment, Text);
+                        ParseText(Row, currentSpan, Text);
                     }
 
-                    Segment oldseg = CurrentSegment;
-                    while (CurrentSegment != EndSegment.Segment)
+                    Span oldseg = currentSpan;
+                    while (currentSpan != EndSegment.span)
                     {
-                        Row.EndSegments.Add(CurrentSegment);
-                        CurrentSegment = CurrentSegment.Parent;
+                        Row.endSpans.Add(currentSpan);
+                        currentSpan = currentSpan.Parent;
                     }
-                    Row.EndSegments.Add(CurrentSegment);
+                    Row.endSpans.Add(currentSpan);
 
-                    TextStyle st2 = CurrentSegment.Scope.Style;
+                    TextStyle st2 = currentSpan.Scope.Style;
 
                     ParseTools.AddPatternString(EndSegment.Token, Row, EndSegment.Pattern,
-                                                st2, CurrentSegment, false);
-                    while (oldseg != EndSegment.Segment)
+                                                st2, currentSpan, false);
+                    while (oldseg != EndSegment.span)
                     {
                         oldseg.EndRow = Row;
                         oldseg.EndWord = Row[Row.Count - 1];
                         oldseg = oldseg.Parent;
                     }
 
-                    CurrentSegment.EndRow = Row;
-                    CurrentSegment.EndWord = Row[Row.Count - 1];
+                    currentSpan.EndRow = Row;
+                    currentSpan.EndWord = Row[Row.Count - 1];
 
 
-                    if (CurrentSegment.Parent != null)
-                        CurrentSegment = CurrentSegment.Parent;
+                    if (currentSpan.Parent != null)
+                        currentSpan = currentSpan.Parent;
 
                     CurrentPosition = EndSegment.Position + EndSegment.Token.Length;
                 }
@@ -603,20 +603,20 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                     {
                         string Text = Row.Text.Substring(CurrentPosition,
                                                          ChildSegment.Position - CurrentPosition);
-                        //TextStyle st=CurrentSegment.BlockType.Style;
-                        ParseText(Row, CurrentSegment, Text);
-                        //ParseTools.AddString (Text,Row,st,CurrentSegment);
+                        //TextStyle st=currentSpan.spanDefinition.Style;
+                        ParseText(Row, currentSpan, Text);
+                        //ParseTools.AddString (Text,Row,st,currentSpan);
                     }
 
 
-                    var NewSeg = new Segment
+                    var NewSeg = new Span
                                  {
-                                     Parent = CurrentSegment,
-                                     BlockType = ChildSegment.BlockType,
+                                     Parent = currentSpan,
+                                     spanDefinition = ChildSegment.spanDefinition,
                                      Scope = ChildSegment.Scope
                                  };
 
-                    Row.StartSegments.Add(NewSeg);
+                    Row.startSpans.Add(NewSeg);
 
                     TextStyle st2 = NewSeg.Scope.Style;
                     ParseTools.AddPatternString(ChildSegment.Token, Row,
@@ -625,20 +625,20 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                     NewSeg.StartWord = Row[Row.Count - 1];
 
 
-                    CurrentSegment = NewSeg;
+                    currentSpan = NewSeg;
                     CurrentPosition = ChildSegment.Position + ChildSegment.Token.Length;
 
-                    if (ChildSegment.Scope.SpawnBlockOnStart != null)
+                    if (ChildSegment.Scope.spawnSpanOnStart != null)
                     {
-                        var SpawnSeg = new Segment
+                        var SpawnSeg = new Span
                                        {
                                            Parent = NewSeg,
-                                           BlockType = ChildSegment.Scope.SpawnBlockOnStart,
+                                           spanDefinition = ChildSegment.Scope.spawnSpanOnStart,
                                            Scope = new Scope(),
                                            StartWord = NewSeg.StartWord
                                        };
-                        Row.StartSegments.Add(SpawnSeg);
-                        CurrentSegment = SpawnSeg;
+                        Row.startSpans.Add(SpawnSeg);
+                        currentSpan = SpawnSeg;
                     }
                 }
                 else
@@ -649,27 +649,27 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         {
                             //we did not find a childblock nor an endblock , just output the last pice of text
                             string Text = Row.Text.Substring(CurrentPosition);
-                            //TextStyle st=CurrentSegment.BlockType.Style;	
-                            ParseText(Row, CurrentSegment, Text);
-                            //ParseTools.AddString (Text,Row,st,CurrentSegment);
+                            //TextStyle st=currentSpan.spanDefinition.Style;	
+                            ParseText(Row, currentSpan, Text);
+                            //ParseTools.AddString (Text,Row,st,currentSpan);
                         }
                     }
                     break;
                 }
             }
 
-            while (!CurrentSegment.BlockType.MultiLine)
+            while (!currentSpan.spanDefinition.MultiLine)
             {
-                Row.EndSegments.Add(CurrentSegment);
-                CurrentSegment = CurrentSegment.Parent;
+                Row.endSpans.Add(currentSpan);
+                currentSpan = currentSpan.Parent;
             }
 
-            Row.EndSegment = CurrentSegment;
+            Row.endSpan = currentSpan;
             Row.SetExpansionSegment();
 
             Row.RowState = ParseKeywords ? RowState.AllParsed : RowState.SegmentParsed;
 
-            if (IsSameButDifferent(index, OldStartSegment))
+            if (IsSameButDifferent(index, oldStartSpan))
             {
                 MakeSame(index);
                 //if (!IsSameButDifferent(index))
@@ -677,17 +677,17 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             }
 
             if (Row.CanFold)
-                Row.Expansion_StartSegment.Expanded = Fold;
+                Row.expansion_StartSpan.Expanded = Fold;
 
             //dont flag next line as needs parsing if only parsing keywords
             if (!ParseKeywords)
             {
-                if (OldEndSegment != null)
+                if (oldEndSpan != null)
                 {
-                    if (Row.EndSegment != OldEndSegment && index <= Document.Count - 2)
+                    if (Row.endSpan != oldEndSpan && index <= Document.Count - 2)
                     {
                         //if (Row.CanFold)
-                        //	Row.Expansion_StartSegment.Expanded = true;
+                        //	Row.expansion_StartSpan.Expanded = true;
                         Document[index + 1].AddToParseQueue();
                         Document.NeedResetRows = true;
                     }
@@ -695,26 +695,26 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                 else if (index <= Document.Count - 2)
                 {
                     //if (Row.CanFold)
-                    //	Row.Expansion_StartSegment.Expanded = true;
+                    //	Row.expansion_StartSpan.Expanded = true;
                     Document[index + 1].AddToParseQueue();
                     Document.NeedResetRows = true;
                 }
             }
 
-            if (OldEndSegment != null)
+            if (oldEndSpan != null)
             {
                 //expand segment if this line dont have an end word
-                if (OldEndSegment.EndWord == null)
-                    OldEndSegment.Expanded = true;
+                if (oldEndSpan.EndWord == null)
+                    oldEndSpan.Expanded = true;
             }
         }
 
 
-        private ScanResultSegment GetEndSegment(Row Row, Segment CurrentSegment,
+        private ScanResultSegment GetEndSegment(Row Row, Span currentSpan,
                                                 int StartPos)
         {
             //this row has no text , just bail out...
-            if (StartPos >= Row.Text.Length || CurrentSegment.Scope == null)
+            if (StartPos >= Row.Text.Length || currentSpan.Scope == null)
                 return new ScanResultSegment();
 
             var Result = new ScanResultSegment {HasContent = false, IsEndSegment = false};
@@ -724,11 +724,11 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             //scan for childblocks
             //scan each scope in each childblock
 
-            Segment seg = CurrentSegment;
+            Span seg = currentSpan;
 
             while (seg != null)
             {
-                if (seg == CurrentSegment || seg.BlockType.TerminateChildren)
+                if (seg == currentSpan || seg.spanDefinition.TerminateChildren)
                 {
                     foreach (Pattern end in seg.Scope.EndPatterns)
                     {
@@ -746,7 +746,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                                 Result.Position = CurrentPosition;
                                 Result.Token = psr.Token;
                                 Result.HasContent = true;
-                                Result.Segment = seg;
+                                Result.span = seg;
                                 Result.Scope = null;
 
 
@@ -770,8 +770,8 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             return Result;
         }
 
-        private ScanResultSegment GetNextChildSegment(Row Row, Segment
-                                                                   CurrentSegment, int StartPos)
+        private ScanResultSegment GetNextChildSegment(Row Row, Span
+                                                                   currentSpan, int StartPos)
         {
             //this row has no text , just bail out...
             if (StartPos >= Row.Text.Length)
@@ -781,7 +781,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             var Result = new ScanResultSegment {HasContent = false, IsEndSegment = false};
 
 
-            foreach (BlockType ChildBlock in CurrentSegment.BlockType.ChildBlocks)
+            foreach (SpanDefinition ChildBlock in currentSpan.spanDefinition.ChildBlocks)
             {
                 //scan each scope in each childblock
                 foreach (Scope Scope in ChildBlock.ScopePatterns)
@@ -798,7 +798,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         Result.Position = CurrentPosition;
                         Result.Token = psr.Token;
                         Result.HasContent = true;
-                        Result.BlockType = ChildBlock;
+                        Result.spanDefinition = ChildBlock;
                         Result.Scope = Scope;
 
                         if (Scope.NormalizeCase)

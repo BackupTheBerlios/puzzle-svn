@@ -11,7 +11,7 @@
 namespace Puzzle.SourceCode
 {
     /// <summary>
-    /// The Scope class defines what patterns starts and ends a BlockType
+    /// The Scope class defines what patterns starts and ends a spanDefinition
     /// </summary>
     public sealed class Scope
     {
@@ -43,19 +43,19 @@ namespace Puzzle.SourceCode
         public bool NormalizeCase = true;
 
         /// <summary>
-        /// The owner BlockType
+        /// The owner spanDefinition
         /// </summary>
-        public BlockType Parent;
+        public SpanDefinition Parent;
 
         /// <summary>
-        /// BlockType that should be started directly after this block have ended
+        /// spanDefinition that should be started directly after this block have ended
         /// </summary>
-        public BlockType SpawnBlockOnEnd;
+        public SpanDefinition spawnSpanOnEnd;
 
         /// <summary>
-        /// BlockType that should be started directly after this block have started
+        /// spanDefinition that should be started directly after this block have started
         /// </summary>
-        public BlockType SpawnBlockOnStart;
+        public SpanDefinition spawnSpanOnStart;
 
         /// <summary>
         /// The Start trigger Pattern

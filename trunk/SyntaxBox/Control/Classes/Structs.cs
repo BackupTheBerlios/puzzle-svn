@@ -143,92 +143,92 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
     public struct RenderItems
     {
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDISurface BackBuffer; //backbuffer surface
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush BackgroundBrush; //background brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontBold; //Font , bold
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontBoldItalic; //Font , bold & italic
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontBoldItalicUnderline; //Font , bold & italic
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontBoldUnderline; //Font , bold
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontItalic; //Font , italic
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontItalicUnderline; //Font , italic
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontNormal; //Font , no decoration		
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIFont FontUnderline; //Font , no decoration		
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush GutterMarginBorderBrush; //Gutter magrin brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush GutterMarginBrush; //Gutter magrin brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush HighLightLineBrush; //background brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush LineNumberMarginBorderBrush; //linenumber margin brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush LineNumberMarginBrush; //linenumber margin brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDIBrush OutlineBrush; //background brush
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDISurface SelectionBuffer; //backbuffer surface
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public GDISurface StringBuffer; //backbuffer surface
     }

@@ -13,12 +13,12 @@ namespace Puzzle.SourceCode
     /// <summary>
     /// 
     /// </summary>
-    public class Segment
+    public class Span
     {
         /// <summary>
-        /// The owner BlockType
+        /// The owner spanDefinition
         /// </summary>
-        public BlockType BlockType;
+        public SpanDefinition spanDefinition;
 
         /// <summary>
         /// The depth of this segment in the segment hirarchy
@@ -43,7 +43,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// The parent segment
         /// </summary>
-        public Segment Parent;
+        public Span Parent;
 
         /// <summary>
         /// Gets or Sets what scope triggered this segment
@@ -65,7 +65,7 @@ namespace Puzzle.SourceCode
         /// 
         /// </summary>
         /// <param name="startrow"></param>
-        public Segment(Row startrow)
+        public Span(Row startrow)
         {
             StartRow = startrow;
         }
@@ -73,6 +73,6 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// 
         /// </summary>
-        public Segment() {}
+        public Span() {}
     }
 }

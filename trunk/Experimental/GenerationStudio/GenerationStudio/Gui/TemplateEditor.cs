@@ -90,7 +90,7 @@ namespace GenerationStudio.Gui
             {
                 foreach (Word word in row)
                 {
-                    if (word.Segment.BlockType.Name == "CS Directive")
+                    if (word.span.spanDefinition.Name == "CS Directive")
                     {
                         if (word.Style.Name == "CS Scope")
                             continue;
@@ -98,7 +98,7 @@ namespace GenerationStudio.Gui
                         sbHeader.Append(word.Text);
                     }
                 }
-                if (row.EndSegment.BlockType.Name == "CS Directive")
+                if (row.endSpan.spanDefinition.Name == "CS Directive")
                     sbHeader.AppendLine();
             }
 
@@ -108,7 +108,7 @@ namespace GenerationStudio.Gui
             {
                 foreach (Word word in row)
                 {
-                    if (word.Segment.BlockType.Name != "CS Directive")
+                    if (word.span.spanDefinition.Name != "CS Directive")
                     {
                         if (word.Style.Name == "CS Scope")
                         {
@@ -139,7 +139,7 @@ namespace GenerationStudio.Gui
                         }
                         else
                         {
-                            if (word.Segment.BlockType.Name == "Text")
+                            if (word.span.spanDefinition.Name == "Text")
                             {
                                 string text = word.Text;
                                 text = text.Replace("\\", "\\\\");
@@ -153,11 +153,11 @@ namespace GenerationStudio.Gui
                         }
                     }
                 }
-                if (row.EndSegment.BlockType.Name == "Text")
+                if (row.endSpan.spanDefinition.Name == "Text")
                 {
                     sbCode.Append("\\r\\n");
                 }
-                else if (row.EndSegment.BlockType.Name == "CS Directive") {}
+                else if (row.endSpan.spanDefinition.Name == "CS Directive") {}
                 else
                 {
                     sbCode.AppendLine();

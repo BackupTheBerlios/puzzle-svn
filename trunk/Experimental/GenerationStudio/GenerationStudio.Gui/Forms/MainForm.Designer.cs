@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node0");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ProjectTree = new System.Windows.Forms.TreeView();
             this.Icons = new System.Windows.Forms.ImageList(this.components);
@@ -114,10 +114,10 @@
             this.ProjectTree.LabelEdit = true;
             this.ProjectTree.Location = new System.Drawing.Point(0, 26);
             this.ProjectTree.Name = "ProjectTree";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Node0";
             this.ProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.ProjectTree.SelectedImageIndex = 0;
             this.ProjectTree.ShowNodeToolTips = true;
             this.ProjectTree.Size = new System.Drawing.Size(171, 117);
@@ -611,6 +611,7 @@
             // 
             this.SummaryToolStrip.Location = new System.Drawing.Point(0, 0);
             this.SummaryToolStrip.Name = "SummaryToolStrip";
+            this.SummaryToolStrip.Padding = new System.Windows.Forms.Padding(0);
             this.SummaryToolStrip.Size = new System.Drawing.Size(414, 25);
             this.SummaryToolStrip.TabIndex = 1;
             // 

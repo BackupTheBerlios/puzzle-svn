@@ -177,7 +177,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     }
                 }
             }
-            catch {}
+            catch
+            {
+                
+            }
             finally
             {
                 CropPosition();
@@ -449,7 +452,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// This only applies if the active row is fully parsed.
         /// </summary>
         /// <returns>a Word object from the active row</returns>
-        public Segment CurrentSegment()
+        public Span CurrentSegment()
         {
             return Control.Document.GetSegmentFromPos(Position);
         }
@@ -477,7 +480,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 var PaddStr = new String(' ', Padd);
                 string TotStr = xtr.Text + PaddStr;
 
-                foreach (char c in TotStr)
+                char[] buffer = TotStr.ToCharArray(0, Position.X);
+                foreach (char c in buffer)
                 {
                     if (c == '\t')
                     {

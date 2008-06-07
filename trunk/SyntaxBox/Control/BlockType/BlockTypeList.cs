@@ -15,7 +15,7 @@ namespace Puzzle.SourceCode
     /// <summary>
     /// 
     /// </summary>
-    public class BlockTypeList : List<BlockType>
+    public class BlockTypeList : List<SpanDefinition>
     {
     }
 }

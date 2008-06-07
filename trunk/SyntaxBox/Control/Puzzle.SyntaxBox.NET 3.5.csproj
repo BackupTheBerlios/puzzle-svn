@@ -118,7 +118,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlockType\BlockType.cs" />
+    <Compile Include="BlockType\SpanDefinition.cs" />
     <Compile Include="BlockType\BlockTypeList.cs" />
     <Compile Include="Classes\Caret.cs">
       <SubType>Code</SubType>
@@ -236,8 +236,8 @@
     <Compile Include="Document\Row\RowList.cs" />
     <Compile Include="Document\Scope\Scope.cs" />
     <Compile Include="Document\Scope\ScopeList.cs" />
-    <Compile Include="Document\Segment\Segment.cs" />
-    <Compile Include="Document\Segment\SegmentList.cs" />
+    <Compile Include="Document\Segment\Span.cs" />
+    <Compile Include="Document\Segment\SpanList.cs" />
     <Compile Include="Document\Structs.cs" />
     <Compile Include="Document\SyntaxDocument.cs">
       <SubType>Component</SubType>

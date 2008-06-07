@@ -16,33 +16,33 @@ using System.Globalization;
 namespace Puzzle.SourceCode
 {
     /// <summary>
-    /// BlockType class
+    /// spanDefinition class
     /// </summary>
     /// <remarks>
-    /// The BlockType class represents a specific code/text element<br/>
+    /// The spanDefinition class represents a specific code/text element<br/>
     /// such as a string , comment or the code itself.<br/>
     /// <br/>
-    /// a BlockType  can contain keywords , operators , scopes and child BlockTypes.<br/>
+    /// a spanDefinition  can contain keywords , operators , scopes and child BlockTypes.<br/>
     /// <br/>
     /// <br/>
     /// For example , if we where to describe the language C#<br/>
     /// we would have the following blocks:<br/>
     /// <br/>
-    /// Code block						- the BlockType containing all the keywords and operators.<br/>
-    /// Singleline comment block		- a BlockType that starts on // terminates at the end of a line.<br/>
-    /// Multiline comment block			- a BlockType that starts on /* can span multiple rows and terminates on */.<br/>
-    /// String block					- a BlockType that starts on " terminates on " or at the end of a line.<br/>
-    /// Char block						- a BlockType that starts on ' terminates on ' or at the end of a line.<br/>
+    /// Code block						- the spanDefinition containing all the keywords and operators.<br/>
+    /// Singleline comment block		- a spanDefinition that starts on // terminates at the end of a line.<br/>
+    /// Multiline comment block			- a spanDefinition that starts on /* can span multiple rows and terminates on */.<br/>
+    /// String block					- a spanDefinition that starts on " terminates on " or at the end of a line.<br/>
+    /// Char block						- a spanDefinition that starts on ' terminates on ' or at the end of a line.<br/>
     /// <br/>
     /// <b>CHILD BLOCKS:</b><br/>
     /// The code block would have all the other blocks as childblocks , since they can only appear inside the<br/>
     /// code block . A string can for example never exist inside a comment in C#.<br/>
-    /// a BlockType can also have itself as a child block.<br/>
+    /// a spanDefinition can also have itself as a child block.<br/>
     /// For example , the C# Code block can have itself as a childblock and use the scope patterns "{" and "}"<br/>
     /// this way we can accomplish FOLDING since the parser will know where a new scope starts and ends.<br/>
     /// <br/>
     /// <b>SCOPES:</b><br/>
-    /// Scopes describe what patterns starts and what patterns end a specific BlockType.<br/>
+    /// Scopes describe what patterns starts and what patterns end a specific spanDefinition.<br/>
     /// For example , the C# Multiline Comment have the scope patterns /* and */<br/>
     /// <br/>
     /// <b>KEYWORDS:</b><br/>
@@ -58,7 +58,7 @@ namespace Puzzle.SourceCode
     ///<br/>
     /// <br/>
     ///</remarks>
-    public class BlockType
+    public class SpanDefinition
     {
         private readonly List<Pattern> tmpSimplePatterns = new List<Pattern>();
 
@@ -85,7 +85,7 @@ namespace Puzzle.SourceCode
         public Hashtable LookupTable = new Hashtable();
 
         /// <summary>
-        /// Gets or Sets if the BlockType can span multiple lines or if it should terminate at the end of a line.
+        /// Gets or Sets if the spanDefinition can span multiple lines or if it should terminate at the end of a line.
         /// </summary>
         public bool MultiLine;
 
@@ -121,15 +121,15 @@ namespace Puzzle.SourceCode
 
 
         /// <summary>
-        /// Default BlockType constructor
+        /// Default spanDefinition constructor
         /// </summary>
-        public BlockType(SyntaxDefinition parent) : this()
+        public SpanDefinition(SyntaxDefinition parent) : this()
         {
             Parent = parent;
             Parent.ChangeVersion();
         }
 
-        public BlockType()
+        public SpanDefinition()
         {
             KeywordsList = new PatternListList(this);
             OperatorsList = new PatternListList(this);

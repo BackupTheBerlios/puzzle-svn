@@ -48,9 +48,9 @@ namespace Puzzle.SourceCode
         public PatternListList Parent;
 
         /// <summary>
-        /// The parent BlockType of this list
+        /// The parent spanDefinition of this list
         /// </summary>
-        public BlockType ParentBlock;
+        public SpanDefinition parentSpanDefinition;
 
         /// <summary>
         /// for public use only

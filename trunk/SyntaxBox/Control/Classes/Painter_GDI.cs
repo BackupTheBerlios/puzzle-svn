@@ -234,7 +234,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                         for (int i = Control.View.RowHeight; i > 0; i -= Control.SmoothScrollSpeed)
                         {
                             yOffset = i + Control.View.YOffset;
-                            RenderAll2(g);
+                            RenderAll2();
                             g.Flush();
                             Thread.Sleep(0);
                         }
@@ -244,7 +244,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                         for (int i = -Control.View.RowHeight; i < 0; i += Control.SmoothScrollSpeed)
                         {
                             yOffset = i + Control.View.YOffset;
-                            RenderAll2(g);
+                            RenderAll2();
                             g.Flush();
                             Thread.Sleep(0);
                         }
@@ -252,7 +252,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 }
 
                 yOffset = Control.View.YOffset;
-                RenderAll2(g);
+                RenderAll2();
                 //g.Flush ();
                 //System.Threading.Thread.Sleep (0);
             }
@@ -470,22 +470,22 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
         private void SetBrackets()
         {
-            Segment CurrentSegment;
+            Span currentSpan;
             BracketEnd = null;
             BracketStart = null;
 
             Word CurrWord = Control.Caret.CurrentWord;
             if (CurrWord != null)
             {
-                CurrentSegment = CurrWord.Segment;
-                if (CurrentSegment != null)
+                currentSpan = CurrWord.span;
+                if (currentSpan != null)
                 {
-                    if (CurrWord == CurrentSegment.StartWord || CurrWord == CurrentSegment.EndWord)
+                    if (CurrWord == currentSpan.StartWord || CurrWord == currentSpan.EndWord)
                     {
-                        if (CurrentSegment.EndWord != null)
+                        if (currentSpan.EndWord != null)
                         {
-                            BracketEnd = CurrentSegment.EndWord;
-                            BracketStart = CurrentSegment.StartWord;
+                            BracketEnd = currentSpan.EndWord;
+                            BracketStart = currentSpan.StartWord;
                         }
                     }
 
@@ -496,13 +496,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
                         if (CurrWord.Pattern.BracketType == BracketType.EndBracket)
                         {
-                            Word w = Control.Document.GetStartBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.Segment);
+                            Word w = Control.Document.GetStartBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.span);
                             BracketEnd = CurrWord;
                             BracketStart = w;
                         }
                         if (CurrWord.Pattern.BracketType == BracketType.StartBracket)
                         {
-                            Word w = Control.Document.GetEndBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.Segment);
+                            Word w = Control.Document.GetEndBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.span);
 
                             //	if(w!=null)
                             //	{
@@ -524,7 +524,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             SpanFound = false;
             try
             {
-                Segment s = Control.Caret.CurrentSegment();
+                Span s = Control.Caret.CurrentSegment();
 
                 if (s == null || s.StartWord == null || s.StartWord.Row == null || s.EndWord == null || s.EndWord.Row == null)
                     return;
@@ -536,7 +536,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             catch {}
         }
 
-        private void RenderAll2(Graphics g)
+        private void RenderAll2()
         {
             try
             {
@@ -639,8 +639,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                             {
                                 RenderRow(Control.Document.IndexOf(r), i);
                             }
-                            //Control.Caret.CurrentRow.Expansion_EndSegment.StartRow.Index
-                            if (Control.Caret.CurrentRow.Expansion_EndSegment != null && Control.Caret.CurrentRow.Expansion_EndSegment.StartRow != null && Control.Caret.CurrentRow.Expansion_EndSegment.StartRow == r)
+                            //Control.Caret.CurrentRow.expansion_EndSpan.StartRow.Index
+                            if (Control.Caret.CurrentRow.expansion_EndSpan != null && Control.Caret.CurrentRow.expansion_EndSpan.StartRow != null && Control.Caret.CurrentRow.expansion_EndSpan.StartRow == r)
                             {
                                 RenderRow(Control.Document.IndexOf(r), i);
                             }
@@ -664,11 +664,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             catch
             {
             }
-        }
-
-        private void RequireControl() {
-            if(Control == null)
-                throw new NullReferenceException("Control may not be null");
         }
 
         private void RenderRow(int RowIndex, int RowPos)
@@ -709,15 +704,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                         }
                         else
                         {
-                            if (r.EndSegment != null)
+                            if (r.endSpan != null)
                             {
-                                Segment tmp = null;
-                                tmp = r.Expansion_EndSegment;
+                                Span tmp = r.expansion_EndSpan;
                                 while (tmp != null)
                                 {
-                                    if (tmp.BlockType.Transparent == false)
+                                    if (tmp.spanDefinition.Transparent == false)
                                     {
-                                        bg = new GDIBrush(tmp.BlockType.BackColor);
+                                        bg = new GDIBrush(tmp.spanDefinition.BackColor);
                                         found = true;
                                         break;
                                     }
@@ -727,12 +721,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
                                 if (!found)
                                 {
-                                    tmp = r.EndSegment;
+                                    tmp = r.endSpan;
                                     while (tmp != null)
                                     {
-                                        if (tmp.BlockType.Transparent == false)
+                                        if (tmp.spanDefinition.Transparent == false)
                                         {
-                                            bg = new GDIBrush(tmp.BlockType.BackColor);
+                                            bg = new GDIBrush(tmp.spanDefinition.BackColor);
                                             found = true;
                                             break;
                                         }
@@ -741,12 +735,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 }
                                 if (!found)
                                 {
-                                    tmp = r.Expansion_EndSegment;
+                                    tmp = r.expansion_EndSpan;
                                     while (tmp != null)
                                     {
-                                        if (tmp.BlockType.Transparent == false)
+                                        if (tmp.spanDefinition.Transparent == false)
                                         {
-                                            bg = new GDIBrush(tmp.BlockType.BackColor);
+                                            bg = new GDIBrush(tmp.spanDefinition.BackColor);
                                             found = true;
                                             break;
                                         }
@@ -804,7 +798,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     RenderCaret(RowIndex, RowPos * Control.View.RowHeight + yOffset);
                 }
 
-                RenderSelection(RowIndex, true);
+                RenderSelection(RowIndex);
                 RenderMargin(RowIndex);
                 if (Control.Document.Folding)
                     RenderExpansion(RowIndex);
@@ -888,16 +882,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             bbuff.Font = GFX.FontBold;
             bbuff.FontTransparent = true;
 
-            if (Control.ContainsFocus)
-                bbuff.TextForeColor = Control.SelectionForeColor;
-            else
-                bbuff.TextForeColor = Control.InactiveSelectionForeColor;
+            bbuff.TextForeColor = Control.ContainsFocus ? Control.SelectionForeColor : Control.InactiveSelectionForeColor;
 
             //bbuff.TextForeColor =Color.DarkBlue;
             Row r = Control.Document[RowIndex];
-            string str = "";
-            str = r.CollapsedText;
-
+            string str = r.CollapsedText;
 
             xPos++;
             int taborig = -Control.View.FirstVisibleColumn*Control.View.CharWidth + Control.View.TextMargin;
@@ -922,16 +911,16 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             //this can crash if document not fully parsed , on error resume next
             try
             {
-                if (r.Expansion_StartSegment.EndRow != null)
+                if (r.expansion_StartSpan.EndRow != null)
                 {
-                    if (r.Expansion_StartSegment.EndRow.RowState == RowState.SegmentParsed)
-                        Control.Document.Parser.ParseLine(r.Expansion_StartSegment.EndRow.Index, true);
+                    if (r.expansion_StartSpan.EndRow.RowState == RowState.SegmentParsed)
+                        Control.Document.Parser.ParseLine(r.expansion_StartSpan.EndRow.Index, true);
 
-                    Word last = r.Expansion_StartSegment.EndWord;
+                    Word last = r.expansion_StartSpan.EndWord;
                     xPos += Control.View.FirstVisibleColumn*Control.View.CharWidth;
-                    r.Expansion_StartSegment.EndRow.Expansion_PixelStart = xPos + wdh - Control.View.TextMargin + 2;
+                    r.expansion_StartSpan.EndRow.Expansion_PixelStart = xPos + wdh - Control.View.TextMargin + 2;
                     r.Expansion_PixelEnd = xPos - 1;
-                    RenderSelectedText(Control.Document.IndexOf(r.Expansion_StartSegment.EndRow), r.Expansion_StartSegment.EndRow.Expansion_PixelStart, last);
+                    RenderSelectedText(Control.Document.IndexOf(r.expansion_StartSpan.EndRow), r.expansion_StartSpan.EndRow.Expansion_PixelStart, last);
                 }
             }
             catch {}
@@ -944,11 +933,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             bbuff.FontTransparent = true;
 
             bbuff.TextForeColor = Control.OutlineColor;
-            //bbuff.TextForeColor =Color.DarkBlue;
-            Row r = Control.Document[RowIndex];
-            string str = "";
-            str = r.CollapsedText;
 
+            Row r = Control.Document[RowIndex];
+            string str = r.CollapsedText;
 
             xPos++;
             int taborig = -Control.View.FirstVisibleColumn*Control.View.CharWidth + Control.View.TextMargin;
@@ -962,16 +949,16 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             //this can crash if document not fully parsed , on error resume next
             try
             {
-                if (r.Expansion_StartSegment.EndRow != null)
+                if (r.expansion_StartSpan.EndRow != null)
                 {
-                    if (r.Expansion_StartSegment.EndRow.RowState == RowState.SegmentParsed)
-                        Control.Document.Parser.ParseLine(r.Expansion_StartSegment.EndRow.Index, true);
+                    if (r.expansion_StartSpan.EndRow.RowState == RowState.SegmentParsed)
+                        Control.Document.Parser.ParseLine(r.expansion_StartSpan.EndRow.Index, true);
 
-                    Word last = r.Expansion_StartSegment.EndWord;
+                    Word last = r.expansion_StartSpan.EndWord;
                     xPos += Control.View.FirstVisibleColumn*Control.View.CharWidth;
-                    r.Expansion_StartSegment.EndRow.Expansion_PixelStart = xPos + wdh - Control.View.TextMargin + 2;
+                    r.expansion_StartSpan.EndRow.Expansion_PixelStart = xPos + wdh - Control.View.TextMargin + 2;
                     r.Expansion_PixelEnd = xPos - 1;
-                    RenderText(Control.Document.IndexOf(r.Expansion_StartSegment.EndRow), r.Expansion_StartSegment.EndRow.Expansion_PixelStart, last);
+                    RenderText(Control.Document.IndexOf(r.expansion_StartSpan.EndRow), r.expansion_StartSpan.EndRow.Expansion_PixelStart, last);
                 }
             }
             catch {}
@@ -993,8 +980,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 bbuff.TextForeColor = Color.Black;
                 Row xtr = Control.Document[RowIndex];
 
-                //if (xtr.StartSegment != null)
-                //	bbuff.DrawTabbedString (xtr.StartSegment.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture),100,0,0,0);
+                //if (xtr.startSpan != null)
+                //	bbuff.DrawTabbedString (xtr.startSpan.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture),100,0,0,0);
 
                 //bbuff.TextForeColor = Color.Black;
                 //bbuff.DrawTabbedString (xtr.Text,(int)(Control.View.TextMargin -Control.View.ClientAreaStart),1,-Control.View.FirstVisibleColumn*Control.View.CharWidth+Control.View.TextMargin,Control.PixelTabSize);					
@@ -1015,8 +1002,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 {
                     if (StartDraw)
                     {
-                        if (w.Segment == xtr.Expansion_StartSegment && xtr.Expansion_StartSegment != null)
-                            if (xtr.Expansion_StartSegment.Expanded == false)
+                        if (w.span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
+                            if (xtr.expansion_StartSpan.Expanded == false)
                             {
                                 RenderCollapsedText(RowIndex, xpos);
                                 HasExpansion = true;
@@ -1093,7 +1080,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 }
                             }
                         }
-                        else if (w.Type == WordType.xtSpace && ws)
+                        else if (w.Type == WordType.xtSpace)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.TextForeColor = Control.WhitespaceColor;
@@ -1109,7 +1096,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                             bbuff.DrawTabbedString("·", xpos, 0, taborig, Control.PixelTabSize);
                             wdh = bbuff.DrawTabbedString(w.Text, xpos, 0, taborig, Control.PixelTabSize).Width;
                         }
-                        else if (w.Type == WordType.xtTab && ws)
+                        else if (w.Type == WordType.xtTab)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.TextForeColor = Control.WhitespaceColor;
@@ -1146,9 +1133,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
 
                 if (xtr.IsCollapsed) {}
-                else if (xtr.EndSegment != null && xtr.EndSegment.BlockType != null && xtr.EndSegment.BlockType.Style != null)
+                else if (xtr.endSpan != null && xtr.endSpan.spanDefinition != null && xtr.endSpan.spanDefinition.Style != null)
                 {
-                    bbuff.FillRect(xtr.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                    bbuff.FillRect(xtr.endSpan.spanDefinition.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
                 }
 
                 if (Control._SyntaxBox.ShowEOLMarker && !HasExpansion)
@@ -1158,11 +1145,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     bbuff.FontTransparent = true;
                     bbuff.DrawTabbedString("¶", xpos, 0, taborig, Control.PixelTabSize);
                 }
-            }
-            else
-            {
-                //bbuff.TextForeColor =Color.Red;
-                //bbuff.DrawTabbedString ("",Control.View.TextMargin ,1,0,Control.PixelTabSize);
             }
         }
 
@@ -1179,15 +1161,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             bbuff.FontTransparent = true;
             if (RowIndex <= Control.Document.Count - 1)
             {
-                if (Control.ContainsFocus)
-                    bbuff.TextForeColor = Control.SelectionForeColor;
-                else
-                    bbuff.TextForeColor = Control.InactiveSelectionForeColor;
+                bbuff.TextForeColor = Control.ContainsFocus ? Control.SelectionForeColor : Control.InactiveSelectionForeColor;
 
                 Row xtr = Control.Document[RowIndex];
 
-                //if (xtr.StartSegment != null)
-                //	bbuff.DrawTabbedString (xtr.StartSegment.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture),100,0,0,0);
+                //if (xtr.startSpan != null)
+                //	bbuff.DrawTabbedString (xtr.startSpan.GetHashCode ().ToString (System.Globalization.CultureInfo.InvariantCulture),100,0,0,0);
 
                 //bbuff.TextForeColor = Color.Black;
                 //bbuff.DrawTabbedString (xtr.Text,(int)(Control.View.TextMargin -Control.View.ClientAreaStart),1,-Control.View.FirstVisibleColumn*Control.View.CharWidth+Control.View.TextMargin,Control.PixelTabSize);					
@@ -1208,8 +1187,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 {
                     if (StartDraw)
                     {
-                        if (w.Segment == xtr.Expansion_StartSegment && xtr.Expansion_StartSegment != null)
-                            if (xtr.Expansion_StartSegment.Expanded == false)
+                        if (w.span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
+                            if (xtr.expansion_StartSpan.Expanded == false)
                             {
                                 RenderCollapsedSelectedText(RowIndex, xpos);
                                 HasExpansion = true;
@@ -1243,13 +1222,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 }
                             }
                         }
-                        else if (w.Type == WordType.xtSpace && ws)
+                        else if (w.Type == WordType.xtSpace)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.DrawTabbedString("·", xpos, 0, taborig, Control.PixelTabSize);
                             wdh = bbuff.DrawTabbedString(w.Text, xpos, 0, taborig, Control.PixelTabSize).Width;
                         }
-                        else if (w.Type == WordType.xtTab && ws)
+                        else if (w.Type == WordType.xtTab)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.DrawTabbedString("»", xpos, 0, taborig, Control.PixelTabSize);
@@ -1275,9 +1254,9 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 }
 
                 if (xtr.IsCollapsed) {}
-                else if (xtr.EndSegment != null && xtr.EndSegment.BlockType != null && xtr.EndSegment.BlockType.Style != null)
+                else if (xtr.endSpan != null && xtr.endSpan.spanDefinition != null && xtr.endSpan.spanDefinition.Style != null)
                 {
-                    GFX.BackBuffer.FillRect(xtr.EndSegment.BlockType.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
+                    GFX.BackBuffer.FillRect(xtr.endSpan.spanDefinition.Style.BackColor, xpos, 0, Control.Width - xpos, Control.View.RowHeight);
                 }
 
                 if (Control._SyntaxBox.ShowEOLMarker && !HasExpansion)
@@ -1288,33 +1267,27 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     bbuff.DrawTabbedString("¶", xpos, 0, taborig, Control.PixelTabSize);
                 }
             }
-            else
-            {
-                //bbuff.TextForeColor =Color.Red;
-                //bbuff.DrawTabbedString ("",Control.View.TextMargin ,1,0,Control.PixelTabSize);
-            }
         }
 
         private void RenderCaret(int RowIndex, int ypos)
         {
             int StartRow = -1;
             int cr = Control.Caret.Position.Y;
-            bool Collapsed = false;
 
             if (cr >= 0 && cr <= Control.Document.Count - 1)
             {
                 Row r = Control.Document[cr];
-                if (r.Expansion_EndSegment != null)
+                if (r.expansion_EndSpan != null)
                 {
-                    if (r.Expansion_EndSegment.Expanded == false)
+                    if (r.expansion_EndSpan.Expanded == false)
                     {
-                        r = r.Expansion_EndSegment.StartRow;
+                        r = r.expansion_EndSpan.StartRow;
                         StartRow = r.Index;
                     }
                 }
             }
 
-            Collapsed = (RowIndex == StartRow);
+            bool Collapsed = (RowIndex == StartRow);
 
 
             if (RowIndex != cr && RowIndex != StartRow)
@@ -1478,30 +1451,30 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 const int yo = 4;
                 Row xtr = Control.Document[RowIndex];
                 GDISurface bbuff = GFX.BackBuffer;
-                if (xtr.EndSegment != null)
+                if (xtr.endSpan != null)
                 {
-                    if (xtr.Expansion_StartSegment != null && xtr.StartSegment.Parent == null)
+                    if (xtr.expansion_StartSpan != null && xtr.startSpan.Parent == null)
                     {
                         if (!xtr.IsCollapsed)
                         {
                             bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 6, yo, 1, Control.View.RowHeight - yo);
                         }
                     }
-                    else if ((xtr.EndSegment.Parent != null || xtr.Expansion_EndSegment != null))
+                    else if ((xtr.endSpan.Parent != null || xtr.expansion_EndSpan != null))
                     {
                         bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 6, 0, 1, Control.View.RowHeight);
                     }
 
-                    if (xtr.Expansion_StartSegment != null)
+                    if (xtr.expansion_StartSpan != null)
                     {
                         bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 2, yo, 9, 9);
                         bbuff.FillRect(GFX.BackgroundBrush, Control.View.TotalMarginWidth + 3, yo + 1, 7, 7);
                         //render plus / minus
                         bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 4, yo + 4, 5, 1);
-                        if (!xtr.Expansion_StartSegment.Expanded)
+                        if (!xtr.expansion_StartSpan.Expanded)
                             bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 6, yo + 2, 1, 5);
                     }
-                    if (xtr.Expansion_EndSegment != null)
+                    if (xtr.expansion_EndSpan != null)
                     {
                         bbuff.FillRect(GFX.OutlineBrush, Control.View.TotalMarginWidth + 7, Control.View.RowHeight - 1, 5, 1);
                     }
@@ -1534,7 +1507,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
 
         //draws aControl.Selection.LogicalBounds row in the backbuffer
-        private void RenderSelection(int RowIndex, bool Invert)
+        private void RenderSelection(int RowIndex)
         {
             if (RowIndex <= Control.Document.Count - 1 && Control.Selection.IsValid)
             {
@@ -1544,40 +1517,40 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     if ((RowIndex > Control.Selection.LogicalBounds.FirstRow) && (RowIndex < Control.Selection.LogicalBounds.LastRow))
                     {
                         int width = MeasureRow(xtr, xtr.Text.Length).Width + MeasureString("¶").Width + 3;
-                        RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight, Invert);
+                        RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight);
                     }
                     else if ((RowIndex == Control.Selection.LogicalBounds.FirstRow) && (RowIndex == Control.Selection.LogicalBounds.LastRow))
                     {
                         int start = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.FirstColumn)).Width;
                         int width = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.LastColumn)).Width - start;
-                        RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight, Invert);
+                        RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight);
                     }
                     else if (RowIndex == Control.Selection.LogicalBounds.LastRow)
                     {
                         int width = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.LastColumn)).Width;
-                        RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight, Invert);
+                        RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight);
                     }
                     else if (RowIndex == Control.Selection.LogicalBounds.FirstRow)
                     {
                         int start = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.FirstColumn)).Width;
                         int width = MeasureRow(xtr, xtr.Text.Length).Width + MeasureString("¶").Width + 3 - start;
-                        RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight, Invert);
+                        RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight);
                     }
                 }
                 else
                 {
-                    RenderCollapsedSelection(RowIndex, Invert);
+                    RenderCollapsedSelection(RowIndex);
                 }
             }
         }
 
-        private void RenderCollapsedSelection(int RowIndex, bool Invert)
+        private void RenderCollapsedSelection(int RowIndex)
         {
             Row xtr = Control.Document[RowIndex];
             if ((RowIndex > Control.Selection.LogicalBounds.FirstRow) && (RowIndex < Control.Selection.LogicalBounds.LastRow))
             {
                 int width = MeasureRow(xtr, xtr.Expansion_EndChar).Width;
-                RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight, Invert);
+                RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight);
             }
             else if ((RowIndex == Control.Selection.LogicalBounds.FirstRow) && (RowIndex == Control.Selection.LogicalBounds.LastRow))
             {
@@ -1585,18 +1558,18 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 int min = Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.LastColumn);
                 min = Math.Min(min, xtr.Expansion_EndChar);
                 int width = MeasureRow(xtr, min).Width - start;
-                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight, Invert);
+                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight);
             }
             else if (RowIndex == Control.Selection.LogicalBounds.LastRow)
             {
                 int width = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.LastColumn)).Width;
-                RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight, Invert);
+                RenderBox(Control.View.TextMargin, 0, Math.Max(width - Control.View.ClientAreaStart, 0), Control.View.RowHeight);
             }
             else if (RowIndex == Control.Selection.LogicalBounds.FirstRow)
             {
                 int start = MeasureRow(xtr, Math.Min(xtr.Text.Length, Control.Selection.LogicalBounds.FirstColumn)).Width;
                 int width = MeasureRow(xtr, Math.Min(xtr.Text.Length, xtr.Expansion_EndChar)).Width - start;
-                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight, Invert);
+                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, width, Control.View.RowHeight);
             }
 
             if (Control.Selection.LogicalBounds.LastRow > RowIndex && Control.Selection.LogicalBounds.FirstRow <= RowIndex)
@@ -1605,7 +1578,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 int end = xtr.Expansion_EndRow.Expansion_PixelStart - start + Control.View.TextMargin;
                 //start+=100;
                 //end=200;
-                RenderBox(start - Control.View.ClientAreaStart, 0, end, Control.View.RowHeight, Invert);
+                RenderBox(start - Control.View.ClientAreaStart, 0, end, Control.View.RowHeight);
             }
 
             RowIndex = xtr.Expansion_EndRow.Index;
@@ -1613,16 +1586,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
             if (Control.Selection.LogicalBounds.FirstRow <= RowIndex && Control.Selection.LogicalBounds.LastRow >= RowIndex)
             {
-                int endchar = 0;
-
-                endchar = Control.Selection.LogicalBounds.LastRow != RowIndex ? xtr.Text.Length : Math.Min(Control.Selection.LogicalBounds.LastColumn, xtr.Text.Length);
-
+                int endchar = Control.Selection.LogicalBounds.LastRow != RowIndex ? xtr.Text.Length : Math.Min(Control.Selection.LogicalBounds.LastColumn, xtr.Text.Length);
 
                 int end = MeasureRow(xtr, endchar).Width;
                 end += xtr.Expansion_PixelStart;
                 end -= MeasureRow(xtr, xtr.Expansion_StartChar).Width;
 
-                int start = 0;
+                int start;
 
                 if (Control.Selection.LogicalBounds.FirstRow == RowIndex)
                 {
@@ -1644,11 +1614,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     end += 6;
 
 
-                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, end, Control.View.RowHeight, Invert);
+                RenderBox(Control.View.TextMargin + start - Control.View.ClientAreaStart, 0, end, Control.View.RowHeight);
             }
         }
 
-        private void RenderBox(int x, int y, int width, int height, bool Invert)
+        private void RenderBox(int x, int y, int width, int height)
         {
             GFX.SelectionBuffer.RenderTo(GFX.BackBuffer, x, y, width, height, x, y);
         }
@@ -1656,7 +1626,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
         private TextPoint ColumnFromPixel(int RowIndex, int X)
         {
             Row xtr = Control.Document[RowIndex];
-            int CharIndex = xtr.Text.Length;
             X -= Control.View.TextMargin - 2 - Control.View.FirstVisibleColumn*Control.View.CharWidth;
 
             if (xtr.Count == 0)
@@ -1665,16 +1634,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 {
                     return new TextPoint(X/Control.View.CharWidth, RowIndex);
                 }
-                else
-                {
-                    return new TextPoint(0, RowIndex);
-                }
+
+                return new TextPoint(0, RowIndex);
             }
 
 
             int taborig = -Control.View.FirstVisibleColumn*Control.View.CharWidth + Control.View.TextMargin;
             int xpos = Control.View.TextMargin - Control.View.ClientAreaStart;
-            int Count = xtr.Text.Length;
             int CharNo = 0;
             int TotWidth = 0;
             Word Word = null;
@@ -1705,28 +1671,30 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             }
 
             //CharNo is the index in the text where 'word' starts
-            //'Word' is the word object that contains th 'X'
+            //'Word' is the word object that contains the 'X'
             //'WordStart' contains the pixel start position for 'Word'
 
-            if (Word.Type == WordType.xtWord && Word.Style != null)
-                SetStringFont(Word.Style.Bold, Word.Style.Italic, Word.Style.Underline);
-            else
-                SetStringFont(false, false, false);
+            if (Word != null)
+                if (Word.Type == WordType.xtWord && Word.Style != null)
+                    SetStringFont(Word.Style.Bold, Word.Style.Italic, Word.Style.Underline);
+                else
+                    SetStringFont(false, false, false);
 
             //now , lets measure each char and get a correct pos
 
             bool found = false;
-            foreach (char c in Word.Text)
-            {
-                int tmpWidth = GFX.StringBuffer.DrawTabbedString(c + "", xpos + WordStart, 0, taborig, Control.PixelTabSize).Width;
-                if (WordStart + tmpWidth >= X)
+            if (Word != null)
+                foreach (char c in Word.Text)
                 {
-                    found = true;
-                    break;
+                    int tmpWidth = GFX.StringBuffer.DrawTabbedString(c + "", xpos + WordStart, 0, taborig, Control.PixelTabSize).Width;
+                    if (WordStart + tmpWidth >= X)
+                    {
+                        found = true;
+                        break;
+                    }
+                    CharNo++;
+                    WordStart += tmpWidth;
                 }
-                CharNo++;
-                WordStart += tmpWidth;
-            }
 
             if (!found && Control.View.CharWidth > 0 && Control.VirtualWhitespace)
             {
@@ -1741,23 +1709,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             return new TextPoint(CharNo, RowIndex);
         }
 
-        private Point GetCaretPixelPos()
-        {
-            return GetTextPointPixelPos(Control.Caret.Position);
-        }
-
         private Point GetTextPointPixelPos(TextPoint tp)
         {
             Row xtr = Control.Document[tp.Y];
             if (xtr.RowState == RowState.SegmentParsed)
                 Control.Document.Parser.ParseLine(xtr.Index, true);
 
-            Row r = null;
-
-            if (xtr.IsCollapsedEndPart)
-                r = xtr.Expansion_StartRow;
-            else
-                r = xtr;
+            Row r = xtr.IsCollapsedEndPart ? xtr.Expansion_StartRow : xtr;
 
             int index = r.VisibleIndex;
             int yPos = (index - Control.View.FirstVisibleRow);
@@ -1766,8 +1724,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
             yPos *= Control.View.RowHeight;
 
-            bool Collapsed = false;
-            Collapsed = (xtr.IsCollapsedEndPart);
+            bool Collapsed = (xtr.IsCollapsedEndPart);
             int pos = MeasureRow(xtr, tp.X).Width + 1;
 
 

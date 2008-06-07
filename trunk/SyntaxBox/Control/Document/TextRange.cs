@@ -19,12 +19,12 @@ namespace Puzzle.SourceCode
     {
         public TextRange() {}
 
-        public TextRange(int FirstColumn, int FirstRow, int LastColumn, int LastRow)
+        public TextRange(int firstColumn, int firstRow, int lastColumn, int lastRow)
         {
-            firstColumn = FirstColumn;
-            firstRow = FirstRow;
-            lastColumn = LastColumn;
-            lastRow = LastRow;
+            this.firstColumn = firstColumn;
+            this.firstRow = firstRow;
+            this.lastColumn = lastColumn;
+            this.lastRow = lastRow;
         }
 
         public event EventHandler Change = null;

@@ -11,7 +11,7 @@ namespace AlbinoHorse.Model
             DataSource = new DefaultUmlDiagramData();
         }
 
-        #region Property Shapes        
+        #region Property Shapes
 
         public IList<Shape> Shapes
         {
@@ -21,55 +21,6 @@ namespace AlbinoHorse.Model
         #endregion
 
         public IUmlDiagramData DataSource { get; set; }
-
-        //public void AutoLayout()
-        //{
-        //    Hashtable classLookup = new Hashtable();
-        //    Hashtable nodeLookup = new Hashtable();
-        //    Graph graph = new Graph();
-        //    int scaleFactor = 7;
-        //    foreach (Shape shape in Shapes)
-        //    {
-        //        if (shape is UmlInstanceType)
-        //        {
-        //            Node node = new Node();
-        //            node.Bounds = new RectangleF(shape.Bounds.Left, shape.Bounds.Top, shape.Bounds.Width / scaleFactor, shape.Bounds.Height / scaleFactor);
-        //            classLookup.Add(shape, node);
-        //            nodeLookup.Add(node, shape);
-        //            graph.Nodes.Add(node);
-
-        //        }
-        //    }
-
-        //    foreach (Shape shape in Shapes)
-        //    {
-        //        if (shape is UmlConnection)
-        //        {
-        //            UmlConnection connection = (UmlConnection)shape;
-        //            if (connection.Start == null || connection.End == null)
-        //                continue;
-        //            Node start = (Node)classLookup[connection.Start];
-        //            Node end = (Node)classLookup[connection.End];
-
-        //            start.Connections.Add(end);
-        //            end.Connections.Add(start);
-        //        }
-        //    }
-        //    Random r = new Random();
-        //    //foreach (Node node in graph.Nodes)
-        //    //{
-        //    //    node.Bounds.X = r.Next(0, 200);
-        //    //    node.Bounds.Y = r.Next(0, 200);
-        //    //}
-
-        //    graph.AutoLayout();
-
-        //    foreach (Node node in graph.Nodes)
-        //    {
-        //        UmlInstanceType umlType = (UmlInstanceType)nodeLookup[node];
-        //        umlType.Bounds = new Rectangle((int)(node.Bounds.X * scaleFactor), (int)(node.Bounds.Y * scaleFactor), umlType.Bounds.Width, umlType.Bounds.Height);
-        //    }
-        //}
 
         public virtual void Draw(RenderInfo info)
         {

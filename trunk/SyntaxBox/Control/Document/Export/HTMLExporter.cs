@@ -72,7 +72,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentExporters
                     string img = "minus.gif";
                     try
                     {
-                        if (r.Expansion_StartSegment.Parent.Parent == null)
+                        if (r.expansion_StartSpan.Parent.Parent == null)
                             img = "minusNoTopLine.gif";
                     }
                     catch {}
@@ -124,7 +124,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentExporters
             string img = "plus.gif";
             try
             {
-                if (TrueRow.Expansion_StartSegment.Parent.Parent == null)
+                if (TrueRow.expansion_StartSpan.Parent.Parent == null)
                     img = "PlusNoLines.gif";
             }
             catch {}

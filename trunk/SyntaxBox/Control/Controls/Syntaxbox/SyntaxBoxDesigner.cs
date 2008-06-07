@@ -8,7 +8,6 @@
 // *
 // *
 
-using System;
 using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
 using Puzzle.SourceCode;
@@ -30,22 +29,30 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             get { return (IDesignerHost) base.GetService(typeof (IDesignerHost)); }
         }
 
-        protected void OnActivate(object s, EventArgs e) {}
+        //protected void OnActivate(object s, EventArgs e) {}
 
-        public override void OnSetComponentDefaults()
+        public override void InitializeNewComponent(System.Collections.IDictionary defaultValues)
         {
-            base.OnSetComponentDefaults();
+            base.InitializeNewComponent(defaultValues);
             if (DesignerHost != null)
             {
                 DesignerTransaction trans = DesignerHost.CreateTransaction(
                     "Adding Syntaxdocument");
                 var sd = DesignerHost.CreateComponent
-                             (typeof (SyntaxDocument)) as
+                             (typeof(SyntaxDocument)) as
                          SyntaxDocument;
-
+                
                 var sb = Control as SyntaxBoxControl;
-                sb.Document = sd;
-                trans.Commit();
+
+                if (sb == null)
+                {
+                    trans.Cancel();
+                }
+                else
+                {
+                    sb.Document = sd;
+                    trans.Commit();
+                }
             }
         }
     }

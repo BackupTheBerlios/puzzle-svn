@@ -35,24 +35,12 @@ namespace Puzzle.Drawing.GDI
 
             object li = FontListbox.Items[e.Index];
             string text = li.ToString();
-            Brush bg, fg;
+
+            Brush fg = selected ? SystemBrushes.HighlightText : SystemBrushes.WindowText;
 
             if (selected)
             {
-                bg = SystemBrushes.Highlight;
-                fg = SystemBrushes.HighlightText;
-                //fg=Brushes.Black;
-            }
-            else
-            {
-                bg = SystemBrushes.Window;
-                fg = SystemBrushes.WindowText;
-            }
-
-            //e.Graphics.FillRectangle (SystemBrushes.Window,0,e.Bounds.Top,e.Bounds.Width ,FontListbox.ItemHeight); 			
-            if (selected)
-            {
-                int ofs = 37;
+                const int ofs = 37;
                 e.Graphics.FillRectangle(SystemBrushes.Window,
                                          new Rectangle(ofs, e.Bounds.Top, e.Bounds.Width - ofs, FontListbox.ItemHeight));
                 e.Graphics.FillRectangle(SystemBrushes.Highlight,
@@ -101,15 +89,12 @@ namespace Puzzle.Drawing.GDI
                 if (edSvc != null)
                 {
                     // Create a CheckedListBox and populate it with all the enum values
-                    FontListbox = new ListBox();
-                    FontListbox.DrawMode = DrawMode.OwnerDrawFixed;
-                    FontListbox.BorderStyle = BorderStyle.None;
-                    FontListbox.Sorted = true;
+                    FontListbox = new ListBox
+                                  {DrawMode = DrawMode.OwnerDrawFixed, BorderStyle = BorderStyle.None, Sorted = true};
                     FontListbox.MouseDown += OnMouseDown;
                     FontListbox.DoubleClick += ValueChanged;
                     FontListbox.DrawItem += LB_DrawItem;
                     FontListbox.ItemHeight = 20;
-                    FontListbox.MouseMove += OnMouseMoved;
                     FontListbox.Height = 200;
                     FontListbox.Width = 180;
 
@@ -142,8 +127,6 @@ namespace Puzzle.Drawing.GDI
             }
         }
 
-        private void OnMouseMoved(object sender, MouseEventArgs e) {}
-
         private void ValueChanged(object sender, EventArgs e)
         {
             if (edSvc != null)
@@ -157,11 +140,6 @@ namespace Puzzle.Drawing.GDI
             string text = e.Value.ToString();
             var bp = new Bitmap(e.Bounds.Width, e.Bounds.Height);
             Graphics g = Graphics.FromImage(bp);
-
-            Brush bg, fg;
-
-            bg = SystemBrushes.Window;
-            fg = SystemBrushes.WindowText;
 
             g.FillRectangle(SystemBrushes.Highlight, e.Bounds);
 
@@ -199,8 +177,7 @@ namespace Puzzle.Drawing.GDI
 
             IntPtr hDC = g.GetHdc();
             Fonts = new Hashtable();
-            var lf = new LogFont();
-            lf.lfCharSet = 1;
+            var lf = new LogFont {lfCharSet = 1};
             FONTENUMPROC callback = CallbackFunc;
             NativeMethods.EnumFontFamiliesEx(hDC, lf, callback, 0, 0);
 

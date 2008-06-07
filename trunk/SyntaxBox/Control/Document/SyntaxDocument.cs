@@ -491,7 +491,7 @@ namespace Puzzle.SourceCode
         private void Init()
         {
             var l = new SyntaxDefinition();
-            l.MainBlock = new BlockType(l)
+            l.mainSpanDefinition = new SpanDefinition(l)
                           {
                               MultiLine = true
                           };
@@ -602,9 +602,9 @@ namespace Puzzle.SourceCode
 
                     foreach (Row r in this)
                     {
-                        if (r.Expansion_StartSegment != null && r.Expansion_EndRow != null)
+                        if (r.expansion_StartSpan != null && r.Expansion_EndRow != null)
                         {
-                            if (r.Expansion_StartSegment.Scope.DefaultExpanded == false)
+                            if (r.expansion_StartSpan.Scope.DefaultExpanded == false)
                                 r.Expanded = false;
                         }
                     }
@@ -987,10 +987,10 @@ namespace Puzzle.SourceCode
                 bool f = row.IsCollapsed;
                 row.Expanded = true;
                 row.Text = tot;
-                row.StartSegments.Clear();
-                row.EndSegments.Clear();
-                row.StartSegment = null;
-                row.EndSegment = null;
+                row.startSpans.Clear();
+                row.endSpans.Clear();
+                row.startSpan = null;
+                row.endSpan = null;
                 row.Parse();
             }
 
@@ -1306,13 +1306,13 @@ namespace Puzzle.SourceCode
             return tp;
         }
 
-        public void AutoIndentSegment(Segment Segment)
+        public void AutoIndentSegment(Span span)
         {
-            if (Segment == null)
-                Segment = this[0].StartSegment;
+            if (span == null)
+                span = this[0].startSpan;
 
-            Row start = Segment.StartRow;
-            Row end = Segment.EndRow;
+            Row start = span.StartRow;
+            Row end = span.EndRow;
             if (start == null)
                 start = this[0];
 
@@ -1333,20 +1333,20 @@ namespace Puzzle.SourceCode
 
         //Returns the segment object at the given position
         /// <summary>
-        /// Gets a Segment object form a given column , Row index
+        /// Gets a span object form a given column , Row index
         /// (This only applies if the row is fully parsed)
         /// </summary>
         /// <param name="p">Column and Rowindex</param>
-        /// <returns>Segment object at the given position</returns>
-        public Segment GetSegmentFromPos(TextPoint p)
+        /// <returns>span object at the given position</returns>
+        public Span GetSegmentFromPos(TextPoint p)
         {
             Row xtr = this[p.Y];
             int CharNo = 0;
 
             if (xtr.Count == 0)
-                return xtr.StartSegment;
+                return xtr.startSpan;
 
-            Segment prev = xtr.StartSegment;
+            Span prev = xtr.startSpan;
             foreach (Word w in xtr)
             {
                 if (w.Text.Length + CharNo > p.X)
@@ -1354,16 +1354,16 @@ namespace Puzzle.SourceCode
                     if (CharNo == p.X)
                         return prev;
                     else
-                        return w.Segment;
+                        return w.span;
                 }
                 else
                 {
                     CharNo += w.Text.Length;
-                    prev = w.Segment;
+                    prev = w.span;
                 }
             }
 
-            return xtr.EndSegment;
+            return xtr.endSpan;
         }
 
         //the specific word that contains the char in point p
@@ -1482,12 +1482,12 @@ namespace Puzzle.SourceCode
                     VisibleRows.Add(r);
                     bool collapsed = false;
                     if (r.CanFold)
-                        if (r.Expansion_StartSegment.Expanded == false)
+                        if (r.expansion_StartSpan.Expanded == false)
                         {
-                            if (r.Expansion_StartSegment.EndWord == null) {}
+                            if (r.expansion_StartSpan.EndWord == null) {}
                             else
                             {
-                                r = r.Expansion_EndRow; // .Expansion_StartSegment.EndRow;
+                                r = r.Expansion_EndRow; // .expansion_StartSpan.EndRow;
                                 collapsed = true;
                             }
                         }
@@ -1561,12 +1561,12 @@ namespace Puzzle.SourceCode
 
 //			if (r.IsCollapsed)
 //			{
-//				r.Expansion_StartSegment.Expanded =	true;
+//				r.expansion_StartSpan.Expanded =	true;
 //				ExpandRow(r);
 //			}
 //			else
 //			{
-//				r.Expansion_StartSegment.Expanded =	false;
+//				r.expansion_StartSpan.Expanded =	false;
 //				CollapseRow(r);
 //			}
 
@@ -1612,10 +1612,10 @@ namespace Puzzle.SourceCode
             {
                 Row tmpRow = this[startIndex + i];
                 VisibleRows.Insert(visIndex, tmpRow);
-                if (tmpRow.Expansion_StartSegment != null)
-                    if (tmpRow.Expansion_StartSegment.Expanded == false)
+                if (tmpRow.expansion_StartSpan != null)
+                    if (tmpRow.expansion_StartSpan.Expanded == false)
                     {
-                        tmpRow = tmpRow.Expansion_StartSegment.EndRow;
+                        tmpRow = tmpRow.expansion_StartSpan.EndRow;
                         i = tmpRow.Index - startIndex;
                     }
                 visIndex++;
@@ -1665,9 +1665,9 @@ namespace Puzzle.SourceCode
             return new TextPoint(ran.LastColumn, ran.LastRow);
         }
 
-        public Word GetStartBracketWord(Word Start, Pattern End, Segment FindIn)
+        public Word GetStartBracketWord(Word Start, Pattern End, Span FindIn)
         {
-            if (Start == null || Start.Pattern == null || Start.Segment == null)
+            if (Start == null || Start.Pattern == null || Start.span == null)
                 return null;
 
             int CurrentRow = Start.Row.Index;
@@ -1679,7 +1679,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i >= 0; i--)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.Segment == FindIn && w.Type == WordType.xtWord)
+                    if (w.span == FindIn && w.Type == WordType.xtWord)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;
@@ -1702,9 +1702,9 @@ namespace Puzzle.SourceCode
         }
 
 
-        public Word GetEndBracketWord(Word Start, Pattern End, Segment FindIn)
+        public Word GetEndBracketWord(Word Start, Pattern End, Span FindIn)
         {
-            if (Start == null || Start.Pattern == null || Start.Segment == null)
+            if (Start == null || Start.Pattern == null || Start.span == null)
                 return null;
 
             int CurrentRow = Start.Row.Index;
@@ -1721,7 +1721,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i < this[CurrentRow].Count; i++)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.Segment == FindIn && w.Type == WordType.xtWord)
+                    if (w.span == FindIn && w.Type == WordType.xtWord)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;
