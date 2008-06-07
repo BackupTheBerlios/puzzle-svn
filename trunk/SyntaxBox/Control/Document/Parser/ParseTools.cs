@@ -15,29 +15,19 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 {
     public sealed class ParseTools
     {
-        public static char[] Parse(string text, string separators)
-        {
-            //string Result="";
-            var Result = new StringBuilder();
-            text = " " + text + " ";
-            foreach (char c in text)
-                if (separators.IndexOf(c) >= 0)
-                    Result.Append(' ');
-                else
-                    Result.Append('.');
-            return Result.ToString().ToCharArray();
-        }
-
-
         public static void AddPatternString(string Text, Row Row, Pattern Pattern,
                                             TextStyle Style, Span span, bool
                                                                                   HasError)
         {
-            Word x = Row.Add(Text);
-            x.Style = Style;
-            x.Pattern = Pattern;
-            x.HasError = HasError;
-            x.span = span;
+            var x = new Word
+            {
+                Style = Style,
+                Pattern = Pattern,
+                HasError = HasError,
+                Span = span,
+                Text = Text
+            };
+            Row.Add(x);
         }
 
         public static unsafe void AddString(string Text, Row Row, TextStyle Style,
@@ -58,7 +48,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         {
                             Word word = Row.Add(CurrentWord.ToString());
                             word.Style = Style;
-                            word.span = span;
+                            word.Span = span;
                             CurrentWord = new StringBuilder();
                         }
 
@@ -68,7 +58,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         else
                             ws.Type = WordType.xtTab;
                         ws.Style = Style;
-                        ws.span = span;
+                        ws.Span = span;
                     }
                     else
                         CurrentWord.Append(c[i].ToString());
@@ -77,7 +67,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                 {
                     Word word = Row.Add(CurrentWord.ToString());
                     word.Style = Style;
-                    word.span = span;
+                    word.Span = span;
                 }
             }
         }

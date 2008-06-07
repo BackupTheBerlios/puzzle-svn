@@ -66,7 +66,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// The parent segment
         /// </summary>
-        public Span span; //the segment that this word is located in
+        public Span Span; //the segment that this word is located in
 
         /// <summary>
         /// The style of the word

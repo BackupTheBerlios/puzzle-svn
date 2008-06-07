@@ -98,10 +98,10 @@ namespace GenerationStudio.Properties {
         ///
         ///
         ///  &lt;Block Name=&quot;Text&quot; Style=&quot;Text&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;
-        ///    &lt;ChildBlocks&gt;      
+        ///    &lt;childSpanDefinitions&gt;      
         ///      &lt;Child Name=&quot;CS Directive&quot; /&gt;
         ///      &lt;Child Name=&quot;CS Code&quot; /&gt;
-        ///    &lt;/ChildBlocks&gt;
+        ///    &lt;/childSpanDefinitions&gt;
         ///  &lt;/Block&gt;
         ///
         ///	&lt;Block Name=&quot;CS Directive&quot; Style=&quot;CS Directive Code&quot; EscapeChar=&quot;&quot; IsMultiline=&quot;true&quot;&gt;

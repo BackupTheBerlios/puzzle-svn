@@ -124,7 +124,7 @@ namespace Puzzle.SourceCode
         private bool mBookmarked; //is this line bookmarked?
         private bool mBreakpoint; //Does this line have a breakpoint?
         private string mText = "";
-        internal WordList mWords = new WordList();
+        internal WordList words = new WordList();
 
         /// <summary>
         /// The first collapsable segment on this row.
@@ -302,7 +302,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public int Count
         {
-            get { return mWords.Count; }
+            get { return words.Count; }
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace Puzzle.SourceCode
             get
             {
                 if (index >= 0)
-                    return mWords[index];
+                    return words[index];
                 return new Word();
             }
         }
@@ -607,7 +607,7 @@ namespace Puzzle.SourceCode
 
                 foreach (Word w in this)
                 {
-                    if (expansion_StartSpan == w.span)
+                    if (expansion_StartSpan == w.Span)
                         break;
                     r.Add(w);
                 }
@@ -642,7 +642,7 @@ namespace Puzzle.SourceCode
                 foreach (Word w in this)
                 {
                     pos += w.Text.Length;
-                    if (w.span == expansion_StartSpan)
+                    if (w.Span == expansion_StartSpan)
                     {
                         str = Text.Substring(pos).Trim();
                         break;
@@ -677,14 +677,14 @@ namespace Puzzle.SourceCode
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            return mWords.GetEnumerator();
+            return words.GetEnumerator();
         }
 
         #endregion
 
         public void Clear()
         {
-            mWords.Clear();
+            words.Clear();
         }
 
         /// <summary>
@@ -707,7 +707,7 @@ namespace Puzzle.SourceCode
         public Word Add(string text)
         {
             var xw = new Word {Row = this, Text = text};
-            mWords.Add(xw);
+            words.Add(xw);
             return xw;
         }
 
@@ -749,7 +749,7 @@ namespace Puzzle.SourceCode
         public void MatchCase()
         {
             string s = "";
-            foreach (Word w in mWords)
+            foreach (Word w in words)
             {
                 s = s + w.Text;
             }
@@ -843,7 +843,8 @@ namespace Puzzle.SourceCode
         /// <param name="word">Word object</param>
         public void Add(Word word)
         {
-            mWords.Add(word);
+            word.Row = this;
+            words.Add(word);
         }
 
         /// <summary>
@@ -853,7 +854,7 @@ namespace Puzzle.SourceCode
         /// <returns>index of the word in the row</returns>
         public int IndexOf(Word word)
         {
-            return mWords.IndexOf(word);
+            return words.IndexOf(word);
         }
 
         /// <summary>
@@ -868,7 +869,7 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            while (i < mWords.Count)
+            while (i < words.Count)
             {
                 Word w = this[i];
                 if (w.Pattern != null)
@@ -899,7 +900,7 @@ namespace Puzzle.SourceCode
             if (IgnoreStartWord)
                 i++;
 
-            while (i < mWords.Count)
+            while (i < words.Count)
             {
                 Word w = this[i];
                 if (w.Pattern != null)
@@ -995,7 +996,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 Word w = this[i];
-                if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1016,10 +1017,10 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            while (i < mWords.Count)
+            while (i < words.Count)
             {
                 Word w = this[i];
-                if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1043,7 +1044,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 Word w = this[i];
-                if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }
@@ -1064,10 +1065,10 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            while (i < mWords.Count)
+            while (i < words.Count)
             {
                 Word w = this[i];
-                if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
                 }

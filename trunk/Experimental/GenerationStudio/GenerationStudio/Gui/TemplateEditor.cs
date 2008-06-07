@@ -90,7 +90,7 @@ namespace GenerationStudio.Gui
             {
                 foreach (Word word in row)
                 {
-                    if (word.span.spanDefinition.Name == "CS Directive")
+                    if (word.Span.spanDefinition.Name == "CS Directive")
                     {
                         if (word.Style.Name == "CS Scope")
                             continue;
@@ -108,7 +108,7 @@ namespace GenerationStudio.Gui
             {
                 foreach (Word word in row)
                 {
-                    if (word.span.spanDefinition.Name != "CS Directive")
+                    if (word.Span.spanDefinition.Name != "CS Directive")
                     {
                         if (word.Style.Name == "CS Scope")
                         {
@@ -139,7 +139,7 @@ namespace GenerationStudio.Gui
                         }
                         else
                         {
-                            if (word.span.spanDefinition.Name == "Text")
+                            if (word.Span.spanDefinition.Name == "Text")
                             {
                                 string text = word.Text;
                                 text = text.Replace("\\", "\\\\");

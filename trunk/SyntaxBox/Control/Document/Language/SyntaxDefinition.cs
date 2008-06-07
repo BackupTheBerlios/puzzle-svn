@@ -201,7 +201,7 @@ namespace Puzzle.SourceCode
             SpanDefinition[] spanDefinitions = SpanDefinitions;
             foreach (SpanDefinition bt in spanDefinitions)
             {
-                bt.ChildBlocks.Insert(0, Target.mainSpanDefinition);
+                bt.childSpanDefinitions.Insert(0, Target.mainSpanDefinition);
             }
         }
 
@@ -210,10 +210,10 @@ namespace Puzzle.SourceCode
             SpanDefinition[] spanDefinitions = SpanDefinitions;
             foreach (SpanDefinition bt in spanDefinitions)
             {
-                for (int i = Target.mainSpanDefinition.ChildBlocks.Count - 1; i >= 0; i--)
+                for (int i = Target.mainSpanDefinition.childSpanDefinitions.Count - 1; i >= 0; i--)
                 {
-                    SpanDefinition child = Target.mainSpanDefinition.ChildBlocks[i];
-                    bt.ChildBlocks.Insert(0, child);
+                    SpanDefinition child = Target.mainSpanDefinition.childSpanDefinitions[i];
+                    bt.childSpanDefinitions.Insert(0, child);
                 }
             }
         }
@@ -229,7 +229,7 @@ namespace Puzzle.SourceCode
 
             spanDefinitionLookup.Add(bt, bt);
 
-            foreach (SpanDefinition btc in bt.ChildBlocks)
+            foreach (SpanDefinition btc in bt.childSpanDefinitions)
             {
                 FillBlocks(btc);
             }

@@ -1354,12 +1354,12 @@ namespace Puzzle.SourceCode
                     if (CharNo == p.X)
                         return prev;
                     else
-                        return w.span;
+                        return w.Span;
                 }
                 else
                 {
                     CharNo += w.Text.Length;
-                    prev = w.span;
+                    prev = w.Span;
                 }
             }
 
@@ -1667,7 +1667,7 @@ namespace Puzzle.SourceCode
 
         public Word GetStartBracketWord(Word Start, Pattern End, Span FindIn)
         {
-            if (Start == null || Start.Pattern == null || Start.span == null)
+            if (Start == null || Start.Pattern == null || Start.Span == null)
                 return null;
 
             int CurrentRow = Start.Row.Index;
@@ -1679,7 +1679,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i >= 0; i--)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.span == FindIn && w.Type == WordType.xtWord)
+                    if (w.Span == FindIn && w.Type == WordType.xtWord)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;
@@ -1704,7 +1704,7 @@ namespace Puzzle.SourceCode
 
         public Word GetEndBracketWord(Word Start, Pattern End, Span FindIn)
         {
-            if (Start == null || Start.Pattern == null || Start.span == null)
+            if (Start == null || Start.Pattern == null || Start.Span == null)
                 return null;
 
             int CurrentRow = Start.Row.Index;
@@ -1721,7 +1721,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i < this[CurrentRow].Count; i++)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.span == FindIn && w.Type == WordType.xtWord)
+                    if (w.Span == FindIn && w.Type == WordType.xtWord)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;
@@ -1787,7 +1787,7 @@ namespace Puzzle.SourceCode
 
         protected internal void OnApplyFormatRanges(Row row)
         {
-            row.FormattedWords = row.mWords;
+            row.FormattedWords = row.words;
         }
     }
 }

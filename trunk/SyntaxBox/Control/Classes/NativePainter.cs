@@ -23,7 +23,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
     /// <summary>
     /// Painter class that uses GDI32 to render the content of a SyntaxBoxControl
     /// </summary>
-    public class Painter_GDI : IPainter
+    public class NativePainter : IPainter
     {
         private readonly EditViewControl Control;
         private Word BracketEnd;
@@ -38,10 +38,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
         private int yOffset;
 
         /// <summary>
-        /// Painter_GDI constructor.
+        /// NativePainter constructor.
         /// </summary>
         /// <param name="control">The control that will use the Painter</param>
-        public Painter_GDI(EditViewControl control)
+        public NativePainter(EditViewControl control)
         {
             Control = control;
             InitGraphics();
@@ -477,7 +477,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             Word CurrWord = Control.Caret.CurrentWord;
             if (CurrWord != null)
             {
-                currentSpan = CurrWord.span;
+                currentSpan = CurrWord.Span;
                 if (currentSpan != null)
                 {
                     if (CurrWord == currentSpan.StartWord || CurrWord == currentSpan.EndWord)
@@ -496,13 +496,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
                         if (CurrWord.Pattern.BracketType == BracketType.EndBracket)
                         {
-                            Word w = Control.Document.GetStartBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.span);
+                            Word w = Control.Document.GetStartBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.Span);
                             BracketEnd = CurrWord;
                             BracketStart = w;
                         }
                         if (CurrWord.Pattern.BracketType == BracketType.StartBracket)
                         {
-                            Word w = Control.Document.GetEndBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.span);
+                            Word w = Control.Document.GetEndBracketWord(CurrWord, CurrWord.Pattern.MatchingBracket, CurrWord.Span);
 
                             //	if(w!=null)
                             //	{
@@ -987,7 +987,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 {
                     if (StartDraw)
                     {
-                        if (w.span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
+                        if (w.Span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
                             if (xtr.expansion_StartSpan.Expanded == false)
                             {
                                 RenderCollapsedText(RowIndex, xpos);
@@ -1172,7 +1172,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 {
                     if (StartDraw)
                     {
-                        if (w.span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
+                        if (w.Span == xtr.expansion_StartSpan && xtr.expansion_StartSpan != null)
                             if (xtr.expansion_StartSpan.Expanded == false)
                             {
                                 RenderCollapsedSelectedText(RowIndex, xpos);

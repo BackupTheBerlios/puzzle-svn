@@ -452,7 +452,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             _SyntaxBox = Parent;
 
-            Painter = new Painter_GDI(this);
+            Painter = new NativePainter(this);
             _Selection = new Selection(this);
             _Caret = new Caret(this);
 

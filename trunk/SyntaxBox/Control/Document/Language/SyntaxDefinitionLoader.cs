@@ -522,7 +522,7 @@ namespace Puzzle.SourceCode
                         {
                             foreach (XmlAttribute att in cn.Attributes)
                                 if (att.Name.ToLowerInvariant() == "name")
-                                    bl.ChildBlocks.Add(GetBlock(att.Value));
+                                    bl.childSpanDefinitions.Add(GetBlock(att.Value));
                         }
                     }
                 }

@@ -159,15 +159,15 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             {
                 foreach (Word w in row)
                 {
-                    if (w.span == seg)
+                    if (w.Span == seg)
                     {
-                        if (w.span.StartWord == w)
+                        if (w.Span.StartWord == w)
                             seg2.StartWord = w;
 
-                        if (w.span.EndWord == w)
+                        if (w.Span.EndWord == w)
                             seg2.EndWord = w;
 
-                        w.span = seg2;
+                        w.Span = seg2;
                     }
                 }
 
@@ -771,7 +771,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
             var Result = new ScanResultSegment {HasContent = false, IsEndSegment = false};
 
 
-            foreach (SpanDefinition ChildBlock in currentSpan.spanDefinition.ChildBlocks)
+            foreach (SpanDefinition ChildBlock in currentSpan.spanDefinition.childSpanDefinitions)
             {
                 //scan each scope in each childblock
                 foreach (Scope Scope in ChildBlock.ScopePatterns)

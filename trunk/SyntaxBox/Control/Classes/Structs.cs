@@ -138,7 +138,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 
 
     /// <summary>
-    /// Struct used by the Painter_GDI class.
+    /// Struct used by the NativePainter class.
     /// </summary>
     public struct RenderItems
     {

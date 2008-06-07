@@ -76,7 +76,7 @@
 //			}
 //		
 //
-//			foreach (spanDefinition ChildBlock in Block.ChildBlocks)
+//			foreach (spanDefinition ChildBlock in Block.childSpanDefinitions)
 //			{
 //				FillTree(ChildBlock);
 //			}

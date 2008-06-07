@@ -119,7 +119,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlockType\SpanDefinition.cs" />
-    <Compile Include="BlockType\BlockTypeList.cs" />
+    <Compile Include="BlockType\SpanDefinitionList.cs" />
     <Compile Include="Classes\Caret.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -129,7 +129,7 @@
     <Compile Include="Classes\KeyboardAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Painter_GDI.cs">
+    <Compile Include="Classes\NativePainter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Selection.cs">
