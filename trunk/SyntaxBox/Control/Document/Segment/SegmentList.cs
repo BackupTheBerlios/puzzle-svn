@@ -15,7 +15,7 @@ namespace Puzzle.SourceCode
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SegmentCollection : List<Segment>
+    public sealed class SegmentList : List<Segment>
     {        
     }
 }

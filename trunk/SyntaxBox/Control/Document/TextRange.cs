@@ -21,10 +21,10 @@ namespace Puzzle.SourceCode
 
         public TextRange(int FirstColumn, int FirstRow, int LastColumn, int LastRow)
         {
-            _FirstColumn = FirstColumn;
-            _FirstRow = FirstRow;
-            _LastColumn = LastColumn;
-            _LastRow = LastRow;
+            firstColumn = FirstColumn;
+            firstRow = FirstRow;
+            lastColumn = LastColumn;
+            lastRow = LastRow;
         }
 
         public event EventHandler Change = null;
@@ -51,25 +51,25 @@ namespace Puzzle.SourceCode
         /// The end column of the range
         /// </summary>
 
-        public void SetBounds(int FirstColumn, int FirstRow, int LastColumn, int LastRow)
+        public void SetBounds(int firstColumn, int firstRow, int lastColumn, int lastRow)
         {
-            _FirstColumn = FirstColumn;
-            _FirstRow = FirstRow;
-            _LastColumn = LastColumn;
-            _LastRow = LastRow;
+            this.firstColumn = firstColumn;
+            this.firstRow = firstRow;
+            this.lastColumn = lastColumn;
+            this.lastRow = lastRow;
             OnChange();
         }
 
         #region PUBLIC PROPERTY FIRSTROW
 
-        private int _FirstRow;
+        private int firstRow;
 
         public int FirstRow
         {
-            get { return _FirstRow; }
+            get { return firstRow; }
             set
             {
-                _FirstRow = value;
+                firstRow = value;
                 OnChange();
             }
         }
@@ -78,14 +78,14 @@ namespace Puzzle.SourceCode
 
         #region PUBLIC PROPERTY FIRSTCOLUMN
 
-        private int _FirstColumn;
+        private int firstColumn;
 
         public int FirstColumn
         {
-            get { return _FirstColumn; }
+            get { return firstColumn; }
             set
             {
-                _FirstColumn = value;
+                firstColumn = value;
                 OnChange();
             }
         }
@@ -94,14 +94,14 @@ namespace Puzzle.SourceCode
 
         #region PUBLIC PROPERTY LASTROW
 
-        private int _LastRow;
+        private int lastRow;
 
         public int LastRow
         {
-            get { return _LastRow; }
+            get { return lastRow; }
             set
             {
-                _LastRow = value;
+                lastRow = value;
                 OnChange();
             }
         }
@@ -110,14 +110,14 @@ namespace Puzzle.SourceCode
 
         #region PUBLIC PROPERTY LASTCOLUMN
 
-        private int _LastColumn;
+        private int lastColumn;
 
         public int LastColumn
         {
-            get { return _LastColumn; }
+            get { return lastColumn; }
             set
             {
-                _LastColumn = value;
+                lastColumn = value;
                 OnChange();
             }
         }

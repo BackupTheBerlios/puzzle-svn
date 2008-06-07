@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace Puzzle.SourceCode
 {
     /// <summary>
-    /// Collection of Ts
+    /// 
     /// </summary>
     public class ImageIndexCollection : List<int>
     {

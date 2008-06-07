@@ -225,6 +225,7 @@
     <Compile Include="Document\Language\LanguageReader.cs" />
     <Compile Include="Document\Parser\DefaultParser.cs" />
     <Compile Include="Document\Parser\IParser.cs" />
+    <Compile Include="Document\Parser\ParserEventHandler.cs" />
     <Compile Include="Document\Parser\ParseTools.cs" />
     <Compile Include="Document\Pattern\Pattern.cs" />
     <Compile Include="Document\Pattern\PatternCollection.cs" />
@@ -234,11 +235,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Document\Row\Row.cs" />
+    <Compile Include="Document\Row\RowEventArgs.cs" />
+    <Compile Include="Document\Row\RowEventHandler.cs" />
     <Compile Include="Document\Row\RowList.cs" />
     <Compile Include="Document\Scope\Scope.cs" />
     <Compile Include="Document\Scope\ScopeList.cs" />
     <Compile Include="Document\Segment\Segment.cs" />
-    <Compile Include="Document\Segment\SegmentCollection.cs" />
+    <Compile Include="Document\Segment\SegmentList.cs" />
     <Compile Include="Document\Structs.cs" />
     <Compile Include="Document\SyntaxDocument.cs">
       <SubType>Component</SubType>
@@ -253,7 +256,7 @@
     <Compile Include="Document\Undo\UndoBlockCollection.cs" />
     <Compile Include="Document\Undo\UndoBuffer.cs" />
     <Compile Include="Document\Word\Word.cs" />
-    <Compile Include="Document\Word\WordCollection.cs" />
+    <Compile Include="Document\Word\WordList.cs" />
     <Compile Include="Drawing\DrawingTools.cs" />
     <Compile Include="Drawing\GDI32\FontEnum.cs" />
     <Compile Include="Drawing\GDI32\GDIBrushes.cs" />

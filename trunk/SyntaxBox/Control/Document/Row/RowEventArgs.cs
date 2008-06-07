@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Puzzle.SourceCode
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RowEventArgs : EventArgs
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public Row Row;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row"></param>
+        public RowEventArgs(Row row)
+        {
+            Row = row;
+        }
+    }
+}

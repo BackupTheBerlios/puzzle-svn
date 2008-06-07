@@ -19,35 +19,6 @@ using Puzzle.SourceCode.SyntaxDocumentParsers;
 
 namespace Puzzle.SourceCode
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class RowEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public Row Row;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="row"></param>
-        public RowEventArgs(Row row)
-        {
-            Row = row;
-        }
-    }
-
-    /// <summary>
-    /// Parser event handler
-    /// </summary>
-    public delegate void ParserEventHandler(object sender, RowEventArgs e);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public delegate void RowEventHandler(object sender, RowEventArgs e);
 
 
     /// <summary>
@@ -1846,7 +1817,7 @@ namespace Puzzle.SourceCode
             }
             else
             {
-                row.FormattedWords = new WordCollection();
+                row.FormattedWords = new WordList();
                 int i = 0;
                 int l = 0;
                 int x = 0;

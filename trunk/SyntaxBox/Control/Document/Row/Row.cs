@@ -60,7 +60,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// Segments that ends in this row
         /// </summary>
-        public SegmentCollection EndSegments = new SegmentCollection();
+        public SegmentList EndSegments = new SegmentList();
 
         /// <summary>
         /// For public use only
@@ -92,7 +92,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public Segment Expansion_StartSegment;
 
-        public WordCollection FormattedWords = new WordCollection();
+        public WordList FormattedWords = new WordList();
 
         /// <summary>
         /// Collection of Image indices assigned to a row.
@@ -124,7 +124,7 @@ namespace Puzzle.SourceCode
         private bool mBookmarked; //is this line bookmarked?
         private bool mBreakpoint; //Does this line have a breakpoint?
         private string mText = "";
-        internal WordCollection mWords = new WordCollection();
+        internal WordList mWords = new WordList();
 
         /// <summary>
         /// The first collapsable segment on this row.
@@ -134,7 +134,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// Segments that start on this row
         /// </summary>
-        public SegmentCollection StartSegments = new SegmentCollection();
+        public SegmentList StartSegments = new SegmentList();
 
         /// <summary>
         /// Object tag for storage of custom user data..

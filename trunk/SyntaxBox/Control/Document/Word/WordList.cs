@@ -8,17 +8,14 @@
 // *
 // *
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using T = Puzzle.SourceCode.Word;
 
 namespace Puzzle.SourceCode
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class WordCollection : List<Word>
+    public sealed class WordList : List<Word>
     {        
     }
 }
