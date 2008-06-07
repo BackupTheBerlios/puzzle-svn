@@ -223,10 +223,13 @@
     <Compile Include="Document\Parser\ParseTools.cs" />
     <Compile Include="Document\Parser\ScanResultSegment.cs" />
     <Compile Include="Document\Parser\ScanResultWord.cs" />
+    <Compile Include="Document\Pattern\BracketType.cs" />
     <Compile Include="Document\Pattern\Pattern.cs" />
     <Compile Include="Document\Pattern\PatternCollection.cs" />
+    <Compile Include="Document\Pattern\PatternExtensions.cs" />
     <Compile Include="Document\Pattern\PatternList.cs" />
     <Compile Include="Document\Pattern\PatternListList.cs" />
+    <Compile Include="Document\Pattern\PatternScanResult.cs" />
     <Compile Include="Document\Print\SourceCodePrintDocument.cs">
       <SubType>Component</SubType>
     </Compile>

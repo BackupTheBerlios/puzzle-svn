@@ -13,30 +13,6 @@ using System.Text.RegularExpressions;
 namespace Puzzle.SourceCode
 {
     /// <summary>
-    /// PatternScanResult struct is redurned by the Pattern class when an .IndexIn call has been performed.
-    /// </summary>
-    public struct PatternScanResult
-    {
-        /// <summary>
-        /// The index on which the pattern was found in the source string
-        /// </summary>
-        public int Index;
-
-        /// <summary>
-        /// The string that was found , this is always the same as the pattern StringPattern property if the pattern is a simple pattern.
-        /// if the pattern is complex this field will contain the string that was found by the scan.
-        /// </summary>
-        public string Token;
-    }
-
-    public enum BracketType
-    {
-        None,
-        StartBracket,
-        EndBracket,
-    }
-
-    /// <summary>
     /// A Pattern is a specific string or a RegEx pattern that is used by the parser.
     /// There are two types of patterns , Simple and Complex.
     /// 
@@ -102,7 +78,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public PatternList Parent;
 
-        private Regex rx;
+        internal Regex rx;
 
         /// <summary>
         /// 
@@ -181,164 +157,14 @@ namespace Puzzle.SourceCode
                 return false;
             }
         }
-        private void Init(string pattern, bool iscomplex, bool separator, bool
-                                                                              keyword)
+        private void Init(string pattern, bool isComplex, bool separator, bool keyword)
         {
             StringPattern = pattern;
             IsSeparator = separator;
             IsKeyword = keyword;
-            if (iscomplex)
-            {
-                IsComplex = true;
+            IsComplex = isComplex;
+            if (isComplex)
                 rx = new Regex(StringPattern, RegexOptions.Compiled);
-            }
-            else
-            {
-                IsComplex = false;
-            }
-        }
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        /// <param name="Text"></param>
-        /// <param name="Position"></param>
-        /// <returns></returns>
-        public bool HasSeparators(string Text, int Position)
-        {
-            return (CharIsSeparator(Text, Position - 1) && CharIsSeparator(Text,
-                                                                           Position + StringPattern.Length));
-        }
-
-
-        private bool CharIsSeparator(string Text, int Position)
-        {
-            if (Position < 0 || Position >= Text.Length)
-                return true;
-
-            string s = Text.Substring(Position, 1);
-            if (Separators.IndexOf(s) >= 0)
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the index of the pattern in a string
-        /// </summary>
-        /// <param name="text">The string in which to find the pattern</param>
-        /// <param name="startPosition">Start index in the string</param>
-        /// <param name="matchCase">true if a case sensitive match should be performed</param>
-        /// <param name="separators"></param>
-        /// <returns>A PatternScanResult containing information on where the pattern was found and also the text of the pattern</returns>
-        public PatternScanResult IndexIn(string text, int startPosition, bool matchCase, string separators)
-        {
-            if (separators == null) {}
-            else
-            {
-                Separators = separators;
-            }
-
-            if (!IsComplex)
-            {
-                if (!IsKeyword)
-                    return SimpleFind(text, startPosition, matchCase);
-
-                return SimpleFindKeyword(text, startPosition, matchCase);
-            }
-            if (!IsKeyword)
-                return ComplexFind(text, startPosition);
-
-            return ComplexFindKeyword(text, startPosition);
-        }
-
-
-        private PatternScanResult SimpleFind(string Text, int StartPosition, bool
-                                                                                 MatchCase)
-        {
-            int Position = MatchCase ? Text.IndexOf(StringPattern, StartPosition) : Text.ToLowerInvariant().IndexOf(LowerStringPattern, StartPosition);
-
-            PatternScanResult Result;
-            if (Position >= 0)
-            {
-                Result.Index = Position;
-                Result.Token = Text.Substring(Position, StringPattern.Length);
-            }
-            else
-            {
-                Result.Index = 0;
-                Result.Token = "";
-            }
-
-            return Result;
-        }
-
-        private PatternScanResult SimpleFindKeyword(string Text, int StartPosition,
-                                                    bool MatchCase)
-        {
-            PatternScanResult res;
-            while (true)
-            {
-                res = SimpleFind(Text, StartPosition, MatchCase);
-                if (res.Token == "")
-                    return res;
-
-                if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text,
-                                                                            res.Index + res.Token.Length))
-                    return res;
-
-                StartPosition = res.Index + 1;
-                if (StartPosition >= Text.Length)
-                {
-                    res.Token = "";
-                    res.Index = 0;
-                    return res;
-                }
-            }
-        }
-
-
-        private PatternScanResult ComplexFindKeyword(string Text, int StartPosition)
-        {
-            PatternScanResult res;
-            while (true)
-            {
-                res = ComplexFind(Text, StartPosition);
-                if (res.Token == "")
-                    return res;
-
-                if (CharIsSeparator(Text, res.Index - 1) && CharIsSeparator(Text,
-                                                                            res.Index + res.Token.Length))
-                    return res;
-
-                StartPosition = res.Index + 1;
-                if (StartPosition >= Text.Length)
-                {
-                    res.Token = "";
-                    res.Index = 0;
-                    return res;
-                }
-            }
-        }
-
-        private PatternScanResult ComplexFind(string Text, int StartPosition)
-        {
-            MatchCollection mc = rx.Matches(Text);
-            foreach (Match m in mc)
-            {
-                int pos = m.Index;
-                string p = m.Value;
-                if (pos >= StartPosition)
-                {
-                    PatternScanResult t;
-                    t.Index = pos;
-                    t.Token = p;
-                    return t;
-                }
-            }
-            PatternScanResult res;
-            res.Index = 0;
-            res.Token = "";
-            return res;
-        }
+        }        
     }
 }
