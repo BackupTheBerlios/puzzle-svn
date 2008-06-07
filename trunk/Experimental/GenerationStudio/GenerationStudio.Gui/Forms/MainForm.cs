@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using GenerationStudio.Elements;
 using GenerationStudio.AppCore;
 using GenerationStudio.Attributes;
-using System.Reflection;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Soap;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Remoting.Messaging;
+using GenerationStudio.Elements;
 using GenerationStudio.Forms.Docking;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -23,46 +18,46 @@ namespace GenerationStudio.Gui
 {
     public partial class MainForm : Form
     {
+        private readonly ErrorDockingForm ErrorDockingForm = new ErrorDockingForm();
+        private readonly ProjectDockingForm ProjectDockingForm = new ProjectDockingForm();
+        private readonly PropertiesDockingForm PropertiesDockingForm = new PropertiesDockingForm();
+        private readonly StartDockingForm StartDockingForm = new StartDockingForm();
+        private readonly SummaryDockingForm SummaryDockingForm = new SummaryDockingForm();
+        private RootElement root;
+
         public MainForm()
         {
             InitializeComponent();
         }
 
-        private RootElement root;
-        private ErrorDockingForm ErrorDockingForm = new ErrorDockingForm();
-        private ProjectDockingForm ProjectDockingForm = new ProjectDockingForm();
-        private PropertiesDockingForm PropertiesDockingForm = new PropertiesDockingForm();
-        private StartDockingForm StartDockingForm = new StartDockingForm();
-        private SummaryDockingForm SummaryDockingForm = new SummaryDockingForm();
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            MainMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            ProjectContextMenu.Renderer = new Office2007Renderer.Office2007Renderer();
-            StatusBar.Renderer = new Office2007Renderer.Office2007Renderer();
+            SetupDockingForms();
+            SetupNewProject();
 
+            Engine.RegisterAllElementTypes(typeof(RootElement).Assembly);
+
+            ToolStripManager.VisualStylesEnabled = false;            
+            Engine.NotifyChange += Engine_NotifyChange;
+
+            MainToolStrip.SendToBack();
+            MainMenu.SendToBack();
+        }
+
+        private void SetupDockingForms() {
             ErrorDockingForm.SetContent(ErrorPanel, "Error List");
             ProjectDockingForm.SetContent(ProjectPanel, "Solution Explorer");
             PropertiesDockingForm.SetContent(PropertyPanel, "Properties");
             SummaryDockingForm.SetContent(SummaryPanel, "Summary");
 
             ErrorDockingForm.Show(DockPanel, DockState.DockBottom);
-            ProjectDockingForm.Show(DockPanel,DockState.DockRight);
+            ProjectDockingForm.Show(DockPanel, DockState.DockRight);
             PropertiesDockingForm.Show(ProjectDockingForm.Pane, DockAlignment.Bottom, 0.3);
             StartDockingForm.Show(DockPanel, DockState.Document);
             SummaryDockingForm.Show(DockPanel, DockState.Document);
-
-            NewProject();
-            Engine.RegisterAllElementTypes(root.GetType().Assembly);
-
-            Engine.NotifyChange += new EventHandler(Engine_NotifyChange);
-
-            MainToolStrip.SendToBack();
-            MainMenu.SendToBack();
-            
         }
 
-        void Engine_NotifyChange(object sender, EventArgs e)
+        private void Engine_NotifyChange(object sender, EventArgs e)
         {
             NotifyChange();
         }
@@ -76,17 +71,18 @@ namespace GenerationStudio.Gui
 
         private void ShowErrors()
         {
-            IList<ElementError> allErrors = root.GetErrorsRecursive();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Image", typeof(Image));
-            dt.Columns.Add("OwnerType", typeof(string));
-            dt.Columns.Add("Owner", typeof(string));            
-            dt.Columns.Add("Message", typeof(string));
-            dt.Columns.Add("Item", typeof(Element));
+            var allErrors = root.GetErrorsRecursive();
+            var dt = new DataTable();
+            dt.Columns.Add("Image", typeof (Image));
+            dt.Columns.Add("OwnerType", typeof (string));
+            dt.Columns.Add("Owner", typeof (string));
+            dt.Columns.Add("Message", typeof (string));
+            dt.Columns.Add("Item", typeof (Element));
             ErrorGrid.AutoGenerateColumns = false;
-            foreach (ElementError error in allErrors)
+            foreach (var error in allErrors)
             {
-                dt.Rows.Add(error.Owner.GetIcon (), error.Owner.GetType().GetElementName(), error.Owner.GetDisplayName (), error.Message,error.Owner);
+                dt.Rows.Add(error.Owner.GetIcon(), error.Owner.GetType().GetElementName(), error.Owner.GetDisplayName(),
+                            error.Message, error.Owner);
             }
             ErrorGrid.DataSource = dt;
         }
@@ -98,8 +94,8 @@ namespace GenerationStudio.Gui
 
         private void UpdateNode(TreeNode node)
         {
-            Element element = (Element)node.Tag;
-            if (element.GetDisplayName () != node.Text)
+            var element = (Element) node.Tag;
+            if (element.GetDisplayName() != node.Text)
                 node.Text = element.GetDisplayName();
 
             ApplyImage(node);
@@ -113,7 +109,7 @@ namespace GenerationStudio.Gui
 
         private static void ApplyErrors(TreeNode node)
         {
-            Element element = node.GetElement ();
+            Element element = node.GetElement();
             IList<ElementError> allErrors = element.GetErrorsRecursive();
             string message = "";
             foreach (ElementError error in allErrors)
@@ -126,11 +122,13 @@ namespace GenerationStudio.Gui
             node.ToolTipText = message;
         }
 
-        private void FillTree(Element element,TreeNode parentNode)
+        private void FillTree(Element element, TreeNode parentNode)
         {
-            TreeNode node = new TreeNode();
-            node.Text = element.GetDisplayName ();
-            node.Tag = element;
+            var node = new TreeNode
+                       {
+                           Text = element.GetDisplayName(),
+                           Tag = element
+                       };
 
             ApplyImage(node);
             ApplyErrors(node);
@@ -149,9 +147,9 @@ namespace GenerationStudio.Gui
             }
 
             if (element.GetDefaultExpanded())
-                node.Expand ();
+                node.Expand();
             else
-                node.Collapse ();
+                node.Collapse();
         }
 
         private void ApplyImage(TreeNode node)
@@ -161,7 +159,7 @@ namespace GenerationStudio.Gui
             string imageKey = selectedElement.GetIconKey();
             if (!Icons.Images.ContainsKey(imageKey))
             {
-                Image img = selectedElement.GetIcon ();
+                Image img = selectedElement.GetIcon();
                 Icons.Images.Add(imageKey, img);
             }
             if (node.ImageKey != imageKey)
@@ -185,7 +183,7 @@ namespace GenerationStudio.Gui
                 return;
             }
 
-            Element currentElement =  selectedNode.GetElement ();
+            Element currentElement = selectedNode.GetElement();
             if (currentElement == null)
                 return;
 
@@ -199,25 +197,30 @@ namespace GenerationStudio.Gui
             {
                 if (pathElement == currentElement)
                 {
-                    Label pathLabel = new Label();
-                    pathLabel.AutoSize = true;
-                    pathLabel.Margin = new Padding(0);
-                    pathLabel.Text = pathElement.GetDisplayName();
-                    pathLabel.Font = BoldFont.Font;
-                    
+                    var pathLabel = new Label
+                                    {
+                                        AutoSize = true,
+                                        Margin = new Padding(0),
+                                        Text = pathElement.GetDisplayName(),
+                                        Font = BoldFont.Font
+                                    };
+
                     SummaryPathPanel.Controls.Add(pathLabel);
-                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);                 
+                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);
                 }
                 else
                 {
-                    LinkLabel pathLabel = new LinkLabel();
-                    pathLabel.AutoSize = true;
-                    pathLabel.Margin = new Padding(0);
-                    pathLabel.Text = pathElement.GetDisplayName();
-                    pathLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(SummaryPath_LinkClicked);
+                    var pathLabel = new LinkLabel
+                                    {
+                                        AutoSize = true,
+                                        Margin = new Padding(0),
+                                        Text = pathElement.GetDisplayName()
+                                    };
+
+                    pathLabel.LinkClicked += SummaryPath_LinkClicked;
                     pathLabel.Tag = pathElement;
                     SummaryPathPanel.Controls.Add(pathLabel);
-                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);                 
+                    SummaryPathPanel.Controls.SetChildIndex(pathLabel, 0);
                 }
                 pathElement = pathElement.Parent;
             }
@@ -225,12 +228,12 @@ namespace GenerationStudio.Gui
             SummaryIcon.Image = currentElement.GetIcon();
 
 
-            IList<Element> allChildren = currentElement.AllChildren.ToList ();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Image", typeof(Image));
-            dt.Columns.Add("OwnerType", typeof(string));
-            dt.Columns.Add("Owner", typeof(string));            
-            dt.Columns.Add("Item", typeof(Element));
+            IList<Element> allChildren = currentElement.AllChildren.ToList();
+            var dt = new DataTable();
+            dt.Columns.Add("Image", typeof (Image));
+            dt.Columns.Add("OwnerType", typeof (string));
+            dt.Columns.Add("Owner", typeof (string));
+            dt.Columns.Add("Item", typeof (Element));
             SummaryGridView.AutoGenerateColumns = false;
             foreach (Element child in allChildren)
             {
@@ -238,14 +241,13 @@ namespace GenerationStudio.Gui
             }
             SummaryGridView.DataSource = dt;
 
-            SummaryChildCountLabel.Text = string.Format("{0} Item(s)",currentElement.AllChildren.ToList().Count);
+            SummaryChildCountLabel.Text = string.Format("{0} Item(s)", currentElement.AllChildren.ToList().Count);
         }
 
         private void SummaryPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Element element = ((LinkLabel)sender).Tag as Element;
+            var element = ((LinkLabel) sender).Tag as Element;
             SelectElementInProjectTree(element);
-            
         }
 
         private void trvProject_MouseUp(object sender, MouseEventArgs e)
@@ -256,25 +258,28 @@ namespace GenerationStudio.Gui
 
         private void ShowProjectContextMenu(MouseEventArgs e)
         {
-            Point p = new Point(e.X, e.Y);
-            
-            TreeNode selectedNode = ProjectTree.GetNodeAt(p);            
+            var p = new Point(e.X, e.Y);
+
+            TreeNode selectedNode = ProjectTree.GetNodeAt(p);
 
             if (selectedNode == null)
                 return;
 
             ProjectTree.SelectedNode = selectedNode;
 
-            Element currentElement = (Element)selectedNode.Tag;
+            var currentElement = (Element) selectedNode.Tag;
             IList<Type> childTypes = Engine.GetChildTypes(currentElement.GetType());
             ProjectContextMenu.Items.Clear();
-            ToolStripLabel addNewLabel = new ToolStripLabel("Elements:");
-            addNewLabel.Font = BoldFont.Font;
-            ProjectContextMenu.Items.Add (addNewLabel);
+            var addNewLabel = new ToolStripLabel("Elements:")
+                              {
+                                  Font = BoldFont.Font
+                              };
+
+            ProjectContextMenu.Items.Add(addNewLabel);
             foreach (Type childType in childTypes)
             {
                 bool allowNew = true;
-                AllowMultipleAttribute allowMultipleAttrib = childType.GetAttribute<AllowMultipleAttribute>();
+                var allowMultipleAttrib = childType.GetAttribute<AllowMultipleAttribute>();
                 if (allowMultipleAttrib != null && allowMultipleAttrib.Allow == false)
                 {
                     foreach (Element childElement in currentElement.AllChildren)
@@ -287,14 +292,15 @@ namespace GenerationStudio.Gui
                     }
                 }
                 string itemText = string.Format("Add {0}", childType.GetElementName());
-                ToolStripMenuItem item = new ToolStripMenuItem(itemText);
-                item.Tag = childType;
-                item.Click += new EventHandler(NewElement_Click);
+                var item = new ToolStripMenuItem(itemText)
+                           {
+                               Tag = childType
+                           };
+
+                item.Click += NewElement_Click;
                 item.Enabled = allowNew;
                 item.Image = childType.GetElementIcon();
-                if (allowNew)
-                {
-                }
+                if (allowNew) {}
                 else
                 {
                     item.ToolTipText = "Only one instance of this item is allowed";
@@ -303,85 +309,90 @@ namespace GenerationStudio.Gui
             }
 
 
-            ToolStripSeparator separator1 = new ToolStripSeparator();
+            var separator1 = new ToolStripSeparator();
             ProjectContextMenu.Items.Add(separator1);
 
 
-            ToolStripLabel verbLabel = new ToolStripLabel("Verbs:");
-            verbLabel.Font = BoldFont.Font;
+            var verbLabel = new ToolStripLabel("Verbs:")
+                            {
+                                Font = BoldFont.Font
+                            };
+
             ProjectContextMenu.Items.Add(verbLabel);
 
             List<MethodInfo> elementVerbs = currentElement.GetType().GetElementVerbs();
             foreach (MethodInfo method in elementVerbs)
             {
                 string verbName = method.GetVerbName();
-                ToolStripMenuItem item = new ToolStripMenuItem(verbName);
-                item.Tag = method;
-                item.Click += new EventHandler(ElementVerb_Click);
-                ProjectContextMenu.Items.Add(item);
+                var item = new ToolStripMenuItem(verbName)
+                            {
+                                Tag = method
+                            };
 
+                item.Click += ElementVerb_Click;
+                ProjectContextMenu.Items.Add(item);
             }
-            
+
 
             ProjectContextMenu.Show(ProjectTree, e.Location);
         }
 
-        void ElementVerb_Click(object sender, EventArgs e)
+        private void ElementVerb_Click(object sender, EventArgs e)
         {
             TreeNode selectedNode = ProjectTree.SelectedNode;
-            Element currentElement = (Element)selectedNode.Tag;
+            var currentElement = (Element) selectedNode.Tag;
 
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            MethodInfo method = item.Tag as MethodInfo;
+            var item = (ToolStripMenuItem) sender;
+            var method = item.Tag as MethodInfo;
 
             InvokeVerb(currentElement, method);
         }
 
         private void InvokeVerb(Element currentElement, MethodInfo method)
         {
-            method.Invoke(currentElement, new object[]{this});
+            method.Invoke(currentElement, new object[] {this});
         }
-            
+
 
         private void NewElement_Click(object sender, EventArgs e)
         {
             TreeNode selectedNode = ProjectTree.SelectedNode;
-            Element currentElement = (Element)selectedNode.Tag;
+            var currentElement = (Element) selectedNode.Tag;
 
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            Type childType = (Type)item.Tag;
-            Element newElement = (Element)Activator.CreateInstance(childType);
+            var item = (ToolStripMenuItem) sender;
+            var childType = (Type) item.Tag;
+            var newElement = (Element) Activator.CreateInstance(childType);
             currentElement.AddChild(newElement);
             if (newElement is NamedElement)
             {
-                ((NamedElement)newElement).Name = string.Format("New {0}", childType.GetElementName());
+                ((NamedElement) newElement).Name = string.Format("New {0}", childType.GetElementName());
             }
-            TreeNode newNode = new TreeNode(newElement.GetDisplayName());
-            
-            
-            newNode.Tag = newElement;            
+            var newNode = new TreeNode(newElement.GetDisplayName())
+                          {
+                              Tag = newElement
+                          };
+
+
             selectedNode.Nodes.Add(newNode);
             selectedNode.Expand();
             ProjectTree.SelectedNode = newNode;
             ApplyImage(newNode);
             ApplyErrors(newNode);
 
-            
+
             if (newElement is NamedElement)
             {
                 newNode.BeginEdit();
             }
-
         }
 
         private void FillTreeView()
         {
             ProjectTree.Nodes.Clear();
-            TreeNode rootParentNode = new TreeNode();
+            var rootParentNode = new TreeNode();
             FillTree(root, rootParentNode);
 
             ProjectTree.Nodes.Add(rootParentNode.Nodes[0]);
-            
         }
 
         private void ProjectTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
@@ -393,7 +404,7 @@ namespace GenerationStudio.Gui
                 return;
 
             TreeNode selectedNode = ProjectTree.SelectedNode;
-            NamedElement currentElement = selectedNode.GetElement () as NamedElement;
+            var currentElement = selectedNode.GetElement() as NamedElement;
             if (currentElement == null)
                 return;
 
@@ -410,7 +421,6 @@ namespace GenerationStudio.Gui
             if (e.KeyCode == Keys.Delete)
             {
                 DeleteSelectedElement();
-                
             }
         }
 
@@ -427,14 +437,10 @@ namespace GenerationStudio.Gui
             UpdateNode(parentNode);
         }
 
-        private void ProjectTree_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
+        private void ProjectTree_KeyPress(object sender, KeyPressEventArgs e) {}
 
         private void MainMenuFileSaveProject_Click(object sender, EventArgs e)
         {
-
             SaveProject();
 
             //SerializerEngine se = new SerializerEngine();
@@ -443,16 +449,18 @@ namespace GenerationStudio.Gui
             //    se.Serialize(fs, root);
             //    fs.Flush();
             //}
-
         }
 
         private void SaveProject()
         {
-            FileStream fs = new FileStream("c:\\productobjectsoapformatted.Data", FileMode.Create);
-            BinaryFormatter sf = new BinaryFormatter();
-            sf.AssemblyFormat = FormatterAssemblyStyle.Simple;
-            sf.FilterLevel = TypeFilterLevel.Full;
-            sf.TypeFormat = FormatterTypeStyle.TypesAlways;
+            var fs = new FileStream("c:\\productobjectsoapformatted.Data", FileMode.Create);
+            var sf = new BinaryFormatter
+                     {
+                         AssemblyFormat = FormatterAssemblyStyle.Simple,
+                         FilterLevel = TypeFilterLevel.Full,
+                         TypeFormat = FormatterTypeStyle.TypesAlways
+                     };
+
             sf.Serialize(fs, root);
             fs.Close();
         }
@@ -467,20 +475,22 @@ namespace GenerationStudio.Gui
 
         private void OpenProject(string fileName)
         {
-            NewProject();
-            FileStream fs = new FileStream(fileName, FileMode.Open);
-            BinaryFormatter sf = new BinaryFormatter();
-            sf.AssemblyFormat = FormatterAssemblyStyle.Simple;
-            sf.FilterLevel = TypeFilterLevel.Full;
-            sf.TypeFormat = FormatterTypeStyle.TypesAlways;
-            root = (RootElement)sf.Deserialize(fs);
+            SetupNewProject();
+            var fs = new FileStream(fileName, FileMode.Open);
+            var sf = new BinaryFormatter
+                     {
+                         AssemblyFormat = FormatterAssemblyStyle.Simple,
+                         FilterLevel = TypeFilterLevel.Full,
+                         TypeFormat = FormatterTypeStyle.TypesAlways
+                     };
+
+            root = (RootElement) sf.Deserialize(fs);
             fs.Close();
             FillTreeView();
-            NotifyChange();    
-       
+            NotifyChange();
         }
 
-        private void NewProject()
+        private void SetupNewProject()
         {
             root = new RootElement();
             FillTreeView();
@@ -493,7 +503,7 @@ namespace GenerationStudio.Gui
             if (selectedNode == null)
                 return;
 
-            Element currentElement = (Element)selectedNode.Tag;
+            var currentElement = (Element) selectedNode.Tag;
 
             MethodInfo defaultVerb = currentElement.GetType().GetElementDefaultVerb();
             if (defaultVerb == null)
@@ -504,21 +514,20 @@ namespace GenerationStudio.Gui
 
         private void ErrorGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataRowView rowView = (DataRowView)ErrorGrid.Rows[e.RowIndex].DataBoundItem;
+            var rowView = (DataRowView) ErrorGrid.Rows[e.RowIndex].DataBoundItem;
             DataRow row = rowView.Row;
-            Element errorElement = (Element)row["Item"];
+            var errorElement = (Element) row["Item"];
 
-            SelectElementInProjectTree(errorElement,ProjectTree.Nodes[0]);
+            SelectElementInProjectTree(errorElement, ProjectTree.Nodes[0]);
         }
 
 
-        
         private void SelectElementInProjectTree(Element errorElement)
         {
             SelectElementInProjectTree(errorElement, ProjectTree.Nodes[0]);
         }
 
-        private void SelectElementInProjectTree(Element errorElement,TreeNode node)
+        private void SelectElementInProjectTree(Element errorElement, TreeNode node)
         {
             if (node.GetElement() == errorElement)
             {
@@ -531,18 +540,14 @@ namespace GenerationStudio.Gui
             }
         }
 
-        private void ProjectTree_MouseMove(object sender, MouseEventArgs e)
-        {
-
-        }
+        private void ProjectTree_MouseMove(object sender, MouseEventArgs e) {}
 
         private void ProjectTree_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            TreeNode sourceNode = (TreeNode)e.Item;
+            var sourceNode = (TreeNode) e.Item;
             Element currentElement = sourceNode.GetElement();
             Engine.DragDropElement = currentElement;
             DoDragDrop("DragElement", DragDropEffects.Move | DragDropEffects.Copy);
-
-        }       
+        }
     }
 }

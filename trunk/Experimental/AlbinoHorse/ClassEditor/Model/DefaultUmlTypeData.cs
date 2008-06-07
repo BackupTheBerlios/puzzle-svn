@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AlbinoHorse.Model
 {
     public class DefaultUmlInstanceTypeData : IUmlInstanceTypeData
     {
+        private readonly List<UmlTypeMember> members = new List<UmlTypeMember>();
+
+        #region IUmlInstanceTypeData Members
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
         public bool Expanded { get; set; }
         public string TypeName { get; set; }
-
-        private List<UmlTypeMember> members = new List<UmlTypeMember>(); 
 
         public void RemoveTypeMember(UmlTypeMember property)
         {
@@ -26,12 +26,14 @@ namespace AlbinoHorse.Model
 
         public UmlTypeMember CreateTypeMember(string sectionName)
         {
-            UmlTypeMember member = new UmlTypeMember();
-            DefaultUmlTypeMemberData data = new DefaultUmlTypeMemberData();
+            var member = new UmlTypeMember();
+            var data = new DefaultUmlTypeMemberData();
             data.SectionName = sectionName;
-            member.DataSource = data;            
+            member.DataSource = data;
             members.Add(member);
             return member;
-        }       
+        }
+
+        #endregion
     }
 }

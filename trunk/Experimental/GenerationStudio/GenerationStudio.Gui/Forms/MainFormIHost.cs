@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using GenerationStudio.Elements;
 using GenerationStudio.Forms.Docking;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace GenerationStudio.Gui
 {
     public partial class MainForm : IHost
     {
-        private Dictionary<Element, Dictionary<string, Control>> elementEditors = new Dictionary<Element, Dictionary<string, Control>>();
+        private Dictionary<Element, Dictionary<string, Control>> elementEditors =
+            new Dictionary<Element, Dictionary<string, Control>>();
 
-        public T GetEditor<T>(Element owner,string name) where T:Control,new()
+        #region IHost Members
+
+        public T GetEditor<T>(Element owner, string name) where T : Control, new()
         {
             if (!elementEditors.ContainsKey(owner))
                 elementEditors.Add(owner, new Dictionary<string, Control>());
@@ -21,21 +20,22 @@ namespace GenerationStudio.Gui
             if (!elementEditors[owner].ContainsKey(name))
                 elementEditors[owner].Add(name, new T());
 
-            T editor = (T)elementEditors[owner][name];
+            var editor = (T) elementEditors[owner][name];
             return editor;
         }
 
         public void ShowEditor(Control editor)
         {
-
-            DocumentForm form = new DocumentForm();
+            var form = new DocumentForm();
             form.SetContent(editor, "Blah");
-            form.Show(DockPanel);            
+            form.Show(DockPanel);
         }
 
         public void RefreshProjectTree()
         {
             FillTreeView();
         }
+
+        #endregion
     }
 }

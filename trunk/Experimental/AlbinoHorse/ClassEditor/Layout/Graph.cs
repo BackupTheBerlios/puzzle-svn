@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace AlbinoHorse.Layout
@@ -12,33 +11,20 @@ namespace AlbinoHorse.Layout
             Nodes = new List<Node>();
         }
 
-
-
         #region Property Nodes
-        private List<Node> nodes;
-        public List<Node> Nodes
-        {
-            get
-            {
-                return this.nodes;
-            }
-            set
-            {
-                this.nodes = value;
-            }
-        }
-        #endregion
 
+        public List<Node> Nodes { get; set; }
+
+        #endregion
 
         public void AutoLayout()
         {
+            var SingleNodes = new List<Node>();
+            var LinearNodeLists = new List<List<Node>>();
+            var ConnectedNodes = new List<Node>();
+            var AllLinearNodes = new List<Node>();
 
-            List<Node> SingleNodes = new List<Node>();
-            List<List<Node>> LinearNodeLists = new List<List<Node>>();
-            List<Node> ConnectedNodes = new List<Node>();
-            List<Node> AllLinearNodes = new List<Node>();
-
-            Random r = new Random(0);
+            var r = new Random(0);
             foreach (Node node in Nodes)
             {
                 if (AllLinearNodes.Contains(node))
@@ -51,7 +37,7 @@ namespace AlbinoHorse.Layout
                 }
                 else
                 {
-                    List<Node> tmpNodes = new List<Node>();
+                    var tmpNodes = new List<Node>();
                     bool isLinear = true;
                     if (node.Connections.Count == 1)
                     {
@@ -96,14 +82,10 @@ namespace AlbinoHorse.Layout
                         isLinear = false;
                     }
 
-                    if (isLinear)
-                    {
-
-                    }
+                    if (isLinear) {}
                     else
                     {
                         ConnectedNodes.Add(node);
-
                     }
                 }
             }
@@ -119,12 +101,10 @@ namespace AlbinoHorse.Layout
                     y++;
                 }
 
-                node.Bounds.X = x * 30;
-                node.Bounds.Y = y * 30;
+                node.Bounds.X = x*30;
+                node.Bounds.Y = y*30;
                 node.Bounds.Height = 20;
                 x++;
-
-
             }
 
             if (SingleNodes.Count > 0)
@@ -133,14 +113,14 @@ namespace AlbinoHorse.Layout
             x = 0;
             int yl = 0;
             int maxY = 0;
-            foreach (List<Node> linearNodes in LinearNodeLists)
+            foreach (var linearNodes in LinearNodeLists)
             {
                 yl = y;
                 foreach (Node node in linearNodes)
                 {
-                    node.Bounds.X = x * 30;
-                    node.Bounds.Y = (y * 30) + yl * 30;
-                    yl += (int)node.Bounds.Height / 20;
+                    node.Bounds.X = x*30;
+                    node.Bounds.Y = (y*30) + yl*30;
+                    yl += (int) node.Bounds.Height/20;
                 }
                 x++;
                 maxY = Math.Max(yl, maxY);
@@ -155,7 +135,7 @@ namespace AlbinoHorse.Layout
 
             for (int i = 0; i < 3000; i++)
             {
-                LayoutNodes(ConnectedNodes,2);
+                LayoutNodes(ConnectedNodes, 2);
             }
 
             for (int i = 0; i < 1000; i++)
@@ -167,7 +147,6 @@ namespace AlbinoHorse.Layout
             {
                 LayoutNodes(ConnectedNodes, 0);
             }
-
 
 
             float left = float.MaxValue;
@@ -198,18 +177,15 @@ namespace AlbinoHorse.Layout
             //    node.Bounds.Y = yp * 20;
 
             //}
-
         }
 
-        private static void LayoutNodes(List<Node> ConnectedNodes,float massFactor)
+        private static void LayoutNodes(List<Node> ConnectedNodes, float massFactor)
         {
             foreach (Node node in ConnectedNodes)
             {
-                PointF force = node.GetForceDirection(ConnectedNodes, massFactor);              
+                PointF force = node.GetForceDirection(ConnectedNodes, massFactor);
                 node.Bounds.X += force.X;
                 node.Bounds.Y += force.Y;
-
-                
             }
         }
     }

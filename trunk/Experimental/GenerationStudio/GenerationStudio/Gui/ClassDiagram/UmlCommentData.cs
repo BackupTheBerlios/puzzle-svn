@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AlbinoHorse.Model;
+﻿using AlbinoHorse.Model;
 using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
@@ -15,62 +11,32 @@ namespace GenerationStudio.Gui
 
         public int X
         {
-            get
-            {
-                return Owner.X;
-            }
-            set
-            {
-                Owner.X = value;
-            }
+            get { return Owner.X; }
+            set { Owner.X = value; }
         }
 
         public int Y
         {
-            get
-            {
-                return Owner.Y;
-            }
-            set
-            {
-                Owner.Y = value;
-            }
+            get { return Owner.Y; }
+            set { Owner.Y = value; }
         }
 
         public int Width
         {
-            get
-            {
-                return Owner.Width;
-            }
-            set
-            {
-                Owner.Width = value;
-            }
+            get { return Owner.Width; }
+            set { Owner.Width = value; }
         }
 
         public int Height
         {
-            get
-            {
-                return Owner.Height;
-            }
-            set
-            {
-                Owner.Height = value;
-            }
+            get { return Owner.Height; }
+            set { Owner.Height = value; }
         }
 
         public string Text
         {
-            get
-            {
-                return Owner.Text;
-            }
-            set
-            {
-                Owner.Text = value;
-            }
+            get { return Owner.Text; }
+            set { Owner.Text = value; }
         }
 
         #endregion

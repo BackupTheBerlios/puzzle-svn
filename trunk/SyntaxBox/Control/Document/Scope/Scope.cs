@@ -10,68 +10,61 @@
 
 namespace Puzzle.SourceCode
 {
-	/// <summary>
-	/// The Scope class defines what patterns starts and ends a BlockType
-	/// </summary>
-	public sealed class Scope
-	{
-		/// <summary>
-		/// The Start trigger Pattern
-		/// </summary>
-		public Pattern Start = null;
+    /// <summary>
+    /// The Scope class defines what patterns starts and ends a BlockType
+    /// </summary>
+    public sealed class Scope
+    {
+        /// <summary>
+        /// Gets or Sets if the scope patterns is case sensitive
+        /// </summary>
+        public bool CaseSensitive;
 
-		/// <summary>
-		/// BlockType that should be started directly after this block have started
-		/// </summary>
-		public BlockType SpawnBlockOnStart = null;
+        public bool CauseIndent;
 
-		/// <summary>
-		/// BlockType that should be started directly after this block have ended
-		/// </summary>
-		public BlockType SpawnBlockOnEnd = null;
+        /// <summary>
+        /// Gets or Sets if this block should be expanded or collapsed by default
+        /// </summary>
+        public bool DefaultExpanded = true;
 
-		/// <summary>
-		/// The owner BlockType
-		/// </summary>
-		public BlockType Parent = null;
+        /// <summary>
+        /// List of end patterns
+        /// </summary>
+        public PatternCollection EndPatterns = new PatternCollection();
 
-		/// <summary>
-		/// List of end patterns
-		/// </summary>
-		public PatternCollection EndPatterns = new PatternCollection();
+        /// <summary>
+        /// The text that should be displayed if the owner block is collapsed
+        /// </summary>
+        public string ExpansionText = "";
 
-		/// <summary>
-		/// The style that should be applied to the start and end patterns
-		/// </summary>
-		public TextStyle Style = null;
+        /// <summary>
+        /// Gets or Sets if the scope patterns should be case normalized
+        /// </summary>
+        public bool NormalizeCase = true;
 
-		/// <summary>
-		/// The text that should be displayed if the owner block is collapsed
-		/// </summary>
-		public string ExpansionText = "";
+        /// <summary>
+        /// The owner BlockType
+        /// </summary>
+        public BlockType Parent;
 
-		/// <summary>
-		/// Gets or Sets if this block should be expanded or collapsed by default
-		/// </summary>
-		public bool DefaultExpanded = true;
+        /// <summary>
+        /// BlockType that should be started directly after this block have ended
+        /// </summary>
+        public BlockType SpawnBlockOnEnd;
 
-		/// <summary>
-		/// Gets or Sets if the scope patterns is case sensitive
-		/// </summary>
-		public bool CaseSensitive = false;
+        /// <summary>
+        /// BlockType that should be started directly after this block have started
+        /// </summary>
+        public BlockType SpawnBlockOnStart;
 
-		/// <summary>
-		/// Gets or Sets if the scope patterns should be case normalized
-		/// </summary>
-		public bool NormalizeCase = true;
+        /// <summary>
+        /// The Start trigger Pattern
+        /// </summary>
+        public Pattern Start;
 
-		public bool CauseIndent = false;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public Scope()
-		{
-		}
-	}
+        /// <summary>
+        /// The style that should be applied to the start and end patterns
+        /// </summary>
+        public TextStyle Style;
+    }
 }

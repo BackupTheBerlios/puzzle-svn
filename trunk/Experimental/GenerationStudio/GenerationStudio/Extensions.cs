@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GenerationStudio.Attributes;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using GenerationStudio.Attributes;
 using GenerationStudio.Gui;
 
 namespace GenerationStudio
@@ -14,7 +13,7 @@ namespace GenerationStudio
     {
         public static string GetElementName(this Type elementType)
         {
-            ElementNameAttribute attrib =elementType.GetAttribute<ElementNameAttribute>();
+            var attrib = elementType.GetAttribute<ElementNameAttribute>();
 
 
             if (attrib == null)
@@ -25,7 +24,7 @@ namespace GenerationStudio
 
         public static string GetVerbName(this MethodInfo method)
         {
-            ElementVerbAttribute attrib = method.GetAttribute<ElementVerbAttribute>();
+            var attrib = method.GetAttribute<ElementVerbAttribute>();
 
 
             if (attrib == null)
@@ -36,7 +35,7 @@ namespace GenerationStudio
 
         public static T GetAttribute<T>(this Type type) where T : Attribute
         {
-            object[] attribs = type.GetCustomAttributes(typeof(T), true);
+            object[] attribs = type.GetCustomAttributes(typeof (T), true);
             if (attribs.Length == 0)
                 return null;
 
@@ -45,7 +44,7 @@ namespace GenerationStudio
 
         public static T GetAttribute<T>(this MethodInfo method) where T : Attribute
         {
-            object[] attribs = method.GetCustomAttributes(typeof(T), true);
+            object[] attribs = method.GetCustomAttributes(typeof (T), true);
             if (attribs.Length == 0)
                 return null;
 
@@ -54,7 +53,7 @@ namespace GenerationStudio
 
         public static Image GetElementIcon(this Type elementType)
         {
-            ElementIconAttribute attrib = elementType.GetAttribute<ElementIconAttribute>();
+            var attrib = elementType.GetAttribute<ElementIconAttribute>();
             if (attrib == null)
                 return null;
 
@@ -67,7 +66,7 @@ namespace GenerationStudio
 
         public static string GetElementIconName(this Type elementType)
         {
-            ElementIconAttribute attrib = elementType.GetAttribute<ElementIconAttribute>();
+            var attrib = elementType.GetAttribute<ElementIconAttribute>();
             if (attrib == null)
                 return "";
 
@@ -76,18 +75,18 @@ namespace GenerationStudio
 
         public static List<MethodInfo> GetElementVerbs(this Type elementType)
         {
-            var res = from method in elementType.GetMethods()
-                      where                       
-                      method.IsVerb()
-                      orderby method.Name
-                      select method;
+            IOrderedEnumerable<MethodInfo> res = from method in elementType.GetMethods()
+                                                 where
+                                                     method.IsVerb()
+                                                 orderby method.Name
+                                                 select method;
 
             return res.ToList();
         }
 
         public static MethodInfo GetElementDefaultVerb(this Type elementType)
         {
-            var verbs = elementType.GetElementVerbs();
+            List<MethodInfo> verbs = elementType.GetElementVerbs();
 
             foreach (MethodInfo verb in verbs)
             {
@@ -102,13 +101,13 @@ namespace GenerationStudio
             if (method.GetParameters().Length != 1)
                 return false;
 
-            if (method.GetParameters()[0].ParameterType != typeof(IHost))
+            if (method.GetParameters()[0].ParameterType != typeof (IHost))
                 return false;
 
-            if (method.ReturnType != typeof(void))
+            if (method.ReturnType != typeof (void))
                 return false;
 
-            ElementVerbAttribute attrib = method.GetAttribute<ElementVerbAttribute>();
+            var attrib = method.GetAttribute<ElementVerbAttribute>();
             if (attrib == null)
                 return false;
 
@@ -120,13 +119,13 @@ namespace GenerationStudio
             if (method.GetParameters().Length != 1)
                 return false;
 
-            if (method.GetParameters()[0].ParameterType != typeof(IHost))
+            if (method.GetParameters()[0].ParameterType != typeof (IHost))
                 return false;
 
-            if (method.ReturnType != typeof(void))
+            if (method.ReturnType != typeof (void))
                 return false;
 
-            ElementVerbAttribute attrib = method.GetAttribute<ElementVerbAttribute>();
+            var attrib = method.GetAttribute<ElementVerbAttribute>();
             if (attrib == null)
                 return false;
 
@@ -135,7 +134,5 @@ namespace GenerationStudio
 
             return false;
         }
-
-
     }
 }

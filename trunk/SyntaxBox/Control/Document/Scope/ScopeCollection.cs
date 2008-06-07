@@ -14,339 +14,423 @@ using T = Puzzle.SourceCode.Scope;
 
 namespace Puzzle.SourceCode
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public sealed class ScopeCollection : ICollection, IList, IEnumerable,
-		ICloneable
-	{
-		private const int DefaultMinimumCapacity = 16;
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ScopeCollection : ICollection, IList, IEnumerable,
+                                          ICloneable
+    {
+        private const int DefaultMinimumCapacity = 16;
 
-		private T[] m_array = new T[DefaultMinimumCapacity];
-		private int m_count = 0;
-		private int m_version = 0;
+        private Scope[] m_array = new Scope[DefaultMinimumCapacity];
+        private int m_count;
+        private int m_version;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public BlockType Parent = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        public BlockType Parent;
 
-		// Construction
+        // Construction
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public ScopeCollection()
-		{
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public ScopeCollection() {}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="parent"></param>
-		public ScopeCollection(BlockType parent)
-		{
-			Parent = parent;
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        public ScopeCollection(BlockType parent)
+        {
+            Parent = parent;
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="collection"></param>
-		public ScopeCollection(ScopeCollection collection)
-		{
-			AddRange(collection);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        public ScopeCollection(ScopeCollection collection)
+        {
+            AddRange(collection);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="array"></param>
-		public ScopeCollection(T[] array)
-		{
-			AddRange(array);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        public ScopeCollection(Scope[] array)
+        {
+            AddRange(array);
+        }
 
-		// Operations (type-safe ICollection)
+        /// <summary>
+        /// 
+        /// </summary>
+        public Scope this[int index]
+        {
+            get
+            {
+                ValidateIndex(index); // throws
+                return m_array[index];
+            }
+            set
+            {
+                ValidateIndex(index); // throws
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public int Count
-		{
-			get { return m_count; }
-		}
+                ++m_version;
+                m_array[index] = value;
+            }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="array"></param>
-		public void CopyTo(T[] array)
-		{
-			this.CopyTo(array, 0);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Capacity
+        {
+            get { return m_array.Length; }
+            set
+            {
+                if (value < m_count)
+                    value = m_count;
+                if (value < DefaultMinimumCapacity)
+                    value = DefaultMinimumCapacity;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="array"></param>
-		/// <param name="start"></param>
-		public void CopyTo(T[] array, int start)
-		{
-			if (m_count > array.GetUpperBound(0) + 1 - start)
-				throw new ArgumentException(
-					"Destination array was not long enough.");
+                if (m_array.Length == value)
+                    return;
 
-			// for (int i=0; i < m_count; ++i) array[start+i] = m_array[i];
-			Array.Copy(m_array, 0, array, start, m_count);
-		}
+                ++m_version;
 
-		// Operations (type-safe IList)
+                var temp = new Scope[value];
+                // for (int i=0; i < m_count; ++i) temp[i] = m_array[i];
+                Array.Copy(m_array, 0, temp, 0, m_count);
+                m_array = temp;
+            }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public T this[int index]
-		{
-			get
-			{
-				ValidateIndex(index); // throws
-				return m_array[index];
-			}
-			set
-			{
-				ValidateIndex(index); // throws
+        #region ICloneable Members
 
-				++m_version;
-				m_array[index] = value;
-			}
-		}
+        object ICloneable.Clone()
+        {
+            return (Clone());
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public int Add(T item)
-		{
-			if (NeedsGrowth())
-				Grow();
+        #endregion
 
-			++m_version;
-			m_array[m_count] = item;
-			item.Parent = this.Parent;
+        // Operations (type-safe ICollection)
 
-			return m_count++;
-		}
+        #region ICollection Members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public void Clear()
-		{
-			++m_version;
-			m_array = new T[DefaultMinimumCapacity];
-			m_count = 0;
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Count
+        {
+            get { return m_count; }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public bool Contains(T item)
-		{
-			return ((IndexOf(item) == - 1) ? false : true);
-		}
+        bool ICollection.IsSynchronized
+        {
+            get { return m_array.IsSynchronized; }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public int IndexOf(T item)
-		{
-			for (int i = 0; i < m_count; ++i)
-				if (m_array[i] == (item))
-					return i;
-			return - 1;
-		}
+        object ICollection.SyncRoot
+        {
+            get { return m_array.SyncRoot; }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="position"></param>
-		/// <param name="item"></param>
-		public void Insert(int position, T item)
-		{
-			ValidateIndex(position, true); // throws
+        void ICollection.CopyTo(Array array, int start)
+        {
+            CopyTo((Scope[]) array, start);
+        }
 
-			if (NeedsGrowth())
-				Grow();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (GetEnumerator());
+        }
 
-			++m_version;
-			// for (int i=m_count; i > position; --i) m_array[i] = m_array[i-1];
-			Array.Copy(m_array, position, m_array, position + 1, m_count - position);
+        #endregion
 
-			m_array[position] = item;
-			m_count++;
-		}
+        #region IList Members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		public void Remove(T item)
-		{
-			int index = IndexOf(item);
-			if (index < 0)
-				throw new ArgumentException(
-					"Cannot remove the specified item because it was not found in the specified Collection.");
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Clear()
+        {
+            ++m_version;
+            m_array = new Scope[DefaultMinimumCapacity];
+            m_count = 0;
+        }
 
-			RemoveAt(index);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        public void RemoveAt(int index)
+        {
+            ValidateIndex(index); // throws
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="index"></param>
-		public void RemoveAt(int index)
-		{
-			ValidateIndex(index); // throws
+            ++m_version;
+            m_count--;
+            // for (int i=index; i < m_count; ++i) m_array[i] = m_array[i+1];
+            Array.Copy(m_array, index + 1, m_array, index, m_count - index);
 
-			++m_version;
-			m_count--;
-			// for (int i=index; i < m_count; ++i) m_array[i] = m_array[i+1];
-			Array.Copy(m_array, index + 1, m_array, index, m_count - index);
+            if (NeedsTrimming())
+                Trim();
+        }
 
-			if (NeedsTrimming())
-				Trim();
-		}
+        bool IList.IsFixedSize
+        {
+            get { return false; }
+        }
 
-		// Operations (type-safe IEnumerable)
+        bool IList.IsReadOnly
+        {
+            get { return false; }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public Enumerator GetEnumerator()
-		{
-			return new Enumerator(this);
-		}
+        object IList.this[int index]
+        {
+            get { return this[index]; }
+            set { this[index] = (Scope) value; }
+        }
 
-		// Operations (type-safe ICloneable)
+        int IList.Add(object item)
+        {
+            return Add((Scope) item);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public ScopeCollection Clone()
-		{
-			ScopeCollection tc = new ScopeCollection();
-			tc.AddRange(this);
-			tc.Capacity = this.m_array.Length;
-			tc.m_version = this.m_version;
-			return tc;
-		}
+        /* redundant w/ type-safe method
+    void IList.Clear()
+    {
+    this.Clear();
+    }
+     */
 
-		// Public helpers (just to mimic some nice features of ArrayList)
+        bool IList.Contains(object item)
+        {
+            return Contains((Scope) item);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public int Capacity
-		{
-			get { return m_array.Length; }
-			set
-			{
-				if (value < m_count)
-					value = m_count;
-				if (value < DefaultMinimumCapacity)
-					value = DefaultMinimumCapacity;
+        int IList.IndexOf(object item)
+        {
+            return IndexOf((Scope) item);
+        }
 
-				if (m_array.Length == value)
-					return;
+        void IList.Insert(int position, object item)
+        {
+            Insert(position, (Scope) item);
+        }
 
-				++m_version;
+        void IList.Remove(object item)
+        {
+            Remove((Scope) item);
+        }
 
-				T[] temp = new T[value];
-				// for (int i=0; i < m_count; ++i) temp[i] = m_array[i];
-				Array.Copy(m_array, 0, temp, 0, m_count);
-				m_array = temp;
-			}
-		}
+        #endregion
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="collection"></param>
-		public void AddRange(ScopeCollection collection)
-		{
-			// for (int i=0; i < collection.Count; ++i) Add(collection[i]);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        public void CopyTo(Scope[] array)
+        {
+            CopyTo(array, 0);
+        }
 
-			++m_version;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="start"></param>
+        public void CopyTo(Scope[] array, int start)
+        {
+            if (m_count > array.GetUpperBound(0) + 1 - start)
+                throw new ArgumentException(
+                    "Destination array was not long enough.");
 
-			Capacity += collection.Count;
-			Array.Copy(collection.m_array, 0, this.m_array, m_count,
-			           collection.m_count);
-			m_count += collection.Count;
-		}
+            // for (int i=0; i < m_count; ++i) array[start+i] = m_array[i];
+            Array.Copy(m_array, 0, array, start, m_count);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="array"></param>
-		public void AddRange(T[] array)
-		{
-			// for (int i=0; i < array.Length; ++i) Add(array[i]);
+        // Operations (type-safe IList)
 
-			++m_version;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public int Add(Scope item)
+        {
+            if (NeedsGrowth())
+                Grow();
 
-			Capacity += array.Length;
-			Array.Copy(array, 0, this.m_array, m_count, array.Length);
-			m_count += array.Length;
-		}
+            ++m_version;
+            m_array[m_count] = item;
+            item.Parent = Parent;
 
-		// Implementation (helpers)
+            return m_count++;
+        }
 
-		private void ValidateIndex(int index)
-		{
-			ValidateIndex(index, false);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool Contains(Scope item)
+        {
+            return ((IndexOf(item) == - 1) ? false : true);
+        }
 
-		private void ValidateIndex(int index, bool allowEqualEnd)
-		{
-			int max = (allowEqualEnd) ? (m_count) : (m_count - 1);
-			if (index < 0 || index > max)
-				throw new ArgumentOutOfRangeException(
-					"Index was out of range.  Must be non-negative and less than the size of the collection.", (object) index, "Specified argument was out of the range of valid values.");
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public int IndexOf(Scope item)
+        {
+            for (int i = 0; i < m_count; ++i)
+                if (m_array[i] == (item))
+                    return i;
+            return - 1;
+        }
 
-		private bool NeedsGrowth()
-		{
-			return (m_count >= Capacity);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="item"></param>
+        public void Insert(int position, Scope item)
+        {
+            ValidateIndex(position, true); // throws
 
-		private void Grow()
-		{
-			if (NeedsGrowth())
-				Capacity = m_count*2;
-		}
+            if (NeedsGrowth())
+                Grow();
 
-		private bool NeedsTrimming()
-		{
-			return (m_count <= Capacity/2);
-		}
+            ++m_version;
+            // for (int i=m_count; i > position; --i) m_array[i] = m_array[i-1];
+            Array.Copy(m_array, position, m_array, position + 1, m_count - position);
 
-		private void Trim()
-		{
-			if (NeedsTrimming())
-				Capacity = m_count;
-		}
+            m_array[position] = item;
+            m_count++;
+        }
 
-		// Implementation (ICollection)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        public void Remove(Scope item)
+        {
+            int index = IndexOf(item);
+            if (index < 0)
+                throw new ArgumentException(
+                    "Cannot remove the specified item because it was not found in the specified Collection.");
 
-		/* redundant w/ type-safe method
+            RemoveAt(index);
+        }
+
+        // Operations (type-safe IEnumerable)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        // Operations (type-safe ICloneable)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ScopeCollection Clone()
+        {
+            var tc = new ScopeCollection();
+            tc.AddRange(this);
+            tc.Capacity = m_array.Length;
+            tc.m_version = m_version;
+            return tc;
+        }
+
+        // Public helpers (just to mimic some nice features of ArrayList)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        public void AddRange(ScopeCollection collection)
+        {
+            // for (int i=0; i < collection.Count; ++i) Add(collection[i]);
+
+            ++m_version;
+
+            Capacity += collection.Count;
+            Array.Copy(collection.m_array, 0, m_array, m_count,
+                       collection.m_count);
+            m_count += collection.Count;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        public void AddRange(Scope[] array)
+        {
+            // for (int i=0; i < array.Length; ++i) Add(array[i]);
+
+            ++m_version;
+
+            Capacity += array.Length;
+            Array.Copy(array, 0, m_array, m_count, array.Length);
+            m_count += array.Length;
+        }
+
+        // Implementation (helpers)
+
+        private void ValidateIndex(int index)
+        {
+            ValidateIndex(index, false);
+        }
+
+        private void ValidateIndex(int index, bool allowEqualEnd)
+        {
+            int max = (allowEqualEnd) ? (m_count) : (m_count - 1);
+            if (index < 0 || index > max)
+                throw new ArgumentOutOfRangeException(
+                    "Index was out of range.  Must be non-negative and less than the size of the collection.", index,
+                    "Specified argument was out of the range of valid values.");
+        }
+
+        private bool NeedsGrowth()
+        {
+            return (m_count >= Capacity);
+        }
+
+        private void Grow()
+        {
+            if (NeedsGrowth())
+                Capacity = m_count*2;
+        }
+
+        private bool NeedsTrimming()
+        {
+            return (m_count <= Capacity/2);
+        }
+
+        private void Trim()
+        {
+            if (NeedsTrimming())
+                Capacity = m_count;
+        }
+
+        // Implementation (ICollection)
+
+        /* redundant w/ type-safe method
     int ICollection.Count
     {
     get
@@ -354,168 +438,90 @@ namespace Puzzle.SourceCode
     }
      */
 
-		bool ICollection.IsSynchronized
-		{
-			get { return m_array.IsSynchronized; }
-		}
+        // Nested enumerator class
 
-		object ICollection.SyncRoot
-		{
-			get { return m_array.SyncRoot; }
-		}
+        #region Nested type: Enumerator
 
-		void ICollection.CopyTo(Array array, int start)
-		{
-			this.CopyTo((T[]) array, start);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public class Enumerator : IEnumerator
+        {
+            private readonly ScopeCollection m_collection;
+            private readonly int m_version;
+            private int m_index;
 
-		// Implementation (IList)
+            // Construction
 
-		bool IList.IsFixedSize
-		{
-			get { return false; }
-		}
+            public Enumerator(ScopeCollection tc)
+            {
+                m_collection = tc;
+                m_index = - 1;
+                m_version = tc.m_version;
+            }
 
-		bool IList.IsReadOnly
-		{
-			get { return false; }
-		}
+            // Operations (type-safe IEnumerator)
 
-		object IList.this[int index]
-		{
-			get { return (object) this[index]; }
-			set { this[index] = (T) value; }
-		}
+            /// <summary>
+            /// 
+            /// </summary>
+            public Scope Current
+            {
+                get { return m_collection[m_index]; }
+            }
 
-		int IList.Add(object item)
-		{
-			return this.Add((T) item);
-		}
+            #region IEnumerator Members
 
-		/* redundant w/ type-safe method
-    void IList.Clear()
-    {
-    this.Clear();
-    }
-     */
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public bool MoveNext()
+            {
+                if (m_version != m_collection.m_version)
+                    throw new InvalidOperationException(
+                        "Collection was modified; enumeration operation may not execute.");
 
-		bool IList.Contains(object item)
-		{
-			return this.Contains((T) item);
-		}
+                ++m_index;
+                return (m_index < m_collection.Count) ? true : false;
+            }
 
-		int IList.IndexOf(object item)
-		{
-			return this.IndexOf((T) item);
-		}
+            /// <summary>
+            /// 
+            /// </summary>
+            public void Reset()
+            {
+                if (m_version != m_collection.m_version)
+                    throw new InvalidOperationException(
+                        "Collection was modified; enumeration operation may not execute.");
 
-		void IList.Insert(int position, object item)
-		{
-			this.Insert(position, (T) item);
-		}
+                m_index = - 1;
+            }
 
-		void IList.Remove(object item)
-		{
-			this.Remove((T) item);
-		}
+            // Implementation (IEnumerator)
 
-		/* redundant w/ type-safe method
-    void IList.RemoveAt(int index)
-    {
-    this.RemoveAt(index);
-    }
-     */
+            object IEnumerator.Current
+            {
+                get { return (Current); }
+            }
 
-		// Implementation (IEnumerable)
+            #endregion
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return (IEnumerator) (this.GetEnumerator());
-		}
-
-		// Implementation (ICloneable)
-
-		object ICloneable.Clone()
-		{
-			return (object) (this.Clone());
-		}
-
-		// Nested enumerator class
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public class Enumerator : IEnumerator
-		{
-			private ScopeCollection m_collection;
-			private int m_index;
-			private int m_version;
-
-			// Construction
-
-			public Enumerator(ScopeCollection tc)
-			{
-				m_collection = tc;
-				m_index = - 1;
-				m_version = tc.m_version;
-			}
-
-			// Operations (type-safe IEnumerator)
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public T Current
-			{
-				get { return m_collection[m_index]; }
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public bool MoveNext()
-			{
-				if (m_version != m_collection.m_version)
-					throw new InvalidOperationException(
-						"Collection was modified; enumeration operation may not execute.");
-
-				++m_index;
-				return (m_index < m_collection.Count) ? true : false;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public void Reset()
-			{
-				if (m_version != m_collection.m_version)
-					throw new InvalidOperationException(
-						"Collection was modified; enumeration operation may not execute.");
-
-				m_index = - 1;
-			}
-
-			// Implementation (IEnumerator)
-
-			object IEnumerator.Current
-			{
-				get { return (object) (this.Current); }
-			}
-
-			/* redundant w/ type-safe method
+            /* redundant w/ type-safe method
       bool IEnumerator.MoveNext()
       {
       return this.MoveNext();
       }
        */
 
-			/* redundant w/ type-safe method
+            /* redundant w/ type-safe method
       void IEnumerator.Reset()
       {
       this.Reset();
       }
        */
-		}
-	}
+        }
+
+        #endregion
+    }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace AlbinoHorse.Model
 {
@@ -9,7 +6,7 @@ namespace AlbinoHorse.Model
     {
         string Name { get; set; }
         string SectionName { get; }
-        Image GetImage();
         object DataObject { get; }
+        Image GetImage();
     }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AlbinoHorse.Model;
 using GenerationStudio.Elements;
 
@@ -9,125 +7,68 @@ namespace GenerationStudio.Gui
 {
     public class UmlInterfaceData : IUmlInterfaceData
     {
+        private readonly Dictionary<TypeMemberElement, UmlTypeMember> typeMemberLookup =
+            new Dictionary<TypeMemberElement, UmlTypeMember>();
 
         public DiagramTypeElement Owner { get; set; }
 
+        #region IUmlInterfaceData Members
+
         public bool Expanded
         {
-            get
-            {
-                return Owner.Expanded;
-            }
-            set
-            {
-                Owner.Expanded = value;
-            }
+            get { return Owner.Expanded; }
+            set { Owner.Expanded = value; }
         }
 
         public int X
         {
-            get
-            {
-                return Owner.X;
-            }
-            set
-            {
-                Owner.X = value;
-            }
+            get { return Owner.X; }
+            set { Owner.X = value; }
         }
 
         public int Y
         {
-            get
-            {
-                return Owner.Y;
-            }
-            set
-            {
-                Owner.Y = value;
-            }
+            get { return Owner.Y; }
+            set { Owner.Y = value; }
         }
 
         public int Width
         {
-            get
-            {
-                return Owner.Width;
-            }
-            set
-            {
-                Owner.Width = value;
-            }
+            get { return Owner.Width; }
+            set { Owner.Width = value; }
         }
 
         public string TypeName
         {
-            get
-            {
-                return Owner.Type.Name;
-            }
-            set
-            {
-                Owner.Type.Name = value;
-            }
+            get { return Owner.Type.Name; }
+            set { Owner.Type.Name = value; }
         }
 
         public void RemoveTypeMember(UmlTypeMember property)
         {
-            TypeMemberElement pe = (TypeMemberElement)property.DataSource.DataObject;
+            var pe = (TypeMemberElement) property.DataSource.DataObject;
             pe.Parent.RemoveChild(pe);
             typeMemberLookup.Remove(pe);
         }
 
-        private IOrderedEnumerable<Element> GetValidProperties()
-        {
-            var res = from e in Owner.Type.AllChildren
-
-                      where !e.Excluded &&
-                            (e is PropertyElement || e is MethodElement)
-                        orderby e.GetDisplayName()
-                      select e;
-            return res;
-        }
-
-        private Dictionary<TypeMemberElement, UmlTypeMember> typeMemberLookup = new Dictionary<TypeMemberElement, UmlTypeMember>();
-
         public IList<UmlTypeMember> GetTypeMembers()
         {
-            var res = GetValidProperties();
+            IOrderedEnumerable<Element> res = GetValidProperties();
 
-            List<UmlTypeMember> members = new List<UmlTypeMember>();
+            var members = new List<UmlTypeMember>();
             foreach (TypeMemberElement pe in res)
                 members.Add(GetTypeMember(pe));
 
             return members;
         }
 
-        private UmlTypeMember GetTypeMember(TypeMemberElement pe)
-        {
-            UmlTypeMember typeMember = null;
-            if (typeMemberLookup.TryGetValue(pe, out typeMember))
-            {
-                return typeMember;
-            }
-
-            typeMember = new UmlTypeMember();
-            UmlTypeMemberData data = new UmlTypeMemberData();
-            data.Owner = pe;
-            typeMember.DataSource = data;
-
-            typeMemberLookup.Add(pe, typeMember);
-
-            return typeMember;
-        }
-
         public UmlTypeMember CreateTypeMember(string sectionName)
         {
-            UmlTypeMember property = new UmlTypeMember();
-            UmlTypeMemberData data = new UmlTypeMemberData();
+            var property = new UmlTypeMember();
+            var data = new UmlTypeMemberData();
             if (sectionName == "Properties")
             {
-                PropertyElement pe = new PropertyElement();
+                var pe = new PropertyElement();
                 pe.Type = "string";
                 pe.Name = "";
                 data.Owner = pe;
@@ -139,7 +80,7 @@ namespace GenerationStudio.Gui
 
             if (sectionName == "Methods")
             {
-                MethodElement pe = new MethodElement();
+                var pe = new MethodElement();
                 pe.Name = "";
                 data.Owner = pe;
                 property.DataSource = data;
@@ -149,6 +90,36 @@ namespace GenerationStudio.Gui
             }
 
             return property;
+        }
+
+        #endregion
+
+        private IOrderedEnumerable<Element> GetValidProperties()
+        {
+            IOrderedEnumerable<Element> res = from e in Owner.Type.AllChildren
+                                              where !e.Excluded &&
+                                                    (e is PropertyElement || e is MethodElement)
+                                              orderby e.GetDisplayName()
+                                              select e;
+            return res;
+        }
+
+        private UmlTypeMember GetTypeMember(TypeMemberElement pe)
+        {
+            UmlTypeMember typeMember = null;
+            if (typeMemberLookup.TryGetValue(pe, out typeMember))
+            {
+                return typeMember;
+            }
+
+            typeMember = new UmlTypeMember();
+            var data = new UmlTypeMemberData();
+            data.Owner = pe;
+            typeMember.DataSource = data;
+
+            typeMemberLookup.Add(pe, typeMember);
+
+            return typeMember;
         }
     }
 }

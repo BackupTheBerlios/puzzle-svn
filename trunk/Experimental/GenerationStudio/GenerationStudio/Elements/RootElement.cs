@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
-using System.ComponentModel;
 
 namespace GenerationStudio.Elements
 {
@@ -11,20 +7,17 @@ namespace GenerationStudio.Elements
     [ElementName("Root")]
     public class RootElement : NamedElement
     {
+        public RootElement()
+        {
+            Name = "MyProject";
+        }
+
         public string FilePath { get; set; }
 
         //root nodes are always valid
         public override bool IsValid
         {
-            get
-            {
-                return true;
-            }
-        }
-
-        public RootElement()
-        {
-            Name = "MyProject";
+            get { return true; }
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
@@ -11,21 +9,21 @@ namespace GenerationStudio.Elements
         None,
         Array,
         List,
-        Set,        
+        Set,
     }
 
     [Serializable]
     [ElementName("Property")]
     [ElementIcon("GenerationStudio.Images.property.gif")]
-    [ElementParent(typeof(InstanceTypeElement))]
+    [ElementParent(typeof (InstanceTypeElement))]
     public class PropertyElement : TypeMemberElement
     {
+        private CollectionType collectionType = CollectionType.None;
         private string type;
-        public string Type {
-            get
-            {
-                return type;
-            }
+
+        public string Type
+        {
+            get { return type; }
             set
             {
                 type = value;
@@ -33,13 +31,9 @@ namespace GenerationStudio.Elements
             }
         }
 
-        private CollectionType collectionType = CollectionType.None;
-        public CollectionType CollectionType 
+        public CollectionType CollectionType
         {
-            get
-            {
-                return collectionType;
-            }
+            get { return collectionType; }
             set
             {
                 collectionType = value;
@@ -49,9 +43,11 @@ namespace GenerationStudio.Elements
 
         public override IList<ElementError> GetErrors()
         {
-            List<ElementError> errors = new List<ElementError>();
+            var errors = new List<ElementError>();
             if (string.IsNullOrEmpty(Type))
-                errors.Add(new ElementError(this, string.Format("Property {0}.{1} is missing Type", Parent.GetDisplayName(), GetDisplayName())));
+                errors.Add(new ElementError(this,
+                                            string.Format("Property {0}.{1} is missing Type", Parent.GetDisplayName(),
+                                                          GetDisplayName())));
 
             return errors;
         }

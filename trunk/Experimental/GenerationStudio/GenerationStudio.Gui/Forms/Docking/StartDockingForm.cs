@@ -1,44 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
+using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace GenerationStudio.Forms.Docking
 {
     public class StartDockingForm : DockContent
     {
-        private System.Windows.Forms.WebBrowser webBrowser1;
+        private WebBrowser webBrowser1;
 
         public StartDockingForm()
         {
             InitializeComponent();
         }
-    
+
         private void InitializeComponent()
         {
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.SuspendLayout();
+            webBrowser1 = new WebBrowser();
+            SuspendLayout();
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(552, 538);
-            this.webBrowser1.TabIndex = 0;
-            this.webBrowser1.Url = new System.Uri("http://rogeralsing.com/category/puzzleframework/caramel/", System.UriKind.Absolute);
+            webBrowser1.Dock = DockStyle.Fill;
+            webBrowser1.Location = new Point(0, 0);
+            webBrowser1.MinimumSize = new Size(20, 20);
+            webBrowser1.Name = "webBrowser1";
+            webBrowser1.Size = new Size(552, 538);
+            webBrowser1.TabIndex = 0;
+            webBrowser1.Url = new Uri("http://rogeralsing.com/category/puzzleframework/caramel/", UriKind.Absolute);
             // 
             // StartDockingForm
             // 
-            this.ClientSize = new System.Drawing.Size(552, 538);
-            this.Controls.Add(this.webBrowser1);
-            this.Name = "StartDockingForm";
-            this.TabText = "Start";
-            this.Text = "Start";
-            this.ResumeLayout(false);
-
+            ClientSize = new Size(552, 538);
+            Controls.Add(webBrowser1);
+            Name = "StartDockingForm";
+            TabText = "Start";
+            Text = "Start";
+            ResumeLayout(false);
         }
     }
 }

@@ -1,67 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using AlbinoHorse.ClassDesigner.Properties;
 using AlbinoHorse.Infrastructure;
-using AlbinoHorse.Windows.Forms;
-
+using AlbinoHorse.Model.Settings;
+using Brushes=System.Drawing.Brushes;
+using Pens=AlbinoHorse.Model.Settings.Pens;
 
 namespace AlbinoHorse.Model
 {
     public class UmlClass : UmlInstanceType
     {
         #region TypedDataSource property
+
         private IUmlClassData TypedDataSource
         {
-            get
-            {
-                return DataSource as IUmlClassData;
-            }
+            get { return DataSource as IUmlClassData; }
         }
+
         #endregion
 
         #region IsAbstract property
+
         public bool IsAbstract
         {
-            get
-            {
-                return TypedDataSource.IsAbstract;
-            }
-            set
-            {
-                TypedDataSource.IsAbstract = value;
-            }
+            get { return TypedDataSource.IsAbstract; }
+            set { TypedDataSource.IsAbstract = value; }
         }
+
         #endregion
 
         #region InheritsTypeName property
+
         public string InheritsTypeName
         {
-            get
-            {
-                return TypedDataSource.InheritsTypeName;
-            }
-            set
-            {
-                TypedDataSource.InheritsTypeName = value;
-            }
+            get { return TypedDataSource.InheritsTypeName; }
+            set { TypedDataSource.InheritsTypeName = value; }
         }
+
         #endregion
-
-        public UmlClass()
-        {
-
-        }
 
         protected override IList<UmlTypeMemberSection> GetTypeMemberSections()
         {
-            return new List<UmlTypeMemberSection>()
-            {
-                new UmlTypeMemberSection(this,"Properties"),
-                new UmlTypeMemberSection(this,"Methods")
-            };
+            return new List<UmlTypeMemberSection>
+                   {
+                       new UmlTypeMemberSection(this, "Properties"),
+                       new UmlTypeMemberSection(this, "Methods")
+                   };
         }
 
         protected override Brush GetCaptionBrush(Rectangle renderBounds)
@@ -83,42 +68,43 @@ namespace AlbinoHorse.Model
         protected override Font GetTypeNameFont()
         {
             if (IsAbstract)
-                return Settings.Fonts.AbstractTypeName;
+                return Fonts.AbstractTypeName;
             else
-                return Settings.Fonts.DefaultTypeName;
+                return Fonts.DefaultTypeName;
         }
 
         protected override Pen GetBorderPen()
         {
             if (IsAbstract)
-                return Settings.Pens.AbstractBorder;
+                return Pens.AbstractBorder;
             else
-                return Settings.Pens.DefaultBorder;
+                return Pens.DefaultBorder;
         }
-
 
 
         protected override void DrawCustomCaptionInfo(RenderInfo info, int x, int y, int width)
         {
             if (InheritsTypeName != null)
             {
-                info.Graphics.DrawImage(global::AlbinoHorse.ClassDesigner.Properties.Resources.InheritanceArrow, x + Settings.Margins.typeBoxSideMargin, y + 35);
-                Rectangle typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
-                info.Graphics.DrawString(InheritsTypeName, Settings.Fonts.InheritsTypeName, Brushes.Black, typeInheritsBounds, StringFormat.GenericTypographic);
+                info.Graphics.DrawImage(Resources.InheritanceArrow, x + Margins.typeBoxSideMargin, y + 35);
+                var typeInheritsBounds = new Rectangle(x + 24, y + 33, width - 26, 10);
+                info.Graphics.DrawString(InheritsTypeName, Fonts.InheritsTypeName, Brushes.Black, typeInheritsBounds,
+                                         StringFormat.GenericTypographic);
             }
 
             IList<string> implementedInterfaces = TypedDataSource.GetImplementedInterfaces();
             if (implementedInterfaces.Count > 0)
             {
                 int offsetX = 20;
-                int offsetY = 20 + (16 * (implementedInterfaces.Count - 1));
-                info.Graphics.DrawEllipse(Settings.Pens.Lolipop, x + offsetX, y - offsetY, 12, 12);
-                info.Graphics.DrawLine(Settings.Pens.Lolipop, x + offsetX + 6, y - offsetY + 12, x + offsetX + 6, y);
+                int offsetY = 20 + (16*(implementedInterfaces.Count - 1));
+                info.Graphics.DrawEllipse(Pens.Lolipop, x + offsetX, y - offsetY, 12, 12);
+                info.Graphics.DrawLine(Pens.Lolipop, x + offsetX + 6, y - offsetY + 12, x + offsetX + 6, y);
 
                 int yy = y - offsetY;
                 foreach (string interfaceName in implementedInterfaces)
                 {
-                    info.Graphics.DrawString(interfaceName, Settings.Fonts.ImplementedInterfaces, Brushes.Black, x + offsetX+16, yy);
+                    info.Graphics.DrawString(interfaceName, Fonts.ImplementedInterfaces, Brushes.Black, x + offsetX + 16,
+                                             yy);
                     yy += 16;
                 }
             }
@@ -131,7 +117,7 @@ namespace AlbinoHorse.Model
 
         protected override Font GetTypeMemberFont()
         {
-            return Settings.Fonts.ClassTypeMember;
+            return Fonts.ClassTypeMember;
         }
     }
 }

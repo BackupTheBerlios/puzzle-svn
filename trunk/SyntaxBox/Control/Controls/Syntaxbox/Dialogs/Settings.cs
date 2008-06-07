@@ -1,4 +1,4 @@
- //using System;
+//using System;
 //using System.Drawing;
 //using System.Collections;
 //using System.ComponentModel;
@@ -56,7 +56,7 @@
 //			mOwner=Owner;
 //			lstBlocks.Items.Clear ();
 //
-//			FillTree(Owner.Document.Parser.Language.MainBlock);
+//			FillTree(Owner.Document.Parser.SyntaxDefinition.MainBlock);
 //		}
 //
 //		public void FillTree(BlockType Block)

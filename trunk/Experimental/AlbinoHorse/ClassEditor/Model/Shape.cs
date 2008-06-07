@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using AlbinoHorse.Infrastructure;
 
@@ -9,71 +6,41 @@ namespace AlbinoHorse.Model
     public abstract class Shape
     {
         #region Property Bounds 
-        private Rectangle bounds;
-        public virtual Rectangle Bounds
-        {
-            get
-            {
-                return this.bounds;
-            }
-            set
-            {
-                this.bounds = value;
-            }
-        }                        
+
+        public virtual Rectangle Bounds { get; set; }
+
         #endregion
 
         #region Property Selected
-        private bool selected;
-        public virtual bool Selected
-        {
-            get
-            {
-                return this.selected;
-            }
-            set
-            {
-                this.selected = value;
-            }
-        }
+
+        public virtual bool Selected { get; set; }
+
         #endregion
 
-        public virtual void Draw(RenderInfo info) { }
-        public virtual void DrawBackground(RenderInfo info) { }
-        public virtual void DrawPreview(RenderInfo info) { }
-        public virtual void PreviewDrawBackground(RenderInfo info) { }
+        public virtual void Draw(RenderInfo info) {}
+        public virtual void DrawBackground(RenderInfo info) {}
+        public virtual void DrawPreview(RenderInfo info) {}
+        public virtual void PreviewDrawBackground(RenderInfo info) {}
 
 
-        public virtual void OnMouseDown(ShapeMouseEventArgs args)
-        {            
-        }
+        public virtual void OnMouseDown(ShapeMouseEventArgs args) {}
 
-        public virtual void OnMouseUp(ShapeMouseEventArgs args)
-        {
-        }
+        public virtual void OnMouseUp(ShapeMouseEventArgs args) {}
 
-        public virtual void OnMouseMove(ShapeMouseEventArgs args)
-        {
-        }
+        public virtual void OnMouseMove(ShapeMouseEventArgs args) {}
 
-        public virtual void OnClick(ShapeMouseEventArgs args)
-        {
-        }
+        public virtual void OnClick(ShapeMouseEventArgs args) {}
 
-        public virtual void OnDoubleClick(ShapeMouseEventArgs args)
-        {
-        }
+        public virtual void OnDoubleClick(ShapeMouseEventArgs args) {}
 
-        public virtual void OnKeyPress(ShapeKeyEventArgs args)
-        {
-        }
+        public virtual void OnKeyPress(ShapeKeyEventArgs args) {}
 
         protected void DrawSelectionHandle(RenderInfo info, Point point, object identifier)
         {
             DrawSelectionHandle(info, point);
 
-            Rectangle bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
-            BoundingBox bBox = new BoundingBox();
+            var bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
+            var bBox = new BoundingBox();
             bBox.Bounds = bounds;
             bBox.Data = identifier;
             bBox.Target = this;
@@ -82,11 +49,10 @@ namespace AlbinoHorse.Model
 
         protected void DrawSelectionHandle(RenderInfo info, Point point)
         {
-            Rectangle bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
+            var bounds = new Rectangle(point.X - 4, point.Y - 4, 8, 8);
             info.Graphics.FillRectangle(Brushes.Gray, bounds);
             bounds.Inflate(-1, -1);
             info.Graphics.FillRectangle(Brushes.White, bounds);
         }
-
     }
 }

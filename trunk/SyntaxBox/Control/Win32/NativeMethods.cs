@@ -19,15 +19,15 @@ using System.Windows.Forms;
 
 namespace Puzzle.Windows
 {
-    public sealed class NativeMethods
+    public static class NativeMethods
     {
-        private NativeMethods()
-        {
-        }
+        public const int GWL_STYLE = -16;
+        public const int WS_CHILD = 0x40000000;
 
         #region uxTheme.dll
 
-        [DllImport("uxtheme.dll", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("uxtheme.dll", SetLastError = true, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr OpenThemeData(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)] string pszClassList);
 
         [DllImport("uxtheme.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -37,10 +37,13 @@ namespace Puzzle.Windows
         public static extern bool IsThemeActive();
 
         [DllImport("uxtheme.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DrawThemeBackground(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, ref APIRect rect, ref APIRect clipRect);
+        public static extern int DrawThemeBackground(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId,
+                                                     ref APIRect rect, ref APIRect clipRect);
 
         [DllImport("uxtheme.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DrawThemeText(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, string pszText, int iCharCount, uint dwTextFlags, uint dwTextFlags2, [MarshalAs(UnmanagedType.Struct)] ref APIRect rect);
+        public static extern int DrawThemeText(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, string pszText,
+                                               int iCharCount, uint dwTextFlags, uint dwTextFlags2,
+                                               [MarshalAs(UnmanagedType.Struct)] ref APIRect rect);
 
         [DllImport("uxtheme.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int GetThemeColor(IntPtr hTheme, int iPartId, int iStateId, int iPropId, out ulong color);
@@ -187,24 +190,23 @@ namespace Puzzle.Windows
 
         #endregion
 
-		[DllImport("imm32.dll")]
-		public static extern IntPtr ImmGetDefaultIMEWnd(IntPtr hWnd);
+        [DllImport("imm32.dll")]
+        public static extern IntPtr ImmGetDefaultIMEWnd(IntPtr hWnd);
 
-		[DllImport("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, COMPOSITIONFORM lParam);
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, COMPOSITIONFORM lParam);
 
-		[DllImport("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, LogFont lParam);
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, LogFont lParam);
 
-        [DllImport("user32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("user32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int DrawText(IntPtr hDC, string lpString, int nCount, ref APIRect Rect, int wFormat);
-
-        public const int GWL_STYLE = -16;
-        public const int WS_CHILD = 0x40000000;
 
 
         [DllImport("gdi32", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern int EnumFontFamiliesEx(IntPtr hDC, [MarshalAs(UnmanagedType.LPStruct)] LogFont lf, FONTENUMPROC proc, Int64 LParam, Int64 DW);
+        public static extern int EnumFontFamiliesEx(IntPtr hDC, [MarshalAs(UnmanagedType.LPStruct)] LogFont lf,
+                                                    FONTENUMPROC proc, Int64 LParam, Int64 DW);
 
         [DllImport("shlwapi.dll", SetLastError = true)]
         public static extern int SHAutoComplete(IntPtr hWnd, UInt32 flags);
@@ -224,10 +226,12 @@ namespace Puzzle.Windows
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int SetBkColor(IntPtr hDC, int crColor);
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int SetBkMode(IntPtr hDC, int Mode);
 
         [DllImport("user32.DLL", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -258,20 +262,25 @@ namespace Puzzle.Windows
         [DllImport("gdi32.DLL", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr DeleteObject(IntPtr hObject);
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int GetTextColor(IntPtr hDC);
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int SetTextColor(IntPtr hDC, int crColor);
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int GetBkColor(IntPtr hDC);
 
 
-        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("gdi32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int GetBkMode(IntPtr hDC);
 
-        [DllImport("user32", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("user32", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall
+            )]
         public static extern int DrawFocusRect(IntPtr hDC, ref APIRect rect);
 
         [DllImport("gdi32.DLL", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -283,13 +292,18 @@ namespace Puzzle.Windows
         [DllImport("gdi32.DLL", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr CreateHatchBrush(int Style, int crColor);
 
-        [DllImport("user32.DLL", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int TabbedTextOut(IntPtr hDC, int x, int y, string lpString, int nCount, int nTabPositions, ref int lpnTabStopPositions, int nTabOrigin);
+        [DllImport("user32.DLL", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        public static extern int TabbedTextOut(IntPtr hDC, int x, int y, string lpString, int nCount, int nTabPositions,
+                                               ref int lpnTabStopPositions, int nTabOrigin);
 
-        [DllImport("gdi32.dll", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern IntPtr BitBlt(IntPtr hDestDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
+        [DllImport("gdi32.dll", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr BitBlt(IntPtr hDestDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC,
+                                           int xSrc, int ySrc, int dwRop);
 
-        [DllImport("user32.dll", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("user32.dll", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int FillRect(IntPtr hDC, ref APIRect rect, IntPtr hBrush);
 
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -299,12 +313,14 @@ namespace Puzzle.Windows
         public static extern int GetTextMetrics(IntPtr hDC, ref GDITextMetric TextMetric);
 
         [DllImport("gdi32.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern IntPtr CreateFontIndirect([MarshalAs(UnmanagedType.LPStruct)]LogFont LogFont);
+        public static extern IntPtr CreateFontIndirect([MarshalAs(UnmanagedType.LPStruct)] LogFont LogFont);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern int GetTabbedTextExtent(IntPtr hDC, string lpString, int nCount, int nTabPositions, ref int lpnTabStopPositions);
+        public static extern int GetTabbedTextExtent(IntPtr hDC, string lpString, int nCount, int nTabPositions,
+                                                     ref int lpnTabStopPositions);
 
-        [DllImport("user32.dll", SetLastError = false, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("user32.dll", SetLastError = false, CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
         public static extern int InvertRect(IntPtr hDC, ref APIRect rect);
 
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -330,7 +346,7 @@ namespace Puzzle.Windows
 
         public static bool IsKeyPressed(Keys k)
         {
-            int s = (int)NativeMethods.GetAsyncKeyState((int)k);
+            int s = GetAsyncKeyState((int) k);
             s = (s & 0x8000) >> 15;
             return (s == 1);
         }
@@ -359,6 +375,5 @@ namespace Puzzle.Windows
             int r = (color) & 0xFF;
             return Color.FromArgb(r, g, b);
         }
-
     }
 }

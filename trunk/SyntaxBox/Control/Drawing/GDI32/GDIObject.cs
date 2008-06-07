@@ -12,32 +12,30 @@ using System;
 
 namespace Puzzle.Drawing.GDI
 {
-	/// <summary>
-	/// Summary description for GDIObject.
-	/// </summary>
-	public abstract class GDIObject : IDisposable
-	{
-		protected bool IsCreated = false;
+    /// <summary>
+    /// Summary description for GDIObject.
+    /// </summary>
+    public abstract class GDIObject : IDisposable
+    {
+        protected bool IsCreated;
 
-		protected virtual void Destroy()
-		{
-			IsCreated = false;
-			MemHandler.Remove(this);
-		}
+        protected virtual void Destroy()
+        {
+            IsCreated = false;
+        }
 
-		protected virtual void Create()
-		{
-			IsCreated = true;
-			MemHandler.Add(this);
-		}
+        protected virtual void Create()
+        {
+            IsCreated = true;
+        }
 
-		#region Implementation of IDisposable
+        #region Implementation of IDisposable
 
-		public void Dispose()
-		{
-			this.Destroy();
-		}
+        public void Dispose()
+        {
+            Destroy();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

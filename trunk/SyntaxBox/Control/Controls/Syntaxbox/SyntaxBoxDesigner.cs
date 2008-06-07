@@ -15,44 +15,38 @@ using Puzzle.SourceCode;
 
 namespace Puzzle.Windows.Forms.SyntaxBox
 {
-	/// <summary>
-	/// Designer for the SyntaxBoxControl
-	/// </summary>
-	public class SyntaxBoxDesigner : ControlDesigner
-	{
-		public SyntaxBoxDesigner() : base()
-		{
-		}
+    /// <summary>
+    /// Designer for the SyntaxBoxControl
+    /// </summary>
+    public class SyntaxBoxDesigner : ControlDesigner
+    {
+        protected ISelectionService SelectionService
+        {
+            get { return (ISelectionService) GetService(typeof (ISelectionService)); }
+        }
 
-		protected ISelectionService SelectionService
-		{
-			get { return (ISelectionService) this.GetService(typeof (ISelectionService)); }
-		}
+        protected virtual IDesignerHost DesignerHost
+        {
+            get { return (IDesignerHost) base.GetService(typeof (IDesignerHost)); }
+        }
 
-		protected void OnActivate(object s, EventArgs e)
-		{
-		}
+        protected void OnActivate(object s, EventArgs e) {}
 
-		protected virtual IDesignerHost DesignerHost
-		{
-			get { return (IDesignerHost) base.GetService(typeof (IDesignerHost)); }
-		}
+        public override void OnSetComponentDefaults()
+        {
+            base.OnSetComponentDefaults();
+            if (DesignerHost != null)
+            {
+                DesignerTransaction trans = DesignerHost.CreateTransaction(
+                    "Adding Syntaxdocument");
+                var sd = DesignerHost.CreateComponent
+                             (typeof (SyntaxDocument)) as
+                         SyntaxDocument;
 
-		public override void OnSetComponentDefaults()
-		{
-			base.OnSetComponentDefaults();
-			if (DesignerHost != null)
-			{
-				DesignerTransaction trans = DesignerHost.CreateTransaction(
-					"Adding Syntaxdocument");
-				SyntaxDocument sd = DesignerHost.CreateComponent
-					(typeof (SyntaxDocument)) as
-					SyntaxDocument;
-
-				SyntaxBoxControl sb = this.Control as SyntaxBoxControl;
-				sb.Document = sd;
-				trans.Commit();
-			}
-		}
-	}
+                var sb = Control as SyntaxBoxControl;
+                sb.Document = sd;
+                trans.Commit();
+            }
+        }
+    }
 }

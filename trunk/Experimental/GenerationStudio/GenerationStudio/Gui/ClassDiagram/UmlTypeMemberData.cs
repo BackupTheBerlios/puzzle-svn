@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using AlbinoHorse.Model;
 using GenerationStudio.Elements;
-using System.Drawing;
 
 namespace GenerationStudio.Gui
 {
     public class UmlTypeMemberData : IUmlTypeMemberData
     {
+        private static readonly Dictionary<string, Image> imageLookup = new Dictionary<string, Image>();
         public TypeMemberElement Owner { get; set; }
+
+        #region IUmlTypeMemberData Members
 
         public string Name
         {
-            get
-            {
-                return Owner.Name;
-            }
-            set
-            {
-                Owner.Name = value;
-            }
+            get { return Owner.Name; }
+            set { Owner.Name = value; }
         }
 
         public string SectionName
@@ -41,10 +35,9 @@ namespace GenerationStudio.Gui
             }
         }
 
-        private static Dictionary<string, Image> imageLookup = new Dictionary<string, Image>();
         public Image GetImage()
         {
-            string iconKey = Owner.GetIconKey ();
+            string iconKey = Owner.GetIconKey();
 
             Image res = null;
             if (!imageLookup.TryGetValue(iconKey, out res))
@@ -60,5 +53,7 @@ namespace GenerationStudio.Gui
         {
             get { return Owner; }
         }
+
+        #endregion
     }
 }

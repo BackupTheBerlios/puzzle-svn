@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using GenerationStudio.AppCore;
-using GenerationStudio.Attributes;
-using System.Xml.Serialization;
-using System.Collections;
-using System.Runtime.Serialization;
-using GenerationStudio.Gui;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using GenerationStudio.AppCore;
+using GenerationStudio.Attributes;
+using GenerationStudio.Drawing;
 
 namespace GenerationStudio.Elements
 {
@@ -18,16 +14,14 @@ namespace GenerationStudio.Elements
     [ElementIcon("GenerationStudio.Images.dummy.bmp")]
     public abstract class Element
     {
-        private IList<Element> children = new List<Element>();
+        private readonly IList<Element> children = new List<Element>();
+        private bool excluded;
 
         //if the node does not have a parent, it is considered invalid
         [Browsable(false)]
         public virtual bool IsValid
         {
-            get
-            {
-                return Parent != null;
-            }
+            get { return Parent != null; }
         }
 
         [Browsable(false)]
@@ -35,8 +29,8 @@ namespace GenerationStudio.Elements
         {
             get
             {
-                var res = from child in children
-                          select child;
+                IEnumerable<Element> res = from child in children
+                                           select child;
 
                 return res;
             }
@@ -47,75 +41,66 @@ namespace GenerationStudio.Elements
         {
             get
             {
-                
-                var res = from child in children
-                          where !child.Excluded
-                          select child;
+                IEnumerable<Element> res = from child in children
+                                           where !child.Excluded
+                                           select child;
 
                 return res;
             }
         }
 
-        public IList<T> GetChildren<T>() where T : Element
-        {
-            var res = from child in children
-                      where !child.Excluded &&
-                      child is T
-                      select child;
-
-            return res.Cast<T>().ToList();
-        }
-
-        public T GetChild<T>() where T : Element
-        {
-            var res = from child in children
-                      where !child.Excluded &&
-                      child is T
-                      select child;
-
-            return res.Cast<T>().FirstOrDefault();
-        }
-
-        private Element parent;
         [Browsable(false)]
-        public Element Parent
-        {
-            get
-            {
-                return parent;
-            }
-            set
-            {
-                parent = value;
-            }
-        }
+        public Element Parent { get; set; }
 
-        private bool excluded;
         [Browsable(false)]
         public bool Excluded
         {
-            get
-            {
-                return excluded;
-            }
+            get { return excluded; }
             set
             {
                 excluded = value;
                 OnNotifyChange();
             }
         }
-     
+
+        [Browsable(false)]
+        public RootElement Root
+        {
+            get
+            {
+                Element current = this;
+                while (current.Parent != null)
+                    current = current.Parent;
+
+                return (RootElement) current;
+            }
+        }
+
+        public IList<T> GetChildren<T>() where T : Element
+        {
+            IEnumerable<Element> res = from child in children
+                                       where !child.Excluded &&
+                                             child is T
+                                       select child;
+
+            return res.Cast<T>().ToList();
+        }
+
+        public T GetChild<T>() where T : Element
+        {
+            IEnumerable<Element> res = from child in children
+                                       where !child.Excluded &&
+                                             child is T
+                                       select child;
+
+            return res.Cast<T>().FirstOrDefault();
+        }
+
         public virtual int GetSortPriority()
         {
             return 0;
         }
 
-        
-
-
-        public Element()
-        {            
-        }
 
         public virtual string GetDisplayName()
         {
@@ -134,21 +119,21 @@ namespace GenerationStudio.Elements
 
         public virtual string GetIconName()
         {
-            return this.GetType().GetElementIconName();
+            return GetType().GetElementIconName();
         }
 
         public virtual Image GetIcon()
         {
-            Stream stream = this.GetType().Assembly.GetManifestResourceStream(GetIconName ());
+            Stream stream = GetType().Assembly.GetManifestResourceStream(GetIconName());
             Image img = Image.FromStream(stream);
 
-            if (Excluded )
+            if (Excluded)
             {
                 try
                 {
-                    stream = typeof(Element).Assembly.GetManifestResourceStream("GenerationStudio.Images.exclude.gif");
+                    stream = typeof (Element).Assembly.GetManifestResourceStream("GenerationStudio.Images.exclude.gif");
                     Image exclude = Image.FromStream(stream);
-                    Image bw = GenerationStudio.Drawing.Utils.MakeGrayscale((Bitmap)img);
+                    Image bw = Utils.MakeGrayscale((Bitmap) img);
                     Image tmp = new Bitmap(16, 16);
                     Graphics g = Graphics.FromImage(tmp);
                     g.DrawImage(bw, 0, 0);
@@ -164,7 +149,7 @@ namespace GenerationStudio.Elements
             {
                 try
                 {
-                    stream = typeof(Element).Assembly.GetManifestResourceStream("GenerationStudio.Images.error.gif");
+                    stream = typeof (Element).Assembly.GetManifestResourceStream("GenerationStudio.Images.error.gif");
                     Image exclude = Image.FromStream(stream);
                     Image tmp = new Bitmap(16, 16);
                     Graphics g = Graphics.FromImage(tmp);
@@ -183,9 +168,8 @@ namespace GenerationStudio.Elements
 
         public IList<ElementError> GetErrorsRecursive()
         {
-            
-            List<ElementError> allErrors = new List<ElementError>();
-            
+            var allErrors = new List<ElementError>();
+
             allErrors.AddRange(GetErrors());
 
             foreach (Element child in AllChildren)
@@ -227,22 +211,9 @@ namespace GenerationStudio.Elements
             if (!child.AllowDelete())
                 return;
 
-            this.children.Remove(child);
+            children.Remove(child);
             child.Parent = null;
             OnNotifyChange();
-        }
-
-        [Browsable(false)]
-        public RootElement Root
-        {
-            get
-            {
-                Element current = this;
-                while (current.Parent != null)
-                    current = current.Parent;
-
-                return (RootElement)current;
-            }
         }
 
         public virtual bool AllowDelete()

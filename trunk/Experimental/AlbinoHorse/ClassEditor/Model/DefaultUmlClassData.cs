@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AlbinoHorse.Model
 {
@@ -8,6 +6,7 @@ namespace AlbinoHorse.Model
     {
         public string InheritsTypeName { get; set; }
         public bool IsAbstract { get; set; }
+
         public IList<string> GetImplementedInterfaces()
         {
             return new List<string>();

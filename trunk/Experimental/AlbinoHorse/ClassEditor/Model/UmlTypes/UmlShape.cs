@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 using AlbinoHorse.Infrastructure;
-using AlbinoHorse.Windows.Forms;
-
+using Brushes=AlbinoHorse.Model.Settings.Brushes;
+using Pens=AlbinoHorse.Model.Settings.Pens;
 
 namespace AlbinoHorse.Model
 {
@@ -18,13 +15,12 @@ namespace AlbinoHorse.Model
         #region Properties
 
         #region SelectedObject property
+
         private object selectedObject;
+
         public object SelectedObject
         {
-            get
-            {
-                return selectedObject;
-            }
+            get { return selectedObject; }
 
             set
             {
@@ -32,40 +28,42 @@ namespace AlbinoHorse.Model
                 OnSelectedObjectChanged(EventArgs.Empty);
             }
         }
+
         #endregion
 
         #endregion
 
         #region Identifiers
-        //bounding box identifiers
-        protected readonly object TypeExpanderIdentifier = new object();
-        
-        protected readonly object LeftResizeIdentifier = new object();
-        protected readonly object RightResizeIdentifier = new object();
-        protected readonly object TopResizeIdentifier = new object();
-        protected readonly object BottomResizeIdentifier = new object();
 
-        protected readonly object TopLeftResizeIdentifier = new object();
-        protected readonly object TopRightResizeIdentifier = new object();
-        protected readonly object BottomLeftResizeIdentifier = new object();
-        protected readonly object BottomRightResizeIdentifier = new object();
+        //bounding box identifiers
 
         protected readonly object BodyIdentifier = new object();
+        protected readonly object BottomLeftResizeIdentifier = new object();
+        protected readonly object BottomResizeIdentifier = new object();
+        protected readonly object BottomRightResizeIdentifier = new object();
+        protected readonly object LeftResizeIdentifier = new object();
+        protected readonly object RightResizeIdentifier = new object();
+
+        protected readonly object TopLeftResizeIdentifier = new object();
+        protected readonly object TopResizeIdentifier = new object();
+        protected readonly object TopRightResizeIdentifier = new object();
+        protected readonly object TypeExpanderIdentifier = new object();
+
         #endregion
 
         #region Draw
 
         public override void DrawPreview(RenderInfo info)
         {
-            info.Graphics.FillRectangle(Brushes.White, this.Bounds);
-            info.Graphics.DrawRectangle(Pens.Black, this.Bounds);
+            info.Graphics.FillRectangle(System.Drawing.Brushes.White, Bounds);
+            info.Graphics.DrawRectangle(System.Drawing.Pens.Black, Bounds);
         }
 
         protected virtual void DrawSelection(RenderInfo info)
         {
             if (Selected && SelectedObject == null)
             {
-                Rectangle outerBounds = this.Bounds;
+                Rectangle outerBounds = Bounds;
                 outerBounds.Inflate(6, 6);
                 outerBounds.Offset(1, 0);
                 Rectangle innerBounds = outerBounds;
@@ -73,25 +71,24 @@ namespace AlbinoHorse.Model
 
                 info.Graphics.SetClip(outerBounds, CombineMode.Replace);
                 info.Graphics.SetClip(innerBounds, CombineMode.Xor);
-                info.Graphics.FillRectangle(Settings.Brushes.Selection, outerBounds);
+                info.Graphics.FillRectangle(Brushes.Selection, outerBounds);
                 info.Graphics.ResetClip();
                 //info.Graphics.DrawRectangle(Settings.Pens.SelectionInner, outerBounds);
                 //outerBounds.Offset(-1, 1);
                 //info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, outerBounds);
 
-                
-                DrawSelectionHandle(info,new Point (outerBounds.Left , (outerBounds.Top + outerBounds.Bottom) / 2 ), LeftResizeIdentifier);
-                DrawSelectionHandle(info, new Point(outerBounds.Right , (outerBounds.Top + outerBounds.Bottom) / 2), RightResizeIdentifier);                
+
+                DrawSelectionHandle(info, new Point(outerBounds.Left, (outerBounds.Top + outerBounds.Bottom)/2),
+                                    LeftResizeIdentifier);
+                DrawSelectionHandle(info, new Point(outerBounds.Right, (outerBounds.Top + outerBounds.Bottom)/2),
+                                    RightResizeIdentifier);
 
                 DrawCustomSelection(info);
             }
         }
 
-        
 
-        protected virtual void DrawCustomSelection(RenderInfo info)
-        {            
-        }
+        protected virtual void DrawCustomSelection(RenderInfo info) {}
 
         public override void DrawBackground(RenderInfo info)
         {
@@ -107,19 +104,14 @@ namespace AlbinoHorse.Model
 
             try
             {
-                info.Graphics.FillPath(Settings.Brushes.Shadow, shadowPath);
+                info.Graphics.FillPath(Brushes.Shadow, shadowPath);
             }
-            catch
-            {
-            }
+            catch {}
         }
 
         #endregion
 
-        protected virtual void OnSelectedObjectChanged(EventArgs eventArgs)
-        {
-
-        }
+        protected virtual void OnSelectedObjectChanged(EventArgs eventArgs) {}
 
         protected virtual int GetRadius()
         {
@@ -130,7 +122,7 @@ namespace AlbinoHorse.Model
         {
             int radius = GetRadius();
 
-            GraphicsPath path = new GraphicsPath();
+            var path = new GraphicsPath();
             path.AddLine(x + radius, y, x + width - radius, y);
             path.AddArc(x + width - radius, y, radius, radius, 270, 90);
             path.AddLine(x + width, y + radius, x + width, y + height - radius);
@@ -147,7 +139,7 @@ namespace AlbinoHorse.Model
 
         protected virtual Pen GetBorderPen()
         {
-            return Settings.Pens.DefaultBorder;
+            return Pens.DefaultBorder;
         }
     }
 }

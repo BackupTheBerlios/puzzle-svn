@@ -55,13 +55,12 @@ namespace NObjectStore
             IList data = list.GetRawData();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine();
-            sb.AppendLine("\t[");
+            sb.Append(" [");
             bool first = true;
             foreach (object o in data)
             {
                 string value = Serialize(o);
-                sb.AppendFormat("\t\t{0}",value);
+                sb.AppendFormat("{0}",value);
 
                 if (first)
                 {
@@ -70,10 +69,10 @@ namespace NObjectStore
                 else
                 {
                     sb.AppendLine(",");
+                    sb.Append("\t\t");
                 }
             }
-            sb.AppendLine();
-            sb.Append("\t]");
+            sb.Append("]");
 
             return sb.ToString();
         }
@@ -82,7 +81,7 @@ namespace NObjectStore
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("{");
-            sb.AppendFormat("\"Id\": \"{0}\"",id.Id);
+            sb.AppendFormat("\"Id\": {0}",Serialize (id.Id));
             sb.Append("}");
 
             return sb.ToString();

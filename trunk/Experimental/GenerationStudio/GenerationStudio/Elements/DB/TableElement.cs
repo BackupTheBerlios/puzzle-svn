@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GenerationStudio.Attributes;
-using GenerationStudio.Gui;
 using System.Data;
 using System.Windows.Forms;
+using GenerationStudio.Attributes;
+using GenerationStudio.Gui;
 
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(DataBaseElement))]
+    [ElementParent(typeof (DataBaseElement))]
     [ElementName("Table")]
     [ElementIcon("GenerationStudio.Images.table.gif")]
     public class TableElement : NamedElement
@@ -33,28 +30,29 @@ namespace GenerationStudio.Elements
         {
             try
             {
-                DataBaseElement db = Parent as DataBaseElement;
+                var db = Parent as DataBaseElement;
                 IDbConnection connection = db.GetConnection();
                 IDbCommand command = connection.CreateCommand();
-                command.CommandText = string.Format("select * from [{0}]", this.Name);
+                command.CommandText = string.Format("select * from [{0}]", Name);
                 connection.Open();
                 IDataReader reader = command.ExecuteReader();
 
 
-                DataTable dt = new DataTable();
+                var dt = new DataTable();
                 dt.Load(reader);
 
                 reader.Close();
                 connection.Close();
-                TableDataView editor = host.GetEditor<TableDataView>(this, "View Table");
+                var editor = host.GetEditor<TableDataView>(this, "View Table");
                 editor.Data = dt;
                 host.ShowEditor(editor);
             }
-            catch(Exception x)
+            catch (Exception x)
             {
                 MessageBox.Show("An error occured");
             }
         }
+
         public override bool GetDefaultExpanded()
         {
             return false;

@@ -69,7 +69,7 @@ namespace GenerationStudio.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;Language Name=&quot;Visual C#&quot; Startblock=&quot;CS Code&quot;&gt;
+        ///&lt;SyntaxDefinition Name=&quot;Visual C#&quot; Startblock=&quot;CS Code&quot;&gt;
         ///&lt;FileTypes&gt;
         ///	&lt;FileType Extension=&quot;.cs&quot; Name=&quot;C# code file&quot;/&gt;
         ///&lt;/FileTypes&gt;
@@ -91,7 +91,7 @@ namespace GenerationStudio.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;Language Name=&quot;C# template&quot; Startblock=&quot;Text&quot;&gt;
+        ///&lt;SyntaxDefinition Name=&quot;C# template&quot; Startblock=&quot;Text&quot;&gt;
         ///&lt;FileTypes&gt;
         ///	&lt;FileType Extension=&quot;.cst&quot; Name=&quot;C# template file&quot;/&gt;
         ///&lt;/FileTypes&gt;

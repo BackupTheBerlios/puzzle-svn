@@ -14,108 +14,108 @@ using Puzzle.Windows;
 
 namespace Puzzle.Globalization
 {
-	public class IMEWindow
-	{
-		private const int IMC_SETCOMPOSITIONWINDOW = 0x000c;
-		private const int CFS_POINT = 0x0002;
-		private const int IMC_SETCOMPOSITIONFONT = 0x000a;
-		private const byte FF_MODERN = 48;
-		private const byte FIXED_PITCH = 1;
-		private IntPtr hIMEWnd;
+    public class IMEWindow
+    {
+        private const int CFS_POINT = 0x0002;
+        private const byte FF_MODERN = 48;
+        private const byte FIXED_PITCH = 1;
+        private const int IMC_SETCOMPOSITIONFONT = 0x000a;
+        private const int IMC_SETCOMPOSITIONWINDOW = 0x000c;
+        private readonly IntPtr hIMEWnd;
 
-		#region ctor
+        #region ctor
 
-		public IMEWindow(IntPtr hWnd, string fontname, float fontsize)
-		{
-			hIMEWnd = NativeMethods.ImmGetDefaultIMEWnd(hWnd);
-			SetFont(fontname, fontsize);
-		}
+        public IMEWindow(IntPtr hWnd, string fontname, float fontsize)
+        {
+            hIMEWnd = NativeMethods.ImmGetDefaultIMEWnd(hWnd);
+            SetFont(fontname, fontsize);
+        }
 
-		#endregion
+        #endregion
 
-		#region PUBLIC PROPERTY FONT
+        #region PUBLIC PROPERTY FONT
 
-		private Font _Font = null;
+        private Font _Font;
 
-		public Font Font
-		{
-			get { return _Font; }
-			set
-			{
-				if (_Font.Equals(value) == false)
-				{
-					SetFont(value);
-					_Font = value;
-				}
-			}
-		}
+        public Font Font
+        {
+            get { return _Font; }
+            set
+            {
+                if (_Font.Equals(value) == false)
+                {
+                    SetFont(value);
+                    _Font = value;
+                }
+            }
+        }
 
-		public void SetFont(Font font)
-		{
-			LogFont lf = new LogFont();
-			font.ToLogFont(lf);
-			lf.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+        public void SetFont(Font font)
+        {
+            var lf = new LogFont();
+            font.ToLogFont(lf);
+            lf.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
 
-			NativeMethods.SendMessage(
-				hIMEWnd, (int) WindowMessage.WM_IME_CONTROL,
-				IMC_SETCOMPOSITIONFONT,
-				lf
-				);
-		}
+            NativeMethods.SendMessage(
+                hIMEWnd, (int) WindowMessage.WM_IME_CONTROL,
+                IMC_SETCOMPOSITIONFONT,
+                lf
+                );
+        }
 
-		public void SetFont(string fontname, float fontsize)
-		{
-			LogFont tFont = new LogFont();
-			tFont.lfItalic = (byte) 0;
-			tFont.lfStrikeOut = (byte) 0;
-			tFont.lfUnderline = (byte) 0;
-			tFont.lfWeight = 400;
-			tFont.lfWidth = 0;
-			tFont.lfHeight = (int) (-fontsize*1.3333333333333);
-			tFont.lfCharSet = 1;
-			tFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
-			tFont.lfFaceName = fontname;
+        public void SetFont(string fontname, float fontsize)
+        {
+            var tFont = new LogFont();
+            tFont.lfItalic = 0;
+            tFont.lfStrikeOut = 0;
+            tFont.lfUnderline = 0;
+            tFont.lfWeight = 400;
+            tFont.lfWidth = 0;
+            tFont.lfHeight = (int) (-fontsize*1.3333333333333);
+            tFont.lfCharSet = 1;
+            tFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+            tFont.lfFaceName = fontname;
 
-			LogFont lf = tFont;
+            LogFont lf = tFont;
 
-			NativeMethods.SendMessage(
-				hIMEWnd, (int) WindowMessage.WM_IME_CONTROL,
-				IMC_SETCOMPOSITIONFONT,
-				lf
-				);
-		}
+            NativeMethods.SendMessage(
+                hIMEWnd, (int) WindowMessage.WM_IME_CONTROL,
+                IMC_SETCOMPOSITIONFONT,
+                lf
+                );
+        }
 
-		#endregion
+        #endregion
 
-		#region PUBLIC PROPERTY LOATION
+        #region PUBLIC PROPERTY LOATION
 
-		private Point _Loation;
+        private Point _Loation;
 
-		public Point Loation
-		{
-			get { return _Loation; }
-			set
-			{
-				_Loation = value;
+        public Point Loation
+        {
+            get { return _Loation; }
+            set
+            {
+                _Loation = value;
 
-				APIPoint p = new APIPoint();
-				p.x = value.X;
-				p.y = value.Y;
+                var p = new APIPoint();
+                p.x = value.X;
+                p.y = value.Y;
 
-				COMPOSITIONFORM lParam = new COMPOSITIONFORM();
-				lParam.dwStyle = CFS_POINT;
-				lParam.ptCurrentPos = p;
-				lParam.rcArea = new APIRect();
+                var lParam = new COMPOSITIONFORM();
+                lParam.dwStyle = CFS_POINT;
+                lParam.ptCurrentPos = p;
+                lParam.rcArea = new APIRect();
 
-				NativeMethods.SendMessage(
-					hIMEWnd,
-					(int) WindowMessage.WM_IME_CONTROL,
-					IMC_SETCOMPOSITIONWINDOW,
-					lParam
-					);
-			}
-		}
+                NativeMethods.SendMessage(
+                    hIMEWnd,
+                    (int) WindowMessage.WM_IME_CONTROL,
+                    IMC_SETCOMPOSITIONWINDOW,
+                    lParam
+                    );
+            }
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

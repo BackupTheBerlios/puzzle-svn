@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using GenerationStudio.Elements;
 using System.Reflection;
 using GenerationStudio.Attributes;
+using GenerationStudio.Elements;
 
 namespace GenerationStudio.AppCore
 {
     public static class Engine
     {
-        public static event EventHandler NotifyChange;
-
-        private static readonly IList<Type> ElementTypes = new List<Type>();
         private static readonly IDictionary<Type, IList<Type>> ChildElements = new Dictionary<Type, IList<Type>>();
-        public static Element DragDropElement = null;
+        private static readonly IList<Type> ElementTypes = new List<Type>();
+        public static Element DragDropElement;
+        private static bool mute;
+        public static event EventHandler NotifyChange;
 
         public static void RegisterElementType(Type elementType)
         {
-            if (!typeof(Element).IsAssignableFrom(elementType))
+            if (!typeof (Element).IsAssignableFrom(elementType))
                 throw new Exception("Type is not an element type");
 
             if (ElementTypes.Contains(elementType))
@@ -27,7 +26,7 @@ namespace GenerationStudio.AppCore
 
             ElementTypes.Add(elementType);
 
-            object[] attributes = elementType.GetCustomAttributes(typeof(ElementParentAttribute), true);
+            object[] attributes = elementType.GetCustomAttributes(typeof (ElementParentAttribute), true);
 
             foreach (ElementParentAttribute parentAttribute in attributes)
             {
@@ -39,24 +38,22 @@ namespace GenerationStudio.AppCore
                 if (!elementType.IsAbstract)
                     ChildElements[parentAttribute.ParentType].Add(elementType);
             }
-
-            
         }
 
         public static void RegisterAllElementTypes(Assembly assembly)
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (typeof(Element).IsAssignableFrom(type) && type != typeof(Element))
+                if (typeof (Element).IsAssignableFrom(type) && type != typeof (Element))
                     RegisterElementType(type);
             }
         }
 
         public static List<Type> GetChildTypes(Type type)
         {
-            List<Type> childTypes = new List<Type>();
+            var childTypes = new List<Type>();
             Type currentType = type;
-            while (currentType != typeof(Element))
+            while (currentType != typeof (Element))
             {
                 if (ChildElements.ContainsKey(currentType))
                 {
@@ -65,7 +62,7 @@ namespace GenerationStudio.AppCore
                 currentType = currentType.BaseType;
             }
 
-            return childTypes.Distinct().ToList ();
+            return childTypes.Distinct().ToList();
         }
 
         internal static void OnNotifyChange()
@@ -77,7 +74,6 @@ namespace GenerationStudio.AppCore
                 NotifyChange(null, EventArgs.Empty);
         }
 
-        private static bool mute = false;
         internal static void MuteNotify()
         {
             mute = true;

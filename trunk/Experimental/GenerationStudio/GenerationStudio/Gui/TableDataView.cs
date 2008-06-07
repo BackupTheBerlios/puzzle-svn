@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace GenerationStudio.Gui
@@ -22,7 +17,7 @@ namespace GenerationStudio.Gui
         {
             base.OnLoad(e);
 
-            this.Grid.DataSource = Data;
+            Grid.DataSource = Data;
         }
     }
 }

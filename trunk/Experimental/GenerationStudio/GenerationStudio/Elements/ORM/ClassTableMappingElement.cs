@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(ClassElement))]
+    [ElementParent(typeof (ClassElement))]
     [AllowMultiple(false)]
     [ElementName("Class/Table Mapping")]
     [ElementIcon("GenerationStudio.Images.mapping.gif")]
@@ -23,16 +21,17 @@ namespace GenerationStudio.Elements
 
             string className = "*missing*";
             if (Parent != null)
-                className = Parent.GetDisplayName ();
+                className = Parent.GetDisplayName();
 
             return string.Format("Mapping: {0} <-> {1}", className, tableName);
         }
 
         public override IList<ElementError> GetErrors()
         {
-            List<ElementError> errors = new List<ElementError>();
+            var errors = new List<ElementError>();
             if (MappedTable == null)
-                errors.Add(new ElementError (this, string.Format("Class {0} is missing table mapping", Parent.GetDisplayName())));
+                errors.Add(new ElementError(this,
+                                            string.Format("Class {0} is missing table mapping", Parent.GetDisplayName())));
 
             return errors;
         }

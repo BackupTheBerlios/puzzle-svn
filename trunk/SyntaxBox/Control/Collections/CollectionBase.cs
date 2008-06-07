@@ -9,24 +9,21 @@
 // *
 
 using System;
-using System.Collections;
 
 namespace Puzzle.Collections
 {
 
-	#region EventArgs and Delegate
+    #region EventArgs and Delegate
 
-	public class CollectionEventArgs : EventArgs
-	{
-		public readonly object Item = null;
-		public readonly int Index = 0;
+    public class CollectionEventArgs : EventArgs
+    {
+        public readonly int Index;
+        public readonly object Item;
 
-		public CollectionEventArgs()
-		{
-			try
-			{
-			}
-				#region ERROR HANDLER
+        public CollectionEventArgs()
+        {
+            try {}
+                #region ERROR HANDLER
 #if DEBUG_COMPONA
 			catch (Exception x)
 			{
@@ -34,31 +31,31 @@ namespace Puzzle.Collections
 				throw;
 			}
 #else
-			catch
-			{
-				throw;
-			}
+            catch
+            {
+                throw;
+            }
 #endif
 
-			#endregion
-		}
+            #endregion
+        }
 
-		public CollectionEventArgs(object item, int index)
-		{
-			#region PARAMETER VALIDATIONS
+        public CollectionEventArgs(object item, int index)
+        {
+            #region PARAMETER VALIDATIONS
 
-			if (item == null)
-				throw new ArgumentNullException("item"); // Throw error if validation failed for "item"
+            if (item == null)
+                throw new ArgumentNullException("item"); // Throw error if validation failed for "item"
 
-			#endregion
+            #endregion
 
-			//IMPLEMENTATION 
-			try
-			{
-				this.Index = index;
-				this.Item = item;
-			}
-				#region ERROR HANDLER
+            //IMPLEMENTATION 
+            try
+            {
+                Index = index;
+                Item = item;
+            }
+                #region ERROR HANDLER
 #if DEBUG_COMPONA
 			catch (Exception x)
 			{
@@ -66,82 +63,78 @@ namespace Puzzle.Collections
 				throw;
 			}
 #else
-			catch
-			{
-				throw;
-			}
+            catch
+            {
+                throw;
+            }
 #endif
 
-			#endregion
-		}
-	}
+            #endregion
+        }
+    }
 
-	public delegate void CollectionEventHandler(object sender, CollectionEventArgs e);
+    public delegate void CollectionEventHandler(object sender, CollectionEventArgs e);
 
-	#endregion
+    #endregion
 
-	public abstract class CollectionBase : System.Collections.CollectionBase, IList
-	{
-		public CollectionBase()
-		{
-		}
+    public abstract class CollectionBase : System.Collections.CollectionBase
+    {
+        #region Events
 
-		#region Events
+        public event CollectionEventHandler ItemAdded = null;
 
-		public event CollectionEventHandler ItemAdded = null;
+        protected virtual void OnItemAdded(int index, object item)
+        {
+            if (ItemAdded != null)
+            {
+                var e = new CollectionEventArgs(item, index);
 
-		protected virtual void OnItemAdded(int index, object item)
-		{
-			if (this.ItemAdded != null)
-			{
-				CollectionEventArgs e = new CollectionEventArgs(item, index);
+                ItemAdded(this, e);
+            }
+        }
 
-				this.ItemAdded(this, e);
-			}
-		}
+        public event CollectionEventHandler ItemRemoved = null;
 
-		public event CollectionEventHandler ItemRemoved = null;
+        protected virtual void OnItemRemoved(int index, object item)
+        {
+            if (ItemRemoved != null)
+            {
+                var e = new CollectionEventArgs(item, index);
 
-		protected virtual void OnItemRemoved(int index, object item)
-		{
-			if (this.ItemRemoved != null)
-			{
-				CollectionEventArgs e = new CollectionEventArgs(item, index);
+                ItemRemoved(this, e);
+            }
+        }
 
-				this.ItemRemoved(this, e);
-			}
-		}
+        public event EventHandler ItemsCleared = null;
 
-		public event EventHandler ItemsCleared = null;
+        protected virtual void OnItemsCleared()
+        {
+            if (ItemsCleared != null)
+                ItemsCleared(this, EventArgs.Empty);
+        }
 
-		protected virtual void OnItemsCleared()
-		{
-			if (this.ItemsCleared != null)
-				this.ItemsCleared(this, EventArgs.Empty);
-		}
+        #endregion
 
-		#endregion
+        #region Overrides
 
-		#region Overrides
+        protected override void OnClearComplete()
+        {
+            base.OnClearComplete();
+            OnItemsCleared();
+        }
 
-		protected override void OnClearComplete()
-		{
-			base.OnClearComplete();
-			this.OnItemsCleared();
-		}
+        protected override void OnRemoveComplete(int index, object value)
+        {
+            base.OnRemoveComplete(index, value);
+            OnItemRemoved(index, value);
+        }
 
-		protected override void OnRemoveComplete(int index, object value)
-		{
-			base.OnRemoveComplete(index, value);
-			this.OnItemRemoved(index, value);
-		}
+        protected override void OnInsertComplete(int index, object value)
+        {
+            base.OnInsertComplete(index, value);
+            OnItemAdded(index, value);
+        }
 
-		protected override void OnInsertComplete(int index, object value)
-		{
-			base.OnInsertComplete(index, value);
-			this.OnItemAdded(index, value);
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AlbinoHorse.Model;
 using GenerationStudio.Elements;
 
@@ -9,7 +7,12 @@ namespace GenerationStudio.Gui
 {
     public class UmlClassDiagramData : IUmlDiagramData
     {
+        private readonly Dictionary<DiagramMemberElement, Shape> shapeLookup =
+            new Dictionary<DiagramMemberElement, Shape>();
+
         public DiagramElement Owner { get; set; }
+
+        #region IUmlDiagramData Members
 
         public T CreateShape<T>() where T : Shape, new()
         {
@@ -24,22 +27,22 @@ namespace GenerationStudio.Gui
 
         public IList<Shape> GetShapes()
         {
-            var res = GetValidMembers();
+            IList<DiagramMemberElement> res = GetValidMembers();
 
-            List<Shape> shapes = new List<Shape>();
+            var shapes = new List<Shape>();
             foreach (DiagramMemberElement member in res)
                 shapes.Add(GetShape(member));
 
             return shapes;
         }
 
+        #endregion
+
         private IList<DiagramMemberElement> GetValidMembers()
         {
-            var res = Owner.GetChildren<DiagramMemberElement>();
+            IList<DiagramMemberElement> res = Owner.GetChildren<DiagramMemberElement>();
             return res;
         }
-
-        private Dictionary<DiagramMemberElement, Shape> shapeLookup = new Dictionary<DiagramMemberElement, Shape>();
 
         public Shape GetShape(DiagramMemberElement member)
         {
@@ -69,8 +72,8 @@ namespace GenerationStudio.Gui
 
         private Shape GetUmlAssociation(DiagramRelationElement associationElement)
         {
-            UmlRelation association = new UmlRelation();
-            UmlAssociationData data = new UmlAssociationData();
+            var association = new UmlRelation();
+            var data = new UmlAssociationData();
             data.Owner = associationElement;
             data.DiagramData = this;
             association.DataSource = data;
@@ -84,7 +87,7 @@ namespace GenerationStudio.Gui
             if (diagramElement.Type is InterfaceElement)
             {
                 t = new UmlInterface();
-                UmlInterfaceData data = new UmlInterfaceData();
+                var data = new UmlInterfaceData();
                 data.Owner = diagramElement;
                 t.DataSource = data;
             }
@@ -92,7 +95,7 @@ namespace GenerationStudio.Gui
             if (diagramElement.Type is ClassElement)
             {
                 t = new UmlClass();
-                UmlClassData data = new UmlClassData();
+                var data = new UmlClassData();
                 data.Owner = diagramElement;
                 t.DataSource = data;
             }
@@ -100,7 +103,7 @@ namespace GenerationStudio.Gui
             if (diagramElement.Type is EnumElement)
             {
                 t = new UmlEnum();
-                UmlEnumData data = new UmlEnumData();
+                var data = new UmlEnumData();
                 data.Owner = diagramElement;
                 t.DataSource = data;
             }
@@ -110,8 +113,8 @@ namespace GenerationStudio.Gui
 
         private UmlComment GetUmlComment(DiagramCommentElement diagramElement)
         {
-            UmlComment comment = new UmlComment();
-            UmlCommentData data = new UmlCommentData();
+            var comment = new UmlComment();
+            var data = new UmlCommentData();
             data.Owner = diagramElement;
             comment.DataSource = data;
             return comment;

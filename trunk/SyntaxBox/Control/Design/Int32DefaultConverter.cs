@@ -14,53 +14,50 @@ using System.Globalization;
 
 namespace Puzzle.Design
 {
-	public class Int32DefaultConverter : Int32Converter
-	{
-		public Int32DefaultConverter()
-		{
-		}
+    public class Int32DefaultConverter : Int32Converter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof (string))
+                return true;
 
-		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-		{
-			if (sourceType == typeof (string))
-				return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
 
-			return base.CanConvertFrom(context, sourceType);
-		}
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type t)
+        {
+            if (t == typeof (string))
+                return true;
 
-		public override bool CanConvertTo(ITypeDescriptorContext context, Type t)
-		{
-			if (t == typeof (string))
-				return true;
+            return base.CanConvertTo(context, t);
+        }
 
-			return base.CanConvertTo(context, t);
-		}
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string)
+            {
+                if (value.ToString().ToLower() == "default")
+                    return 0;
 
-		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-		{
-			if (value is string)
-			{
-				if (value.ToString().ToLower() == "default")
-					return 0;
+                return Convert.ToInt32(value);
+            }
 
-				return Convert.ToInt32(value);
-			}
+            return base.ConvertFrom(context, culture, value);
+        }
 
-			return base.ConvertFrom(context, culture, value);
-		}
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
+                                         Type destinationType)
+        {
+            if (destinationType == typeof (string))
+            {
+                int v = Convert.ToInt32(value);
+                if (v == 0)
+                    return "default";
 
-		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-		{
-			if (destinationType == typeof (string))
-			{
-				int v = Convert.ToInt32(value);
-				if (v == 0)
-					return "default";
+                return v.ToString();
+            }
 
-				return v.ToString();
-			}
-
-			return base.ConvertTo(context, culture, value, destinationType);
-		}
-	}
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
 }

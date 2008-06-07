@@ -128,9 +128,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Renderers\Toolbars\Office2007ColorTable.cs" />
-    <Compile Include="Renderers\Toolbars\Office2007Helpers.cs" />
-    <Compile Include="Renderers\Toolbars\Office2007Renderer.cs" />
     <Compile Include="TemplateEngine\Dummy.cs" />
     <Compile Include="TemplateEngine\ITemplate.cs" />
     <Compile Include="TemplateEngine\ScriptCompiler.cs" />

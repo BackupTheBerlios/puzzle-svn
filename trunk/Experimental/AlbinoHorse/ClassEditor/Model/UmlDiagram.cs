@@ -1,23 +1,26 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
-using AlbinoHorse.Model;
 using System.Drawing;
-using System.Collections;
 using AlbinoHorse.Infrastructure;
-using AlbinoHorse.Layout;
 
 namespace AlbinoHorse.Model
 {
     public class UmlDiagram
     {
-
-        public IUmlDiagramData DataSource { get; set; }
-
         public UmlDiagram()
         {
             DataSource = new DefaultUmlDiagramData();
         }
+
+        #region Property Shapes        
+
+        public IList<Shape> Shapes
+        {
+            get { return DataSource.GetShapes(); }
+        }
+
+        #endregion
+
+        public IUmlDiagramData DataSource { get; set; }
 
         //public void AutoLayout()
         //{
@@ -68,27 +71,20 @@ namespace AlbinoHorse.Model
         //    }
         //}
 
-        #region Property Shapes        
-        public IList<Shape> Shapes
-        {
-            get
-            {
-                return DataSource.GetShapes();
-            }
-        }
-        #endregion
-
         public virtual void Draw(RenderInfo info)
         {
-
             if (!info.Preview && info.ShowGrid)
             {
-                int xo = info.VisualBounds.X % info.GridSize;
-                int yo = info.VisualBounds.Y % info.GridSize;
+                int xo = info.VisualBounds.X%info.GridSize;
+                int yo = info.VisualBounds.Y%info.GridSize;
 
-                for (int y = info.VisualBounds.Y - yo; y < (info.VisualBounds.Bottom + info.GridSize) / info.Zoom; y += info.GridSize)
+                for (int y = info.VisualBounds.Y - yo;
+                     y < (info.VisualBounds.Bottom + info.GridSize)/info.Zoom;
+                     y += info.GridSize)
                 {
-                    for (int x = info.VisualBounds.X - xo; x < (info.VisualBounds.Right + info.GridSize) / info.Zoom; x += info.GridSize)
+                    for (int x = info.VisualBounds.X - xo;
+                         x < (info.VisualBounds.Right + info.GridSize)/info.Zoom;
+                         x += info.GridSize)
                     {
                         info.Graphics.FillRectangle(Brushes.Gray, x, y, 1, 1);
                     }
@@ -116,24 +112,24 @@ namespace AlbinoHorse.Model
                     shape.Draw(info);
 
 
-                if (shape.Bounds.Left * info.Zoom < minWidth)
-                    minWidth = (int)(shape.Bounds.Left * info.Zoom);
+                if (shape.Bounds.Left*info.Zoom < minWidth)
+                    minWidth = (int) (shape.Bounds.Left*info.Zoom);
 
-                if (shape.Bounds.Top * info.Zoom < minHeight)
-                    minHeight = (int)(shape.Bounds.Top * info.Zoom);
+                if (shape.Bounds.Top*info.Zoom < minHeight)
+                    minHeight = (int) (shape.Bounds.Top*info.Zoom);
 
-                if (shape.Bounds.Right * info.Zoom > maxWidth)
-                    maxWidth = (int)(shape.Bounds.Right * info.Zoom);
+                if (shape.Bounds.Right*info.Zoom > maxWidth)
+                    maxWidth = (int) (shape.Bounds.Right*info.Zoom);
 
-                if (shape.Bounds.Bottom * info.Zoom > maxHeight)
-                    maxHeight = (int)(shape.Bounds.Bottom * info.Zoom);
-
+                if (shape.Bounds.Bottom*info.Zoom > maxHeight)
+                    maxHeight = (int) (shape.Bounds.Bottom*info.Zoom);
             }
 
-            maxWidth += (int)(info.GridSize * info.Zoom);
-            maxHeight += (int)(info.GridSize * info.Zoom);
+            maxWidth += (int) (info.GridSize*info.Zoom);
+            maxHeight += (int) (info.GridSize*info.Zoom);
 
-            info.ReturnedBounds = new  Rectangle (new Point (minWidth,minHeight), new Size(maxWidth -minWidth, maxHeight - minHeight));
+            info.ReturnedBounds = new Rectangle(new Point(minWidth, minHeight),
+                                                new Size(maxWidth - minWidth, maxHeight - minHeight));
         }
     }
 }

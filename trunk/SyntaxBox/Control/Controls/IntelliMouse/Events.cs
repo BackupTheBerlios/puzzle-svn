@@ -12,11 +12,11 @@ using System;
 
 namespace Puzzle.Windows.Forms.IntelliMouse
 {
-	public class ScrollEventArgs : EventArgs
-	{
-		public int DeltaX = 0;
-		public int DeltaY = 0;
-	}
+    public class ScrollEventArgs : EventArgs
+    {
+        public int DeltaX;
+        public int DeltaY;
+    }
 
-	public delegate void ScrollEventHandler(object sender, ScrollEventArgs e);
+    public delegate void ScrollEventHandler(object sender, ScrollEventArgs e);
 }

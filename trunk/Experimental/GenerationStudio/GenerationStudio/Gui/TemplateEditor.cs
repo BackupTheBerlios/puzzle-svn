@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Puzzle.SourceCode;
-using GenerationStudio.Elements;
-using System.IO;
 using GenerationStudio.AppCore;
-using My.Scripting;
+using GenerationStudio.Elements;
+using GenerationStudio.Properties;
 using GenerationStudio.TemplateEngine;
+using My.Scripting;
+using Puzzle.SourceCode;
 
 namespace GenerationStudio.Gui
 {
@@ -20,26 +16,22 @@ namespace GenerationStudio.Gui
         public TemplateEditor()
         {
             InitializeComponent();
-            MainToolStrip.Renderer = new Office2007Renderer.Office2007Renderer();
-        }
-
-        private void TemplateEditor_Load(object sender, EventArgs e)
-        {
-            SyntaxLoader sl = new SyntaxLoader();
-            Language lang = sl.LoadXML(Properties.Resources.CSharpTemplate);
-            TemplateSyntaxBox.Document.Parser.Init(lang);
-
-            lang = sl.LoadXML(Properties.Resources.CSharp);
-            SourceSyntaxBox.Document.Parser.Init(lang);
-            OutputSyntaxBox.Document.Parser.Init(lang);            
         }
 
         public TemplateElement Node { get; set; }
 
-        private void MainToolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void TemplateEditor_Load(object sender, EventArgs e)
         {
+            var sl = new SyntaxDefinitionLoader();
+            SyntaxDefinition lang = sl.LoadXML(Resources.CSharpTemplate);
+            TemplateSyntaxBox.Document.Parser.Init(lang);
 
+            lang = sl.LoadXML(Resources.CSharp);
+            SourceSyntaxBox.Document.Parser.Init(lang);
+            OutputSyntaxBox.Document.Parser.Init(lang);
         }
+
+        private void MainToolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {}
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
@@ -54,7 +46,7 @@ namespace GenerationStudio.Gui
         {
             try
             {
-                using (StreamReader sr = new StreamReader(fileName, Encoding.Default))
+                using (var sr = new StreamReader(fileName, Encoding.Default))
                 {
                     string text = sr.ReadToEnd();
                     TemplateSyntaxBox.Document.Text = text;
@@ -79,9 +71,9 @@ namespace GenerationStudio.Gui
 
         private void SaveFileDialog(string fileName)
         {
-            using (StreamWriter sw = new StreamWriter(fileName,false, Encoding.Default))
+            using (var sw = new StreamWriter(fileName, false, Encoding.Default))
             {
-                sw.Write(TemplateSyntaxBox.Document.Text);                
+                sw.Write(TemplateSyntaxBox.Document.Text);
                 Node.FilePath = fileName;
                 Engine.OnNotifyChange();
             }
@@ -91,20 +83,20 @@ namespace GenerationStudio.Gui
         {
             TemplateSyntaxBox.Document.ParseAll(true);
 
-            StringBuilder sbHeader = new StringBuilder();
-            StringBuilder sbCode = new StringBuilder();
+            var sbHeader = new StringBuilder();
+            var sbCode = new StringBuilder();
 
             foreach (Row row in TemplateSyntaxBox.Document)
             {
                 foreach (Word word in row)
-                {                    
+                {
                     if (word.Segment.BlockType.Name == "CS Directive")
                     {
                         if (word.Style.Name == "CS Scope")
                             continue;
 
                         sbHeader.Append(word.Text);
-                    }                    
+                    }
                 }
                 if (row.EndSegment.BlockType.Name == "CS Directive")
                     sbHeader.AppendLine();
@@ -159,15 +151,13 @@ namespace GenerationStudio.Gui
                                 sbCode.Append(word.Text);
                             }
                         }
-                    }                    
+                    }
                 }
                 if (row.EndSegment.BlockType.Name == "Text")
                 {
                     sbCode.Append("\\r\\n");
                 }
-                else if (row.EndSegment.BlockType.Name == "CS Directive")
-                {
-                }
+                else if (row.EndSegment.BlockType.Name == "CS Directive") {}
                 else
                 {
                     sbCode.AppendLine();
@@ -188,20 +178,20 @@ namespace GenerationStudio.Gui
             sbHeader.AppendLine("   {");
             sbHeader.AppendLine("       public void Render(TextWriter output, RootElement root)");
             sbHeader.AppendLine("       {");
-            sbHeader.AppendLine("       " + sbCode.ToString ());
+            sbHeader.AppendLine("       " + sbCode);
             sbHeader.AppendLine("       }");
             sbHeader.AppendLine("   }");
             sbHeader.AppendLine("}");
             SourceSyntaxBox.Document.Text = sbHeader.ToString();
 
-            ScriptCompiler compiler = new ScriptCompiler();
+            var compiler = new ScriptCompiler();
             try
             {
                 ITemplate templateObj = compiler.Compile(sbHeader.ToString());
 
-                StringBuilder sbOutput = new StringBuilder();
-                StringWriter sw = new StringWriter(sbOutput);
-                             
+                var sbOutput = new StringBuilder();
+                var sw = new StringWriter(sbOutput);
+
                 templateObj.Render(sw, Node.Root);
 //                MyTemplate d = new MyTemplate();
 //                d.Render(sw, Node.Root);
@@ -241,7 +231,6 @@ namespace GenerationStudio.Gui
                 SourceSyntaxBox.Visible = false;
                 OutputSyntaxBox.Visible = true;
             }
-
         }
     }
 }

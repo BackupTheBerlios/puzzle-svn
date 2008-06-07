@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AlbinoHorse.Model;
+﻿using AlbinoHorse.Model;
 
 namespace AlbinoHorse.Infrastructure
 {

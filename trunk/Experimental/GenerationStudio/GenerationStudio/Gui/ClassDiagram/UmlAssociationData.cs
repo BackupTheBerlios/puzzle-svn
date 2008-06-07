@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AlbinoHorse.Model;
+﻿using AlbinoHorse.Model;
 using GenerationStudio.Elements;
 
 namespace GenerationStudio.Gui
@@ -12,20 +8,16 @@ namespace GenerationStudio.Gui
         public UmlClassDiagramData DiagramData { get; set; }
         public DiagramRelationElement Owner { get; set; }
 
+        #region IUmlRelationData Members
+
         public Shape Start
         {
-            get 
-            { 
-                return DiagramData.GetShape (Owner.Start);
-            }
+            get { return DiagramData.GetShape(Owner.Start); }
         }
 
         public Shape End
         {
-            get 
-            { 
-                return DiagramData.GetShape (Owner.End);
-            }
+            get { return DiagramData.GetShape(Owner.End); }
         }
 
         public int StartPortOffset
@@ -36,13 +28,13 @@ namespace GenerationStudio.Gui
 
         public UmlPortSide StartPortSide
         {
-            get { return (UmlPortSide)(int)Owner.StartPortSide; }
-            set { Owner.StartPortSide = (DiagramPortSide)(int)value; }
+            get { return (UmlPortSide) (int) Owner.StartPortSide; }
+            set { Owner.StartPortSide = (DiagramPortSide) (int) value; }
         }
 
         public UmlRelationType AssociationType
         {
-            get { return (UmlRelationType)(int)Owner.AssociationType; }
+            get { return (UmlRelationType) (int) Owner.AssociationType; }
         }
 
         public int EndPortOffset
@@ -53,11 +45,10 @@ namespace GenerationStudio.Gui
 
         public UmlPortSide EndPortSide
         {
-            get { return (UmlPortSide)(int)Owner.EndPortSide; }
-            set { Owner.EndPortSide = (DiagramPortSide)(int)value; }
+            get { return (UmlPortSide) (int) Owner.EndPortSide; }
+            set { Owner.EndPortSide = (DiagramPortSide) (int) value; }
         }
 
-
-
+        #endregion
     }
 }

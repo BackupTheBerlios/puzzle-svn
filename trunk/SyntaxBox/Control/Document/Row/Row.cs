@@ -45,15 +45,17 @@ namespace Puzzle.SourceCode
     {
         #region General Declarations
 
-        private string mText = "";
-        internal WordCollection mWords = new WordCollection();
-
-        public WordCollection FormattedWords = new WordCollection();
+        private RowState _RowState = RowState.NotParsed;
 
         /// <summary>
-        /// Segments that start on this row
+        /// The owner document
         /// </summary>
-        public SegmentCollection StartSegments = new SegmentCollection();
+        public SyntaxDocument Document;
+
+        /// <summary>
+        /// The first segment that terminates on this row.
+        /// </summary>
+        public Segment EndSegment;
 
         /// <summary>
         /// Segments that ends in this row
@@ -61,80 +63,36 @@ namespace Puzzle.SourceCode
         public SegmentCollection EndSegments = new SegmentCollection();
 
         /// <summary>
-        /// The owner document
+        /// For public use only
         /// </summary>
-        public SyntaxDocument Document = null;
-
-        /// <summary>
-        /// The first collapsable segment on this row.
-        /// </summary>
-        public Segment StartSegment = null;
-
-        /// <summary>
-        /// The first segment that terminates on this row.
-        /// </summary>
-        public Segment EndSegment = null;
+        public int Expansion_EndChar;
 
         /// <summary>
         /// 
         /// </summary>
-        public Segment Expansion_StartSegment = null;
+        public Segment Expansion_EndSegment;
+
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public int Expansion_PixelEnd;
+
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public int Expansion_PixelStart;
+
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public int Expansion_StartChar;
 
         /// <summary>
         /// 
         /// </summary>
-        public Segment Expansion_EndSegment = null;
+        public Segment Expansion_StartSegment;
 
-        private RowState _RowState = RowState.NotParsed;
-
-        #region PUBLIC PROPERTY BACKCOLOR
-
-        private Color _BackColor = Color.Transparent;
-
-        public Color BackColor
-        {
-            get { return _BackColor; }
-            set { _BackColor = value; }
-        }
-
-        #endregion
-
-        public int Depth
-        {
-            get
-            {
-                int i = 0;
-                Segment s = this.StartSegment;
-                while (s != null)
-                {
-                    if (s.Scope != null && s.Scope.CauseIndent)
-                        i++;
-
-                    s = s.Parent;
-                }
-                //				if (i>0)
-                //					i--;
-
-                if (ShouldOutdent)
-                    i--;
-
-                return i;
-            }
-        }
-
-        public bool ShouldOutdent
-        {
-            get
-            {
-                if (this.StartSegment.EndRow == this)
-                {
-                    if (this.StartSegment.Scope.CauseIndent)
-                        return true;
-                }
-
-                return false;
-            }
-        }
+        public WordCollection FormattedWords = new WordCollection();
 
         /// <summary>
         /// Collection of Image indices assigned to a row.
@@ -147,6 +105,36 @@ namespace Puzzle.SourceCode
         /// </example>
         public ImageIndexCollection Images = new ImageIndexCollection();
 
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public int Indent; //value indicating how much this line should be indented (c style)
+
+
+        /// <summary>
+        /// Returns true if the row is in the owner documents keyword parse queue
+        /// </summary>
+        public bool InKeywordQueue; //is this line in the parseQueue?
+
+        /// <summary>
+        /// Returns true if the row is in the owner documents parse queue
+        /// </summary>
+        public bool InQueue; //is this line in the parseQueue?
+
+        private bool mBookmarked; //is this line bookmarked?
+        private bool mBreakpoint; //Does this line have a breakpoint?
+        private string mText = "";
+        internal WordCollection mWords = new WordCollection();
+
+        /// <summary>
+        /// The first collapsable segment on this row.
+        /// </summary>
+        public Segment StartSegment;
+
+        /// <summary>
+        /// Segments that start on this row
+        /// </summary>
+        public SegmentCollection StartSegments = new SegmentCollection();
 
         /// <summary>
         /// Object tag for storage of custom user data..
@@ -182,7 +170,56 @@ namespace Puzzle.SourceCode
         /// 
         /// </code>
         /// </example>
-        public object Tag = null;
+        public object Tag;
+
+        #region PUBLIC PROPERTY BACKCOLOR
+
+        private Color _BackColor = Color.Transparent;
+
+        public Color BackColor
+        {
+            get { return _BackColor; }
+            set { _BackColor = value; }
+        }
+
+        #endregion
+
+        public int Depth
+        {
+            get
+            {
+                int i = 0;
+                Segment s = StartSegment;
+                while (s != null)
+                {
+                    if (s.Scope != null && s.Scope.CauseIndent)
+                        i++;
+
+                    s = s.Parent;
+                }
+                //				if (i>0)
+                //					i--;
+
+                if (ShouldOutdent)
+                    i--;
+
+                return i;
+            }
+        }
+
+        public bool ShouldOutdent
+        {
+            get
+            {
+                if (StartSegment.EndRow == this)
+                {
+                    if (StartSegment.Scope.CauseIndent)
+                        return true;
+                }
+
+                return false;
+            }
+        }
 
         /// <summary>
         /// The parse state of this row
@@ -206,85 +243,21 @@ namespace Puzzle.SourceCode
 
                 if (value == RowState.SegmentParsed && !InKeywordQueue)
                 {
-                    this.Document.KeywordQueue.Add(this);
-                    this.InKeywordQueue = true;
+                    Document.KeywordQueue.Add(this);
+                    InKeywordQueue = true;
                 }
 
                 if ((value == RowState.AllParsed || value == RowState.NotParsed) && InKeywordQueue)
                 {
-                    this.Document.KeywordQueue.Remove(this);
-                    this.InKeywordQueue = false;
+                    Document.KeywordQueue.Remove(this);
+                    InKeywordQueue = false;
                 }
 
                 _RowState = value;
             }
-
         }
-
-
-        //----Lookuptables-----------------
-        //		public	  char[]					Buffer_Text			=null;
-        //	//	public	  char[]					Buffer_Separators	=null;
-        //---------------------------------
-
-        /// <summary>
-        /// Returns true if the row is in the owner documents parse queue
-        /// </summary>
-        public bool InQueue = false; //is this line in the parseQueue?
-        /// <summary>
-        /// Returns true if the row is in the owner documents keyword parse queue
-        /// </summary>
-        public bool InKeywordQueue = false; //is this line in the parseQueue?
-        private bool mBookmarked = false; //is this line bookmarked?
-        private bool mBreakpoint = false; //Does this line have a breakpoint?
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public int Indent = 0; //value indicating how much this line should be indented (c style)
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public int Expansion_PixelStart = 0;
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public int Expansion_StartChar = 0;
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public int Expansion_PixelEnd = 0;
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public int Expansion_EndChar = 0;
 
         #endregion
-
-        public void Clear()
-        {
-            mWords.Clear();
-        }
-
-        /// <summary>
-        /// If the row is hidden inside a collapsed segment , call this method to make the collapsed segments expanded.
-        /// </summary>
-        public void EnsureVisible()
-        {
-            if (this.RowState == RowState.NotParsed)
-                return;
-
-            Segment seg = this.StartSegment;
-            while (seg != null)
-            {
-                seg.Expanded = true;
-                seg = seg.Parent;
-            }
-            this.Document.ResetVisibleRows();
-        }
 
         /// <summary>
         /// Gets or Sets if this row has a bookmark or not.
@@ -303,7 +276,6 @@ namespace Puzzle.SourceCode
 
                 Document.InvokeChange();
             }
-
         }
 
         /// <summary>
@@ -324,15 +296,6 @@ namespace Puzzle.SourceCode
             }
         }
 
-        public Word Add(string text)
-        {
-            Word xw = new Word();
-            xw.Row = this;
-            xw.Text = text;
-            mWords.Add(xw);
-            return xw;
-        }
-
         /// <summary>
         /// Returns the number of words in the row.
         /// (this only applied if the row is fully parsed)
@@ -340,7 +303,6 @@ namespace Puzzle.SourceCode
         public int Count
         {
             get { return mWords.Count; }
-
         }
 
         /// <summary>
@@ -356,7 +318,7 @@ namespace Puzzle.SourceCode
                 if (mText != value)
                 {
                     ParsePreview = true;
-                    this.Document.Modified = true;
+                    Document.Modified = true;
                 }
 
                 mText = value;
@@ -365,12 +327,409 @@ namespace Puzzle.SourceCode
                     if (ParsePreview)
                     {
                         Document.Parser.ParsePreviewLine(Document.IndexOf(this));
-                        this.Document.OnApplyFormatRanges(this);
+                        Document.OnApplyFormatRanges(this);
                     }
 
                     AddToParseQueue();
                 }
             }
+        }
+
+        /// <summary>
+        /// Return the Word object at the specified index.
+        /// </summary>
+        public Word this[int index]
+        {
+            get
+            {
+                if (index >= 0)
+                    return mWords[index];
+                else
+                    return new Word();
+            }
+        }
+
+        public int StartWordIndex
+        {
+            get
+            {
+                if (Expansion_StartSegment == null)
+                    return 0;
+
+                //				if (this.Expansion_StartSegment.StartRow != this)
+                //					return 0;
+
+                Word w = Expansion_StartSegment.StartWord;
+
+                int i = 0;
+                foreach (Word wo in this)
+                {
+                    if (wo == w)
+                        break;
+                    i += wo.Text.Length;
+                }
+                return i;
+            }
+        }
+
+        public Word FirstNonWsWord
+        {
+            get
+            {
+                foreach (Word w in this)
+                {
+                    if (w.Type == WordType.xtWord)
+                        return w;
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the index of this row in the owner SyntaxDocument.
+        /// </summary>
+        public int Index
+        {
+            get { return Document.IndexOf(this); }
+        }
+
+        /// <summary>
+        /// Returns the visible index of this row in the owner SyntaxDocument
+        /// </summary>
+        public int VisibleIndex
+        {
+            get
+            {
+                int i = Document.VisibleRows.IndexOf(this);
+                if (i == -1)
+                {
+                    if (StartSegment != null)
+                    {
+                        if (StartSegment.StartRow != null)
+                        {
+                            if (StartSegment.StartRow != this)
+                                return StartSegment.StartRow.VisibleIndex;
+                            else
+                                return Index;
+                        }
+                        else
+                            return Index;
+                    }
+                    else
+                        return Index;
+                }
+                else
+                    return Document.VisibleRows.IndexOf(this);
+            }
+        }
+
+        /// <summary>
+        /// Returns the next visible row.
+        /// </summary>
+        public Row NextVisibleRow
+        {
+            get
+            {
+                int i = VisibleIndex;
+                if (i > Document.VisibleRows.Count)
+                    return null;
+
+                if (i + 1 < Document.VisibleRows.Count)
+                {
+                    return Document.VisibleRows[i + 1];
+                }
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the next row
+        /// </summary>
+        public Row NextRow
+        {
+            get
+            {
+                int i = Index;
+                if (i + 1 <= Document.Lines.Length - 1)
+                    return Document[i + 1];
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the first visible row before this row.
+        /// </summary>
+        public Row PrevVisibleRow
+        {
+            get
+            {
+                int i = VisibleIndex;
+                if (i < 0)
+                    return null;
+
+                if (i - 1 >= 0)
+                    return Document.VisibleRows[i - 1];
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the row is collapsed
+        /// </summary>
+        public bool IsCollapsed
+        {
+            get
+            {
+                if (Expansion_StartSegment != null)
+                    if (Expansion_StartSegment.Expanded == false)
+                        return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if this row is the last part of a collepsed segment
+        /// </summary>
+        public bool IsCollapsedEndPart
+        {
+            get
+            {
+                if (Expansion_EndSegment != null)
+                    if (Expansion_EndSegment.Expanded == false)
+                        return true;
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns true if this row can fold
+        /// </summary>
+        public bool CanFold
+        {
+            get
+            {
+                return (Expansion_StartSegment != null && Expansion_StartSegment.EndRow != null &&
+                        Document.IndexOf(Expansion_StartSegment.EndRow) != 0);
+            }
+        }
+
+        /// <summary>
+        /// Gets or Sets if this row is expanded.
+        /// </summary>
+        public bool Expanded
+        {
+            get
+            {
+                if (CanFold)
+                {
+                    return (Expansion_StartSegment.Expanded);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                if (CanFold)
+                {
+                    Expansion_StartSegment.Expanded = value;
+                }
+            }
+        }
+
+        public string ExpansionText
+        {
+            get { return Expansion_StartSegment.Scope.ExpansionText; }
+            set
+            {
+                Scope oScope = Expansion_StartSegment.Scope;
+                var oNewScope = new Scope();
+                oNewScope.CaseSensitive = oScope.CaseSensitive;
+                oNewScope.CauseIndent = oScope.CauseIndent;
+                oNewScope.DefaultExpanded = oScope.DefaultExpanded;
+                oNewScope.EndPatterns = oScope.EndPatterns;
+                oNewScope.NormalizeCase = oScope.NormalizeCase;
+                oNewScope.Parent = oScope.Parent;
+                oNewScope.SpawnBlockOnEnd = oScope.SpawnBlockOnEnd;
+                oNewScope.SpawnBlockOnStart = oScope.SpawnBlockOnStart;
+                oNewScope.Start = oScope.Start;
+                oNewScope.Style = oScope.Style;
+                oNewScope.ExpansionText = value;
+                Expansion_StartSegment.Scope = oNewScope;
+                Document.InvokeChange();
+            }
+        }
+
+        /// <summary>
+        /// Returns true if this row is the end part of a collapsable segment
+        /// </summary>
+        public bool CanFoldEndPart
+        {
+            get { return (Expansion_EndSegment != null); }
+        }
+
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public bool HasExpansionLine
+        {
+            get { return (EndSegment.Parent != null); }
+        }
+
+        /// <summary>
+        /// Returns the last row of a collapsable segment
+        /// (this only applies if this row is the start row of the segment)
+        /// </summary>
+        public Row Expansion_EndRow
+        {
+            get
+            {
+                if (CanFold)
+                    return Expansion_StartSegment.EndRow;
+                else
+                    return this;
+            }
+        }
+
+        /// <summary>
+        /// Returns the first row of a collapsable segment
+        /// (this only applies if this row is the last row of the segment)
+        /// </summary>
+        public Row Expansion_StartRow
+        {
+            get
+            {
+                if (CanFoldEndPart)
+                    return Expansion_EndSegment.StartRow;
+                else
+                    return this;
+            }
+        }
+
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public Row VirtualCollapsedRow
+        {
+            get
+            {
+                var r = new Row();
+
+                foreach (Word w in this)
+                {
+                    if (Expansion_StartSegment == w.Segment)
+                        break;
+                    r.Add(w);
+                }
+
+                Word wo = r.Add(CollapsedText);
+                wo.Style = new TextStyle();
+                wo.Style.BackColor = Color.Silver;
+                wo.Style.ForeColor = Color.DarkBlue;
+                wo.Style.Bold = true;
+
+                bool found = false;
+                if (Expansion_EndRow != null)
+                {
+                    foreach (Word w in Expansion_EndRow)
+                    {
+                        if (found)
+                            r.Add(w);
+                        if (w == Expansion_EndRow.Expansion_EndSegment.EndWord)
+                            found = true;
+                    }
+                }
+                return r;
+            }
+        }
+
+        /// <summary>
+        /// Returns the text that should be displayed if the row is collapsed.
+        /// </summary>
+        public string CollapsedText
+        {
+            get
+            {
+                string str = "";
+                int pos = 0;
+                foreach (Word w in this)
+                {
+                    pos += w.Text.Length;
+                    if (w.Segment == Expansion_StartSegment)
+                    {
+                        str = Text.Substring(pos).Trim();
+                        break;
+                    }
+                }
+                if (Expansion_StartSegment.Scope.ExpansionText != "")
+                    str = Expansion_StartSegment.Scope.ExpansionText.Replace("***", str);
+                return str;
+            }
+        }
+
+        /// <summary>
+        /// Returns the row before this row.
+        /// </summary>
+        public Row PrevRow
+        {
+            get
+            {
+                int i = Index;
+
+                if (i - 1 >= 0)
+                    return Document[i - 1];
+                else
+                    return null;
+            }
+        }
+
+        #region IEnumerable Members
+
+        /// <summary>
+        /// Get the Word enumerator for this row
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator GetEnumerator()
+        {
+            return mWords.GetEnumerator();
+        }
+
+        #endregion
+
+        public void Clear()
+        {
+            mWords.Clear();
+        }
+
+        /// <summary>
+        /// If the row is hidden inside a collapsed segment , call this method to make the collapsed segments expanded.
+        /// </summary>
+        public void EnsureVisible()
+        {
+            if (RowState == RowState.NotParsed)
+                return;
+
+            Segment seg = StartSegment;
+            while (seg != null)
+            {
+                seg.Expanded = true;
+                seg = seg.Parent;
+            }
+            Document.ResetVisibleRows();
+        }
+
+        public Word Add(string text)
+        {
+            var xw = new Word();
+            xw.Row = this;
+            xw.Text = text;
+            mWords.Add(xw);
+            return xw;
         }
 
         /// <summary>
@@ -381,7 +740,7 @@ namespace Puzzle.SourceCode
             if (!InQueue)
                 Document.ParseQueue.Add(this);
             InQueue = true;
-            this.RowState = RowState.NotParsed;
+            RowState = RowState.NotParsed;
         }
 
         /// <summary>
@@ -390,22 +749,22 @@ namespace Puzzle.SourceCode
         /// <param name="Text"></param>
         public void SetText(string Text)
         {
-            this.Document.StartUndoCapture();
-            TextPoint tp = new TextPoint(0, this.Index);
-            TextRange tr = new TextRange();
+            Document.StartUndoCapture();
+            var tp = new TextPoint(0, Index);
+            var tr = new TextRange();
             tr.FirstColumn = 0;
             tr.FirstRow = tp.Y;
             tr.LastColumn = this.Text.Length;
             tr.LastRow = tp.Y;
 
-            this.Document.StartUndoCapture();
+            Document.StartUndoCapture();
             //delete the current line
-            this.Document.PushUndoBlock(UndoAction.DeleteRange, this.Document.GetRange(tr), tr.FirstColumn, tr.FirstRow);
+            Document.PushUndoBlock(UndoAction.DeleteRange, Document.GetRange(tr), tr.FirstColumn, tr.FirstRow);
             //alter the text
-            this.Document.PushUndoBlock(UndoAction.InsertRange, Text, tp.X, tp.Y);
+            Document.PushUndoBlock(UndoAction.InsertRange, Text, tp.X, tp.Y);
             this.Text = Text;
-            this.Document.EndUndoCapture();
-            this.Document.InvokeChange();
+            Document.EndUndoCapture();
+            Document.InvokeChange();
         }
 
         private char[] GetSeparatorBuffer(string text, string separators)
@@ -438,29 +797,6 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Get the Word enumerator for this row
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator GetEnumerator()
-        {
-            return mWords.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Return the Word object at the specified index.
-        /// </summary>
-        public Word this[int index]
-        {
-            get
-            {
-                if (index >= 0)
-                    return (Word)mWords[index];
-                else
-                    return new Word();
-            }
-        }
-
-        /// <summary>
         /// Force a segment parse on the row.
         /// </summary>
         public void Parse()
@@ -479,29 +815,28 @@ namespace Puzzle.SourceCode
 
         public void SetExpansionSegment()
         {
-            this.Expansion_StartSegment = null;
-            this.Expansion_EndSegment = null;
-            foreach (Segment s in this.StartSegments)
+            Expansion_StartSegment = null;
+            Expansion_EndSegment = null;
+            foreach (Segment s in StartSegments)
             {
-                if (!this.EndSegments.Contains(s))
+                if (!EndSegments.Contains(s))
                 {
-                    this.Expansion_StartSegment = s;
-                    break;
-
-                }
-            }
-
-            foreach (Segment s in this.EndSegments)
-            {
-                if (!this.StartSegments.Contains(s))
-                {
-                    this.Expansion_EndSegment = s;
+                    Expansion_StartSegment = s;
                     break;
                 }
             }
 
-            if (this.Expansion_EndSegment != null)
-                this.Expansion_StartSegment = null;
+            foreach (Segment s in EndSegments)
+            {
+                if (!StartSegments.Contains(s))
+                {
+                    Expansion_EndSegment = s;
+                    break;
+                }
+            }
+
+            if (Expansion_EndSegment != null)
+                Expansion_StartSegment = null;
         }
 
         /// <summary>
@@ -515,9 +850,7 @@ namespace Puzzle.SourceCode
             s = s.Replace("	", " ");
             for (i = 0; i < s.Length; i++)
             {
-                if (s.Substring(i, 1) == " ")
-                {
-                }
+                if (s.Substring(i, 1) == " ") {}
                 else
                 {
                     break;
@@ -526,47 +859,11 @@ namespace Puzzle.SourceCode
             return mText.Substring(0, i);
         }
 
-        public int StartWordIndex
-        {
-            get
-            {
-                if (this.Expansion_StartSegment == null)
-                    return 0;
-
-                //				if (this.Expansion_StartSegment.StartRow != this)
-                //					return 0;
-
-                Word w = this.Expansion_StartSegment.StartWord;
-
-                int i = 0;
-                foreach (Word wo in this)
-                {
-                    if (wo == w)
-                        break;
-                    i += wo.Text.Length;
-                }
-                return i;
-            }
-        }
-
-        public Word FirstNonWsWord
-        {
-            get
-            {
-                foreach (Word w in this)
-                {
-                    if (w.Type == WordType.xtWord)
-                        return w;
-                }
-                return null;
-            }
-        }
-
         public string GetVirtualLeadingWhitespace()
         {
-            int i = this.StartWordIndex;
+            int i = StartWordIndex;
             string ws = "";
-            foreach (char c in this.Text)
+            foreach (char c in Text)
             {
                 if (c == '\t')
                     ws += c;
@@ -581,300 +878,12 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Returns the index of this row in the owner SyntaxDocument.
-        /// </summary>
-        public int Index
-        {
-            get { return this.Document.IndexOf(this); }
-        }
-
-        /// <summary>
-        /// Returns the visible index of this row in the owner SyntaxDocument
-        /// </summary>
-        public int VisibleIndex
-        {
-            get
-            {
-                int i = this.Document.VisibleRows.IndexOf(this);
-                if (i == -1)
-                {
-                    if (this.StartSegment != null)
-                    {
-                        if (this.StartSegment.StartRow != null)
-                        {
-                            if (this.StartSegment.StartRow != this)
-                                return this.StartSegment.StartRow.VisibleIndex;
-                            else
-                                return this.Index;
-                        }
-                        else
-                            return this.Index;
-                    }
-                    else
-                        return this.Index;
-                }
-                else
-                    return this.Document.VisibleRows.IndexOf(this);
-            }
-        }
-
-        /// <summary>
-        /// Returns the next visible row.
-        /// </summary>
-        public Row NextVisibleRow
-        {
-            get
-            {
-                int i = this.VisibleIndex;
-                if (i > this.Document.VisibleRows.Count)
-                    return null;
-
-                if (i + 1 < this.Document.VisibleRows.Count)
-                {
-                    return this.Document.VisibleRows[i + 1];
-                }
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Returns the next row
-        /// </summary>
-        public Row NextRow
-        {
-            get
-            {
-
-                int i = this.Index;
-                if (i + 1 <= this.Document.Lines.Length - 1)
-                    return this.Document[i + 1];
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Returns the first visible row before this row.
-        /// </summary>
-        public Row PrevVisibleRow
-        {
-            get
-            {
-
-                int i = this.VisibleIndex;
-                if (i < 0)
-                    return null;
-
-                if (i - 1 >= 0)
-                    return this.Document.VisibleRows[i - 1];
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Returns true if the row is collapsed
-        /// </summary>
-        public bool IsCollapsed
-        {
-            get
-            {
-                if (this.Expansion_StartSegment != null)
-                    if (this.Expansion_StartSegment.Expanded == false)
-                        return true;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Returns true if this row is the last part of a collepsed segment
-        /// </summary>
-        public bool IsCollapsedEndPart
-        {
-            get
-            {
-                if (this.Expansion_EndSegment != null)
-                    if (this.Expansion_EndSegment.Expanded == false)
-                        return true;
-                return false;
-            }
-        }
-
-
-        /// <summary>
-        /// Returns true if this row can fold
-        /// </summary>
-        public bool CanFold
-        {
-            get { return (this.Expansion_StartSegment != null && this.Expansion_StartSegment.EndRow != null && this.Document.IndexOf(this.Expansion_StartSegment.EndRow) != 0); }
-        }
-
-        /// <summary>
-        /// Gets or Sets if this row is expanded.
-        /// </summary>
-        public bool Expanded
-        {
-            get
-            {
-                if (this.CanFold)
-                {
-                    return (this.Expansion_StartSegment.Expanded);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            set
-            {
-                if (this.CanFold)
-                {
-                    this.Expansion_StartSegment.Expanded = value;
-                }
-            }
-        }
-
-        public string ExpansionText
-        {
-            get { return this.Expansion_StartSegment.Scope.ExpansionText; }
-            set
-            {
-                Scope oScope = this.Expansion_StartSegment.Scope;
-                Scope oNewScope = new Scope();
-                oNewScope.CaseSensitive = oScope.CaseSensitive;
-                oNewScope.CauseIndent = oScope.CauseIndent;
-                oNewScope.DefaultExpanded = oScope.DefaultExpanded;
-                oNewScope.EndPatterns = oScope.EndPatterns;
-                oNewScope.NormalizeCase = oScope.NormalizeCase;
-                oNewScope.Parent = oScope.Parent;
-                oNewScope.SpawnBlockOnEnd = oScope.SpawnBlockOnEnd;
-                oNewScope.SpawnBlockOnStart = oScope.SpawnBlockOnStart;
-                oNewScope.Start = oScope.Start;
-                oNewScope.Style = oScope.Style;
-                oNewScope.ExpansionText = value;
-                this.Expansion_StartSegment.Scope = oNewScope;
-                this.Document.InvokeChange();
-            }
-        }
-
-        /// <summary>
-        /// Returns true if this row is the end part of a collapsable segment
-        /// </summary>
-        public bool CanFoldEndPart
-        {
-            get { return (this.Expansion_EndSegment != null); }
-        }
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public bool HasExpansionLine
-        {
-            get
-            {
-                return (this.EndSegment.Parent != null);
-            }
-        }
-
-        /// <summary>
-        /// Returns the last row of a collapsable segment
-        /// (this only applies if this row is the start row of the segment)
-        /// </summary>
-        public Row Expansion_EndRow
-        {
-            get
-            {
-                if (this.CanFold)
-                    return this.Expansion_StartSegment.EndRow;
-                else
-                    return this;
-            }
-        }
-
-        /// <summary>
-        /// Returns the first row of a collapsable segment
-        /// (this only applies if this row is the last row of the segment)
-        /// </summary>
-        public Row Expansion_StartRow
-        {
-            get
-            {
-                if (this.CanFoldEndPart)
-                    return this.Expansion_EndSegment.StartRow;
-                else
-                    return this;
-            }
-        }
-
-        /// <summary>
         /// Adds a word object to this row
         /// </summary>
         /// <param name="word">Word object</param>
         public void Add(Word word)
         {
-            this.mWords.Add(word);
-        }
-
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        public Row VirtualCollapsedRow
-        {
-            get
-            {
-                Row r = new Row();
-
-                foreach (Word w in this)
-                {
-                    if (this.Expansion_StartSegment == w.Segment)
-                        break;
-                    r.Add(w);
-                }
-
-                Word wo = r.Add(this.CollapsedText);
-                wo.Style = new TextStyle();
-                wo.Style.BackColor = Color.Silver;
-                wo.Style.ForeColor = Color.DarkBlue;
-                wo.Style.Bold = true;
-
-                bool found = false;
-                if (this.Expansion_EndRow != null)
-                {
-                    foreach (Word w in this.Expansion_EndRow)
-                    {
-                        if (found)
-                            r.Add(w);
-                        if (w == this.Expansion_EndRow.Expansion_EndSegment.EndWord)
-                            found = true;
-                    }
-                }
-                return r;
-            }
-        }
-
-        /// <summary>
-        /// Returns the text that should be displayed if the row is collapsed.
-        /// </summary>
-        public string CollapsedText
-        {
-            get
-            {
-                string str = "";
-                int pos = 0;
-                foreach (Word w in this)
-                {
-                    pos += w.Text.Length;
-                    if (w.Segment == this.Expansion_StartSegment)
-                    {
-                        str = this.Text.Substring(pos).Trim();
-                        break;
-                    }
-                }
-                if (this.Expansion_StartSegment.Scope.ExpansionText != "")
-                    str = this.Expansion_StartSegment.Scope.ExpansionText.Replace("***", str);
-                return str;
-            }
+            mWords.Add(word);
         }
 
         /// <summary>
@@ -939,7 +948,8 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace &&
+                            w.Type != WordType.xtTab)
                         {
                             return w;
                         }
@@ -1002,7 +1012,8 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace &&
+                            w.Type != WordType.xtTab)
                         {
                             return w;
                         }
@@ -1086,8 +1097,6 @@ namespace Puzzle.SourceCode
                 i--;
             }
             return null;
-
-
         }
 
         /// <summary>
@@ -1113,23 +1122,6 @@ namespace Puzzle.SourceCode
                 i++;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Returns the row before this row.
-        /// </summary>
-        public Row PrevRow
-        {
-            get
-            {
-
-                int i = this.Index;
-
-                if (i - 1 >= 0)
-                    return this.Document[i - 1];
-                else
-                    return null;
-            }
         }
     }
 }

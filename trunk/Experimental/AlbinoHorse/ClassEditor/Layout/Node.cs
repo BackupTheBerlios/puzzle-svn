@@ -1,40 +1,33 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace AlbinoHorse.Layout
 {
     public class Node
     {
+        public RectangleF Bounds;
+
+        #region Property Connections
+
+        private List<Node> connections;
+
+        public List<Node> Connections
+        {
+            get { return connections; }
+            set { connections = value; }
+        }
+
+        #endregion
+
         public Node()
         {
             Connections = new List<Node>();
         }
 
-        public RectangleF Bounds;
-
-
-        #region Property Connections
-        private List<Node> connections;
-        public List<Node> Connections
-        {
-            get
-            {
-                return this.connections;
-            }
-            set
-            {
-                this.connections = value;
-            }
-        }
-        #endregion
-
         public PointF GetRepellingForce(PointF delta, float mass)
         {
-
-
-            PointF force = new PointF();
+            var force = new PointF();
             double dx = delta.X;
             double dy = delta.Y;
 
@@ -46,8 +39,7 @@ namespace AlbinoHorse.Layout
 
             dist++;
             double power = 0;
-            power = (1 / dist) * 10 * mass;
-
+            power = (1/dist)*10*mass;
 
 
             if (power < 0.05)
@@ -57,35 +49,34 @@ namespace AlbinoHorse.Layout
                 power = 10;
 
 
-
-            force.X = (float)(Math.Cos(angle) * power);
-            force.Y = (float)(Math.Sin(angle) * power);
+            force.X = (float) (Math.Cos(angle)*power);
+            force.Y = (float) (Math.Sin(angle)*power);
 
             return force;
         }
 
         private static double GetDistance(double dx, double dy)
         {
-            double dist = Math.Sqrt(dx * dx + dy * dy);
+            double dist = Math.Sqrt(dx*dx + dy*dy);
             return dist;
         }
 
         public PointF GetPullingForce(PointF delta)
         {
-            PointF force = new PointF();
+            var force = new PointF();
             double dx = delta.X;
             double dy = delta.Y;
 
             double dist = GetDistance(dx, dy);
             double angle = Math.Atan2(dy, dx);
 
-            double power = (dist * dist) / 1000;
+            double power = (dist*dist)/1000;
             if (power > 60)
                 power = 60;
-            
 
-            force.X = (float)(Math.Cos(angle) * power);
-            force.Y = (float)(Math.Sin(angle) * power);
+
+            force.X = (float) (Math.Cos(angle)*power);
+            force.Y = (float) (Math.Sin(angle)*power);
 
             return force;
         }
@@ -109,7 +100,7 @@ namespace AlbinoHorse.Layout
 
         public PointF GetForceDirection(List<Node> allNodes, float massFactor)
         {
-            PointF force = new PointF();
+            var force = new PointF();
             foreach (Node node in allNodes)
             {
                 if (node == this)
@@ -121,7 +112,10 @@ namespace AlbinoHorse.Layout
                 if (dist > 200)
                     continue;
 
-                PointF nodeForce = GetRepellingForce(delta, 1 + ((1 + (node.Bounds.Width * node.Bounds.Height) / 1000) * node.connections.Count * massFactor));
+                PointF nodeForce = GetRepellingForce(delta,
+                                                     1 +
+                                                     ((1 + (node.Bounds.Width*node.Bounds.Height)/1000)*
+                                                      node.connections.Count*massFactor));
 
                 force.X += nodeForce.X;
                 force.Y += nodeForce.Y;
@@ -190,10 +184,7 @@ namespace AlbinoHorse.Layout
                 dy = bounds2.Top - bounds1.Bottom;
 
 
-
-
             return new PointF(dx, dy);
         }
-
     }
 }

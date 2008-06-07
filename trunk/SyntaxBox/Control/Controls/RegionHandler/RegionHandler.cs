@@ -14,96 +14,83 @@ using System.Windows.Forms;
 
 namespace Puzzle.Windows.Forms.CoreLib
 {
-	[ToolboxItem(true)]
-	public class RegionHandler : Component
-	{
-		private Container components = null;
+    [ToolboxItem(true)]
+    public class RegionHandler : Component
+    {
+        private Container components;
 
-		#region PUBLIC PROPERTY TRANSPARENCYKEY
+        #region PUBLIC PROPERTY TRANSPARENCYKEY
 
-		private Color _TransparencyKey = Color.FromArgb(255, 0, 255);
+        private Color _TransparencyKey = Color.FromArgb(255, 0, 255);
 
-		public Color TransparencyKey
-		{
-			get { return _TransparencyKey; }
-			set { _TransparencyKey = value; }
-		}
+        public Color TransparencyKey
+        {
+            get { return _TransparencyKey; }
+            set { _TransparencyKey = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region PUBLIC PROPERTY CONTROL
+        #region PUBLIC PROPERTY CONTROL
 
-		private Control _Control;
+        public Control Control { get; set; }
 
-		public Control Control
-		{
-			get { return _Control; }
-			set { _Control = value; }
-		}
+        #endregion
 
-		#endregion
+        #region PUBLIC PROPERTY MASKIMAGE
 
-		#region PUBLIC PROPERTY MASKIMAGE
+        public Bitmap MaskImage { get; set; }
 
-		private Bitmap _MaskImage;
+        #endregion
 
-		public Bitmap MaskImage
-		{
-			get { return _MaskImage; }
-			set { _MaskImage = value; }
-		}
+        public RegionHandler(IContainer container)
+        {
+            container.Add(this);
+            InitializeComponent();
+        }
 
-		#endregion
+        public RegionHandler()
+        {
+            InitializeComponent();
+        }
 
-		public void ApplyRegion(Control Target, Bitmap MaskImage, Color TransparencyKey)
-		{
-			this.Control = Target;
-			this.MaskImage = MaskImage;
-			this.TransparencyKey = TransparencyKey;
-			ApplyRegion();
-		}
+        #region Component Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+        }
+
+        #endregion
+
+        public void ApplyRegion(Control Target, Bitmap MaskImage, Color TransparencyKey)
+        {
+            Control = Target;
+            this.MaskImage = MaskImage;
+            this.TransparencyKey = TransparencyKey;
+            ApplyRegion();
+        }
 
 
-		public void ApplyRegion()
-		{
-			Region r = new Region(new Rectangle(0, 0, MaskImage.Width, MaskImage.Height));
+        public void ApplyRegion()
+        {
+            var r = new Region(new Rectangle(0, 0, MaskImage.Width, MaskImage.Height));
 
-			for (int y = 0; y < this.MaskImage.Height; y++)
-				for (int x = 0; x < this.MaskImage.Width; x++)
-				{
-					if (this.MaskImage.GetPixel(x, y) == this.TransparencyKey)
-					{
-						r.Exclude(new Rectangle(x, y, 1, 1));
-					}
-				}
+            for (int y = 0; y < MaskImage.Height; y++)
+                for (int x = 0; x < MaskImage.Width; x++)
+                {
+                    if (MaskImage.GetPixel(x, y) == TransparencyKey)
+                    {
+                        r.Exclude(new Rectangle(x, y, 1, 1));
+                    }
+                }
 
-			Control.Region = r;
-			Control.BackgroundImage = this.MaskImage;
-		}
-
-		public RegionHandler(IContainer container)
-		{
-			container.Add(this);
-			InitializeComponent();
-
-		}
-
-		public RegionHandler()
-		{
-			InitializeComponent();
-		}
-
-		#region Component Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			components = new System.ComponentModel.Container();
-		}
-
-		#endregion
-	}
+            Control.Region = r;
+            Control.BackgroundImage = MaskImage;
+        }
+    }
 }

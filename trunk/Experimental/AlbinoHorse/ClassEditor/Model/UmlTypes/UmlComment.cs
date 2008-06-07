@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using AlbinoHorse.Infrastructure;
+using AlbinoHorse.Model.Settings;
 using AlbinoHorse.Windows.Forms;
-
+using Brushes=System.Drawing.Brushes;
+using Pens=AlbinoHorse.Model.Settings.Pens;
 
 namespace AlbinoHorse.Model
 {
@@ -15,16 +14,16 @@ namespace AlbinoHorse.Model
         #region Properties
 
         #region DataSource property
+
         public IUmlCommentData DataSource { get; set; }
+
         #endregion
 
         #region Bounds property
+
         public override Rectangle Bounds
         {
-            get
-            {
-                return new Rectangle(DataSource.X, DataSource.Y, DataSource.Width, DataSource.Height);
-            }
+            get { return new Rectangle(DataSource.X, DataSource.Y, DataSource.Width, DataSource.Height); }
             set
             {
                 DataSource.X = value.X;
@@ -35,27 +34,26 @@ namespace AlbinoHorse.Model
                 base.Bounds = value;
             }
         }
+
         #endregion
 
         #region Text property
+
         public string Text
         {
-            get
-            {
-                return DataSource.Text;
-            }
-            set
-            {
-                DataSource.Text = value;
-            }
+            get { return DataSource.Text; }
+            set { DataSource.Text = value; }
         }
+
         #endregion
 
         #endregion
 
         #region Identifiers
+
         //bounding box identifiers
         protected readonly object TextIdentifier = new object();
+
         #endregion
 
         public override void Draw(RenderInfo info)
@@ -63,10 +61,10 @@ namespace AlbinoHorse.Model
             int grid = info.GridSize;
             Rectangle renderBounds = Bounds;
 
-            BoundingBox bboxThis = new BoundingBox();
+            var bboxThis = new BoundingBox();
             bboxThis.Bounds = renderBounds;
             bboxThis.Target = this;
-            bboxThis.Data = this.BodyIdentifier;
+            bboxThis.Data = BodyIdentifier;
             info.BoundingBoxes.Add(bboxThis);
 
             int x = renderBounds.X;
@@ -90,23 +88,22 @@ namespace AlbinoHorse.Model
             Rectangle textBounds = renderBounds;
             textBounds.Inflate(-10, -10);
 
-            BoundingBox bboxText = new BoundingBox();            
+            var bboxText = new BoundingBox();
             bboxText.Bounds = textBounds;
             bboxText.Target = this;
-            bboxText.Data = this.TextIdentifier;
+            bboxText.Data = TextIdentifier;
             info.BoundingBoxes.Add(bboxText);
 
-            
-            RectangleF textBoundsF = new RectangleF(textBounds.X, textBounds.Y, textBounds.Width, textBounds.Height);
+
+            var textBoundsF = new RectangleF(textBounds.X, textBounds.Y, textBounds.Width, textBounds.Height);
 
             //info.Graphics.FillRectangle(Brushes.White, textBounds);
-            info.Graphics.DrawString(Text, Settings.Fonts.CommentText, Brushes.Black, textBoundsF, StringFormat.GenericTypographic);
+            info.Graphics.DrawString(Text, Fonts.CommentText, Brushes.Black, textBoundsF,
+                                     StringFormat.GenericTypographic);
             return renderBounds;
-        }        
-
-        public override void DrawBackground(RenderInfo info)
-        {           
         }
+
+        public override void DrawBackground(RenderInfo info) {}
 
         protected override void DrawCustomSelection(RenderInfo info)
         {
@@ -115,7 +112,7 @@ namespace AlbinoHorse.Model
             Rectangle textBounds = renderBounds;
             textBounds.Inflate(-10, -10);
 
-            info.Graphics.DrawRectangle(Settings.Pens.SelectionOuter, textBounds);
+            info.Graphics.DrawRectangle(Pens.SelectionOuter, textBounds);
         }
 
         protected override int GetRadius()
@@ -125,32 +122,33 @@ namespace AlbinoHorse.Model
 
         protected override Pen GetBorderPen()
         {
-            return Settings.Pens.CommentBorder;
+            return Pens.CommentBorder;
         }
 
         #region Mouse Events
+
         public override void OnMouseDown(ShapeMouseEventArgs args)
         {
             args.Sender.ClearSelection();
-            this.Selected = true;
+            Selected = true;
 
             if (args.BoundingBox.Data == RightResizeIdentifier)
             {
                 mouseDownPos = new Point(args.X, args.Y);
-                this.SelectedObject = null;
+                SelectedObject = null;
                 args.Redraw = true;
             }
             else if (args.BoundingBox.Data == LeftResizeIdentifier)
             {
                 mouseDownPos = new Point(args.X, args.Y);
-                this.SelectedObject = null;
+                SelectedObject = null;
                 args.Redraw = true;
             }
             else
             {
                 mouseDownPos = new Point(args.X, args.Y);
-                mouseDownShapePos = this.Bounds.Location;
-                this.SelectedObject = null;
+                mouseDownShapePos = Bounds.Location;
+                SelectedObject = null;
 
                 args.Redraw = true;
             }
@@ -165,7 +163,7 @@ namespace AlbinoHorse.Model
         {
             if (args.BoundingBox.Data == RightResizeIdentifier && args.Button == MouseButtons.Left)
             {
-                int diff = args.X - this.Bounds.Left;
+                int diff = args.X - Bounds.Left;
                 if (diff < 100)
                     diff = 100;
 
@@ -175,7 +173,7 @@ namespace AlbinoHorse.Model
 
             if (args.BoundingBox.Data == LeftResizeIdentifier && args.Button == MouseButtons.Left)
             {
-                int diff = this.Bounds.Right - args.X;
+                int diff = Bounds.Right - args.X;
                 if (diff < 100)
                     diff = 100;
 
@@ -191,7 +189,8 @@ namespace AlbinoHorse.Model
                 }
             }
 
-            if ((args.BoundingBox.Data == BodyIdentifier || args.BoundingBox.Data == TextIdentifier) && args.Button == MouseButtons.Left)
+            if ((args.BoundingBox.Data == BodyIdentifier || args.BoundingBox.Data == TextIdentifier) &&
+                args.Button == MouseButtons.Left)
             {
                 int dx = args.X - mouseDownPos.X;
                 int dy = args.Y - mouseDownPos.Y;
@@ -211,7 +210,7 @@ namespace AlbinoHorse.Model
                 if (shapeY < 0)
                     shapeY = 0;
 
-                this.Bounds = new Rectangle(shapeX, shapeY, Bounds.Width, Bounds.Height);
+                Bounds = new Rectangle(shapeX, shapeY, Bounds.Width, Bounds.Height);
                 args.Redraw = true;
             }
         }
@@ -226,16 +225,14 @@ namespace AlbinoHorse.Model
 
         private void BeginEditText(UmlDesigner owner)
         {
-            Rectangle inputBounds = this.Bounds;
+            Rectangle inputBounds = Bounds;
             inputBounds.Inflate(-10, -10);
 
-            Action endEditText = () =>
-            {
-                DataSource.Text = owner.GetInput();
-            };
+            Action endEditText = () => { DataSource.Text = owner.GetInput(); };
 
-            owner.BeginInputMultiLine(inputBounds, DataSource.Text, Settings.Fonts.CommentText, endEditText);
+            owner.BeginInputMultiLine(inputBounds, DataSource.Text, Fonts.CommentText, endEditText);
         }
+
         #endregion
     }
 }

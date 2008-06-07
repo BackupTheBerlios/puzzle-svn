@@ -1,70 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace GenerationStudio.Forms.Docking
 {
     public class DocumentForm : DockingForm
     {
-        public System.Windows.Forms.Panel ContentPanel;
-        private System.Windows.Forms.Panel BorderPanel;
-    
+        private Panel BorderPanel;
+        public Panel ContentPanel;
+
         public DocumentForm()
         {
-            InitializeComponent();           
+            InitializeComponent();
         }
 
         private void InitializeComponent()
         {
-            this.BorderPanel = new System.Windows.Forms.Panel();
-            this.ContentPanel = new System.Windows.Forms.Panel();
-            this.BorderPanel.SuspendLayout();
-            this.SuspendLayout();
+            BorderPanel = new Panel();
+            ContentPanel = new Panel();
+            BorderPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // BorderPanel
             // 
-            this.BorderPanel.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.BorderPanel.Controls.Add(this.ContentPanel);
-            this.BorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BorderPanel.Location = new System.Drawing.Point(3, 3);
-            this.BorderPanel.Name = "BorderPanel";
-            this.BorderPanel.Padding = new System.Windows.Forms.Padding(1);
-            this.BorderPanel.Size = new System.Drawing.Size(286, 260);
-            this.BorderPanel.TabIndex = 0;
+            BorderPanel.BackColor = SystemColors.ControlDark;
+            BorderPanel.Controls.Add(ContentPanel);
+            BorderPanel.Dock = DockStyle.Fill;
+            BorderPanel.Location = new Point(3, 3);
+            BorderPanel.Name = "BorderPanel";
+            BorderPanel.Padding = new Padding(1);
+            BorderPanel.Size = new Size(286, 260);
+            BorderPanel.TabIndex = 0;
             // 
             // ContentPanel
             // 
-            this.ContentPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(1, 1);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(284, 258);
-            this.ContentPanel.TabIndex = 1;
+            ContentPanel.BackColor = SystemColors.Control;
+            ContentPanel.Dock = DockStyle.Fill;
+            ContentPanel.Location = new Point(1, 1);
+            ContentPanel.Name = "ContentPanel";
+            ContentPanel.Size = new Size(284, 258);
+            ContentPanel.TabIndex = 1;
             // 
             // DocumentForm
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(292, 266);
-            this.Controls.Add(this.BorderPanel);
-            this.Name = "DocumentForm";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.BorderPanel.ResumeLayout(false);
-            this.ResumeLayout(false);
-
+            BackColor = Color.White;
+            ClientSize = new Size(292, 266);
+            Controls.Add(BorderPanel);
+            Name = "DocumentForm";
+            Padding = new Padding(3);
+            BorderPanel.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         public override void SetContent(Control content, string title)
         {
-            this.HideOnClose = true;
+            HideOnClose = true;
             this.content = content;
-            this.oldParent = content.Parent;
-            this.ContentPanel.Controls.Clear();
-            content.Parent = this.ContentPanel;
+            oldParent = content.Parent;
+            ContentPanel.Controls.Clear();
+            content.Parent = ContentPanel;
             content.Dock = DockStyle.Fill;
-            this.Text = title;
+            Text = title;
             content.Visible = true;
         }
     }

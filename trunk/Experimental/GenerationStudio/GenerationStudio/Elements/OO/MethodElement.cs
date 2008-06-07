@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
@@ -9,8 +6,6 @@ namespace GenerationStudio.Elements
     [Serializable]
     [ElementName("Method")]
     [ElementIcon("GenerationStudio.Images.method.gif")]
-    [ElementParent(typeof(InstanceTypeElement))]
-    public class MethodElement : TypeMemberElement
-    {
-    }
+    [ElementParent(typeof (InstanceTypeElement))]
+    public class MethodElement : TypeMemberElement {}
 }

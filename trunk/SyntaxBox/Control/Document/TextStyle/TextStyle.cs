@@ -15,180 +15,185 @@ using System.Drawing.Design;
 
 namespace Puzzle.SourceCode
 {
-	/// <summary>
-	/// TextStyles are used to describe the apperance of text.
-	/// </summary>
-	[Editor(typeof (TextStyleUIEditor), typeof
-		(UITypeEditor))]
-	public class TextStyle :
-		ICloneable
-	{
-		public event EventHandler Change = null;
+    /// <summary>
+    /// TextStyles are used to describe the apperance of text.
+    /// </summary>
+    [Editor(typeof (TextStyleUIEditor), typeof
+        (UITypeEditor))]
+    public class TextStyle :
+        ICloneable
+    {
+        /// <summary>
+        /// Name of the style
+        /// </summary>
+        public string Name;
 
-		protected virtual void OnChange()
-		{
-			if (Change != null)
-				Change(this, EventArgs.Empty);
-		}
+        #region PUBLIC PROPERTY BOLD
 
-		/// <summary>
-		/// Name of the style
-		/// </summary>
-		public string Name = null;
+        private bool _Bold;
 
-		/// <summary>
-		/// Gets or Sets if the style uses a Bold font
-		/// </summary>
+        [Category("Font")]
+        [Description("Gets or Sets if the style uses a BOLD font")
+        ]
+        public bool Bold
+        {
+            get { return _Bold; }
+            set
+            {
+                _Bold = value;
+                OnChange();
+            }
+        }
 
-		#region PUBLIC PROPERTY BOLD
-		private bool _Bold;
+        #endregion
 
-		[Category("Font")]
-		[Description("Gets or Sets if the style uses a BOLD font")
-			]
-		public bool Bold
-		{
-			get { return _Bold; }
-			set
-			{
-				_Bold = value;
-				OnChange();
-			}
-		}
+        #region PUBLIC PROPERTY ITALIC
 
-		#endregion
+        private bool _Italic;
 
-		/// <summary>
-		/// Gets or Sets if the style uses an Italic font
-		/// </summary>
+        [Category("Font")]
+        [Description(
+            "Gets or Sets if the style uses an ITALIC font")]
+        public bool
+            Italic
+        {
+            get { return _Italic; }
+            set
+            {
+                _Italic = value;
+                OnChange();
+            }
+        }
 
-		#region PUBLIC PROPERTY ITALIC
-		private bool _Italic;
+        #endregion
 
-		[Category("Font")]
-		[Description(
-			"Gets or Sets if the style uses an ITALIC font")]
-		public bool
-			Italic
-		{
-			get { return _Italic; }
-			set
-			{
-				_Italic = value;
-				OnChange();
-			}
-		}
+        #region PUBLIC PROPERTY UNDERLINE
 
-		#endregion
+        private bool _Underline;
 
-		/// <summary>
-		/// Gets or Sets if the style uses an Underlined font
-		/// </summary>
+        [Category("Font")]
+        [Description(
+            "Gets or Sets if the style uses an UNDERLINED font")]
+        public bool
+            Underline
+        {
+            get { return _Underline; }
+            set
+            {
+                _Underline = value;
+                OnChange();
+            }
+        }
 
-		#region PUBLIC PROPERTY UNDERLINE
-		private bool _Underline;
+        #endregion
 
-		[Category("Font")]
-		[Description(
-			"Gets or Sets if the style uses an UNDERLINED font")]
-		public bool
-			Underline
-		{
-			get { return _Underline; }
-			set
-			{
-				_Underline = value;
-				OnChange();
-			}
-		}
+        #region PUBLIC PROPERTY FORECOLOR
 
-		#endregion
+        private Color _ForeColor = Color.Black;
 
-		/// <summary>
-		/// Gets or Sets the ForeColor of the style
-		/// </summary>
+        [Category("Color")]
+        [Description("Gets or Sets the fore color of the style")
+        ]
+        public Color ForeColor
+        {
+            get { return _ForeColor; }
+            set
+            {
+                _ForeColor = value;
+                OnChange();
+            }
+        }
 
-		#region PUBLIC PROPERTY FORECOLOR
-		private Color _ForeColor = Color.Black;
+        #endregion
 
-		[Category("Color")]
-		[Description("Gets or Sets the fore color of the style")
-			]
-		public Color ForeColor
-		{
-			get { return _ForeColor; }
-			set
-			{
-				_ForeColor = value;
-				OnChange();
-			}
-		}
+        #region PUBLIC PROPERTY BACKCOLOR
 
-		#endregion
+        private Color _BackColor = Color.Transparent;
 
-		/// <summary>
-		/// Gets or Sets the BackColor of the style
-		/// </summary>
+        [Category("Color")]
+        [Description(
+            "Gets or Sets the background color of the style")]
+        public Color
+            BackColor
+        {
+            get { return _BackColor; }
+            set
+            {
+                _BackColor = value;
+                OnChange();
+            }
+        }
 
-		#region PUBLIC PROPERTY BACKCOLOR
-		private Color _BackColor = Color.Transparent;
+        #endregion
 
-		[Category("Color")]
-		[Description(
-			"Gets or Sets the background color of the style")]
-		public Color
-			BackColor
-		{
-			get { return _BackColor; }
-			set
-			{
-				_BackColor = value;
-				OnChange();
-			}
-		}
+        /// <summary>
+        /// Gets or Sets if the style uses a Bold font
+        /// </summary>
 
-		#endregion
+        /// <summary>
+        /// Gets or Sets if the style uses an Italic font
+        /// </summary>
 
-		/// <summary>
-		/// Default constructor
-		/// </summary>
-		public TextStyle()
-		{
-			ForeColor = Color.Black;
-			BackColor = Color.Transparent;
-		}
+        /// <summary>
+        /// Gets or Sets if the style uses an Underlined font
+        /// </summary>
 
-		/// <summary>
-		/// Returns true if no color have been assigned to the backcolor
-		/// </summary>
-		[Browsable(false)]
-		public bool Transparent
-		{
-			get { return (BackColor.A == 0); }
-		}
+        /// <summary>
+        /// Gets or Sets the ForeColor of the style
+        /// </summary>
 
-		public override string ToString()
-		{
-			if (this.Name == null)
-				return "TextStyle";
+        /// <summary>
+        /// Gets or Sets the BackColor of the style
+        /// </summary>
 
-			return this.Name;
-		}
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public TextStyle()
+        {
+            ForeColor = Color.Black;
+            BackColor = Color.Transparent;
+        }
 
-		#region Implementation of ICloneable
+        /// <summary>
+        /// Returns true if no color have been assigned to the backcolor
+        /// </summary>
+        [Browsable(false)]
+        public bool Transparent
+        {
+            get { return (BackColor.A == 0); }
+        }
 
-		public object Clone()
-		{
-			TextStyle ts = new TextStyle();
-			ts.BackColor = this.BackColor;
-			ts.Bold = this.Bold;
-			ts.ForeColor = this.ForeColor;
-			ts.Italic = this.Italic;
-			ts.Underline = this.Underline;
-			ts.Name = this.Name;
-			return ts;
-		}
+        public event EventHandler Change = null;
 
-		#endregion
-	}
+        protected virtual void OnChange()
+        {
+            if (Change != null)
+                Change(this, EventArgs.Empty);
+        }
+
+        public override string ToString()
+        {
+            if (Name == null)
+                return "TextStyle";
+
+            return Name;
+        }
+
+        #region Implementation of ICloneable
+
+        public object Clone()
+        {
+            var ts = new TextStyle();
+            ts.BackColor = BackColor;
+            ts.Bold = Bold;
+            ts.ForeColor = ForeColor;
+            ts.Italic = Italic;
+            ts.Underline = Underline;
+            ts.Name = Name;
+            return ts;
+        }
+
+        #endregion
+    }
 }

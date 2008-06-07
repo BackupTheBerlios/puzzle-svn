@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
-using System.Windows.Forms;
 using GenerationStudio.Gui;
 
 namespace GenerationStudio.Elements
@@ -15,7 +11,7 @@ namespace GenerationStudio.Elements
     }
 
     [Serializable]
-    [ElementParent(typeof(RootElement))]
+    [ElementParent(typeof (RootElement))]
     [ElementName("Template")]
     [ElementIcon("GenerationStudio.Images.template.gif")]
     public class TemplateElement : NamedElement
@@ -23,19 +19,16 @@ namespace GenerationStudio.Elements
         public string FilePath { get; set; }
         public TemplateLanguage Language { get; set; }
 
-        [ElementVerb("Edit template",Default=true)]
+        [ElementVerb("Edit template", Default = true)]
         public void Edit(IHost host)
         {
-            TemplateEditor editor = host.GetEditor<TemplateEditor>(this, "Edit template");
+            var editor = host.GetEditor<TemplateEditor>(this, "Edit template");
             editor.Node = this;
-            editor.OpenFile(this.FilePath);
+            editor.OpenFile(FilePath);
             host.ShowEditor(editor);
         }
 
         [ElementVerb("Execute")]
-        public void Execute(IHost host)
-        {
-            
-        }
+        public void Execute(IHost host) {}
     }
 }

@@ -220,8 +220,8 @@
     <Compile Include="Document\Formatting\FormatRange.cs" />
     <Compile Include="Document\Formatting\FormatRangeCollection.cs" />
     <Compile Include="Document\IntCollection.cs" />
-    <Compile Include="Document\Language\Language.cs" />
-    <Compile Include="Document\Language\LanguageList.cs" />
+    <Compile Include="Document\Language\SyntaxDefinition.cs" />
+    <Compile Include="Document\Language\SyntaxDefinitionList.cs" />
     <Compile Include="Document\Language\LanguageReader.cs" />
     <Compile Include="Document\Parser\DefaultParser.cs" />
     <Compile Include="Document\Parser\IParser.cs" />

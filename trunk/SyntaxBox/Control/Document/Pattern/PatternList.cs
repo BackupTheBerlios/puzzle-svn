@@ -14,155 +14,150 @@ using System.Globalization;
 
 namespace Puzzle.SourceCode
 {
-	/// <summary>
-	/// A List containing patterns.
-	/// this could be for example a list of keywords or operators
-	/// </summary>
-	public sealed class PatternList : IEnumerable
-	{
-		private PatternCollection mPatterns = new PatternCollection();
+    /// <summary>
+    /// A List containing patterns.
+    /// this could be for example a list of keywords or operators
+    /// </summary>
+    public sealed class PatternList : IEnumerable
+    {
+        private readonly PatternCollection patterns = new PatternCollection();
 
-		/// <summary>
-		/// for public use only
-		/// </summary>
-		public Hashtable SimplePatterns = new Hashtable();
+        /// <summary>
+        /// Gets or Sets if this list contains case seinsitive patterns
+        /// </summary>		
+        public bool CaseSensitive;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public Hashtable SimplePatterns1Char = new Hashtable();
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public PatternCollection ComplexPatterns = new PatternCollection();
 
-		/// <summary>
-		/// For public use only
-		/// </summary>
-		public Hashtable SimplePatterns2Char = new Hashtable();
+        /// <summary>
+        /// The name of the pattern list
+        /// </summary>
+        public string Name = "";
 
-		/// <summary>
-		/// For public use only
-		/// </summary>
-		public PatternCollection ComplexPatterns = new PatternCollection();
+        /// <summary>
+        /// Gets or Sets if the patterns in this list should be case normalized
+        /// </summary>
+        public bool NormalizeCase;
 
-		/// <summary>
-		/// Gets or Sets the TextStyle that should be assigned to patterns in this list
-		/// </summary>
-		public TextStyle Style = new TextStyle();
+        /// <summary>
+        /// 
+        /// </summary>
+        public PatternListList Parent;
 
-		/// <summary>
-		/// Gets or Sets if this list contains case seinsitive patterns
-		/// </summary>		
-		public bool CaseSensitive = false;
+        /// <summary>
+        /// The parent BlockType of this list
+        /// </summary>
+        public BlockType ParentBlock;
 
-		/// <summary>
-		/// Gets or Sets if the patterns in this list should be case normalized
-		/// </summary>
-		public bool NormalizeCase = false;
+        /// <summary>
+        /// for public use only
+        /// </summary>
+        public Hashtable SimplePatterns = new Hashtable();
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public PatternListList Parent = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        public Hashtable SimplePatterns1Char = new Hashtable();
 
-		/// <summary>
-		/// The parent BlockType of this list
-		/// </summary>
-		public BlockType ParentBlock = null;
+        /// <summary>
+        /// For public use only
+        /// </summary>
+        public Hashtable SimplePatterns2Char = new Hashtable();
 
-		/// <summary>
-		/// The name of the pattern list
-		/// </summary>
-		public string Name = "";
+        /// <summary>
+        /// Gets or Sets the TextStyle that should be assigned to patterns in this list
+        /// </summary>
+        public TextStyle Style = new TextStyle();
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public PatternList()
-		{
-			SimplePatterns = new Hashtable(CaseInsensitiveHashCodeProvider.Default,
-			                               CaseInsensitiveComparer.Default);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public PatternList()
+        {
+            SimplePatterns = new Hashtable(CaseInsensitiveHashCodeProvider.Default,
+                                           CaseInsensitiveComparer.Default);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator GetEnumerator()
-		{
-			return mPatterns.GetEnumerator();
-		}
+        #region IEnumerable Members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Pattern"></param>
-		/// <returns></returns>
-		public Pattern Add(Pattern Pattern)
-		{
-			if (this.Parent != null && this.Parent.Parent != null &&
-				this.Parent.Parent.Parent != null)
-			{
-				Pattern.Separators = this.Parent.Parent.Parent.Separators;
-				this.Parent.Parent.Parent.ChangeVersion();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator GetEnumerator()
+        {
+            return patterns.GetEnumerator();
+        }
 
-			}
+        #endregion
 
-			if (!Pattern.IsComplex && !Pattern.ContainsSeparator)
-			{
-				//store pattern in lookuptable if it is a simple pattern
-				string s = "";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Pattern"></param>
+        /// <returns></returns>
+        public Pattern Add(Pattern Pattern)
+        {
+            if (Parent != null && Parent.Parent != null &&
+                Parent.Parent.Parent != null)
+            {
+                Pattern.Separators = Parent.Parent.Parent.Separators;
+                Parent.Parent.Parent.ChangeVersion();
+            }
 
-				if (Pattern.StringPattern.Length >= 2)
-					s = Pattern.StringPattern.Substring(0, 2);
-				else
-					s = Pattern.StringPattern.Substring(0, 1) + " ";
+            if (!Pattern.IsComplex && !Pattern.ContainsSeparator)
+            {
+                //store pattern in lookuptable if it is a simple pattern
+                string s;
 
-				s = s.ToLower(CultureInfo.InvariantCulture);
+                if (Pattern.StringPattern.Length >= 2)
+                    s = Pattern.StringPattern.Substring(0, 2);
+                else
+                    s = Pattern.StringPattern.Substring(0, 1) + " ";
 
-				if (Pattern.StringPattern.Length == 1)
-				{
-					SimplePatterns1Char[Pattern.StringPattern] = Pattern;
-				}
-				else
-				{
-					if (SimplePatterns2Char[s] == null)
-						SimplePatterns2Char[s] = new PatternCollection();
-					PatternCollection ar = (PatternCollection) SimplePatterns2Char[s];
-					ar.Add(Pattern);
-				}
+                s = s.ToLower(CultureInfo.InvariantCulture);
 
-				if (this.CaseSensitive)
-					SimplePatterns[Pattern.LowerStringPattern] = Pattern;
-				else
-					SimplePatterns[Pattern.StringPattern] = Pattern;
+                if (Pattern.StringPattern.Length == 1)
+                {
+                    SimplePatterns1Char[Pattern.StringPattern] = Pattern;
+                }
+                else
+                {
+                    if (SimplePatterns2Char[s] == null)
+                        SimplePatterns2Char[s] = new PatternCollection();
+                    var ar = (PatternCollection) SimplePatterns2Char[s];
+                    ar.Add(Pattern);
+                }
 
-				//				if (SimplePatterns[s]==null)
-				//					SimplePatterns.Add (s,new ArrayList ());
-				//				
-				//				ArrayList bb=(ArrayList) SimplePatterns[s];
-				//
-				//				bb.Add (Pattern);
+                if (CaseSensitive)
+                    SimplePatterns[Pattern.LowerStringPattern] = Pattern;
+                else
+                    SimplePatterns[Pattern.StringPattern] = Pattern;
+            }
+            else
+            {
+                ComplexPatterns.Add(Pattern);
+            }
 
-			}
-			else
-			{
-				ComplexPatterns.Add(Pattern);
-			}
+            patterns.Add(Pattern);
+            if (Pattern.Parent == null)
+                Pattern.Parent = this;
+            else
+            {
+                throw (new Exception("Pattern already assigned to another PatternList"));
+            }
+            return Pattern;
+        }
 
-			mPatterns.Add(Pattern);
-			if (Pattern.Parent == null)
-				Pattern.Parent = this;
-			else
-			{
-				throw(new Exception("Pattern already assigned to another PatternList"));
-			}
-			return Pattern;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public void Clear()
-		{
-			mPatterns.Clear();
-		}
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Clear()
+        {
+            patterns.Clear();
+        }
+    }
 }

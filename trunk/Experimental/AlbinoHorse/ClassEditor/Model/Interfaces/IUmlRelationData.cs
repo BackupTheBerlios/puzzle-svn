@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AlbinoHorse.Model
+﻿namespace AlbinoHorse.Model
 {
     public enum UmlPortSide
     {
@@ -17,7 +13,7 @@ namespace AlbinoHorse.Model
         None,
         Association,
         Aggregation,
-        Inheritance,        
+        Inheritance,
     }
 
     public interface IUmlRelationData
@@ -26,10 +22,9 @@ namespace AlbinoHorse.Model
         int StartPortOffset { get; set; }
         UmlPortSide StartPortSide { get; set; }
         UmlRelationType AssociationType { get; }
-        
+
         Shape End { get; }
         int EndPortOffset { get; set; }
         UmlPortSide EndPortSide { get; set; }
-
     }
 }

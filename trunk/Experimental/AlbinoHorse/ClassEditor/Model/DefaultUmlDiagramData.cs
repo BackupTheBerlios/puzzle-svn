@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AlbinoHorse.Model
 {
@@ -13,9 +11,11 @@ namespace AlbinoHorse.Model
 
         public List<Shape> Shapes { get; set; }
 
+        #region IUmlDiagramData Members
+
         public T CreateShape<T>() where T : Shape, new()
         {
-            T shape = new T();
+            var shape = new T();
             Shapes.Add(shape);
             return shape;
         }
@@ -29,5 +29,7 @@ namespace AlbinoHorse.Model
         {
             return Shapes;
         }
+
+        #endregion
     }
 }

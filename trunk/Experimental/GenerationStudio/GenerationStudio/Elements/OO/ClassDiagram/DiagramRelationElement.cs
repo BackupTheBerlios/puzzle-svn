@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
-using GenerationStudio.Gui;
-using System.ComponentModel;
 
 namespace GenerationStudio.Elements
 {
@@ -25,7 +20,7 @@ namespace GenerationStudio.Elements
     }
 
     [Serializable]
-    [ElementParent(typeof(DiagramElement))]
+    [ElementParent(typeof (DiagramElement))]
     [ElementName("Association")]
     [ElementIcon("GenerationStudio.Images.association.gif")]
     public class DiagramRelationElement : DiagramMemberElement
@@ -37,11 +32,11 @@ namespace GenerationStudio.Elements
 
         public DiagramMemberElement End { get; set; }
         public int EndPortOffset { get; set; }
-        public DiagramPortSide EndPortSide { get; set; }        
+        public DiagramPortSide EndPortSide { get; set; }
 
         public override string GetDisplayName()
         {
-            return string.Format("{0}: {1} -> {2}",AssociationType, Start.GetDisplayName(), End.GetDisplayName());
+            return string.Format("{0}: {1} -> {2}", AssociationType, Start.GetDisplayName(), End.GetDisplayName());
         }
     }
 }

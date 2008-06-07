@@ -16,279 +16,271 @@ using Puzzle.Drawing;
 
 namespace Puzzle.Windows.Forms
 {
-	[ToolboxItem(true)]
-	public class BasePanelControl : Panel
-	{
-		private BorderStyle borderStyle;
-		private Color borderColor = Color.Black;
-		private Container components = null;
-		private bool RunOnce = true;
-
-		public event EventHandler Load = null;
-
-
-		public BasePanelControl()
-		{
-			SetStyle(ControlStyles.EnableNotifyMessage, true);
-			this.BorderStyle = BorderStyle.FixedSingle;
-			InitializeComponent();
-		}
-
-		public Color BorderColor
-		{
-			get { return borderColor; }
-
-			set
-			{
-				borderColor = value;
-				this.Refresh();
-				this.Invalidate();
-				UpdateStyles();
-			}
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
-
-		private const int WS_EX_CLIENTEDGE = unchecked((int) 0x00000200);
-		private const int WS_BORDER = unchecked((int) 0x00800000);
-
-		protected override CreateParams CreateParams
-		{
-			get
-			{
-				CreateParams cp = base.CreateParams;
-
-				if (BorderStyle == BorderStyle.None)
-					return cp;
-
-				cp.ExStyle &= (~WS_EX_CLIENTEDGE);
-				cp.Style &= (~WS_BORDER);
-
-				return cp;
-			}
-		}
-
-		[Browsable(true),
-			EditorBrowsable(EditorBrowsableState.Always)]
-		new public BorderStyle BorderStyle
-		{
-			get { return borderStyle; }
-			set
-			{
-				try
-				{
-					if (borderStyle != value)
-					{
-						borderStyle = value;
-						UpdateStyles();
-						this.Refresh();
-					}
-				}
-				catch
-				{
-				}
-			}
-		}
-
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Obsolete("Do not use!", true)]
-		public override Image BackgroundImage
-		{
-			get { return base.BackgroundImage; }
-			set { base.BackgroundImage = value; }
-		}
+    [ToolboxItem(true)]
+    public class BasePanelControl : Panel
+    {
+        private const int WS_BORDER = unchecked(0x00800000);
+        private const int WS_EX_CLIENTEDGE = unchecked(0x00000200);
+        private Color borderColor = Color.Black;
+        private BorderStyle borderStyle;
+        private Container components;
+        private bool RunOnce = true;
 
 
-		[Browsable(false)]
-		public int ClientWidth
-		{
-			get { return this.Width - (this.BorderWidth*2); }
-		}
+        public BasePanelControl()
+        {
+            SetStyle(ControlStyles.EnableNotifyMessage, true);
+            BorderStyle = BorderStyle.FixedSingle;
+            InitializeComponent();
+        }
 
-		[Browsable(false)]
-		public int ClientHeight
-		{
-			get { return this.Height - (this.BorderWidth*2); }
-		}
+        public Color BorderColor
+        {
+            get { return borderColor; }
 
-		[Browsable(false)]
-		public int BorderWidth
-		{
-			get
-			{
-				switch (this.borderStyle)
-				{
-					case BorderStyle.None:
-						{
-							return 0;
-						}
-					case BorderStyle.Sunken:
-						{
-							return 2;
-						}
-					case BorderStyle.SunkenThin:
-						{
-							return 1;
-						}
-					case BorderStyle.Raised:
-						{
-							return 2;
-						}
+            set
+            {
+                borderColor = value;
+                Refresh();
+                Invalidate();
+                UpdateStyles();
+            }
+        }
 
-					case BorderStyle.Etched:
-						{
-							return 2;
-						}
-					case BorderStyle.Bump:
-						{
-							return 6;
-						}
-					case BorderStyle.FixedSingle:
-						{
-							return 1;
-						}
-					case BorderStyle.FixedDouble:
-						{
-							return 2;
-						}
-					case BorderStyle.RaisedThin:
-						{
-							return 1;
-						}
-					case BorderStyle.Dotted:
-						{
-							return 1;
-						}
-					case BorderStyle.Dashed:
-						{
-							return 1;
-						}
-				}
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+
+                if (BorderStyle == BorderStyle.None)
+                    return cp;
+
+                cp.ExStyle &= (~WS_EX_CLIENTEDGE);
+                cp.Style &= (~WS_BORDER);
+
+                return cp;
+            }
+        }
+
+        [Browsable(true),
+         EditorBrowsable(EditorBrowsableState.Always)]
+        public new BorderStyle BorderStyle
+        {
+            get { return borderStyle; }
+            set
+            {
+                try
+                {
+                    if (borderStyle != value)
+                    {
+                        borderStyle = value;
+                        UpdateStyles();
+                        Refresh();
+                    }
+                }
+                catch {}
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Obsolete("Do not use!", true)]
+        public override Image BackgroundImage
+        {
+            get { return base.BackgroundImage; }
+            set { base.BackgroundImage = value; }
+        }
 
 
-				return this.Height;
-			}
-		}
+        [Browsable(false)]
+        public int ClientWidth
+        {
+            get { return Width - (BorderWidth*2); }
+        }
 
-		#region Component Designer generated code
+        [Browsable(false)]
+        public int ClientHeight
+        {
+            get { return Height - (BorderWidth*2); }
+        }
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			// 
-			// BasePanelControl
-			// 
-			this.Size = new System.Drawing.Size(272, 264);
+        [Browsable(false)]
+        public int BorderWidth
+        {
+            get
+            {
+                switch (borderStyle)
+                {
+                    case BorderStyle.None:
+                        {
+                            return 0;
+                        }
+                    case BorderStyle.Sunken:
+                        {
+                            return 2;
+                        }
+                    case BorderStyle.SunkenThin:
+                        {
+                            return 1;
+                        }
+                    case BorderStyle.Raised:
+                        {
+                            return 2;
+                        }
 
-
-		}
-
-		#endregion
-
-		protected virtual void OnLoad(EventArgs e)
-		{
-			if (Load != null)
-				Load(this, e);
-			this.Refresh();
-		}
-
-		protected override unsafe void WndProc(ref Message m)
-		{
-			if (m.Msg == (int) WindowMessage.WM_NCPAINT)
-			{
-				try
-				{
-					RenderBorder();
-				}
-				catch
-				{
-				}
-				base.WndProc(ref m);
-				//	RenderBorder();
-			}
-			else if (m.Msg == (int) WindowMessage.WM_SHOWWINDOW)
-			{
-				if (RunOnce)
-				{
-					RunOnce = false;
-					OnLoad(null);
-					base.WndProc(ref m);
-					UpdateStyles();
-				}
-				else
-				{
-					UpdateStyles();
-					base.WndProc(ref m);
-				}
-
-			}
-			else if (m.Msg == (int) WindowMessage.WM_NCCREATE)
-			{
-				base.WndProc(ref m);
-			}
-			else if (m.Msg == (int) WindowMessage.WM_NCCALCSIZE)
-			{
-				if (m.WParam == (IntPtr) 0)
-				{
-					//APIRect* pRC=(APIRect*)m.LParam;
-					//pRC->left -=3;
-					base.WndProc(ref m);
-				}
-				else if (m.WParam == (IntPtr) 1)
-				{
-					_NCCALCSIZE_PARAMS* pNCP = (_NCCALCSIZE_PARAMS*) m.LParam;
-
-					base.WndProc(ref m);
-
-					int t = pNCP->NewRect.top + this.BorderWidth;
-					int l = pNCP->NewRect.left + this.BorderWidth;
-					int b = pNCP->NewRect.bottom - this.BorderWidth;
-					int r = pNCP->NewRect.right - this.BorderWidth;
+                    case BorderStyle.Etched:
+                        {
+                            return 2;
+                        }
+                    case BorderStyle.Bump:
+                        {
+                            return 6;
+                        }
+                    case BorderStyle.FixedSingle:
+                        {
+                            return 1;
+                        }
+                    case BorderStyle.FixedDouble:
+                        {
+                            return 2;
+                        }
+                    case BorderStyle.RaisedThin:
+                        {
+                            return 1;
+                        }
+                    case BorderStyle.Dotted:
+                        {
+                            return 1;
+                        }
+                    case BorderStyle.Dashed:
+                        {
+                            return 1;
+                        }
+                }
 
 
-					pNCP->NewRect.top = t;
-					pNCP->NewRect.left = l;
-					pNCP->NewRect.right = r;
-					pNCP->NewRect.bottom = b;
+                return Height;
+            }
+        }
 
-					return;
-				}
-			}
-			else
-			{
-				base.WndProc(ref m);
-			}
-		}
+        #region Component Designer generated code
 
-		private void RenderBorder()
-		{
-			IntPtr hdc = NativeMethods.GetWindowDC(this.Handle);
-			APIRect s = new APIRect();
-			NativeMethods.GetWindowRect(this.Handle, ref s);
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            // 
+            // BasePanelControl
+            // 
+            this.Size = new System.Drawing.Size(272, 264);
+        }
 
-			using (Graphics g = Graphics.FromHdc(hdc))
-			{
-				DrawingTools.DrawBorder((BorderStyle2) (int) this.BorderStyle, this.BorderColor, g, new Rectangle(0, 0, s.Width, s.Height));
-			}
-			NativeMethods.ReleaseDC(this.Handle, hdc);
-		}
+        #endregion
 
-		protected override void OnEnter(EventArgs e)
-		{
-			base.OnEnter(e);
-		}
+        public event EventHandler Load = null;
 
-	}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+
+        protected virtual void OnLoad(EventArgs e)
+        {
+            if (Load != null)
+                Load(this, e);
+            Refresh();
+        }
+
+        protected override unsafe void WndProc(ref Message m)
+        {
+            if (m.Msg == (int) WindowMessage.WM_NCPAINT)
+            {
+                try
+                {
+                    RenderBorder();
+                }
+                catch {}
+                base.WndProc(ref m);
+                //	RenderBorder();
+            }
+            else if (m.Msg == (int) WindowMessage.WM_SHOWWINDOW)
+            {
+                if (RunOnce)
+                {
+                    RunOnce = false;
+                    OnLoad(null);
+                    base.WndProc(ref m);
+                    UpdateStyles();
+                }
+                else
+                {
+                    UpdateStyles();
+                    base.WndProc(ref m);
+                }
+            }
+            else if (m.Msg == (int) WindowMessage.WM_NCCREATE)
+            {
+                base.WndProc(ref m);
+            }
+            else if (m.Msg == (int) WindowMessage.WM_NCCALCSIZE)
+            {
+                if (m.WParam == (IntPtr) 0)
+                {
+                    //APIRect* pRC=(APIRect*)m.LParam;
+                    //pRC->left -=3;
+                    base.WndProc(ref m);
+                }
+                else if (m.WParam == (IntPtr) 1)
+                {
+                    var pNCP = (_NCCALCSIZE_PARAMS*) m.LParam;
+
+                    base.WndProc(ref m);
+
+                    int t = pNCP->NewRect.top + BorderWidth;
+                    int l = pNCP->NewRect.left + BorderWidth;
+                    int b = pNCP->NewRect.bottom - BorderWidth;
+                    int r = pNCP->NewRect.right - BorderWidth;
+
+
+                    pNCP->NewRect.top = t;
+                    pNCP->NewRect.left = l;
+                    pNCP->NewRect.right = r;
+                    pNCP->NewRect.bottom = b;
+
+                    return;
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
+            }
+        }
+
+        private void RenderBorder()
+        {
+            IntPtr hdc = NativeMethods.GetWindowDC(Handle);
+            var s = new APIRect();
+            NativeMethods.GetWindowRect(Handle, ref s);
+
+            using (Graphics g = Graphics.FromHdc(hdc))
+            {
+                DrawingTools.DrawBorder((BorderStyle2) (int) BorderStyle, BorderColor, g,
+                                        new Rectangle(0, 0, s.Width, s.Height));
+            }
+            NativeMethods.ReleaseDC(Handle, hdc);
+        }
+
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+        }
+    }
 }

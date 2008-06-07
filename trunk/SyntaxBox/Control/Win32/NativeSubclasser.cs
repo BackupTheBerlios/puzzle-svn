@@ -14,76 +14,74 @@ using System.Windows.Forms;
 namespace Puzzle.Windows.Forms
 {
 
-	#region params
+    #region params
 
-	public class NativeMessageArgs : EventArgs
-	{
-		public Message Message;
-		public bool Cancel;
-	}
+    public class NativeMessageArgs : EventArgs
+    {
+        public bool Cancel;
+        public Message Message;
+    }
 
-	public delegate void NativeMessageHandler(object s, NativeMessageArgs e);
+    public delegate void NativeMessageHandler(object s, NativeMessageArgs e);
 
-	#endregion
+    #endregion
 
-	public class NativeSubclasser : NativeWindow
-	{
-		public event NativeMessageHandler Message = null;
+    public class NativeSubclasser : NativeWindow
+    {
+        public NativeSubclasser() {}
 
-		protected virtual void OnMessage(NativeMessageArgs e)
-		{
-			if (Message != null)
-				Message(this, e);
-		}
+        public NativeSubclasser(Control Target)
+        {
+            AssignHandle(Target.Handle);
+            Target.HandleCreated += Handle_Created;
+            Target.HandleDestroyed += Handle_Destroyed;
+        }
 
-		public NativeSubclasser()
-		{
-		}
+        public NativeSubclasser(IntPtr hWnd)
+        {
+            AssignHandle(hWnd);
+        }
 
-		public NativeSubclasser(Control Target)
-		{
-			this.AssignHandle(Target.Handle);
-			Target.HandleCreated += new EventHandler(this.Handle_Created);
-			Target.HandleDestroyed += new EventHandler(this.Handle_Destroyed);
-		}
+        public event NativeMessageHandler Message = null;
 
-		private void Handle_Created(object o, EventArgs e)
-		{
-			this.AssignHandle(((Control) o).Handle);
-		}
+        protected virtual void OnMessage(NativeMessageArgs e)
+        {
+            if (Message != null)
+                Message(this, e);
+        }
 
-		private void Handle_Destroyed(object o, EventArgs e)
-		{
-			this.ReleaseHandle();
-		}
+        private void Handle_Created(object o, EventArgs e)
+        {
+            AssignHandle(((Control) o).Handle);
+        }
 
-		public NativeSubclasser(IntPtr hWnd)
-		{
-			this.AssignHandle(hWnd);
-		}
+        private void Handle_Destroyed(object o, EventArgs e)
+        {
+            ReleaseHandle();
+        }
 
-		public void Detatch()
-		{
-			//	this.ReleaseHandle ();
-		}
+        public void Detatch()
+        {
+            //	this.ReleaseHandle ();
+        }
 
-		protected override void WndProc(ref Message m)
-		{
-			try
-			{
-				NativeMessageArgs e = new NativeMessageArgs();
-				e.Message = m;
-				e.Cancel = false;
+        protected override void WndProc(ref Message m)
+        {
+            try
+            {
+                var e = new NativeMessageArgs();
+                e.Message = m;
+                e.Cancel = false;
 
-				OnMessage(e);
+                OnMessage(e);
 
-				if (!e.Cancel)
-					base.WndProc(ref m);
-			}
-			catch (Exception x)
-			{
-				Console.WriteLine(x.Message);
-			}
-		}
-	}
+                if (!e.Cancel)
+                    base.WndProc(ref m);
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+        }
+    }
 }

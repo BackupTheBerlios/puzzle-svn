@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AlbinoHorse.Model
 {
-    public interface IUmlDiagramData 
+    public interface IUmlDiagramData
     {
-        T CreateShape<T>() where T:Shape,new();
+        T CreateShape<T>() where T : Shape, new();
         void RemoveShape(Shape item);
         IList<Shape> GetShapes();
     }

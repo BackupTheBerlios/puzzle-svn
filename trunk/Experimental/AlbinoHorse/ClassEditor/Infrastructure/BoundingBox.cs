@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace AlbinoHorse.Infrastructure
@@ -8,33 +5,21 @@ namespace AlbinoHorse.Infrastructure
     public class BoundingBox
     {
         #region Property Bounds 
-        private Rectangle bounds;
-        public Rectangle Bounds
-        {
-            get
-            {
-                return this.bounds;
-            }
-            set
-            {
-                this.bounds = value;
-            }
-        }                        
+
+        public Rectangle Bounds { get; set; }
+
         #endregion
 
         #region Property Target
-        private object target;
-        public object Target
-        {
-            get
-            {
-                return this.target;
-            }
-            set
-            {
-                this.target = value;
-            }
-        }
+
+        public object Target { get; set; }
+
+        #endregion
+
+        #region Property Data
+
+        public object Data { get; set; }
+
         #endregion
 
         //#region Property Section
@@ -51,20 +36,5 @@ namespace AlbinoHorse.Infrastructure
         //    }
         //}
         //#endregion
-
-        #region Property Data
-        private object data;
-        public object Data
-        {
-            get
-            {
-                return this.data;
-            }
-            set
-            {
-                this.data = value;
-            }
-        }
-        #endregion
     }
 }

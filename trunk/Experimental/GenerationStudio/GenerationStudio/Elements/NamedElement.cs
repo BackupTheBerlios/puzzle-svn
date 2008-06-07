@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 
 namespace GenerationStudio.Elements
@@ -10,14 +7,12 @@ namespace GenerationStudio.Elements
     public abstract class NamedElement : Element
     {
         private string name;
+
         [Category("Design")]
         [Description("The name of the element")]
-        public virtual string Name 
+        public virtual string Name
         {
-            get
-            {
-                return name;
-            }
+            get { return name; }
             set
             {
                 name = value;
@@ -28,8 +23,6 @@ namespace GenerationStudio.Elements
         public override string GetDisplayName()
         {
             return Name;
-        } 
+        }
     }
-
-    
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GenerationStudio.Attributes;
 
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(NamespaceElement))]
+    [ElementParent(typeof (NamespaceElement))]
     [AllowMultiple(false)]
     [ElementName("Namespace/DataBase Mapping")]
     [ElementIcon("GenerationStudio.Images.mapping.gif")]
@@ -30,9 +28,11 @@ namespace GenerationStudio.Elements
 
         public override IList<ElementError> GetErrors()
         {
-            List<ElementError> errors = new List<ElementError>();
+            var errors = new List<ElementError>();
             if (MappedDataBase == null)
-                errors.Add(new ElementError(this, string.Format("Namespace {0} is missing database mapping", Parent.GetDisplayName())));
+                errors.Add(new ElementError(this,
+                                            string.Format("Namespace {0} is missing database mapping",
+                                                          Parent.GetDisplayName())));
 
             return errors;
         }

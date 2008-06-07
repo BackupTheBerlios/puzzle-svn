@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GenerationStudio.Attributes;
 using System.Runtime.Serialization;
-using System.Data;
+using GenerationStudio.Attributes;
 using GenerationStudio.Gui;
 
 namespace GenerationStudio.Elements
 {
     [Serializable]
-    [ElementParent(typeof(ColumnsElement))]
+    [ElementParent(typeof (ColumnsElement))]
     [ElementName("Column")]
     [ElementIcon("GenerationStudio.Images.column.gif")]
     public class ColumnElement : NamedElement
     {
-        [OptionalField]
-        private string dbType;
+        [OptionalField] private int autoIncrementSeed;
+        [OptionalField] private int autoIncrementStep;
+        [OptionalField] private string dbType;
+        [OptionalField] private string defaultValue;
+        [OptionalField] private bool isAutoIncrement;
+
+
+        [OptionalField] private bool isIdentity;
+        [OptionalField] private bool isNullable;
+        [OptionalField] private bool isUnique;
+        [OptionalField] private int maxLength;
+
+        [OptionalField] private Type nativeType;
+
+        [OptionalField] private int ordinal;
+
         public string DbType
         {
-            get
-            {
-                return dbType;
-            }
+            get { return dbType; }
             set
             {
                 dbType = value;
@@ -30,16 +38,9 @@ namespace GenerationStudio.Elements
             }
         }
 
-
-
-        [OptionalField]
-        private bool isIdentity;
         public bool IsIdentity
         {
-            get
-            {
-                return isIdentity;
-            }
+            get { return isIdentity; }
             set
             {
                 isIdentity = value;
@@ -47,138 +48,66 @@ namespace GenerationStudio.Elements
             }
         }
 
-        [OptionalField]
-        private Type nativeType;
         public Type NativeType
         {
-            get
-            {
-                return nativeType;
-            }
-            set
-            {
-                nativeType = value;
-            }
+            get { return nativeType; }
+            set { nativeType = value; }
         }
 
-        [OptionalField]
-        private int ordinal;
         public int Ordinal
         {
-            get
-            {
-                return ordinal;
-            }
-            set
-            {
-                ordinal = value;
-            }
+            get { return ordinal; }
+            set { ordinal = value; }
         }
 
-        [OptionalField]
-        private int maxLength;
         public int MaxLength
         {
-            get
-            {
-                return maxLength;
-            }
-            set
-            {
-                maxLength = value;
-            }
+            get { return maxLength; }
+            set { maxLength = value; }
         }
 
-        [OptionalField]
-        private int autoIncrementSeed;
         public int AutoIncrementSeed
         {
-            get
-            {
-                return autoIncrementSeed;
-            }
-            set
-            {
-                autoIncrementSeed = value;
-            }
+            get { return autoIncrementSeed; }
+            set { autoIncrementSeed = value; }
         }
 
 
-        [OptionalField]
-        private int autoIncrementStep;
         public int AutoIncrementStep
         {
-            get
-            {
-                return autoIncrementStep;
-            }
-            set
-            {
-                autoIncrementStep = value;
-            }
+            get { return autoIncrementStep; }
+            set { autoIncrementStep = value; }
         }
 
-        [OptionalField]
-        private bool isUnique;
         public bool IsUnique
         {
-            get
-            {
-                return isUnique;
-            }
-            set
-            {
-                isUnique = value;
-            }
+            get { return isUnique; }
+            set { isUnique = value; }
         }
 
-        [OptionalField]
-        private bool isNullable;
-        public bool IsNullable 
+        public bool IsNullable
         {
-            get
-            {
-                return isNullable;
-            }
-            set
-            {
-                isNullable = value;
-            }
+            get { return isNullable; }
+            set { isNullable = value; }
         }
 
-        [OptionalField]
-        private string defaultValue;
         public string DefaultValue
         {
-            get
-            {
-                return defaultValue;
-            }
-            set
-            {
-                defaultValue = value;
-            }
+            get { return defaultValue; }
+            set { defaultValue = value; }
         }
 
-        [OptionalField]
-        private bool isAutoIncrement;
         public bool IsAutoIncrement
         {
-            get
-            {
-                return isAutoIncrement;
-            }
-            set
-            {
-                isAutoIncrement = value;
-            }
+            get { return isAutoIncrement; }
+            set { isAutoIncrement = value; }
         }
 
         public override string GetIconName()
         {
             if (IsIdentity)
                 return "GenerationStudio.Images.pk.gif";
-            else                
+            else
                 return base.GetIconName();
         }
 
@@ -190,14 +119,16 @@ namespace GenerationStudio.Elements
 
         public override int GetSortPriority()
         {
-            return this.Ordinal;
+            return Ordinal;
         }
 
         public override IList<ElementError> GetErrors()
         {
-            List<ElementError> errors = new List<ElementError>();
-            if (string.IsNullOrEmpty (DbType))
-                errors.Add (new ElementError (this, string.Format ("Column {0}.{1} is missing DbType",Parent.GetDisplayName (),GetDisplayName ())));
+            var errors = new List<ElementError>();
+            if (string.IsNullOrEmpty(DbType))
+                errors.Add(new ElementError(this,
+                                            string.Format("Column {0}.{1} is missing DbType", Parent.GetDisplayName(),
+                                                          GetDisplayName())));
 
             return errors;
         }
