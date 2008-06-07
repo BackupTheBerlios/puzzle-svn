@@ -344,8 +344,7 @@ namespace Puzzle.SourceCode
             {
                 if (index >= 0)
                     return mWords[index];
-                else
-                    return new Word();
+                return new Word();
             }
         }
 
@@ -403,23 +402,15 @@ namespace Puzzle.SourceCode
                 int i = Document.VisibleRows.IndexOf(this);
                 if (i == -1)
                 {
-                    if (startSpan != null)
-                    {
-                        if (startSpan.StartRow != null)
-                        {
-                            if (startSpan.StartRow != this)
-                                return startSpan.StartRow.VisibleIndex;
-                            else
-                                return Index;
-                        }
-                        else
-                            return Index;
-                    }
-                    else
-                        return Index;
+                    if (startSpan != null && 
+                        startSpan.StartRow != null && 
+                        startSpan.StartRow != this)
+
+                        return startSpan.StartRow.VisibleIndex;
+
+                    return Index;
                 }
-                else
-                    return Document.VisibleRows.IndexOf(this);
+                return Document.VisibleRows.IndexOf(this);
             }
         }
 
@@ -438,8 +429,7 @@ namespace Puzzle.SourceCode
                 {
                     return Document.VisibleRows[i + 1];
                 }
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -453,8 +443,7 @@ namespace Puzzle.SourceCode
                 int i = Index;
                 if (i + 1 <= Document.Lines.Length - 1)
                     return Document[i + 1];
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -471,8 +460,7 @@ namespace Puzzle.SourceCode
 
                 if (i - 1 >= 0)
                     return Document.VisibleRows[i - 1];
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -528,10 +516,7 @@ namespace Puzzle.SourceCode
                 {
                     return (expansion_StartSpan.Expanded);
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
             set
             {
@@ -548,18 +533,20 @@ namespace Puzzle.SourceCode
             set
             {
                 Scope oScope = expansion_StartSpan.Scope;
-                var oNewScope = new Scope();
-                oNewScope.CaseSensitive = oScope.CaseSensitive;
-                oNewScope.CauseIndent = oScope.CauseIndent;
-                oNewScope.DefaultExpanded = oScope.DefaultExpanded;
-                oNewScope.EndPatterns = oScope.EndPatterns;
-                oNewScope.NormalizeCase = oScope.NormalizeCase;
-                oNewScope.Parent = oScope.Parent;
-                oNewScope.spawnSpanOnEnd = oScope.spawnSpanOnEnd;
-                oNewScope.spawnSpanOnStart = oScope.spawnSpanOnStart;
-                oNewScope.Start = oScope.Start;
-                oNewScope.Style = oScope.Style;
-                oNewScope.ExpansionText = value;
+                var oNewScope = new Scope
+                                {
+                                    CaseSensitive = oScope.CaseSensitive,
+                                    CauseIndent = oScope.CauseIndent,
+                                    DefaultExpanded = oScope.DefaultExpanded,
+                                    EndPatterns = oScope.EndPatterns,
+                                    NormalizeCase = oScope.NormalizeCase,
+                                    Parent = oScope.Parent,
+                                    spawnSpanOnEnd = oScope.spawnSpanOnEnd,
+                                    spawnSpanOnStart = oScope.spawnSpanOnStart,
+                                    Start = oScope.Start,
+                                    Style = oScope.Style,
+                                    ExpansionText = value
+                                };
                 expansion_StartSpan.Scope = oNewScope;
                 Document.InvokeChange();
             }
@@ -591,8 +578,7 @@ namespace Puzzle.SourceCode
             {
                 if (CanFold)
                     return expansion_StartSpan.EndRow;
-                else
-                    return this;
+                return this;
             }
         }
 
@@ -606,8 +592,7 @@ namespace Puzzle.SourceCode
             {
                 if (CanFoldEndPart)
                     return expansion_EndSpan.StartRow;
-                else
-                    return this;
+                return this;
             }
         }
 
@@ -628,10 +613,7 @@ namespace Puzzle.SourceCode
                 }
 
                 Word wo = r.Add(CollapsedText);
-                wo.Style = new TextStyle();
-                wo.Style.BackColor = Color.Silver;
-                wo.Style.ForeColor = Color.DarkBlue;
-                wo.Style.Bold = true;
+                wo.Style = new TextStyle {BackColor = Color.Silver, ForeColor = Color.DarkBlue, Bold = true};
 
                 bool found = false;
                 if (Expansion_EndRow != null)
@@ -683,8 +665,7 @@ namespace Puzzle.SourceCode
 
                 if (i - 1 >= 0)
                     return Document[i - 1];
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -725,9 +706,7 @@ namespace Puzzle.SourceCode
 
         public Word Add(string text)
         {
-            var xw = new Word();
-            xw.Row = this;
-            xw.Text = text;
+            var xw = new Word {Row = this, Text = text};
             mWords.Add(xw);
             return xw;
         }
@@ -746,41 +725,22 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// Assigns a new text to the row.
         /// </summary>
-        /// <param name="Text"></param>
-        public void SetText(string Text)
+        /// <param name="text"></param>
+        public void SetText(string text)
         {
             Document.StartUndoCapture();
             var tp = new TextPoint(0, Index);
-            var tr = new TextRange();
-            tr.FirstColumn = 0;
-            tr.FirstRow = tp.Y;
-            tr.LastColumn = this.Text.Length;
-            tr.LastRow = tp.Y;
+            var tr = new TextRange {FirstColumn = 0, FirstRow = tp.Y, LastColumn = Text.Length, LastRow = tp.Y};
 
             Document.StartUndoCapture();
             //delete the current line
             Document.PushUndoBlock(UndoAction.DeleteRange, Document.GetRange(tr), tr.FirstColumn, tr.FirstRow);
             //alter the text
-            Document.PushUndoBlock(UndoAction.InsertRange, Text, tp.X, tp.Y);
-            this.Text = Text;
+            Document.PushUndoBlock(UndoAction.InsertRange, text, tp.X, tp.Y);
+            Text = text;
             Document.EndUndoCapture();
             Document.InvokeChange();
         }
-
-        private char[] GetSeparatorBuffer(string text, string separators)
-        {
-            char[] buff = text.ToCharArray();
-            for (int i = 0; i < text.Length; i++)
-            {
-                char c = buff[i];
-                if (separators.IndexOf(c) >= 0)
-                    buff[i] = ' ';
-                else
-                    buff[i] = '.';
-            }
-            return buff;
-        }
-
 
         /// <summary>
         /// Call this method to make all words match the case of their patterns.
@@ -846,7 +806,7 @@ namespace Puzzle.SourceCode
         public string GetLeadingWhitespace()
         {
             string s = mText;
-            int i = 0;
+            int i;
             s = s.Replace("	", " ");
             for (i = 0; i < s.Length; i++)
             {
@@ -908,10 +868,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            Word w = null;
             while (i < mWords.Count)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.Pattern != null)
                 {
                     if (w.Pattern.Parent != null)
@@ -940,10 +899,9 @@ namespace Puzzle.SourceCode
             if (IgnoreStartWord)
                 i++;
 
-            Word w = null;
             while (i < mWords.Count)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.Pattern != null)
                 {
                     if (w.Pattern.Parent != null)
@@ -972,10 +930,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i--;
-            Word w = null;
             while (i >= 0)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.Pattern != null)
                 {
                     if (w.Pattern.Parent != null)
@@ -1004,10 +961,9 @@ namespace Puzzle.SourceCode
             if (IgnoreStartWord)
                 i--;
 
-            Word w = null;
             while (i >= 0)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.Pattern != null)
                 {
                     if (w.Pattern.Parent != null)
@@ -1036,10 +992,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i--;
-            Word w = null;
             while (i >= 0)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
@@ -1061,10 +1016,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            Word w = null;
             while (i < mWords.Count)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
@@ -1086,10 +1040,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i--;
-            Word w = null;
             while (i >= 0)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;
@@ -1111,10 +1064,9 @@ namespace Puzzle.SourceCode
             int i = StartWord.Index;
             if (IgnoreStartWord)
                 i++;
-            Word w = null;
             while (i < mWords.Count)
             {
-                w = this[i];
+                Word w = this[i];
                 if (w.span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
                 {
                     return w;

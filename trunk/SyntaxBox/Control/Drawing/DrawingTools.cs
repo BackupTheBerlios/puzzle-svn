@@ -18,7 +18,7 @@ using Puzzle.Windows.Forms;
 
 namespace Puzzle.Drawing
 {
-    public class DesktopGraphics
+    public class DesktopGraphics : IDisposable
     {
         public readonly Graphics Graphics;
         protected IntPtr handle = new IntPtr(0);
@@ -62,49 +62,22 @@ namespace Puzzle.Drawing
                 {
                     case Border3DStyle.Sunken:
                         {
-                            g.FillRectangle(dark, r.Left, r.Top, r.Width, 1);
-                            g.FillRectangle(dark, r.Left, r.Top, 1, r.Height);
-                            g.FillRectangle(darkdark, r.Left + 1, r.Top + 1, r.Width - 2, 1);
-                            g.FillRectangle(darkdark, r.Left + 1, r.Top + 1, 1, r.Height - 2);
-
-                            g.FillRectangle(light, r.Right - 1, r.Top + 1, 1, r.Height - 1);
-                            g.FillRectangle(light, r.Left + 1, r.Bottom - 1, r.Width - 1, 1);
-                            g.FillRectangle(normal, r.Right - 2, r.Top + 2, 1, r.Height - 3);
-                            g.FillRectangle(normal, r.Left + 2, r.Bottom - 2, r.Width - 3, 1);
+                            DrawSunkenBorder(g, dark, r, darkdark, light, normal);
                             break;
                         }
                     case Border3DStyle.Raised:
                         {
-                            g.FillRectangle(normal, r.Left, r.Top, r.Width - 1, 1);
-                            g.FillRectangle(normal, r.Left, r.Top, 1, r.Height - 1);
-                            g.FillRectangle(light, r.Left + 1, r.Top + 1, r.Width - 2, 1);
-                            g.FillRectangle(light, r.Left + 1, r.Top + 1, 1, r.Height - 2);
-
-                            g.FillRectangle(darkdark, r.Right - 1, r.Top, 1, r.Height);
-                            g.FillRectangle(darkdark, r.Left, r.Bottom - 1, r.Width, 1);
-                            g.FillRectangle(dark, r.Right - 2, r.Top + 1, 1, r.Height - 2);
-                            g.FillRectangle(dark, r.Left + 1, r.Bottom - 2, r.Width - 2, 1);
-
+                            DrawRaisedBorder(g, dark, r, darkdark, light, normal);
                             break;
                         }
                     case Border3DStyle.RaisedInner:
                         {
-                            g.FillRectangle(light, r.Left, r.Top, r.Width - 1, 1);
-                            g.FillRectangle(light, r.Left, r.Top, 1, r.Height - 1);
-
-                            g.FillRectangle(dark, r.Right - 1, r.Top, 1, r.Height);
-                            g.FillRectangle(dark, r.Left, r.Bottom - 1, r.Width, 1);
-
+                            RaisedInnerBorder(g, dark, r, light);
                             break;
                         }
                     case Border3DStyle.SunkenOuter:
                         {
-                            g.FillRectangle(dark, r.Left, r.Top, r.Width, 1);
-                            g.FillRectangle(dark, r.Left, r.Top, 1, r.Height);
-
-                            g.FillRectangle(light, r.Right - 1, r.Top + 1, 1, r.Height - 1);
-                            g.FillRectangle(light, r.Left + 1, r.Bottom - 1, r.Width - 1, 1);
-
+                            DrawSunkenOuterBorder(g, dark, r, light);
                             break;
                         }
                     case Border3DStyle.Etched:
@@ -115,6 +88,47 @@ namespace Puzzle.Drawing
                         break;
                 }
             }
+        }
+
+        private static void DrawSunkenOuterBorder(Graphics g, Brush dark, Rectangle r, Brush light) {
+
+            g.FillRectangle(dark, r.Left, r.Top, r.Width, 1);
+            g.FillRectangle(dark, r.Left, r.Top, 1, r.Height);
+
+            g.FillRectangle(light, r.Right - 1, r.Top + 1, 1, r.Height - 1);
+            g.FillRectangle(light, r.Left + 1, r.Bottom - 1, r.Width - 1, 1);
+        }
+
+        private static void RaisedInnerBorder(Graphics g, Brush dark, Rectangle r, Brush light) {
+            g.FillRectangle(light, r.Left, r.Top, r.Width - 1, 1);
+            g.FillRectangle(light, r.Left, r.Top, 1, r.Height - 1);
+
+            g.FillRectangle(dark, r.Right - 1, r.Top, 1, r.Height);
+            g.FillRectangle(dark, r.Left, r.Bottom - 1, r.Width, 1);
+        }
+
+        private static void DrawRaisedBorder(Graphics g, Brush dark, Rectangle r, Brush darkdark, Brush light, Brush normal) {
+            g.FillRectangle(normal, r.Left, r.Top, r.Width - 1, 1);
+            g.FillRectangle(normal, r.Left, r.Top, 1, r.Height - 1);
+            g.FillRectangle(light, r.Left + 1, r.Top + 1, r.Width - 2, 1);
+            g.FillRectangle(light, r.Left + 1, r.Top + 1, 1, r.Height - 2);
+
+            g.FillRectangle(darkdark, r.Right - 1, r.Top, 1, r.Height);
+            g.FillRectangle(darkdark, r.Left, r.Bottom - 1, r.Width, 1);
+            g.FillRectangle(dark, r.Right - 2, r.Top + 1, 1, r.Height - 2);
+            g.FillRectangle(dark, r.Left + 1, r.Bottom - 2, r.Width - 2, 1);
+        }
+
+        private static void DrawSunkenBorder(Graphics g, Brush dark, Rectangle r, Brush darkdark, Brush light, Brush normal) {
+            g.FillRectangle(dark, r.Left, r.Top, r.Width, 1);
+            g.FillRectangle(dark, r.Left, r.Top, 1, r.Height);
+            g.FillRectangle(darkdark, r.Left + 1, r.Top + 1, r.Width - 2, 1);
+            g.FillRectangle(darkdark, r.Left + 1, r.Top + 1, 1, r.Height - 2);
+
+            g.FillRectangle(light, r.Right - 1, r.Top + 1, 1, r.Height - 1);
+            g.FillRectangle(light, r.Left + 1, r.Bottom - 1, r.Width - 1, 1);
+            g.FillRectangle(normal, r.Right - 2, r.Top + 2, 1, r.Height - 3);
+            g.FillRectangle(normal, r.Left + 2, r.Bottom - 2, r.Width - 3, 1);
         }
 
         private static SolidBrush GetNormalBrush(Color BorderColor) {

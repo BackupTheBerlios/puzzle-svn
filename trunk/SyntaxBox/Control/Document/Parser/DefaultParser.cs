@@ -7,9 +7,6 @@
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
-
-using System.Globalization;
-
 //no parsing , just splitting and making whitespace possible
 //1 sec to finnish ca 10000 rows
 
@@ -106,8 +103,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         {
             try
             {
-                if (!SyntaxFile.ToLower
-                         (CultureInfo.InvariantCulture).EndsWith(".syn")
+                if (!SyntaxFile.ToLowerInvariant().EndsWith(".syn")
                     )
                     SyntaxFile += ".syn";
 
@@ -121,8 +117,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         {
             try
             {
-                if (!syntaxFile.ToLower
-                         (CultureInfo.InvariantCulture).EndsWith(".syn")
+                if (!syntaxFile.ToLowerInvariant().EndsWith(".syn")
                     )
                     syntaxFile += ".syn";
 
@@ -302,8 +297,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
                 if (i <= Text.Length - 3)
                 {
-                    string key = Text.Substring(i, 3).ToLower
-                        (CultureInfo.InvariantCulture);
+                    string key = Text.Substring(i, 3).ToLowerInvariant();
                     var patterns2 = (PatternCollection)
                                     spanDefinition.LookupTable[key];
                     //ok , there are patterns that start with this char
@@ -328,11 +322,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                                 {
                                     if (!pattern.Parent.CaseSensitive)
                                     {
-                                        string s = Text.Substring(i, len).ToLower
-                                            (CultureInfo.InvariantCulture);
+                                        string s = Text.Substring(i, len).ToLowerInvariant();
 
-                                        if (s == pattern.StringPattern.ToLower
-                                                     (CultureInfo.InvariantCulture))
+                                        if (s == pattern.StringPattern.ToLowerInvariant())
                                         {
                                             simpleword.HasContent = true;
                                             simpleword.ParentList = pattern.Parent;
@@ -394,11 +386,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                                 if (!pattern.IsKeyword || (pattern.IsKeyword &&
                                                            pattern.HasSeparators(Text, i)))
                                 {
-                                    string s = Text.Substring(i, len).ToLower
-                                        (CultureInfo.InvariantCulture);
+                                    string s = Text.Substring(i, len).ToLowerInvariant();
 
-                                    if (s == pattern.StringPattern.ToLower
-                                                 (CultureInfo.InvariantCulture))
+                                    if (s == pattern.StringPattern.ToLowerInvariant())
                                     {
                                         simpleword.HasContent = true;
                                         simpleword.ParentList = pattern.Parent;

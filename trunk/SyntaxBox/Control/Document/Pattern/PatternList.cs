@@ -118,7 +118,7 @@ namespace Puzzle.SourceCode
                 else
                     s = Pattern.StringPattern.Substring(0, 1) + " ";
 
-                s = s.ToLower(CultureInfo.InvariantCulture);
+                s = s.ToLowerInvariant();
 
                 if (Pattern.StringPattern.Length == 1)
                 {

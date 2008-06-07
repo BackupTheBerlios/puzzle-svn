@@ -69,9 +69,7 @@ namespace Puzzle.Windows.Forms
         {
             try
             {
-                var e = new NativeMessageArgs();
-                e.Message = m;
-                e.Cancel = false;
+                var e = new NativeMessageArgs {Message = m, Cancel = false};
 
                 OnMessage(e);
 

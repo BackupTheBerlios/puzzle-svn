@@ -59,10 +59,7 @@ namespace Puzzle.Windows.Forms
         public InfoTipForm(Control parent)
         {
             ParentControl = parent;
-            CreateParams.ClassName = "tooltips_class32";
-            //		//	this.CreateParams.Parent =ParentControl.Handle;
-            //			this.RecreateHandle ();
-
+            if (CreateParams != null) CreateParams.ClassName = "tooltips_class32";
 
             InitializeComponent();
         }
@@ -70,12 +67,7 @@ namespace Puzzle.Windows.Forms
         private Control ParentControl
         {
             get
-            {
-                if (_Control != null)
-                    return (Control) _Control.Target;
-                else
-                    return null;
-            }
+            { return _Control != null ? (Control) _Control.Target : null; }
             set { _Control = new WeakReference(value); }
         }
 
@@ -149,17 +141,7 @@ namespace Puzzle.Windows.Forms
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="text"></param>
-        //	public void ShowInfo(int x,int y,string text)
-        //	{
-        //		this.Show ();
-        //		this.Location =new Point (x,y);
-        //	}
+
         private void InfoText_Resize(object sender, EventArgs e)
         {
             DoResize();
@@ -230,8 +212,7 @@ namespace Puzzle.Windows.Forms
             }
             DoResize();
 
-            lblIndex.Text = SelectedIndex.ToString
-                                (CultureInfo.InvariantCulture) + " of " +
+            lblIndex.Text = SelectedIndex.ToString((CultureInfo.InvariantCulture)) + " of " +
                             Count.ToString(CultureInfo.InvariantCulture);
 
             if (ParentControl != null)

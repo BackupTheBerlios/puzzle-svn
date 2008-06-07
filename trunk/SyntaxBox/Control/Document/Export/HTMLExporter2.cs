@@ -58,9 +58,6 @@ namespace Puzzle.SourceCode.SyntaxDocumentExporters
             sb = new StringBuilder();
             doc.ParseAll(true);
 
-            string guid = DateTime.Now.Ticks.ToString
-                (CultureInfo.InvariantCulture);
-
             Out("<div class=\"" + CssClass + "\">" + Environment.NewLine);
             foreach (Row r in doc)
             {

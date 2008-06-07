@@ -107,13 +107,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
         public void SelectItem(string Text)
         {
-            Text = Text.ToLower(CultureInfo.InvariantCulture);
+            Text = Text.ToLowerInvariant();
 
             for (int i = 0; i < LB.Items.Count; i++)
             {
                 var li = (ListItem) LB.Items[i];
-                string lis = li.Text.ToLower
-                    (CultureInfo.InvariantCulture);
+                string lis = li.Text.ToLowerInvariant();
                 if (lis.StartsWith(Text))
                 {
                     LB.SelectedIndex = i;

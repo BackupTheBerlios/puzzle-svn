@@ -1837,9 +1837,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
                 if (!MatchCase)
                 {
-                    t = t.ToLower(CultureInfo.InvariantCulture);
-                    pattern = pattern.ToLower
-                        (CultureInfo.InvariantCulture);
+                    t = t.ToLowerInvariant();
+                    pattern = pattern.ToLowerInvariant();
                 }
 
                 int Col = t.IndexOf(pattern);

@@ -8,7 +8,6 @@
 // *
 // *
 
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Puzzle.SourceCode
@@ -101,9 +100,7 @@ namespace Puzzle.SourceCode
         /// </summary>
         public PatternList Parent;
 
-        private char[] PatternBuffer;
         private Regex rx;
-        private Regex rx2;
 
         /// <summary>
         /// 
@@ -117,12 +114,9 @@ namespace Puzzle.SourceCode
             {
                 IsComplex = true;
                 rx = new Regex(StringPattern, RegexOptions.Compiled);
-                rx2 = new Regex(StringPattern, RegexOptions.Compiled |
-                                               RegexOptions.IgnoreCase);
             }
             else
             {
-                PatternBuffer = pattern.ToCharArray();
                 IsComplex = false;
             }
         }
@@ -144,12 +138,10 @@ namespace Puzzle.SourceCode
         /// 
         /// </summary>
         /// <param name="pattern"></param>
-        /// <param name="iscomplex"></param>
         /// <param name="separator"></param>
         /// <param name="keyword"></param>
         /// <param name="EscapeChar"></param>
-        public Pattern(string pattern, bool iscomplex, bool separator, bool keyword,
-                       string EscapeChar)
+        public Pattern(string pattern, bool separator, bool keyword, string EscapeChar)
         {
             EscapeChar = Regex.Escape(EscapeChar);
             string EscPattern = string.Format("(?<=((?<!{0})({0}{0})*))({1})",
@@ -167,8 +159,7 @@ namespace Puzzle.SourceCode
             set
             {
                 _StringPattern = value;
-                LowerStringPattern = _StringPattern.ToLower
-                    (CultureInfo.InvariantCulture);
+                LowerStringPattern = _StringPattern.ToLowerInvariant();
             }
         }
 
@@ -301,12 +292,9 @@ namespace Puzzle.SourceCode
             {
                 IsComplex = true;
                 rx = new Regex(StringPattern, RegexOptions.Compiled);
-                rx2 = new Regex(StringPattern, RegexOptions.Compiled |
-                                               RegexOptions.IgnoreCase);
             }
             else
             {
-                PatternBuffer = pattern.ToCharArray();
                 IsComplex = false;
             }
         }
@@ -332,52 +320,42 @@ namespace Puzzle.SourceCode
             string s = Text.Substring(Position, 1);
             if (Separators.IndexOf(s) >= 0)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         /// <summary>
         /// Returns the index of the pattern in a string
         /// </summary>
-        /// <param name="Text">The string in which to find the pattern</param>
-        /// <param name="StartPosition">Start index in the string</param>
+        /// <param name="text">The string in which to find the pattern</param>
+        /// <param name="startPosition">Start index in the string</param>
         /// <param name="MatchCase">true if a case sensitive match should be performed</param>
+        /// <param name="separators"></param>
         /// <returns>A PatternScanResult containing information on where the pattern was found and also the text of the pattern</returns>
-        public PatternScanResult IndexIn(string Text, int StartPosition, bool
-                                                                             MatchCase, string Separators)
+        public PatternScanResult IndexIn(string text, int startPosition, bool
+                                                                             MatchCase, string separators)
         {
-            if (Separators == null) {}
+            if (separators == null) {}
             else
             {
-                this.Separators = Separators;
+                Separators = separators;
             }
 
             if (!IsComplex)
             {
                 if (!IsKeyword)
-                    return SimpleFind(Text, StartPosition, MatchCase);
-                else
-                    return SimpleFindKeyword(Text, StartPosition, MatchCase);
+                    return SimpleFind(text, startPosition, MatchCase);
+                return SimpleFindKeyword(text, startPosition, MatchCase);
             }
-            else
-            {
-                if (!IsKeyword)
-                    return ComplexFind(Text, StartPosition);
-                else
-                    return ComplexFindKeyword(Text, StartPosition);
-            }
+            if (!IsKeyword)
+                return ComplexFind(text, startPosition);
+            return ComplexFindKeyword(text, startPosition);
         }
 
 
         private PatternScanResult SimpleFind(string Text, int StartPosition, bool
                                                                                  MatchCase)
         {
-            int Position = 0;
-            if (MatchCase)
-                Position = Text.IndexOf(StringPattern, StartPosition);
-            else
-                Position = Text.ToLower
-                    (CultureInfo.InvariantCulture).IndexOf(LowerStringPattern, StartPosition);
+            int Position = MatchCase ? Text.IndexOf(StringPattern, StartPosition) : Text.ToLowerInvariant().IndexOf(LowerStringPattern, StartPosition);
 
             PatternScanResult Result;
             if (Position >= 0)
@@ -445,12 +423,10 @@ namespace Puzzle.SourceCode
         private PatternScanResult ComplexFind(string Text, int StartPosition)
         {
             MatchCollection mc = rx.Matches(Text);
-            int pos = 0;
-            string p = "";
             foreach (Match m in mc)
             {
-                pos = m.Index;
-                p = m.Value;
+                int pos = m.Index;
+                string p = m.Value;
                 if (pos >= StartPosition)
                 {
                     PatternScanResult t;

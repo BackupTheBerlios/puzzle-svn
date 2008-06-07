@@ -435,11 +435,11 @@ namespace Puzzle.Windows.Forms.CoreLib
                 else
                 {
                     string[] TagTextPair = part.Split('>');
-                    cmd.Tag = TagTextPair[0].ToLower(CultureInfo.InvariantCulture);
+                    cmd.Tag = TagTextPair[0].ToLowerInvariant();
                     if (cmd.Tag.IndexOfAny(" \t".ToCharArray()) >= 0)
                     {
                         int ws = cmd.Tag.IndexOfAny(" \t".ToCharArray());
-                        string s1 = TagTextPair[0].Substring(0, ws).ToLower(CultureInfo.InvariantCulture);
+                        string s1 = TagTextPair[0].Substring(0, ws).ToLowerInvariant();
                         string s2 = TagTextPair[0].Substring(ws + 1);
                         cmd.Tag = s1 + " " + s2;
                     }
@@ -757,7 +757,7 @@ namespace Puzzle.Windows.Forms.CoreLib
 
                     try
                     {
-                        string SRC = GetAttrib("img", Element.Tag).ToLower(CultureInfo.InvariantCulture);
+                        string SRC = GetAttrib("img", Element.Tag).ToLowerInvariant();
                         if (IsIndex(SRC))
                         {
                             int index = int.Parse(SRC);

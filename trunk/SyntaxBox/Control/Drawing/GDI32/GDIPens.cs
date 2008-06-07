@@ -31,10 +31,5 @@ namespace Puzzle.Drawing.GDI
             base.Destroy();
             hPen = (IntPtr) 0;
         }
-
-        protected override void Create()
-        {
-            base.Create();
-        }
     }
 }

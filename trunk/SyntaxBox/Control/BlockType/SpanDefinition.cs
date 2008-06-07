@@ -184,7 +184,7 @@ namespace Puzzle.SourceCode
 
                     if (!p.Parent.CaseSensitive)
                     {
-                        char c1 = char.ToLower(c);
+                        char c1 = char.ToLowerInvariant(c);
                         if (LookupTable[c1] == null)
                             LookupTable[c1] = new PatternCollection();
 
@@ -215,8 +215,7 @@ namespace Puzzle.SourceCode
                 }
                 else
                 {
-                    string c = p.StringPattern.Substring(0, 3).ToLower
-                        (CultureInfo.InvariantCulture);
+                    string c = p.StringPattern.Substring(0, 3).ToLowerInvariant();
 
                     if (LookupTable[c] == null)
                         LookupTable[c] = new PatternCollection();

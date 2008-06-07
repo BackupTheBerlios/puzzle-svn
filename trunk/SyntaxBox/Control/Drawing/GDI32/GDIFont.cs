@@ -51,16 +51,17 @@ namespace Puzzle.Drawing.GDI
             Underline = underline;
             Strikethrough = strikethrough;
 
-            var tFont = new LogFont();
-            tFont.lfItalic = (byte) (Italic ? 1 : 0);
-            tFont.lfStrikeOut = (byte) (Strikethrough ? 1 : 0);
-            tFont.lfUnderline = (byte) (Underline ? 1 : 0);
-            tFont.lfWeight = Bold ? 700 : 400;
-            tFont.lfWidth = 0;
-            tFont.lfHeight = (int) (-Size*1.3333333333333);
-            tFont.lfCharSet = 1;
-
-            tFont.lfFaceName = FontName;
+            var tFont = new LogFont
+                        {
+                            lfItalic = ((byte) (Italic ? 1 : 0)),
+                            lfStrikeOut = ((byte) (Strikethrough ? 1 : 0)),
+                            lfUnderline = ((byte) (Underline ? 1 : 0)),
+                            lfWeight = (Bold ? 700 : 400),
+                            lfWidth = 0,
+                            lfHeight = ((int) (-Size*1.3333333333333)),
+                            lfCharSet = 1,
+                            lfFaceName = FontName
+                        };
 
 
             hFont = NativeMethods.CreateFontIndirect(tFont);
@@ -77,11 +78,6 @@ namespace Puzzle.Drawing.GDI
                 NativeMethods.DeleteObject(hFont);
             base.Destroy();
             hFont = (IntPtr) 0;
-        }
-
-        protected override void Create()
-        {
-            base.Create();
         }
     }
 }

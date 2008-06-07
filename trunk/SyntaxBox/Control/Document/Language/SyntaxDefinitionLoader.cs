@@ -271,7 +271,7 @@ namespace Puzzle.SourceCode
                             Pattern endPattern;
                             if (EscapeChar != "")
                             {
-                                endPattern = new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword), EscapeChar);
+                                endPattern = new Pattern(End, false, bool.Parse(EndIsKeyword), EscapeChar);
                             }
                             else
                             {

@@ -33,12 +33,6 @@ namespace Puzzle.Drawing.GDI
             mhDC = hDC;
         }
 
-        public GDISurface(int width, int height)
-        {
-            //make compatible with screen
-            //to be implemented
-        }
-
         public GDISurface(int width, int height, IntPtr hdc)
         {
             Init(width, height, hdc);
@@ -62,7 +56,6 @@ namespace Puzzle.Drawing.GDI
             {
                 Control = CompatibleControl;
             }
-            else {}
 
             Create();
         }
@@ -73,8 +66,7 @@ namespace Puzzle.Drawing.GDI
             {
                 if (_Control != null)
                     return (Control) _Control.Target;
-                else
-                    return null;
+                return null;
             }
             set { _Control = new WeakReference(value); }
         }
@@ -118,19 +110,21 @@ namespace Puzzle.Drawing.GDI
             get
             {
                 var tm = new GDITextMetric();
-                string fontname = "                                                ";
+                var fontname = new string(' ', 48);
 
                 NativeMethods.GetTextMetrics(mhDC, ref tm);
                 NativeMethods.GetTextFace(mhDC, 79, fontname);
 
-                var gf = new GDIFont();
-                gf.FontName = fontname;
-                gf.Bold = (tm.tmWeight > 400); //400=fw_normal
-                gf.Italic = (tm.tmItalic != 0);
-                gf.Underline = (tm.tmUnderlined != 0);
-                gf.Strikethrough = (tm.tmStruckOut != 0);
+                var gf = new GDIFont
+                         {
+                             FontName = fontname,
+                             Bold = (tm.tmWeight > 400),
+                             Italic = (tm.tmItalic != 0),
+                             Underline = (tm.tmUnderlined != 0),
+                             Strikethrough = (tm.tmStruckOut != 0),
+                             Size = ((int) (((tm.tmMemoryHeight)/(double) tm.tmDigitizedAspectY)*72))
+                         };
 
-                gf.Size = (int) (((tm.tmMemoryHeight)/(double) tm.tmDigitizedAspectY)*72);
                 return gf;
             }
             set
@@ -195,7 +189,7 @@ namespace Puzzle.Drawing.GDI
         public void RenderTo(IntPtr hdc, int x, int y)
         {
             //map bitblt
-            IntPtr ret = NativeMethods.BitBlt(hdc, x, y, mWidth, mHeight, mhDC, 0, 0, (int) GDIRop.SrcCopy);
+            NativeMethods.BitBlt(hdc, x, y, mWidth, mHeight, mhDC, 0, 0, (int) GDIRop.SrcCopy);
         }
 
 
@@ -274,7 +268,7 @@ namespace Puzzle.Drawing.GDI
             gp.y = 0;
             NativeMethods.MoveToEx(mhDC, p1.X, p1.Y, ref gp);
             NativeMethods.LineTo(mhDC, p2.X, p2.Y);
-            IntPtr crap = NativeMethods.SelectObject(mhDC, oldpen);
+            NativeMethods.SelectObject(mhDC, oldpen);
         }
 
         public void DrawLine(Color color, Point p1, Point p2)
@@ -349,11 +343,6 @@ namespace Puzzle.Drawing.GDI
             p.x = 0;
             p.y = 0;
             NativeMethods.SetBrushOrgEx(mhDC, x, y, ref p);
-        }
-
-        protected override void Create()
-        {
-            base.Create();
         }
     }
 }

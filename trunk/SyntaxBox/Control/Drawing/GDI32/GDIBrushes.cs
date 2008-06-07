@@ -67,11 +67,6 @@ namespace Puzzle.Drawing.GDI
             base.Destroy();
             hBrush = (IntPtr) 0;
         }
-
-        protected override void Create()
-        {
-            base.Create();
-        }
     }
 
 

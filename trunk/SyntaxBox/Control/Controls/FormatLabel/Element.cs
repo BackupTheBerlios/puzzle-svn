@@ -49,7 +49,7 @@ namespace Puzzle.Windows.Forms.FormatLabel
             get { return _Tag; }
             set
             {
-                _Tag = value.ToLower(CultureInfo.InvariantCulture);
+                _Tag = value.ToLowerInvariant();
                 _Tag = _Tag.Replace("\t", " ");
                 if (_Tag.IndexOf(" ") >= 0)
                 {

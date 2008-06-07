@@ -62,8 +62,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            lblLines.Text = "Line number (1-" + (RowCount).ToString
-                                                    (CultureInfo.InvariantCulture) + "):";
+            lblLines.Text = "Line number (1-" + RowCount.ToString(CultureInfo.InvariantCulture) + "):";
             mOwner = Owner;
         }
 

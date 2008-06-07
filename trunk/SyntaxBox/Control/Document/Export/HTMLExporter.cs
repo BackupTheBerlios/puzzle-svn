@@ -178,7 +178,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentExporters
             }
         }
 
-        private string GetHTMLColor(Color c)
+        private static string GetHTMLColor(Color c)
         {
             return string.Format("#{0}{1}{2}", c.R.ToString("x2"), c.G.ToString("x2"),
                                  c.B.ToString("x2"));

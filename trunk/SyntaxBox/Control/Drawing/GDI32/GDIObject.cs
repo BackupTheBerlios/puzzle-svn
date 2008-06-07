@@ -24,7 +24,7 @@ namespace Puzzle.Drawing.GDI
             IsCreated = false;
         }
 
-        protected virtual void Create()
+        protected void Create()
         {
             IsCreated = true;
         }

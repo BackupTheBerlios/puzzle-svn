@@ -829,51 +829,36 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             }
         }
 
-        private void SetFont(bool Bold, bool Italic, bool Underline, GDISurface bbuff)
+        private void SetFont(bool bold, bool italic, bool underline, GDISurface surface)
         {
-            if (Bold)
-                if (Italic)
-                    if (Underline)
-                        bbuff.Font = GFX.FontBoldItalicUnderline;
-                    else
-                        bbuff.Font = GFX.FontBoldItalic;
-                else if (Underline)
-                    bbuff.Font = GFX.FontBoldUnderline;
-                else
-                    bbuff.Font = GFX.FontBold;
-            else if (Italic)
-                if (Underline)
-                    bbuff.Font = GFX.FontItalicUnderline;
-                else
-                    bbuff.Font = GFX.FontItalic;
-            else if (Underline)
-                bbuff.Font = GFX.FontUnderline;
-            else
-                bbuff.Font = GFX.FontNormal;
+            if (bold && italic && underline)
+                surface.Font = GFX.FontBoldItalicUnderline;
+
+            else if (bold && italic)
+                surface.Font = GFX.FontBoldItalic;
+
+            else if (bold && underline)
+                surface.Font = GFX.FontBoldUnderline;
+
+            else if (bold)
+                surface.Font = GFX.FontBold;
+
+            else if (italic && underline)
+                surface.Font = GFX.FontItalicUnderline;
+
+            else if (!italic && underline)
+                surface.Font = GFX.FontUnderline;
+
+            else if (italic)
+                surface.Font = GFX.FontItalic;
+
+            else if (true)
+                surface.Font = GFX.FontNormal;
         }
 
-        private void SetStringFont(bool Bold, bool Italic, bool Underline)
+        private void SetStringFont(bool bold, bool italic, bool underline)
         {
-            GDISurface bbuff = GFX.StringBuffer;
-            if (Bold)
-                if (Italic)
-                    if (Underline)
-                        bbuff.Font = GFX.FontBoldItalicUnderline;
-                    else
-                        bbuff.Font = GFX.FontBoldItalic;
-                else if (Underline)
-                    bbuff.Font = GFX.FontBoldUnderline;
-                else
-                    bbuff.Font = GFX.FontBold;
-            else if (Italic)
-                if (Underline)
-                    bbuff.Font = GFX.FontItalicUnderline;
-                else
-                    bbuff.Font = GFX.FontItalic;
-            else if (Underline)
-                bbuff.Font = GFX.FontUnderline;
-            else
-                bbuff.Font = GFX.FontNormal;
+            SetFont(bold, italic, underline, GFX.StringBuffer);            
         }
 
         private void RenderCollapsedSelectedText(int RowIndex, int xPos)

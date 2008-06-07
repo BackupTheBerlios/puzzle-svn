@@ -9,7 +9,6 @@
 // *
 
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 namespace Puzzle.SourceCode.SyntaxDocumentParsers
@@ -63,8 +62,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                             CurrentWord = new StringBuilder();
                         }
 
-                        Word ws = Row.Add(c[i].ToString
-                                              (CultureInfo.InvariantCulture));
+                        Word ws = Row.Add(c[i].ToString());
                         if (c[i] == ' ')
                             ws.Type = WordType.xtSpace;
                         else
@@ -73,8 +71,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         ws.span = span;
                     }
                     else
-                        CurrentWord.Append(c[i].ToString
-                                               (CultureInfo.InvariantCulture));
+                        CurrentWord.Append(c[i].ToString());
                 }
                 if (CurrentWord.Length != 0)
                 {
@@ -100,11 +97,10 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                         CurrentWord = new StringBuilder();
                     }
 
-                    words.Add(c.ToString (CultureInfo.InvariantCulture));
+                    words.Add(c.ToString());
                 }
                 else
-                    CurrentWord.Append(c.ToString
-                                           (CultureInfo.InvariantCulture)
+                    CurrentWord.Append(c.ToString()
                         );
             }
             if (CurrentWord.ToString() != "")
