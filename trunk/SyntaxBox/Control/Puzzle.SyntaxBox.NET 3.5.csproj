@@ -221,7 +221,7 @@
     <Compile Include="Document\ImageIndexList.cs" />
     <Compile Include="Document\Language\SyntaxDefinition.cs" />
     <Compile Include="Document\Language\SyntaxDefinitionList.cs" />
-    <Compile Include="Document\Language\LanguageReader.cs" />
+    <Compile Include="Document\Language\SyntaxDefinitionLoader.cs" />
     <Compile Include="Document\Parser\DefaultParser.cs" />
     <Compile Include="Document\Parser\IParser.cs" />
     <Compile Include="Document\Parser\ParserEventHandler.cs" />
