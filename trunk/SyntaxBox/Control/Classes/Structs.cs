@@ -28,13 +28,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         LastRow = 1,
         /// <summary>
         /// New lines get their indention from the scoping level.
-        /// <seealso cref="CauseIndent"/>
         /// </summary>
         Scope = 2,
         /// <summary>
         /// New lines get thir indention from the scoping level or from the previous row
         /// depending on which is most indented.
-        /// <seealso cref="CauseIndent"/>
         /// </summary>
         Smart = 3,
     }
@@ -42,30 +40,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
 namespace Puzzle.Windows.Forms.SyntaxBox.TextDraw
 {
-    /// <summary>
-    /// To be implemented
-    /// </summary>
-    public enum TextDrawType
-    {
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        StarBorder = 0,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        MinusBorder = 1,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DoubleBorder = 2,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        SingleBorder = 3
-    }
-
-    /// <summary>
+ /// <summary>
     /// For public use only
     /// </summary>
     public enum TextDrawDirectionType
@@ -86,62 +61,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox.TextDraw
         /// For public use only
         /// </summary>
         Down = 8
-    }
-
-
-    /// <summary>
-    /// For public use only
-    /// </summary>
-    public enum TextBorderChars
-    {
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownRight = 0,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        RightLeft = 1,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownRightLeft = 2,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownLeft = 4,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownUp = 5,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownUpRight = 10,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownUpRightLeft = 11,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        DownUpLeft = 12,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        UpRight = 20,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        UpRightLeft = 21,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        UpLeft = 22,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        Blank = 6
     }
 
     /// <summary>

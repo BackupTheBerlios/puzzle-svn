@@ -24,6 +24,7 @@ using Puzzle.SourceCode;
 using Puzzle.Windows.Forms.CoreLib;
 using Puzzle.Windows.Forms.SyntaxBox.Painter;
 using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
+using System.IO;
 
 #endregion
 
@@ -37,18 +38,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         private readonly Caret _Caret;
         private readonly Selection _Selection;
 
-        private readonly string[] TextBorderStyles = new[]
-                                                     {
-                                                         "****** * ******* * ******", "+---+| | |+-+-+| | |+---+",
-                                                         "+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+", "+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
-                                                     };
-
         private bool _AutoListVisible;
         private bool _InfoTipVisible;
         private double _IntelliScrollPos;
         private bool _KeyDownHandled;
         private bool _OverWrite;
-        private TextDrawType _TextDrawStyle = 0;
 
         /// <summary>
         /// The Point in the text where the Autolist was activated.
@@ -60,7 +54,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// </summary>		
         public TextPoint InfoTipStartPos;
 
-        private MouseButtons MouseButton = 0;
         private int MouseX;
         private int MouseY;
         public IPainter Painter;
@@ -442,19 +435,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             }
 
 
-            DataObject da;
-
-
-            da = new DataObject();
+            var da = new DataObject();
             da.SetData(DataFormats.Rtf, sb.ToString());
-            string
-                s = Selection.Text;
-            da.SetData(DataFormats.Text,
-                       s);
+            string s = Selection.Text;
+            da.SetData(DataFormats.Text, s);
             Clipboard.SetDataObject(da);
 
-            var ea = new CopyEventArgs();
-            ea.Text = s;
+            var ea = new CopyEventArgs {Text = s};
             OnClipboardUpdated(ea);
         }
 
@@ -610,7 +597,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     LeftThumb.Top = hScroll.Top;
 
                     TopThumb.Left = vScroll.Left;
-                    ;
                     TopThumb.Top = 0;
 
 
@@ -635,7 +621,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             {
                 if (!_OverWrite || text.Length > 1)
                 {
-                    Row xtr = Caret.CurrentRow;
                     TextPoint p = Document.InsertText(text, Caret.Position.X,
                                                       Caret.Position.Y);
                     Caret.CurrentRow.Parse(true);
@@ -655,21 +640,26 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 }
                 else
                 {
-                    var r = new TextRange();
-                    r.FirstColumn = Caret.Position.X;
-                    r.FirstRow = Caret.Position.Y;
-                    r.LastColumn = Caret.Position.X + 1;
-                    r.LastRow = Caret.Position.Y;
+                    var r = new TextRange
+                            {
+                                FirstColumn = Caret.Position.X,
+                                FirstRow = Caret.Position.Y,
+                                LastColumn = (Caret.Position.X + 1),
+                                LastRow = Caret.Position.Y
+                            };
                     var ag = new UndoBlockCollection();
-                    UndoBlock b;
-                    b = new UndoBlock();
-                    b.Action = UndoAction.DeleteRange;
-                    b.Text = Document.GetRange(r);
-                    b.Position = Caret.Position;
+                    var b = new UndoBlock
+                                  {
+                                      Action = UndoAction.DeleteRange,
+                                      Text = Document.GetRange(r),
+                                      Position = Caret.Position
+                                  };
                     ag.Add(b);
                     Document.DeleteRange(r, false);
-                    b = new UndoBlock();
-                    b.Action = UndoAction.InsertRange;
+                    b = new UndoBlock
+                        {
+                            Action = UndoAction.InsertRange
+                        };
                     string NewChar = text;
                     b.Text = NewChar;
                     b.Position = Caret.Position;
@@ -699,7 +689,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     case IndentStyle.None:
                         {
-                            Row xtr = Caret.CurrentRow;
                             Document.InsertText("\n", Caret.Position.X, Caret.Position.Y);
                             //depends on what sort of indention we are using....
                             Caret.CurrentRow.Parse();
@@ -822,7 +811,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 if (Indent == IndentStyle.Scope)
                 {
                     Row xtr = Caret.CurrentRow;
-                    string ct = xtr.Text.Substring(0, xtr.GetLeadingWhitespace().Length);
                     var indent1 = new String('\t', Caret.CurrentRow.Depth);
                     var tr = new TextRange
                              {
@@ -849,16 +837,16 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
                     if (xtr.FirstNonWsWord == xtr.Expansion_EndSegment.EndWord)
                     {
-                        string ct = xtr.Text.Substring(0, xtr.GetLeadingWhitespace().Length)
-                            ;
                         //int j=xtr.Expansion_StartRow.StartWordIndex;
                         string indent1 =
                             xtr.StartSegment.StartWord.Row.GetVirtualLeadingWhitespace();
-                        var tr = new TextRange();
-                        tr.FirstColumn = 0;
-                        tr.LastColumn = xtr.GetLeadingWhitespace().Length;
-                        tr.FirstRow = xtr.Index;
-                        tr.LastRow = xtr.Index;
+                        var tr = new TextRange
+                                 {
+                                     FirstColumn = 0,
+                                     LastColumn = xtr.GetLeadingWhitespace().Length,
+                                     FirstRow = xtr.Index,
+                                     LastRow = xtr.Index
+                                 };
                         Document.DeleteRange(tr);
                         string ts = "\t" + new String(' ', TabSize);
                         while (indent1.IndexOf(ts) >= 0)
@@ -892,9 +880,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (Caret.Position.Y <= Document.Count - 2)
                     {
-                        var r = new TextRange();
-                        r.FirstColumn = Caret.Position.X;
-                        r.FirstRow = Caret.Position.Y;
+                        var r = new TextRange {FirstColumn = Caret.Position.X, FirstRow = Caret.Position.Y};
                         r.LastRow = r.FirstRow + 1;
                         r.LastColumn = 0;
 
@@ -904,9 +890,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 }
                 else
                 {
-                    var r = new TextRange();
-                    r.FirstColumn = Caret.Position.X;
-                    r.FirstRow = Caret.Position.Y;
+                    var r = new TextRange {FirstColumn = Caret.Position.X, FirstRow = Caret.Position.Y};
                     r.LastRow = r.FirstRow;
                     r.LastColumn = r.FirstColumn + 1;
                     Document.DeleteRange(r);
@@ -940,9 +924,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (Caret.Position.X >= xtr.Text.Length)
                     {
-                        var r = new TextRange();
-                        r.FirstColumn = Caret.Position.X - 1;
-                        r.FirstRow = Caret.Position.Y;
+                        var r = new TextRange {FirstColumn = (Caret.Position.X - 1), FirstRow = Caret.Position.Y};
                         r.LastRow = r.FirstRow;
                         r.LastColumn = r.FirstColumn + 1;
                         Document.DeleteRange(r);
@@ -952,9 +934,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     }
                     else
                     {
-                        var r = new TextRange();
-                        r.FirstColumn = Caret.Position.X - 1;
-                        r.FirstRow = Caret.Position.Y;
+                        var r = new TextRange {FirstColumn = (Caret.Position.X - 1), FirstRow = Caret.Position.Y};
                         r.LastRow = r.FirstRow;
                         r.LastColumn = r.FirstColumn + 1;
                         Document.DeleteRange(r);
@@ -967,11 +947,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         }
 
         private void ScrollScreen(int Amount)
-        {
-            ScrollScreen(Amount, 2);
-        }
-
-        private void ScrollScreen(int Amount, int speed)
         {
             try
             {
@@ -997,24 +972,25 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             {
                 IDataObject iData = Clipboard.GetDataObject();
 
-                if (iData.GetDataPresent(DataFormats.UnicodeText))
-                {
-                    // Yes it is, so display it in a text box.
-                    var s = (string) iData.GetData(DataFormats.UnicodeText);
+                if (iData != null)
+                    if (iData.GetDataPresent(DataFormats.UnicodeText))
+                    {
+                        // Yes it is, so display it in a text box.
+                        var s = (string) iData.GetData(DataFormats.UnicodeText);
 
-                    InsertText(s);
-                    if (ParseOnPaste)
-                        Document.ParseAll(true);
-                }
-                else if (iData.GetDataPresent(DataFormats.Text))
-                {
-                    // Yes it is, so display it in a text box.
-                    var s = (string) iData.GetData(DataFormats.Text);
+                        InsertText(s);
+                        if (ParseOnPaste)
+                            Document.ParseAll(true);
+                    }
+                    else if (iData.GetDataPresent(DataFormats.Text))
+                    {
+                        // Yes it is, so display it in a text box.
+                        var s = (string) iData.GetData(DataFormats.Text);
 
-                    InsertText(s);
-                    if (ParseOnPaste)
-                        Document.ParseAll(true);
-                }
+                        InsertText(s);
+                        if (ParseOnPaste)
+                            Document.ParseAll(true);
+                    }
             }
             catch
             {
@@ -1065,8 +1041,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     else
                     {
                         Assembly assembly = GetType().Assembly;
-                        Cursor = new Cursor(assembly.GetManifestResourceStream(
-                                                "FlippedCursor.cur"));
+                        Stream stream = assembly.GetManifestResourceStream("FlippedCursor.cur");
+                        if (stream != null) Cursor = new Cursor(stream);
                     }
                 }
                 else
@@ -1081,11 +1057,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             Word w = Document.GetWordFromPos(tp);
                             if (w != null && w.Pattern != null && w.Pattern.Category != null)
                             {
-                                var e = new WordMouseEventArgs();
-                                e.Pattern = w.Pattern;
-                                e.Button = MouseButtons.None;
-                                e.Cursor = Cursors.Hand;
-                                e.Word = w;
+                                var e = new WordMouseEventArgs {
+                                            Pattern = w.Pattern,
+                                            Button = MouseButtons.None,
+                                            Cursor = Cursors.Hand,
+                                            Word = w
+                                        };
 
                                 _SyntaxBox.OnWordMouseHover(ref e);
 
@@ -1119,8 +1096,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     string t = Selection.Text;
                     Clipboard.SetDataObject(t, true);
-                    var ea = new CopyEventArgs();
-                    ea.Text = t;
+                    var ea = new CopyEventArgs {Text = t};
                     OnClipboardUpdated(ea);
                 }
                 catch
@@ -1129,8 +1105,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     {
                         string t = Selection.Text;
                         Clipboard.SetDataObject(t, true);
-                        var ea = new CopyEventArgs();
-                        ea.Text = t;
+                        var ea = new CopyEventArgs {Text = t};
                         OnClipboardUpdated(ea);
                     }
                     catch {}
@@ -1164,47 +1139,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             return true;
         }
-
-        private void TextDraw(TextDrawDirectionType Direction)
-        {
-            var r = new TextRange();
-            r.FirstColumn = Caret.Position.X;
-            r.FirstRow = Caret.Position.Y;
-            r.LastColumn = Caret.Position.X + 1;
-            r.LastRow = Caret.Position.Y;
-
-            var Style = (int) TextDrawStyle;
-            string OldChar = Document.GetRange(r);
-            string BorderString = TextBorderStyles[Style];
-            //TextBorderChars OldCharType=0;
-
-            if (OldChar == "")
-                OldChar = " ";
-
-
-            var ag = new UndoBlockCollection();
-            UndoBlock b;
-            b = new UndoBlock();
-            b.Action = UndoAction.DeleteRange;
-            b.Text = Document.GetRange(r);
-            b.Position = Caret.Position;
-            ag.Add(b);
-            Document.DeleteRange(r, false);
-
-            b = new UndoBlock();
-            b.Action = UndoAction.InsertRange;
-
-
-            string NewChar = "*";
-
-
-            b.Text = NewChar;
-            b.Position = Caret.Position;
-            ag.Add(b);
-            Document.AddToUndoList(ag);
-            Document.InsertText(NewChar, Caret.Position.X, Caret.Position.Y, false);
-        }
-
 
         public void RemoveFocus()
         {
@@ -1252,10 +1186,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             Redraw();
         }
 
-        private int CharType(string s)
+        private static int CharType(string s)
         {
-            string g1 = " \t";
-            string g2 = ".,-+'?´=)(/&%¤#!\"\\<>[]$£@*:;{}";
+            const string g1 = " \t";
+            const string g2 = ".,-+'?´=)(/&%¤#!\"\\<>[]$£@*:;{}";
 
             if (g1.IndexOf(s) >= 0)
                 return 1;
@@ -1305,10 +1239,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 View.VisibleRowCount = (Height - hScroll.Height)/View.RowHeight
                                        + 2;
 
-            if (ShowGutterMargin)
-                View.GutterMarginWidth = GutterMarginWidth;
-            else
-                View.GutterMarginWidth = 0;
+            View.GutterMarginWidth = ShowGutterMargin ? GutterMarginWidth : 0;
 
             if (ShowLineNumbers)
             {
@@ -1364,12 +1295,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     if (i >= View.VisibleRowCount + View.FirstVisibleRow)
                         break;
 
-                    string l = "";
-
-                    if (Document.VisibleRows[i].IsCollapsed)
-                        l = Document.VisibleRows[i].VirtualCollapsedRow.Text;
-                    else
-                        l = Document.VisibleRows[i].Text;
+                    string l = Document.VisibleRows[i].IsCollapsed ? Document.VisibleRows[i].VirtualCollapsedRow.Text : Document.VisibleRows[i].Text;
 
                     l = l.Replace("\t", new string(' ', TabSize));
                     if (l.Length > max)
@@ -1514,11 +1440,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
         public void InsertAutolistText()
         {
-            var tr = new TextRange();
-            tr.FirstRow = Caret.Position.Y;
-            tr.LastRow = Caret.Position.Y;
-            tr.FirstColumn = AutoListStartPos.X;
-            tr.LastColumn = Caret.Position.X;
+            var tr = new TextRange
+                     {
+                         FirstRow = Caret.Position.Y,
+                         LastRow = Caret.Position.Y,
+                         FirstColumn = AutoListStartPos.X,
+                         LastColumn = Caret.Position.X
+                     };
 
             Document.DeleteRange(tr, true);
             Caret.Position.X = AutoListStartPos.X;
@@ -1530,8 +1458,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             int x = Caret.Position.X;
             int y = Caret.Position.Y;
-            string StartChar = "";
-            int StartType = 0;
+            int StartType;
             bool found = false;
             if (x == Caret.CurrentRow.Text.Length)
             {
@@ -1539,7 +1466,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             }
             else
             {
-                StartChar = Document[y].Text.Substring(Caret.Position.X, 1);
+                string StartChar = Document[y].Text.Substring(Caret.Position.X, 1);
                 StartType = CharType(StartChar);
             }
 
@@ -1603,8 +1530,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             int x = Caret.Position.X;
             int y = Caret.Position.Y;
-            string StartChar = "";
-            int StartType = 0;
+            int StartType;
             bool found = false;
             if (x == Caret.CurrentRow.Text.Length)
             {
@@ -1613,7 +1539,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             }
             else
             {
-                StartChar = Document[y].Text.Substring(Caret.Position.X, 1);
+                string StartChar = Document[y].Text.Substring(Caret.Position.X, 1);
                 StartType = CharType(StartChar);
             }
 
@@ -1628,12 +1554,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     {
                         found = true;
 
-                        string Char2 = Document[y].Text.Substring(x, 1);
-                        int Type2 = Type;
                         while (x > 0)
                         {
-                            Char2 = Document[y].Text.Substring(x, 1);
-                            Type2 = CharType(Char2);
+                            string Char2 = Document[y].Text.Substring(x, 1);
+                            int Type2 = CharType(Char2);
                             if (Type2 != Type)
                             {
                                 x++;
@@ -1749,30 +1673,25 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 if (p.Y > Selection.LogicalBounds.FirstRow && p.Y <
                                                               Selection.LogicalBounds.LastRow && Selection.IsValid)
                     return true;
-                else
+                if (p.Y == Selection.LogicalBounds.FirstRow &&
+                    Selection.LogicalBounds.FirstRow ==
+                    Selection.LogicalBounds.LastRow)
                 {
-                    if (p.Y == Selection.LogicalBounds.FirstRow &&
-                        Selection.LogicalBounds.FirstRow ==
-                        Selection.LogicalBounds.LastRow)
-                    {
-                        if (p.X >= Selection.LogicalBounds.FirstColumn && p.X <=
-                                                                          Selection.LogicalBounds.LastColumn)
-                            return true;
-                        else
-                            return false;
-                    }
-                    else if (p.X >= Selection.LogicalBounds.FirstColumn && p.Y ==
-                                                                           Selection.LogicalBounds.FirstRow)
+                    if (p.X >= Selection.LogicalBounds.FirstColumn && p.X <=
+                                                                      Selection.LogicalBounds.LastColumn)
                         return true;
-                    else if (p.X <= Selection.LogicalBounds.LastColumn && p.Y ==
-                                                                          Selection.LogicalBounds.LastRow)
-                        return true;
-                    else
-                        return false;
+                    return false;
                 }
-            }
-            else
+                if (p.X >= Selection.LogicalBounds.FirstColumn && p.Y ==
+                                                                  Selection.LogicalBounds.FirstRow)
+                    return true;
+                if (p.X <= Selection.LogicalBounds.LastColumn && p.Y ==
+                                                                 Selection.LogicalBounds.LastRow)
+                    return true;
                 return false;
+            }
+
+            return false;
             //no chance we are over Selection.LogicalBounds
         }
 
@@ -1837,7 +1756,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             Row xtr = Caret.CurrentRow;
 
 
-            int x = 0;
+            int x;
             if (Caret.CurrentRow.IsCollapsedEndPart)
             {
                 x = Painter.MeasureRow(xtr, Caret.Position.X).Width +
@@ -1871,8 +1790,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// </summary>
         public void GotoNextBookmark()
         {
-            int index = 0;
-            index = Document.GetNextBookmark(Caret.Position.Y);
+            int index = Document.GetNextBookmark(Caret.Position.Y);
             Caret.SetPos(new TextPoint(0, index));
             ScrollIntoView();
             Redraw();
@@ -1884,8 +1802,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// </summary>
         public void GotoPreviousBookmark()
         {
-            int index = 0;
-            index = Document.GetPreviousBookmark(Caret.Position.Y);
+            int index = Document.GetPreviousBookmark(Caret.Position.Y);
             Caret.SetPos(new TextPoint(0, index));
             ScrollIntoView();
             Redraw();
@@ -1897,6 +1814,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// <param name="Pattern">Pattern to find</param>
         /// <param name="MatchCase">Case sensitive</param>
         /// <param name="WholeWords">Match whole words only</param>
+        /// <param name="UseRegEx"></param>
         public bool SelectNext(string Pattern, bool MatchCase, bool WholeWords,
                                bool UseRegEx)
         {
@@ -1904,13 +1822,11 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             for (int i = Caret.Position.Y; i < Document.Count; i++)
             {
                 Row r = Document[i];
-                int Col = - 1;
 
-                string s = "";
                 string t = r.Text;
                 if (WholeWords)
                 {
-                    s = " " + r.Text + " ";
+                    string s = " " + r.Text + " ";
                     t = "";
                     pattern = " " + Pattern + " ";
                     foreach (char c in s)
@@ -1929,7 +1845,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                         (CultureInfo.InvariantCulture);
                 }
 
-                Col = t.IndexOf(pattern);
+                int Col = t.IndexOf(pattern);
 
                 int StartCol = Caret.Position.X;
                 int StartRow = Caret.Position.Y;
@@ -2167,11 +2083,12 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     IDataObject iData = Clipboard.GetDataObject();
 
-                    if (iData.GetDataPresent(DataFormats.Text))
-                    {
-                        // Yes it is, so display it in a text box.
-                        s = (String) iData.GetData(DataFormats.Text);
-                    }
+                    if (iData != null)
+                        if (iData.GetDataPresent(DataFormats.Text))
+                        {
+                            // Yes it is, so display it in a text box.
+                            s = (String) iData.GetData(DataFormats.Text);
+                        }
 
                     if (s != null)
                         return true;
@@ -2267,18 +2184,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         public string FontName
         {
             get { return _SyntaxBox.FontName; }
-        }
-
-        /// <summary>
-        /// Determines the style to use when painting with alt+arrow keys.
-        /// </summary>
-        [Category("Behavior")]
-        [Description(
-            "Determines what type of chars to use when painting with ALT+arrow keys")]
-        public TextDrawType TextDrawStyle
-        {
-            get { return _TextDrawStyle; }
-            set { _TextDrawStyle = value; }
         }
 
         /// <summary>
@@ -2917,8 +2822,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             ScrollScreen(1);
                         else
                         {
-                            if (e.Alt)
-                                TextDraw(TextDrawDirectionType.Down);
                             Caret.MoveDown(e.Shift);
                             Redraw();
                         }
@@ -2928,8 +2831,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             ScrollScreen(- 1);
                         else
                         {
-                            if (e.Alt)
-                                TextDraw(TextDrawDirectionType.Up);
                             Caret.MoveUp(e.Shift);
                         }
                         Redraw();
@@ -2942,8 +2843,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             }
                             else
                             {
-                                if (e.Alt)
-                                    TextDraw(TextDrawDirectionType.Left);
                                 Caret.MoveLeft(e.Shift);
                             }
                         }
@@ -2957,9 +2856,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             }
                             else
                             {
-                                if (e.Alt)
-                                    TextDraw(TextDrawDirectionType.Right);
-
                                 Caret.MoveRight(e.Shift);
                             }
                         }
@@ -3143,15 +3039,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         }
 
         /// <summary>
-        /// Overrides the default OnKeyUp
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-        }
-
-        /// <summary>
         /// Overrides the default OnMouseDown
         /// </summary>
         /// <param name="e"></param>
@@ -3159,7 +3046,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             MouseX = e.X;
             MouseY = e.Y;
-            MouseButton = e.Button;
 
             SetFocus();
             base.OnMouseDown(e);
@@ -3170,11 +3056,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #region RowEvent
 
-            var rea = new RowMouseEventArgs();
-            rea.Row = row;
-            rea.Button = e.Button;
-            rea.MouseX = MouseX;
-            rea.MouseY = MouseY;
+            var rea = new RowMouseEventArgs {Row = row, Button = e.Button, MouseX = MouseX, MouseY = MouseY};
             if (e.X >= View.TextMargin - 7)
             {
                 rea.Area = RowArea.TextArea;
@@ -3256,11 +3138,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                 if (w != null && w.Pattern != null && w.Pattern.Category !=
                                                                       null)
                                 {
-                                    var pe = new WordMouseEventArgs();
-                                    pe.Pattern = w.Pattern;
-                                    pe.Button = e.Button;
-                                    pe.Cursor = Cursors.Hand;
-                                    pe.Word = w;
+                                    var pe = new WordMouseEventArgs
+                                    {
+                                        Pattern = w.Pattern,
+                                        Button = e.Button,
+                                        Cursor = Cursors.Hand,
+                                        Word = w
+                                    };
 
                                     _SyntaxBox.OnWordMouseDown(ref pe);
 
@@ -3287,13 +3171,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 }
                 else
                 {
-                    if (row.Expansion_StartSegment != null)
-                    {
-                        Caret.SetPos(new TextPoint(0, pos.Y));
-                        Selection.ClearSelection();
-                        Document.ToggleRow(row);
-                        Redraw();
-                    }
+                    if (row != null)
+                        if (row.Expansion_StartSegment != null)
+                        {
+                            Caret.SetPos(new TextPoint(0, pos.Y));
+                            Selection.ClearSelection();
+                            Document.ToggleRow(row);
+                            Redraw();
+                        }
                 }
             }
             else
@@ -3334,7 +3219,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             MouseX = e.X;
             MouseY = e.Y;
-            MouseButton = e.Button;
 
             TextPoint pos = Painter.CharFromPixel(e.X, e.Y);
             Row row = null;
@@ -3343,11 +3227,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #region RowEvent
 
-            var rea = new RowMouseEventArgs();
-            rea.Row = row;
-            rea.Button = e.Button;
-            rea.MouseX = MouseX;
-            rea.MouseY = MouseY;
+            var rea = new RowMouseEventArgs {Row = row, Button = e.Button, MouseX = MouseX, MouseY = MouseY};
             if (e.X >= View.TextMargin - 7)
             {
                 rea.Area = RowArea.TextArea;
@@ -3486,7 +3366,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         {
             MouseX = e.X;
             MouseY = e.Y;
-            MouseButton = e.Button;
 
             TextPoint pos = Painter.CharFromPixel(e.X, e.Y);
             Row row = null;
@@ -3495,11 +3374,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #region RowEvent
 
-            var rea = new RowMouseEventArgs();
-            rea.Row = row;
-            rea.Button = e.Button;
-            rea.MouseX = MouseX;
-            rea.MouseY = MouseY;
+            var rea = new RowMouseEventArgs {Row = row, Button = e.Button, MouseX = MouseX, MouseY = MouseY};
             if (e.X >= View.TextMargin - 7)
             {
                 rea.Area = RowArea.TextArea;
@@ -3547,7 +3422,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             int l = SystemInformation.MouseWheelScrollLines;
-            ScrollScreen(- (e.Delta/120)*l, 2);
+            ScrollScreen(- (e.Delta/120)*l);
 
             base.OnMouseWheel(e);
         }
@@ -3563,16 +3438,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 Painter.RenderAll(e.Graphics);
             }
         }
-
-        /// <summary>
-        /// Overrides the default OnHandleCreated
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-        }
-
 
         /// <summary>
         /// Overrides the default OnResize
@@ -3605,14 +3470,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     //	drgevent.Effect = DragDropEffects.All  ;
                     //Caret.Position = Painter.CharFromPixel(x,y);
 
-                    if ((drgevent.KeyState & 8) == 8)
-                    {
-                        drgevent.Effect = DragDropEffects.Copy;
-                    }
-                    else
-                    {
-                        drgevent.Effect = DragDropEffects.Move;
-                    }
+                    drgevent.Effect = (drgevent.KeyState & 8) == 8 ? DragDropEffects.Copy : DragDropEffects.Move;
                     Caret.SetPos(Painter.CharFromPixel(x, y));
                     Redraw();
                 }
@@ -3658,8 +3516,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                         Caret.Position = Document.IntPosToPoint(DropStart);
                     }
 
-                    TextPoint p = Document.InsertText(s, Caret.Position.X,
-                                                      Caret.Position.Y);
+                    Document.InsertText(s, Caret.Position.X, Caret.Position.Y);
                     Document.EndUndoCapture();
 
                     Selection.SelStart = Document.PointToIntPos(Caret.Position);
@@ -3707,11 +3564,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #region RowEvent
 
-            var rea = new RowMouseEventArgs();
-            rea.Row = row;
-            rea.Button = MouseButtons.None;
-            rea.MouseX = MouseX;
-            rea.MouseY = MouseY;
+            var rea = new RowMouseEventArgs {Row = row, Button = MouseButtons.None, MouseX = MouseX, MouseY = MouseY};
             if (MouseX >= View.TextMargin - 7)
             {
                 rea.Area = RowArea.TextArea;
@@ -3774,11 +3627,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #region RowEvent
 
-            var rea = new RowMouseEventArgs();
-            rea.Row = row;
-            rea.Button = MouseButtons.None;
-            rea.MouseX = MouseX;
-            rea.MouseY = MouseY;
+            var rea = new RowMouseEventArgs {Row = row, Button = MouseButtons.None, MouseX = MouseX, MouseY = MouseY};
             if (MouseX >= View.TextMargin - 7)
             {
                 rea.Area = RowArea.TextArea;

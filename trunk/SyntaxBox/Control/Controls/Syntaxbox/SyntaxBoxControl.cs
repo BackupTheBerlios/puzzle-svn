@@ -84,7 +84,6 @@ namespace Puzzle.Windows.Forms
 
         private int _TabSize = 4;
 
-        private TextDrawType _TextDrawStyle = 0;
         private int _TooltipDelay = 240;
         private bool _VirtualWhitespace;
         private Color _WhitespaceColor = SystemColors.ControlDark;
@@ -843,19 +842,6 @@ namespace Puzzle.Windows.Forms
 
                 Redraw();
             }
-        }
-
-        /// <summary>
-        /// Determines the style to use when painting with alt+arrow keys.
-        /// </summary>
-        [Category("Behavior")]
-        [Description(
-            "Determines what type of chars to use when painting with ALT+arrow keys")]
-        [DefaultValue(TextDrawType.StarBorder)]
-        public TextDrawType TextDrawStyle
-        {
-            get { return _TextDrawStyle; }
-            set { _TextDrawStyle = value; }
         }
 
         /// <summary>
