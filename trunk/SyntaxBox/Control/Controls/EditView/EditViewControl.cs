@@ -2570,9 +2570,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     _InfoTip.Visible = false;
                 }
-
-                // ROB: Removed this, did it as a check, but doesn't seem to be required at all, might want to check this.
-                //this.Redraw();
             }
             get { return _InfoTipVisible; }
         }

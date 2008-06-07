@@ -11,7 +11,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 
 namespace Puzzle.SourceCode
 {
@@ -22,23 +21,23 @@ namespace Puzzle.SourceCode
     /// The spanDefinition class represents a specific code/text element<br/>
     /// such as a string , comment or the code itself.<br/>
     /// <br/>
-    /// a spanDefinition  can contain keywords , operators , scopes and child BlockTypes.<br/>
+    /// a spanDefinition  can contain keywords , operators , scopes and child spans.<br/>
     /// <br/>
     /// <br/>
     /// For example , if we where to describe the language C#<br/>
-    /// we would have the following blocks:<br/>
+    /// we would have the following span:<br/>
     /// <br/>
-    /// Code block						- the spanDefinition containing all the keywords and operators.<br/>
-    /// Singleline comment block		- a spanDefinition that starts on // terminates at the end of a line.<br/>
-    /// Multiline comment block			- a spanDefinition that starts on /* can span multiple rows and terminates on */.<br/>
-    /// String block					- a spanDefinition that starts on " terminates on " or at the end of a line.<br/>
-    /// Char block						- a spanDefinition that starts on ' terminates on ' or at the end of a line.<br/>
+    /// Code span						- the spanDefinition containing all the keywords and operators.<br/>
+    /// Singleline comment span		    - a spanDefinition that starts on // terminates at the end of a line.<br/>
+    /// Multiline comment span			- a spanDefinition that starts on /* can span multiple rows and terminates on */.<br/>
+    /// String span					    - a spanDefinition that starts on " terminates on " or at the end of a line.<br/>
+    /// Char span						- a spanDefinition that starts on ' terminates on ' or at the end of a line.<br/>
     /// <br/>
-    /// <b>CHILD BLOCKS:</b><br/>
-    /// The code block would have all the other blocks as childblocks , since they can only appear inside the<br/>
-    /// code block . A string can for example never exist inside a comment in C#.<br/>
-    /// a spanDefinition can also have itself as a child block.<br/>
-    /// For example , the C# Code block can have itself as a childblock and use the scope patterns "{" and "}"<br/>
+    /// <b>CHILD SPANS:</b><br/>
+    /// The code span would have all the other spans as childspans , since they can only appear inside the<br/>
+    /// code span . A string can for example never exist inside a comment in C#.<br/>
+    /// a spanDefinition can also have itself as a child span.<br/>
+    /// For example , the C# Code span can have itself as a childspan and use the scope patterns "{" and "}"<br/>
     /// this way we can accomplish FOLDING since the parser will know where a new scope starts and ends.<br/>
     /// <br/>
     /// <b>SCOPES:</b><br/>
@@ -63,13 +62,13 @@ namespace Puzzle.SourceCode
         private readonly List<Pattern> tmpSimplePatterns = new List<Pattern>();
 
         /// <summary>
-        /// The background color of a block.
+        /// The background color of a span.
         /// </summary>
         public Color BackColor = Color.Transparent;
 
         /// <summary>
-        /// A list containing which BlockTypes are valid child blocks in a specific block.
-        /// eg. strings and comments are child blocks for a code block
+        /// A list containing which spanDefinitions are valid child spans in a specific span.
+        /// eg. strings and comments are child spans for a code span
         /// </summary>
         public SpanDefinitionList childSpanDefinitions = new SpanDefinitionList();
 
@@ -90,8 +89,8 @@ namespace Puzzle.SourceCode
         public bool MultiLine;
 
         /// <summary>
-        /// The name of this block.
-        /// names are not required for block but can be a good help when interacting with the parser.
+        /// The name of this span.
+        /// names are not required for span but can be a good help when interacting with the parser.
         /// </summary>
         public string Name = "";
 
@@ -102,20 +101,20 @@ namespace Puzzle.SourceCode
         public PatternListList OperatorsList; //new PatternListList (this);	
 
         /// <summary>
-        /// A list of scopes , most block only contain one scope , eg a scope with start and end patterns "/*" and "*/"
+        /// A list of scopes , most span only contain one scope , eg a scope with start and end patterns "/*" and "*/"
         /// for multiline comments, but in some cases you will need more scopes , eg. PHP uses both "&lt;?" , "?&gt;" and "&lt;?PHP" , "PHP?&gt;"
         /// </summary>
         public ScopeList ScopePatterns;
 
         /// <summary>
-        /// The style to use when colorizing the content of a block,
-        /// meaning everything in this block except keywords , operators and childblocks.
+        /// The style to use when colorizing the content of a span,
+        /// meaning everything in this span except keywords , operators and childspans.
         /// </summary>
         public TextStyle Style;
 
         /// <summary>
-        /// Gets or Sets if the parser should terminate any child block when it finds an end scope pattern for this block.
-        /// for example %&gt; in asp terminates any asp block even if it appears inside an asp string.
+        /// Gets or Sets if the parser should terminate any child span when it finds an end scope pattern for this span.
+        /// for example %&gt; in asp terminates any asp span even if it appears inside an asp string.
         /// </summary>
         public bool TerminateChildren;
 

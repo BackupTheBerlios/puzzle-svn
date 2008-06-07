@@ -45,9 +45,11 @@ namespace Puzzle.SourceCode
     /// </summary>
     public sealed class Pattern
     {
+        public static readonly string DefaultSeparators = ".,+-*^\\/()[]{}@:;'?£$#%& \t=<>";
+
         #region PUBLIC PROPERTY SEPARATORS
 
-        private string _Separators = ".,+-*^\\/()[]{}@:;'?£$#%& \t=<>";
+        private string _Separators = DefaultSeparators;
 
         public string Separators
         {
@@ -89,7 +91,7 @@ namespace Puzzle.SourceCode
         public bool IsSeparator;
 
         /// <summary>
-        /// For public use only
+        /// For internal use only
         /// </summary>
         public string LowerStringPattern = "";
 
@@ -179,109 +181,6 @@ namespace Puzzle.SourceCode
                 return false;
             }
         }
-
-        #region old stuff
-
-        //		private unsafe PatternScanResult SimpleFindFast(string Text,int StartPosition,bool MatchCase)
-        //		{
-        //			PatternScanResult Result;
-        //			int Length=Text.Length - StartPosition;
-        //			char[] Buff=Text.ToCharArray (StartPosition,Length);
-        //			Length-=Pattern.Length;
-        //
-        //			if (StartPosition>=Text.Length-1 || Length<1)
-        //			{
-        //				Result.Index =0;
-        //				Result.Token ="";
-        //				return Result;
-        //			}
-        //			fixed(char* p=&PatternBuffer[0])
-        //			{
-        //				fixed(char* c=&Buff[0])
-        //				{
-        //					for (int i=0;i<=Length;i++)
-        //					{					
-        //						if (c[i]==PatternBuffer[0])
-        //						{
-        //							bool found=true;
-        //							for (int j=0;j<Pattern.Length;j++)
-        //							{
-        //								if (c[i+j]!=p[j])
-        //								{
-        //									found=false;
-        //									break;
-        //								}
-        //							}
-        //							if (found)
-        //							{
-        //								Result.Index =i+StartPosition;
-        //								Result.Token = Text.Substring(i+StartPosition,this.Pattern.Length);
-        //								return Result;
-        //							}							
-        //						}
-        //					}
-        //				}
-        //			}
-        //			
-        //			Result.Index =0;
-        //			Result.Token ="";
-        //			return Result;
-        //		}
-
-
-        //		private PatternScanResult ComplexFind(string Text)
-        //		{
-        //			Match m= rx.Match (Text);
-        //			int pos=0;
-        //			string p="";
-        //			if (m.Success)
-        //			{
-        //				pos=m.Index;
-        //				p=m.Value;
-        //				PatternScanResult t;
-        //				t.Index =pos;
-        //				t.Token = p;
-        //				return t;
-        //			}
-        //			else
-        //			{
-        //				PatternScanResult res;
-        //				res.Index =0;
-        //				res.Token ="";
-        //				return res;
-        //			}
-        //		}
-
-        //		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
-        //		{
-        //		
-        //		}
-
-        //		private PatternScanResult ComplexFind(string Text,ref char[] SeparatorPositions)
-        //		{
-        //			MatchCollection mc= rx.Matches (Text);
-        //			int pos=0;
-        //			string p="";
-        //			foreach (Match m in mc)
-        //			{
-        //				pos=m.Index;
-        //				p=m.Value;
-        //				if (SeparatorPositions[pos]==(char)32 && SeparatorPositions[pos+p.Length+1]==(char)32 )
-        //				{
-        //					PatternScanResult t;
-        //					t.Index =pos;
-        //					t.Token = p;
-        //					return t;
-        //				}
-        //			}
-        //			PatternScanResult res;
-        //			res.Index =0;
-        //			res.Token ="";
-        //			return res;
-        //		}
-
-        #endregion
-
         private void Init(string pattern, bool iscomplex, bool separator, bool
                                                                               keyword)
         {
@@ -328,11 +227,10 @@ namespace Puzzle.SourceCode
         /// </summary>
         /// <param name="text">The string in which to find the pattern</param>
         /// <param name="startPosition">Start index in the string</param>
-        /// <param name="MatchCase">true if a case sensitive match should be performed</param>
+        /// <param name="matchCase">true if a case sensitive match should be performed</param>
         /// <param name="separators"></param>
         /// <returns>A PatternScanResult containing information on where the pattern was found and also the text of the pattern</returns>
-        public PatternScanResult IndexIn(string text, int startPosition, bool
-                                                                             MatchCase, string separators)
+        public PatternScanResult IndexIn(string text, int startPosition, bool matchCase, string separators)
         {
             if (separators == null) {}
             else
@@ -343,11 +241,13 @@ namespace Puzzle.SourceCode
             if (!IsComplex)
             {
                 if (!IsKeyword)
-                    return SimpleFind(text, startPosition, MatchCase);
-                return SimpleFindKeyword(text, startPosition, MatchCase);
+                    return SimpleFind(text, startPosition, matchCase);
+
+                return SimpleFindKeyword(text, startPosition, matchCase);
             }
             if (!IsKeyword)
                 return ComplexFind(text, startPosition);
+
             return ComplexFindKeyword(text, startPosition);
         }
 
