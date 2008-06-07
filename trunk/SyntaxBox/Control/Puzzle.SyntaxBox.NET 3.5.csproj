@@ -271,6 +271,11 @@
     <Compile Include="Interfaces\IPainter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Win32\Enums.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\NativeSubclasser.cs" />
@@ -362,8 +367,8 @@
       <DependentUpon>TextStyleDesignerDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FlippedCursor.cur" />
-    <EmbeddedResource Include="Puzzle.Windows.Forms.SyntaxBoxControl.bmp" />
+    <None Include="FlippedCursor.cur" />
+    <None Include="Puzzle.Windows.Forms.SyntaxBoxControl.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -383,11 +388,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Puzzle.SourceCode.SourceCodePrintDocument.bmp" />
-    <EmbeddedResource Include="Puzzle.SourceCode.SyntaxDocument.bmp" />
-    <EmbeddedResource Include="MoveUp.cur" />
-    <EmbeddedResource Include="MoveUpDown.cur" />
-    <EmbeddedResource Include="MoveDown.cur" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Puzzle.SourceCode.SourceCodePrintDocument.bmp" />
+    <None Include="Puzzle.SourceCode.SyntaxDocument.bmp" />
+    <None Include="MoveUp.cur" />
+    <None Include="MoveUpDown.cur" />
+    <None Include="MoveDown.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

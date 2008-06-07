@@ -1040,9 +1040,8 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     }
                     else
                     {
-                        Assembly assembly = GetType().Assembly;
-                        Stream stream = assembly.GetManifestResourceStream("FlippedCursor.cur");
-                        if (stream != null) Cursor = new Cursor(stream);
+                        var ms = new MemoryStream(Properties.Resources.FlippedCursor);
+                        Cursor = new Cursor(ms);
                     }
                 }
                 else

@@ -11,7 +11,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Reflection;
+using System.IO;
 using System.Windows.Forms;
 using ScrollEventArgs=Puzzle.Windows.Forms.IntelliMouse.ScrollEventArgs;
 using ScrollEventHandler=Puzzle.Windows.Forms.IntelliMouse.ScrollEventHandler;
@@ -48,8 +48,7 @@ namespace Puzzle.Windows.Forms.CoreLib
             {
                 if (_CurrentParent != null)
                     return (Control) _CurrentParent.Target;
-                else
-                    return null;
+                return null;
             }
             set { _CurrentParent = new WeakReference(value); }
         }
@@ -222,8 +221,6 @@ namespace Puzzle.Windows.Forms.CoreLib
 
         protected void SetCursor(int x, int y)
         {
-            Assembly assembly = GetType().Assembly;
-
             int dY = y;
             int dX = x;
 
@@ -232,17 +229,20 @@ namespace Puzzle.Windows.Forms.CoreLib
 
             if (dY > 16)
             {
-                Cursor = new Cursor(assembly.GetManifestResourceStream("MoveDown.cur"));
+                var ms = new MemoryStream(Properties.Resources.MoveDown);
+                Cursor = new Cursor(ms);
                 CurrentDelta.Y -= 16;
             }
             else if (dY < -16)
             {
-                Cursor = new Cursor(assembly.GetManifestResourceStream("MoveUp.cur"));
+                var ms = new MemoryStream(Properties.Resources.MoveUp);
+                Cursor = new Cursor(ms);
                 CurrentDelta.Y += 16;
             }
             else
             {
-                Cursor = new Cursor(assembly.GetManifestResourceStream("MoveUpDown.cur"));
+                var ms = new MemoryStream(Properties.Resources.MoveUpDown);
+                Cursor = new Cursor(ms);
                 CurrentDelta = new Point(0, 0);
             }
         }
@@ -285,11 +285,6 @@ namespace Puzzle.Windows.Forms.CoreLib
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
-
         protected void Deactivate()
         {
             NativeMethods.SendMessage(Handle, WM_MBUTTONUP, 0, 0);
@@ -302,10 +297,7 @@ namespace Puzzle.Windows.Forms.CoreLib
 
         protected override void OnResize(EventArgs e)
         {
-            if (Image != null)
-                Size = new Size(Image.Width, Image.Height);
-            else
-                Size = new Size(32, 32);
+            Size = Image != null ? new Size(Image.Width, Image.Height) : new Size(32, 32);
         }
 
         protected void Parent_MouseDown(object s, MouseEventArgs e)
@@ -318,9 +310,7 @@ namespace Puzzle.Windows.Forms.CoreLib
 
         protected void tmrFeedback_Tick(object sender, EventArgs e)
         {
-            var a = new ScrollEventArgs();
-            a.DeltaX = CurrentDelta.X;
-            a.DeltaY = CurrentDelta.Y;
+            var a = new ScrollEventArgs {DeltaX = CurrentDelta.X, DeltaY = CurrentDelta.Y};
             onScroll(a);
         }
 
