@@ -19,8 +19,6 @@ using Puzzle.SourceCode.SyntaxDocumentParsers;
 
 namespace Puzzle.SourceCode
 {
-
-
     /// <summary>
     /// The SyntaxDocument is a component that is responsible for Parsing , Folding , Undo / Redo actions and various text actions.
     /// </summary>
@@ -30,7 +28,6 @@ namespace Puzzle.SourceCode
 
         private readonly RowList mDocument = new RowList();
         private Container components;
-        public FormatRangeCollection FormatRanges;
 
         /// <summary>
         /// 
@@ -242,7 +239,6 @@ namespace Puzzle.SourceCode
             Text = "";
             ResetVisibleRows();
             Init();
-            FormatRanges = new FormatRangeCollection(this);
         }
 
         /// <summary>
@@ -495,8 +491,10 @@ namespace Puzzle.SourceCode
         private void Init()
         {
             var l = new SyntaxDefinition();
-            l.MainBlock = new BlockType(l);
-            l.MainBlock.MultiLine = true;
+            l.MainBlock = new BlockType(l)
+                          {
+                              MultiLine = true
+                          };
             Parser.Init(l);
         }
 
@@ -674,14 +672,17 @@ namespace Puzzle.SourceCode
         /// <returns>The row that was inserted</returns>
         public Row Insert(string Text, int index, bool StoreUndo)
         {
-            var xtl = new Row();
-            xtl.Document = this;
+            var xtl = new Row {Document = this};
             mDocument.Insert(index, xtl);
             xtl.Text = Text;
             if (StoreUndo)
             {
-                var undo = new UndoBlock();
-                undo.Text = Text;
+                var undo = new UndoBlock()
+                           {
+                               Text = Text,
+                               
+                           };
+
                 undo.Position.Y = IndexOf(xtl);
                 AddToUndoList(undo);
             }
@@ -991,18 +992,7 @@ namespace Puzzle.SourceCode
                 row.StartSegment = null;
                 row.EndSegment = null;
                 row.Parse();
-
-
-                //	if (row.CanFold)
-                //		row.Expansion_StartSegment.Expanded = !fold;
             }
-
-            //ShirinkFormatRanges
-            if (FormatRanges != null)
-            {
-                FormatRanges.Shrink(Range);
-            }
-
 
             ResetVisibleRows();
             OnChange();
@@ -1157,14 +1147,6 @@ namespace Puzzle.SourceCode
             if (StoreUndo)
                 PushUndoBlock(UndoAction.InsertRange, text, xPos, yPos);
 
-
-            //ExpandFormatRanges
-            if (FormatRanges != null)
-            {
-                FormatRanges.Expand(xPos, yPos, text);
-            }
-
-
             ResetVisibleRows();
             OnChange();
 
@@ -1174,14 +1156,12 @@ namespace Puzzle.SourceCode
 
         private void OnModifiedChanged()
         {
-            //System.Windows.Forms.MessageBox.Show ("on change");
             if (ModifiedChanged != null)
                 ModifiedChanged(this, new EventArgs());
         }
 
         private void OnChange()
         {
-            //System.Windows.Forms.MessageBox.Show ("on change");
             if (Change != null)
                 Change(this, new EventArgs());
         }
@@ -1205,11 +1185,14 @@ namespace Puzzle.SourceCode
                 RowDeleted(this, new RowEventArgs(r));
         }
 
-        public void PushUndoBlock(UndoAction Action, string Text, int x, int y)
+        public void PushUndoBlock(UndoAction Action, string text, int x, int y)
         {
-            var undo = new UndoBlock();
-            undo.Action = Action;
-            undo.Text = Text;
+            var undo = new UndoBlock()
+                       {
+                           Action = Action,
+                           Text = text
+                       };
+
             undo.Position.Y = y;
             undo.Position.X = x;
             //AddToUndoList(undo);
@@ -1235,11 +1218,14 @@ namespace Puzzle.SourceCode
         {
             string t = text.Replace(Environment.NewLine, "\n");
             string[] lines = t.Split("\n".ToCharArray());
-            var r = new TextRange();
-            r.FirstColumn = xPos;
-            r.FirstRow = yPos;
-            r.LastRow = lines.Length - 1 + yPos;
-            r.LastColumn = lines[lines.Length - 1].Length;
+            var r = new TextRange
+                    {
+                        FirstColumn = xPos,
+                        FirstRow = yPos,
+                        LastRow = (lines.Length - 1 + yPos),
+                        LastColumn = lines[lines.Length - 1].Length
+                    };
+
             if (r.FirstRow == r.LastRow)
                 r.LastColumn += r.FirstColumn;
 
@@ -1249,8 +1235,7 @@ namespace Puzzle.SourceCode
         public void AddToUndoList(UndoBlock undo)
         {
             //store the undo action in a actiongroup
-            var ActionGroup = new UndoBlockCollection();
-            ActionGroup.Add(undo);
+            var ActionGroup = new UndoBlockCollection {undo};
 
             AddToUndoList(ActionGroup);
         }
@@ -1547,14 +1532,13 @@ namespace Puzzle.SourceCode
         {
             int p = 0;
             int y = 0;
-            int x = 0;
             foreach (Row r in this)
             {
                 p += r.Text.Length + Environment.NewLine.Length;
                 if (p > pos)
                 {
                     p -= r.Text.Length + Environment.NewLine.Length;
-                    x = pos - p;
+                    int x = pos - p;
                     return new TextPoint(x, y);
                 }
                 y++;
@@ -1760,11 +1744,6 @@ namespace Puzzle.SourceCode
 
 
         /// <summary>
-        /// 
-        /// </summary>
-        ~SyntaxDocument() {}
-
-        /// <summary>
         /// Sets a syntax file, from an embedded resource.
         /// </summary>
         /// <param name="assembly">The assembly which contains the embedded resource.</param>
@@ -1773,7 +1752,8 @@ namespace Puzzle.SourceCode
         {
             if (assembly == null)
                 throw new ArgumentNullException("assembly");
-            if (resourceName == null || resourceName == "")
+
+            if (string.IsNullOrEmpty(resourceName))
                 throw new ArgumentNullException("resourceName");
 
             //
@@ -1807,65 +1787,7 @@ namespace Puzzle.SourceCode
 
         protected internal void OnApplyFormatRanges(Row row)
         {
-            if (FormatRanges == null)
-                return;
-
-
-            if (!FormatRanges.RowContainsFormats(row) || row.RowState != RowState.AllParsed)
-            {
-                row.FormattedWords = row.mWords;
-            }
-            else
-            {
-                row.FormattedWords = new WordList();
-                int i = 0;
-                int l = 0;
-                int x = 0;
-                int ri = row.Index;
-                foreach (char c in row.Text)
-                {
-                    Word w = row[i];
-                    FormatRange fr = FormatRanges.MergeFormats(x, ri);
-                    var wn = new Word();
-                    wn.Text = c.ToString();
-
-
-                    if (fr == null)
-                    {
-                        wn.Style = w.Style;
-                    }
-                    else
-                    {
-                        wn.Style = new TextStyle();
-                        if (w.Style == null)
-                            w.Style = new TextStyle();
-
-                        wn.Style.BackColor = (fr.BackColor == Color.Empty) ? w.Style.BackColor : fr.BackColor;
-                        wn.Style.ForeColor = (fr.ForeColor == Color.Empty) ? w.Style.ForeColor : fr.ForeColor;
-                        wn.InfoTip = fr.InfoTip;
-                        /*wn.Style.Bold = false;
-						wn.Style.Italic = true;
-						wn.Style.Underline = false;*/
-                        if (fr.WaveColor != Color.Empty)
-                        {
-                            wn.HasError = true;
-                            wn.ErrorColor = fr.WaveColor;
-                        }
-                    }
-                    wn.Type = w.Type;
-                    wn.Segment = w.Segment;
-                    row.FormattedWords.Add(wn);
-
-
-                    l++;
-                    if (l == row[i].Text.Length)
-                    {
-                        i++;
-                        l = 0;
-                    }
-                    x++;
-                }
-            }
+            row.FormattedWords = row.mWords;
         }
     }
 }

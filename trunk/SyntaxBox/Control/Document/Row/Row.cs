@@ -103,7 +103,7 @@ namespace Puzzle.SourceCode
         /// MySyntaxBox.Caret.CurrentRow.Images.Add(3);
         /// </code>
         /// </example>
-        public ImageIndexCollection Images = new ImageIndexCollection();
+        public ImageIndexList Images = new ImageIndexList();
 
         /// <summary>
         /// For public use only

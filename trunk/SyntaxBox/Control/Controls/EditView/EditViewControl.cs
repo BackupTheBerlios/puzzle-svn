@@ -155,8 +155,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (_Control != null && _Control.IsAlive)
                         return (SyntaxBoxControl) _Control.Target;
-                    else
-                        return null;
+                    return null;
                 }
                 catch
                 {
@@ -825,11 +824,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     Row xtr = Caret.CurrentRow;
                     string ct = xtr.Text.Substring(0, xtr.GetLeadingWhitespace().Length);
                     var indent1 = new String('\t', Caret.CurrentRow.Depth);
-                    var tr = new TextRange();
-                    tr.FirstColumn = 0;
-                    tr.LastColumn = xtr.GetLeadingWhitespace().Length;
-                    tr.FirstRow = xtr.Index;
-                    tr.LastRow = xtr.Index;
+                    var tr = new TextRange
+                             {
+                                 FirstColumn = 0,
+                                 LastColumn = xtr.GetLeadingWhitespace().Length,
+                                 FirstRow = xtr.Index,
+                                 LastRow = xtr.Index
+                             };
+
                     Document.DeleteRange(tr);
                     Document.InsertText(indent1, 0, xtr.Index, true);
 
@@ -1419,21 +1421,23 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             if (!_SyntaxBox.DisableIntelliMouse)
             {
                 IntelliMouse = new
-                    IntelliMouseControl();
+                    IntelliMouseControl
+                               {
+                                   BackgroundImage = ((Bitmap)
+                                                      (resources.GetObject("IntelliMouse.BackgroundImage"))),
+                                   Image = ((Bitmap) (resources.GetObject(
+                                                         "IntelliMouse.Image"))),
+                                   Location = new Point(197, 157),
+                                   Name = "IntelliMouse",
+                                   Size = new Size(28, 28),
+                                   TabIndex = 4,
+                                   TransparencyKey = Color.FromArgb((
+                                                                        (255)), ((0)), ((255))),
+                                   Visible = false
+                               };
                 // 
                 // IntelliMouse
                 // 
-                IntelliMouse.BackgroundImage = ((Bitmap)
-                                                (resources.GetObject("IntelliMouse.BackgroundImage")));
-                IntelliMouse.Image = ((Bitmap) (resources.GetObject(
-                                                   "IntelliMouse.Image")));
-                IntelliMouse.Location = new Point(197, 157);
-                IntelliMouse.Name = "IntelliMouse";
-                IntelliMouse.Size = new Size(28, 28);
-                IntelliMouse.TabIndex = 4;
-                IntelliMouse.TransparencyKey = Color.FromArgb((
-                                                                  (255)), ((0)), ((255)));
-                IntelliMouse.Visible = false;
                 IntelliMouse.EndScroll += IntelliMouse_EndScroll;
                 IntelliMouse.BeginScroll += IntelliMouse_BeginScroll;
                 IntelliMouse.Scroll += IntelliMouse_Scroll;

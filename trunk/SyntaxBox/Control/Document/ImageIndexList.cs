@@ -15,7 +15,7 @@ namespace Puzzle.SourceCode
     /// <summary>
     /// 
     /// </summary>
-    public class ImageIndexCollection : List<int>
+    public class ImageIndexList : List<int>
     {
     }
 }
