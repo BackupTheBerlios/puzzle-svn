@@ -65,7 +65,6 @@ namespace Puzzle.Windows.Forms
         private Color _LineNumberBorderColor = Color.Teal;
         private Color _LineNumberForeColor = Color.Teal;
         private Color _OutlineColor = SystemColors.ControlDark;
-        private bool _OverWrite;
         private bool _ParseOnPaste;
         private Color _ScopeBackColor = Color.Transparent;
         private Color _ScopeIndicatorColor = Color.Transparent;
@@ -707,16 +706,6 @@ namespace Puzzle.Windows.Forms
                 Redraw();
             }
         }
-
-        /// <summary>
-        /// Returns true if the control is in overwrite mode.
-        /// </summary>
-        [Browsable(false)]
-        public bool OverWrite
-        {
-            get { return _OverWrite; }
-        }
-
 
         /// <summary>
         /// Gets or Sets the Size of the font.
