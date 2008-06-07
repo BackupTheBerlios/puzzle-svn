@@ -57,14 +57,14 @@ namespace Puzzle.SourceCode
     {
         #region General declarations
 
-        private readonly RowCollection mDocument = new RowCollection();
+        private readonly RowList mDocument = new RowList();
         private Container components;
         public FormatRangeCollection FormatRanges;
 
         /// <summary>
         /// 
         /// </summary>
-        public RowCollection KeywordQueue = new RowCollection();
+        public RowList KeywordQueue = new RowList();
 
         private UndoBlockCollection mCaptureBlock;
         private bool mCaptureMode;
@@ -88,7 +88,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// List of rows that should be parsed
         /// </summary>
-        public RowCollection ParseQueue = new RowCollection();
+        public RowList ParseQueue = new RowList();
 
         /// <summary>
         /// The active parser of the document
@@ -108,7 +108,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// List of rows that is not hidden by folding
         /// </summary>
-        public RowCollection VisibleRows = new RowCollection();
+        public RowList VisibleRows = new RowList();
 
         #region PUBLIC PROPERTY UNDOSTEP
 
@@ -1503,7 +1503,7 @@ namespace Puzzle.SourceCode
 //			if (System.DateTime.Now > new DateTime (2002,12,31))
 //			{
 //				
-//				this.mDocument = new RowCollection ();
+//				this.mDocument = new RowList ();
 //				this.Add ("BETA VERSION EXPIRED");
 //				VisibleRows = this.mDocument;
 //				return;
@@ -1517,7 +1517,7 @@ namespace Puzzle.SourceCode
             else
             {
                 NeedResetRows = false;
-                VisibleRows = new RowCollection(); //.Clear ();			
+                VisibleRows = new RowList(); //.Clear ();			
                 int RealRow = 0;
                 Row r = null;
                 for (int i = 0; i < Count; i++)

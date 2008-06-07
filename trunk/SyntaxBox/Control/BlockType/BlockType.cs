@@ -105,7 +105,7 @@ namespace Puzzle.SourceCode
         /// A list of scopes , most block only contain one scope , eg a scope with start and end patterns "/*" and "*/"
         /// for multiline comments, but in some cases you will need more scopes , eg. PHP uses both "&lt;?" , "?&gt;" and "&lt;?PHP" , "PHP?&gt;"
         /// </summary>
-        public ScopeCollection ScopePatterns;
+        public ScopeList ScopePatterns;
 
         /// <summary>
         /// The style to use when colorizing the content of a block,
@@ -139,7 +139,7 @@ namespace Puzzle.SourceCode
             KeywordsList.IsKeyword = true;
             OperatorsList.Parent = this;
             OperatorsList.IsOperator = true;
-            ScopePatterns = new ScopeCollection(this);
+            ScopePatterns = new ScopeList(this);
         }
 
         #region PUBLIC PROPERTY PARENT

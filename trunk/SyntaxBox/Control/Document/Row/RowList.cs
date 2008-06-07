@@ -15,7 +15,7 @@ namespace Puzzle.SourceCode
     /// <summary>
     /// Row collection class.
     /// </summary>
-    public sealed class RowCollection : List<Row>
+    public sealed class RowList : List<Row>
     {
         
     }

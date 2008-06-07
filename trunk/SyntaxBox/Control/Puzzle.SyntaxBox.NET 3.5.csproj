@@ -234,9 +234,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Document\Row\Row.cs" />
-    <Compile Include="Document\Row\RowCollection.cs" />
+    <Compile Include="Document\Row\RowList.cs" />
     <Compile Include="Document\Scope\Scope.cs" />
-    <Compile Include="Document\Scope\ScopeCollection.cs" />
+    <Compile Include="Document\Scope\ScopeList.cs" />
     <Compile Include="Document\Segment\Segment.cs" />
     <Compile Include="Document\Segment\SegmentCollection.cs" />
     <Compile Include="Document\Structs.cs" />

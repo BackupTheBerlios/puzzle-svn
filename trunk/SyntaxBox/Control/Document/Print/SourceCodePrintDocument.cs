@@ -43,7 +43,7 @@ namespace Puzzle.SourceCode
         private Font fontNormal;
 
 
-        private RowCollection rc;
+        private RowList rc;
         private int RowIndex;
 
         public SourceCodePrintDocument() {}
@@ -88,7 +88,7 @@ namespace Puzzle.SourceCode
                 Document.ParseAll(true);
 
 
-                rc = new RowCollection();
+                rc = new RowList();
                 foreach (Row r in Document)
                 {
                     bool hasbreak = false;
