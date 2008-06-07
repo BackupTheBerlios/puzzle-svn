@@ -87,13 +87,6 @@ namespace Puzzle.Windows.Forms
         private bool _VirtualWhitespace;
         private Color _WhitespaceColor = SystemColors.ControlDark;
         private IContainer components;
-
-        private string[] TextBorderStyles = new[]
-                                            {
-                                                "****** * ******* * ******", "+---+| | |+-+-+| | |+---+",
-                                                "+---+¦ ¦ ¦¦-+-¦¦ ¦ ¦+---+", "+---+¦ ¦ ¦+-+-¦¦ ¦ ¦+---+"
-                                            };
-
         #endregion
 
         #region Internal Components/Controls
@@ -447,10 +440,7 @@ namespace Puzzle.Windows.Forms
         {
             get
             {
-                if ((_ActiveView) != null)
-                    return ((EditViewControl) _ActiveView).AutoListVisible;
-                else
-                    return false;
+                 return (_ActiveView) != null && ((EditViewControl) _ActiveView).AutoListVisible;
             }
             set
             {
@@ -470,10 +460,7 @@ namespace Puzzle.Windows.Forms
         {
             get
             {
-                if ((_ActiveView) != null)
-                    return ((EditViewControl) _ActiveView).InfoTipVisible;
-                else
-                    return false;
+                 return (_ActiveView) != null && ((EditViewControl) _ActiveView).InfoTipVisible;
             }
             set
             {
@@ -682,10 +669,10 @@ namespace Puzzle.Windows.Forms
             {
                 if (value <= 0)
                 {
-                    throw (new Exception("Scrollsped may not be less than 1"));
+                    throw (new Exception("Scroll speed may not be less than 1"));
                 }
-                else
-                    _SmoothScrollSpeed = value;
+
+                _SmoothScrollSpeed = value;
             }
         }
 
@@ -1475,35 +1462,35 @@ namespace Puzzle.Windows.Forms
         /// MySyntaxBox.AutoListEndLoad();
         /// </code>
         /// </example>
-        /// <param name="Text">The text to display in the autolist</param>
+        /// <param name="text">The text to display in the autolist</param>
         /// <param name="ImageIndex">The image index in the AutoListIcons</param>
-        public void AutoListAdd(string Text, int ImageIndex)
+        public void AutoListAdd(string text, int ImageIndex)
         {
-            ((EditViewControl) _ActiveView).AutoList.Add(Text, ImageIndex);
+            ((EditViewControl) _ActiveView).AutoList.Add(text, ImageIndex);
         }
 
         /// <summary>
         /// Adds an item to the autolist control.
         /// </summary>
-        /// <param name="Text">The text to display in the autolist</param>
+        /// <param name="text">The text to display in the autolist</param>
         /// <param name="InsertText">The text to insert in the code</param>
         /// <param name="ImageIndex">The image index in the AutoListIcons</param>
-        public void AutoListAdd(string Text, string InsertText, int ImageIndex)
+        public void AutoListAdd(string text, string InsertText, int ImageIndex)
         {
-            ((EditViewControl) _ActiveView).AutoList.Add(Text, InsertText, ImageIndex);
+            ((EditViewControl) _ActiveView).AutoList.Add(text, InsertText, ImageIndex);
         }
 
         /// <summary>
         /// Adds an item to the autolist control.
         /// </summary>
-        /// <param name="Text">The text to display in the autolist</param>
+        /// <param name="text">The text to display in the autolist</param>
         /// <param name="InsertText">The text to insert in the code</param>
         /// <param name="ToolTip"></param>
         /// <param name="ImageIndex">The image index in the AutoListIcons</param>
-        public void AutoListAdd(string Text, string InsertText, string ToolTip, int
+        public void AutoListAdd(string text, string InsertText, string ToolTip, int
                                                                                     ImageIndex)
         {
-            ((EditViewControl) _ActiveView).AutoList.Add(Text, InsertText, ToolTip,
+            ((EditViewControl) _ActiveView).AutoList.Add(text, InsertText, ToolTip,
                                                          ImageIndex);
         }
 
