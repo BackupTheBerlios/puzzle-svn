@@ -70,25 +70,22 @@ namespace Puzzle.Design
 
         public void Bind()
         {
-            if (EditValue != null)
-            {
-                //MessageBox.Show (EditValue.ToString ());
-            }
-            else
+            if (EditValue == null)
             {
                 MessageBox.Show("EditValue is null");
             }
-
-
-            var e = EditValue as ICollection;
-            lstMembers.Items.Clear();
-            foreach (object o in e)
+            else
             {
-                lstMembers.Items.Add(o);
-            }
+                var e = EditValue as ICollection;
+                lstMembers.Items.Clear();
+                foreach (object o in e)
+                {
+                    lstMembers.Items.Add(o);
+                }
 
-            EnableRemove();
-            SelectObject();
+                EnableRemove();
+                SelectObject();
+            }
         }
 
         private void lstMembers_DrawItem(object sender, DrawItemEventArgs e)

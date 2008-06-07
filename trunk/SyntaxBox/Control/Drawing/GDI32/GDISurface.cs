@@ -146,11 +146,11 @@ namespace Puzzle.Drawing.GDI
             IntPtr ret = NativeMethods.SelectObject(mhDC, mhBMP);
             _OldBmp = ret;
 
-            if (mhDC == (IntPtr) 0)
-                MessageBox.Show("hDC creation FAILED!!");
+            if (mhDC == (IntPtr)0)
+                throw new OutOfMemoryException("hDC creation FAILED!!");
 
             if (mhDC == (IntPtr) 0)
-                MessageBox.Show("hBMP creation FAILED!!");
+                throw new OutOfMemoryException("hBMP creation FAILED!!");
         }
 
 

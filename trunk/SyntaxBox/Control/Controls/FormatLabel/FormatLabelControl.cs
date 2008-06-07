@@ -1130,14 +1130,12 @@ namespace Puzzle.Windows.Forms.CoreLib
                             {
                                 if (x >= w.ScreenArea.Left && x <= w.ScreenArea.Right)
                                 {
-                                    //MessageBox.Show (w.Text);
                                     if (w.Element.Link != null)
                                     {
                                         Link = true;
                                         _ActiveElement = w.Element.Link;
                                         break;
                                     }
-                                    //this.Cursor =Cursors.Hand;
                                 }
                             }
                         }
@@ -1183,14 +1181,12 @@ namespace Puzzle.Windows.Forms.CoreLib
                             {
                                 if (x >= w.ScreenArea.Left && x <= w.ScreenArea.Right)
                                 {
-                                    //MessageBox.Show (w.Text);
                                     if (w.Element.Link != null)
                                     {
                                         Link = true;
                                         _ActiveElement = w.Element.Link;
                                         break;
                                     }
-                                    //this.Cursor =Cursors.Hand;									
                                 }
                             }
                         }

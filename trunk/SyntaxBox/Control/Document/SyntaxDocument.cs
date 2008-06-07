@@ -11,7 +11,6 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -375,7 +374,6 @@ namespace Puzzle.SourceCode
         {
             get
             {
-                string s = Text.Replace(Environment.NewLine, "\n");
                 return Text.Split("\n".ToCharArray());
             }
             set
@@ -1246,16 +1244,7 @@ namespace Puzzle.SourceCode
         /// <param name="ActionGroup">action to add</param>
         public void AddToUndoList(UndoBlockCollection ActionGroup)
         {
-            //int count=UndoBuffer.Count-UndoStep;
-//			if (count>0)
-//			{
-//				System.Windows.Forms.MessageBox.Show (UndoStep.ToString ());
-//				System.Windows.Forms.MessageBox.Show (count.ToString ());
-//			}
-
             UndoBuffer.ClearFrom(UndoStep);
-
-            //	System.Windows.Forms.MessageBox.Show (UndoBuffer.Count.ToString());		
             UndoBuffer.Add(ActionGroup);
             UndoStep++;
             OnUndoBufferChanged();

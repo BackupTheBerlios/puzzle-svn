@@ -513,7 +513,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                     }
                     catch
                     {
-                        //	System.Windows.Forms.MessageBox.Show (x.Message + "\n\n\n" + x.StackTrace);
                     }
                 }
             }

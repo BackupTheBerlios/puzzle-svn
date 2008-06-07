@@ -173,8 +173,8 @@ namespace Puzzle.Design
             protected void btnDropDownMenuItem_Click(object o, EventArgs e)
             {
                 var tmi = o as TypeMenuItem;
-//				MessageBox.Show (tmi.ToString ());
-                CreateAndAddInstance(tmi.Type as Type);
+                if (tmi != null) 
+                    CreateAndAddInstance(tmi.Type as Type);
             }
 
             protected void btnDown_Click(object o, EventArgs e)
