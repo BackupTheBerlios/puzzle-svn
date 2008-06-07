@@ -118,13 +118,13 @@ namespace Puzzle.SourceCode
         /// <param name="pattern"></param>
         /// <param name="separator"></param>
         /// <param name="keyword"></param>
-        /// <param name="EscapeChar"></param>
-        public Pattern(string pattern, bool separator, bool keyword, string EscapeChar)
+        /// <param name="escapeChar"></param>
+        public Pattern(string pattern, bool separator, bool keyword, string escapeChar)
         {
-            EscapeChar = Regex.Escape(EscapeChar);
-            string EscPattern = string.Format("(?<=((?<!{0})({0}{0})*))({1})",
-                                              EscapeChar, pattern);
-            Init(EscPattern, true, separator, keyword);
+            escapeChar = Regex.Escape(escapeChar);
+            string escapePattern = string.Format("(?<=((?<!{0})({0}{0})*))({1})",
+                                              escapeChar, pattern);
+            Init(escapePattern, true, separator, keyword);
         }
 
         /// <summary>
