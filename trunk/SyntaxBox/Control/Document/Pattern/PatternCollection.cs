@@ -8,10 +8,7 @@
 // *
 // *
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using T = Puzzle.SourceCode.Pattern;
 
 namespace Puzzle.SourceCode
 {

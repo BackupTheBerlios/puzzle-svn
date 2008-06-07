@@ -253,6 +253,7 @@
     <Compile Include="Document\Undo\UndoBuffer.cs" />
     <Compile Include="Document\Word\Word.cs" />
     <Compile Include="Document\Word\WordList.cs" />
+    <Compile Include="Drawing\DesktopGraphics.cs" />
     <Compile Include="Drawing\DrawingTools.cs" />
     <Compile Include="Drawing\GDI32\FontEnum.cs" />
     <Compile Include="Drawing\GDI32\GDIBrushes.cs" />

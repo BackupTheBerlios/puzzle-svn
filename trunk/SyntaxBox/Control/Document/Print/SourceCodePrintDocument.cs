@@ -74,8 +74,6 @@ namespace Puzzle.SourceCode
         //Override the OnPrintPage to provide the printing logic for the document
         protected override void OnPrintPage(PrintPageEventArgs ev)
         {
-            float lpp = 0;
-            float yPos = 0;
             int count = 0;
             float leftMargin = ev.MarginBounds.Left;
             float rightMargin = ev.MarginBounds.Right;
@@ -117,9 +115,7 @@ namespace Puzzle.SourceCode
                         if (x + sf.Width > rightMargin)
                         {
                             var chr = (char) 0xbf;
-                            var br = new Word();
-                            br.Text = chr + "";
-                            br.InfoTip = "break char";
+                            var br = new Word {Text = (chr + ""), InfoTip = "break char"};
                             newRow.Add(br);
                             hasbreak = true;
 
@@ -142,13 +138,13 @@ namespace Puzzle.SourceCode
             base.OnPrintPage(ev);
 
 
-            lpp = ev.MarginBounds.Height/fontNormal.GetHeight(ev.Graphics);
+            float lpp = ev.MarginBounds.Height/fontNormal.GetHeight(ev.Graphics);
 
 
             while (count < lpp && (RowIndex < rc.Count))
             {
                 float x = leftMargin;
-                yPos = topMargin + (count*fontNormal.GetHeight(ev.Graphics));
+                float yPos = topMargin + (count*fontNormal.GetHeight(ev.Graphics));
 
                 Row r = rc[RowIndex];
 
@@ -214,10 +210,7 @@ namespace Puzzle.SourceCode
             }
 
             //If we have more lines then print another page
-            if (RowIndex < rc.Count)
-                ev.HasMorePages = true;
-            else
-                ev.HasMorePages = false;
+            ev.HasMorePages = RowIndex < rc.Count;
         }
     }
 }

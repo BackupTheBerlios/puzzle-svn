@@ -268,15 +268,7 @@ namespace Puzzle.SourceCode
                             var scope = new Scope {Style = GetStyle(style), ExpansionText = text, DefaultExpanded = expanded, CauseIndent = blnCauseIndent};
 
                             var StartP = new Pattern(Start, blnStartIsComplex, false, bool.Parse(StartIsKeyword));
-                            Pattern endPattern;
-                            if (EscapeChar != "")
-                            {
-                                endPattern = new Pattern(End, false, bool.Parse(EndIsKeyword), EscapeChar);
-                            }
-                            else
-                            {
-                                endPattern = new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword));
-                            }
+                            Pattern endPattern = EscapeChar != "" ? new Pattern(End, false, bool.Parse(EndIsKeyword), EscapeChar) : new Pattern(End, blnEndIsComplex, false, bool.Parse(EndIsKeyword));
 
                             if (EndIsSeparator != "")
                                 endPattern.IsSeparator = bool.Parse(EndIsSeparator);
