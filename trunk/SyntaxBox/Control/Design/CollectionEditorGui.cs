@@ -70,13 +70,14 @@ namespace Puzzle.Design
 
         public void Bind()
         {
-            if (EditValue == null)
+            var e = EditValue as ICollection;
+            if (e == null)
             {
                 MessageBox.Show("EditValue is null");
             }
             else
             {
-                var e = EditValue as ICollection;
+                
                 lstMembers.Items.Clear();
                 foreach (object o in e)
                 {
@@ -103,11 +104,7 @@ namespace Puzzle.Design
 
                 var r = new Rectangle(0, e.Bounds.Top, maxwidth, lstMembers.ItemHeight);
                 bool SupportPaint = Editor.GetPaintValueSupported();
-                int w = 0;
-                if (SupportPaint)
-                    w = 20;
-                else
-                    w = 0;
+                int w = SupportPaint ? 20 : 0;
 
                 var rcItem = new Rectangle(r.Right + w, r.Top, e.Bounds.Width - r.Right - w, lstMembers.ItemHeight);
 
@@ -118,39 +115,41 @@ namespace Puzzle.Design
                 e.Graphics.DrawString(e.Index.ToString(), lstMembers.Font, Brushes.Black, r, sf);
 
 
-                SolidBrush bg = null;
-                SolidBrush fg = null;
                 bool Selected = ((int) e.State & (int) DrawItemState.Selected) != 0;
 
-                if (Selected)
+                using (SolidBrush bg = GetBgBrush(Selected))
+                using (SolidBrush fg = GetFgBrush(Selected))
                 {
-                    bg = new SolidBrush(SystemColors.Highlight);
-                    fg = new SolidBrush(SystemColors.HighlightText);
-                }
-                else
-                {
-                    bg = new SolidBrush(lstMembers.BackColor);
-                    fg = new SolidBrush(lstMembers.ForeColor);
-                }
-                e.Graphics.FillRectangle(bg, rcItem);
-                if (Selected && e.Index != -1)
-                {
-                    if (((int) e.State & (int) DrawItemState.Focus) != 0)
+                    e.Graphics.FillRectangle(bg, rcItem);
+                    if (Selected && e.Index != -1)
                     {
-                        ControlPaint.DrawFocusRectangle(e.Graphics, rcItem);
+                        if (((int) e.State & (int) DrawItemState.Focus) != 0)
+                        {
+                            ControlPaint.DrawFocusRectangle(e.Graphics, rcItem);
+                        }
+                    }
+
+                    if (e.Index >= 0)
+                    {
+                        object o = lstMembers.Items[e.Index];
+                        string name = GetDisplayText(o);
+                        e.Graphics.DrawString(name, lstMembers.Font, fg, rcItem);
                     }
                 }
-
-                if (e.Index >= 0)
-                {
-                    object o = lstMembers.Items[e.Index];
-                    string name = GetDisplayText(o);
-                    e.Graphics.DrawString(name, lstMembers.Font, fg, rcItem);
-                }
-                fg.Dispose();
-                bg.Dispose();
             }
-            catch {}
+            catch { }
+        }
+
+        private SolidBrush GetFgBrush(bool Selected)
+        {
+            SolidBrush fg = Selected ? new SolidBrush(SystemColors.HighlightText) : new SolidBrush(lstMembers.ForeColor);
+            return fg;
+        }
+
+        private SolidBrush GetBgBrush(bool Selected)
+        {
+            SolidBrush bg = Selected ? new SolidBrush(SystemColors.Highlight) : new SolidBrush(lstMembers.BackColor);
+            return bg;
         }
 
         private void lstMembers_SelectedIndexChanged(object sender, EventArgs e)
@@ -161,10 +160,7 @@ namespace Puzzle.Design
 
         private void SelectObject()
         {
-            if (lstMembers.SelectedIndex >= 0)
-                pygProperties.SelectedObject = lstMembers.SelectedItem;
-            else
-                pygProperties.SelectedObject = null;
+            pygProperties.SelectedObject = lstMembers.SelectedIndex >= 0 ? lstMembers.SelectedItem : null;
         }
 
         private void EnableRemove()
@@ -173,37 +169,25 @@ namespace Puzzle.Design
         }
 
 
-        private string GetDisplayText(object Item)
+        private static string GetDisplayText(object Item)
         {
             string ObjectName = null;
 
-            PropertyDescriptor descriptor1;
             if (Item == null)
             {
                 return string.Empty;
             }
-            descriptor1 = TypeDescriptor.GetProperties(Item)["Name"];
+            PropertyDescriptor descriptor1 = TypeDescriptor.GetProperties(Item)["Name"];
             if (descriptor1 != null)
             {
                 ObjectName = ((string) descriptor1.GetValue(Item));
-                if ((ObjectName != null) && (ObjectName.Length > 0))
+                if (!string.IsNullOrEmpty(ObjectName))
                 {
                     return ObjectName;
                 }
             }
-//			descriptor1 = TypeDescriptor.GetDefaultProperty(base.CollectionType);
-//			if ((descriptor1 != null) && (descriptor1.PropertyType == typeof(string)))
-//			{
-//				ObjectName = ((string) descriptor1.GetValue(this.EditValue));
-//				if ((ObjectName != null) && (ObjectName.Length > 0))
-//				{
-//					return ObjectName; 
-//				}
-// 
-//			}
-            //	ObjectName = item.Converter.ConvertToString(Item);
 
-            if ((ObjectName == null) || (ObjectName.Length == 0))
+            if (string.IsNullOrEmpty(ObjectName))
             {
                 ObjectName = Item.GetType().Name;
             }

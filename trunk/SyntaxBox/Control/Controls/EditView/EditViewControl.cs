@@ -209,7 +209,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             {
                 Debug.WriteLine("Creating Autolist");
 
-                AutoList = new AutoListForm(this);
+                AutoList = new AutoListForm();
                 NativeMethods.SetWindowLong(AutoList.Handle,
                                             NativeMethods.GWL_STYLE,
                                             NativeMethods.WS_CHILD);

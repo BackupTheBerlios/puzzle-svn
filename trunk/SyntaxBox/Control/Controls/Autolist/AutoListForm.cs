@@ -9,10 +9,8 @@
 // *
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -24,7 +22,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
     [ToolboxItem(false)]
     public class AutoListForm : Form
     {
-        private WeakReference _Control;
         private IContainer components;
 
 
@@ -39,27 +36,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// <summary>
         /// Default AltoListControl constructor.
         /// </summary>
-        public AutoListForm(Control Owner)
+        public AutoListForm()
         {
-            ParentControl = Owner;
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
             //SetStyle(ControlStyles.ContainerControl  ,false);
             SetStyle(ControlStyles.Selectable, true);
 
             // TODO: Add any initialization after the InitForm call
-        }
-
-        private Control ParentControl
-        {
-            get
-            {
-                if (_Control != null)
-                    return (Control) _Control.Target;
-                else
-                    return null;
-            }
-            set { _Control = new WeakReference(value); }
         }
 
         /// <summary>
@@ -81,14 +65,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         private static extern
             int SendMessage(IntPtr hWnd, int message, int _data, int _id);
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-
         public void SendKey(int KeyCode)
         {
             SendMessage(LB.Handle, (int) WindowMessage.WM_KEYDOWN,
@@ -105,15 +81,15 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                       Width, Height, Border3DStyle.Raised);
         }
 
-        public void SelectItem(string Text)
+        public void SelectItem(string text)
         {
-            Text = Text.ToLowerInvariant();
+            text = text.ToLowerInvariant();
 
             for (int i = 0; i < LB.Items.Count; i++)
             {
                 var li = (ListItem) LB.Items[i];
                 string lis = li.Text.ToLowerInvariant();
-                if (lis.StartsWith(Text))
+                if (lis.StartsWith(text))
                 {
                     LB.SelectedIndex = i;
                     break;
@@ -163,24 +139,24 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// <summary>
         /// Adds a new ListItem to the AutoListForm.
         /// </summary>
-        /// <param name="Text">Text of the new ListItem</param>
+        /// <param name="text">Text of the new ListItem</param>
         /// <param name="ImageIndex">Image index that should be assigned to the new ListItem</param>
         /// <returns></returns>
-        public ListItem Add(string Text, int ImageIndex)
+        public ListItem Add(string text, int ImageIndex)
         {
-            return Add(Text, Text, ImageIndex);
+            return Add(text, text, ImageIndex);
         }
 
         /// <summary>
         /// Adds a new ListItem to the AutoListForm.
         /// </summary>
-        /// <param name="Text">Text of the new ListItem</param>
-        /// <param name="InsertText">Text to insert when this item is selected</param>
+        /// <param name="text">Text of the new ListItem</param>
+        /// <param name="InsertText">text to insert when this item is selected</param>
         /// <param name="ImageIndex">Image index that should be assigned to the new ListItem</param>
         /// <returns></returns>
-        public ListItem Add(string Text, string InsertText, int ImageIndex)
+        public ListItem Add(string text, string InsertText, int ImageIndex)
         {
-            var li = new ListItem(Text, ImageIndex, "", InsertText);
+            var li = new ListItem(text, ImageIndex, "", InsertText);
             LB.Items.Add(li);
 
 
@@ -188,10 +164,10 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             return li;
         }
 
-        public ListItem Add(string Text, string InsertText, string ToolTip, int
+        public ListItem Add(string text, string InsertText, string ToolTip, int
                                                                                 ImageIndex)
         {
-            var li = new ListItem(Text, ImageIndex, "", InsertText);
+            var li = new ListItem(text, ImageIndex, "", InsertText);
             LB.Items.Add(li);
             li.ToolTip = ToolTip;
             //this.LB.Sorted =true;
@@ -215,7 +191,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             if (e.Index == - 1)
                 return;
 
-            int Offset = 24;
+            const int Offset = 24;
 
             var li = (ListItem) LB.Items[e.Index];
             string text = li.Text;
