@@ -119,7 +119,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlockType\BlockType.cs" />
-    <Compile Include="BlockType\BlockTypeCollection.cs" />
+    <Compile Include="BlockType\BlockTypeList.cs" />
     <Compile Include="Classes\Caret.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -131,8 +131,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 if (Position.X > CurrentRow.Expansion_EndChar)
                 {
                     Position.Y = CurrentRow.Expansion_EndRow.Index;
-                    Position.X =
-                        CurrentRow.Expansion_EndRow.Expansion_StartChar;
+                    Position.X = CurrentRow.Expansion_EndRow.Expansion_StartChar;
                     CropPosition();
                 }
                 RememberXPos();
@@ -316,8 +315,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     if (CurrentRow.Expansion_StartRow.Index == - 1)
                         Debugger.Break();
                     Position.Y = CurrentRow.Expansion_StartRow.Index;
-                    Position.X =
-                        CurrentRow.Expansion_StartRow.Expansion_EndChar;
+                    Position.X = CurrentRow.Expansion_StartRow.Expansion_EndChar;
                     CropPosition();
                 }
                 RememberXPos();
@@ -363,14 +361,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             else
             {
                 int i = CurrentRow.GetLeadingWhitespace().Length;
-                if (Position.X == i)
-                {
-                    Position.X = 0;
-                }
-                else
-                {
-                    Position.X = i;
-                }
+                Position.X = Position.X == i ? 0 : i;
                 RememberXPos();
                 CaretMoved(Select);
             }
@@ -424,9 +415,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// <param name="Select">True if a selection should be created from the current caret pos to the new pos</param>
         public void MoveAbsoluteEnd(bool Select)
         {
-            Position.X = Control.Document[Control.Document.Count -
-                                          1].Text.Length;
-            ;
+            Position.X = Control.Document[Control.Document.Count - 1].Text.Length;
             Position.Y = Control.Document.Count - 1;
             RememberXPos();
             CaretMoved(Select);
@@ -484,8 +473,6 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 if (xtr == null)
                     return new TextPoint(0, 0);
 
-                int max = xtr.Text.Length;
-
                 int Padd = Math.Max(Position.X - xtr.Text.Length, 0);
                 var PaddStr = new String(' ', Padd);
                 string TotStr = xtr.Text + PaddStr;
@@ -516,11 +503,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
                     while (x < value.X)
                     {
-                        char c;
-                        if (i < chars.Length)
-                            c = chars[i];
-                        else
-                            c = ' ';
+                        char c = i < chars.Length ? chars[i] : ' ';
                         xx++;
                         if (c == '\t')
                         {

@@ -8,11 +8,7 @@
 // *
 // *
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using T = Puzzle.Windows.Forms.SyntaxBox.KeyboardAction;
 
 namespace Puzzle.Windows.Forms.SyntaxBox
 {

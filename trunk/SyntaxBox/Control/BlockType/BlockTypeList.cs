@@ -8,17 +8,14 @@
 // *
 // *
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using T = Puzzle.SourceCode.BlockType;
 
 namespace Puzzle.SourceCode
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BlockTypeCollection : List<BlockType>
+    public class BlockTypeList : List<BlockType>
     {
     }
 }

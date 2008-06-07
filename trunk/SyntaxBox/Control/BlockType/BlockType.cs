@@ -71,7 +71,7 @@ namespace Puzzle.SourceCode
         /// A list containing which BlockTypes are valid child blocks in a specific block.
         /// eg. strings and comments are child blocks for a code block
         /// </summary>
-        public BlockTypeCollection ChildBlocks = new BlockTypeCollection();
+        public BlockTypeList ChildBlocks = new BlockTypeList();
 
         public PatternCollection ComplexPatterns = new PatternCollection();
 
