@@ -22,7 +22,6 @@ using Puzzle.Drawing.GDI;
 using Puzzle.SourceCode;
 using Puzzle.Windows.Forms.CoreLib;
 using Puzzle.Windows.Forms.SyntaxBox;
-using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 
 #endregion
 

@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
@@ -23,7 +22,6 @@ using Puzzle.Globalization;
 using Puzzle.SourceCode;
 using Puzzle.Windows.Forms.CoreLib;
 using Puzzle.Windows.Forms.SyntaxBox.Painter;
-using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 using System.IO;
 
 #endregion
@@ -1025,7 +1023,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 return;
             }
 
-            if (View.Action == XTextAction.xtDragText)
+            if (View.Action == EditAction.DragText)
             {
                 Cursor = Cursors.Hand;
                 //Cursor.Current = Cursors.Hand;
@@ -3105,7 +3103,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                     Selection.MakeSelection();
 
                                     Redraw();
-                                    View.Action = XTextAction.xtSelect;
+                                    View.Action = EditAction.SelectText;
 
                                     return;
                                 }
@@ -3151,7 +3149,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                     return;
                                 }
 
-                                View.Action = XTextAction.xtSelect;
+                                View.Action = EditAction.SelectText;
                                 Caret.SetPos(pos);
                                 Selection.ClearSelection();
                                 Caret.Blink = true;
@@ -3159,7 +3157,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             }
                             else
                             {
-                                View.Action = XTextAction.xtSelect;
+                                View.Action = EditAction.SelectText;
                                 Caret.SetPos(pos);
                                 Selection.MakeSelection();
                                 Caret.Blink = true;
@@ -3199,7 +3197,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 }
                 else
                 {
-                    View.Action = XTextAction.xtSelect;
+                    View.Action = EditAction.SelectText;
                     Caret.SetPos(Painter.CharFromPixel(0, e.Y));
                     Selection.ClearSelection();
                     Caret.MoveDown(true);
@@ -3255,7 +3253,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 {
                     if (e.Button == MouseButtons.Left)
                     {
-                        if (View.Action == XTextAction.xtSelect)
+                        if (View.Action == EditAction.SelectText)
                         {
                             //Selection ACTIONS!!!!!!!!!!!!!!
                             Caret.Blink = true;
@@ -3267,14 +3265,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                             ScrollIntoView();
                             Redraw();
                         }
-                        else if (View.Action == XTextAction.xtNone)
+                        else if (View.Action == EditAction.None)
                         {
                             if (IsOverSelection(e.X, e.Y))
                             {
                                 BeginDragDrop();
                             }
                         }
-                        else if (View.Action == XTextAction.xtDragText) {}
+                        else if (View.Action == EditAction.DragText) {}
                     }
                     else
                     {
@@ -3396,13 +3394,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox
 
             #endregion
 
-            if (View.Action == XTextAction.xtNone)
+            if (View.Action == EditAction.None)
             {
                 if (e.X > View.TotalMarginWidth)
                 {
                     if (IsOverSelection(e.X, e.Y) && e.Button == MouseButtons.Left)
                     {
-                        View.Action = XTextAction.xtSelect;
+                        View.Action = EditAction.SelectText;
                         Caret.SetPos(Painter.CharFromPixel(e.X, e.Y));
                         Selection.ClearSelection();
                         Redraw();
@@ -3410,7 +3408,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                 }
             }
 
-            View.Action = XTextAction.xtNone;
+            View.Action = EditAction.None;
             base.OnMouseUp(e);
         }
 
@@ -3459,7 +3457,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             {
                 if (Document != null)
                 {
-                    View.Action = XTextAction.xtDragText;
+                    View.Action = EditAction.DragText;
 
                     Point pt = PointToClient(new Point(drgevent.X, drgevent.Y));
 
@@ -3491,7 +3489,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
             {
                 if (Document != null)
                 {
-                    View.Action = XTextAction.xtNone;
+                    View.Action = EditAction.None;
                     int SelStart = Selection.LogicalSelStart;
                     int DropStart = Document.PointToIntPos(Caret.Position);
 
@@ -3528,7 +3526,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                     if (ParseOnPaste)
                         Document.ParseAll(true);
 
-                    View.Action = XTextAction.xtNone;
+                    View.Action = EditAction.None;
                 }
             }
         }
@@ -3547,7 +3545,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
         /// <param name="e"></param>
         protected override void OnDragLeave(EventArgs e)
         {
-            View.Action = XTextAction.xtNone;
+            View.Action = EditAction.None;
         }
 
         /// <summary>

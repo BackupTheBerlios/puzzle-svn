@@ -9,7 +9,6 @@
 // *
 
 using Puzzle.Drawing.GDI;
-using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 
 namespace Puzzle.Windows.Forms.SyntaxBox
 {
@@ -38,48 +37,25 @@ namespace Puzzle.Windows.Forms.SyntaxBox
     }
 }
 
-namespace Puzzle.Windows.Forms.SyntaxBox.TextDraw
+namespace Puzzle.Windows.Forms.SyntaxBox
 {
- /// <summary>
-    /// For public use only
-    /// </summary>
-    public enum TextDrawDirectionType
-    {
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        Right = 1,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        Left = 2,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        Up = 4,
-        /// <summary>
-        /// For public use only
-        /// </summary>
-        Down = 8
-    }
-
     /// <summary>
     /// Text actions that can be performed by the SyntaxBoxControl
     /// </summary>
-    public enum XTextAction
+    public enum EditAction
     {
         /// <summary>
         /// The control is not performing any action
         /// </summary>
-        xtNone = 0,
+        None = 0,
         /// <summary>
         /// The control is in Drag Drop mode
         /// </summary>
-        xtDragText = 1,
+        DragText = 1,
         /// <summary>
         /// The control is selecting text
         /// </summary>
-        xtSelect = 2
+        SelectText = 2
     }
 }
 
@@ -94,7 +70,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
         /// <summary>
         /// The action that the SyntaxBoxControl is currently performing
         /// </summary>
-        public XTextAction Action;
+        public EditAction Action;
 
         /// <summary>
         /// Width of a char (space) in pixels

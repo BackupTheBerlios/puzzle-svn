@@ -17,7 +17,6 @@ using System.Windows.Forms;
 using Puzzle.Drawing.GDI;
 using Puzzle.Globalization;
 using Puzzle.SourceCode;
-using Puzzle.Windows.Forms.SyntaxBox.TextDraw;
 
 namespace Puzzle.Windows.Forms.SyntaxBox.Painter
 {
@@ -800,7 +799,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 }
 
 
-                if (Control.ContainsFocus || Control.View.Action == XTextAction.xtDragText)
+                if (Control.ContainsFocus || Control.View.Action == EditAction.DragText)
                 {
                     RenderCaret(RowIndex, RowPos * Control.View.RowHeight + yOffset);
                 }
@@ -1321,7 +1320,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             if (RowIndex != cr && RowIndex != StartRow)
                 return;
 
-            if (Control.View.Action == XTextAction.xtDragText)
+            if (Control.View.Action == EditAction.DragText)
             {
                 //drop Control.Caret
                 Row xtr = Control.Document[cr];
