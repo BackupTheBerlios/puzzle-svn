@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Puzzle.SourceCode.SyntaxDocumentExporters
 {
-    public class HTMLExporter2
+    public class SimpleHTMLExporter
     {
         private static StringBuilder sb;
 

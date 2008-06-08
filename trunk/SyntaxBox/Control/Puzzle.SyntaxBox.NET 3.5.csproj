@@ -211,8 +211,8 @@
     <Compile Include="Design\FilteredTypeConverter.cs" />
     <Compile Include="Design\Int32AutoConverter.cs" />
     <Compile Include="Design\Int32DefaultConverter.cs" />
-    <Compile Include="Document\Export\HTMLExporter.cs" />
-    <Compile Include="Document\Export\HTMLExporter2.cs" />
+    <Compile Include="Document\Export\CollapsingHTMLExporter.cs" />
+    <Compile Include="Document\Export\SimpleHTMLExporter.cs" />
     <Compile Include="Document\ImageIndexList.cs" />
     <Compile Include="Document\SyntaxDefinition\SyntaxDefinition.cs" />
     <Compile Include="Document\SyntaxDefinition\SyntaxDefinitionList.cs" />

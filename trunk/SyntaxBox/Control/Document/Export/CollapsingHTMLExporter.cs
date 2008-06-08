@@ -18,7 +18,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentExporters
     /// <summary>
     /// Html exporter class
     /// </summary>
-    public class HTMLExporter
+    public class CollapsingHTMLExporter
     {
         private StringBuilder sb;
 
