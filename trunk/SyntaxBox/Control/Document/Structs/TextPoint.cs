@@ -1,4 +1,4 @@
-// *
+﻿// *
 // * Copyright (C) 2005 Roger Alsing : http://www.puzzleframework.com
 // *
 // * This library is free software; you can redistribute it and/or modify it
@@ -24,7 +24,7 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// 
         /// </summary>
-        public TextPoint() {}
+        public TextPoint() { }
 
         /// <summary>
         /// 

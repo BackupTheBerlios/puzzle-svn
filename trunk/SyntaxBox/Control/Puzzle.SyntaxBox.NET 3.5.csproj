@@ -214,9 +214,9 @@
     <Compile Include="Document\Export\HTMLExporter.cs" />
     <Compile Include="Document\Export\HTMLExporter2.cs" />
     <Compile Include="Document\ImageIndexList.cs" />
-    <Compile Include="Document\Language\SyntaxDefinition.cs" />
-    <Compile Include="Document\Language\SyntaxDefinitionList.cs" />
-    <Compile Include="Document\Language\SyntaxDefinitionLoader.cs" />
+    <Compile Include="Document\SyntaxDefinition\SyntaxDefinition.cs" />
+    <Compile Include="Document\SyntaxDefinition\SyntaxDefinitionList.cs" />
+    <Compile Include="Document\SyntaxDefinition\SyntaxDefinitionLoader.cs" />
     <Compile Include="Document\Parser\DefaultParser.cs" />
     <Compile Include="Document\Parser\IParser.cs" />
     <Compile Include="Document\Parser\NewParser.cs" />
@@ -225,13 +225,13 @@
     <Compile Include="Document\Parser\ParseTools.cs" />
     <Compile Include="Document\Parser\ScanResultSegment.cs" />
     <Compile Include="Document\Parser\ScanResultWord.cs" />
-    <Compile Include="Document\Pattern\BracketType.cs" />
-    <Compile Include="Document\Pattern\Pattern.cs" />
-    <Compile Include="Document\Pattern\PatternCollection.cs" />
-    <Compile Include="Document\Pattern\PatternExtensions.cs" />
-    <Compile Include="Document\Pattern\PatternList.cs" />
-    <Compile Include="Document\Pattern\PatternListList.cs" />
-    <Compile Include="Document\Pattern\PatternScanResult.cs" />
+    <Compile Include="Document\Structs\BracketType.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\Pattern.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\PatternCollection.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\PatternExtensions.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\PatternList.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\PatternListList.cs" />
+    <Compile Include="Document\SyntaxDefinition\Pattern\PatternScanResult.cs" />
     <Compile Include="Document\Print\SourceCodePrintDocument.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -239,15 +239,15 @@
     <Compile Include="Document\Row\RowEventArgs.cs" />
     <Compile Include="Document\Row\RowEventHandler.cs" />
     <Compile Include="Document\Row\RowList.cs" />
-    <Compile Include="Document\Scope\Scope.cs" />
-    <Compile Include="Document\Scope\ScopeList.cs" />
-    <Compile Include="Document\Segment\Span.cs" />
-    <Compile Include="Document\Segment\SpanList.cs" />
-    <Compile Include="Document\Structs.cs" />
+    <Compile Include="Document\SyntaxDefinition\Scope\Scope.cs" />
+    <Compile Include="Document\SyntaxDefinition\Scope\ScopeList.cs" />
+    <Compile Include="Document\SyntaxDefinition\Span\Span.cs" />
+    <Compile Include="Document\SyntaxDefinition\Span\SpanList.cs" />
+    <Compile Include="Document\Structs\TextPoint.cs" />
     <Compile Include="Document\SyntaxDocument.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Document\TextRange.cs" />
+    <Compile Include="Document\Structs\TextRange.cs" />
     <Compile Include="Document\TextStyle\TextStyle.cs" />
     <Compile Include="Document\TextStyle\TextStyleDesignerDialog.cs">
       <SubType>Form</SubType>
