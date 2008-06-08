@@ -118,8 +118,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlockType\SpanDefinition.cs" />
-    <Compile Include="BlockType\SpanDefinitionList.cs" />
+    <Compile Include="Document\SyntaxDefinition\SpanDefinition\SpanDefinition.cs" />
+    <Compile Include="Document\SyntaxDefinition\SpanDefinition\SpanDefinitionList.cs" />
     <Compile Include="Classes\Caret.cs">
       <SubType>Code</SubType>
     </Compile>
