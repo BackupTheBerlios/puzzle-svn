@@ -241,8 +241,8 @@
     <Compile Include="Document\DocumentStructure\Row\RowList.cs" />
     <Compile Include="Document\SyntaxDefinition\Scope\Scope.cs" />
     <Compile Include="Document\SyntaxDefinition\Scope\ScopeList.cs" />
-    <Compile Include="Document\SyntaxDefinition\Span\Span.cs" />
-    <Compile Include="Document\SyntaxDefinition\Span\SpanList.cs" />
+    <Compile Include="Document\DocumentStructure\Span\Span.cs" />
+    <Compile Include="Document\DocumentStructure\Span\SpanList.cs" />
     <Compile Include="Document\DocumentStructure\Structs\TextPoint.cs" />
     <Compile Include="Document\SyntaxDocument.cs">
       <SubType>Component</SubType>
