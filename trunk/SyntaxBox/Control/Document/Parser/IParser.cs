@@ -31,15 +31,15 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         /// <summary>
         /// Initializes the parser with a spcified SyntaxFile
         /// </summary>
-        /// <param name="SyntaxFile">Filename of the SyntaxFile that should be used</param>
-        void Init(string SyntaxFile);
+        /// <param name="syntaxDefinitionPath">Filename of the SyntaxFile that should be used</param>
+        void Init(string syntaxDefinitionPath);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="syntaxFile"></param>
+        /// <param name="syntaxDefinitionPath"></param>
         /// <param name="separators"></param>
-        void Init(string syntaxFile, string separators);
+        void Init(string syntaxDefinitionPath, string separators);
 
         /// <summary>
         /// Initializes the parser with a spcified syntaxDefinition object
@@ -51,7 +51,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         /// Called by the SyntaxDocument object when a row should be parsed
         /// </summary>
         /// <param name="RowIndex">The row index in the document</param>
-        /// <param name="ParseKeywords">true if keywords and operators should be parsed , false if only a segment parse should be performed</param>
+        /// <param name="ParseKeywords">true if keywords and operators should be parsed , false if only a span parse should be performed</param>
         void ParseLine(int RowIndex, bool ParseKeywords);
 
         /// <summary>

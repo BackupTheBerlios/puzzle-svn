@@ -438,7 +438,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 int TotWidth = 0;
                 foreach (Word w in xtr.FormattedWords)
                 {
-                    if (w.Type == WordType.xtWord && w.Style != null)
+                    if (w.Type == WordType.Word && w.Style != null)
                         SetStringFont(w.Style.Bold, w.Style.Italic, w.Style.Underline);
                     else
                         SetStringFont(false, false, false);
@@ -994,14 +994,14 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 break;
                             }
 
-                        if ((w.Type == WordType.xtSpace || w.Type == WordType.xtTab) && !DrawBreakpoint && Control.ShowTabGuides)
+                        if ((w.Type == WordType.Space || w.Type == WordType.Tab) && !DrawBreakpoint && Control.ShowTabGuides)
                         {
                             int xtab = xpos - (Control.View.TextMargin - Control.View.ClientAreaStart + XOffset);
                             if ((xtab/(double) Control.PixelTabSize) == (xtab/Control.PixelTabSize))
                                 bbuff.FillRect(Control.TabGuideColor, xpos, 0, 1, Control.View.RowHeight);
                         }
 
-                        if (w.Type == WordType.xtWord || ws == false)
+                        if (w.Type == WordType.Word || ws == false)
                         {
                             if (w.Style != null)
                             {
@@ -1018,7 +1018,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                             }
 
 
-                            if (w.Type == WordType.xtWord)
+                            if (w.Type == WordType.Word)
                                 DrawBreakpoint = true;
 
                             if (xtr.Breakpoint && DrawBreakpoint)
@@ -1064,7 +1064,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 }
                             }
                         }
-                        else if (w.Type == WordType.xtSpace)
+                        else if (w.Type == WordType.Space)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.TextForeColor = Control.WhitespaceColor;
@@ -1080,7 +1080,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                             bbuff.DrawTabbedString("·", xpos, 0, taborig, Control.PixelTabSize);
                             wdh = bbuff.DrawTabbedString(w.Text, xpos, 0, taborig, Control.PixelTabSize).Width;
                         }
-                        else if (w.Type == WordType.xtTab)
+                        else if (w.Type == WordType.Tab)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.TextForeColor = Control.WhitespaceColor;
@@ -1180,7 +1180,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                             }
 
 
-                        if (w.Type == WordType.xtWord || ws == false)
+                        if (w.Type == WordType.Word || ws == false)
                         {
                             if (w.Style != null)
                             {
@@ -1206,13 +1206,13 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                                 }
                             }
                         }
-                        else if (w.Type == WordType.xtSpace)
+                        else if (w.Type == WordType.Space)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.DrawTabbedString("·", xpos, 0, taborig, Control.PixelTabSize);
                             wdh = bbuff.DrawTabbedString(w.Text, xpos, 0, taborig, Control.PixelTabSize).Width;
                         }
-                        else if (w.Type == WordType.xtTab)
+                        else if (w.Type == WordType.Tab)
                         {
                             bbuff.Font = GFX.FontNormal;
                             bbuff.DrawTabbedString("»", xpos, 0, taborig, Control.PixelTabSize);
@@ -1634,7 +1634,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
                 Word = w;
                 WordStart = TotWidth;
 
-                if (w.Type == WordType.xtWord && w.Style != null)
+                if (w.Type == WordType.Word && w.Style != null)
                     SetStringFont(w.Style.Bold, w.Style.Italic, w.Style.Underline);
                 else
                     SetStringFont(false, false, false);
@@ -1659,7 +1659,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox.Painter
             //'WordStart' contains the pixel start position for 'Word'
 
             if (Word != null)
-                if (Word.Type == WordType.xtWord && Word.Style != null)
+                if (Word.Type == WordType.Word && Word.Style != null)
                     SetStringFont(Word.Style.Bold, Word.Style.Italic, Word.Style.Underline);
                 else
                     SetStringFont(false, false, false);

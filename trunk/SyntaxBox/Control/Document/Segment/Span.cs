@@ -21,42 +21,42 @@ namespace Puzzle.SourceCode
         public SpanDefinition spanDefinition;
 
         /// <summary>
-        /// The depth of this segment in the segment hirarchy
+        /// The depth of this span in the span hirarchy
         /// </summary>
         public int Depth;
 
         /// <summary>
-        /// The row that the segment ends on
+        /// The row that the span ends on
         /// </summary>
         public Row EndRow;
 
         /// <summary>
-        /// The word that ends this segment
+        /// The word that ends this span
         /// </summary>
         public Word EndWord;
 
         /// <summary>
-        /// Gets or Sets if this segment is expanded
+        /// Gets or Sets if this span is expanded
         /// </summary>
         public bool Expanded = true;
 
         /// <summary>
-        /// The parent segment
+        /// The parent span
         /// </summary>
         public Span Parent;
 
         /// <summary>
-        /// Gets or Sets what scope triggered this segment
+        /// Gets or Sets what scope triggered this span
         /// </summary>
         public Scope Scope;
 
         /// <summary>
-        /// The row on which the segment starts
+        /// The row on which the span starts
         /// </summary>
         public Row StartRow;
 
         /// <summary>
-        /// The word that starts this segment
+        /// The word that starts this span
         /// </summary>
         public Word StartWord;
 

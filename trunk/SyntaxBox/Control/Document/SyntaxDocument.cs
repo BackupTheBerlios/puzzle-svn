@@ -505,7 +505,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Performs a segment parse on all rows. No Keyword colorizing
+        /// Performs a span parse on all rows. No Keyword colorizing
         /// </summary>
         public void ParseAll()
         {
@@ -516,7 +516,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Parses all rows , either a segment parse or a full parse with keyword colorizing
+        /// Parses all rows , either a span parse or a full parse with keyword colorizing
         /// </summary>
         public void ParseAll(bool ParseKeywords)
         {
@@ -1320,7 +1320,7 @@ namespace Puzzle.SourceCode
             ResetVisibleRows();
         }
 
-        //Returns the segment object at the given position
+        //Returns the span object at the given position
         /// <summary>
         /// Gets a span object form a given column , Row index
         /// (This only applies if the row is fully parsed)
@@ -1668,7 +1668,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i >= 0; i--)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.Span == FindIn && w.Type == WordType.xtWord)
+                    if (w.Span == FindIn && w.Type == WordType.Word)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;
@@ -1710,7 +1710,7 @@ namespace Puzzle.SourceCode
                 for (int i = x; i < this[CurrentRow].Count; i++)
                 {
                     Word w = this[CurrentRow][i];
-                    if (w.Span == FindIn && w.Type == WordType.xtWord)
+                    if (w.Span == FindIn && w.Type == WordType.Word)
                     {
                         if (w.Pattern == Start.Pattern)
                             count++;

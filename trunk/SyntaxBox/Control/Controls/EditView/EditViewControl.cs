@@ -360,7 +360,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                                                                c2);
 
 
-                    if (w.Type == WordType.xtWord && w.Style != null)
+                    if (w.Type == WordType.Word && w.Style != null)
                     {
                         int clrindex = Array.IndexOf(styles, w.Style);
                         clrindex *= 2;
@@ -416,7 +416,7 @@ namespace Puzzle.Windows.Forms.SyntaxBox
                         if (w.Style.Italic) sb.Append(@"\i0 ");
                     }
 
-                    if (w.Type == WordType.xtWord && w.Style != null)
+                    if (w.Type == WordType.Word && w.Style != null)
                     {
                         sb.Append("}");
                     }

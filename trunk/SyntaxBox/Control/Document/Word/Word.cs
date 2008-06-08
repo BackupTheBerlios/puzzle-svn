@@ -20,15 +20,15 @@ namespace Puzzle.SourceCode
         /// <summary>
         /// The word is a normal word/text
         /// </summary>
-        xtWord = 0,
+        Word = 0,
         /// <summary>
         /// The word is a space char
         /// </summary>
-        xtSpace = 1,
+        Space = 1,
         /// <summary>
         /// The word is a tab char
         /// </summary>
-        xtTab = 2
+        Tab = 2
     }
 
     /// <summary>
@@ -64,9 +64,9 @@ namespace Puzzle.SourceCode
         public Row Row; //the row that holds this word
 
         /// <summary>
-        /// The parent segment
+        /// The parent span
         /// </summary>
-        public Span Span; //the segment that this word is located in
+        public Span Span; //the span that this word is located in
 
         /// <summary>
         /// The style of the word

@@ -16,8 +16,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
     public sealed class ParseTools
     {
         public static void AddPatternString(string Text, Row Row, Pattern Pattern,
-                                            TextStyle Style, Span span, bool
-                                                                                  HasError)
+                                            TextStyle Style, Span span, bool HasError)
         {
             var x = new Word
             {
@@ -54,9 +53,9 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
                         Word ws = Row.Add(c[i].ToString());
                         if (c[i] == ' ')
-                            ws.Type = WordType.xtSpace;
+                            ws.Type = WordType.Space;
                         else
-                            ws.Type = WordType.xtTab;
+                            ws.Type = WordType.Tab;
                         ws.Style = Style;
                         ws.Span = span;
                     }

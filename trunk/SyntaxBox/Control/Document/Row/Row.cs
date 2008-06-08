@@ -7,12 +7,7 @@
 // * or http://www.gnu.org/copyleft/lesser.html for details.
 // *
 // *
-
-/*
- * this file was modified for resolve some bugs removed all try catch because it hide some
- * bug on the code and because aren't speed safe all modification are copyright of 
- * <sebastian.faltoni[at]gmail.com> and are under the LGPL licenze
-*/
+// * contributions by Sebastian Faltoni
 
 using System.Collections;
 using System.Drawing;
@@ -29,11 +24,11 @@ namespace Puzzle.SourceCode
         /// </summary>
         NotParsed = 0,
         /// <summary>
-        /// the row is segment parsed
+        /// the row is span parsed
         /// </summary>
         SegmentParsed = 1,
         /// <summary>
-        /// the row is both segment and keyword parsed
+        /// the row is both span and keyword parsed
         /// </summary>
         AllParsed = 2
     }
@@ -53,7 +48,7 @@ namespace Puzzle.SourceCode
         public SyntaxDocument Document;
 
         /// <summary>
-        /// The first segment that terminates on this row.
+        /// The first span that terminates on this row.
         /// </summary>
         public Span endSpan;
 
@@ -127,7 +122,7 @@ namespace Puzzle.SourceCode
         internal WordList words = new WordList();
 
         /// <summary>
-        /// The first collapsable segment on this row.
+        /// The first collapsable span on this row.
         /// </summary>
         public Span startSpan;
 
@@ -377,7 +372,7 @@ namespace Puzzle.SourceCode
             {
                 foreach (Word w in this)
                 {
-                    if (w.Type == WordType.xtWord)
+                    if (w.Type == WordType.Word)
                         return w;
                 }
                 return null;
@@ -479,7 +474,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Returns true if this row is the last part of a collepsed segment
+        /// Returns true if this row is the last part of a collepsed span
         /// </summary>
         public bool IsCollapsedEndPart
         {
@@ -553,7 +548,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Returns true if this row is the end part of a collapsable segment
+        /// Returns true if this row is the end part of a collapsable span
         /// </summary>
         public bool CanFoldEndPart
         {
@@ -569,8 +564,8 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Returns the last row of a collapsable segment
-        /// (this only applies if this row is the start row of the segment)
+        /// Returns the last row of a collapsable span
+        /// (this only applies if this row is the start row of the span)
         /// </summary>
         public Row Expansion_EndRow
         {
@@ -583,8 +578,8 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Returns the first row of a collapsable segment
-        /// (this only applies if this row is the last row of the segment)
+        /// Returns the first row of a collapsable span
+        /// (this only applies if this row is the last row of the span)
         /// </summary>
         public Row Expansion_StartRow
         {
@@ -688,7 +683,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// If the row is hidden inside a collapsed segment , call this method to make the collapsed segments expanded.
+        /// If the row is hidden inside a collapsed span , call this method to make the collapsed segments expanded.
         /// </summary>
         public void EnsureVisible()
         {
@@ -757,7 +752,7 @@ namespace Puzzle.SourceCode
         }
 
         /// <summary>
-        /// Force a segment parse on the row.
+        /// Force a span parse on the row.
         /// </summary>
         public void Parse()
         {
@@ -876,7 +871,7 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent == PatternList && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent == PatternList && w.Type != WordType.Space && w.Type != WordType.Tab)
                         {
                             return w;
                         }
@@ -907,8 +902,8 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace &&
-                            w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.Space &&
+                            w.Type != WordType.Tab)
                         {
                             return w;
                         }
@@ -938,7 +933,7 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent == PatternList && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent == PatternList && w.Type != WordType.Space && w.Type != WordType.Tab)
                         {
                             return w;
                         }
@@ -969,8 +964,8 @@ namespace Puzzle.SourceCode
                 {
                     if (w.Pattern.Parent != null)
                     {
-                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.xtSpace &&
-                            w.Type != WordType.xtTab)
+                        if (w.Pattern.Parent.Name == PatternListName && w.Type != WordType.Space &&
+                            w.Type != WordType.Tab)
                         {
                             return w;
                         }
@@ -996,7 +991,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 Word w = this[i];
-                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.Space && w.Type != WordType.Tab)
                 {
                     return w;
                 }
@@ -1020,7 +1015,7 @@ namespace Puzzle.SourceCode
             while (i < words.Count)
             {
                 Word w = this[i];
-                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition == spanDefinition && w.Type != WordType.Space && w.Type != WordType.Tab)
                 {
                     return w;
                 }
@@ -1044,7 +1039,7 @@ namespace Puzzle.SourceCode
             while (i >= 0)
             {
                 Word w = this[i];
-                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.Space && w.Type != WordType.Tab)
                 {
                     return w;
                 }
@@ -1068,7 +1063,7 @@ namespace Puzzle.SourceCode
             while (i < words.Count)
             {
                 Word w = this[i];
-                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.xtSpace && w.Type != WordType.xtTab)
+                if (w.Span.spanDefinition.Name == BlockTypeName && w.Type != WordType.Space && w.Type != WordType.Tab)
                 {
                     return w;
                 }

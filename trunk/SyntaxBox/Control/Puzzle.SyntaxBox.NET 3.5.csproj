@@ -219,6 +219,8 @@
     <Compile Include="Document\Language\SyntaxDefinitionLoader.cs" />
     <Compile Include="Document\Parser\DefaultParser.cs" />
     <Compile Include="Document\Parser\IParser.cs" />
+    <Compile Include="Document\Parser\NewParser.cs" />
+    <Compile Include="Document\Parser\ParserBase.cs" />
     <Compile Include="Document\Parser\ParserEventHandler.cs" />
     <Compile Include="Document\Parser\ParseTools.cs" />
     <Compile Include="Document\Parser\ScanResultSegment.cs" />

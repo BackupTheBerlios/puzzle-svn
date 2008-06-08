@@ -191,7 +191,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
         }
 
         //om denna är true
-        // så ska INTE nästa rad parse'as , utan denna ska fixas så den blir som den förra... (kopiera segment)
+        // så ska INTE nästa rad parse'as , utan denna ska fixas så den blir som den förra... (kopiera span)
         private bool IsSameButDifferent(int RowIndex, Span oldStartSpan)
         {
             //is this the last row ? , if so , bailout
@@ -548,7 +548,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
                      EndSegment.Position <= ChildSegment.Position) ||
                     (EndSegment.HasContent && ChildSegment.HasContent == false))
                 {
-                    //this is an end segment
+                    //this is an end span
 
                     if (ParseKeywords)
                     {
@@ -693,7 +693,7 @@ namespace Puzzle.SourceCode.SyntaxDocumentParsers
 
             if (oldEndSpan != null)
             {
-                //expand segment if this line dont have an end word
+                //expand span if this line dont have an end word
                 if (oldEndSpan.EndWord == null)
                     oldEndSpan.Expanded = true;
             }
