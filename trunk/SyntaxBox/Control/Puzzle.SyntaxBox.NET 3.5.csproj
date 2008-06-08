@@ -266,7 +266,7 @@
     <Compile Include="Drawing\GDI32\GDIObject.cs" />
     <Compile Include="Drawing\GDI32\GDIPens.cs" />
     <Compile Include="Drawing\GDI32\GDISurface.cs" />
-    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Drawing\Enums.cs" />
     <Compile Include="Globalization\IMEWindow.cs" />
     <Compile Include="Interfaces\IPainter.cs">
       <SubType>Code</SubType>
