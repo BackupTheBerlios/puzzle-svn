@@ -225,7 +225,7 @@
     <Compile Include="Document\Parser\ParseTools.cs" />
     <Compile Include="Document\Parser\ScanResultSegment.cs" />
     <Compile Include="Document\Parser\ScanResultWord.cs" />
-    <Compile Include="Document\Structs\BracketType.cs" />
+    <Compile Include="Document\DocumentStructure\Structs\BracketType.cs" />
     <Compile Include="Document\SyntaxDefinition\Pattern\Pattern.cs" />
     <Compile Include="Document\SyntaxDefinition\Pattern\PatternCollection.cs" />
     <Compile Include="Document\SyntaxDefinition\Pattern\PatternExtensions.cs" />
@@ -235,29 +235,29 @@
     <Compile Include="Document\Print\SourceCodePrintDocument.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Document\Row\Row.cs" />
-    <Compile Include="Document\Row\RowEventArgs.cs" />
-    <Compile Include="Document\Row\RowEventHandler.cs" />
-    <Compile Include="Document\Row\RowList.cs" />
+    <Compile Include="Document\DocumentStructure\Row\Row.cs" />
+    <Compile Include="Document\DocumentStructure\Row\RowEventArgs.cs" />
+    <Compile Include="Document\DocumentStructure\Row\RowEventHandler.cs" />
+    <Compile Include="Document\DocumentStructure\Row\RowList.cs" />
     <Compile Include="Document\SyntaxDefinition\Scope\Scope.cs" />
     <Compile Include="Document\SyntaxDefinition\Scope\ScopeList.cs" />
     <Compile Include="Document\SyntaxDefinition\Span\Span.cs" />
     <Compile Include="Document\SyntaxDefinition\Span\SpanList.cs" />
-    <Compile Include="Document\Structs\TextPoint.cs" />
+    <Compile Include="Document\DocumentStructure\Structs\TextPoint.cs" />
     <Compile Include="Document\SyntaxDocument.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Document\Structs\TextRange.cs" />
-    <Compile Include="Document\TextStyle\TextStyle.cs" />
-    <Compile Include="Document\TextStyle\TextStyleDesignerDialog.cs">
+    <Compile Include="Document\DocumentStructure\Structs\TextRange.cs" />
+    <Compile Include="Document\SyntaxDefinition\TextStyle\TextStyle.cs" />
+    <Compile Include="Document\SyntaxDefinition\TextStyle\TextStyleDesignerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Document\TextStyle\TextStyleUIEditor.cs" />
-    <Compile Include="Document\Undo\UndoBlock.cs" />
-    <Compile Include="Document\Undo\UndoBlockCollection.cs" />
-    <Compile Include="Document\Undo\UndoBuffer.cs" />
-    <Compile Include="Document\Word\Word.cs" />
-    <Compile Include="Document\Word\WordList.cs" />
+    <Compile Include="Document\SyntaxDefinition\TextStyle\TextStyleUIEditor.cs" />
+    <Compile Include="Document\DocumentStructure\Undo\UndoBlock.cs" />
+    <Compile Include="Document\DocumentStructure\Undo\UndoBlockCollection.cs" />
+    <Compile Include="Document\DocumentStructure\Undo\UndoBuffer.cs" />
+    <Compile Include="Document\DocumentStructure\Word\Word.cs" />
+    <Compile Include="Document\DocumentStructure\Word\WordList.cs" />
     <Compile Include="Drawing\DesktopGraphics.cs" />
     <Compile Include="Drawing\DrawingTools.cs" />
     <Compile Include="Drawing\GDI32\FontEnum.cs" />
@@ -359,7 +359,7 @@
       <DependentUpon>SyntaxDocument.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Document\TextStyle\TextStyleDesignerDialog.resx">
+    <EmbeddedResource Include="Document\SyntaxDefinition\TextStyle\TextStyleDesignerDialog.resx">
       <DependentUpon>TextStyleDesignerDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
